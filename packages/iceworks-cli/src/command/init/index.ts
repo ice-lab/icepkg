@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import { downloadAndGenerateProject } from '@iceworks/generate-project';
 import * as chalk from 'chalk';
 import log from '../../utils/log';

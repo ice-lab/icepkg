@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import * as fse from 'fs-extra';
 import init from '../command/init';
 import add from '../command/add';
