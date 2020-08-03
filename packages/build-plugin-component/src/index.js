@@ -168,7 +168,7 @@ module.exports = (
      */
     babelCompiler(context, log, basicComponents, compileOptions);
     if (!commandArgs.skipDemo) {
-      modifyPkgHomePage(pkg, rootDir);
+      await modifyPkgHomePage(pkg, rootDir);
     }
   });
 
