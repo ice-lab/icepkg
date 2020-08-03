@@ -30,7 +30,7 @@ module.exports = function dtsCompiler(compileInfo, log = console) {
   if (needCompileList.length === 0) {
     return;
   }
-  log.info(`Compiling ts declaration ...`);
+  log.info('Compiling ts declaration ...');
   // Create a Program with an in-memory emit
   let createdFiles = {};
   const host = ts.createCompilerHost(options);

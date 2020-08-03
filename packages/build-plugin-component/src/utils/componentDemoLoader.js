@@ -4,7 +4,7 @@ const { parse } = require('@babel/parser');
 const t = require('@babel/types');
 const traverse = require('@babel/traverse');
 const generator = require('@babel/generator');
-const { markdownParser } = require('../utils/markdownHelper');
+const { markdownParser } = require('./markdownHelper');
 
 module.exports = function demoLoader(markdown) {
   const filePath = this.resourcePath;

@@ -29,10 +29,10 @@ module.exports = ({
     commands: ['build'],  // 支持的命令，如果为空默认任何命令都将执行注册方法
     configWebpack: (config) => {
       config.module
-      .rule('fusion-cool-loader')
-      .test(/\.(jsx|tsx)$/i)
-      .use('fusion-cool')
-      .loader(require.resolve('./utils/fusionCoolInfoLoader'));
+        .rule('fusion-cool-loader')
+        .test(/\.(jsx|tsx)$/i)
+        .use('fusion-cool')
+        .loader(require.resolve('./utils/fusionCoolInfoLoader'));
     },
   });
 

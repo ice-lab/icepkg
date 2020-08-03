@@ -25,8 +25,8 @@ module.exports = function fusionCoolInfoLoader(code) {
           return false;
         }
       } catch (error) {
-          console.log(error);
-          return false;
+        console.log(error);
+        return false;
       }
 
       // 只针对首字母大写的自定义 JSX 组件
@@ -73,9 +73,9 @@ module.exports = function fusionCoolInfoLoader(code) {
 
         // 只有需要加 data-fusion-cool 属性的结点，这个参数才有值
         const fusionCoolProps = {
-            name: componentName,
-            type: 'adaptor-component',
-            pkgName: importPkg,
+          name: componentName,
+          type: 'adaptor-component',
+          pkgName: importPkg,
         };
 
         if (!fusionCoolProps) {
