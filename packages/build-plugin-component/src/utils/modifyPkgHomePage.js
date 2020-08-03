@@ -1,6 +1,7 @@
 const path = require('path');
 const fse = require('fs-extra');
 const npmUtils = require('ice-npm-utils');
+const userHome = require('user-home');
 
 module.exports = async (pkg, rootDir) => {
   // modify pkg home page
@@ -14,20 +15,24 @@ module.exports = async (pkg, rootDir) => {
       // 2. 物料集合根目录的 pkg.materialConfig
       const materialPkgData =  await fse.readJSON(path.resolve(rootDir, '../../package.json'));
       unpkgHost = materialPkgData.materialConfig && materialPkgData.materialConfig.unpkgHost;
-    } catch(err) {}
+    } catch(err) {
+      // ignore error
+    }
 
     if (!unpkgHost) {
       try {
         // 3. iceworks cli config
         const CONFIG_PATH = path.join(userHome || __dirname, '.iceworks/cli-config.json');
         const configData =  await fse.readJSON(CONFIG_PATH);
-        unpkgHost = configData && mconfigData.unpkgHost;
-      } catch(err) {}
+        unpkgHost = configData && configData.unpkgHost;
+      } catch(err) {
+        // ignore error
+      }
 
       if (!unpkgHost) {
         // 4. ice-npm-utils
         unpkgHost = npmUtils.getUnpkgHost(name);
-      } 
+      }
     }
   }
 
