@@ -7,7 +7,7 @@ import { IPackageInfo, getPackageInfos } from './getPackageInfos';
 
 if (process.env.BRANCH_NAME !== 'master') {
   console.log('No Publish', process.env.BRANCH_NAME);
-  return;
+  process.exit(0);
 }
 
 function publish(pkg: string, version: string, directory: string): void {
