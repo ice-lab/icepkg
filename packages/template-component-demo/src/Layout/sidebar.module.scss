@@ -1,0 +1,88 @@
+.sidebar {
+  width: 250px;
+  min-width: 250px;
+  min-height: 100vh;
+  background: #ffffff;
+  border-right: #e4e8ed solid 1px;
+  transition: transform 0.2s, background 0.3s;
+  z-index: 1000;
+  padding: 32px;
+}
+
+.searchbox {
+  display:inline-block;
+  position:relative;
+  width:100%;
+  height:32px!important;
+  white-space:nowrap;
+  box-sizing:border-box;
+  visibility:visible!important
+}
+
+.input {
+  display:inline-block;
+  box-sizing:border-box;
+  transition:box-shadow .4s ease, background .4s ease;
+  border:0;
+  border-radius:14px;
+  box-shadow:inset 0 0 0 1px #ccc;
+  background:#fff!important;
+  padding:0 16px;
+  width:100%;
+  height:100%;
+  vertical-align:middle;
+  white-space:normal;
+  font-size:14px;
+  appearance:none;
+
+  &:hover {
+    box-shadow:inset 0 0 0 1px #b3b3b3;
+  }
+  &:active,
+  &:focus {
+    outline:0;
+    box-shadow:inset 0 0 0 1px #aaa;
+    background:#fff;
+  }
+  &::placeholde {
+    color:#aaa;
+  }
+}
+
+
+.menuList {
+  padding-left: 10px;
+}
+
+.item {
+  list-style: none;
+  position: relative;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  line-height: 20px;
+
+  a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #2D3747;
+    display: block;
+  }
+
+  a:link, a:visited {
+    color: #2D3747;
+  }
+}
+
+.selected:before {
+  content: "";
+  position: absolute;
+  display: block;
+  top: 2px;
+  left: -8px;
+  height: 1rem;
+  background-color: #0B5FFF;
+  -webkit-transition: width 200ms ease 0s;
+  transition: width 200ms ease 0s;
+  width: 2px;
+  border-radius: 1px;
+}
