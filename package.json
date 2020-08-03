@@ -5,12 +5,12 @@
   "scripts": {
     "test": "NODE_ENV=unittest jest",
     "install:deps": "rm -rf node_modules && rm -rf ./packages/*/node_modules && npm install --registry=http://registry.npm.taobao.org && lerna exec -- npm install --registry=http://registry.npm.taobao.org",
-    "tnpm:install:deps": "rm -rf node_modules && rm -rf ./packages/*/node_modules && tnpm i && lerna exec -- tnpm i",
-    "packages:build": "lerna run build",
+    "tnpm:install:deps": "tnpm update && lerna exec -- tnpm update",
+    "packages:build": "npm run packages:clean && lerna run build",
     "packages:clean": "rm -rf ./packages/*/lib",
     "lint": "eslint --cache --ext .ts,.tsx,.js ./ --quiet",
     "lint:fix": "eslint --cache --ext .ts,.tsx,.js ./ --quiet --fix",
-    "ci": "npm run install:deps && npm run lint && npm run test && npm run coverage",
+    "ci": "npm run lint && npm run test && codecov",
     "publish:packages": "ts-node ./scripts/publish.ts"
   },
   "husky": {
