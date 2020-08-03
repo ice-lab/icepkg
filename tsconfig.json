@@ -1,6 +1,11 @@
 {
-  "files": [],
-  "references": [
-    {"path": "packages/iceworks-cli"}
-  ]
+  "compilerOptions": {
+    "target": "es5",
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "declaration": true,
+    "sourceMap": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
 }

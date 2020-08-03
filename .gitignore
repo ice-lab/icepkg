@@ -15,6 +15,7 @@ tmp/
 .tmp/
 
 packages/*/lib/
+packages/*/es/
 .vscode-test
 
 **/.ice/

@@ -11,6 +11,14 @@
   ],
   "author": "hahaiwin",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ice-lab/iceworks-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ice-lab/iceworks-cli/issues"
+  },
+  "homepage": "https://ice.work/docs/materials/about",
   "dependencies": {
     "chalk": "^4.0.0",
     "cross-spawn": "^7.0.3",
