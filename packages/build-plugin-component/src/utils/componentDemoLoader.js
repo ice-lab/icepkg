@@ -88,7 +88,9 @@ module.exports = function demoLoader(markdown) {
     sourceCode = generator.default(ast).code;
   }
 
+  // eslint-disable-next-line quotes
   const requireReact = `window.React = require('react');window.ReactDOM = require('react-dom');`;
+
   // inject code for demos which do not import React or ReactDOM
   return `${mountNode}${requireReact}${
     sourceCode
