@@ -2,14 +2,13 @@ const path = require('path');
 const fse = require('fs-extra');
 const npmUtils = require('ice-npm-utils');
 
-module.exports = (pkg, rootDir) => {
+module.exports = async (pkg, rootDir) => {
   // modify pkg home page
   const { name, version } = pkg;
   const pkgPath = path.resolve(rootDir, 'package.json');
-  const pkgData =  await fse.readJSON(pkgPath);
 
   // 1. 业务组件自身的 pkg.materialConfig
-  let unpkgHost = pkgData.materialConfig && pkgData.materialConfig.unpkgHost;
+  let unpkgHost = pkg.materialConfig && pkg.materialConfig.unpkgHost;
   if (!unpkgHost) {
     try {
       // 2. 物料集合根目录的 pkg.materialConfig
