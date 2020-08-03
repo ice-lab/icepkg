@@ -4,7 +4,7 @@ const ora = require('ora');
 const detect = require('detect-port');
 const fs = require('fs');
 
-const createServer = require('../utils/createServer');
+const createServer = require('./createServer');
 const getPuppeteer = require('./getPuppeteer');
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -64,14 +64,14 @@ async function screenshot(packageJsonPath, url, imgOutput, htmlOutput, timeout) 
     // get and save html content
     const htmlContent = await page.evaluate(() => {
       // convert all canvas to img
-      for (let i = 0; i < document.getElementsByTagName("canvas").length; i++) {
-        document.getElementsByTagName("canvas")[i].outerHTML = `<img src="${document.getElementsByTagName("canvas")[i].toDataURL("image/png", 1)}"/>`;
+      for (let i = 0; i < document.getElementsByTagName('canvas').length; i++) {
+        document.getElementsByTagName('canvas')[i].outerHTML = `<img src="${document.getElementsByTagName('canvas')[i].toDataURL('image/png', 1)}"/>`;
       }
       // delete <script> tag
       const SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
       const IFRAME_REGEX = /<iframe\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/iframe>/gi;
 
-      return document.body.innerHTML.replace(SCRIPT_REGEX, "").replace(IFRAME_REGEX, "");
+      return document.body.innerHTML.replace(SCRIPT_REGEX, '').replace(IFRAME_REGEX, '');
     });
     fs.writeFileSync(htmlOutput, htmlContent);
 

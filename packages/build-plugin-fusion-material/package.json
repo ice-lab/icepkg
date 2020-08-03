@@ -3,12 +3,16 @@
   "version": "0.1.8",
   "description": "plugin for fusion material",
   "main": "index.js",
-  "scripts": {
-    "lint": "eslint --cache --ext .js,.jsx ./",
-    "test": "echo \"test\""
-  },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ice-lab/iceworks-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ice-lab/iceworks-cli/issues"
+  },
+  "homepage": "https://ice.work/docs/materials/about",
   "devDependencies": {
     "puppeteer": "^2.0.0"
   },

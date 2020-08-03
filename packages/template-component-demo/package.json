@@ -3,14 +3,20 @@
   "version": "1.0.1",
   "description": "default demo style for component development",
   "files": [
-    "demo/",
     "es/",
     "lib/",
     "build/"
   ],
   "main": "lib/index.js",
   "module": "es/index.js",
-  "stylePath": "style.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ice-lab/iceworks-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ice-lab/iceworks-cli/issues"
+  },
+  "homepage": "https://ice.work/docs/materials/about",
   "scripts": {
     "start": "build-scripts start",
     "build": "build-scripts build --skip-demo",
@@ -34,10 +40,5 @@
   "peerDependencies": {
     "react": "^15.6.0",
     "@alifd/next": "1.x"
-  },
-  "componentConfig": {
-    "name": "template-component-demo",
-    "title": "component demo",
-    "category": "Information"
   }
 }

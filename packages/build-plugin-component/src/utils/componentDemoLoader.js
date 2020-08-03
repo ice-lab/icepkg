@@ -4,7 +4,7 @@ const { parse } = require('@babel/parser');
 const t = require('@babel/types');
 const traverse = require('@babel/traverse');
 const generator = require('@babel/generator');
-const { markdownParser } = require('../utils/markdownHelper');
+const { markdownParser } = require('./markdownHelper');
 
 module.exports = function demoLoader(markdown) {
   const filePath = this.resourcePath;
@@ -88,7 +88,9 @@ module.exports = function demoLoader(markdown) {
     sourceCode = generator.default(ast).code;
   }
 
+  // eslint-disable-next-line quotes
   const requireReact = `window.React = require('react');window.ReactDOM = require('react-dom');`;
+
   // inject code for demos which do not import React or ReactDOM
   return `${mountNode}${requireReact}${
     sourceCode
