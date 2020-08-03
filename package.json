@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "test": "NODE_ENV=unittest jest",
-    "install:deps": "rm -rf node_modules && rm -rf ./packages/*/node_modules && npm install --registry=http://registry.npm.taobao.org && lerna exec -- npm install --registry=http://registry.npm.taobao.org",
+    "install:deps": "rm -rf node_modules && rm -rf ./packages/*/node_modules && npm install && lerna exec -- npm install",
     "tnpm:install:deps": "tnpm update && lerna exec -- tnpm update",
     "packages:build": "npm run packages:clean && lerna run build",
     "packages:clean": "rm -rf ./packages/*/lib",
