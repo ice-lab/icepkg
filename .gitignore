@@ -15,12 +15,10 @@ tmp/
 .tmp/
 
 packages/*/lib/
-extensions/*/out
+packages/*/es/
 .vscode-test
 
 **/.ice/
 
 **/package-lock.json
 **/build
-
-*.vsix

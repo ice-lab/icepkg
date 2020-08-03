@@ -11,7 +11,10 @@
     "lib",
     "bin"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "rm -rf lib && tsc && cp -rf src/template/ lib/template/",
+    "prepublishOnly": "npm run build"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/ice-lab/iceworks-cli/issues"
   },
-  "homepage": "https://ice.work/docs/iceworks/about",
+  "homepage": "https://ice.work/docs/materials/about",
   "dependencies": {
     "@iceworks/generate-project": "^1.0.7",
     "axios": "^0.18.0",
@@ -58,7 +61,5 @@
   },
   "engines": {
     "node": ">=8.3.0"
-  },
-  "__npminstall_done": false,
-  "gitHead": "fc5b35f95ab4cc24898845916acf598c2f34d576"
+  }
 }
