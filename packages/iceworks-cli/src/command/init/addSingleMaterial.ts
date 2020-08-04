@@ -160,7 +160,7 @@ function nameQuestion(type, npmScope, cwd) {
 
       const npmName = generateNpmName(value, npmScope);
       if (!validateName(npmName).validForNewPackages) {
-        return `this ${type} name(${npmName}) has already exist. please retry`;
+        return `NPM package name ${npmName} not validate, please retry`;
       }
       return true;
     },

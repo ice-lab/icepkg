@@ -152,8 +152,14 @@ async function initMaterialAsk(cwd, projectType): Promise<IResult> {
   ]) : await inquirer.prompt([
     {
       type: 'input',
-      message: 'npm scope (optional)',
+      message: 'npm scope (eg: @ice)',
       name: 'npmScope',
+      validate: (value) => {
+        if (!/^@/.test(value)) {
+          return 'npm scope should starts with @, eg: @ice';
+        }
+        return true;
+      },
     },
   ]);
   result.npmScope = npmScope;
