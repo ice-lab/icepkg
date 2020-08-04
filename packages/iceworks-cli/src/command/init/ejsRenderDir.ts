@@ -7,6 +7,7 @@ export default async function(dir: string, options: any, diableFormatDotFile?: b
   return new Promise((resolve, reject) => {
     glob('**', {
       cwd: dir,
+      ignore: ['node_modules/**'],
       nodir: true,
     }, (err, files) => {
       if (err) {

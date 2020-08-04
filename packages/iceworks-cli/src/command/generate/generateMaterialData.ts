@@ -8,6 +8,7 @@ import getUnpkgHost from '../../utils/getUnpkgHost';
 import log from '../../utils/log';
 
 export default async function generateMaterialData(pkgPath, materialType, materialConfig) {
+  const projectPath = path.dirname(pkgPath);
   const pkg = await fse.readJson(pkgPath);
 
   const materialItemConfig = pkg[`${materialType}Config`] || {};
@@ -23,7 +24,9 @@ export default async function generateMaterialData(pkgPath, materialType, materi
 
   const screenshot = materialItemConfig.screenshot
     || materialItemConfig.snapshot
-    || (hasScreenshot(path.dirname(pkgPath)) ? `${unpkgHost}/${npmName}@${pkg.version}/screenshot.png` : '');
+    || (fse.existsSync(path.join(projectPath, 'screenshot.png')) && `${unpkgHost}/${npmName}@${pkg.version}/screenshot.png`)
+    || (fse.existsSync(path.join(projectPath, 'screenshot.jpg')) && `${unpkgHost}/${npmName}@${pkg.version}/screenshot.jpg`)
+    || '';
   const screenshots = materialItemConfig.screenshots || (screenshot && [screenshot]);
   const homepage = pkg.homepage || `${unpkgHost}/${npmName}@${pkg.version}/build/index.html`;
 
@@ -33,12 +36,20 @@ export default async function generateMaterialData(pkgPath, materialType, materi
   // category 字段：兼容老的物料无 category 字段
   const category = originCategory || ((originCategories && originCategories[0]) ? originCategories[0] : '');
 
+  let languageType = 'js';
+  try {
+    languageType = await getProjectLanguageType(projectPath, pkg);
+  } catch (err) {
+    log.warn('getProjectLanguageType warning', err.message);
+  }
+
   const materialData = {
     // 允许（但不推荐）自定义单个物料的数据
     ...materialItemConfig,
     name: materialItemConfig.name,
     title: materialItemConfig.title,
     description: pkg.description,
+    languageType,
     homepage,
     categories,
     category,
@@ -64,10 +75,6 @@ export default async function generateMaterialData(pkgPath, materialType, materi
 
   return { materialData, materialType };
 };
-
-function hasScreenshot(cwd) {
-  return fse.existsSync(path.join(cwd, 'screenshot.png'));
-}
 
 /**
  * 检测 NPM 包是否已发送，并返回包的发布时间
@@ -111,4 +118,25 @@ function getNpmPublishTime(npm, version = 'latest', registry) {
 
       return Promise.reject(err);
     });
+}
+async function getProjectLanguageType(projectPath, pkgData) {
+  const hasTsconfig = fse.existsSync(path.join(projectPath, 'tsconfig.json'));
+
+  if (!hasTsconfig) {
+    return 'js';
+  } else {
+    const { dependencies = {}, devDependencies = {} } = pkgData;
+    const isIcejs = devDependencies['ice.js'] || dependencies['ice.js'];
+    const isRaxjs = devDependencies['rax.js'] || dependencies['rax.js'];
+
+    if (isIcejs || isRaxjs) {
+      // icejs&raxjs 都有 tsconfig，因此需要通过 src/app.js[x] 进一步区分
+      const hasAppJs = fse.existsSync(path.join(projectPath, 'src/app.js')) || fse.existsSync(path.join(projectPath, 'src/app.jsx'));
+      if (hasAppJs) {
+        return 'js';
+      }
+    }
+
+    return 'ts';
+  }
 }
