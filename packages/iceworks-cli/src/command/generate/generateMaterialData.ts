@@ -23,7 +23,9 @@ export default async function generateMaterialData(pkgPath, materialType, materi
 
   const screenshot = materialItemConfig.screenshot
     || materialItemConfig.snapshot
-    || (hasScreenshot(path.dirname(pkgPath)) ? `${unpkgHost}/${npmName}@${pkg.version}/screenshot.png` : '');
+    || (fse.existsSync(path.join(path.dirname(pkgPath), 'screenshot.png')) && `${unpkgHost}/${npmName}@${pkg.version}/screenshot.png`)
+    || (fse.existsSync(path.join(path.dirname(pkgPath), 'screenshot.jpg')) && `${unpkgHost}/${npmName}@${pkg.version}/screenshot.jpg`)
+    || '';
   const screenshots = materialItemConfig.screenshots || (screenshot && [screenshot]);
   const homepage = pkg.homepage || `${unpkgHost}/${npmName}@${pkg.version}/build/index.html`;
 
@@ -64,10 +66,6 @@ export default async function generateMaterialData(pkgPath, materialType, materi
 
   return { materialData, materialType };
 };
-
-function hasScreenshot(cwd) {
-  return fse.existsSync(path.join(cwd, 'screenshot.png'));
-}
 
 /**
  * 检测 NPM 包是否已发送，并返回包的发布时间
