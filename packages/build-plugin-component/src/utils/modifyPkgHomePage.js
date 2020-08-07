@@ -2,6 +2,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const npmUtils = require('ice-npm-utils');
 const userHome = require('user-home');
+const urljoin = require('url-join');
 
 module.exports = async (pkg, rootDir) => {
   // modify pkg home page
@@ -36,7 +37,7 @@ module.exports = async (pkg, rootDir) => {
     }
   }
 
-  const homepage = `${path.join(unpkgHost, name)}@${version}/build/index.html`;
+  const homepage = urljoin(unpkgHost, `${name}@${version}`, 'build/index.html');
   fse.writeJsonSync(pkgPath, { ...pkg, homepage }, {
     spaces: 2,
   });

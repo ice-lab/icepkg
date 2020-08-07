@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.22
+
+- [fix] fix invalid homepage
+
+## 0.2.21
+
+- [feat] support custom unpkgHost
+
 ## 0.2.20
 
 - [fix] fail to create component-demos.js when no node_modules folder
