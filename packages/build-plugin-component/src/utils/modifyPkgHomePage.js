@@ -36,7 +36,7 @@ module.exports = async (pkg, rootDir) => {
     }
   }
 
-  const homepage = `${path.join(unpkgHost, name)}@${version}/build/index.html`;
+  const homepage = `${unpkgHost}/${name}@${version}/build/index.html`;
   fse.writeJsonSync(pkgPath, { ...pkg, homepage }, {
     spaces: 2,
   });
