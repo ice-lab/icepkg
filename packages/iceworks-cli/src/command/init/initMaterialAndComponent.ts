@@ -15,11 +15,14 @@ import * as fse from 'fs-extra';
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
 import { checkAliInternal } from 'ice-npm-utils';
+import { downloadMaterialTemplate } from '@iceworks/generate-material';
+
 import addSingleMaterial from './addSingleMaterial';
-import downloadMaterialTemplate from './downloadMaterialTemplate';
 import ejsRenderDir from './ejsRenderDir';
 import generateNpmName from './generateNpmName';
+import getNpmRegistry from '../../utils/getNpmRegistry';
 import log from '../../utils/log';
+import { TEMP_PATH } from '../../utils/constants';
 
 interface IOptions {
   cwd: string;
@@ -32,25 +35,31 @@ export default async function({
 }: IOptions): Promise<void> {
   log.verbose('initMaterialAndComponent', projectType, template);
 
-  const materialDir = await downloadMaterialTemplate(template);
-  const templatePkg = await fse.readJson(path.join(materialDir, 'package.json'));
+  const registry = await getNpmRegistry(template, null, null, true);
+  const tempMaterialDir = TEMP_PATH;
+
+  await downloadMaterialTemplate(tempMaterialDir, template, registry);
+  const templatePkg = await fse.readJson(path.join(tempMaterialDir, 'package.json'));
   const { npmScope, projectName, description } = await initMaterialAsk(cwd, projectType);
 
   if (projectType === 'material') {
-    // 生成根目录文件 package.json/README/lint 等
+    // 1. 生成根目录文件 package.json/README/eslint 等
     const npmName = generateNpmName(projectName, npmScope);
     const templatePath = path.join(__dirname, '../../template/initMaterial');
-    await fse.copy(templatePath, cwd);
-    await ejsRenderDir(cwd, {
+
+    const tempRootFilesDir = path.join(tempMaterialDir, 'temp');
+    await fse.copy(templatePath, tempRootFilesDir);
+    await ejsRenderDir(tempRootFilesDir, {
       npmName, description, template,
       version: '0.1.0',
       materialConfig: templatePkg.materialConfig,
     });
+    await fse.copy(tempRootFilesDir, cwd);
 
-    // add block
+    // 2. add block
     await Promise.all(['block'].map((item) => {
       return addSingleMaterial({
-        materialDir,
+        materialDir: tempMaterialDir,
         cwd,
         useDefaultOptions: true,
         npmScope,
@@ -85,7 +94,7 @@ export default async function({
   } else if (projectType === 'component') {
     // add component
     await addSingleMaterial({
-      materialDir,
+      materialDir: tempMaterialDir,
       cwd,
       useDefaultOptions: false,
       npmScope,
@@ -103,7 +112,7 @@ export default async function({
   }
 
   // remove temp dir
-  await fse.remove(materialDir);
+  await fse.remove(tempMaterialDir);
 };
 
 

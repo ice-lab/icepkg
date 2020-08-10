@@ -1,11 +1,14 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import * as inquirer from 'inquirer';
+import { downloadMaterialTemplate } from '@iceworks/generate-material';
+
 import goldlog from '../../utils/goldlog';
 import log from '../../utils/log';
 import addBlockToProject from './addBlockToProject';
-import downloadMaterialTemplate from '../init/downloadMaterialTemplate';
 import addSingleMaterial from '../init/addSingleMaterial';
+import getNpmRegistry from '../../utils/getNpmRegistry';
+import { TEMP_PATH } from '../../utils/constants';
 
 export default async (options) => {
   const destDir = options.rootDir || process.cwd();
@@ -34,7 +37,11 @@ export default async (options) => {
   }
 
   const { template } = materialConfig;
-  const materialDir = await downloadMaterialTemplate(template, materialConfig);
+
+  const registry = await getNpmRegistry(template, materialConfig, null, true);
+  const materialDir = TEMP_PATH;
+
+  await downloadMaterialTemplate(materialDir, template, registry);
 
   if (!materialType) {
     const answers = await inquirer.prompt([{

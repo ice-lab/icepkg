@@ -15,6 +15,13 @@ export default async function(options: IOptions = {}): Promise<void> {
   let { npmName, type } = options;
   log.verbose('iceworks init options', options as string);
 
+  if (options.type && options.type === 'project') {
+    console.log('');
+    log.warn('', 'Please use `npm init ice ice-example` init icejs project.');
+    console.log('');
+    process.exit(-1);
+  }
+
   const go = await checkEmpty(cwd);
   if (!go) process.exit(1);
 
@@ -28,23 +35,18 @@ export default async function(options: IOptions = {}): Promise<void> {
   goldlog('init', { npmName, type });
   log.verbose('iceworks init', type, npmName);
 
-  if (type === 'project') {
-    log.warn('', 'Please use `npm init ice ice-example` init icejs project.');
-    process.exit(-1);
-  } else {
-    await initMaterialAndComponent({
-      cwd,
-      projectType: type,
-      template: npmName,
-    });
-  }
+  await initMaterialAndComponent({
+    cwd,
+    projectType: type,
+    template: npmName,
+  });
 };
 
 /**
  * 选择初始项目类型
  */
 async function selectType(): Promise<string> {
-  const DEFAULT_TYPE = 'project';
+  const DEFAULT_TYPE = 'material';
   return inquirer
     .prompt({
       type: 'list',
@@ -52,10 +54,6 @@ async function selectType(): Promise<string> {
       message: 'Please select a type',
       default: DEFAULT_TYPE,
       choices: [
-        {
-          name: 'project',
-          value: DEFAULT_TYPE,
-        },
         {
           name: 'material collection(component&scaffold&block)',
           value: 'material',
@@ -77,20 +75,6 @@ async function selectType(): Promise<string> {
 async function selectTemplate(type: string): Promise<string> {
   // 针对不同 init 类型的内置模板
   const typeToTemplates = {
-    project: [{
-      npmName: '@alifd/scaffold-lite',
-      description: 'A lightweight TypeScript template.',
-      default: true,
-    }, {
-      npmName: '@alifd/scaffold-lite-js',
-      description: 'A lightweight JavaScript template.',
-    }, {
-      npmName: '@alifd/fusion-design-pro',
-      description: 'Pro TypeScript template，Integrated rich features such as charts, lists, forms, etc.',
-    }, {
-      npmName: '@alifd/fusion-design-pro-js',
-      description: 'Pro JavaScript template，Integrated rich features such as charts, lists, forms, etc.',
-    }],
     material: [{
       npmName: '@icedesign/ice-react-material-template',
       description: 'React material template',

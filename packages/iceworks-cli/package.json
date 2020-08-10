@@ -25,7 +25,7 @@
   },
   "homepage": "https://ice.work/docs/materials/about",
   "dependencies": {
-    "@iceworks/generate-project": "^1.0.7",
+    "@iceworks/generate-material": "^1.0.0-0",
     "axios": "^0.18.0",
     "bluebird": "^3.5.5",
     "camelcase": "^5.3.1",
