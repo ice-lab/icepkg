@@ -1,13 +1,8 @@
-/* eslint-disable import/order */
-import { downloadAndGenerateProject } from '@iceworks/generate-project';
-import * as chalk from 'chalk';
+import * as inquirer from 'inquirer';
 import log from '../../utils/log';
 import goldlog from '../../utils/goldlog';
 import checkEmpty from '../../utils/checkEmpty';
-import getNpmRegistry from '../../utils/getNpmRegistry';
 import initMaterialAndComponent from './initMaterialAndComponent';
-
-import inquirer = require('inquirer');
 
 interface IOptions {
   rootDir?: string;
@@ -34,21 +29,8 @@ export default async function(options: IOptions = {}): Promise<void> {
   log.verbose('iceworks init', type, npmName);
 
   if (type === 'project') {
-    const registry = await getNpmRegistry(npmName, null, null, true);
-    await downloadAndGenerateProject(
-      cwd,
-      npmName,
-      'latest',
-      registry,
-    );
-    console.log();
-    console.log('Initialize project successfully.');
-    console.log();
-    console.log('Starts the development server.');
-    console.log();
-    console.log(chalk.cyan('    npm install'));
-    console.log(chalk.cyan('    npm start'));
-    console.log();
+    log.warn('', 'Please use `npm init ice ice-example` init icejs project.');
+    process.exit(-1);
   } else {
     await initMaterialAndComponent({
       cwd,
