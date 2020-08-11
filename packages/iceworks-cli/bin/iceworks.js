@@ -39,19 +39,18 @@ program
 
 program
   .command('init [type] [npmName]')
-  .description('init project/material/component by template')
+  .description('init material-collection/component by template')
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
     console.log('  $ iceworks init');
     console.log('  $ iceworks init component');
-    console.log('  $ iceworks init project @icedesign/lite-scaffold');
   })
   .action(async (type, npmName, cmd) => {
     // 兼容 iceworks init @icedesign/pro-scaffold
-    if (type && ['project', 'material', 'component'].indexOf(type) === -1) {
+    if (type && ['material', 'component'].indexOf(type) === -1) {
       npmName = type;
-      type = 'project';
+      type = 'material';
     }
 
     const options = cleanArgs(cmd);

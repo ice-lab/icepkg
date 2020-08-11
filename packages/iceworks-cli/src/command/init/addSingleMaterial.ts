@@ -20,7 +20,7 @@ import * as inquirer from 'inquirer';
 import * as decamelize from 'decamelize';
 import * as validateName from 'validate-npm-package-name';
 import * as uppercamelcase from 'uppercamelcase';
-import { generateComponent, ITemplateOptions } from '@iceworks/generate-material';
+import { generateMaterial, ITemplateOptions } from '@iceworks/generate-material';
 
 import log from '../../utils/log';
 import generateNpmName from './generateNpmName';
@@ -36,7 +36,7 @@ export default async function({
   log.verbose('addSingleMaterial args', materialDir, cwd, useDefaultOptions, npmScope, materialType);
 
   const questions = getQuestions(npmScope, cwd)[materialType];
-  let options: ITemplateOptions = {};
+  let options: ITemplateOptions = {} as ITemplateOptions;
 
   if (useDefaultOptions || process.env.NODE_ENV === 'unittest') {
     // inquire
@@ -61,11 +61,11 @@ export default async function({
   const targetPath = projectType === 'material' ? path.join(cwd, `${materialType}s`, options.name) : cwd;
   await fse.ensureDir(targetPath);
 
-  await generateComponent({
+  await generateMaterial({
     rootDir: targetPath,
     templateOptions: options,
-    template: materialDir,
-    needDownloadTemplate: false,
+    materialTemplateDir: materialDir,
+    materialType,
   });
 
   if (projectType === 'material') {
