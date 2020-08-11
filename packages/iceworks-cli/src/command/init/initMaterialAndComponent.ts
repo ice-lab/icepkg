@@ -164,7 +164,7 @@ async function initMaterialAsk(cwd, projectType): Promise<IResult> {
       message: 'npm scope (eg: @ice)',
       name: 'npmScope',
       validate: (value) => {
-        if (!/^@/.test(value)) {
+        if (value && !/^@/.test(value)) {
           return 'npm scope should starts with @, eg: @ice';
         }
         return true;

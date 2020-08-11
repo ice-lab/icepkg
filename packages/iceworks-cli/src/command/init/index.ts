@@ -76,29 +76,29 @@ async function selectTemplate(type: string): Promise<string> {
   // 针对不同 init 类型的内置模板
   const typeToTemplates = {
     material: [{
+      npmName: '@icedesign/ice-react-ts-material-template',
+      description: 'React + TypeScript',
+    }, {
       npmName: '@icedesign/ice-react-material-template',
-      description: 'React material template',
+      description: 'React + JavaScript',
       default: true,
     }, {
       npmName: '@icedesign/ice-vue-material-template',
-      description: 'Vue material template',
+      description: 'Vue + JavaScript',
     }, {
       npmName: '@icedesign/template-rax',
-      description: 'Rax material template',
-    }, {
-      npmName: '@icedesign/ice-react-ts-material-template',
-      description: 'React material template with TypeScript',
+      description: 'Rax + TypeScript',
     }],
     component: [{
+      npmName: '@icedesign/ice-react-ts-material-template',
+      description: 'React + TypeScript',
+    }, {
       npmName: '@icedesign/ice-react-material-template',
-      description: 'React component template',
+      description: 'React + JavaScript',
       default: true,
     }, {
       npmName: '@icedesign/template-rax',
-      description: 'Rax component template',
-    }, {
-      npmName: '@icedesign/ice-react-ts-material-template',
-      description: 'React component template with TypeScript',
+      description: 'Rax + TypeScript',
     }],
   };
   const templates = typeToTemplates[type];
