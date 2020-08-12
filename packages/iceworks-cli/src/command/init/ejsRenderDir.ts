@@ -3,12 +3,13 @@ import * as glob from 'glob';
 import * as ejs from 'ejs';
 import * as fse from 'fs-extra';
 
-export default async function(dir: string, options: any, diableFormatDotFile?: boolean): Promise<void> {
+export default async function(dir: string, options: any): Promise<void> {
   return new Promise((resolve, reject) => {
     glob('**', {
       cwd: dir,
       ignore: ['node_modules/**'],
       nodir: true,
+      dot: true,
     }, (err, files) => {
       if (err) {
         return reject(err);
@@ -16,7 +17,7 @@ export default async function(dir: string, options: any, diableFormatDotFile?: b
 
       Promise.all(files.map((file) => {
         const filepath = path.join(dir, file);
-        return renderFile(filepath, options, diableFormatDotFile);
+        return renderFile(filepath, options);
       })).then(() => {
         resolve();
       }).catch((err) => {
@@ -26,7 +27,7 @@ export default async function(dir: string, options: any, diableFormatDotFile?: b
   });
 };
 
-function renderFile(filepath: string, options: any, diableFormatDotFile: boolean): Promise<string> {
+function renderFile(filepath: string, options: any): Promise<string> {
   let filename = path.basename(filepath);
 
   return new Promise((resolve, reject) => {
@@ -35,18 +36,8 @@ function renderFile(filepath: string, options: any, diableFormatDotFile: boolean
         return reject(err);
       }
 
-      if (/^_package.json/.test(filename)) {
-        filename = filename.replace('_package.json', 'package.json');
-        fse.removeSync(filepath);
-      }
-
       if (/\.ejs$/.test(filepath)) {
         filename = filename.replace(/\.ejs$/, '');
-        fse.removeSync(filepath);
-      }
-
-      if (!diableFormatDotFile && /^_/.test(filename)) {
-        filename = filename.replace(/^_/, '.');
         fse.removeSync(filepath);
       }
 

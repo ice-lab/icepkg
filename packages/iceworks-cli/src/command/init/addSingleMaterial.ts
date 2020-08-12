@@ -20,30 +20,23 @@ import * as inquirer from 'inquirer';
 import * as decamelize from 'decamelize';
 import * as validateName from 'validate-npm-package-name';
 import * as uppercamelcase from 'uppercamelcase';
-import { isAliNpm } from 'ice-npm-utils';
+import { generateMaterial, ITemplateOptions } from '@iceworks/generate-material';
 
 import log from '../../utils/log';
-import ejsRenderDir from './ejsRenderDir';
 import generateNpmName from './generateNpmName';
 
 export default async function({
-  materialDir,
+  materialDir,   // temp dir
   cwd,
   useDefaultOptions,
   npmScope,
-  materialType,
-  projectType,
+  materialType,  // scaffold | block | component
+  projectType,   // material | component
 }): Promise<void> {
   log.verbose('addSingleMaterial args', materialDir, cwd, useDefaultOptions, npmScope, materialType);
 
-  const materialPath = path.join(materialDir, 'template', materialType);
-  if (!fse.existsSync(materialPath)) {
-    log.warn('', `当前物料模板不存在 ${materialType} 类型的物料`);
-    return;
-  }
-
   const questions = getQuestions(npmScope, cwd)[materialType];
-  let options: any = {};
+  let options: ITemplateOptions = {} as ITemplateOptions;
 
   if (useDefaultOptions || process.env.NODE_ENV === 'unittest') {
     // inquire
@@ -66,45 +59,26 @@ export default async function({
   log.verbose('addSingleMaterial options', options);
 
   const targetPath = projectType === 'material' ? path.join(cwd, `${materialType}s`, options.name) : cwd;
-
   await fse.ensureDir(targetPath);
-  await fse.copy(materialPath, targetPath);
 
-  if (materialType === 'component') {
-    if (options.adaptor) {
-      const templatePath = path.join(__dirname, '../../template/componentAdaptor');
-      await fse.copy(templatePath, targetPath);
-    }
-  }
+  await generateMaterial({
+    rootDir: targetPath,
+    templateOptions: options,
+    materialTemplateDir: materialDir,
+    materialType,
+  });
 
-  // render ejs
-  await ejsRenderDir(
-    targetPath,
-    options,
-    // scaffold 不将 _eslintxxx 转换成 .eslintxxx
-    materialType === 'scaffold',
-  );
-
-  if (isAliNpm(options.npmName)) {
-    // 追加 publishConfig
-    const pkgPath = path.join(targetPath, 'package.json');
-    const pkgData = await fse.readJson(pkgPath);
-    pkgData.publishConfig = {
-      registry: 'https://registry.npm.alibaba-inc.com',
-    };
-    await fse.writeJson(pkgPath, pkgData, { spaces: 2 });
-  }
-
-  if (materialType === 'component' && projectType === 'material') {
-    // 组件有单独开发的链路，有自己的 eslint 文件，在物料集合场景下需要删除掉
+  if (projectType === 'material') {
+    // 物料集合场景下需要删除掉物料自身的 eslint 等文件
     await Promise.all([
       '.eslintignore',
       '.eslintrc.js',
-      '.gitignore',
       '.stylelintignore',
       '.stylelintrc.js',
+      '.editorconfig',
+      '.gitignore',
     ].map((filename) => {
-      return fse.remove(path.join(targetPath, filename));
+      return fse.remove(path.join(targetPath, filename)).catch(err => {});
     }));
   }
 };

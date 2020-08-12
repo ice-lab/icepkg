@@ -37,20 +37,6 @@ afterAll(async () => {
   });
 });
 
-test('init project', async () => {
-  const projectDir = path.join(__dirname, 'tmp/init/project');
-  rimraf.sync(projectDir);
-  mkdirp.sync(projectDir);
-
-  await init({
-    type: 'project',
-    npmName: '@alifd/fusion-design-pro',
-    rootDir: projectDir,
-  });
-
-  expect(1).toBe(1);
-});
-
 test('init material', async () => {
   const projectDir = path.join(__dirname, 'tmp/init/material');
   rimraf.sync(projectDir);

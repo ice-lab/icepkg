@@ -4,7 +4,7 @@ import * as camelCase from 'camelcase';
 import * as readFiles from 'fs-readdir-recursive';
 import * as pkgDir from 'pkg-dir';
 import * as glob from 'glob';
-import * as transfromTsToJs from 'sylvanas';
+import * as transformTsToJs from 'transform-ts-to-js';
 
 import extractTarball from '../../utils/extractTarball';
 import log from '../../utils/log';
@@ -72,12 +72,12 @@ async function addBlock(options, destDir, tempDir) {
       log.verbose('blockType: ', blockType, 'projectType: ', projectType);
 
       if (blockType === 'ts' && projectType === 'js') {
-        // transfrom ts to js
+        // transform ts to js
         const files = glob.sync('**/*.@(ts|tsx)', {
           cwd: blockSourceSrcPath,
         });
-        log.verbose('transfrom ts to js', files.join(','));
-        transfromTsToJs(files, {
+        log.verbose('transform ts to js', files.join(','));
+        transformTsToJs(files, {
           cwd: blockSourceSrcPath,
           outDir: blockSourceSrcPath,
           action: 'overwrite',
