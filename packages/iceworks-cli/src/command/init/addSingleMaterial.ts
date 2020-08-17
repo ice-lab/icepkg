@@ -30,7 +30,7 @@ export default async function({
   cwd,
   useDefaultOptions,
   npmScope,
-  materialType,  // scaffold | block | component
+  materialType,  // scaffold | block | component | page
   projectType,   // material | component
 }): Promise<void> {
   log.verbose('addSingleMaterial args', materialDir, cwd, useDefaultOptions, npmScope, materialType);
@@ -55,6 +55,8 @@ export default async function({
   options.kebabCaseName = decamelize(options.name, '-');
   // @ali/test-component
   options.npmName = generateNpmName(options.name, npmScope);
+
+  options.useEjsTemplate = materialType === 'page';
 
   log.verbose('addSingleMaterial options', options);
 
@@ -94,6 +96,10 @@ const COMPONENT_CATEGORIES = [
   'Information',
   'Others',
 ];
+
+const PAGE_CATEGORIES = [
+  'Test'
+]
 
 const BLOCK_CATEGORIES = [
   'Table',
@@ -308,5 +314,56 @@ function getQuestions(npmScope, cwd) {
         },
       },
     ],
+    page:[
+      nameQuestion('page', npmScope, cwd),
+      {
+        type: 'input',
+        name: 'title',
+        message: 'title',
+        default: 'demo page',
+        validate: (value) => {
+          if (!value) {
+            return 'title cannot be empty';
+          }
+          return true;
+        },
+        filter(value) {
+          return value.trim();
+        },
+      },
+      {
+        type: 'string',
+        required: true,
+        name: 'version',
+        message: 'version',
+        default: '1.0.0',
+      },
+      {
+        type: 'string',
+        required: true,
+        name: 'description',
+        message: 'description',
+        default: 'intro component',
+        filter(value) {
+          return value.trim();
+        },
+        validate: (value) => {
+          if (!value) {
+            return 'description cannot be empty';
+          }
+          return true;
+        },
+      },
+      {
+        type: 'list',
+        name: 'category',
+        message: 'category',
+        default: 'Information',
+        choices: PAGE_CATEGORIES,
+        filter: (answer) => {
+          return answer;
+        },
+      },
+    ]
   };
 }

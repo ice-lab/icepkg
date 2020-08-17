@@ -36,19 +36,26 @@ export default async (options) => {
     throw new Error('Missing `materialConfig.template` property in package.json file.');
   }
 
-  const { template } = materialConfig;
+  const { template,pageTemplate } = materialConfig;
 
   const registry = await getNpmRegistry(template, materialConfig, null, true);
   const materialDir = TEMP_PATH;
 
-  await downloadMaterialTemplate(materialDir, template, registry);
-
+  if(materialType === 'block'){
+    await downloadMaterialTemplate(materialDir, template, registry);
+  } else {
+    // TODO : download from npm differently
+    await downloadMaterialTemplate(materialDir, 
+      pageTemplate ||'ice-react-ts-page-material-template-beta',
+      registry);
+  }
+  
   if (!materialType) {
     const answers = await inquirer.prompt([{
       type: 'list',
       name: 'materialType',
       message: 'Please select material type',
-      choices: ['block', 'component', 'scaffold'],
+      choices: ['block', 'component', 'scaffold','page'],
     }]);
     materialType = answers.materialType;
   }
