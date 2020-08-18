@@ -45,6 +45,9 @@ export default async (options) => {
     await downloadMaterialTemplate(materialDir, template, registry);
   } else {
     // TODO : download from npm differently
+    // 由于我不能发布 @iceworks/ 类型的包，现在的包名为 ice-react-ts-page-material-template-beta
+    // 但是在模板的 Page template 中，设定为了 @iceworks/ice-react-ts-page-material-template-beta
+    // 因此直接在这里直接指定了包名。
     await downloadMaterialTemplate(materialDir, 
       pageTemplate ||'ice-react-ts-page-material-template-beta',
       registry);

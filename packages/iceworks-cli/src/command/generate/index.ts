@@ -28,12 +28,12 @@ export default async function(options) {
 
   goldlog('generate', materialConfig);
 
-  const [blocks, components, scaffolds] = await Promise.all(
-    ['block', 'component', 'scaffold'].map((item) => {
+  const [blocks, components, scaffolds, pages] = await Promise.all(
+    ['block', 'component', 'scaffold','page'].map((item) => {
       return globMaterials(cwd, item);
     })
   );
-  const allMaterials = [].concat(blocks).concat(components).concat(scaffolds);
+  const allMaterials = [].concat(blocks).concat(components).concat(scaffolds).concat(pages);
 
   const concurrency = Number(process.env.CONCURRENCY) || 30;
   log.info('Generate:', `generating materials data，total: ${allMaterials.length}，concurrency: ${concurrency}`);
