@@ -1,7 +1,10 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 const path = require('path');
 const glob = require('glob');
 const { getWebpackConfig, getJestConfig } = require('build-scripts-config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ejsRender = require('./ejsRender');
 
 const formatPath = (outputPath) => {
   const isWin = process.platform === 'win32';
@@ -13,6 +16,17 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
   const { rootDir, command, pkg } = context;
   const mode = command === 'start' ? 'development' : 'production';
   const defaultConfig = getWebpackConfig(mode);
+  const mockData = require(path.join(rootDir,'config','mock'));
+
+  // ejs 模板通过接下来的步骤渲染至 .tmp 文件夹。
+  // 之后我们遍从 .tmp 中的 index 进行读取。
+  const sourceDir = path.join(rootDir,'src');
+  const tmpDir = path.join(rootDir,'.tmp');
+  ejsRender(sourceDir,tmpDir,mockData,log);
+
+
+
+  // log.info('defaultConfig',defaultConfig);
   registerTask('page',defaultConfig);
 
   const defaultFilename = '[name].js';
@@ -22,8 +36,10 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
     validation: 'object',
     defaultValue: { js: '', css: '' },
     configWebpack: (config, outputAssetsPath) => {
+      // log.info('config',config,'outputAssetsPath',outputAssetsPath);
       config.output.filename(formatPath(path.join(outputAssetsPath.js || '', defaultFilename)));
       if (config.plugins.get('MiniCssExtractPlugin')) {
+        // log.info('config.plugin get MinCssExtractPlugin');
         const options = config.plugin('MiniCssExtractPlugin').get('args')[0];
         config.plugin('MiniCssExtractPlugin').tap((args) => [Object.assign(...args, {
           filename: formatPath(path.join(outputAssetsPath.css || '', options.filename)),
@@ -47,7 +63,7 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
     // add custom entry file
     config.merge({
       entry: {
-        index: [require.resolve('./template/block.entry.js')],
+        index: [require.resolve('./template/page.entry.js')],
       },
     });
 
@@ -93,19 +109,28 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
     config.merge({
       resolve: {
         alias: {
-          '@/page': path.join(rootDir, hasDemoFile ? 'demo' : 'src/index'),
+          '@/page': path.join(rootDir, hasDemoFile ? 'demo' : '.tmp/index.tsx'),
         },
       },
     });
 
-    // add exclude rule for compile template/ice.block.entry.js
+    // add exclude rule for compile template/ice.page.entry.js
     ['jsx', 'tsx'].forEach((rule) => {
       config.module
         .rule(rule)
         .exclude
         .clear()
-        .add(/node_modules(?!.+block.entry.js)/);
+        .add(/node_modules(?!.+page.entry.js)/);
     });
+    config.module.rule('ejs')
+      .test(/\.ejs/)
+      .pre()
+      .include
+      .add(path.join(rootDir,'src'))
+      .end()
+      .use('ejs')
+      .loader('ejs-loader?isShowUser=true')
+      .options({esModule:false})
   });
   if (command === 'test') {
     // jest config
