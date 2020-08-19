@@ -2,6 +2,8 @@
 /* eslint-disable global-require */
 const path = require('path');
 const glob = require('glob');
+const webpack = require('webpack');
+const chokidar = require('chokidar');
 const { getWebpackConfig, getJestConfig } = require('build-scripts-config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ejsRender = require('./ejsRender');
@@ -23,6 +25,13 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
   const sourceDir = path.join(rootDir,'src');
   const tmpDir = path.join(rootDir,'.tmp');
   ejsRender(sourceDir,tmpDir,mockData,log);
+  const watcher = chokidar.watch(sourceDir,{
+    ignoreInitial:true
+  })
+  watcher.on('change',()=>{
+    log.info('FILECHANGE');
+    ejsRender(sourceDir,tmpDir,mockData,log);
+  })
 
   // log.info('defaultConfig',defaultConfig);
   registerTask('page',defaultConfig);
@@ -55,6 +64,7 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
         demoTitle: pkg.blockConfig && pkg.blockConfig.name || 'ICE PAGE TEMPLATE',
       },
     }]);
+    config.plugin('HotModuleReplacementPlugin').use(webpack.HotModuleReplacementPlugin);
     config.output.filename(defaultFilename);
     const outputPath = path.resolve(rootDir, 'build');
     config.output.path(outputPath);
@@ -87,7 +97,11 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
         },
       },
     });
+    log.info('config',config)
 
+    // config.module.hot.accept(path.join(rootDir,'src/index.tsx.ejs'),()=>{
+    //   log.info('ejsChanged!!!')
+    // })
     // update publicPath ./
     config.output.publicPath('./');
     ['scss', 'scss-module', 'css', 'css-module', 'less', 'less-module'].forEach((rule) => {
