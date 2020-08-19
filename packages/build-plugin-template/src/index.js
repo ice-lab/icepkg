@@ -24,8 +24,6 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
   const tmpDir = path.join(rootDir,'.tmp');
   ejsRender(sourceDir,tmpDir,mockData,log);
 
-
-
   // log.info('defaultConfig',defaultConfig);
   registerTask('page',defaultConfig);
 

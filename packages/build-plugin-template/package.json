@@ -1,5 +1,5 @@
 {
-  "name": "build-plugin-page-template",
+  "name": "build-plugin-template",
   "version": "1.1.0",
   "description": "build-scripts plugin for page development",
   "main": "src/index.js",

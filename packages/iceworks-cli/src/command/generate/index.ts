@@ -62,6 +62,7 @@ export default async function(options) {
   const blocksData = [];
   const componentsData = [];
   const scaffoldsData = [];
+  const pagesData = [];
   materialsData.forEach((item) => {
     const { materialType, materialData } = item;
     if (materialType === 'block') {
@@ -70,6 +71,8 @@ export default async function(options) {
       componentsData.push(materialData);
     } else if (materialType === 'scaffold') {
       scaffoldsData.push(materialData);
+    }else if (materialType === 'page'){
+      pagesData.push(materialData);
     }
   });
 
@@ -82,6 +85,7 @@ export default async function(options) {
     blocks: blocksData,
     components: componentsData,
     scaffolds: scaffoldsData,
+    pages: pagesData
   };
 
   const distFilepath = path.join(cwd, DB_PATH);
