@@ -5,6 +5,11 @@ module.exports = async (sourceDir,targetDir,variables,log)=>{
   fse.ensureDir(targetDir);
   fse.copySync(sourceDir,targetDir);
   log.info('renderDir',originEjsRenderDir.default);
-  await originEjsRenderDir.default(targetDir,variables).then();
+  try{
+    await originEjsRenderDir.default(targetDir,variables).then();
+  }catch(error){
+    log.error('Problems occurred during compilation',error)
+  }
+
 }
 

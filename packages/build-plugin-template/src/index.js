@@ -33,6 +33,11 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
     ejsRender(sourceDir,tmpDir,mockData,log);
   })
 
+  watcher.on('error',err=>{
+    log.error('fail to watch file',err);
+    process.exit();
+  })
+
   // log.info('defaultConfig',defaultConfig);
   registerTask('page',defaultConfig);
 
