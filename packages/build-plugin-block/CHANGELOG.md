@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+- [feat] support ejs template file  
+
 ## 1.0.0
 
 - [refactor] run block without plugin-react-app

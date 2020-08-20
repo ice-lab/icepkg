@@ -98,7 +98,9 @@ module.exports = (
     // add custom entry file
     config.merge({
       entry: {
-        index: [require.resolve('./template/block.entry.js')],
+        index: usingTemplate?
+          [require.resolve('./examples/material-page.js')]:
+          [require.resolve('./template/block.entry.js')]
       },
     });
 
@@ -147,9 +149,8 @@ module.exports = (
     config.merge({
       resolve: {
         alias: {
-          '@/block': usingTemplate
-            ? path.join(rootDir, hasDemoFile ? 'demo' : '.tmp/index')
-            : path.join(rootDir, hasDemoFile ? 'demo' : 'src/index'),
+          '@/block': path.join(rootDir, hasDemoFile ? 'demo' : 'src/index'),
+          '@/page':path.join(rootDir, hasDemoFile ? 'demo' : '.tmp/index')
         },
       },
     });

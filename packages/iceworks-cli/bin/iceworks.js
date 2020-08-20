@@ -210,6 +210,9 @@ logCLIVersion();
 // check node version
 checkNodeVersion();
 
+// check iceworks version
+checkIceworksVersion();
+
 if (!process.argv.slice(2).length) {
   program.help();
 }
@@ -255,7 +258,7 @@ async function checkIceworksVersion() {
     console.log(
       chalk.yellow(
         `A newer version of iceworks-cli is available(CHANGELOG: ${chalk.blue(
-          'https://github.com/alibaba/ice/blob/master/tools/iceworks-cli/CHANGELOG.md'
+          'https://github.com/ice-lab/iceworks-cli/releases'
         )})`
       )
     );
