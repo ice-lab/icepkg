@@ -1,5 +1,4 @@
-/* eslint-disable import/no-dynamic-require */
-/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require , global-require */
 const path = require('path');
 const glob = require('glob');
 const chokidar = require('chokidar');
@@ -32,7 +31,7 @@ module.exports = (
     try {
       mockData = require(path.join(rootDir, 'config', 'mock'));
     } catch (err) {
-      log.error('cannot get mock data', err);
+      log.warn('cannot get mock data', err);
     }
 
     const tmpDir = path.join(rootDir, '.tmp');
@@ -160,7 +159,7 @@ module.exports = (
       config.module
         .rule(rule)
         .exclude.clear()
-        .add(new RegExp(`node_modules(?!.+${materialType || 'block'}.entry.js)`));
+        .add(new RegExp('node_modules(?!.+block.entry.js)'));
     });
   });
   if (command === 'test') {

@@ -1,4 +1,7 @@
 {
+  // 1. add "debug":"node --inspect-brk=5858 path/to/iceworks.js [command]" to example project.
+  // 2. run 「 npm run debug 」 in example project and f5 in this project.
+  // 3. enjoy Breakpoint Debugging in this project
   "version": "0.2.0",
   "configurations": [
     {
