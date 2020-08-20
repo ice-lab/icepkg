@@ -3,7 +3,7 @@ const glob = require('glob');
 const ejs = require('ejs');
 const fse = require('fs-extra');
 
-const ejsRenderDir= async function (dir, options) {
+const ejsRenderDir = async function (dir, options) {
   return new Promise((resolve, reject) => {
     glob(
       '**',
@@ -57,10 +57,10 @@ function renderFile(filepath, options) {
 }
 
 module.exports = async (sourceDir, targetDir, variables, log) => {
-  fse.ensureDir(targetDir);
+  fse.ensureDirSync(targetDir);
   fse.copySync(sourceDir, targetDir);
   try {
-    await ejsRenderDir(targetDir, variables).then();
+    await ejsRenderDir(targetDir, variables);
   } catch (error) {
     log.error('Problems occurred during compilation', error);
   }

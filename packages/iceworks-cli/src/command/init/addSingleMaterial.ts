@@ -56,8 +56,6 @@ export default async function ({
   // @ali/test-component
   options.npmName = generateNpmName(options.name, npmScope);
 
-  log.verbose('addSingleMaterial options', options);
-
   const targetPath = projectType === 'material' ? path.join(cwd, `${materialType}s`, options.name) : cwd;
   await fse.ensureDir(targetPath);
 

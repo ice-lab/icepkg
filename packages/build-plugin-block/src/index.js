@@ -39,6 +39,7 @@ module.exports = (
   }
 
   if (usingTemplate) {
+    ejsRender();
     const watchers = [
       chokidar.watch(sourceDir, {
         ignoreInitial: true,
@@ -98,9 +99,7 @@ module.exports = (
     // add custom entry file
     config.merge({
       entry: {
-        index: usingTemplate?
-          [require.resolve('./examples/material-page.js')]:
-          [require.resolve('./template/block.entry.js')]
+        index: [require.resolve('./template/block.entry.js')]
       },
     });
 
@@ -149,13 +148,14 @@ module.exports = (
     config.merge({
       resolve: {
         alias: {
-          '@/block': path.join(rootDir, hasDemoFile ? 'demo' : 'src/index'),
-          '@/page':path.join(rootDir, hasDemoFile ? 'demo' : '.tmp/index')
+          '@/block': usingTemplate?
+            path.join(rootDir, hasDemoFile ? 'demo' : '.tmp/index'):
+            path.join(rootDir, hasDemoFile ? 'demo' : 'src/index')
         },
       },
     });
 
-    // add exclude rule for compile template/ice.page.entry.js
+    // add exclude rule for compile template/ice.block.entry.js
     ['jsx', 'tsx'].forEach((rule) => {
       config.module
         .rule(rule)
