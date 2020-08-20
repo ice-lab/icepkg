@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const chokidar = require('chokidar');
 const { getWebpackConfig, getJestConfig } = require('build-scripts-config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ejsRender = require('./ejsRender');
+const originEjsRender = require('./ejsRender');
 
 const formatPath = (outputPath) => {
   const isWin = process.platform === 'win32';
@@ -23,22 +23,31 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
   // ejs 模板通过接下来的步骤渲染至 .tmp 文件夹。
   // 之后我们遍从 .tmp 中的 index 进行读取。
   const sourceDir = path.join(rootDir,'src');
-  if(usingTemplate){
+  const mockDir = path.join(rootDir,'config','mock.js');
+  function ejsRender(){
     const mockData = require(path.join(rootDir,'config','mock'));
     const tmpDir = path.join(rootDir,'.tmp');
-    ejsRender(sourceDir,tmpDir,mockData,log);
-    const watcher = chokidar.watch(sourceDir,{
-      ignoreInitial:true
-    })
-    watcher.on('change',()=>{
-      log.info('FILECHANGE');
-      ejsRender(sourceDir,tmpDir,mockData,log);
-    })
+    originEjsRender(sourceDir,tmpDir,mockData,log);
+  }
 
-    watcher.on('error',err=>{
-      log.error('fail to watch file',err);
-      process.exit();
-    })
+  if(usingTemplate){
+    const watchers = [
+      chokidar.watch(sourceDir,{
+        ignoreInitial:true
+      }),
+      chokidar.watch(mockDir)
+    ];
+    watchers.forEach(watcher=>{
+      watcher.on('change',()=>{
+        log.info('FILECHANGE');
+        ejsRender();
+      })
+  
+      watcher.on('error',err=>{
+        log.error('fail to watch file',err);
+        process.exit();
+      })
+    }) 
   }
 
   registerTask(materialType,defaultConfig);
