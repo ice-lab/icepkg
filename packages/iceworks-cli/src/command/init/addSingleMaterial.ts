@@ -98,14 +98,7 @@ const COMPONENT_CATEGORIES = [
 ];
 
 const PAGE_CATEGORIES = [
-  'Table',
-  'Form',
-  'Chart',
-  'List',
-  'Modal',
-  'Filter',
-  'DataDisplay',
-  'Information',
+  'Basic',
   'Others',
 ]
 

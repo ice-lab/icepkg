@@ -36,21 +36,12 @@ export default async (options) => {
     throw new Error('Missing `materialConfig.template` property in package.json file.');
   }
 
-  const { template,pageTemplate } = materialConfig;
+  const { template } = materialConfig;
 
   const registry = await getNpmRegistry(template, materialConfig, null, true);
   const materialDir = TEMP_PATH;
 
-  if(materialType === 'block'){
-    await downloadMaterialTemplate(materialDir, template, registry);
-  } else {
-    // TODO : download from npm differently
-    // 由于我不能发布 @iceworks/ 类型的包，现在的包名为 ice-react-ts-page-material-template-beta
-    // 应为 @iceworks/ice-react-ts-page-material-template-beta
-    await downloadMaterialTemplate(materialDir, 
-      pageTemplate ||'ice-react-ts-page-material-template-beta',
-      registry);
-  }
+  await downloadMaterialTemplate(materialDir, template, registry);
   
   if (!materialType) {
     const answers = await inquirer.prompt([{
