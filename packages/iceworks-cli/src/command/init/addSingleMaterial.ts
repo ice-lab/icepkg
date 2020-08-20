@@ -25,13 +25,13 @@ import { generateMaterial, ITemplateOptions } from '@iceworks/generate-material'
 import log from '../../utils/log';
 import generateNpmName from './generateNpmName';
 
-export default async function({
-  materialDir,   // temp dir
+export default async function ({
+  materialDir, // temp dir
   cwd,
   useDefaultOptions,
   npmScope,
-  materialType,  // scaffold | block | component | page
-  projectType,   // material | component
+  materialType, // scaffold | block | component | page
+  projectType, // material | component
 }): Promise<void> {
   log.verbose('addSingleMaterial args', materialDir, cwd, useDefaultOptions, npmScope, materialType);
 
@@ -72,18 +72,15 @@ export default async function({
 
   if (projectType === 'material') {
     // 物料集合场景下需要删除掉物料自身的 eslint 等文件
-    await Promise.all([
-      '.eslintignore',
-      '.eslintrc.js',
-      '.stylelintignore',
-      '.stylelintrc.js',
-      '.editorconfig',
-      '.gitignore',
-    ].map((filename) => {
-      return fse.remove(path.join(targetPath, filename)).catch(err => {});
-    }));
+    await Promise.all(
+      ['.eslintignore', '.eslintrc.js', '.stylelintignore', '.stylelintrc.js', '.editorconfig', '.gitignore'].map(
+        (filename) => {
+          return fse.remove(path.join(targetPath, filename)).catch((err) => {});
+        }
+      )
+    );
   }
-};
+}
 
 const COMPONENT_CATEGORIES = [
   'Table',
@@ -97,10 +94,7 @@ const COMPONENT_CATEGORIES = [
   'Others',
 ];
 
-const PAGE_CATEGORIES = [
-  'Basic',
-  'Others',
-]
+const PAGE_CATEGORIES = ['Basic', 'Others'];
 
 const BLOCK_CATEGORIES = [
   'Table',
@@ -117,12 +111,7 @@ const BLOCK_CATEGORIES = [
   'Others',
 ];
 
-
-const SCAFFOLD_CATEGORIES = [
-  'Basic',
-  'Pro',
-  'Others',
-];
+const SCAFFOLD_CATEGORIES = ['Basic', 'Pro', 'Others'];
 
 function nameQuestion(type, npmScope, cwd) {
   const defaultName = `Example${uppercamelcase(type)}`;
@@ -315,7 +304,7 @@ function getQuestions(npmScope, cwd) {
         },
       },
     ],
-    page:[
+    page: [
       nameQuestion('page', npmScope, cwd),
       {
         type: 'input',
@@ -344,7 +333,7 @@ function getQuestions(npmScope, cwd) {
         required: true,
         name: 'description',
         message: 'description',
-        default: 'intro component',
+        default: 'intro page',
         filter(value) {
           return value.trim();
         },
@@ -365,6 +354,6 @@ function getQuestions(npmScope, cwd) {
           return answer;
         },
       },
-    ]
+    ],
   };
 }

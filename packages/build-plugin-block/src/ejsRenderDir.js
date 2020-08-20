@@ -3,31 +3,39 @@ const glob = require('glob');
 const ejs = require('ejs');
 const fse = require('fs-extra');
 
-module.exports = async function(dir ,options) {
+module.exports = async function (dir, options) {
   return new Promise((resolve, reject) => {
-    glob('**', {
-      cwd: dir,
-      ignore: ['node_modules/**'],
-      nodir: true,
-      dot: true,
-    }, (err, files) => {
-      if (err) {
-        return reject(err);
-      }
+    glob(
+      '**',
+      {
+        cwd: dir,
+        ignore: ['node_modules/**'],
+        nodir: true,
+        dot: true,
+      },
+      (err, files) => {
+        if (err) {
+          return reject(err);
+        }
 
-      Promise.all(files.map((file) => {
-        const filepath = path.join(dir, file);
-        return renderFile(filepath, options);
-      })).then(() => {
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+        Promise.all(
+          files.map((file) => {
+            const filepath = path.join(dir, file);
+            return renderFile(filepath, options);
+          })
+        )
+          .then(() => {
+            resolve();
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      }
+    );
   });
 };
 
-function renderFile(filepath, options){
+function renderFile(filepath, options) {
   let filename = path.basename(filepath);
 
   return new Promise((resolve, reject) => {
