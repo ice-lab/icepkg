@@ -18,7 +18,14 @@
   "homepage": "https://ice.work/docs/materials/about",
   "dependencies": {
     "build-scripts-config": "^0.1.6",
+    "chokidar": "^3.4.2",
+    "ejs": "^3.1.5",
+    "fs-extra": "^9.0.1",
     "glob": "^7.1.6",
-    "html-webpack-plugin": "^3.2.0"
+    "html-webpack-plugin": "^3.2.0",
+    "underscore-template-loader": "^1.1.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.44.1"
   }
 }

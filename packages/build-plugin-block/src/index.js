@@ -1,7 +1,12 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 const path = require('path');
 const glob = require('glob');
+const webpack = require('webpack');
+const chokidar = require('chokidar');
 const { getWebpackConfig, getJestConfig } = require('build-scripts-config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ejsRender = require('./ejsRender');
 
 const formatPath = (outputPath) => {
   const isWin = process.platform === 'win32';
@@ -9,14 +14,37 @@ const formatPath = (outputPath) => {
   return isWin ? outputPath.replace(/\\/g, '/') : outputPath;
 };
 
-module.exports = ({ context, onGetWebpackConfig, onGetJestConfig, registerTask, registerUserConfig }) => {
+module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackConfig,onGetJestConfig },userConfig) => {
+  const {usingTemplate,materialType} = userConfig || {};
   const { rootDir, command, pkg } = context;
-
   const mode = command === 'start' ? 'development' : 'production';
   const defaultConfig = getWebpackConfig(mode);
-  registerTask('block', defaultConfig);
   
+  // ejs 模板通过接下来的步骤渲染至 .tmp 文件夹。
+  // 之后我们遍从 .tmp 中的 index 进行读取。
+  const sourceDir = path.join(rootDir,'src');
+  if(usingTemplate){
+    const mockData = require(path.join(rootDir,'config','mock'));
+    const tmpDir = path.join(rootDir,'.tmp');
+    ejsRender(sourceDir,tmpDir,mockData,log);
+    const watcher = chokidar.watch(sourceDir,{
+      ignoreInitial:true
+    })
+    watcher.on('change',()=>{
+      log.info('FILECHANGE');
+      ejsRender(sourceDir,tmpDir,mockData,log);
+    })
+
+    watcher.on('error',err=>{
+      log.error('fail to watch file',err);
+      process.exit();
+    })
+  }
+
+  registerTask(materialType,defaultConfig);
+
   const defaultFilename = '[name].js';
+
   // register config outputAssetsPath for compatiable with plugin-fusion-material
   registerUserConfig({
     name: 'outputAssetsPath',
@@ -32,7 +60,6 @@ module.exports = ({ context, onGetWebpackConfig, onGetJestConfig, registerTask, 
       }
     },
   });
-
   onGetWebpackConfig((config) => {
     // modify HtmlWebpackPlugin
     config.plugin('HtmlWebpackPlugin').use(HtmlWebpackPlugin, [{
@@ -40,9 +67,10 @@ module.exports = ({ context, onGetWebpackConfig, onGetJestConfig, registerTask, 
       template: require.resolve('./template/index.html'),
       minify: false,
       templateParameters: {
-        demoTitle: pkg.blockConfig && pkg.blockConfig.name || 'ICE BLOCK',
+        demoTitle: pkg.blockConfig && pkg.blockConfig.name || `ICE ${materialType.toUpperCase()||'BLOCK'} TEMPLATE`,
       },
     }]);
+    config.plugin('HotModuleReplacementPlugin').use(webpack.HotModuleReplacementPlugin);
     config.output.filename(defaultFilename);
     const outputPath = path.resolve(rootDir, 'build');
     config.output.path(outputPath);
@@ -75,7 +103,7 @@ module.exports = ({ context, onGetWebpackConfig, onGetJestConfig, registerTask, 
         },
       },
     });
-
+    
     // update publicPath ./
     config.output.publicPath('./');
     ['scss', 'scss-module', 'css', 'css-module', 'less', 'less-module'].forEach((rule) => {
@@ -95,18 +123,20 @@ module.exports = ({ context, onGetWebpackConfig, onGetJestConfig, registerTask, 
     config.merge({
       resolve: {
         alias: {
-          '@/block': path.join(rootDir, hasDemoFile ? 'demo' : 'src/index'),
+          '@/block': usingTemplate?
+            path.join(rootDir, hasDemoFile ? 'demo' : '.tmp/index'):
+            path.join(rootDir, hasDemoFile ? 'demo' : 'src/index')
         },
       },
     });
 
-    // add exclude rule for compile template/ice.block.entry.js
+    // add exclude rule for compile template/ice.page.entry.js
     ['jsx', 'tsx'].forEach((rule) => {
       config.module
         .rule(rule)
         .exclude
         .clear()
-        .add(/node_modules(?!.+block.entry.js)/);
+        .add(/node_modules(?!.+page.entry.js)/);
     });
   });
   if (command === 'test') {
