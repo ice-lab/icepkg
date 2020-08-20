@@ -1,5 +1,5 @@
 const fse = require('fs-extra');
-const originEjsRenderDir = require('iceworks/lib/command/init/ejsRenderDir');
+const originEjsRenderDir = require('./ejsRenderDir');
 
 module.exports = async (sourceDir,targetDir,variables,log)=>{
   fse.ensureDir(targetDir);

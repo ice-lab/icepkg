@@ -38,20 +38,18 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
     process.exit();
   })
 
-  // log.info('defaultConfig',defaultConfig);
   registerTask('page',defaultConfig);
 
   const defaultFilename = '[name].js';
+
   // register config outputAssetsPath for compatiable with plugin-fusion-material
   registerUserConfig({
     name: 'outputAssetsPath',
     validation: 'object',
     defaultValue: { js: '', css: '' },
     configWebpack: (config, outputAssetsPath) => {
-      // log.info('config',config,'outputAssetsPath',outputAssetsPath);
       config.output.filename(formatPath(path.join(outputAssetsPath.js || '', defaultFilename)));
       if (config.plugins.get('MiniCssExtractPlugin')) {
-        // log.info('config.plugin get MinCssExtractPlugin');
         const options = config.plugin('MiniCssExtractPlugin').get('args')[0];
         config.plugin('MiniCssExtractPlugin').tap((args) => [Object.assign(...args, {
           filename: formatPath(path.join(outputAssetsPath.css || '', options.filename)),
@@ -102,11 +100,7 @@ module.exports = ({ context, log, registerTask,registerUserConfig,onGetWebpackCo
         },
       },
     });
-    log.info('config',config)
-
-    // config.module.hot.accept(path.join(rootDir,'src/index.tsx.ejs'),()=>{
-    //   log.info('ejsChanged!!!')
-    // })
+    
     // update publicPath ./
     config.output.publicPath('./');
     ['scss', 'scss-module', 'css', 'css-module', 'less', 'less-module'].forEach((rule) => {

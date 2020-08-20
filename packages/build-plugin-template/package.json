@@ -1,6 +1,6 @@
 {
   "name": "build-plugin-template",
-  "version": "1.1.0",
+  "version": "0.1.0",
   "description": "build-scripts plugin for page development",
   "main": "src/index.js",
   "scripts": {
@@ -21,7 +21,6 @@
     "chokidar": "^3.4.2",
     "glob": "^7.1.6",
     "html-webpack-plugin": "^3.2.0",
-    "iceworks": "^3.3.0",
     "underscore-template-loader": "^1.1.0"
   },
   "devDependencies": {
