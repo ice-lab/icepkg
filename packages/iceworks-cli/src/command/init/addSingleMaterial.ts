@@ -1,5 +1,5 @@
 /**
- * material add [block|component|scaffold]:
+ * material add [block|component|scaffold|page]:
  *  1. get options by materialType
  *  2. 仅 component: adaptor
  *  3. copy and ejsRender，文件名称转换：
