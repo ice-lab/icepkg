@@ -1,11 +1,9 @@
 {
   "plugins": [
-    ["build-plugin-block",
-      {
+    ["build-plugin-block",{
         "usingTemplate": true,
         "materialType": "page"
-      }
-    ],
+    }],
     "build-plugin-fusion",
     ["build-plugin-moment-locales", {
       "locales": ["zh-cn"]

@@ -40,7 +40,7 @@ module.exports = (
 
   if (usingTemplate) {
     ejsRender();
-    if(mode === 'development'){
+    if (mode === 'development') {
       const watchers = [
         chokidar.watch(sourceDir, {
           ignoreInitial: true,
@@ -52,7 +52,7 @@ module.exports = (
           log.info('FILECHANGE');
           ejsRender();
         });
-  
+
         watcher.on('error', (err) => {
           log.error('fail to watch file', err);
           process.exit();
@@ -101,7 +101,7 @@ module.exports = (
     // add custom entry file
     config.merge({
       entry: {
-        index: [require.resolve('./template/block.entry.js')]
+        index: [require.resolve('./template/block.entry.js')],
       },
     });
 
@@ -150,19 +150,16 @@ module.exports = (
     config.merge({
       resolve: {
         alias: {
-          '@/block': usingTemplate?
-            path.join(rootDir, hasDemoFile ? 'demo' : '.tmp/index'):
-            path.join(rootDir, hasDemoFile ? 'demo' : 'src/index')
+          '@/block': usingTemplate
+            ? path.join(rootDir, hasDemoFile ? 'demo' : '.tmp/index')
+            : path.join(rootDir, hasDemoFile ? 'demo' : 'src/index'),
         },
       },
     });
 
     // add exclude rule for compile template/ice.block.entry.js
     ['jsx', 'tsx'].forEach((rule) => {
-      config.module
-        .rule(rule)
-        .exclude.clear()
-        .add(new RegExp('node_modules(?!.+block.entry.js)'));
+      config.module.rule(rule).exclude.clear().add(new RegExp('node_modules(?!.+block.entry.js)'));
     });
   });
   if (command === 'test') {

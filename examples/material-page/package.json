@@ -1,7 +1,7 @@
 {
-  "name": "<%= npmName %>",
-  "version": "<%= version %>",
-  "description": "<%= description %>",
+  "name": "example-page",
+  "version": "1.0.0",
+  "description": "intro page",
   "files": [
     "src/!(style.d.ts)",
     "src/",
@@ -33,9 +33,9 @@
     "@types/react-dom": "^16.9.4"
   },
   "pageConfig": {
-    "name": "<%= name %>",
-    "title": "<%= title %>",
-    "category": "<%= category %>"
+    "name": "ExamplePage",
+    "title": "demo page",
+    "category": "Basic"
   },
   "publishConfig": {
     "access": "public"
