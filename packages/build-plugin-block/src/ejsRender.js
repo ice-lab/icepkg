@@ -34,21 +34,16 @@ const ejsRenderDir = async function (dir, data, log) {
 
 async function renderFile(filepath, data, log) {
   const asyncRenderFile = util.promisify(ejs.renderFile);
-  try{
-    return await asyncRenderFile(filepath, data).then(
-      (result) => {
-        if (/\.ejs$/.test(filepath)) {
-          const mockFilePath = filepath.replace(/\.ejs$/, '');
-          return fse.rename(filepath, mockFilePath).then(() => {
-            return fse.writeFile(mockFilePath, result);
-          });
-        }
-      }
-    );
-  }catch (err){
-    log.error('RenderError',err);
+  try {
+    if (/\.ejs$/.test(filepath)) {
+      const content = await asyncRenderFile(filepath, data)
+      const targetFilePath = filepath.replace(/\.ejs$/, '');
+      await fse.rename(filepath, targetFilePath);
+      await fse.writeFile(targetFilePath, content);
+    }
+  } catch (err){
+    log.error('RenderError', err);
   }
-  
 }
 
 module.exports = async (sourceDir, targetDir, variables, log) => {
