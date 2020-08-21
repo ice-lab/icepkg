@@ -30,7 +30,7 @@ program
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/start').default();
-    }  catch (err) {
+    } catch (err) {
       log.error('iceworks start error', err.message);
       console.error(err.stack);
       process.exit(1);
@@ -60,7 +60,7 @@ program
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/init').default(options);
-    }  catch (err) {
+    } catch (err) {
       await fse.remove(TEMP_PATH);
       log.error('iceworks init error', err.message);
       console.error(err.stack);
@@ -71,10 +71,7 @@ program
 program
   .command('add [materialType] [npmName]')
   .description('add block to current directory')
-  .option(
-    '-n, --name <name>',
-    'Specify the block directory name like CustomBlock'
-  )
+  .option('-n, --name <name>', 'Specify the block directory name like CustomBlock')
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
@@ -85,7 +82,7 @@ program
   })
   .action(async (materialType, npmName, cmd) => {
     // 兼容 iceworks add @icedesign/block-test
-    if (materialType && ['scaffold', 'block', 'component'].indexOf(materialType) === -1) {
+    if (materialType && ['scaffold', 'block', 'component', 'page'].indexOf(materialType) === -1) {
       npmName = materialType;
       materialType = null;
     }
@@ -97,7 +94,7 @@ program
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/add').default(options);
-    }  catch (err) {
+    } catch (err) {
       await fse.remove(TEMP_PATH);
       log.error('iceworks add error', err.message);
       console.error(err.stack);
@@ -117,7 +114,7 @@ program
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/generate').default();
-    }  catch (err) {
+    } catch (err) {
       log.error('iceworks generate error', err.message);
       console.error(err.stack);
       process.exit(1);
@@ -127,10 +124,7 @@ program
 program
   .command('sync')
   .description('sync materials data to Fusion Material Center')
-  .option(
-    '-e, --env <env>',
-    'Specify fusion env, support daily|pre|prod'
-  )
+  .option('-e, --env <env>', 'Specify fusion env, support daily|pre|prod')
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
@@ -142,7 +136,7 @@ program
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/sync').default(options);
-    }  catch (err) {
+    } catch (err) {
       log.error('iceworks sync error', err.message);
       console.error(err.stack);
       process.exit(1);
@@ -165,7 +159,7 @@ program
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/start').default(options);
-    }  catch (err) {
+    } catch (err) {
       log.error('iceworks start error', err.message);
       console.error(err.stack);
       process.exit(1);
@@ -192,7 +186,7 @@ program
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/config').default(options);
-    }  catch (err) {
+    } catch (err) {
       log.error('iceworks config error', err.message);
       console.error(err.stack);
       process.exit(1);
@@ -202,9 +196,7 @@ program
 // add some useful info on help
 program.on('--help', () => {
   console.log();
-  console.log(
-    `  Run ${chalk.cyan('iceworks <command> --help')} for detailed usage of given command.`
-  );
+  console.log(`  Run ${chalk.cyan('iceworks <command> --help')} for detailed usage of given command.`);
   console.log();
 });
 
@@ -217,6 +209,9 @@ logCLIVersion();
 
 // check node version
 checkNodeVersion();
+
+// check iceworks version
+checkIceworksVersion();
 
 if (!process.argv.slice(2).length) {
   program.help();
@@ -249,11 +244,7 @@ function cleanArgs(cmd) {
 function checkNodeVersion() {
   if (!semver.satisfies(process.version, packageConfig.engines.node)) {
     console.log();
-    console.log(
-      chalk.red(
-        `You must upgrade node to ${packageConfig.engines.node} to use iceworks`
-      )
-    );
+    console.log(chalk.red(`You must upgrade node to ${packageConfig.engines.node} to use iceworks`));
     console.log();
     process.exit(1);
   }
@@ -264,13 +255,19 @@ async function checkIceworksVersion() {
   const packageVersion = packageConfig.version;
   const latestVersion = await checkVersion(packageName, packageVersion);
   if (latestVersion) {
-    console.log(chalk.yellow(`A newer version of iceworks-cli is available(CHANGELOG: ${chalk.blue('https://github.com/alibaba/ice/blob/master/tools/iceworks-cli/CHANGELOG.md')})`));
+    console.log(
+      chalk.yellow(
+        `A newer version of iceworks-cli is available(CHANGELOG: ${chalk.blue(
+          'https://github.com/ice-lab/iceworks-cli/releases'
+        )})`
+      )
+    );
     console.log(`  latest:     + ${chalk.yellow(latestVersion)}`);
     console.log(`  installed:  + ${chalk.red(packageVersion)} \n`);
     console.log(`  how to update: ${chalk.red('npm install iceworks@latest -g')} \n`);
   }
 }
 
-function logCLIVersion () {
+function logCLIVersion() {
   console.log(chalk.grey('iceworks CLI:', packageConfig.version));
 }

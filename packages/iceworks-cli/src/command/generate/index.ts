@@ -16,7 +16,7 @@ import log from '../../utils/log';
 import { DB_PATH } from '../../utils/constants';
 import generateMaterialData from './generateMaterialData';
 
-export default async function(options) {
+export default async function (options) {
   const cwd = (options && options.rootDir) || process.cwd();
 
   const pkg = await fse.readJson(path.join(cwd, 'package.json'));
@@ -28,12 +28,12 @@ export default async function(options) {
 
   goldlog('generate', materialConfig);
 
-  const [blocks, components, scaffolds] = await Promise.all(
-    ['block', 'component', 'scaffold'].map((item) => {
+  const [blocks, components, scaffolds, pages] = await Promise.all(
+    ['block', 'component', 'scaffold', 'page'].map((item) => {
       return globMaterials(cwd, item);
     })
   );
-  const allMaterials = [].concat(blocks).concat(components).concat(scaffolds);
+  const allMaterials = [].concat(blocks).concat(components).concat(scaffolds).concat(pages);
 
   const concurrency = Number(process.env.CONCURRENCY) || 30;
   log.info('Generate:', `generating materials data，total: ${allMaterials.length}，concurrency: ${concurrency}`);
@@ -44,17 +44,21 @@ export default async function(options) {
   let materialsData;
 
   try {
-    materialsData = await BluebirdPromise.map(allMaterials, (materialItem) => {
-      return generateMaterialData(materialItem.pkgPath, materialItem.materialType, materialConfig).then((data) => {
-        index += 1;
-        spinner.text = `generate materials data progress: ${index}/${total}`;
-        return data;
-      });
-    }, {
-      concurrency,
-    });
+    materialsData = await BluebirdPromise.map(
+      allMaterials,
+      (materialItem) => {
+        return generateMaterialData(materialItem.pkgPath, materialItem.materialType, materialConfig).then((data) => {
+          index += 1;
+          spinner.text = `generate materials data progress: ${index}/${total}`;
+          return data;
+        });
+      },
+      {
+        concurrency,
+      }
+    );
     spinner.succeed(`materials data generate successfully，start write to ${DB_PATH}...`);
-  } catch(err) {
+  } catch (err) {
     spinner.fail('materials data generate failed!');
     throw err;
   }
@@ -62,6 +66,7 @@ export default async function(options) {
   const blocksData = [];
   const componentsData = [];
   const scaffoldsData = [];
+  const pagesData = [];
   materialsData.forEach((item) => {
     const { materialType, materialData } = item;
     if (materialType === 'block') {
@@ -70,6 +75,8 @@ export default async function(options) {
       componentsData.push(materialData);
     } else if (materialType === 'scaffold') {
       scaffoldsData.push(materialData);
+    } else if (materialType === 'page') {
+      pagesData.push(materialData);
     }
   });
 
@@ -82,6 +89,7 @@ export default async function(options) {
     blocks: blocksData,
     components: componentsData,
     scaffolds: scaffoldsData,
+    pages: pagesData,
   };
 
   const distFilepath = path.join(cwd, DB_PATH);
@@ -91,7 +99,7 @@ export default async function(options) {
   console.log();
   console.log(chalk.cyan(`Success! materials data generated: ${DB_PATH}`));
   console.log();
-};
+}
 
 /**
  * @param {Path} materialDir
@@ -109,7 +117,7 @@ function globMaterials(materialDir, materialType) {
         if (err) {
           reject(err);
         } else {
-          const data = files.map(item => {
+          const data = files.map((item) => {
             return {
               pkgPath: path.join(materialDir, item),
               materialType,

@@ -44,12 +44,14 @@ export default async (options) => {
   await downloadMaterialTemplate(materialDir, template, registry);
 
   if (!materialType) {
-    const answers = await inquirer.prompt([{
-      type: 'list',
-      name: 'materialType',
-      message: 'Please select material type',
-      choices: ['block', 'component', 'scaffold'],
-    }]);
+    const answers = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'materialType',
+        message: 'Please select material type',
+        choices: ['block', 'component', 'scaffold', 'page'],
+      },
+    ]);
     materialType = answers.materialType;
   }
 

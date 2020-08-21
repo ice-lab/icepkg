@@ -5,7 +5,7 @@
 ## 特性
 
 - 支持开发自定义物料集合，同时在 VS Code 中可视化创建以及添加物料到项目中
-- 支持区块/业务组件/脚手架不同的物料类型开发
+- 支持区块/业务组件/页面/脚手架不同的物料类型开发
 - 内置多套物料模板（React/Rax/Vue/...）
 - 支持开发私有的物料集合
 - 支持自定义物料模板
@@ -33,7 +33,7 @@ $ iceworks init component
 添加物料：
 
 ```bash
-$ iceworks add // support block/component/scaffold
+$ iceworks add // support block/component/scaffold/page
 ```
 
 生成物料数据：

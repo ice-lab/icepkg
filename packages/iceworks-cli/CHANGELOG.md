@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4.0
+
+- [feat] support page material  
+
 ## 3.2.0
 
 - [feat] support `iceworks sync --env daily/pre/prod`

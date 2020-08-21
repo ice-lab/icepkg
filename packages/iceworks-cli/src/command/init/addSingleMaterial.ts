@@ -1,5 +1,5 @@
 /**
- * material add [block|component|scaffold]:
+ * material add [block|component|scaffold|page]:
  *  1. get options by materialType
  *  2. 仅 component: adaptor
  *  3. copy and ejsRender，文件名称转换：
@@ -25,13 +25,13 @@ import { generateMaterial, ITemplateOptions } from '@iceworks/generate-material'
 import log from '../../utils/log';
 import generateNpmName from './generateNpmName';
 
-export default async function({
-  materialDir,   // temp dir
+export default async function ({
+  materialDir, // temp dir
   cwd,
   useDefaultOptions,
   npmScope,
-  materialType,  // scaffold | block | component
-  projectType,   // material | component
+  materialType, // scaffold | block | component | page
+  projectType, // material | component
 }): Promise<void> {
   log.verbose('addSingleMaterial args', materialDir, cwd, useDefaultOptions, npmScope, materialType);
 
@@ -56,8 +56,6 @@ export default async function({
   // @ali/test-component
   options.npmName = generateNpmName(options.name, npmScope);
 
-  log.verbose('addSingleMaterial options', options);
-
   const targetPath = projectType === 'material' ? path.join(cwd, `${materialType}s`, options.name) : cwd;
   await fse.ensureDir(targetPath);
 
@@ -70,18 +68,15 @@ export default async function({
 
   if (projectType === 'material') {
     // 物料集合场景下需要删除掉物料自身的 eslint 等文件
-    await Promise.all([
-      '.eslintignore',
-      '.eslintrc.js',
-      '.stylelintignore',
-      '.stylelintrc.js',
-      '.editorconfig',
-      '.gitignore',
-    ].map((filename) => {
-      return fse.remove(path.join(targetPath, filename)).catch(err => {});
-    }));
+    await Promise.all(
+      ['.eslintignore', '.eslintrc.js', '.stylelintignore', '.stylelintrc.js', '.editorconfig', '.gitignore'].map(
+        (filename) => {
+          return fse.remove(path.join(targetPath, filename)).catch((err) => {});
+        }
+      )
+    );
   }
-};
+}
 
 const COMPONENT_CATEGORIES = [
   'Table',
@@ -94,6 +89,8 @@ const COMPONENT_CATEGORIES = [
   'Information',
   'Others',
 ];
+
+const PAGE_CATEGORIES = ['Basic', 'Others'];
 
 const BLOCK_CATEGORIES = [
   'Table',
@@ -110,12 +107,7 @@ const BLOCK_CATEGORIES = [
   'Others',
 ];
 
-
-const SCAFFOLD_CATEGORIES = [
-  'Basic',
-  'Pro',
-  'Others',
-];
+const SCAFFOLD_CATEGORIES = ['Basic', 'Pro', 'Others'];
 
 function nameQuestion(type, npmScope, cwd) {
   const defaultName = `Example${uppercamelcase(type)}`;
@@ -303,6 +295,57 @@ function getQuestions(npmScope, cwd) {
         message: 'category',
         default: 'Basic',
         choices: SCAFFOLD_CATEGORIES,
+        filter: (answer) => {
+          return answer;
+        },
+      },
+    ],
+    page: [
+      nameQuestion('page', npmScope, cwd),
+      {
+        type: 'input',
+        name: 'title',
+        message: 'title',
+        default: 'demo page',
+        validate: (value) => {
+          if (!value) {
+            return 'title cannot be empty';
+          }
+          return true;
+        },
+        filter(value) {
+          return value.trim();
+        },
+      },
+      {
+        type: 'string',
+        required: true,
+        name: 'version',
+        message: 'version',
+        default: '1.0.0',
+      },
+      {
+        type: 'string',
+        required: true,
+        name: 'description',
+        message: 'description',
+        default: 'intro page',
+        filter(value) {
+          return value.trim();
+        },
+        validate: (value) => {
+          if (!value) {
+            return 'description cannot be empty';
+          }
+          return true;
+        },
+      },
+      {
+        type: 'list',
+        name: 'category',
+        message: 'category',
+        default: 'Information',
+        choices: PAGE_CATEGORIES,
         filter: (answer) => {
           return answer;
         },
