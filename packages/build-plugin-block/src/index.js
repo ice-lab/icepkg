@@ -40,23 +40,25 @@ module.exports = (
 
   if (usingTemplate) {
     ejsRender();
-    const watchers = [
-      chokidar.watch(sourceDir, {
-        ignoreInitial: true,
-      }),
-      chokidar.watch(mockDir),
-    ];
-    watchers.forEach((watcher) => {
-      watcher.on('change', () => {
-        log.info('FILECHANGE');
-        ejsRender();
+    if(mode === 'development'){
+      const watchers = [
+        chokidar.watch(sourceDir, {
+          ignoreInitial: true,
+        }),
+        chokidar.watch(mockDir),
+      ];
+      watchers.forEach((watcher) => {
+        watcher.on('change', () => {
+          log.info('FILECHANGE');
+          ejsRender();
+        });
+  
+        watcher.on('error', (err) => {
+          log.error('fail to watch file', err);
+          process.exit();
+        });
       });
-
-      watcher.on('error', (err) => {
-        log.error('fail to watch file', err);
-        process.exit();
-      });
-    });
+    }
   }
 
   registerTask(materialType, defaultConfig);
