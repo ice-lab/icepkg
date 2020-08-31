@@ -29,7 +29,12 @@ module.exports = (
   function ejsRender() {
     let mockData = {};
     try {
-      mockData = require(path.join(rootDir, 'config', 'mock'));
+      // TODO: 由于 node require 具有缓存机制，我们必须先删除缓存才能实现热加载
+      // 但是这种方式在某些情况下可能造成内存泄漏： https://zhuanlan.zhihu.com/p/34702356
+      // 对于模板开发来说，这种泄漏的影响比较小，在多次热加载后没有出现卡顿以及内存暴增的现象。在当前情况下可以接受，有更好方案的情况下应该改良。
+      delete require.cache[mockDir];
+      mockData = require(mockDir);
+      console.log('mockData', mockData);
     } catch (err) {
       log.warn('cannot get mock data', err);
     }
