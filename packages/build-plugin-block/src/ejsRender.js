@@ -22,7 +22,7 @@ const ejsRenderDir = async function (dir, data, log) {
         Promise.all(
           files.map((file) => {
             const filepath = path.join(dir, file);
-            return renderFile(filepath, data, log);
+            return ejsRenderFile(filepath, data, log);
           })
         )
           .then(resolve)
@@ -32,7 +32,7 @@ const ejsRenderDir = async function (dir, data, log) {
   });
 };
 
-async function renderFile(filepath, data, log) {
+async function ejsRenderFile(filepath, data, log) {
   const asyncRenderFile = util.promisify(ejs.renderFile);
   try {
     if (/\.ejs$/.test(filepath)) {
@@ -47,11 +47,20 @@ async function renderFile(filepath, data, log) {
   }
 }
 
-module.exports = async (sourceDir, targetDir, variables, log) => {
-  await fse.ensureDir(targetDir);
-  await fse.copy(sourceDir, targetDir);
+module.exports = async (sourcePath, targetPath, variables, log) => {
   try {
-    await ejsRenderDir(targetDir, variables, log);
+    const stat = await fse.stat(sourcePath);
+    if(stat.isDirectory()) {
+      await fse.ensureDir(targetPath);
+      await fse.copy(sourcePath, targetPath);
+      await ejsRenderDir(targetPath, variables, log);
+    } else {
+      // 如果渲染文件时存在同名的文件夹，则会阻塞渲染，应该删除。
+      fse.remove(targetPath);
+      await fse.ensureFile(targetPath);
+      await fse.copy(sourcePath, targetPath);
+      await ejsRenderFile(targetPath, variables, log);
+    }
   } catch (error) {
     log.error('Problems occurred during compilation', error);
   }

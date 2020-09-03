@@ -43,9 +43,10 @@ module.exports = (
     if (mode === 'development') {
       const templateWatcher = chokidar.watch(sourceDir, {ignoreInitial: true});
       const mockWatcher = chokidar.watch(mockDir, {ignoreInitial: true});
-      templateWatcher.on('change', () => {
+      templateWatcher.on('change', sourcepath => {
         log.info('FILE CHANGE');
-        ejsRender(sourceDir, tmpDir, mockData, log);
+        const targetpath = sourcepath.replace(sourceDir, tmpDir);
+        ejsRender(sourcepath, targetpath, mockData, log);
       });
       mockWatcher.on('change', () => {
         log.info('MOCK DATA CHANGE');
