@@ -49,14 +49,14 @@ async function ejsRenderFile(filepath, data, log) {
 
 module.exports = async (sourcePath, targetPath, variables, log) => {
   try {
+    // 如果渲染文件时存在同名的文件夹，则会阻塞渲染，应该删除。
+    fse.remove(targetPath);
     const stat = await fse.stat(sourcePath);
     if(stat.isDirectory()) {
       await fse.ensureDir(targetPath);
       await fse.copy(sourcePath, targetPath);
       await ejsRenderDir(targetPath, variables, log);
     } else {
-      // 如果渲染文件时存在同名的文件夹，则会阻塞渲染，应该删除。
-      fse.remove(targetPath);
       await fse.ensureFile(targetPath);
       await fse.copy(sourcePath, targetPath);
       await ejsRenderFile(targetPath, variables, log);
