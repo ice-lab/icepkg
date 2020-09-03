@@ -23,7 +23,7 @@ module.exports = (
   const mockDir = path.join(rootDir, 'config', 'mock.js');
   const sourceDir = path.join(rootDir, 'src');
   const tmpDir = path.join(rootDir, '.tmp');
-  let mockData = require(mockDir);
+  let mockData;
 
   // ejs 模板通过接下来的步骤渲染至 .tmp 文件夹。
   // 之后我们将 @/block 重定位到 .tmp 文件夹

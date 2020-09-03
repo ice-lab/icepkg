@@ -3,7 +3,6 @@ const glob = require('glob');
 const ejs = require('ejs');
 const fse = require('fs-extra');
 const util = require('util');
-const prettier = require('prettier');
 
 const ejsRenderDir = async function (dir, data, log) {
   return new Promise((resolve, reject) => {
@@ -39,9 +38,8 @@ async function renderFile(filepath, data, log) {
     if (/\.ejs$/.test(filepath)) {
       const content = await asyncRenderFile(filepath, data);
       const targetFilePath = filepath.replace(/\.ejs$/, '');
-      const formattedContent = prettier.format(content, {filepath: targetFilePath});
       await fse.rename(filepath, targetFilePath);
-      await fse.writeFile(targetFilePath, formattedContent);
+      await fse.writeFile(targetFilePath, content);
     }
   } catch (err){
     log.error('RenderError', err);
