@@ -4,7 +4,7 @@ const glob = require('glob');
 const chokidar = require('chokidar');
 const { getWebpackConfig, getJestConfig } = require('build-scripts-config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const originEjsRender = require('./ejsRender');
+const ejsRender = require('./ejsRender');
 
 const formatPath = (outputPath) => {
   const isWin = process.platform === 'win32';
@@ -20,48 +20,45 @@ module.exports = (
   const { rootDir, command, pkg } = context;
   const mode = command === 'start' ? 'development' : 'production';
   const defaultConfig = getWebpackConfig(mode);
+  const mockDir = path.join(rootDir, 'config', 'mock.js');
+  const sourceDir = path.join(rootDir, 'src');
+  const tmpDir = path.join(rootDir, '.tmp');
+  let mockData = require(mockDir);
 
   // ejs 模板通过接下来的步骤渲染至 .tmp 文件夹。
   // 之后我们将 @/block 重定位到 .tmp 文件夹
   // 这样就引入了经过模拟数据渲染的代码。
-  const sourceDir = path.join(rootDir, 'src');
-  const mockDir = path.join(rootDir, 'config', 'mock.js');
-  function ejsRender() {
-    let mockData = {};
+  function updateMockData(){
     try {
-      // TODO: 由于 node require 具有缓存机制，我们必须先删除缓存才能实现热加载
-      // 但是这种方式在某些情况下可能造成内存泄漏： https://zhuanlan.zhihu.com/p/34702356
-      // 对于模板开发来说，这种泄漏的影响比较小，在多次热加载后没有出现卡顿以及内存暴增的现象。在当前情况下可以接受，有更好方案的情况下应该改良。
-      delete require.cache[mockDir];
+      require.cache[mockDir] = undefined;
       mockData = require(mockDir);
-      console.log('mockData', mockData);
     } catch (err) {
       log.warn('cannot get mock data', err);
     }
-
-    const tmpDir = path.join(rootDir, '.tmp');
-    originEjsRender(sourceDir, tmpDir, mockData, log);
   }
 
   if (usingTemplate) {
-    ejsRender();
+    updateMockData();
+    ejsRender(sourceDir, tmpDir, mockData, log);
     if (mode === 'development') {
-      const watchers = [
-        chokidar.watch(sourceDir, {
-          ignoreInitial: true,
-        }),
-        chokidar.watch(mockDir),
-      ];
-      watchers.forEach((watcher) => {
-        watcher.on('change', () => {
-          log.info('FILECHANGE');
-          ejsRender();
-        });
-
-        watcher.on('error', (err) => {
-          log.error('fail to watch file', err);
-          process.exit();
-        });
+      const templateWatcher = chokidar.watch(sourceDir, {ignoreInitial: true});
+      const mockWatcher = chokidar.watch(mockDir, {ignoreInitial: true});
+      templateWatcher.on('change', () => {
+        log.info('FILE CHANGE');
+        ejsRender(sourceDir, tmpDir, mockData, log);
+      });
+      mockWatcher.on('change', () => {
+        log.info('MOCK DATA CHANGE');
+        updateMockData();
+        ejsRender(sourceDir, tmpDir, mockData, log);
+      });
+      templateWatcher.on('error', (err) => {
+        log.error('fail to watch template files', err);
+        process.exit();
+      });
+      mockWatcher.on('error', (err) => {
+        log.error('fail to watch mock data files', err);
+        process.exit();
       });
     }
   }
