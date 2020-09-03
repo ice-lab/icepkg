@@ -36,13 +36,14 @@ async function renderFile(filepath, data, log) {
   const asyncRenderFile = util.promisify(ejs.renderFile);
   try {
     if (/\.ejs$/.test(filepath)) {
-      const content = await asyncRenderFile(filepath, data)
+      const content = await asyncRenderFile(filepath, data);
       const targetFilePath = filepath.replace(/\.ejs$/, '');
       await fse.rename(filepath, targetFilePath);
       await fse.writeFile(targetFilePath, content);
     }
   } catch (err){
     log.error('RenderError', err);
+    throw err;
   }
 }
 
