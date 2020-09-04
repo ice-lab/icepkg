@@ -7,9 +7,9 @@ const path = require('path');
 const fs = require('fs-extra');
 const glob = require('glob');
 const babel = require('@babel/core');
+const getRaxBabelConfig = require('rax-babel-config');
 const { REG_JS } = require('../configs/reg');
 const getCompileBabel = require('../utils/getCompileBabel');
-const getRaxBabelConfig = require('rax-babel-config');
 const { analyzePackage, analyzeDependencies } = require('./depAnalyze');
 const dtsCompiler = require('./dts');
 

@@ -4,8 +4,10 @@ const { parse, print } = require('error-stack-tracey');
 
 function exec(code, filename, filePath) {
   const module = new Module(filename, this);
+  // eslint-disable-next-line
   module.paths = Module._nodeModulePaths(filePath);
   module.filename = filename;
+  // eslint-disable-next-line
   module._compile(code, filename);
   return module.exports;
 }

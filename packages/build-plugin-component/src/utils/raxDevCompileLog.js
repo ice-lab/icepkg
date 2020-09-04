@@ -1,3 +1,4 @@
+const path = require('path');
 const chalk = require('chalk');
 const ip = require('ip');
 const consoleClear = require('console-clear');
@@ -6,7 +7,7 @@ const { handleWebpackErr } = require('rax-compile-config');
 const { platformMap } = require('miniapp-builder-shared');
 const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE } = require('../constants');
 
-function devCompileLog(devCompleted, devUrl, targets, entries) {
+function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options) {
   consoleClear(true);
   const { err, stats } = devCompleted;
 

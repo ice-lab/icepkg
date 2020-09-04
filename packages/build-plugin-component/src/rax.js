@@ -27,8 +27,9 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
   if (command === 'start') {
     const { entries, serverBundles } = generateRaxEntry(rootDir, targets);
     targets.forEach((target) => {
+      const options = { ...userConfig, target };
       if ([WEB, WEEX, NODE].includes(target)) {
-        const options = { ...userConfig, target };
+        // eslint-disable-next-line
         const configDev = require(`./configs/rax/${target}/dev`);
         const defaultConfig = getBaseWebpack(context, options);
         configDev(defaultConfig, context, {...options, entries, serverBundles } );
@@ -41,8 +42,8 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
       }
     });
     onHook('after.start.compile', async(args) => {
-      devUrl = args.url;
-      devCompileLog(args, devUrl, targets, entries);
+      const devUrl = args.url;
+      devCompileLog(args, devUrl, targets, entries, rootDir, userConfig);
     });
   } else if (command === 'build') {
     // omitLib just for sfc2mp，not for developer
@@ -65,7 +66,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
         registerTask(`component-build-${target}-es6`, es6Config);
       } else if (target === WEEX) {
         const distConfig = getDistConfig(context, {...options, entryName: 'index-weex'});
-        registerTask(`component-build-weex`, distConfig);
+        registerTask('component-build-weex', distConfig);
       } else if (target === MINIAPP || target === WECHAT_MINIPROGRAM) {
         options[target] = options[target] || {};
         addMiniappTargetParam(target, options[target]);
@@ -79,7 +80,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
       }
     });
     onHook('after.build.compile', async(args) => {
-      buildCompileLog(args, targets, rootDir);
+      buildCompileLog(args, targets, rootDir, userConfig);
     });
   }
 }

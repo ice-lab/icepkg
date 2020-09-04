@@ -2,8 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { hmrClient } = require('rax-compile-config');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const getBaseWebpack = require('../getBaseWebpack');
-const generateEntryJs = require('../../../utils/generateEntry')
 
 module.exports = (config, context, options) => {
   const { taskName } = context;
@@ -60,12 +58,14 @@ module.exports = (config, context, options) => {
       .options({
         ident: 'postcss',
         plugins: () => [
+          // eslint-disable-next-line
           require('postcss-preset-env')({
             autoprefixer: {
               flexbox: 'no-2009',
             },
             stage: 3,
           }),
+          // eslint-disable-next-line
           require('postcss-plugin-rpx2vw')(),
         ],
       });
@@ -84,12 +84,14 @@ module.exports = (config, context, options) => {
       .options({
         ident: 'postcss',
         plugins: () => [
+          // eslint-disable-next-line
           require('postcss-preset-env')({
             autoprefixer: {
               flexbox: 'no-2009',
             },
             stage: 3,
           }),
+          // eslint-disable-next-line
           require('postcss-plugin-rpx2vw')(),
         ],
       })

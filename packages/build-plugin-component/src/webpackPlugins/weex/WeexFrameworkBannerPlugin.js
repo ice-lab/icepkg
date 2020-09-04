@@ -17,6 +17,7 @@ class WeexFrameworkBannerPlugin {
         // need use afterOptimizeChunkAssets to add frameworkComment after that.
         // like the else block
         compilation.hooks.afterOptimizeChunkAssets.tap('WeexFrameworkBannerPlugin', chunks => {
+          // eslint-disable-next-line
           for (const chunk of chunks) {
             // Entry only
             if (!chunk.canBeInitial()) {

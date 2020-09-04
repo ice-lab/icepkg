@@ -99,7 +99,7 @@ module.exports = (context, options) => {
     config.mode('production');
     // support production sourcemap
     if (options.sourceMap) {
-      config.devtool(typeof sourceMap === 'string' ? sourceMap : 'source-map');
+      config.devtool(typeof options.sourceMap === 'string' ? options.sourceMap : 'source-map');
     }
     config.optimization
       .minimizer('terser')

@@ -5,6 +5,7 @@ module.exports = (api) => {
     log.error('build-plugin-component need to set type react/rax');
   } else {
     const componentType = userConfig.type || 'react';
+    // eslint-disable-next-line
     require(`./${componentType}`)(api);
   }
 }

@@ -56,12 +56,14 @@ module.exports = (context, options) => {
       .options({
         ident: 'postcss',
         plugins: () => [
+          // eslint-disable-next-line global-require
           require('postcss-preset-env')({
             autoprefixer: {
               flexbox: 'no-2009',
             },
             stage: 3,
           }),
+          // eslint-disable-next-line global-require
           require('postcss-plugin-rpx2vw')(),
         ],
       });
@@ -79,12 +81,14 @@ module.exports = (context, options) => {
       .options({
         ident: 'postcss',
         plugins: () => [
+          // eslint-disable-next-line global-require
           require('postcss-preset-env')({
             autoprefixer: {
               flexbox: 'no-2009',
             },
             stage: 3,
           }),
+          // eslint-disable-next-line global-require
           require('postcss-plugin-rpx2vw')(),
         ],
       })

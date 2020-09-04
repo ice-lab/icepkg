@@ -1,5 +1,5 @@
-const getDistConfig = require('./getDistConfig');
 const _ = require('lodash');
+const getDistConfig = require('./getDistConfig');
 
 module.exports = (context, options) => {
   const config = getDistConfig(context, {...options, isES6: true});
