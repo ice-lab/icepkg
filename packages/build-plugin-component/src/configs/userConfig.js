@@ -1,30 +1,5 @@
 module.exports = [
   {
-    name: 'demoTemplate',
-    validation: (val) => {
-      return Array.isArray(val) || typeof val === 'string';
-    },
-  },
-  {
-    name: 'babelPlugins',
-    validation: 'array',
-  },
-  {
-    name: 'babelOptions',
-    // [{ name: '@babel/preset-env', options: { module: false } }]
-    validation: 'array',
-  },
-  {
-    name: 'basicComponents',
-    validation: (val) => {
-      return Array.isArray(val) || val === false;
-    },
-  },
-  {
-    name: 'filename',
-    validation: 'string',
-  },
-  {
     name: 'library',
     validation: 'string',
   },
@@ -41,16 +16,25 @@ module.exports = [
     validation: 'boolean',
   },
   {
-    name: 'externals',
-    validation: 'object',
-  },
-  {
     name: 'minify',
     validation: 'boolean',
   },
   {
+    name: 'type',
+    validation: 'string',
+  },
+  {
     name: 'devServer',
     validation: 'object',
+    defaultValue: {
+      logLevel: 'silent',
+      compress: true,
+      disableHostCheck: true,
+      clientLogLevel: 'error',
+      hot: true,
+      quiet: true,
+      overlay: false,
+    },
     configWebpack: (config, devServer, context) => {
       const { command } = context;
       if (command === 'start' && devServer) {

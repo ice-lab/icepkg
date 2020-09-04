@@ -11,7 +11,7 @@ module.exports = (config, { pkg, rootDir, entry, demoDataPath }) => {
 
   config.plugin('HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
     {
-      template: require.resolve('../template/demo.hbs'),
+      template: require.resolve('../../template/demo.hbs'),
       filename: 'index.html',
     },
   ]);
@@ -38,7 +38,7 @@ module.exports = (config, { pkg, rootDir, entry, demoDataPath }) => {
           plugins: [
             ...plugins,
             // only transform index entry
-            [require.resolve('../utils/babelPluginCorejsLock.js'), { fileList: [entry.index] }],
+            [require.resolve('../../utils/babelPluginCorejsLock.js'), { fileList: [entry.index] }],
           ],
         };
       });
@@ -53,7 +53,7 @@ module.exports = (config, { pkg, rootDir, entry, demoDataPath }) => {
     .rule('demo-loader')
     .test(/\.md$/i)
     .use('demo')
-    .loader(require.resolve('../utils/componentDemoLoader'));
+    .loader(require.resolve('../../webpackLoader/reactDemoLoader'));
   // add packagename to webpack alias
   ['.js', '.jsx', '.json', '.html', '.ts', '.tsx'].forEach(extension => {
     config.resolve.extensions.add(extension);

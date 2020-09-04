@@ -1,5 +1,5 @@
 const path = require('path');
-const setAssetsPath = require('../utils/setAssetsPath');
+const setAssetsPath = require('../../utils/setAssetsPath');
 
 module.exports = (config, { rootDir }) => {
   setAssetsPath(config);
