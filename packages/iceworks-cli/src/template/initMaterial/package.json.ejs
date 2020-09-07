@@ -9,7 +9,8 @@
     "sync": "iceworks sync",
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint --cache --ext .js,.jsx ./",
-    "stylelint": "stylelint ./**/*.scss"
+    "stylelint": "stylelint ./**/*.scss",
+    "prepublishOnly": "npm run generate"
   },
   "files": ["build"],
   "devDependencies": {
