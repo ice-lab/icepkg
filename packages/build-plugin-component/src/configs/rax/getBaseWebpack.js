@@ -57,7 +57,7 @@ module.exports = (context, options) => {
     .use('ts')
     .loader(require.resolve('ts-loader'));
 
-  if (options.enablePlatformLoader) {
+  if (options.enablePlatformLoader && target) {
     ['jsx','tsx'].forEach((rule) => {
       config.module.rule(rule)
         .use('platform')

@@ -1,14 +1,8 @@
 const path = require('path');
-const getDemoDir = require('./getDemoDir');
-const getDemos = require('./getDemos');
-const { markdownParser } = require('./markdownHelper');
 const generateEntry = require('./generateEntry');
 const { NODE } = require('../constants');
 
-function generateRaxEntry(rootDir, targets) {
-  const demoDir = getDemoDir(rootDir);
-  const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
-
+function generateRaxEntry(demos, rootDir, targets) {
   // generate demo entry
   const entries = {};
   const serverBundles = {};
