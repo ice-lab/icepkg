@@ -21,7 +21,7 @@ const getDemoConfig = require('./configs/rax/getDemoConfig');
 
 module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebpackConfig, onGetJestConfig, log }) => {
   const { rootDir, userConfig, command } = context;
-  const { plugins, targets, ...compileOptions } = userConfig;
+  const { plugins, targets, disableUMD, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
     console.error(chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'));
     console.log();
@@ -32,11 +32,11 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
   const demoDir = getDemoDir(rootDir);
   const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
   const { entries, serverBundles } = generateRaxEntry(demos, rootDir, targets);
-  const demoConfig = getDemoConfig(context, { ...userConfig, entries, demos });
+  const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
   registerTask('component-demo', demoConfig);
   if (command === 'start') {
     targets.forEach((target) => {
-      const options = { ...userConfig, target };
+      const options = { ...compileOptions, target };
       if ([WEB, WEEX, NODE].includes(target)) {
         // eslint-disable-next-line
         const configDev = require(`./configs/rax/${target}/dev`);
@@ -67,12 +67,11 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
     targets.forEach(target => {
       const options = { ...userConfig, target };
       if (target === WEB) {
-        const distConfig = getDistConfig(context, options);
-        const umdConfig = getUMDConfig(context, options);
-        const es6Config = getES6Config(context, options);
-        registerTask(`component-build-${target}`, distConfig);
-        registerTask(`component-build-${target}-umd`, umdConfig);
-        registerTask(`component-build-${target}-es6`, es6Config);
+        registerTask(`component-build-${target}`, getDistConfig(context, options));
+        registerTask(`component-build-${target}-es6`, getES6Config(context, options));
+        if (!disableUMD) {
+          registerTask(`component-build-${target}-umd`, getUMDConfig(context, options));
+        }
       } else if (target === WEEX) {
         const distConfig = getDistConfig(context, {...options, entryName: 'index-weex'});
         registerTask('component-build-weex', distConfig);

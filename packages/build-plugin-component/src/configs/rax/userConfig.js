@@ -10,5 +10,9 @@ module.exports = [
   {
     name: 'enablePlatformLoader',
     validation: 'boolean',
+  },
+  {
+    name: 'disableUMD',
+    validation: 'boolean',
   }
 ];

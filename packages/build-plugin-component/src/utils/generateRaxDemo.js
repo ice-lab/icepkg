@@ -8,7 +8,6 @@ function generateRaxDemo(demos, context) {
 
   const demoEntry = path.join(rootDir, 'node_modules', `rax-demoentry.js`);
   const { meta, readme } = getReadme(rootDir, markdownParser, console);
-  console.log(getReadme(rootDir, markdownParser, console));
   generateEntry({
     template: 'raxEntry.hbs',
     outputPath: demoEntry,
