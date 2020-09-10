@@ -18,6 +18,14 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
   console.log(chalk.green('Rax development server has been started:'));
   console.log();
 
+  if (options.watchDist) {
+    console.log(chalk.green('[Dist] Development pages:'));
+    ['index', 'index-es6', 'index-weex'].forEach((distBundle) => {
+      console.log('   ', chalk.underline.white(`${devUrl}${distBundle}.js`));
+    })
+    return;
+  }
+
   if (targets.includes(WEB)) {
     console.log(chalk.green('[Web] Development pages:'));
     Object.keys(entries).forEach((entry) => console.log('   ', chalk.underline.white(devUrl + entry)));

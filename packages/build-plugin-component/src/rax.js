@@ -21,7 +21,7 @@ const getDemoConfig = require('./configs/rax/getDemoConfig');
 
 module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebpackConfig, onGetJestConfig, log }) => {
   const { rootDir, userConfig, command } = context;
-  const { plugins, targets, disableUMD, ...compileOptions } = userConfig;
+  const { plugins, targets, disableUMD, watchDist, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
     console.error(chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'));
     console.log();
@@ -29,12 +29,21 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
   }
   // register user config
   registerUserConfig(defaultUserConfig.concat(raxUserConfig));
-  const demoDir = getDemoDir(rootDir);
-  const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
-  const { entries, serverBundles } = generateRaxEntry(demos, rootDir, targets);
-  const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
-  registerTask('component-demo', demoConfig);
-  if (command === 'start') {
+  // disable demo when watch dist
+  
+  let entries = {};
+  let serverBundles = {};
+
+  if (!watchDist) {
+    const demoDir = getDemoDir(rootDir);
+    const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
+    const raxBundles = generateRaxEntry(demos, rootDir, targets);
+    entries = raxBundles.entries;
+    serverBundles = raxBundles.serverBundles;
+    const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
+    registerTask('component-demo', demoConfig);
+  }
+  if (command === 'start' && !watchDist) {
     targets.forEach((target) => {
       const options = { ...compileOptions, target };
       if ([WEB, WEEX, NODE].includes(target)) {
@@ -50,11 +59,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
         registerTask(`component-demo-${target}`, config);
       }
     });
-    onHook('after.start.compile', async(args) => {
-      const devUrl = args.url;
-      devCompileLog(args, devUrl, targets, entries, rootDir, userConfig);
-    });
-  } else if (command === 'build') {
+  } else if (command === 'build' || watchDist) {
     // omitLib just for sfc2mp，not for developer
     const disableGenerateLib = userConfig[MINIAPP] && userConfig[MINIAPP].omitLib;
 
@@ -82,15 +87,19 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
         registerTask(`component-build-${target}`, config);
       }
     });
-    onHook('before.build.load', async () => {
-      if (!disableGenerateLib) {
-        babelCompiler(context, log, false, compileOptions, 'rax');
-      }
-    });
-    onHook('after.build.compile', async(args) => {
-      buildCompileLog(args, targets, rootDir, userConfig);
-    });
   }
+  onHook('before.build.load', async () => {
+    if (!disableGenerateLib) {
+      babelCompiler(context, log, false, compileOptions, 'rax');
+    }
+  });
+  onHook('after.build.compile', async(args) => {
+    buildCompileLog(args, targets, rootDir, userConfig);
+  });
+  onHook('after.start.compile', async(args) => {
+    const devUrl = args.url;
+    devCompileLog(args, devUrl, targets, entries, rootDir, userConfig);
+  });
   if (command === 'test') {
     // jest config
     onGetJestConfig((jestConfig) => {

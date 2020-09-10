@@ -20,4 +20,8 @@ module.exports = [
     name: 'outputDir',
     validation: 'string',
   },
+  {
+    name: 'watchDist',
+    validation: 'boolean',
+  },
 ];
