@@ -87,12 +87,13 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
         registerTask(`component-build-${target}`, config);
       }
     });
+    onHook('before.build.load', async () => {
+      if (!disableGenerateLib) {
+        babelCompiler(context, log, false, compileOptions, 'rax');
+      }
+    });
   }
-  onHook('before.build.load', async () => {
-    if (!disableGenerateLib) {
-      babelCompiler(context, log, false, compileOptions, 'rax');
-    }
-  });
+  
   onHook('after.build.compile', async(args) => {
     buildCompileLog(args, targets, rootDir, userConfig);
   });
