@@ -36,12 +36,16 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
 
   if (!watchDist) {
     const demoDir = getDemoDir(rootDir);
-    const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
-    const raxBundles = generateRaxEntry(demos, rootDir, targets);
-    entries = raxBundles.entries;
-    serverBundles = raxBundles.serverBundles;
-    const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
-    registerTask('component-demo', demoConfig);
+    if (demoDir) {
+      const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
+      if (demos && demos.length) {
+        const raxBundles = generateRaxEntry(demos, rootDir, targets);
+        entries = raxBundles.entries;
+        serverBundles = raxBundles.serverBundles;
+        const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
+        registerTask('component-demo', demoConfig);
+      }
+    }
   }
   if (command === 'start' && !watchDist) {
     targets.forEach((target) => {
