@@ -82,7 +82,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
           registerTask(`component-build-${target}-umd`, getUMDConfig(context, options));
         }
       } else if (target === WEEX) {
-        const distConfig = getDistConfig(context, {...options, entryName: 'index-weex'});
+        const distConfig = getDistConfig(context, { ...options, forceInline: true, entryName: 'index-weex' });
         registerTask('component-build-weex', distConfig);
       } else if (target === MINIAPP || target === WECHAT_MINIPROGRAM) {
         options[target] = options[target] || {};
