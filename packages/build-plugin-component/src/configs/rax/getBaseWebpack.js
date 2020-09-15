@@ -43,14 +43,14 @@ module.exports = (context, options) => {
   config.module
     .rule('jsx')
     .test(/\.(js|mjs|jsx)$/)
-    .use('babel')
+    .use('babel-loader')
     .loader(require.resolve('babel-loader'))
     .options(babelConfig);
 
   config.module
     .rule('tsx')
     .test(/\.tsx?$/)
-    .use('babel')
+    .use('babel-loader')
     .loader(require.resolve('babel-loader'))
     .options(babelConfig)
     .end()
@@ -69,7 +69,7 @@ module.exports = (context, options) => {
   config.module
     .rule('md')
     .test(/\.md$/)
-    .use('babel')
+    .use('babel-loader')
     .loader(require.resolve('babel-loader'))
     .options(babelConfig)
     .end()
