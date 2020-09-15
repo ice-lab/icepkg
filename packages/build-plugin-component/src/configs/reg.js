@@ -5,6 +5,7 @@
 
 module.exports = {
   REG_TS: /\.(tsx?)$/,
+  REG_D_TS: /\.d\.ts$/,
 
   REG_JS: /\.(jsx?|tsx?)$/,
   REG_SASS: /\.(sa|sc|c)ss$/,

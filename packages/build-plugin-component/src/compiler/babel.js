@@ -8,7 +8,7 @@ const fs = require('fs-extra');
 const glob = require('glob');
 const babel = require('@babel/core');
 const getRaxBabelConfig = require('rax-babel-config');
-const { REG_JS } = require('../configs/reg');
+const { REG_JS, REG_D_TS } = require('../configs/reg');
 const getCompileBabel = require('../utils/getCompileBabel');
 const { analyzePackage, analyzeDependencies } = require('./depAnalyze');
 const dtsCompiler = require('./dts');
@@ -103,7 +103,7 @@ module.exports = function babelCompiler(
     fs.emptyDirSync(destPath);
     filesPath.forEach(filePath => {
       const sourceFile = path.join(srcPath, filePath);
-      if (!REG_JS.test(filePath)) {
+      if (!REG_JS.test(filePath) || REG_D_TS.test(filePath)) {
         // copy file if it does not match REG_JS
         try {
           fs.copySync(sourceFile, path.join(destPath, filePath));
