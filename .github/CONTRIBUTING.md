@@ -20,47 +20,12 @@ clone repo and initialize the setup environment：
 
 ```bash
 $ git clone git@github.com:ice-lab/iceworks.git
-$ cd iceworks && npm run setup
+$ cd iceworks
 
-# add dep to some package
-$ yarn workspace iceworks add <npmName>
-# add dep to project
-$ yarn add <npmName> -D -W
-```
-
-### Develop Packages
-
-```bash
-$ npm run packages:watch
-
+$ npm run install:deps
 $ npm run packages:build
-
-$ npm run publish:package # or npm run publish-beta:package
+$ npm test
 ```
-
-### Develop VS Code extensions
-
-You can add the VS Code Extension of Iceworks to the directory `extension`.
-
-### 1. Initialization
-
-Install [Yeoman](http://yeoman.io/) and [VS Code Extension Generator](https://www.npmjs.com/package/generator-code)：
-
-```shell
-npm install -g yo generator-code
-```
-
-In the `extensions/` Directory, execute `yo code` to initialize the extension
-
-```shell
-yo code
-```
-
-### 2. Development and Debugging
-
-Document：[https://code.visualstudio.com/api](https://code.visualstudio.com/api)
-
-Use the VS Code to develop the extension project, and enable extension debugging through `F5`.
 
 ## Pull Request Guidelines
 
