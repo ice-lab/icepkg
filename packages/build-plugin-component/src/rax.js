@@ -97,6 +97,13 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
       }
     });
   }
+
+  if (watchDist) {
+    // disable hot when watch dist file
+    onGetWebpackConfig((config) => {
+      config.devServer.hot(false);
+    });
+  }
   
   onHook('after.build.compile', async(args) => {
     buildCompileLog(args, targets, rootDir, userConfig);
