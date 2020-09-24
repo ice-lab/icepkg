@@ -8,7 +8,7 @@ const registry = 'https://registry.npmjs.org';
 const tmpPath = path.resolve(__dirname, '../../.tmp');
 fs.removeSync(tmpPath);
 
-test.only('generate component', async () => {
+test('generate component', async () => {
   const projectDir = path.resolve(tmpPath, 'ice-component');
   const materialTemplateDir = path.join(projectDir, '.tmp');
   await fs.ensureDir(projectDir);
