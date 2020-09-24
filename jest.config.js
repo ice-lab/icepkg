@@ -5,6 +5,7 @@ module.exports = {
   testPathIgnorePatterns: [
     'lib/',
     '__tests__/tmp/',
+    '.tmp/',
     '/node_modules/',
   ],
   modulePathIgnorePatterns: [

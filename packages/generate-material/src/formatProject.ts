@@ -26,12 +26,6 @@ export default async function formatProject({
   const pkgData = fse.readJsonSync(pkgPath);
   let abcData = null;
 
-  // fusion cool adaptor
-  if (materialType === 'component' && templateOptions.adaptor) {
-    const templatePath = path.join(__dirname, './template/componentAdaptor');
-    await fse.copy(templatePath, rootDir);
-  }
-
   if (isAliNpm(npmName)) {
     pkgData.publishConfig = {
       registry: 'https://registry.npm.alibaba-inc.com',

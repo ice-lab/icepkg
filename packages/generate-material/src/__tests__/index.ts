@@ -8,7 +8,7 @@ const registry = 'https://registry.npmjs.org';
 const tmpPath = path.resolve(__dirname, '../../.tmp');
 fs.removeSync(tmpPath);
 
-test('generate component', async () => {
+test.only('generate component', async () => {
   const projectDir = path.resolve(tmpPath, 'ice-component');
   const materialTemplateDir = path.join(projectDir, '.tmp');
   await fs.ensureDir(projectDir);
@@ -20,6 +20,7 @@ test('generate component', async () => {
     materialType: 'component',
     templateOptions: {
       npmName: '@ali/ice-label',
+      adaptor: true,
     },
     enableDefPublish: true,
     enablePegasus: true,
