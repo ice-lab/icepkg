@@ -31,6 +31,7 @@ export default async function formatProject(projectDir: string, projectName?: st
   }
   pkgData.version = initialVersion;
   delete pkgData.files;
+  delete pkgData.bizTeam;
   delete pkgData.publishConfig;
   delete pkgData.scaffoldConfig;
   delete pkgData.homepage;
