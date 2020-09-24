@@ -1,6 +1,6 @@
 {
   "name": "@iceworks/generate-project",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Generator project",
   "files": [
     "lib/"
@@ -21,5 +21,8 @@
     "ora": "^4.0.3",
     "@iceworks/constant": "^0.1.0"
   },
-  "gitHead": "fc5b35f95ab4cc24898845916acf598c2f34d576"
+  "gitHead": "fc5b35f95ab4cc24898845916acf598c2f34d576",
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.1"
+  }
 }
