@@ -47,9 +47,11 @@ export async function generateMaterial({
     throw new Error(`当前物料模板不存在 ${materialType} 类型的物料`);
   }
 
-  const templateTmpDir = path.join(materialTemplateDir, '.tmp');
-  await fse.emptyDir(templateTmpDir);
-  await fse.copy(templateDir, templateTmpDir);
+  // add fusion cool adaptor template
+  if (materialType === 'component' && templateOptions.adaptor) {
+    const adaptorTemplatePath = path.join(__dirname, './template/componentAdaptor');
+    await fse.copy(adaptorTemplatePath, templateDir);
+  }
 
   // generate files by template
   const { npmName } = templateOptions;
@@ -70,9 +72,7 @@ export async function generateMaterial({
     ...templateOptions,
   };
 
-  await ejsRenderDir(templateTmpDir, options);
-  await fse.copy(templateTmpDir, rootDir);
-  await fse.remove(templateTmpDir);
+  await ejsRenderDir(templateDir, rootDir, options);
 
   try {
     await formatProject({

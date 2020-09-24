@@ -1,12 +1,12 @@
 {
   "name": "@iceworks/generate-material",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Generate material collection or single component",
   "files": [
     "lib/"
   ],
   "scripts": {
-    "build": "rm -rf lib && tsc && cp -rf src/template/ lib/template/",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc && cp -rf src/template/ lib/template/",
     "prepublishOnly": "npm run build"
   },
   "main": "lib/index.js",

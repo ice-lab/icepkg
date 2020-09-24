@@ -4,12 +4,16 @@ import * as ejs from 'ejs';
 import * as fse from 'fs-extra';
 import { ITemplateOptions } from './index';
 
-export default async function (dir: string, options: ITemplateOptions): Promise<void> {
-  return new Promise((resolve, reject) => {
+export default async function (templateDir: string, destDir: string, options: ITemplateOptions): Promise<void> {
+  const templateTmpDir = path.join(destDir, '.ejs-tmp');
+  await fse.emptyDir(templateTmpDir);
+  await fse.copy(templateDir, templateTmpDir);
+
+  await new Promise((resolve, reject) => {
     glob(
       '**/*.?(_)ejs',
       {
-        cwd: dir,
+        cwd: templateTmpDir,
         nodir: true,
         dot: true,
         ignore: ['node_modules/**'],
@@ -21,7 +25,7 @@ export default async function (dir: string, options: ITemplateOptions): Promise<
 
         Promise.all(
           files.map((file) => {
-            const filepath = path.join(dir, file);
+            const filepath = path.join(templateTmpDir, file);
             return renderFile(filepath, options);
           })
         )
@@ -34,6 +38,9 @@ export default async function (dir: string, options: ITemplateOptions): Promise<
       }
     );
   });
+
+  await fse.copy(templateTmpDir, destDir);
+  await fse.remove(templateTmpDir);
 }
 
 function renderFile(filepath: string, options: any): Promise<string> {
