@@ -16,10 +16,15 @@ export default async function formatProject(projectDir: string, projectName?: st
   pkgData.dependencies = pkgData.dependencies || {};
   pkgData.devDependencies = pkgData.devDependencies || {};
 
+  // 通过 pkg.bizTeam 定制生成逻辑
+  const bizTeam: 'govfe' | null = pkgData.bizTeam;
+
   console.log('clean package.json...');
 
   // modify package.json
-  pkgData.private = true;
+  if (bizTeam !== 'govfe') {
+    pkgData.private = true;
+  }
   pkgData.originTemplate = pkgData.name;
   if (projectName) {
     pkgData.name = projectName;
@@ -35,6 +40,7 @@ export default async function formatProject(projectDir: string, projectName?: st
   }
   delete pkgData.devDependencies['@ice/screenshot'];
 
+  // modify build.json
   const buildJsonPath = path.join(projectDir, 'build.json');
   if (fse.existsSync(buildJsonPath)) {
     const buildData = fse.readJsonSync(buildJsonPath);
@@ -42,7 +48,8 @@ export default async function formatProject(projectDir: string, projectName?: st
 
     delete buildData.publicPath;
 
-    if (isAliInternal) {
+    // generate abcData && add plugin-def to build.json&package.json
+    if (isAliInternal && bizTeam !== 'govfe') {
       if (pkgData.dependencies.rax) {
         // For Rax project
         abcData = {
@@ -67,7 +74,6 @@ export default async function formatProject(projectDir: string, projectName?: st
         buildData.plugins.push('@ali/build-plugin-ice-def');
       }
     }
-
     // delete build-plugin-fusion-material
     const index = buildData.plugins.findIndex((item) => {
       const pluginName = typeof item === 'string' ? item : item[0];
@@ -99,7 +105,7 @@ export default async function formatProject(projectDir: string, projectName?: st
     }
   }
 
-  if (isAliInternal) {
+  if (isAliInternal && !fse.existsSync(abcPath)) {
     fse.writeJSONSync(abcPath, abcData, {
       spaces: 2,
     });
