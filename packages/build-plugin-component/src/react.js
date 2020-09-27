@@ -65,22 +65,27 @@ module.exports = (
       rootDir,
       pkg,
     };
-    // get multi demos from demo dir
-    const markdownDirs = fs.readdirSync(demoDir).filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
-    const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
-    const demoDataPathMap = {};
-    const entries = {};
-    searchDirs.forEach((markdownDir) => {
-      const demoKey = markdownDir || 'index';
-      const demoDataFile = `${demoKey}-demos.js`;
-      const demoDataPath = path.join(outputDir, demoDataFile);
-      const entryPath = path.join(outputDir, `${demoKey}-entry.js`);
-      demoDataPathMap[demoKey] = demoDataPath;
-      entries[demoKey] = entryPath;
-      generateDemoEntry({ demoDir: path.join(demoDir, markdownDir), demoDataPath, entryPath, demoDataFile });
-    });
-    params.demoDataPath = demoDataPathMap;
-    params.entry = entries;
+
+    function generateDemoEntries() {
+      // get multi demos from demo dir
+      const markdownDirs = fs.readdirSync(demoDir).filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
+      const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
+      const demoDataPathMap = {};
+      const entries = {};
+      searchDirs.forEach((markdownDir) => {
+        const demoKey = markdownDir || 'index';
+        const demoDataFile = `${demoKey}-demos.js`;
+        const demoDataPath = path.join(outputDir, demoDataFile);
+        const entryPath = path.join(outputDir, `${demoKey}-entry.js`);
+        demoDataPathMap[demoKey] = demoDataPath;
+        entries[demoKey] = entryPath;
+        generateDemoEntry({ demoDir: path.join(demoDir, markdownDir), demoDataPath, entryPath, demoDataFile });
+      });
+      params.demoDataPath = demoDataPathMap;
+      params.entry = entries;
+    }
+
+    generateDemoEntries();
 
     if (command === 'start') {
       // watch demo changes
@@ -90,7 +95,7 @@ module.exports = (
       });
       demoWatcher.on('all', () => {
         // re-generate entry files when demo changes
-        generateDemoEntry({ demoDir, demoDataPath, entryPath });
+        generateDemoEntries();
       });
 
       demoWatcher.on('error', (error) => {
