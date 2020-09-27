@@ -26,7 +26,7 @@ module.exports = (
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
   const { library, demoTemplate = 'template-component-demo', basicComponents = [] } = compileOptions;
-  function generateDemoEntry({ demoDir, entryPath, demoDataPath }) {
+  function generateDemoEntry({ demoDir, entryPath, demoDataPath, demoDataFile }) {
     const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
     const readme = getReadme(rootDir, markdownParser, log);
     const [templateName, templateProps] = Array.isArray(demoTemplate) ? demoTemplate : [demoTemplate];
@@ -35,6 +35,7 @@ module.exports = (
       outputPath: entryPath,
       params: {
         readme: JSON.stringify(readme),
+        demoDataFile,
         templateName,
         templateProps: JSON.stringify(templateProps || {}),
         demos: demos.map(demo => ({
@@ -44,7 +45,7 @@ module.exports = (
       },
     });
     // wirte demo content
-    fs.writeFileSync(demoDataPath, JSON.stringify(demos));
+    fs.writeFileSync(demoDataPath, `const data = ${JSON.stringify(demos)};export default data;`);
   }
 
   /**
@@ -58,17 +59,28 @@ module.exports = (
   const taskName = 'component-demo-web';
   if (demoDir && !commandArgs.skipDemo) {
     registerTask(taskName, webpackConfig);
-    const outputDir = path.join(rootDir, 'node_modules');
+    const outputDir = path.join(rootDir, 'node_modules', '_component_demo');
     fs.ensureDirSync(outputDir);
-    const demoDataPath = path.join(outputDir, 'component-demos.json');
-    const entryPath = path.join(outputDir, 'component-demo.js');
     const params = {
       rootDir,
       pkg,
-      demoDataPath,
-      entry: { index: entryPath },
     };
-    generateDemoEntry({ demoDir, demoDataPath, entryPath });
+    // get multi demos from demo dir
+    const markdownDirs = fs.readdirSync(demoDir).filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
+    const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
+    const demoDataPathMap = {};
+    const entries = {};
+    searchDirs.forEach((markdownDir) => {
+      const demoKey = markdownDir || 'index';
+      const demoDataFile = `${demoKey}-demos.js`;
+      const demoDataPath = path.join(outputDir, demoDataFile);
+      const entryPath = path.join(outputDir, `${demoKey}-entry.js`);
+      demoDataPathMap[demoKey] = demoDataPath;
+      entries[demoKey] = entryPath;
+      generateDemoEntry({ demoDir: path.join(demoDir, markdownDir), demoDataPath, entryPath, demoDataFile });
+    });
+    params.demoDataPath = demoDataPathMap;
+    params.entry = entries;
 
     if (command === 'start') {
       // watch demo changes

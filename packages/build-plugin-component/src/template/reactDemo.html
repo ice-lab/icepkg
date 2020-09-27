@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>React mutiple component demo</title>
+  <style>
+    body {
+      text-align: center;
+    }
+    .logo {
+      width: 150px;
+      margin: 70px auto 10px;
+    }
+    .pagelist {
+      margin: 20px auto;
+      padding: 10px;
+      max-width: 700px;
+      border: 1px solid #efefef;
+      border-radius: 2px;
+    }
+    .title {
+      margin-bottom: 10px;
+    }
+    .h2 {
+      margin: 10px;
+    }
+    ul, li {
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+    li {
+      text-align: left;
+      border-bottom: 1px solid #efefef;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0 15px;
+      height: 32px;
+      line-height: 32px;
+      cursor: pointer;
+      background-color: #f29718;
+      color: #fff;
+      border-radius: 16px;
+    }
+  </style>
+  <script>
+    function openUrl(url){
+      if (location.search == '?target=_self') {
+        location.replace(url);
+      } else {
+        window.open(url);
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>React mutiple component demo</h1>
+  <div class="pagelist">
+    <ul>
+      <% entries.forEach(function(entry){ %>
+      <li>
+        <div class="title">demo folder: <%= entry.entryName %></div>
+        <button type="button" class="btn" onclick="openUrl('<%= entry.entryPath %>')">view demo</button>
+      </li>
+      <% }); %>
+    </ul>
+  </div>
+</body>
+</html>
