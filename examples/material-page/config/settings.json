@@ -1,7 +1,8 @@
 {
+  "i18n": true,
   "schema": {
-    "title": "用户任务列表",
-    "description": "显示用户信息和用户持有的任务",
+    "title": "title",
+    "description": "description",
     "type": "object",
     "required": [
       "isShowUser"
@@ -9,16 +10,16 @@
     "properties": {
       "isShowUser": {
         "type": "boolean",
-        "title": "是否显示用户信息",
+        "title": "isShowUser.title",
         "default": "Chuck"
       },
       "title": {
         "type": "string",
-        "title": "标题"
+        "title": "title.title"
       },
       "userTitle":{
         "type":"string",
-        "title":"用户页面标题"
+        "title":"userTitle"
       }
     }
   }

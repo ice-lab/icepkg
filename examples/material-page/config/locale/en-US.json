@@ -1,0 +1,7 @@
+{
+    "title": "User Task Title",
+    "description": "Display user information and their tasks",
+    "isShowUser.title": "Whether Display User Information",
+    "title.title": "Title",
+    "userTitle": "User Page Title"
+}

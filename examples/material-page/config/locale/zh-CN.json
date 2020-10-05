@@ -1,0 +1,7 @@
+{
+    "title": "用户任务列表",
+    "description": "显示用户信息和用户持有的任务",
+    "isShowUser.title": "是否显示用户信息",
+    "title.title": "标题",
+    "userTitle": "用户页面标题"
+}
