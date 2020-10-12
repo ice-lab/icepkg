@@ -66,7 +66,7 @@ module.exports = (
       pkg,
     };
 
-    function generateDemoEntries() {
+    const generateDemoEntries = () => {
       // get multi demos from demo dir
       const markdownDirs = fs.readdirSync(demoDir).filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
       const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
