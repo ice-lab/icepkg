@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 import React from 'react';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import * as queryString from 'query-string';
 import { Playground } from './Playground';
 import { BuildLayout, Layout } from './Layout';
 
-const AppProduction = ({ demoData, readmeData }) => {
-  const demos= [].concat(readmeData, demoData);
+const App = ({ demoData, readmeData }) => {
+  const demos= readmeData ? [].concat(readmeData, demoData) : demoData;
   const items = (demos || []).sort((a, b) => a.order - b.order);
   
   return (
@@ -26,36 +27,30 @@ const AppProduction = ({ demoData, readmeData }) => {
   );
 };
 
-const Demo = ({ match, demoData, readmeData }) => {
-  const { demo } = (match && match.params) || {};
-  const demos= [].concat(readmeData, demoData);
-  const data = demos.find(item => item.filename === demo) || readmeData;
-  const matchedFilename = demo || data.filename;
-  const Comp = data.component;
-  
+const Demo = ({ location, demoData, readmeData }) => {
+  const { demo } = queryString.parse(location && location.search);
+  const demos = demoData.find((item) => item[0] && item[0].demoKey === demo);
   return (
-    <Layout demos={demos} matchedFilename={matchedFilename}>
-      <Playground data={data}>
-        {typeof Comp === 'function' && <Comp />}
-      </Playground>
+    <Layout demos={[].concat(readmeData, demoData)} matchedFilename={demo}>
+      { demos ? <App demoData={demos} /> : <Playground data={readmeData} /> }
     </Layout>
   );
 };
 
-const AppDevelopment = (props) => {
+const AppTab = (props) => {
   const renderComponent = (routerProps) => <Demo {...props} {...routerProps} />;
   return (
     <Router>
       <Switch>
-        <Route path="/:demo" render={renderComponent} />
         <Route path="/" render={renderComponent} />
       </Switch>
     </Router>
   );
 };
 
-const App = ({ env, ...rest }) => {
-  return env === 'development' ? <AppDevelopment {...rest} /> : <AppProduction {...rest} />;
+const Main = ({ demoData, ...rest }) => {
+  const demoLength = demoData.length;
+  return demoLength > 1 ? <AppTab {...rest} demoData={demoData} /> : <App {...rest} demoData={demoData[0]} />;
 };
 
-export default App;
+export default Main;
