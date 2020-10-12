@@ -1,6 +1,4 @@
 const { resolve } = require('path');
-const { getOutputPath } = require('miniapp-builder-shared');
-
 const { MINIAPP } = require('../../../constants');
 
 module.exports = (context, { target = MINIAPP, distDir = '' }) => {
@@ -9,9 +7,11 @@ module.exports = (context, { target = MINIAPP, distDir = '' }) => {
     return resolve(rootDir, distDir);
   }
 
+  const { outputDir = 'build' } = userConfig;
+
   if (command === 'build') {
-    return getOutputPath(context, target);
+    return resolve(rootDir, outputDir, target);
   } else {
-    return resolve(rootDir, 'demo', target, 'components', 'Target');
+    return resolve(rootDir, 'build', target, 'components', 'Target');
   }
 };

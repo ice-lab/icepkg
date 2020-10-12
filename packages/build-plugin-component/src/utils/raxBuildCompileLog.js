@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const { handleWebpackErr } = require('rax-compile-config');
 const { platformMap } = require('miniapp-builder-shared');
 const consoleClear = require('console-clear');
-const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE } = require('../constants');
+const { WEB, WEEX } = require('../constants');
 
 function raxBuildCompileLog({err, stats}, targets, rootDir, options) {
   consoleClear(true);

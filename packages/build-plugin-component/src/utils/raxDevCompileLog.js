@@ -5,7 +5,7 @@ const consoleClear = require('console-clear');
 const qrcode = require('qrcode-terminal');
 const { handleWebpackErr } = require('rax-compile-config');
 const { platformMap } = require('miniapp-builder-shared');
-const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE } = require('../constants');
+const { WEB, WEEX, NODE } = require('../constants');
 
 function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options) {
   consoleClear(true);
@@ -66,7 +66,7 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
         outputPath = options[platform].distDir;
         console.log(chalk.green(`[${config.name}] Component lib at: `));
       } else {
-        outputPath = `demo/${platform}`;
+        outputPath = `build/${platform}`;
         console.log(chalk.green(`[${config.name}] Use ali miniapp developer tools to open the following folder:`));
       }
       console.log('   ', chalk.underline.white(path.resolve(rootDir, outputPath)));
