@@ -26,28 +26,6 @@ module.exports = (
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
   const { library, demoTemplate = 'template-component-demo', basicComponents = [] } = compileOptions;
-  function generateDemoEntry({ demoDir, entryPath, demoDataPath, demoDataFile }) {
-    const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
-    const readme = getReadme(rootDir, markdownParser, log);
-    const [templateName, templateProps] = Array.isArray(demoTemplate) ? demoTemplate : [demoTemplate];
-    generateEntryJs({
-      template: 'template.hbs',
-      outputPath: entryPath,
-      params: {
-        readme: JSON.stringify(readme),
-        demoDataFile,
-        templateName,
-        templateProps: JSON.stringify(templateProps || {}),
-        demos: demos.map(demo => ({
-          ...demo,
-          filePath: formatPathForWin(demo.filePath),
-        })),
-      },
-    });
-    // wirte demo content
-    fs.writeFileSync(demoDataPath, `const data = ${JSON.stringify(demos)};export default data;`);
-  }
-
   /**
    * register task for demo
    */
@@ -66,26 +44,48 @@ module.exports = (
       pkg,
     };
 
-    const generateDemoEntries = () => {
+    const generateDemoEntry = () => {
       // get multi demos from demo dir
       const markdownDirs = fs.readdirSync(demoDir).filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
       const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
-      const demoDataPathMap = {};
-      const entries = {};
+      const demoData = [];
+      const readme = getReadme(rootDir, markdownParser, log);
       searchDirs.forEach((markdownDir) => {
         const demoKey = markdownDir || 'index';
-        const demoDataFile = `${demoKey}-demos.js`;
-        const demoDataPath = path.join(outputDir, demoDataFile);
-        const entryPath = path.join(outputDir, `${demoKey}-entry.js`);
-        demoDataPathMap[demoKey] = demoDataPath;
-        entries[demoKey] = entryPath;
-        generateDemoEntry({ demoDir: path.join(demoDir, markdownDir), demoDataPath, entryPath, demoDataFile });
+        const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser);
+        console.log(path.join(rootDir, demoDir, markdownDir), demos);
+        demoData.push({
+          demoKey,
+          demos: demos.map((demo) => {
+            return {
+              ...demo,
+              filePath: formatPathForWin(demo.filePath),
+              demoKey,
+            }
+          }),
+        });
       });
-      params.demoDataPath = demoDataPathMap;
-      params.entry = entries;
+      const entryPath = path.join(outputDir, 'demo-entry.js');
+      const demoDataFile = 'demos-data.js';
+      const demoDataPath = path.join(outputDir, demoDataFile);
+      const [templateName, templateProps] = Array.isArray(demoTemplate) ? demoTemplate : [demoTemplate];
+      generateEntryJs({
+        template: 'template.hbs',
+        outputPath: entryPath,
+        params: {
+          readme: JSON.stringify(readme),
+          demoDataFile,
+          templateName,
+          templateProps: JSON.stringify(templateProps || {}),
+          demoData,
+        },
+      });
+      // wirte demo content
+      fs.writeFileSync(demoDataPath, `const data = ${JSON.stringify(demoData)};export default data;`);
+      params.entry = { index: entryPath };
     }
 
-    generateDemoEntries();
+    generateDemoEntry();
 
     if (command === 'start') {
       // watch demo changes
@@ -95,7 +95,7 @@ module.exports = (
       });
       demoWatcher.on('all', () => {
         // re-generate entry files when demo changes
-        generateDemoEntries();
+        generateDemoEntry();
       });
 
       demoWatcher.on('error', (error) => {

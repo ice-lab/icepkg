@@ -9,39 +9,18 @@ module.exports = (config, { pkg, rootDir, entry }) => {
   config.entryPoints.clear();
   config.merge({ entry });
 
-  const entryKeys = Object.keys(entry);
-  entryKeys.forEach((entryKey) => {
-    config.plugin(`HtmlWebpackPlugin_${entryKey}`).use(HtmlWebpackPlugin, [
-      {
-        template: require.resolve('../../template/demo.hbs'),
-        excludeChunks: entryKeys.filter((n) => n !== entryKey),
-        filename: entryKeys.length === 1 ? 'index.html' : `${entryKey}_demo.html`,
-      },
-    ]);
-  });
-
-  if (entryKeys.length > 1) {
-    config.plugin('HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
-      {
-        template: require.resolve('../../template/reactDemo.html'),
-        templateParameters: {
-          entries: entryKeys.map((key) => ({
-            entryName: key,
-            entryPath: `${key}_demo.html`,
-          })),
-        },
-        inject: false,
-        filename: 'index.html',
-      },
-    ])
-  }
+  config.plugin('HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
+    {
+      template: require.resolve('../../template/demo.hbs'),
+      filename: 'index.html',
+    },
+  ]);
   
   config.resolve.modules
     .add('node_modules')
     .add(path.join(rootDir, 'node_modules'))
     .add(path.resolve(__dirname, '../../node_modules'));
 
-  const fileList = entryKeys.map((key) => entry[key]);
   ['jsx', 'tsx'].forEach(rule => {
     config.module
       .rule(rule)
@@ -56,7 +35,7 @@ module.exports = (config, { pkg, rootDir, entry }) => {
           plugins: [
             ...plugins,
             // only transform index entry
-            [require.resolve('../../utils/babelPluginCorejsLock.js'), { fileList }],
+            [require.resolve('../../utils/babelPluginCorejsLock.js'), { fileList: [entry.index] }],
           ],
         };
       });
