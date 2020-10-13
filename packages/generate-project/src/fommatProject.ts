@@ -61,8 +61,14 @@ export default async function formatProject(projectDir: string, projectName?: st
           },
         };
 
+        let defPluginVersion = '^2.0.0';
+
+        if (pkgData.devDependencies['build-plugin-rax-app'] && !pkgData.devDependencies['rax-app']) {
+          defPluginVersion = '^1.0.2';
+        }
+
         // add @ali/build-plugin-rax-app-def
-        pkgData.devDependencies['@ali/build-plugin-rax-app-def'] = '^1.0.2';
+        pkgData.devDependencies['@ali/build-plugin-rax-app-def'] = defPluginVersion;
         buildData.plugins.push('@ali/build-plugin-rax-app-def');
       } else {
         abcData = {
