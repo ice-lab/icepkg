@@ -27,7 +27,7 @@ module.exports = (context, options) => {
   // 输出到 dist 目录
   config.output.path(path.join(rootDir, 'dist'));
 
-  if (options.forceInline) {
+  if (options.inlineStyle) {
     config.module.rule('css')
       .test(/\.css?$/)
       .use('css')

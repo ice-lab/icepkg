@@ -26,7 +26,7 @@ module.exports = (config, context, options) => {
   config.output
     .filename('[name].js');
 
-  if (options.forceInline) {
+  if (options.inlineStyle) {
     config.module
       .rule('css')
       .test(/\.css?$/)

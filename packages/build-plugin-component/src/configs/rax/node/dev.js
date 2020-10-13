@@ -29,7 +29,7 @@ module.exports = (config, context, options) => {
 
   config.output.filename('ssr/[name].js');
 
-  if (options.forceInline) {
+  if (options.inlineStyle) {
     config.module
       .rule('css')
       .test(/\.css?$/)

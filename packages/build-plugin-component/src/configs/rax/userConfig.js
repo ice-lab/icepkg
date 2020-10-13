@@ -9,7 +9,7 @@ module.exports = [
     validation: 'array',
   },
   {
-    name: 'forceInline',
+    name: 'inlineStyle',
     validation: 'boolean',
   },
   {
