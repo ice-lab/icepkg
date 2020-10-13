@@ -17,10 +17,11 @@ const raxUserConfig = require('./configs/rax/userConfig');
 const babelCompiler = require('./compiler/babel');
 const devCompileLog = require('./utils/raxDevCompileLog');
 const buildCompileLog = require('./utils/raxBuildCompileLog');
+const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
 const getDemoConfig = require('./configs/rax/getDemoConfig');
 
 module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebpackConfig, onGetJestConfig, log }) => {
-  const { rootDir, userConfig, command } = context;
+  const { rootDir, userConfig, command, pkg } = context;
   const { plugins, targets, disableUMD, watchDist, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
     console.error(chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'));
@@ -107,6 +108,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
   
   onHook('after.build.compile', async(args) => {
     buildCompileLog(args, targets, rootDir, userConfig);
+    await modifyPkgHomePage(pkg, rootDir);
   });
   onHook('after.start.compile', async(args) => {
     const devUrl = args.url;

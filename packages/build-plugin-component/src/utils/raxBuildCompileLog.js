@@ -26,7 +26,7 @@ function raxBuildCompileLog({err, stats}, targets, rootDir, options) {
   Object.entries(platformMap).forEach(([platform, config]) => {
     if (targets.includes(platform)) {
       console.log(chalk.green(`[${config.name}] Component lib at:`));
-      const distDir = options[platform].distDir || `lib/${platform}`;
+      const distDir = options[platform] && options[platform].distDir || `lib/${platform}`;
       console.log('   ', chalk.underline.white(path.resolve(rootDir, distDir)));
       console.log();
     }

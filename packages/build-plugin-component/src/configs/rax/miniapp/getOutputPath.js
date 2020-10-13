@@ -7,7 +7,7 @@ module.exports = (context, { target = MINIAPP, distDir = '' }) => {
     return resolve(rootDir, distDir);
   }
 
-  const { outputDir = 'build' } = userConfig;
+  const { outputDir = 'lib' } = userConfig;
 
   if (command === 'build') {
     return resolve(rootDir, outputDir, target);
