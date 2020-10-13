@@ -23,6 +23,7 @@ module.exports = (context, options) => {
   config.output.publicPath('./');
   config.output.path(path.join(rootDir, 'build'));
   if (command === 'start') {
+    config.output.publicPath('/demo');
     config.module
       .rule('css')
       .test(/\.css?$/)

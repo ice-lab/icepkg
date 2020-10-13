@@ -12,6 +12,6 @@ module.exports = (context, { target = MINIAPP, distDir = '' }) => {
   if (command === 'build') {
     return resolve(rootDir, outputDir, target);
   } else {
-    return resolve(rootDir, 'build', target, 'components', 'Target');
+    return resolve(rootDir, '.miniapp', target === MINIAPP ? 'ali-miniapp' : target, 'components', 'Target');
   }
 };

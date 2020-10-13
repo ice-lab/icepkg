@@ -53,7 +53,6 @@ module.exports = (
       searchDirs.forEach((markdownDir) => {
         const demoKey = markdownDir || 'index';
         const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser);
-        console.log(path.join(rootDir, demoDir, markdownDir), demos);
         demoData.push({
           demoKey,
           demos: demos.map((demo) => {

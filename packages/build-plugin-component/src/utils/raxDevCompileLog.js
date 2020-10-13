@@ -5,7 +5,7 @@ const consoleClear = require('console-clear');
 const qrcode = require('qrcode-terminal');
 const { handleWebpackErr } = require('rax-compile-config');
 const { platformMap } = require('miniapp-builder-shared');
-const { WEB, WEEX, NODE } = require('../constants');
+const { WEB, WEEX, NODE, MINIAPP } = require('../constants');
 
 function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options) {
   consoleClear(true);
@@ -24,6 +24,13 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
       console.log('   ', chalk.underline.white(`${devUrl}${distBundle}.js`));
     })
     return;
+  }
+
+  const entryKeys = Object.keys(entries);
+  if (entryKeys.length) {
+    console.log(chalk.green('[DEMO] demo portal served at:'));
+    console.log('   ', chalk.underline.white(`${devUrl}demo/portal`));
+    console.log();
   }
 
   if (targets.includes(WEB)) {
@@ -62,11 +69,11 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
   Object.entries(platformMap).forEach(([platform, config]) => {
     if (targets.includes(platform)) {
       let outputPath = '';
-      if (options[platform].distDir) {
+      if (options[platform] && options[platform].distDir) {
         outputPath = options[platform].distDir;
         console.log(chalk.green(`[${config.name}] Component lib at: `));
       } else {
-        outputPath = `build/${platform}`;
+        outputPath = `.miniapp/${platform === MINIAPP ? 'ali-miniapp' : platform}`;
         console.log(chalk.green(`[${config.name}] Use ali miniapp developer tools to open the following folder:`));
       }
       console.log('   ', chalk.underline.white(path.resolve(rootDir, outputPath)));
