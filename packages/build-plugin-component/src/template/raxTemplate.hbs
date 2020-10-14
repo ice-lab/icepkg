@@ -3,4 +3,6 @@ import DriverUniversal from 'driver-universal';
 {{#each demos}}
 import Component from '{{filePath}}';
 {{/each}}
-render(<Component />, document.body, { driver: DriverUniversal, hydrate: true });
+if (Component) {
+  render(<Component />, document.body, { driver: DriverUniversal, hydrate: true });
+}
