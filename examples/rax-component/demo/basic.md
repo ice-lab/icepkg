@@ -6,9 +6,12 @@ order: 1
 basic usage
 
 ```jsx
-import { createElement, render } from 'rax';
-import DriverUniversal from 'driver-universal';
+import { createElement } from 'rax';
 import MyComponent from 'example-component';
 
-export default MyComponent;
+function App(){
+  return <MyComponent />;
+}
+
+export default App;
 ```
