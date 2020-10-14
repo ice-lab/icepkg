@@ -26,7 +26,7 @@ export default async function generateMaterialData(pkgPath, materialType, materi
     || materialItemConfig.snapshot
     || (fse.existsSync(path.join(projectPath, 'screenshot.png')) && `${unpkgHost}/${npmName}@${pkg.version}/screenshot.png`)
     || (fse.existsSync(path.join(projectPath, 'screenshot.jpg')) && `${unpkgHost}/${npmName}@${pkg.version}/screenshot.jpg`)
-    || '';
+    || `${unpkgHost}/${npmName}@${pkg.version}/screenshot.png`;
   const screenshots = materialItemConfig.screenshots || (screenshot && [screenshot]);
   const homepage = pkg.homepage || `${unpkgHost}/${npmName}@${pkg.version}/build/index.html`;
 
