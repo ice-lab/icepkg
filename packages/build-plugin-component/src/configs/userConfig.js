@@ -12,6 +12,10 @@ module.exports = [
     validation: 'string',
   },
   {
+    name: 'filename',
+    validation: 'string',
+  },
+  {
     name: 'sourceMap',
     validation: 'boolean',
   },
