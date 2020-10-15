@@ -11,12 +11,12 @@ const App = ({ demoData, readmeData }) => {
   
   return (
     <BuildLayout demos={items}>
-      {items.map((data, index) => {
+      {items.map((data) => {
         const Comp = data.component;
         return (
           <div key={data.filename}>
             <a name={`container_${data.filename}`} />
-            {data.title && index !== 0 && data.filename !== 'readme' && <h3>{data.title}</h3>}
+            {data.title && data.filename !== 'readme' && <h3>{data.title}</h3>}
             <Playground data={data}>
               {typeof Comp === 'function' && <Comp />}
             </Playground>
