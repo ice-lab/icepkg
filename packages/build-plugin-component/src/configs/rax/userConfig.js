@@ -10,6 +10,7 @@ module.exports = [
   },
   {
     name: 'inlineStyle',
+    defaultValue: true,
     validation: 'boolean',
   },
   {
