@@ -1,5 +1,5 @@
 import { createElement } from 'rax';
-import MyComponent from 'example-component';
+import MyComponent from '../src/index';
 
 function App(){
   return <MyComponent />;
