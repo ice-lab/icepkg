@@ -10,7 +10,6 @@ module.exports = [
   },
   {
     name: 'inlineStyle',
-    defaultValue: true,
     validation: 'boolean',
   },
   {
@@ -25,10 +24,6 @@ module.exports = [
   {
     name: 'outputDir',
     validation: 'string',
-  },
-  {
-    name: 'watchDist',
-    validation: 'boolean',
   },
   {
     /**
