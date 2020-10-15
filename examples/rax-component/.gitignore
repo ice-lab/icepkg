@@ -17,6 +17,5 @@ types/
 node_modules/
 
 demo/miniapp/components/
-.miniapp/ali-miniapp/components/
-.miniapp/wechat-miniprogram/components/
+.miniapp/
 _miniapp/
