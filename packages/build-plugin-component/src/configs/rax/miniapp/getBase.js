@@ -22,8 +22,8 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
       entryPath = `./${miniappDemoFolder}/${filePath}`;
     });
   }
-  // copy template file to .miniapp
-  const miniappOutput = path.join(rootDir, '.miniapp', parseTarget(target));
+  // copy template file to build
+  const miniappOutput = path.join(rootDir, 'build', parseTarget(target));
   fse.ensureDirSync(miniappOutput);
   fse.copySync(path.join(__dirname, `../../../template/miniapp/${parseTarget(target)}`), miniappOutput);
   

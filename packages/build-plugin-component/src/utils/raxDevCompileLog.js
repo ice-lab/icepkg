@@ -73,7 +73,7 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
         outputPath = options[platform].distDir;
         console.log(chalk.green(`[${config.name}] Component lib at: `));
       } else {
-        outputPath = `.miniapp/${platform === MINIAPP ? 'ali-miniapp' : platform}`;
+        outputPath = `build/${platform === MINIAPP ? 'ali-miniapp' : platform}`;
         console.log(chalk.green(`[${config.name}] Use ali miniapp developer tools to open the following folder:`));
       }
       console.log('   ', chalk.underline.white(path.resolve(rootDir, outputPath)));
