@@ -12,6 +12,7 @@ extensions/*/out
 packages/*/lib/
 packages/*/es/
 packages/*/build/
+packages/build-plugin-component/*/template
 app/main_dist/
 app/build/
 tmp
