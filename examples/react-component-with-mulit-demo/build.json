@@ -2,6 +2,7 @@
   "plugins": [
     "build-plugin-component",
     "build-plugin-fusion",
+    "build-plugin-antd",
     [
       "build-plugin-moment-locales",
       {
