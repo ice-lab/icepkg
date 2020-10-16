@@ -59,7 +59,7 @@
     "rax-server-renderer": "^1.2.0",
     "react-dev-utils": "^10.0.0",
     "style-loader": "^1.2.1",
-    "template-component-demo": "^2.0.0-0",
+    "template-component-demo": "^2.0.0",
     "terser-webpack-plugin": "^4.1.0",
     "typescript": "^3.7.3",
     "url-join": "^4.0.1",

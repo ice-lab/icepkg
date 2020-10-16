@@ -26,10 +26,6 @@ module.exports = [
     validation: 'string',
   },
   {
-    name: 'watchDist',
-    validation: 'boolean',
-  },
-  {
     /**
      * support disable mock node env
      * https://webpack.js.org/configuration/node/

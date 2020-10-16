@@ -21,13 +21,14 @@ const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
 const getDemoConfig = require('./configs/rax/getDemoConfig');
 
 module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebpackConfig, onGetJestConfig, log }) => {
-  const { rootDir, userConfig, command, pkg } = context;
-  const { plugins, targets, disableUMD, watchDist, ...compileOptions } = userConfig;
+  const { rootDir, userConfig, command, pkg, commandArgs } = context;
+  const { plugins, targets, disableUMD, inlineStyle = true, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
     console.error(chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'));
     console.log();
     process.exit(1);
   }
+  const watchDist = commandArgs.watchDist;
   // register user config
   registerUserConfig(defaultUserConfig.concat(raxUserConfig));
   // disable demo when watch dist
@@ -50,7 +51,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
   }
   if (command === 'start' && !watchDist) {
     targets.forEach((target) => {
-      const options = { ...compileOptions, target };
+      const options = { ...compileOptions, target, inlineStyle };
       if ([WEB, WEEX, NODE].includes(target)) {
         // eslint-disable-next-line
         const configDev = require(`./configs/rax/${target}/dev`);
@@ -75,7 +76,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
     fse.removeSync(path.join(rootDir, 'es'));
 
     targets.forEach(target => {
-      const options = { ...userConfig, target };
+      const options = { ...userConfig, target, inlineStyle };
       if (target === WEB) {
         registerTask(`component-build-${target}`, getDistConfig(context, options));
         registerTask(`component-build-${target}-es6`, getES6Config(context, options));

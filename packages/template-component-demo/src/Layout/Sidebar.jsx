@@ -24,7 +24,7 @@ export default class Sidebar extends React.Component {
     const { value, menus } = this.state;
     return (
       <div className={styles.sidebar}>
-        <div className={styles.searchbox}>
+        <div className={styles.searchbox} style={{ display: 'none' }}>
           <input
             type="text"
             className={styles.input}
