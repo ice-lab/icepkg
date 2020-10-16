@@ -56,5 +56,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://registry.npm.taobao.org/example-component@1.0.0/build/index.html"
 }
