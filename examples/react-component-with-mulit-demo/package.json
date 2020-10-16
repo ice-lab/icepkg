@@ -24,6 +24,8 @@
     "component"
   ],
   "dependencies": {
+    "@alifd/next": "^1.21.8",
+    "antd": "^4.7.0",
     "prop-types": "^15.5.8"
   },
   "devDependencies": {
@@ -54,5 +56,5 @@
     "access": "public"
   },
   "license": "MIT",
-  "homepage": "https://unpkg.com/example-component@1.0.0/build/index.html"
+  "homepage": "https://registry.npm.taobao.org/example-component@1.0.0/build/index.html"
 }
