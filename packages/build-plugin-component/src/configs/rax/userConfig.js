@@ -17,6 +17,10 @@ module.exports = [
     validation: 'boolean',
   },
   {
+    name: 'watchDist',
+    validation: 'boolean',
+  },
+  {
     name: 'disableUMD',
     validation: 'boolean',
   },

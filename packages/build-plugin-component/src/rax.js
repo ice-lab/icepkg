@@ -20,7 +20,7 @@ const buildCompileLog = require('./utils/raxBuildCompileLog');
 const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
 const getDemoConfig = require('./configs/rax/getDemoConfig');
 
-module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, log }) => {
+module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, modifyUserConfig, log }) => {
   const { rootDir, userConfig, command, pkg, commandArgs } = context;
   const { plugins, targets, disableUMD, inlineStyle = true, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
@@ -28,7 +28,10 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     console.log();
     process.exit(1);
   }
-  const { watchDist, skipDemo } = commandArgs;
+  const { skipDemo } = commandArgs;
+  const watchDist = commandArgs.watchDist || userConfig.watchDist;
+  // compatible with rax-seed
+  modifyUserConfig('watchDist', !!watchDist);
   // register user config
   registerUserConfig(defaultUserConfig.concat(raxUserConfig));
   // disable demo when watch dist
