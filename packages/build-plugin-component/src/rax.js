@@ -20,7 +20,7 @@ const buildCompileLog = require('./utils/raxBuildCompileLog');
 const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
 const getDemoConfig = require('./configs/rax/getDemoConfig');
 
-module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebpackConfig, onGetJestConfig, log }) => {
+module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, log }) => {
   const { rootDir, userConfig, command, pkg, commandArgs } = context;
   const { plugins, targets, disableUMD, inlineStyle = true, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
@@ -28,7 +28,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
     console.log();
     process.exit(1);
   }
-  const watchDist = commandArgs.watchDist;
+  const { watchDist, skipDemo } = commandArgs;
   // register user config
   registerUserConfig(defaultUserConfig.concat(raxUserConfig));
   // disable demo when watch dist
@@ -36,7 +36,13 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
   let entries = {};
   let serverBundles = {};
 
-  if (!watchDist) {
+  // register cli options
+  const cliOptions = ['watch-dist', '--skip-demo'];
+  registerCliOption(cliOptions.map((name) => ({
+    name,
+    commands: ['start', 'build'],
+  })));
+  if (!watchDist && !skipDemo) {
     const demoDir = getDemoDir(rootDir);
     if (demoDir) {
       const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
@@ -109,11 +115,13 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, onGetWebp
   
   onHook('after.build.compile', async(args) => {
     buildCompileLog(args, targets, rootDir, userConfig);
-    await modifyPkgHomePage(pkg, rootDir);
+    if (!skipDemo) {
+      await modifyPkgHomePage(pkg, rootDir);
+    }
   });
   onHook('after.start.compile', async(args) => {
     const devUrl = args.url;
-    devCompileLog(args, devUrl, targets, entries, rootDir, userConfig);
+    devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });
   });
   if (command === 'test') {
     // jest config
