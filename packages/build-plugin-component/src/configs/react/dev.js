@@ -1,4 +1,4 @@
-const setAssetsPath = require('../utils/setAssetsPath');
+const setAssetsPath = require('../../utils/setAssetsPath');
 
 module.exports = (config) => {
   setAssetsPath(config, { js: 'js', css: 'css' });

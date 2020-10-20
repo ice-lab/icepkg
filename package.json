@@ -8,8 +8,8 @@
     "tnpm:install:deps": "tnpm update && lerna exec -- tnpm update",
     "packages:build": "npm run packages:clean && lerna run build",
     "packages:clean": "rm -rf ./packages/*/lib",
-    "lint": "eslint --cache --ext .ts,.tsx,.js ./ --quiet",
-    "lint:fix": "eslint --cache --ext .ts,.tsx,.js ./ --quiet --fix",
+    "lint": "eslint --cache --ext .ts,.tsx,.js ./packages --quiet",
+    "lint:fix": "eslint --cache --ext .ts,.tsx,.js ./packages --quiet --fix",
     "ci": "npm run lint && npm run test && codecov",
     "publish:packages": "ts-node ./scripts/publish.ts"
   },

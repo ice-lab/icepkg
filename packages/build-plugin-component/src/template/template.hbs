@@ -2,23 +2,29 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import demoData from '@build-plugin-component/demo';
+import demoData from './{{demoDataFile}}';
 import App from '{{templateName}}';
+{{#each demoData}}
 {{#each demos}}
-import __{{camelCased filename}} from '{{filePath}}';
+import _{{demoKey}}_{{camelCased filename}} from '{{filePath}}';
+{{/each}}
 {{/each}}
 
 const demoComponents = {
+{{#each demoData}}
 {{#each demos}}
-  '{{filename}}': __{{camelCased filename}},
+  '{{demoKey}}_{{filename}}': _{{demoKey}}_{{camelCased filename}},
+{{/each}}
 {{/each}}
 };
 
-const parsedData = demoData.map((data) => {
-  return {
-    ...data,
-    component: demoComponents[data.filename],
-  };
+const parsedData = demoData.map(({demos}) => {
+  return demos.map((data) => {
+    return {
+      ...data,
+      component: demoComponents[`${data.demoKey}_${data.filename}`],
+    };
+  });
 });
 
 const readme = {{{readme}}};

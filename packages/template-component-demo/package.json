@@ -1,6 +1,6 @@
 {
   "name": "template-component-demo",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "default demo style for component development",
   "files": [
     "es/",
@@ -27,6 +27,7 @@
     "component"
   ],
   "dependencies": {
+    "query-string": "^6.13.5",
     "react-router-dom": "^5.1.2"
   },
   "devDependencies": {

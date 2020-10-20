@@ -88,8 +88,8 @@ exports.markdownParser = function markdownParser(md, options = {}) {
   }
 
   if (sliceCode) {
-    const JSX_REG = /(````)(?:jsx?)([^\1]*?)(\1)/g;
-    const STYLE_REG = /(````)(?:css|style?)([^\1]*?)(\1)/g;
+    const JSX_REG = /(```)(?:jsx?)([^\1]*?)(\1)/g;
+    const STYLE_REG = /(```)(?:css|style?)([^\1]*?)(\1)/g;
     const DEMO_REG = /<DemoCode\b[^>]*src=['"]?([^'"]*)['"]?\b[^>]*>/;
 
     const jsxMatched = JSX_REG.exec(result.content);

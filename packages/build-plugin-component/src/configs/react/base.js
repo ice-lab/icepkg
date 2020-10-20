@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = (config, { pkg, rootDir, entry, demoDataPath }) => {
+module.exports = (config, { pkg, rootDir, entry }) => {
   config.target('web');
   config.context(rootDir);
 
@@ -11,24 +11,21 @@ module.exports = (config, { pkg, rootDir, entry, demoDataPath }) => {
 
   config.plugin('HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
     {
-      template: require.resolve('../template/demo.hbs'),
+      template: require.resolve('../../template/demo.hbs'),
       filename: 'index.html',
     },
   ]);
   
-  config.resolve.alias
-    .set('@build-plugin-component/demo', demoDataPath);
-
   config.resolve.modules
     .add('node_modules')
     .add(path.join(rootDir, 'node_modules'))
     .add(path.resolve(__dirname, '../../node_modules'));
-  
+
   ['jsx', 'tsx'].forEach(rule => {
     config.module
       .rule(rule)
       .exclude.clear()
-      .add(/node_modules(?!(.+component-demo.js|.+build-plugin-component))/)
+      .add(/node_modules(?!(.+_component_demo|.+build-plugin-component))/)
       .end()
       .use('babel-loader')
       .tap((options) => {
@@ -38,11 +35,10 @@ module.exports = (config, { pkg, rootDir, entry, demoDataPath }) => {
           plugins: [
             ...plugins,
             // only transform index entry
-            [require.resolve('../utils/babelPluginCorejsLock.js'), { fileList: [entry.index] }],
+            [require.resolve('../../utils/babelPluginCorejsLock.js'), { fileList: [entry.index] }],
           ],
         };
       });
-      
   });
   // disable vendor
   config.optimization.splitChunks({ cacheGroups: {} });
@@ -53,7 +49,7 @@ module.exports = (config, { pkg, rootDir, entry, demoDataPath }) => {
     .rule('demo-loader')
     .test(/\.md$/i)
     .use('demo')
-    .loader(require.resolve('../utils/componentDemoLoader'));
+    .loader(require.resolve('../../webpackLoader/reactDemoLoader'));
   // add packagename to webpack alias
   ['.js', '.jsx', '.json', '.html', '.ts', '.tsx'].forEach(extension => {
     config.resolve.extensions.add(extension);

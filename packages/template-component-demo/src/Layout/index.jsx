@@ -3,12 +3,11 @@ import Sidebar from './Sidebar';
 import styles from './index.module.scss';
 
 export const Layout = ({ demos, children, matchedFilename }) => {
-  const items = (demos || []).sort((a, b) => a.order - b.order);
   return (
     <div>
       <div className={styles.nav}>Docs</div>
       <div className={styles.container}>
-        <Sidebar items={items} matchedFilename={matchedFilename} />
+        <Sidebar items={demos} matchedFilename={matchedFilename} />
         <div className={styles.main}>{children}</div>
       </div>
     </div>

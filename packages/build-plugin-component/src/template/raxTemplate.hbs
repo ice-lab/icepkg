@@ -1,0 +1,8 @@
+import { createElement, render } from 'rax';
+import DriverUniversal from 'driver-universal';
+{{#each demos}}
+import Component from '{{filePath}}';
+{{/each}}
+if (Component) {
+  render(<Component />, document.body, { driver: DriverUniversal, hydrate: true });
+}

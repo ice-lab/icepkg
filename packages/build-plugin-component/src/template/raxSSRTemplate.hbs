@@ -1,0 +1,9 @@
+import { createElement } from 'rax';
+import { renderToString } from 'rax-server-renderer';
+{{#each demos}}
+import Component from '{{filePath}}';
+{{/each}}
+
+export default function() {
+  return renderToString(<Component />);
+};
