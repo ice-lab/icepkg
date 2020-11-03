@@ -1,8 +1,11 @@
-import { createElement, render } from 'rax';
+import { createElement, render, Fragment } from 'rax';
 import DriverUniversal from 'driver-universal';
 {{#each demos}}
 import Component from '{{filePath}}';
+const markdownContent = `{{{markdownContent}}}`;
 {{/each}}
 if (Component) {
-  render(<Component />, document.body, { driver: DriverUniversal, hydrate: true });
+  const matchCSS = markdownContent.match(/<style>([\s\S]*?)<\/style>/);
+  const cssContent = matchCSS ? {__html: matchCSS[1] || ''} : '';
+  render(cssContent ? <><style dangerouslySetInnerHTML={cssContent} /><Component /></> : <Component />, document.body, { driver: DriverUniversal, hydrate: true });
 }

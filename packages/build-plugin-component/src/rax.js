@@ -1,6 +1,7 @@
 const path = require('path');
 const fse = require('fs-extra');
 const chalk = require('chalk');
+const chokidar = require('chokidar');
 const getJestConfig = require('rax-jest-config');
 const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE } = require('./constants');
 const getMiniappConfig = require('./configs/rax/miniapp/getBase');
@@ -38,6 +39,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   
   let entries = {};
   let serverBundles = {};
+  let demos = [];
 
   // register cli options
   const cliOptions = ['watch-dist', '--skip-demo'];
@@ -45,17 +47,37 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     name,
     commands: ['start', 'build'],
   })));
-  if (!watchDist && !skipDemo) {
-    const demoDir = getDemoDir(rootDir);
+  const demoDir = getDemoDir(rootDir);
+  const getRaxBundles = () => {
     if (demoDir) {
-      const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
+      demos = getDemos(path.join(rootDir, demoDir), markdownParser);
       if (demos && demos.length) {
-        const raxBundles = generateRaxEntry(demos, rootDir, targets);
-        entries = raxBundles.entries;
-        serverBundles = raxBundles.serverBundles;
-        const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
-        registerTask('component-demo', demoConfig);
+        return generateRaxEntry(demos, rootDir, targets);
       }
+    }
+    return false;
+  };
+  if (!watchDist && !skipDemo) {
+    let raxBundles = getRaxBundles();
+    // watch demo changes
+    if (command === 'start') {
+      const demoWatcher = chokidar.watch(demoDir, {
+        ignoreInitial: false,
+        interval: 200,
+      });
+      demoWatcher.on('all', () => {  
+        // re-generate entry files when demo changes
+        raxBundles = getRaxBundles();
+      });
+      demoWatcher.on('error', (error) => {
+        log.error('fail to watch demo', error);
+      });
+    }
+    if (raxBundles) {
+      entries = raxBundles.entries;
+      serverBundles = raxBundles.serverBundles;
+      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
+      registerTask('component-demo', demoConfig);
     }
   }
   if (command === 'start' && !watchDist) {

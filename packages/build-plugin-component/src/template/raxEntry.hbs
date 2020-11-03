@@ -18,7 +18,9 @@ const DemoBlock = ({ js, css, name, title, desc, active, onClick }) => {
   const wrapperStyle = {maxHeight: open ? '800px' : '150px'};
   const jsxHtml = { __html: js || '' };
   const cssHtml = { __html: css || '' };
-  const descHtml = {__html: desc || ''};
+  // remove style from portal
+  const descContent = desc.replace(/<style>([\s\S]*?)<\/style>/, '');
+  const descHtml = {__html: descContent || ''};
   const targets  = '{{targets}}'.split(',');
   const isWebEnable = ~targets.indexOf('web');
   const isWeexEnable = ~targets.indexOf('weex');

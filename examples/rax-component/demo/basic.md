@@ -15,3 +15,9 @@ function App(){
 
 export default App;
 ```
+
+```css
+body {
+  font-size: 13px;
+}
+```
