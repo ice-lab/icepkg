@@ -28,8 +28,15 @@ module.exports = (config, context, options) => {
     .use('css')
     .loader(require.resolve('stylesheet-loader'))
     .end()
-    .use('less')
+    .use('less-loader')
     .loader(require.resolve('less-loader'));
-
+  
+  config.module.rule('scss')
+    .test(/\.scss?$/)
+    .use('css')
+    .loader(require.resolve('stylesheet-loader'))
+    .end()
+    .use('sass-loader')
+    .loader(require.resolve('sass-loader'));
   return config;
 };
