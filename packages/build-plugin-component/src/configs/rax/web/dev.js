@@ -37,12 +37,21 @@ module.exports = (config, context, options) => {
     config.module
       .rule('less')
       .test(/\.less?$/)
-      .use('css')
+      .use('css-loader')
       .loader(require.resolve('stylesheet-loader'))
       .options({ taskName })
       .end()
-      .use('less')
+      .use('less-loader')
       .loader(require.resolve('less-loader'));
+    config.module
+      .rule('scss')
+      .test(/\.scss?$/)
+      .use('css-loader')
+      .loader(require.resolve('stylesheet-loader'))
+      .options({ taskName })
+      .end()
+      .use('sass-loader')
+      .loader(require.resolve('sass-loader'));
   } else {
     config.module
       .rule('css')
