@@ -6,9 +6,9 @@ const demos = [
   {
     name: '{{filename}}',
     title: '{{filename}}',
-    js: `{{{highlightedCode}}}`,
-    desc:`{{{markdownContent}}}`,
-    css: `{{{highlightedStyle}}}`,
+    js: `{{{escape highlightedCode}}}`,
+    desc:`{{{escape markdownContent}}}`,
+    css: `{{{escape highlightedStyle}}}`,
   },
   {{/each}}
 ];

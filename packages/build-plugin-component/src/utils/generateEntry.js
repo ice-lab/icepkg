@@ -12,6 +12,9 @@ module.exports = function generateEntryJS({
   hbs.registerHelper('camelCased', (str) => {
     return str.replace(/-([a-z])/g, (math) => (math[1].toUpperCase()));
   });
+  hbs.registerHelper('escape', (str) => {
+    return (str || '').replace(/`/g, '&#x60;');
+  });
   const compileTemplateContent = hbs.compile(hbsTemplateContent);
 
   const jsTemplateContent = compileTemplateContent(params);
