@@ -24,7 +24,7 @@ export class CodeBox extends React.Component {
       <div className={styles.codeBox}>
         {filename && children && (
           <div className={styles.demo}>
-            <div id={filename} style={{ display: 'inline-block' }}>{children}</div>
+            <div id={filename}>{children}</div>
           </div>
         )}
         <div className={styles.actions}>
