@@ -26,7 +26,7 @@ const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOpt
       },
       ...params,
     });
-    babelConfig.presets.push(require.resolve('@babel/preset-typescript'));
+    babelConfig.presets.push([require.resolve('@babel/preset-typescript'), { jsxPragma: 'createElement' }]);
   }
   // generate babel-plugin-import config
   const plugins = [];
