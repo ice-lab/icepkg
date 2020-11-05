@@ -1,6 +1,6 @@
 {
   "name": "build-plugin-component",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "build plugin for component development",
   "main": "src/index.js",
   "scripts": {
@@ -58,6 +58,7 @@
     "rax-jest-config": "^0.0.4",
     "rax-server-renderer": "^1.2.0",
     "react-dev-utils": "^10.0.0",
+    "sass-loader": "^10.0.5",
     "style-loader": "^1.2.1",
     "template-component-demo": "^2.0.0",
     "terser-webpack-plugin": "^4.1.0",

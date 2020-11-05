@@ -6,9 +6,9 @@ const demos = [
   {
     name: '{{filename}}',
     title: '{{filename}}',
-    js: `{{{highlightedCode}}}`,
-    desc:`{{{markdownContent}}}`,
-    css: `{{{highlightedStyle}}}`,
+    js: `{{{escape highlightedCode}}}`,
+    desc:`{{{escape markdownContent}}}`,
+    css: `{{{escape highlightedStyle}}}`,
   },
   {{/each}}
 ];
@@ -18,7 +18,9 @@ const DemoBlock = ({ js, css, name, title, desc, active, onClick }) => {
   const wrapperStyle = {maxHeight: open ? '800px' : '150px'};
   const jsxHtml = { __html: js || '' };
   const cssHtml = { __html: css || '' };
-  const descHtml = {__html: desc || ''};
+  // remove style from portal
+  const descContent = desc.replace(/<style>([\s\S]*?)<\/style>/, '');
+  const descHtml = {__html: descContent || ''};
   const targets  = '{{targets}}'.split(',');
   const isWebEnable = ~targets.indexOf('web');
   const isWeexEnable = ~targets.indexOf('weex');
@@ -50,7 +52,7 @@ const DemoBlock = ({ js, css, name, title, desc, active, onClick }) => {
               '{{command}}' !== 'build' ?
               <a
                 target="_blank"
-                href={`weex/${name}.js?wh_weex=true`}
+                href={`/weex/${name}.js?wh_weex=true`}
                 class={`icon weex ${!isWeexEnable ? 'disabled':''}`}
                 onClick={(e) => {
                   e.stopPropagation();

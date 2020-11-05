@@ -37,12 +37,21 @@ module.exports = (config, context, options) => {
     config.module
       .rule('less')
       .test(/\.less?$/)
-      .use('css')
+      .use('css-loader')
       .loader(require.resolve('stylesheet-loader'))
       .options({ taskName })
       .end()
-      .use('less')
+      .use('less-loader')
       .loader(require.resolve('less-loader'));
+    config.module
+      .rule('scss')
+      .test(/\.scss?$/)
+      .use('css-loader')
+      .loader(require.resolve('stylesheet-loader'))
+      .options({ taskName })
+      .end()
+      .use('sass-loader')
+      .loader(require.resolve('sass-loader'));
   } else {
     config.module
       .rule('css')
@@ -69,35 +78,52 @@ module.exports = (config, context, options) => {
           require('postcss-plugin-rpx2vw')(),
         ],
       });
-
+    const postcssOptions = {
+      ident: 'postcss',
+      plugins: () => [
+        // eslint-disable-next-line
+        require('postcss-preset-env')({
+          autoprefixer: {
+            flexbox: 'no-2009',
+          },
+          stage: 3,
+        }),
+        // eslint-disable-next-line
+        require('postcss-plugin-rpx2vw')(),
+      ],
+    };
+    // less-loader
     config.module
       .rule('less')
       .test(/\.less?$/)
-      .use('minicss')
+      .use('MiniCssExtractPlugin.loader')
       .loader(MiniCssExtractPlugin.loader)
       .end()
-      .use('css')
+      .use('css-loader')
       .loader(require.resolve('css-loader'))
       .end()
-      .use('postcss')
+      .use('postcss-loader')
       .loader(require.resolve('postcss-loader'))
-      .options({
-        ident: 'postcss',
-        plugins: () => [
-          // eslint-disable-next-line
-          require('postcss-preset-env')({
-            autoprefixer: {
-              flexbox: 'no-2009',
-            },
-            stage: 3,
-          }),
-          // eslint-disable-next-line
-          require('postcss-plugin-rpx2vw')(),
-        ],
-      })
+      .options(postcssOptions)
       .end()
-      .use('less')
+      .use('less-loader')
       .loader(require.resolve('less-loader'));
+    
+    config.module
+      .rule('scss')
+      .test(/\.scss?$/)
+      .use('MiniCssExtractPlugin.loader')
+      .loader(MiniCssExtractPlugin.loader)
+      .end()
+      .use('css-loader')
+      .loader(require.resolve('css-loader'))
+      .end()
+      .use('postcss-loader')
+      .loader(require.resolve('postcss-loader'))
+      .options(postcssOptions)
+      .end()
+      .use('sass-loader')
+      .loader(require.resolve('sass-loader'));
   }
 
   // Extract css for SSR dev server
