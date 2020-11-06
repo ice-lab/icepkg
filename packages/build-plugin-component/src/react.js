@@ -21,7 +21,7 @@ const reactUserConfig = require('./configs/react/userConfig');
 const babelCompiler = require('./compiler/babel');
 
 module.exports = (
-  { context, registerTask, registerCliOption, registerUserConfig, onGetWebpackConfig, onHook, log, onGetJestConfig }
+  { context, registerTask, registerCliOption, registerUserConfig, onGetWebpackConfig, onHook, log, onGetJestConfig },
 ) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
@@ -60,7 +60,7 @@ module.exports = (
               ...demo,
               filePath: formatPathForWin(demo.filePath),
               demoKey,
-            }
+            };
           }),
         });
       });
@@ -82,7 +82,7 @@ module.exports = (
       // wirte demo content
       fs.writeFileSync(demoDataPath, `const data = ${JSON.stringify(demoData)};export default data;`);
       params.entry = { index: entryPath };
-    }
+    };
 
     generateDemoEntry();
 

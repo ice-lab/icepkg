@@ -3,37 +3,13 @@ import * as fse from 'fs-extra';
 import * as path from 'path';
 import * as camelcase from 'camelcase';
 import { getNpmTarball, getAndExtractTarball } from 'ice-npm-utils';
-
+import { IOptions, ITemplateOptions } from './types';
 import ejsRenderDir from './ejsRenderDir';
 import formatProject from './formatProject';
 
 /**
  * init component by template
  */
-export interface ITemplateOptions {
-  npmName: string; // @icedesign/ice-label
-  name?: string; // ice-label (english and variable)
-  kebabCaseName?: string; // ice-label
-  npmScope?: string; // @icedesign
-  title?: string; //
-  description?: string;
-  className?: string;
-  version?: string;
-  category?: string;
-  // web, miniapp...
-  projectTargets?: string[];
-  adaptor?: boolean;
-}
-
-export interface IOptions {
-  rootDir: string;
-  materialTemplateDir: string;
-  templateOptions: ITemplateOptions;
-  enablePegasus?: boolean;
-  enableDefPublish?: boolean;
-  materialType: 'component' | 'block' | 'scaffold';
-}
-
 export async function generateMaterial({
   rootDir,
   materialTemplateDir,
@@ -111,7 +87,7 @@ export async function downloadMaterialTemplate(dir: string, template: string, re
           filename = 'package.json.ejs';
         }
         return filename;
-      }
+      },
     );
     spinner.succeed('download npm tarball successfully.');
   }

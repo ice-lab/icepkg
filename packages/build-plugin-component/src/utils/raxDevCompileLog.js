@@ -22,7 +22,7 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
     console.log(chalk.green('[Dist] Development pages:'));
     ['index', 'index-es6', 'index-weex'].forEach((distBundle) => {
       console.log('   ', chalk.underline.white(`${devUrl}${distBundle}.js`));
-    })
+    });
     return;
   }
 
@@ -50,7 +50,7 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
 
     Object.keys(entries).forEach((entry) => {
       // Use Weex App to scan ip address (mobile phone can't visit localhost).
-      const weexUrl = `${devUrl}weex/${entry}.js?wh_weex=true`.replace(/^http:\/\/localhost/gi, function(match) {
+      const weexUrl = `${devUrl}weex/${entry}.js?wh_weex=true`.replace(/^http:\/\/localhost/gi, (match) => {
         // Called when matched
         try {
           return `http://${ip.address()}`;

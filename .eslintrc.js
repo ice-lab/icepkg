@@ -1,4 +1,4 @@
-const { eslint, tslint, deepmerge } = require('@ice/spec');
+const { getESLintConfig } = require('@iceworks/spec');
 
 const commonRules = {
   'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx', '.tsx'] }],
@@ -10,7 +10,7 @@ const commonRules = {
   'class-methods-use-this': 0
 };
 
-const jsRules = deepmerge(eslint, {
+const jsRules = getESLintConfig('react', {
   env: {
     jest: true
   },
@@ -19,7 +19,8 @@ const jsRules = deepmerge(eslint, {
   },
 });
 
-const tsRules = deepmerge(tslint, {
+
+const tsRules = getESLintConfig('react-ts', {
   env: {
     jest: true
   },

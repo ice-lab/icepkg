@@ -30,7 +30,7 @@ interface IOptions {
   template: string;
 }
 
-export default async function({
+export default async function ({
   cwd, projectType, template,
 }: IOptions): Promise<void> {
   log.verbose('initMaterialAndComponent', projectType, template);
@@ -50,7 +50,9 @@ export default async function({
     const tempRootFilesDir = path.join(tempMaterialDir, 'temp');
     await fse.copy(templatePath, tempRootFilesDir);
     await ejsRenderDir(tempRootFilesDir, {
-      npmName, description, template,
+      npmName,
+      description,
+      template,
       version: '0.1.0',
       materialConfig: templatePkg.materialConfig,
     });
@@ -113,7 +115,7 @@ export default async function({
 
   // remove temp dir
   await fse.remove(tempMaterialDir);
-};
+}
 
 
 interface IResult {

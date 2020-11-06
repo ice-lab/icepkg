@@ -31,7 +31,7 @@ export default async function (options) {
   const [blocks, components, scaffolds, pages] = await Promise.all(
     ['block', 'component', 'scaffold', 'page'].map((item) => {
       return globMaterials(cwd, item);
-    })
+    }),
   );
   const allMaterials = [].concat(blocks).concat(components).concat(scaffolds).concat(pages);
 
@@ -55,7 +55,7 @@ export default async function (options) {
       },
       {
         concurrency,
-      }
+      },
     );
     spinner.succeed(`materials data generate successfully，start write to ${DB_PATH}...`);
   } catch (err) {
@@ -125,7 +125,7 @@ function globMaterials(materialDir, materialType) {
           });
           resolve(data);
         }
-      }
+      },
     );
   });
 }

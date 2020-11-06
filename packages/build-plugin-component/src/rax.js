@@ -36,7 +36,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   // register user config
   registerUserConfig(defaultUserConfig.concat(raxUserConfig));
   // disable demo when watch dist
-  
+
   let entries = {};
   let serverBundles = {};
   let demos = [];
@@ -65,7 +65,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
         ignoreInitial: false,
         interval: 200,
       });
-      demoWatcher.on('all', () => {  
+      demoWatcher.on('all', () => {
         // re-generate entry files when demo changes
         raxBundles = getRaxBundles();
       });
@@ -87,7 +87,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
         // eslint-disable-next-line
         const configDev = require(`./configs/rax/${target}/dev`);
         const defaultConfig = getBaseWebpack(context, options);
-        configDev(defaultConfig, context, {...options, entries, serverBundles } );
+        configDev(defaultConfig, context, { ...options, entries, serverBundles });
         registerTask(`component-demo-${target}`, defaultConfig);
       } else if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
         options[target] = options[target] || {};
@@ -137,14 +137,14 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
       config.devServer.hot(false);
     });
   }
-  
-  onHook('after.build.compile', async(args) => {
+
+  onHook('after.build.compile', async (args) => {
     buildCompileLog(args, targets, rootDir, userConfig);
     if (!skipDemo) {
       await modifyPkgHomePage(pkg, rootDir);
     }
   });
-  onHook('after.start.compile', async(args) => {
+  onHook('after.start.compile', async (args) => {
     const devUrl = args.url;
     devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });
   });
@@ -161,7 +161,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
       };
     });
   }
-}
+};
 
 /**
  * Add miniapp target param to match jsx2mp-loader config

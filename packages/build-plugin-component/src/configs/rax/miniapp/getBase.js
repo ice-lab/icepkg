@@ -6,13 +6,13 @@ const getWebpackBase = require('../getBaseWebpack');
 const getOutputPath = require('./getOutputPath');
 const { MINIAPP } = require('../../../constants');
 
-const parseTarget = (target) => target === MINIAPP ? 'ali-miniapp' : target;
+const parseTarget = (target) => (target === MINIAPP ? 'ali-miniapp' : target);
 module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   const { rootDir, command } = context;
   const { distDir = '' } = options[target] || {};
   const outputPath = getOutputPath(context, { target, distDir });
   const config = getWebpackBase(context, {
-    disableRegenerator: true
+    disableRegenerator: true,
   });
   let entryPath = './src/index';
   if (command === 'start') {
@@ -26,13 +26,13 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   const miniappOutput = path.join(rootDir, 'build', parseTarget(target));
   fse.ensureDirSync(miniappOutput);
   fse.copySync(path.join(__dirname, `../../../template/miniapp/${parseTarget(target)}`), miniappOutput);
-  
+
   setComponentConfig(config, options[target], {
     onGetWebpackConfig,
     context,
     entryPath,
     outputPath,
-    target
+    target,
   });
 
   return config;

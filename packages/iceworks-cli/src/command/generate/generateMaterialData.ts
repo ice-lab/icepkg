@@ -30,7 +30,7 @@ export default async function generateMaterialData(pkgPath, materialType, materi
   const screenshots = materialItemConfig.screenshots || (screenshot && [screenshot]);
   const homepage = pkg.homepage || `${unpkgHost}/${npmName}@${pkg.version}/build/index.html`;
 
-  const {categories: originCategories, category: originCategory} = materialItemConfig;
+  const { categories: originCategories, category: originCategory } = materialItemConfig;
   // categories 字段：即将废弃，但是展示端还依赖该字段，因此短期内不能删除，同时需要兼容新的物料无 categories 字段
   const categories = originCategories || (originCategory ? [originCategory] : []);
   // category 字段：兼容老的物料无 category 字段
@@ -74,7 +74,7 @@ export default async function generateMaterialData(pkgPath, materialType, materi
   }
 
   return { materialData, materialType };
-};
+}
 
 /**
  * 检测 NPM 包是否已发送，并返回包的发布时间

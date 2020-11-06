@@ -31,7 +31,7 @@ module.exports = (context, options) => {
       config
         .entry(`demo/${entryKey}`)
         .add(entries[entryKey]);
-  
+
       config.plugin(`html4${entryKey}`).use(HtmlWebpackPlugin, [
         {
           inject: true,

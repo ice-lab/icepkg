@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer';
 import axios, { AxiosRequestConfig } from 'axios';
-import * as ora from 'ora'
+import * as ora from 'ora';
 import * as _ from 'lodash';
 import * as chalk from 'chalk';
 import log from '../../utils/log';
@@ -63,7 +63,7 @@ export default class FusionSDK {
       url: `${this.fusionHost}/api/v1/mysites`,
       headers: {
         'x-auth-token': token,
-      }
+      },
     };
 
     log.verbose('fetch fusion sites start', options as any);
@@ -132,9 +132,7 @@ export default class FusionSDK {
       }, this.fusionHost);
 
       if (!body.success) {
-        (body.data || []).forEach((fail) =>
-          log.error('FusionSDK:', `物料 ${fail.npm} 上传失败, 原因: ${fail.reason}`)
-        );
+        (body.data || []).forEach((fail) => log.error('FusionSDK:', `物料 ${fail.npm} 上传失败, 原因: ${fail.reason}`));
         throw new Error('物料上传失败');
       }
     };
@@ -161,7 +159,7 @@ export default class FusionSDK {
     }
   }
 
-};
+}
 
 async function requestFusion(options: AxiosRequestConfig, fusionHost: string) {
   try {

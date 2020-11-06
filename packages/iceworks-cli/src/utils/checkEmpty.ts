@@ -29,4 +29,4 @@ export default function checkEmpty(dir): Promise<boolean> {
       return resolve(true);
     });
   });
-};
+}

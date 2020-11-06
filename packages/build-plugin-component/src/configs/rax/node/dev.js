@@ -16,7 +16,7 @@ function exec(code, filename, filePath) {
 module.exports = (config, context, options) => {
   const { rootDir } = context;
   const { serverBundles } = options;
-  
+
   Object.keys(serverBundles).forEach((entryKey) => {
     config
       .entry(`${entryKey}-ssr`)
@@ -55,7 +55,7 @@ module.exports = (config, context, options) => {
     const outputFs = devServer.compiler.compilers[0].outputFileSystem;
 
     Object.keys(serverBundles).forEach((entryKey) => {
-      app.get(`/ssr/${entryKey}`, async function(req, res) {
+      app.get(`/ssr/${entryKey}`, async (req, res) => {
         const query = req.query || {};
         // disable hydarte for debug http://localhost:9999/ssr/index?hydrate=false
         const hydrate = query.hydrate !== 'false';

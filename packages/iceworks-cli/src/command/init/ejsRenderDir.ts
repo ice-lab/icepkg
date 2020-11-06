@@ -3,7 +3,7 @@ import * as glob from 'glob';
 import * as ejs from 'ejs';
 import * as fse from 'fs-extra';
 
-export default async function(dir: string, options: any): Promise<void> {
+export default async function (dir: string, options: any): Promise<void> {
   return new Promise((resolve, reject) => {
     glob('**', {
       cwd: dir,
@@ -20,12 +20,12 @@ export default async function(dir: string, options: any): Promise<void> {
         return renderFile(filepath, options);
       })).then(() => {
         resolve();
-      }).catch((err) => {
-        reject(err);
+      }).catch((error) => {
+        reject(error);
       });
     });
   });
-};
+}
 
 function renderFile(filepath: string, options: any): Promise<string> {
   let filename = path.basename(filepath);

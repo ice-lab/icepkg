@@ -39,7 +39,7 @@ module.exports = (options = {}, { babelPlugins, babelOptions, rootDir }) => {
       return [presetPath, { modules, loose: true, ...(modifyOptions || {}) }];
     }
     if (presetOptions && modifyOptions) {
-      return [presetPath, {...presetOptions, ...modifyOptions}];
+      return [presetPath, { ...presetOptions, ...modifyOptions }];
     }
     return preset;
   });

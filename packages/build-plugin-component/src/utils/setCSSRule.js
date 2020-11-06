@@ -79,4 +79,4 @@ module.exports = (config, useStylesheetLoader) => {
       .use('sass-loader')
       .loader(require.resolve('sass-loader'));
   }
-}
+};
