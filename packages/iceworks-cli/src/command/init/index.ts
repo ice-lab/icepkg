@@ -8,9 +8,9 @@ interface IOptions {
   rootDir?: string;
   npmName?: string;
   type?: string;
-};
+}
 
-export default async function(options: IOptions = {}): Promise<void> {
+export default async function (options: IOptions = {}): Promise<void> {
   const cwd = options.rootDir || process.cwd();
   let { npmName, type } = options;
   log.verbose('iceworks init options', options as string);
@@ -40,7 +40,7 @@ export default async function(options: IOptions = {}): Promise<void> {
     projectType: type,
     template: npmName,
   });
-};
+}
 
 /**
  * 选择初始项目类型

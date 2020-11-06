@@ -170,7 +170,7 @@ module.exports = function babelCompiler(
           ? [styleSatements, styleContent].filter(Boolean).join('\n')
           : '//empty file';
       fs.writeFileSync(stylePath, styleContent, 'utf-8');
-      log.info(`generate style.js to ${target}`);      
+      log.info(`generate style.js to ${target}`);
     }
   });
   // generate DTS for TS files

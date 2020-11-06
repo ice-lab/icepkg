@@ -35,6 +35,7 @@ function getNpmTarball(npm: string, version?: string, registry?: string): Promis
 function getAndExtractTarball(
   destDir: string,
   tarball: string,
+  // eslint-disable-next-line
   progressFunc = (state) => {},
   formatFilename = (filename: string): string => {
     // 为了兼容
@@ -43,7 +44,7 @@ function getAndExtractTarball(
     } else {
       return filename.replace(/^_/, '.');
     }
-  }
+  },
 ): Promise<string[]> {
   return new Promise((resolve, reject) => {
     const allFiles = [];
@@ -54,7 +55,7 @@ function getAndExtractTarball(
       request({
         url: tarball,
         timeout: 10000,
-      })
+      }),
     )
       .on('progress', progressFunc)
       .on('error', reject)
@@ -87,7 +88,7 @@ function getAndExtractTarball(
               .pipe(fs.createWriteStream(destPath))
               .on('finish', () => streamResolve())
               .on('close', () => streamResolve()); // resolve when file is empty in node v8
-          })
+          }),
         );
       })
       .on('end', () => {
@@ -223,7 +224,7 @@ function checkAliInternal(): Promise<boolean> {
     timeout: 3 * 1000,
     resolveWithFullResponse: true,
   })
-    .catch((err) => {
+    .catch(() => {
       return false;
     })
     .then((response) => {
@@ -240,7 +241,8 @@ async function readPackageJSON(projectPath: string) {
     // eslint-disable-next-line quotes
     throw new Error("Project's package.json file not found in local environment");
   }
-  return await fsExtra.readJson(packagePath);
+  const content = await fsExtra.readJson(packagePath);
+  return content;
 }
 
 /**

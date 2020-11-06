@@ -15,7 +15,7 @@ module.exports = (config, { pkg, rootDir, entry }) => {
       filename: 'index.html',
     },
   ]);
-  
+
   config.resolve.modules
     .add('node_modules')
     .add(path.join(rootDir, 'node_modules'))

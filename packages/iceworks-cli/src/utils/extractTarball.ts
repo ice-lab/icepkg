@@ -22,7 +22,7 @@ interface IOptions {
 export default function extractTarball({
   tarballURL,
   destDir,
-  progressFunc = (state) => {},
+  progressFunc = () => { },
   formatFilename,
 }: IOptions): Promise<string[]> {
   return new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ export default function extractTarball({
       request({
         url: tarballURL,
         timeout: 10000,
-      })
+      }),
     )
       .on('progress', (state) => {
         progressFunc(state);
@@ -87,4 +87,4 @@ export default function extractTarball({
           });
       });
   });
-};
+}

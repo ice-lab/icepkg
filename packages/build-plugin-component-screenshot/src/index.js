@@ -14,7 +14,7 @@ module.exports = (
   onHook('after.build.compile', async () => {
     debug('cloud', cloud);
     // cloud build support
-    if(!cloud && process.env.BUILD_ENV === 'cloud') {
+    if (!cloud && process.env.BUILD_ENV === 'cloud') {
       log.warn('current environment not support screenshot');
       return;
     }
@@ -33,7 +33,7 @@ module.exports = (
     debug('demos', demos);
     const selectors = demos.filter(item => /^.*\.md$/g.test(item)).map(item => item.replace(/\.md$/g, ''));
     debug('selectors', selectors);
-    if(!selectors.length){
+    if (!selectors.length) {
       return;
     }
     const snapshots = await screenshotWithLocalServer(serverPath, port, targetUrl, selectors, viewsPath);

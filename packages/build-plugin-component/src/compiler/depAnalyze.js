@@ -12,7 +12,7 @@ const getPkgJSON = (cwd, module) => {
 
 function analyzePackage(pkg, basicComponents) {
   // get dependencies from pakage.json
-  const { dependencies = {}, devDependencies = {}, peerDependencies = {}  } = pkg;
+  const { dependencies = {}, devDependencies = {}, peerDependencies = {} } = pkg;
   const libraryNames = [];
   if (basicComponents) {
     Object.keys({ ...dependencies, ...devDependencies, ...peerDependencies }).forEach(depName => {

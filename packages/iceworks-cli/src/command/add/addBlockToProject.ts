@@ -20,7 +20,7 @@ export default async (options, destDir) => {
     const blockDirPath = await addBlock(options, destDir, tempDir);
     await fse.remove(tempDir);
     log.info('add block success, you can import and use block in your page code', blockDirPath);
-  } catch(err) {
+  } catch (err) {
     fse.removeSync(tempDir);
     throw err;
   }

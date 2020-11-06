@@ -8,4 +8,4 @@ module.exports = (api) => {
     // eslint-disable-next-line
     require(`./${componentType}`)(api);
   }
-}
+};

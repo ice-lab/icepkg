@@ -5,7 +5,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const setCSSRule = require('../../../utils/setCSSRule');
 
 module.exports = (config, context, options) => {
-  const { taskName } = context;
   const { entries } = options;
 
   Object.keys(entries).forEach((entryKey) => {

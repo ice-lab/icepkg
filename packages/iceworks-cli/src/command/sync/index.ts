@@ -51,7 +51,7 @@ export default async (options) => {
     fusionToken = await fusionSDK.getToken();
     try {
       await config.set(tokenKey, fusionToken);
-    } catch(err) {
+    } catch (err) {
       log.warn('set token warning', err.message);
     }
   }
@@ -64,7 +64,7 @@ export default async (options) => {
   } else {
     try {
       fusionSite = await fusionSDK.getSite(fusionToken);
-    } catch(err) {
+    } catch (err) {
       if (err.noAuth) {
         // token 失效，重置掉
         await config.set(tokenKey, null);
@@ -77,7 +77,7 @@ export default async (options) => {
     try {
       await fse.writeJson(pkgPath, pkgData, { spaces: 2 });
       log.verbose('Sync:', 'write site success');
-    } catch(err) {
+    } catch (err) {
       log.warn('write site warning', err.message);
       console.error(err);
     }
@@ -91,7 +91,7 @@ export default async (options) => {
     log.info('Sync:', '物料上传完成，可以在 iceworks 中添加自定义物料使用啦！');
     log.info('物料地址：', materialUrl);
     console.log();
-  } catch(err) {
+  } catch (err) {
     if (err.noAuth) {
       // token 失效，重置掉
       await config.set(tokenKey, null);

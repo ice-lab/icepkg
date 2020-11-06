@@ -28,13 +28,13 @@ async function minifyImg(imgPath, outputDir) {
  * @param {array} selectors screenshot target CSS selector
  * @param {string} viewsPath output path
  */
-async function screenshot(url, selectors=[], viewsPath, timeout) {
+async function screenshot(url, selectors = [], viewsPath, timeout) {
   // a terminal spinner
   const spinner = ora('generating ...').start();
 
   try {
     const puppeteer = await getPuppeteer();
-    
+
     // start puppeteer
     const browser = await puppeteer.launch();
 
@@ -57,14 +57,14 @@ async function screenshot(url, selectors=[], viewsPath, timeout) {
     const res = await Promise.all(selectors.map(async item => {
       const output = `${viewsPath}/${item}.png`;
       const el = await page.$(`#${item}`);
-      await el.screenshot({ path:  output});
+      await el.screenshot({ path: output });
       await minifyImg(output, output);
       return `views/${item}.png`;
     }));
-    
+
     // close chromium
     await browser.close();
-    
+
     spinner.succeed(chalk.green('generating success!'));
     return res;
   } catch (err) {

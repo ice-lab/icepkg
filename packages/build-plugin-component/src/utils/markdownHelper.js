@@ -19,7 +19,7 @@ const codeTemplate = `
   </div>
 `;
 
-renderer.code = function(code, lang) {
+renderer.code = function (code, lang) {
   // lang = ''
   if (!lang) {
     lang = 'jsx';
@@ -35,14 +35,14 @@ renderer.code = function(code, lang) {
   return util.format(codeTemplate, lang, lang, html);
 };
 
-renderer.heading = function(text, level) {
+renderer.heading = function (text, level) {
   let escapedText = text.replace(/\s+/g, '-');
   escapedText = escapedText.toLowerCase();
   escapedText = escapedText.replace(/^-+?|-+?$/, '');
   return `<h${level}>${text}<a id="user-content-${escapedText}" name="${escapedText}" class="anchor" aria-hidden="true" href="#${escapedText}"><span class="octicon octicon-link"></span></a></h${level}>`;
 };
 
-renderer.link = function(href, title, text) {
+renderer.link = function (href, title, text) {
   if (href.indexOf('http') === 0) {
     return `<a href="${href}" title="${title}">${text}</a>`;
   }
