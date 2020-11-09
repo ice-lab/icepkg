@@ -42,7 +42,7 @@ module.exports = function fusionCoolInfoLoader(code) {
         let current;
 
         // 如果是 cosnt FormItem = Form.Item 这种
-        while(t.isVariableDeclaration(parent)) {
+        while (t.isVariableDeclaration(parent)) {
           current = parent.declarations[0].init;
           if (t.isIdentifier(current)) {
             currenName = current.name;

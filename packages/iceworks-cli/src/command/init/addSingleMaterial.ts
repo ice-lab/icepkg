@@ -36,6 +36,7 @@ export default async function ({
   log.verbose('addSingleMaterial args', materialDir, cwd, useDefaultOptions, npmScope, materialType);
 
   const questions = getQuestions(npmScope, cwd)[materialType];
+  // eslint-disable-next-line
   let options: ITemplateOptions = {} as ITemplateOptions;
 
   if (useDefaultOptions || process.env.NODE_ENV === 'unittest') {
@@ -71,9 +72,9 @@ export default async function ({
     await Promise.all(
       ['.eslintignore', '.eslintrc.js', '.stylelintignore', '.stylelintrc.js', '.editorconfig', '.gitignore'].map(
         (filename) => {
-          return fse.remove(path.join(targetPath, filename)).catch((err) => {});
-        }
-      )
+          return fse.remove(path.join(targetPath, filename)).catch(() => { });
+        },
+      ),
     );
   }
 }

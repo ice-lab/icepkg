@@ -26,7 +26,7 @@ program
     console.log('');
     console.log('  $ iceworks start');
   })
-  .action(async (version, cmd) => {
+  .action(async () => {
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/start').default();
@@ -258,9 +258,9 @@ async function checkIceworksVersion() {
     console.log(
       chalk.yellow(
         `A newer version of iceworks-cli is available(CHANGELOG: ${chalk.blue(
-          'https://github.com/ice-lab/iceworks-cli/releases'
-        )})`
-      )
+          'https://github.com/ice-lab/iceworks-cli/releases',
+        )})`,
+      ),
     );
     console.log(`  latest:     + ${chalk.yellow(latestVersion)}`);
     console.log(`  installed:  + ${chalk.red(packageVersion)} \n`);

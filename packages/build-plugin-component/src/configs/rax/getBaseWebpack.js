@@ -26,7 +26,7 @@ module.exports = (context, options) => {
   config.output.publicPath('/');
 
   config.externals([
-    function(ctx, request, callback) {
+    function (ctx, request, callback) {
       if (request.indexOf('@weex-module') !== -1) {
         return callback(null, `commonjs ${request}`);
       }
@@ -58,7 +58,7 @@ module.exports = (context, options) => {
     .loader(require.resolve('ts-loader'));
 
   if (options.enablePlatformLoader && target) {
-    ['jsx','tsx'].forEach((rule) => {
+    ['jsx', 'tsx'].forEach((rule) => {
       config.module.rule(rule)
         .use('platform')
         .loader(require.resolve('rax-compile-config/src/platformLoader'))

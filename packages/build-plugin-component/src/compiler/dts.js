@@ -34,7 +34,7 @@ module.exports = function dtsCompiler(compileInfo, log = console) {
   // Create a Program with an in-memory emit
   let createdFiles = {};
   const host = ts.createCompilerHost(options);
-  host.writeFile = (fileName, contents) => (createdFiles[fileName] = contents);
+  host.writeFile = (fileName, contents) => { createdFiles[fileName] = contents; };
 
   // Prepare and emit the d.ts files
   const program = ts.createProgram(needCompileList.map(({ sourceFile }) => sourceFile), options, host);
@@ -59,7 +59,7 @@ module.exports = function dtsCompiler(compileInfo, log = console) {
       fse.writeFileSync(targetPath, content, 'utf-8');
     }
   });
-  
+
   // release
   createdFiles = null;
 };

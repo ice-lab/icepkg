@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as glob from 'glob';
 import * as ejs from 'ejs';
 import * as fse from 'fs-extra';
-import { ITemplateOptions } from './index';
+import { ITemplateOptions } from './types';
 
 export default async function (templateDir: string, destDir: string, options: ITemplateOptions): Promise<void> {
   const templateTmpDir = path.join(destDir, '.ejs-tmp');
@@ -27,15 +27,15 @@ export default async function (templateDir: string, destDir: string, options: IT
           files.map((file) => {
             const filepath = path.join(templateTmpDir, file);
             return renderFile(filepath, options);
-          })
+          }),
         )
           .then(() => {
             resolve();
           })
-          .catch((err) => {
-            reject(err);
+          .catch((error) => {
+            reject(error);
           });
-      }
+      },
     );
   });
 

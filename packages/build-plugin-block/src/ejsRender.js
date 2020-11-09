@@ -23,11 +23,11 @@ const ejsRenderDir = async function (dir, data, log) {
           files.map((file) => {
             const filepath = path.join(dir, file);
             return renderFile(filepath, data, log);
-          })
+          }),
         )
           .then(resolve)
           .catch(reject);
-      }
+      },
     );
   });
 };
@@ -41,7 +41,7 @@ async function renderFile(filepath, data, log) {
       await fse.rename(filepath, targetFilePath);
       await fse.writeFile(targetFilePath, content);
     }
-  } catch (err){
+  } catch (err) {
     log.error('RenderError', err);
     throw err;
   }

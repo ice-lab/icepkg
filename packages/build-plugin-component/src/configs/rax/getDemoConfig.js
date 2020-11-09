@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { hmrClient } = require('rax-compile-config');
 const getBaseWebpack = require('./getBaseWebpack');
 const generateRaxDemo = require('../../utils/generateRaxDemo');
+const setCSSRule = require('../../utils/setCSSRule');
 
 module.exports = (context, options) => {
   const { command, rootDir } = context;
@@ -22,69 +23,15 @@ module.exports = (context, options) => {
   config.output.filename('[name].js');
   config.output.publicPath('./');
   config.output.path(path.join(rootDir, 'build'));
+  setCSSRule(config, command !== 'start');
   if (command === 'start') {
     config.output.publicPath('/demo');
-    config.module
-      .rule('css')
-      .test(/\.css?$/)
-      .use('style')
-      .loader(require.resolve('style-loader'))
-      .end()
-      .use('css')
-      .loader(require.resolve('css-loader'))
-      .end()
-      .use('postcss')
-      .loader(require.resolve('postcss-loader'))
-      .options({
-        ident: 'postcss',
-        plugins: () => [
-          // eslint-disable-next-line global-require
-          require('postcss-preset-env')({
-            autoprefixer: {
-              flexbox: 'no-2009',
-            },
-            stage: 3,
-          }),
-          // eslint-disable-next-line global-require
-          require('postcss-plugin-rpx2vw')(),
-        ],
-      });
-
-    config.module
-      .rule('less')
-      .test(/\.less?$/)
-      .use('style')
-      .loader(require.resolve('style-loader'))
-      .end()
-      .use('css')
-      .loader(require.resolve('css-loader'))
-      .end()
-      .use('postcss')
-      .loader(require.resolve('postcss-loader'))
-      .options({
-        ident: 'postcss',
-        plugins: () => [
-          // eslint-disable-next-line global-require
-          require('postcss-preset-env')({
-            autoprefixer: {
-              flexbox: 'no-2009',
-            },
-            stage: 3,
-          }),
-          // eslint-disable-next-line global-require
-          require('postcss-plugin-rpx2vw')(),
-        ],
-      })
-      .end()
-      .use('less')
-      .loader(require.resolve('less-loader'));
-
   } else {
     Object.keys(entries).forEach((entryKey) => {
       config
         .entry(`demo/${entryKey}`)
         .add(entries[entryKey]);
-  
+
       config.plugin(`html4${entryKey}`).use(HtmlWebpackPlugin, [
         {
           inject: true,
@@ -95,21 +42,6 @@ module.exports = (context, options) => {
         },
       ]);
     });
-    config.module
-      .rule('css')
-      .test(/\.css?$/)
-      .use('css')
-      .loader(require.resolve('stylesheet-loader'));
-  
-    config.module
-      .rule('less')
-      .test(/\.less?$/)
-      .use('css')
-      .loader(require.resolve('stylesheet-loader'))
-      .end()
-      .use('less')
-      .loader(require.resolve('less-loader'));
-  
     config.plugin('minicss').use(MiniCssExtractPlugin, [
       {
         filename: '[name].css',

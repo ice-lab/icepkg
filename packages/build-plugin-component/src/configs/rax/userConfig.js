@@ -1,6 +1,6 @@
 const CONFIG = {
   process: false,
-  global: false
+  global: false,
 };
 
 module.exports = [

@@ -6,7 +6,7 @@ interface IConfig {
   value?: any;
 }
 
-export default async function(options: IConfig): Promise<any> {
+export default async function (options: IConfig): Promise<any> {
   const { type, key, value } = options;
 
   if (!type || type === 'list') {
@@ -23,4 +23,4 @@ export default async function(options: IConfig): Promise<any> {
   } else {
     throw new Error('Invalid options');
   }
-};
+}

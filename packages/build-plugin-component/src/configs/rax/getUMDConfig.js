@@ -20,7 +20,7 @@ module.exports = (context, options) => {
     .libraryTarget(libraryTarget);
   if (libraryExport) {
     config.output.libraryExport(libraryExport);
-  } 
+  }
   config.output.filename(filename);
   return config;
 };

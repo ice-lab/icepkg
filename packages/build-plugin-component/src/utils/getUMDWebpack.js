@@ -48,7 +48,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   // file name
   const filename = compileOptions.filename || library;
   const jsPath = path.resolve(rootDir, `src/index${jsExt}`);
-  
+
   config.context(rootDir);
 
   // - set entry
@@ -90,6 +90,6 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
     // disable minify code
     config.optimization.minimize(minify);
   }
-  
+
   return config;
 };

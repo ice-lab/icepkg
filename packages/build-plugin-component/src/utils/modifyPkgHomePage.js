@@ -14,9 +14,9 @@ module.exports = async (pkg, rootDir) => {
   if (!unpkgHost) {
     try {
       // 2. 物料集合根目录的 pkg.materialConfig
-      const materialPkgData =  await fse.readJSON(path.resolve(rootDir, '../../package.json'));
+      const materialPkgData = await fse.readJSON(path.resolve(rootDir, '../../package.json'));
       unpkgHost = materialPkgData.materialConfig && materialPkgData.materialConfig.unpkgHost;
-    } catch(err) {
+    } catch (err) {
       // ignore error
     }
 
@@ -24,9 +24,9 @@ module.exports = async (pkg, rootDir) => {
       try {
         // 3. iceworks cli config
         const CONFIG_PATH = path.join(userHome || __dirname, '.iceworks/cli-config.json');
-        const configData =  await fse.readJSON(CONFIG_PATH);
+        const configData = await fse.readJSON(CONFIG_PATH);
         unpkgHost = configData && configData.unpkgHost;
-      } catch(err) {
+      } catch (err) {
         // ignore error
       }
 

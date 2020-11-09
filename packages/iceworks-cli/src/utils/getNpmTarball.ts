@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as urlJoin from 'url-join';
-import * as path from 'path';
 import * as semver from 'semver';
 import log from './log';
 
@@ -29,4 +28,4 @@ export default async function getNpmTarball(npm: string, version: string, regist
   }
 
   throw new Error(`${name}@${version} 尚未发布`);
-};
+}

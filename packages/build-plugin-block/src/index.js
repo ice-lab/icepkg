@@ -14,7 +14,7 @@ const formatPath = (outputPath) => {
 
 module.exports = (
   { context, log, registerTask, registerUserConfig, onGetWebpackConfig, onGetJestConfig },
-  userConfig
+  userConfig,
 ) => {
   const { usingTemplate, materialType } = userConfig || {};
   const { rootDir, command, pkg } = context;
@@ -28,7 +28,7 @@ module.exports = (
   // ejs 模板通过接下来的步骤渲染至 .tmp 文件夹。
   // 之后我们将 @/block 重定位到 .tmp 文件夹
   // 这样就引入了经过模拟数据渲染的代码。
-  function updateMockData(){
+  function updateMockData() {
     try {
       require.cache[mockDir] = undefined;
       mockData = require(mockDir);
@@ -41,8 +41,8 @@ module.exports = (
     updateMockData();
     ejsRender(sourceDir, tmpDir, mockData, log);
     if (mode === 'development') {
-      const templateWatcher = chokidar.watch(sourceDir, {ignoreInitial: true});
-      const mockWatcher = chokidar.watch(mockDir, {ignoreInitial: true});
+      const templateWatcher = chokidar.watch(sourceDir, { ignoreInitial: true });
+      const mockWatcher = chokidar.watch(mockDir, { ignoreInitial: true });
       templateWatcher.on('change', () => {
         log.info('FILE CHANGE');
         ejsRender(sourceDir, tmpDir, mockData, log);

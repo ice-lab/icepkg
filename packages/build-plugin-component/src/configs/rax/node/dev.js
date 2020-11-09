@@ -1,6 +1,7 @@
 const path = require('path');
 const Module = require('module');
 const { parse, print } = require('error-stack-tracey');
+const setCSSRule = require('../../../utils/setCSSRule');
 
 function exec(code, filename, filePath) {
   const module = new Module(filename, this);
@@ -15,7 +16,7 @@ function exec(code, filename, filePath) {
 module.exports = (config, context, options) => {
   const { rootDir } = context;
   const { serverBundles } = options;
-  
+
   Object.keys(serverBundles).forEach((entryKey) => {
     config
       .entry(`${entryKey}-ssr`)
@@ -30,20 +31,7 @@ module.exports = (config, context, options) => {
   config.output.filename('ssr/[name].js');
 
   if (options.inlineStyle) {
-    config.module
-      .rule('css')
-      .test(/\.css?$/)
-      .use('css')
-      .loader(require.resolve('stylesheet-loader'));
-
-    config.module
-      .rule('less')
-      .test(/\.less?$/)
-      .use('css')
-      .loader(require.resolve('stylesheet-loader'))
-      .end()
-      .use('less')
-      .loader(require.resolve('less-loader'));
+    setCSSRule(config, true);
   } else {
     config.plugins.delete('minicss');
 
@@ -67,7 +55,7 @@ module.exports = (config, context, options) => {
     const outputFs = devServer.compiler.compilers[0].outputFileSystem;
 
     Object.keys(serverBundles).forEach((entryKey) => {
-      app.get(`/ssr/${entryKey}`, async function(req, res) {
+      app.get(`/ssr/${entryKey}`, async (req, res) => {
         const query = req.query || {};
         // disable hydarte for debug http://localhost:9999/ssr/index?hydrate=false
         const hydrate = query.hydrate !== 'false';
