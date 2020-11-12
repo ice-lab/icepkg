@@ -126,7 +126,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     });
     onHook('before.build.load', async () => {
       if (!disableGenerateLib) {
-        babelCompiler(context, log, false, compileOptions, 'rax');
+        babelCompiler(context, log, compileOptions.basicComponents || [], compileOptions, 'rax');
       }
     });
   }

@@ -30,6 +30,12 @@ module.exports = [
     validation: 'string',
   },
   {
+    name: 'basicComponents',
+    validation: (val) => {
+      return Array.isArray(val) || val === false;
+    },
+  },
+  {
     /**
      * support disable mock node env
      * https://webpack.js.org/configuration/node/
