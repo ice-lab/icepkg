@@ -5,10 +5,12 @@ const getBabelConfig = require('rax-babel-config');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const ProgressPlugin = require('webpackbar');
+const TimeFixPlugin = require('time-fix-plugin');
 
 module.exports = (context, options) => {
   const { rootDir, command, pkg, webpack } = context;
-  const { isES6, target } = options || {};
+  const { isES6, target, name } = options || {};
   const config = new Chain();
 
   const babelConfig = getBabelConfig({
@@ -123,6 +125,16 @@ module.exports = (context, options) => {
   if (pkg.name) {
     config.resolve.alias.set(pkg.name, path.resolve(rootDir, 'src/index'));
   }
+  config
+    .plugin('ProgressPlugin')
+    .use(ProgressPlugin, [
+      {
+        color: '#F4AF3D',
+        name: name || target || 'webpack',
+      },
+    ]);
+  // fix: https://github.com/webpack/watchpack/issues/25
+  config.plugin('TimeFixPlugin').use(TimeFixPlugin);
 
   return config;
 };

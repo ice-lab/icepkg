@@ -13,6 +13,7 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   const outputPath = getOutputPath(context, { target, distDir });
   const config = getWebpackBase(context, {
     disableRegenerator: true,
+    name: 'miniapp',
   });
   let entryPath = './src/index';
   if (command === 'start') {
