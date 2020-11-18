@@ -19,7 +19,7 @@ module.exports = [
           alias: aliasWithRoot,
         },
       });
-    }
+    },
   },
   {
     name: 'library',

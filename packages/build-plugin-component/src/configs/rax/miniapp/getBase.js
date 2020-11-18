@@ -35,6 +35,6 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
       target,
     });
   });
-  
+
   return config;
 };

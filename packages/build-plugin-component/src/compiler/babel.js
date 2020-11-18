@@ -59,7 +59,7 @@ const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOpt
       {
         root: ['./src'],
         alias: aliasRelative,
-      }
+      },
     ]]);
   }
   return babelConfig;
