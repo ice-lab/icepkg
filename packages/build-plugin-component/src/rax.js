@@ -80,6 +80,8 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
       registerTask('component-demo', demoConfig);
     }
   }
+  // task name rule `component-build-${target}`.
+  // plugins depend on task names, change task name rule will cause break change.
   if (command === 'start' && !watchDist) {
     targets.forEach((target) => {
       const options = { ...compileOptions, target, inlineStyle };
@@ -88,12 +90,12 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
         const configDev = require(`./configs/rax/${target}/dev`);
         const defaultConfig = getBaseWebpack(context, options);
         configDev(defaultConfig, context, { ...options, entries, serverBundles });
-        registerTask(`component-demo-${target}`, defaultConfig);
+        registerTask(`component-build-${target}`, defaultConfig);
       } else if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
         options[target] = options[target] || {};
         addMiniappTargetParam(target, options[target]);
         const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
-        registerTask(`component-demo-${target}`, config);
+        registerTask(`component-build-${target}`, config);
       }
     });
   } else if (command === 'build' || watchDist) {

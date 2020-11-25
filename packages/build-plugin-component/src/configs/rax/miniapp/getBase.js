@@ -27,7 +27,7 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   fse.ensureDirSync(miniappOutput);
   fse.copySync(path.join(__dirname, `../../../template/miniapp/${parseTarget(target)}`), miniappOutput);
 
-  onGetWebpackConfig(`component-${command === 'start' ? 'demo' : 'build'}-${target}`, (chainConfig) => {
+  onGetWebpackConfig(`component-build-${target}`, (chainConfig) => {
     setComponentConfig(chainConfig, options[target], {
       context,
       entryPath,
