@@ -3,5 +3,6 @@ module.exports = {
   WEEX: 'weex',
   MINIAPP: 'miniapp',
   WECHAT_MINIPROGRAM: 'wechat-miniprogram',
+  BYTEDANCE: 'bytedance-microapp',
   NODE: 'node',
 };

@@ -1,3 +1,5 @@
+import { BYTEDANCE, MINIAPP, WECHAT_MINIPROGRAM } from '../../constants';
+
 const CONFIG = {
   process: false,
   global: false,
@@ -50,5 +52,17 @@ module.exports = [
         });
       }
     },
+  },
+  {
+    name: BYTEDANCE,
+    validation: 'object',
+  },
+  {
+    name: MINIAPP,
+    validation: 'object',
+  },
+  {
+    name: WECHAT_MINIPROGRAM,
+    validation: 'object',
   },
 ];
