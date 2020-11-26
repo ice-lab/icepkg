@@ -1,3 +1,5 @@
+const { BYTEDANCE, MINIAPP, WECHAT_MINIPROGRAM } = require('../../constants');
+
 const CONFIG = {
   process: false,
   global: false,
@@ -50,5 +52,17 @@ module.exports = [
         });
       }
     },
+  },
+  {
+    name: BYTEDANCE,
+    validation: 'object',
+  },
+  {
+    name: MINIAPP,
+    validation: 'object',
+  },
+  {
+    name: WECHAT_MINIPROGRAM,
+    validation: 'object',
   },
 ];

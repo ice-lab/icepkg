@@ -20,7 +20,13 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
 
   if (options.watchDist) {
     console.log(chalk.green('[Dist] Development pages:'));
-    ['index', 'index-es6', 'index-weex'].forEach((distBundle) => {
+    const distBundles = [];
+    if (targets.includes(WEB)) {
+      distBundles.push('index', 'index-es6');
+    } else if (targets.includes(WEEX)) {
+      distBundles.push('index-weex');
+    }
+    distBundles.forEach((distBundle) => {
       console.log('   ', chalk.underline.white(`${devUrl}${distBundle}.js`));
     });
     return;

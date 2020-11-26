@@ -13,7 +13,7 @@ const getCompileBabel = require('../utils/getCompileBabel');
 const { analyzePackage, analyzeDependencies } = require('./depAnalyze');
 const dtsCompiler = require('./dts');
 
-const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOptions, type }) => {
+const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOptions, type, alias }) => {
   const params = target === 'es' ? { modules: false } : {};
   let babelConfig;
   if (type === 'react') {
@@ -49,6 +49,19 @@ const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOpt
     ]);
   });
   babelConfig.plugins = babelConfig.plugins.concat(plugins);
+  if (alias) {
+    const aliasRelative = {};
+    Object.keys(alias).forEach(aliasKey => {
+      aliasRelative[aliasKey] = alias[aliasKey].startsWith('./') ? alias[aliasKey] : `./${alias[aliasKey]}`;
+    });
+    babelConfig.plugins = babelConfig.plugins.concat([[
+      require.resolve('babel-plugin-module-resolver'),
+      {
+        root: ['./src'],
+        alias: aliasRelative,
+      },
+    ]]);
+  }
   return babelConfig;
 };
 
@@ -86,7 +99,7 @@ module.exports = function babelCompiler(
   type,
 ) {
   const { rootDir, pkg } = context;
-  const { compilerOptions = {}, babelPlugins = [], babelOptions = [] } = userOptions;
+  const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias } = userOptions;
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
   const componentLibs = analyzePackage(pkg, basicComponents);
@@ -120,6 +133,7 @@ module.exports = function babelCompiler(
           babelPlugins,
           babelOptions,
           type,
+          alias,
         });
         // compile file by babel
         // TODO use context.babel

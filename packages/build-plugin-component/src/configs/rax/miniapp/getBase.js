@@ -13,6 +13,7 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   const outputPath = getOutputPath(context, { target, distDir });
   const config = getWebpackBase(context, {
     disableRegenerator: true,
+    name: 'miniapp',
   });
   let entryPath = './src/index';
   if (command === 'start') {
@@ -27,12 +28,13 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   fse.ensureDirSync(miniappOutput);
   fse.copySync(path.join(__dirname, `../../../template/miniapp/${parseTarget(target)}`), miniappOutput);
 
-  setComponentConfig(config, options[target], {
-    onGetWebpackConfig,
-    context,
-    entryPath,
-    outputPath,
-    target,
+  onGetWebpackConfig(`component-build-${target}`, (chainConfig) => {
+    setComponentConfig(chainConfig, options[target], {
+      context,
+      entryPath,
+      outputPath,
+      target,
+    });
   });
 
   return config;
