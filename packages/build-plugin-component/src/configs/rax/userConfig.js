@@ -1,4 +1,4 @@
-import { BYTEDANCE, MINIAPP, WECHAT_MINIPROGRAM } from '../../constants';
+const { BYTEDANCE, MINIAPP, WECHAT_MINIPROGRAM } = require('../../constants');
 
 const CONFIG = {
   process: false,
