@@ -16,7 +16,7 @@ module.exports = async function getPuppeteer() {
   try {
     // get Puppeteer from local node_modules
     // eslint-disable-next-line global-require
-    return require('puppeteer');
+    return require(process.env.PUPPETEER_PATH || 'puppeteer');
   } catch (error) {
     if (isNotFoundError(error.message)) {
       try {

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const path = require('path');
+const os = require('os');
 const program = require('commander');
 const chalk = require('chalk');
 const ora = require('ora');
@@ -96,7 +97,9 @@ async function screenshot(url, selector, output, timeout) {
     const puppeteer = await getPuppeteer();
 
     // start puppeteer
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch(
+      /freebsd|linux/.test(os.platform) ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} : {}
+    );
 
     // create a new page
     const page = await browser.newPage();
