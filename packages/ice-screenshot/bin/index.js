@@ -98,7 +98,7 @@ async function screenshot(url, selector, output, timeout) {
 
     // start puppeteer
     const browser = await puppeteer.launch(
-      /freebsd|linux/.test(os.platform) ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} : {}
+      /freebsd|linux/.test(os.platform) ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] } : {},
     );
 
     // create a new page
