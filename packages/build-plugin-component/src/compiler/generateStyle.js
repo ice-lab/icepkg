@@ -59,4 +59,4 @@ module.exports = ({ rootDir, basicComponents, destPath, target, log, folder }) =
       : '//empty file';
   fs.writeFileSync(stylePath, styleContent, 'utf-8');
   log.info(`generate style.js to ${target}`);
-}
+};

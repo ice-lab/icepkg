@@ -11,7 +11,7 @@ const getRaxBabelConfig = require('rax-babel-config');
 const { REG_JS, REG_D_TS } = require('../configs/reg');
 const getCompileBabel = require('../utils/getCompileBabel');
 const { analyzePackage } = require('./depAnalyze');
-const generateStyle = require('./generateStyle')
+const generateStyle = require('./generateStyle');
 const dtsCompiler = require('./dts');
 
 const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOptions, type, alias }) => {
@@ -81,7 +81,6 @@ module.exports = function babelCompiler(
   const srcPath = path.join(rootDir, 'src');
   // compile task es and lib
   const compileTargets = ['es', 'lib'];
-
   const filesPath = glob.sync('**/*.*', { cwd: srcPath, ignore: ['node_modules/**', '*.d.ts'] });
   // traverse to compile the js files
   const compileInfo = [];
