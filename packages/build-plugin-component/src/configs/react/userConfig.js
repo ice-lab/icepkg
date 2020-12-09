@@ -24,4 +24,8 @@ module.exports = [
     name: 'externals',
     validation: 'object',
   },
+  {
+    name: 'basicRepo',
+    validation: 'boolean',
+  }
 ];

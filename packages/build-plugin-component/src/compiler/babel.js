@@ -10,7 +10,8 @@ const babel = require('@babel/core');
 const getRaxBabelConfig = require('rax-babel-config');
 const { REG_JS, REG_D_TS } = require('../configs/reg');
 const getCompileBabel = require('../utils/getCompileBabel');
-const { analyzePackage, analyzeDependencies } = require('./depAnalyze');
+const { analyzePackage } = require('./depAnalyze');
+const generateStyle = require('./generateStyle')
 const dtsCompiler = require('./dts');
 
 const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOptions, type, alias }) => {
@@ -65,32 +66,6 @@ const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOpt
   return babelConfig;
 };
 
-const parseStyleStatement = ({ target, module, rootDir }) => {
-  let styleStatement = '';
-  const stylePaths = ['style', `${target}/style`];
-  if (target === 'es') {
-    // compatible for component without es folder
-    stylePaths.push('lib/style.js');
-  }
-  stylePaths.every(stylePath => {
-    let keepSearch = true;
-    try {
-      require.resolve(path.join(rootDir, 'node_modules', module, stylePath));
-      styleStatement = `${module}/${stylePath}`;
-      keepSearch = false;
-    } catch (err) {
-      keepSearch = true;
-    }
-    return keepSearch;
-  });
-  if (styleStatement) {
-    return target === 'es'
-      ? `import '${styleStatement}';`
-      : `require('${styleStatement}');`;
-  }
-  return '';
-};
-
 module.exports = function babelCompiler(
   context,
   log,
@@ -99,7 +74,7 @@ module.exports = function babelCompiler(
   type,
 ) {
   const { rootDir, pkg } = context;
-  const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias } = userOptions;
+  const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, basicRepo } = userOptions;
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
   const componentLibs = analyzePackage(pkg, basicComponents);
@@ -107,7 +82,7 @@ module.exports = function babelCompiler(
   // compile task es and lib
   const compileTargets = ['es', 'lib'];
 
-  const filesPath = glob.sync('**/*.*', { cwd: srcPath, ignore: ['node_modules/**'] });
+  const filesPath = glob.sync('**/*.*', { cwd: srcPath, ignore: ['node_modules/**', '*.d.ts'] });
   // traverse to compile the js files
   const compileInfo = [];
   compileTargets.forEach(target => {
@@ -155,36 +130,16 @@ module.exports = function babelCompiler(
     });
 
     if (type === 'react') {
-      // analyze dependencies for generate style.js
-      const styleDependencies = analyzeDependencies(
-        path.join(rootDir, `${target}/index`),
-        rootDir,
-        basicComponents,
-      );
-      // generate style.js
-      const stylePath = path.join(destPath, 'style.js');
-      // check index.scss and main.scss
-      let styleContent = '';
-      ['index.scss', 'index.less', 'index.css', 'main.scss'].every(cssFile => {
-        if (fs.existsSync(path.join(destPath, cssFile))) {
-          styleContent =
-            target === 'es'
-              ? `import './${cssFile}';`
-              : `require('./${cssFile}');`;
-          // return false to break loop
-          return false;
-        }
-        return true;
-      });
-      const styleSatements = styleDependencies
-        .map(module => parseStyleStatement({ module, rootDir, target }))
-        .join('\n');
-      styleContent =
-        styleSatements || styleContent
-          ? [styleSatements, styleContent].filter(Boolean).join('\n')
-          : '//empty file';
-      fs.writeFileSync(stylePath, styleContent, 'utf-8');
-      log.info(`generate style.js to ${target}`);
+      if (basicRepo) {
+        // filter dir in destPath folder
+        const folderList = fs.readdirSync(destPath).filter((filePath) => {
+          return fs.lstatSync(path.join(destPath, filePath)).isDirectory();
+        });
+        folderList.forEach((folder) => {
+          generateStyle({ rootDir, basicComponents, destPath: path.join(destPath, folder), target, log, folder });
+        });
+      }
+      generateStyle({ rootDir, basicComponents, destPath, target, log });
     }
   });
   // generate DTS for TS files
