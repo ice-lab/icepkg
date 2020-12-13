@@ -2,6 +2,7 @@ const path = require('path');
 const { markdownParser } = require('./markdownHelper');
 const generateEntry = require('./generateEntry');
 const getReadme = require('./getReadme');
+const { HerboxUrlEnv } = require('../constants');
 
 function generateRaxDemo(demos, context) {
   const { rootDir, command, userConfig } = context;
@@ -16,6 +17,7 @@ function generateRaxDemo(demos, context) {
       command,
       title: meta.title,
       docHtml: readme,
+      herboxUrl: `${HerboxUrlEnv}/demo`,
       demos,
     },
   });

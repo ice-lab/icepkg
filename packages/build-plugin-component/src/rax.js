@@ -20,6 +20,8 @@ const devCompileLog = require('./utils/raxDevCompileLog');
 const buildCompileLog = require('./utils/raxBuildCompileLog');
 const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
 const getDemoConfig = require('./configs/rax/getDemoConfig');
+const miniappPreview = require('./utils/miniappPreview');
+const getHerboxUrl = require('./utils/getHerboxUrl');
 
 module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, modifyUserConfig, log }) => {
   const { rootDir, userConfig, command, pkg, commandArgs } = context;
@@ -147,6 +149,8 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     }
   });
   onHook('after.start.compile', async (args) => {
+    getHerboxUrl(rootDir, 'demo', command);
+    miniappPreview(command, rootDir);
     const devUrl = args.url;
     devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });
   });

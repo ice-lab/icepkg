@@ -145,8 +145,13 @@ function Portal(props){
   const docHtml = {__html: `{{{docHtml}}}` || ''};
   const iframeStyle = { width: '100%', height: '760px', border: 'none' };
   const [active, setActive ] = useState(demos && demos[0] && demos[0].name);
+  const [isH5, setIsH5] = useState(true);
   const handleChange = (demo) => {
   	setActive(demo);
+  }
+
+  const handleClick = () => {
+    setIsH5(!isH5);
   }
 
   return (
@@ -162,7 +167,12 @@ function Portal(props){
         </div>
       </div>
       <Device>
-        <iframe src={ '{{command}}' === 'build' ? `./demo/${active}.html` :`/${active}`} style={iframeStyle}></iframe>
+        <div className="switch" onClick={handleClick}>h5切换</div>
+        {
+          isH5
+          ? <iframe src={ '{{command}}' === 'build' ? `./demo/${active}.html` :`/${active}`} style={iframeStyle}></iframe>
+          : <iframe src='{{herboxUrl}}' style={iframeStyle}></iframe>
+        }
       </Device>
     </div>
   );
