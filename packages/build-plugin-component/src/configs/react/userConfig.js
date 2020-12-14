@@ -25,7 +25,7 @@ module.exports = [
     validation: 'object',
   },
   {
-    name: 'basicRepo',
+    name: 'subComponents',
     validation: 'boolean',
   },
 ];

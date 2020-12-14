@@ -74,7 +74,7 @@ module.exports = function babelCompiler(
   type,
 ) {
   const { rootDir, pkg } = context;
-  const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, basicRepo } = userOptions;
+  const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, subComponents } = userOptions;
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
   const componentLibs = analyzePackage(pkg, basicComponents);
@@ -129,7 +129,7 @@ module.exports = function babelCompiler(
     });
 
     if (type === 'react') {
-      if (basicRepo) {
+      if (subComponents) {
         // filter dir in destPath folder
         const folderList = fs.readdirSync(destPath).filter((filePath) => {
           return fs.lstatSync(path.join(destPath, filePath)).isDirectory();
