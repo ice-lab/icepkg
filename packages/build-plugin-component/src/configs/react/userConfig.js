@@ -63,8 +63,5 @@ module.exports = [
   {
     name: 'htmlInjection',
     validation: 'object',
-    configWebpack: (config, value) => {
-      htmlInjection.configWebpack(value);
-    },
   },
 ];
