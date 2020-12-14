@@ -57,6 +57,10 @@ module.exports = [
     validation: 'object',
   },
   {
+    name: 'subComponents',
+    validation: 'boolean',
+  },
+  {
     name: 'htmlInjection',
     validation: 'object',
     configWebpack: (config, value) => {
@@ -64,4 +68,3 @@ module.exports = [
     },
   },
 ];
-
