@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { configHTMLPlugin } = require('../../utils/htmlInjection');
 
 module.exports = (config, { pkg, rootDir, entry }) => {
   config.target('web');
@@ -11,10 +12,12 @@ module.exports = (config, { pkg, rootDir, entry }) => {
 
   config.plugin('HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
     {
-      template: require.resolve('../../template/demo.hbs'),
+      template: require.resolve('../../template/demo.html'),
       filename: 'index.html',
     },
   ]);
+
+  configHTMLPlugin(config);
 
   config.resolve.modules
     .add('node_modules')

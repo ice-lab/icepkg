@@ -1,4 +1,5 @@
 {
+  "subComponents": true,
   "plugins": [
     "build-plugin-component",
     "build-plugin-fusion",
