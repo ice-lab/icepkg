@@ -97,7 +97,6 @@ function modifyHTMLPluginOptions(config, pluginName, options, params) {
         },
         ...options,
       };
-      console.log('pluginOptions', pluginOptions);
       return [pluginOptions];
     });
   }
