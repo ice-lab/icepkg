@@ -18,7 +18,20 @@ module.exports = (config, context, options) => {
         inject: true,
         filename: entryKey,
         chunks: [entryKey],
-        template: path.resolve(__dirname, '../../../template/demo.hbs'),
+        templateParameters: {
+          htmlAttrs: '',
+          headPrepend: [
+            '<meta charset="UTF-8">',
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+            '<meta http-equiv="X-UA-Compatible" content="ie=edge">',
+          ],
+          headAppend: ['<title>DEMO 预览</title>'],
+          rootContainer: '<div id="root"></div>',
+          bodyPrepend: '',
+          bodyAppend: '',
+          bodyAttrs: '',
+        },
+        template: path.resolve(__dirname, '../../../template/demo.html'),
       },
     ]);
   });
