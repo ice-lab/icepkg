@@ -15,7 +15,7 @@ module.exports = (config, context, options) => {
 
     config.plugin(`html4${entryKey}`).use(HtmlWebpackPlugin, [
       {
-        inject: true,
+        inject: false,
         filename: entryKey,
         chunks: [entryKey],
         templateParameters: {
@@ -24,7 +24,7 @@ module.exports = (config, context, options) => {
             '<meta charset="UTF-8">',
             '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
             '<meta http-equiv="X-UA-Compatible" content="ie=edge">',
-          ],
+          ].join(''),
           headAppend: ['<title>DEMO 预览</title>'],
           rootContainer: '<div id="root"></div>',
           bodyPrepend: '',
