@@ -7,6 +7,7 @@ const getOutputPath = require('./getOutputPath');
 const { MINIAPP } = require('../../../constants');
 
 const parseTarget = (target) => (target === MINIAPP ? 'ali-miniapp' : target);
+
 module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   const { rootDir, command } = context;
   const { distDir = '' } = options[target] || {};
