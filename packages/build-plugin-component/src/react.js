@@ -12,6 +12,7 @@ const getUMDWebpack = require('./utils/getUMDWebpack');
 const generateEntryJs = require('./utils/generateEntry');
 const formatPathForWin = require('./utils/formatPathForWin');
 const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
+const htmlInjection = require('./utils/htmlInjection');
 const baseConfig = require('./configs/react/base');
 const devConfig = require('./configs/react/dev');
 const buildConfig = require('./configs/react/build');
@@ -26,6 +27,12 @@ module.exports = (
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
   const { library, demoTemplate = 'template-component-demo', basicComponents = [] } = compileOptions;
+
+  // config htmlInjection for once
+  if (userConfig.htmlInjection) {
+    htmlInjection.configWebpack(userConfig.htmlInjection);
+  }
+
   /**
    * register task for demo
    */
