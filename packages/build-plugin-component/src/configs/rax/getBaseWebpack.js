@@ -10,11 +10,11 @@ const TimeFixPlugin = require('time-fix-plugin');
 
 module.exports = (context, options) => {
   const { rootDir, command, pkg, webpack } = context;
-  const { isES6, target, name } = options || {};
+  const { isES6, target, name, inlineStyle = true } = options || {};
   const config = new Chain();
 
   const babelConfig = getBabelConfig({
-    styleSheet: true,
+    styleSheet: inlineStyle,
     isES6,
     custom: {
       ignore: ['**/**/*.d.ts'],
