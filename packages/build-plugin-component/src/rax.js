@@ -55,7 +55,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     if (demoDir) {
       demos = getDemos(path.join(rootDir, demoDir), markdownParser);
       if (demos && demos.length) {
-        return generateRaxEntry(demos, rootDir, targets);
+        return generateRaxEntry(demos, rootDir, targets, { isHerboxConfigExist });
       }
     }
     return false;

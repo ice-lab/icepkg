@@ -10,7 +10,7 @@ function generate({ demos, rootDir, template, placeholder }) {
     const { filename } = demo;
     const entryPath = path.join(rootDir, 'build', placeholder.replace('placeholder', filename));
 
-    // make sure build dir is exists
+    // make sure build dir exists
     ensureDirSync(path.join(rootDir, 'build'));
 
     store[filename] = entryPath;
@@ -26,9 +26,8 @@ function generate({ demos, rootDir, template, placeholder }) {
   return store;
 }
 
-function generateRaxEntry(demos, rootDir, targets) {
+function generateRaxEntry(demos, rootDir, targets, options) {
   // generate demo entry
-  // const entries = {};
   const entries = generate({
     demos,
     rootDir,
@@ -49,7 +48,9 @@ function generateRaxEntry(demos, rootDir, targets) {
   }
 
   let herboxEntries = {};
-  if (targets.includes('miniapp')) {
+  const { isHerboxConfigExist = false } = options || {};
+  const shouldGenherboxEntries = targets.includes('miniapp') && isHerboxConfigExist;
+  if (shouldGenherboxEntries) {
     // generate herbox entries if miniapp is included
     herboxEntries = generate({
       demos,

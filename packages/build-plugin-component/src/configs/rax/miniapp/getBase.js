@@ -4,9 +4,7 @@ const glob = require('glob');
 const { setComponentConfig } = require('miniapp-compile-config');
 const getWebpackBase = require('../getBaseWebpack');
 const getOutputPath = require('./getOutputPath');
-const { MINIAPP } = require('../../../constants');
-
-const parseTarget = (target) => (target === MINIAPP ? 'ali-miniapp' : target);
+const parseTarget = require('../../../utils/parseTarget');
 
 module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   const { rootDir, command } = context;

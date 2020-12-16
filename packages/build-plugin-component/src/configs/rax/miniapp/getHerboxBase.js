@@ -4,9 +4,7 @@ const { setComponentConfig } = require('miniapp-compile-config');
 const getWebpackBase = require('../getBaseWebpack');
 const generateEntry = require('../../../utils/generateEntry');
 const getOutputPath = require('./getOutputPath');
-const { MINIAPP } = require('../../../constants');
-
-const parseTarget = (target) => (target === MINIAPP ? 'ali-miniapp' : target);
+const parseTarget = require('../../../utils/parseTarget');
 
 const HERBOX_TEMP_DIR = 'mini-program-demos';
 const genHerboxEntryKey = (entryKey) => `rax-herbox-${entryKey}`;
