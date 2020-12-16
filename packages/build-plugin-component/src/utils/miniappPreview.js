@@ -4,7 +4,7 @@ const {
   runAlipayLocalBuild,
   EBuildMode,
   EPackageType,
-  EBuildTarget
+  EBuildTarget,
 } = require('@ali/minicode-compile');
 const fs = require('fs');
 const chalk = require('chalk');
@@ -14,41 +14,39 @@ function deleteFolder(filePath) {
   if (fs.existsSync(filePath)) {
     files = fs.readdirSync(filePath);
     files.forEach((file) => {
-      const nextFilePath = `${filePath}/${file}`
-      const states = fs.statSync(nextFilePath)
+      const nextFilePath = `${filePath}/${file}`;
+      const states = fs.statSync(nextFilePath);
       if (states.isDirectory()) {
-        //recurse
-        deleteFolder(nextFilePath)
+        // recurse
+        deleteFolder(nextFilePath);
       } else {
-        //delete file
-        fs.unlinkSync(nextFilePath)
+        // delete file
+        fs.unlinkSync(nextFilePath);
       }
-    })
-    fs.rmdirSync(filePath)
+    });
+    fs.rmdirSync(filePath);
   }
 }
 
 function cpFileSync(sourcePath, distPath) {
-  let stat = fs.statSync(sourcePath);
-  console.log('stat: ', stat.isFile());
-  if(stat.isFile()) {
+  const stat = fs.statSync(sourcePath);
+  if (stat.isFile()) {
     fs.copyFileSync(sourcePath, distPath);
-    console.log('copy success');
   }
 }
 
-function saveImg(schema, path) {
+function saveImg(schema, _path) {
   qrcode.toDataURL(schema, (err, url) => {
-    const imgBuffer = Buffer.from(url.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+    const imgBuffer = Buffer.from(url.replace(/^data:image\/\w+;base64,/, ''), 'base64');
     if (err) {
       console.log('生成二维码失败: ', err);
     }
-    fs.writeFile(path, imgBuffer, e => {
+    fs.writeFile(_path, imgBuffer, e => {
       if (e) {
         console.log('写入文件失败: ', e);
       }
-    })
-  })
+    });
+  });
 }
 
 module.exports = async (cmd, rootDir) => {
@@ -57,24 +55,22 @@ module.exports = async (cmd, rootDir) => {
   deleteFolder(distDir);
 
   // 小程序推包
-  const result = await runAlipayLocalBuild(
-    {
-      appId: '2019011563019657',
-      input: projectDir,
-      output: distDir,
-      buildMode: EBuildMode.BuildPush,
-      buildTarget: EBuildTarget.Preview,
-      packageType: EPackageType.Inspect,
-      enableSync: true,
-    }
-  );
+  const result = await runAlipayLocalBuild({
+    appId: '2019011563019657',
+    input: projectDir,
+    output: distDir,
+    buildMode: EBuildMode.BuildPush,
+    buildTarget: EBuildTarget.Preview,
+    packageType: EPackageType.Inspect,
+    enableSync: true,
+  });
 
   if (result.success) {
     if (cmd === 'build') {
       if (fs.existsSync(path.join(rootDir, './build'))) {
-        cpFileSync(distDir+'/dist.tar', path.join(rootDir, './build/dist.tar'));
+        cpFileSync(distDir + '/dist.tar', path.join(rootDir, './build/dist.tar'));
       } else {
-        cpFileSync(distDir+'/dist.tar', path.join(rootDir, './dist/dist.tar'));
+        cpFileSync(distDir + '/dist.tar', path.join(rootDir, './dist/dist.tar'));
       }
     }
     saveImg(result.packageSchema, path.join(rootDir, './build/miniapp.png'));
@@ -82,4 +78,4 @@ module.exports = async (cmd, rootDir) => {
     console.error(result.errorMessage);
     console.error(chalk.red('请解决以上问题，再使用小程序预览功能！'));
   }
-}
+};

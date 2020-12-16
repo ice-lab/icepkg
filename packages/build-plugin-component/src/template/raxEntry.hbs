@@ -141,14 +141,21 @@ const DemoBlocks = ({active:activeProp, onChange}) => {
   })
 }
 
-const QrcodePreview = () => {
+const QrcodePreview = (props) => {
   
+  return (
+    <div className="qrcode-preview">
+      <div className="qrcode-preview-mask" />
+      <img src="./miniapp.png" className="qrcode-preview-image" />
+    <div>
+  )
 }
 
 function Portal(props){
   const docHtml = {__html: `{{{docHtml}}}` || ''};
   const iframeStyle = { width: '414px', height: '736px', border: 'none' };
   const [active, setActive ] = useState(demos && demos[0] && demos[0].name);
+  const [showQr, setShowQr] = useState(false);
   const [isH5, setIsH5] = useState(true);
   const handleChange = (demo) => {
   	setActive(demo);
@@ -160,6 +167,10 @@ function Portal(props){
 
   const openUrl = (url) => {
     window.open(url);
+  }
+
+  const handlePreview = () => {
+    setShowQr(true);
   }
 
   const h5Url = '{{command}}' === 'build' ? `./demo/${active}.html` :`/${active}`;
@@ -187,7 +198,7 @@ function Portal(props){
             <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1m6yt41L2gK0jSZPhXXahvXXa-200-200.png" />
             <span>查看</span>
           </div>
-          <div className="acition-item">
+          <div className="acition-item" onClick={handlePreview}>
             <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1BVBnscVl614jSZKPXXaGjpXa-200-200.png" />
             <span>查看二维码</span>
           </div>
