@@ -5,6 +5,7 @@ const chokidar = require('chokidar');
 const getJestConfig = require('rax-jest-config');
 const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE } = require('./constants');
 const getMiniappConfig = require('./configs/rax/miniapp/getBase');
+const getHerboxBase = require('./configs/rax/miniapp/getHerboxBase');
 const getBaseWebpack = require('./configs/rax/getBaseWebpack');
 const getDistConfig = require('./configs/rax/getDistConfig');
 const getUMDConfig = require('./configs/rax/getUMDConfig');
@@ -28,7 +29,6 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   const { plugins, targets, disableUMD, inlineStyle = true, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
     console.error(chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'));
-    console.log();
     process.exit(1);
   }
   const { skipDemo } = commandArgs;
@@ -39,8 +39,11 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   registerUserConfig(defaultUserConfig.concat(raxUserConfig));
   // disable demo when watch dist
 
+  const isHerboxConfigExist = fse.existsSync(path.join(rootDir, '.herboxrc.js'));
+
   let entries = {};
   let serverBundles = {};
+  let herboxEntries = {};
   let demos = [];
 
   // register cli options
@@ -54,7 +57,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     if (demoDir) {
       demos = getDemos(path.join(rootDir, demoDir), markdownParser);
       if (demos && demos.length) {
-        return generateRaxEntry(demos, rootDir, targets);
+        return generateRaxEntry(demos, rootDir, targets, { isHerboxConfigExist });
       }
     }
     return false;
@@ -78,6 +81,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     if (raxBundles) {
       entries = raxBundles.entries;
       serverBundles = raxBundles.serverBundles;
+      herboxEntries = raxBundles.herboxEntries;
       const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
       registerTask('component-demo', demoConfig);
     }
@@ -93,11 +97,20 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
         const defaultConfig = getBaseWebpack(context, options);
         configDev(defaultConfig, context, { ...options, entries, serverBundles });
         registerTask(`component-build-${target}`, defaultConfig);
-      } else if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
+      }
+
+      if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
         options[target] = options[target] || {};
         addMiniappTargetParam(target, options[target]);
         const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
         registerTask(`component-build-${target}`, config);
+
+        if (isHerboxConfigExist) {
+          Object.keys(herboxEntries).forEach((entryKey) => {
+            const constCopy = getHerboxBase(context, target, options, onGetWebpackConfig, entryKey, herboxEntries[entryKey]);
+            registerTask(`component-build-demo-${entryKey}`, constCopy);
+          });
+        }
       }
     });
   } else if (command === 'build' || watchDist) {
@@ -110,7 +123,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     fse.removeSync(path.join(rootDir, 'build'));
     fse.removeSync(path.join(rootDir, 'es'));
 
-    targets.forEach(target => {
+    targets.forEach((target) => {
       const options = { ...userConfig, target, inlineStyle };
       if (target === WEB) {
         registerTask(`component-build-${target}`, getDistConfig(context, options));
@@ -148,12 +161,15 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
       await modifyPkgHomePage(pkg, rootDir);
     }
   });
+
   onHook('after.start.compile', async (args) => {
+    // TODO: 接入 herbox
     getHerboxUrl(rootDir, 'demo', command);
     miniappPreview(command, rootDir);
     const devUrl = args.url;
     devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });
   });
+
   if (command === 'test') {
     // jest config
     onGetJestConfig((jestConfig) => {

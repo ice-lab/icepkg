@@ -141,18 +141,29 @@ const DemoBlocks = ({active:activeProp, onChange}) => {
   })
 }
 
+const QrcodePreview = () => {
+  
+}
+
 function Portal(props){
   const docHtml = {__html: `{{{docHtml}}}` || ''};
-  const iframeStyle = { width: '100%', height: '760px', border: 'none' };
+  const iframeStyle = { width: '414px', height: '736px', border: 'none' };
   const [active, setActive ] = useState(demos && demos[0] && demos[0].name);
   const [isH5, setIsH5] = useState(true);
   const handleChange = (demo) => {
   	setActive(demo);
   }
 
-  const handleClick = () => {
+  const handleSwitch = () => {
     setIsH5(!isH5);
   }
+
+  const openUrl = (url) => {
+    window.open(url);
+  }
+
+  const h5Url = '{{command}}' === 'build' ? `./demo/${active}.html` :`/${active}`;
+  const herboxUrl = '{{herboxUrl}}';
 
   return (
     <div className="page">
@@ -166,14 +177,27 @@ function Portal(props){
           <div dangerouslySetInnerHTML={docHtml}></div>
         </div>
       </div>
-      <Device>
-        <div className="switch" onClick={handleClick}>h5切换</div>
+      <div className="device-container">
+        <div className="action-container">
+          <div className="acition-item" onClick={handleSwitch}>
+            <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1ufCqr6MZ7e4jSZFOXXX7epXa-200-200.png" />
+            <span>切换到{isH5 ? 'Herbox' : 'H5'}</span>
+          </div>
+          <div className="acition-item" onClick={() => openUrl(isH5 ? h5Url : herboxUrl)}>
+            <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1m6yt41L2gK0jSZPhXXahvXXa-200-200.png" />
+            <span>查看</span>
+          </div>
+          <div className="acition-item">
+            <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1BVBnscVl614jSZKPXXaGjpXa-200-200.png" />
+            <span>查看二维码</span>
+          </div>
+        </div>
         {
           isH5
-          ? <iframe src={ '{{command}}' === 'build' ? `./demo/${active}.html` :`/${active}`} style={iframeStyle}></iframe>
-          : <iframe src='{{herboxUrl}}' style={iframeStyle}></iframe>
+          ? <iframe src={ h5Url } style={iframeStyle}></iframe>
+          : <iframe src={ `${herboxUrl}?view=preview&topSlider=false` } style={iframeStyle}></iframe>
         }
-      </Device>
+      </div>
     </div>
   );
 }

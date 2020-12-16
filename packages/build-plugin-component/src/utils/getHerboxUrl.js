@@ -1,22 +1,16 @@
 const path = require('path');
 const { default: Herbox } = require('@alipay/herbox-cli');
 
-const herboxConfig = {
-  basement: { // basement 属性必须
-    accountName: 'aljk-miniapp-viewer',
-    appId: '5f40cfefea1f93c19b41bf24',
-    masterKey: 'KMNBLPrW0FuueH6HBEnw3_-P',
-  },
-}
-
 module.exports = async function(rootDir, name, command) {
-  const herbox = new Herbox(herboxConfig);
+  const herboxConfig = require(path.join(rootDir, './.herboxrc.js'));
+  const { basement, pubConfig } = herboxConfig;
+  const herbox = new Herbox({ basement });
   const id = name.startsWith('@ali') ? name.slice(5) : name;
-  const pubConfig = {
+  const _pubConfig = Object.assign({
     cwd: path.join(rootDir, 'build/ali-miniapp'),
     id,
     component2: true,
     prod: command === 'build',
-  };
-  await herbox.pub(pubConfig);
+  }, pubConfig);
+  await herbox.pub(_pubConfig);
 }
