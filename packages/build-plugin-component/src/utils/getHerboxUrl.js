@@ -1,7 +1,7 @@
 const path = require('path');
 const { default: Herbox } = require('@alipay/herbox-cli');
 
-module.exports = async function (rootDir, demos, command) {
+module.exports = async function (rootDir, command, demos) {
   const herboxConfig = require(path.join(rootDir, './.herboxrc.js'));
   const { basement, pubConfig } = herboxConfig;
   const herbox = new Herbox({ basement });

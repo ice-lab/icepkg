@@ -1,4 +1,5 @@
 const path = require('path');
+const ip = require('ip');
 const qrcode = require('qrcode');
 const {
   runAlipayLocalBuild,
@@ -49,11 +50,10 @@ function saveImg(schema, _path) {
   });
 }
 
-module.exports = async (cmd, rootDir) => {
-  const projectDir = path.join(rootDir, './build/ali-miniapp');
-  const distDir = path.join(rootDir, '.dist');
+async function saveMiniappQrcode(rootDir, command, name) {
+  const projectDir = path.join(rootDir, `./build/mini-program-demos/rax-herbox-${name}`);
+  const distDir = path.join(rootDir, `./.dist/${name}`);
   deleteFolder(distDir);
-
   // 小程序推包
   const result = await runAlipayLocalBuild({
     appId: '2019011563019657',
@@ -64,18 +64,23 @@ module.exports = async (cmd, rootDir) => {
     packageType: EPackageType.Inspect,
     enableSync: true,
   });
-
   if (result.success) {
-    if (cmd === 'build') {
-      if (fs.existsSync(path.join(rootDir, './build'))) {
-        cpFileSync(distDir + '/dist.tar', path.join(rootDir, './build/dist.tar'));
-      } else {
-        cpFileSync(distDir + '/dist.tar', path.join(rootDir, './dist/dist.tar'));
-      }
-    }
-    saveImg(result.packageSchema, path.join(rootDir, './build/miniapp.png'));
+    saveImg(result.packageSchema, path.join(rootDir, `./build/${name}-miniapp.png`));
   } else {
     console.error(result.errorMessage);
     console.error(chalk.red('请解决以上问题，再使用小程序预览功能！'));
   }
+}
+
+function saveWebQrcode(rootDir, command, name, devUrl) {
+  const _devUrl = devUrl.replace('localhost', ip.address());
+  const url = `${_devUrl}${name}`;
+  saveImg(url, path.join(rootDir, `./build/${name}-web.png`));
+}
+
+module.exports = async (rootDir, command, demos, devUrl) => {
+  demos.forEach(demo => {
+    saveMiniappQrcode(rootDir, command, demo.filename);
+    saveWebQrcode(rootDir, command, demo.filename, devUrl);
+  })
 };

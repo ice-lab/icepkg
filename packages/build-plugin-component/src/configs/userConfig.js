@@ -63,7 +63,7 @@ module.exports = [
     },
     configWebpack: (config, devServer, context) => {
       const { command, rootDir } = context;
-      // devServer.contentBase = path.resolve(rootDir, './build/');
+      devServer.contentBase = path.join(rootDir, './build/');
       if (command === 'start' && devServer) {
         config.merge({ devServer });
       }

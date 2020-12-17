@@ -169,9 +169,9 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
 
   onHook('after.start.compile', async (args) => {
     // TODO: 接入 herbox
-    getHerboxUrl(rootDir, demos, command);
-    miniappPreview(command, rootDir);
     const devUrl = args.url;
+    getHerboxUrl(rootDir, command, demos);
+    miniappPreview(rootDir, command, demos, devUrl);
     devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });
   });
 

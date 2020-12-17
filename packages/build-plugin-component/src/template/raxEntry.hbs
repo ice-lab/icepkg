@@ -142,13 +142,16 @@ const DemoBlocks = ({active:activeProp, onChange}) => {
 }
 
 const QrcodePreview = (props) => {
-  
+  const { closeModal, imgUrl } = props;
   return (
     <div className="qrcode-preview">
-      <div className="qrcode-preview-mask" />
-      <img src="./miniapp.png" className="qrcode-preview-image" />
+      <div className="qrcode-preview-mask" onClick={closeModal}/>
+      <div className="qrcode-preview-image-wrap">
+        <img src={imgUrl} className="qrcode-preview-image" />
+        <p className="qrcode-preview-toast">点击隐藏二维码</p>
+      </div>
     </div>
-  )
+  );
 }
 
 function Portal(props){
@@ -177,38 +180,41 @@ function Portal(props){
   const herboxUrl = `{{herboxUrl}}/${active}`;
 
   return (
-    <div className="page">
-      <div className="main-container">
-        <h1>{props.title}</h1>
-        <h2>DEMO</h2>
-        <div>
-          <DemoBlocks active={active} onChange={handleChange} />
+    <div>
+      <div className="page">
+        <div className="main-container">
+          <h1>{props.title}</h1>
+          <h2>DEMO</h2>
+          <div>
+            <DemoBlocks active={active} onChange={handleChange} />
+          </div>
+          <div className="markdown-body">
+            <div dangerouslySetInnerHTML={docHtml}></div>
+          </div>
         </div>
-        <div className="markdown-body">
-          <div dangerouslySetInnerHTML={docHtml}></div>
+        <div className="device-container">
+          <div className="action-container">
+            <div className="acition-item" onClick={handleSwitch}>
+              <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1ufCqr6MZ7e4jSZFOXXX7epXa-200-200.png" />
+              <span>切换到{isH5 ? 'Herbox' : 'H5'}</span>
+            </div>
+            <div className="acition-item" onClick={() => openUrl(isH5 ? h5Url : herboxUrl)}>
+              <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1m6yt41L2gK0jSZPhXXahvXXa-200-200.png" />
+              <span>查看</span>
+            </div>
+            <div className="acition-item" onClick={handlePreview}>
+              <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1BVBnscVl614jSZKPXXaGjpXa-200-200.png" />
+              <span>查看二维码</span>
+            </div>
+          </div>
+          {
+            isH5
+            ? <iframe src={ h5Url } style={iframeStyle}></iframe>
+            : <iframe src={ `${herboxUrl}?view=preview&topSlider=false` } style={iframeStyle}></iframe>
+          }
         </div>
       </div>
-      <div className="device-container">
-        <div className="action-container">
-          <div className="acition-item" onClick={handleSwitch}>
-            <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1ufCqr6MZ7e4jSZFOXXX7epXa-200-200.png" />
-            <span>切换到{isH5 ? 'Herbox' : 'H5'}</span>
-          </div>
-          <div className="acition-item" onClick={() => openUrl(isH5 ? h5Url : herboxUrl)}>
-            <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1m6yt41L2gK0jSZPhXXahvXXa-200-200.png" />
-            <span>查看</span>
-          </div>
-          <div className="acition-item" onClick={handlePreview}>
-            <img className="acition-icon" src="https://gw.alicdn.com/tfs/TB1BVBnscVl614jSZKPXXaGjpXa-200-200.png" />
-            <span>查看二维码</span>
-          </div>
-        </div>
-        {
-          isH5
-          ? <iframe src={ h5Url } style={iframeStyle}></iframe>
-          : <iframe src={ `${herboxUrl}?view=preview&topSlider=false` } style={iframeStyle}></iframe>
-        }
-      </div>
+    { showQr ? <QrcodePreview closeModal={() => setShowQr(false)} imgUrl={isH5 ? `/${active}-web.png` : `/${active}-miniapp.png`}/> : null}
     </div>
   );
 }
