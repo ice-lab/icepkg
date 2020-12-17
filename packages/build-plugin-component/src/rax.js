@@ -82,7 +82,12 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
       entries = raxBundles.entries;
       serverBundles = raxBundles.serverBundles;
       herboxEntries = raxBundles.herboxEntries;
-      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
+      let herboxName = null;
+      if (isHerboxConfigExist) {
+        const herboxConfig = require(path.join(rootDir, '.herboxrc.js'));
+        herboxName = herboxConfig.basement && herboxConfig.basement.accountName;
+      }
+      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos, herboxName });
       registerTask('component-demo', demoConfig);
     }
   }
@@ -164,7 +169,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
 
   onHook('after.start.compile', async (args) => {
     // TODO: 接入 herbox
-    getHerboxUrl(rootDir, 'demo', command);
+    getHerboxUrl(rootDir, demos, command);
     miniappPreview(command, rootDir);
     const devUrl = args.url;
     devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });

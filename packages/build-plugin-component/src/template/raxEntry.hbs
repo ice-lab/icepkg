@@ -147,7 +147,7 @@ const QrcodePreview = (props) => {
     <div className="qrcode-preview">
       <div className="qrcode-preview-mask" />
       <img src="./miniapp.png" className="qrcode-preview-image" />
-    <div>
+    </div>
   )
 }
 
@@ -174,7 +174,7 @@ function Portal(props){
   }
 
   const h5Url = '{{command}}' === 'build' ? `./demo/${active}.html` :`/${active}`;
-  const herboxUrl = '{{herboxUrl}}';
+  const herboxUrl = `{{herboxUrl}}/${active}`;
 
   return (
     <div className="page">

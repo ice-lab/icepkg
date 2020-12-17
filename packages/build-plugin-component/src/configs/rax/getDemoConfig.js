@@ -8,9 +8,9 @@ const setCSSRule = require('../../utils/setCSSRule');
 
 module.exports = (context, options) => {
   const { command, rootDir } = context;
-  const { demos, entries } = options;
+  const { demos, entries, herboxName } = options;
   const config = getBaseWebpack(context, { ...options, name: 'demo' });
-  const portalPath = generateRaxDemo(demos, context);
+  const portalPath = generateRaxDemo(demos, context, herboxName);
   if (command === 'start') {
     config
       .entry('portal')
