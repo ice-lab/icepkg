@@ -13,5 +13,5 @@ module.exports = async function (rootDir, demos, command) {
       prod: command === 'build',
     }, pubConfig);
     herbox.pub(_pubConfig);
-  })
+  });
 };
