@@ -82,5 +82,5 @@ module.exports = async (rootDir, command, demos, devUrl) => {
   demos.forEach(demo => {
     saveMiniappQrcode(rootDir, command, demo.filename);
     saveWebQrcode(rootDir, command, demo.filename, devUrl);
-  })
+  });
 };
