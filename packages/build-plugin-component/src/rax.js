@@ -76,7 +76,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     if (raxBundles) {
       entries = raxBundles.entries;
       serverBundles = raxBundles.serverBundles;
-      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
+      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos, inlineStyle });
       registerTask('component-demo', demoConfig);
     }
   }
@@ -108,7 +108,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     fse.removeSync(path.join(rootDir, 'build'));
     fse.removeSync(path.join(rootDir, 'es'));
 
-    targets.forEach(target => {
+    targets.forEach((target) => {
       const options = { ...userConfig, target, inlineStyle };
       if (target === WEB) {
         registerTask(`component-build-${target}`, getDistConfig(context, options));
