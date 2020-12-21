@@ -5,13 +5,13 @@ module.exports = async function (rootDir, command, demos) {
   const herboxConfig = require(path.join(rootDir, './.herboxrc.js'));
   const { basement, pubConfig } = herboxConfig;
   const herbox = new Herbox({ basement });
-  demos.forEach(demo => {
+  for (let i = 0; i < demos.length; i++) {
     const _pubConfig = Object.assign({
-      cwd: path.join(rootDir, `build/mini-program-demos/rax-herbox-${demo.filename}`),
-      id: demo.filename,
+      cwd: path.join(rootDir, `build/mini-program-demos/rax-herbox-${demos[i].filename}`),
+      id: demos[i].filename,
       component2: true,
       prod: command === 'build',
     }, pubConfig);
-    herbox.pub(_pubConfig);
-  });
+    await herbox.pub(_pubConfig);
+  }
 };
