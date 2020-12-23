@@ -19,6 +19,7 @@ packages/*/es/
 .vscode-test
 
 **/.ice/
+.idea/
 
 **/package-lock.json
 **/build
