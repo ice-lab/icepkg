@@ -1,6 +1,6 @@
 {
   "name": "build-plugin-component",
-  "version": "1.2.2",
+  "version": "1.2.3-2",
   "description": "build plugin for component development",
   "main": "src/index.js",
   "scripts": {
@@ -75,5 +75,8 @@
   "devDependencies": {
     "@types/node": "^12.12.18",
     "webpack": "^4.41.1"
+  },
+  "peerDependencies": {
+    "rax": "^1.1.0"
   }
 }
