@@ -31,7 +31,7 @@ const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOpt
   }
   // generate babel-plugin-import config
   const plugins = [];
-  componentLibs.forEach(libraryName => {
+  componentLibs.forEach((libraryName) => {
     // check es folder if target is es
     const pluginOption = {
       libraryName,
@@ -52,7 +52,7 @@ const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOpt
   babelConfig.plugins = babelConfig.plugins.concat(plugins);
   if (alias) {
     const aliasRelative = {};
-    Object.keys(alias).forEach(aliasKey => {
+    Object.keys(alias).forEach((aliasKey) => {
       aliasRelative[aliasKey] = alias[aliasKey].startsWith('./') ? alias[aliasKey] : `./${alias[aliasKey]}`;
     });
     babelConfig.plugins = babelConfig.plugins.concat([[
@@ -84,11 +84,11 @@ module.exports = function babelCompiler(
   const filesPath = glob.sync('**/*.*', { cwd: srcPath, ignore: ['node_modules/**', '*.d.ts'] });
   // traverse to compile the js files
   const compileInfo = [];
-  compileTargets.forEach(target => {
+  compileTargets.forEach((target) => {
     const destPath = path.join(rootDir, target);
     // clear dir
     fs.emptyDirSync(destPath);
-    filesPath.forEach(filePath => {
+    filesPath.forEach((filePath) => {
       const sourceFile = path.join(srcPath, filePath);
       if (!REG_JS.test(filePath) || REG_D_TS.test(filePath)) {
         // copy file if it does not match REG_JS
