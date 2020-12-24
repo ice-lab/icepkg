@@ -2,6 +2,7 @@ const path = require('path');
 const { markdownParser } = require('./markdownHelper');
 const generateEntry = require('./generateEntry');
 const getReadme = require('./getReadme');
+const fse = require('fs-extra');
 
 function generatePortalModules(context, applyMethod) {
   const { rootDir, command } = context;
@@ -40,6 +41,8 @@ function generateRaxDemo(demos, context, applyMethod) {
   const { rootDir, command, userConfig } = context;
 
   const modulesPath = path.join(rootDir, './build');
+
+  fse.ensureDirSync(modulesPath);
 
   const demoEntry = path.join(rootDir, 'node_modules', 'rax-demoentry.js');
   const { meta, readme } = getReadme(rootDir, markdownParser, console);

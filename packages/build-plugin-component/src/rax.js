@@ -100,9 +100,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
         registerTask(`component-build-${target}`, defaultConfig);
       } else if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
         options[target] = options[target] || {};
-        console.log('test1---', options);
         addMiniappTargetParam(target, options[target]);
-        console.log('test2---', options);
         const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
         registerTask(`component-build-${target}`, config);
       }
