@@ -94,7 +94,7 @@ const DemoBlock = ({ js, css, name, title, desc, active, onClick }) => {
       </div>
       {
         desc?
-          <div className="demo-body markdown-body"  dangerouslySetInnerHTML={descHtml}></div>:
+          <div className="demo-body markdown"  dangerouslySetInnerHTML={descHtml}></div>:
           null
       }
     </div>
@@ -139,7 +139,7 @@ function Portal(props){
         <div>
           <DemoBlocks active={active} onChange={handleChange} />
         </div>
-        <div className="markdown-body">
+        <div className="markdown">
           <div dangerouslySetInnerHTML={docHtml}></div>
         </div>
       </div>

@@ -11,139 +11,31 @@
       rel="stylesheet"
       href="https://g.alicdn.com/code/lib/normalize/8.0.1/normalize.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://g.alicdn.com/code/lib/github-markdown-css/3.0.1/github-markdown.min.css"
-    />
+    <link rel="stylesheet" href="//g.alicdn.com/fusion-platform/material-center-static/0.4.1/pages/prism-theme-css/index.bundle.css">
+    <link rel="stylesheet" href="//g.alicdn.com/fusion-platform/material-center-static/0.4.1/pages/demo-static-css/index.bundle.css">
     <style>
+      .markdown code:not([class*=language-]) {
+        border: none;
+        background: none;
+      }
+
+      .markdown .highlight pre {
+        margin-bottom: 0;
+        word-break: normal
+      }
+
+      .markdown .highlight pre, .markdown pre {
+        background-color: #f6f8fa;
+        border-radius: 3px;
+        font-size: 85%;
+        line-height: 1.45;
+        overflow: auto;
+        padding: 16px
+      }
+
       .code-box {
         background: #b3d4fc;
         border-radius: 0.3em;
-      }
-      code[class*="language-"],
-      pre[class*="language-"] {
-        color: #000;
-        font-size: 14px;
-        font-weight: 700;
-        text-shadow: none;
-        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-        direction: ltr;
-        text-align: left;
-        white-space: pre;
-        word-spacing: normal;
-        word-break: normal;
-        line-height: 1.5;
-        -moz-tab-size: 4;
-        -o-tab-size: 4;
-        tab-size: 4;
-        -webkit-hyphens: none;
-        -moz-hyphens: none;
-        -ms-hyphens: none;
-        hyphens: none;
-      }
-      code[class*="language-"]::mozselection,
-      code[class*="language-"]::selection,
-      pre[class*="language-"]::mozselection,
-      pre[class*="language-"]::selection {
-        text-shadow: none;
-        background: #4d99bf;
-      }
-      @media print {
-        code[class*="language-"],
-        pre[class*="language-"] {
-          text-shadow: none;
-        }
-      }
-      pre[class*="language-"] {
-        padding: 1em;
-        margin: 0.5em 0;
-        overflow: auto;
-      }
-      :not(pre) > code[class*="language-"] {
-        padding: 0.1em 0.3em;
-        border-radius: 0.3em;
-        color: #905;
-        background: #f9f2f4;
-      }
-      .namespace {
-        opacity: 0.7;
-      }
-      .token.cdata,
-      .token.comment,
-      .token.doctype,
-      .token.prolog {
-        color: silver;
-      }
-      .token.punctuation {
-        color: #999;
-      }
-      .token.boolean,
-      .token.constant,
-      .token.deleted,
-      .token.number,
-      .token.property,
-      .token.symbol,
-      .token.tag {
-        color: #905;
-      }
-      .token.attr-name,
-      .token.builtin,
-      .token.char,
-      .token.inserted,
-      .token.selector,
-      .token.string {
-        color: #690;
-      }
-      .language-css .token.string,
-      .style .token.string,
-      .token.entity,
-      .token.operator,
-      .token.url {
-        color: #07f;
-        background: #fff;
-      }
-      .token.atrule,
-      .token.attr-value,
-      .token.keyword {
-        color: #905;
-      }
-      .token.function {
-        color: #905;
-      }
-      .token.important,
-      .token.regex,
-      .token.variable {
-        color: #905;
-      }
-      .token.bold,
-      .token.important {
-        font-weight: 700;
-      }
-      .token.italic {
-        font-style: italic;
-      }
-      .token.entity {
-        cursor: help;
-      }
-      pre[data-line] {
-        position: relative;
-      }
-      pre[class*="language-"] > code[class*="language-"] {
-        position: relative;
-        z-index: 1;
-      }
-      .line-highlight {
-        position: absolute;
-        left: 0;
-        right: 0;
-        padding: inherit 0;
-        margin-top: 1em;
-        background: #fff;
-        box-shadow: inset 5px 0 0 #fff;
-        z-index: 0;
-        pointer-events: none;
-        line-height: inherit;
-        white-space: pre;
       }
       .token.string {
         white-space: pre-wrap;
