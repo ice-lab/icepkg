@@ -22,8 +22,9 @@ const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
 const getDemoConfig = require('./configs/rax/getDemoConfig');
 const getReadme = require('./utils/getReadme');
 const generateRaxDemo = require('./utils/generateRaxDemo');
+const { setModulesInfo } = require('./utils/getPortalModules');
 
-module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, modifyUserConfig, log, registerMethod, setValue, getValue, applyMethod }) => {
+module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, modifyUserConfig, log, registerMethod, setValue }) => {
   const { rootDir, userConfig, command, pkg, commandArgs } = context;
   const { plugins, targets, disableUMD, inlineStyle = true, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
@@ -42,6 +43,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   registerMethod('pluginComponentGetDemoDir', getDemoDir);
   registerMethod('pluginComponentGetDemos', getDemos);
   registerMethod('pluginComponentGetReadme', getReadme);
+  registerMethod('pluginComponentSetPortalModules', setModulesInfo);
   setValue('pluginComponentDir', __dirname);
 
   let entries = {};
@@ -148,7 +150,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   }
 
   onHook(`before.${command}.run`, async () => {
-    await generateRaxDemo(demos, context, applyMethod);
+    await generateRaxDemo(demos, context);
   });
 
   onHook('after.build.compile', async (args) => {

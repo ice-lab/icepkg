@@ -4,12 +4,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { hmrClient } = require('rax-compile-config');
 const getBaseWebpack = require('./getBaseWebpack');
 const setCSSRule = require('../../utils/setCSSRule');
+const { getRaxDemoEntryJs } = require('../../utils/handlePaths');
 
 module.exports = (context, options) => {
   const { command, rootDir } = context;
   const { entries } = options;
   const config = getBaseWebpack(context, { ...options, name: 'demo' });
-  const portalPath = path.join(rootDir, 'node_modules', 'rax-demoentry.js');
+  const portalPath = getRaxDemoEntryJs(rootDir);
   if (command === 'start') {
     config
       .entry('portal')

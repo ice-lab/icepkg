@@ -1,32 +1,14 @@
 const path = require('path');
+const fse = require('fs-extra');
 const { markdownParser } = require('./markdownHelper');
 const generateEntry = require('./generateEntry');
 const getReadme = require('./getReadme');
-const fse = require('fs-extra');
+const { getModulesInfo } = require('./getPortalModules');
+const { getRaxDemoEntryJs } = require('./handlePaths');
 
-function generatePortalModules(context, applyMethod) {
-  const { rootDir, command } = context;
-  let modules = {
-    device: path.join(__dirname, '../template/device.hbs'),
-  };
-
-  let params = {
-    command,
-  };
-
-  const customModulesInfo = applyMethod('buildComponentProtalArrage');
-
-  if (customModulesInfo) {
-    const { modules: customModules = {}, params: extendParams = {} } = customModulesInfo || {};
-    modules = {
-      ...modules,
-      ...customModules,
-    };
-    params = {
-      ...params,
-      ...extendParams,
-    };
-  }
+function generatePortalModules(context) {
+  const { rootDir } = context;
+  const { modules, params } = getModulesInfo();
 
   Object.keys(modules).forEach((key) => {
     generateEntry({
@@ -44,9 +26,10 @@ function generateRaxDemo(demos, context, applyMethod) {
 
   fse.ensureDirSync(modulesPath);
 
-  const demoEntry = path.join(rootDir, 'node_modules', 'rax-demoentry.js');
+  const demoEntry = getRaxDemoEntryJs(rootDir);
   const { meta, readme } = getReadme(rootDir, markdownParser, console);
 
+  // generate portal framework
   generateEntry({
     template: 'raxEntry.hbs',
     outputPath: demoEntry,
@@ -60,6 +43,7 @@ function generateRaxDemo(demos, context, applyMethod) {
     },
   });
 
+  // generate portal modules, like device, demos, and so on
   generatePortalModules(context, applyMethod);
 
   return demoEntry;
