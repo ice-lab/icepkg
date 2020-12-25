@@ -28,54 +28,8 @@ const DemoBlock = ({ js, css, name, title, desc, active, onClick }) => {
   const isMiniappEnable = ~targets.indexOf('miniapp');
 
   return (
-    <div className="demo-item">
-      <div className={`demo-box ${active ? 'active' : ''}`} onClick={onClick}>
-        <div className="demo-box-meta">
-          <div className="demo-box-title">
-            <a target="_blank" href={ '{{command}}' === 'build' ? `./demo/${name}.html` : `/${name}` }>
-              {name}
-            </a>
-          </div>
-          <div className="icons">
-            <a
-              target="_blank"
-              href={ '{{command}}' === 'build' ? `./demo/${name}.html` : `/${name}` }
-              class={`icon web ${!isWebEnable ? 'disabled':''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                if(!isWebEnable){
-                  e.preventDefault();
-                }
-              }}
-              unselectable="none"
-            />
-            {
-              '{{command}}' !== 'build' ?
-              <a
-                target="_blank"
-                href={`/weex/${name}.js?wh_weex=true`}
-                class={`icon weex ${!isWeexEnable ? 'disabled':''}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if(!isWeexEnable){
-                    e.preventDefault();
-                  }
-                }}
-                unselectable="none"
-              />:
-              null
-            }
-            <span
-            class="icon fullscreen"
-            onClick={(e) => {
-              e.stopPropagation();
-                setOpen(!open);
-              }}
-              unselectable="none"
-            />
-          </div>
-        </div>
-
+    <div className={`demo-item ${active ? 'active' : ''} `} onClick={onClick}>
+      <div className={`demo-box`}>
         <div
           className="highlight-wrapper"
           style={wrapperStyle}
@@ -92,9 +46,26 @@ const DemoBlock = ({ js, css, name, title, desc, active, onClick }) => {
           }
         </div>
       </div>
+      <div className="demo-box-meta">
+        <div className="demo-box-title">
+          <a target="_blank" href={ '{{command}}' === 'build' ? `./demo/${name}.html` : `/${name}` }>
+            {name}
+          </a>
+        </div>
+        <div className="icons">
+          <span
+            class="icon fullscreen"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(!open);
+            }}
+            unselectable="none"
+          />
+        </div>
+      </div>
       {
         desc?
-          <div className="demo-body markdown-body"  dangerouslySetInnerHTML={descHtml}></div>:
+          <div className="demo-body markdown"  dangerouslySetInnerHTML={descHtml}></div>:
           null
       }
     </div>
@@ -139,7 +110,7 @@ function Portal(props){
         <div>
           <DemoBlocks active={active} onChange={handleChange} />
         </div>
-        <div className="markdown-body">
+        <div className="markdown">
           <div dangerouslySetInnerHTML={docHtml}></div>
         </div>
       </div>
