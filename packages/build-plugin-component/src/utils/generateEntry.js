@@ -4,10 +4,11 @@ const hbs = require('handlebars');
 
 module.exports = function generateEntryJS({
   template,
+  templatePath,
   outputPath,
   params,
 }) {
-  const hbsTemplatePath = path.join(__dirname, `../template/${template}`);
+  const hbsTemplatePath = templatePath || path.join(__dirname, `../template/${template}`);
   const hbsTemplateContent = fs.readFileSync(hbsTemplatePath, 'utf-8');
   hbs.registerHelper('camelCased', (str) => {
     return str.replace(/-([a-z])/g, (math) => (math[1].toUpperCase()));
