@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const { markdownParser: defaultMarkdownParser } = require('./markdownHelper');
 
-module.exports = function getReadme(cwd, markdownParser, log) {
+module.exports = function getReadme(cwd, markdownParser = defaultMarkdownParser, log) {
   const filePath = path.join(cwd, 'README.md');
 
   let result = {};

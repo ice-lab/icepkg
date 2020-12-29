@@ -20,8 +20,11 @@ const devCompileLog = require('./utils/raxDevCompileLog');
 const buildCompileLog = require('./utils/raxBuildCompileLog');
 const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
 const getDemoConfig = require('./configs/rax/getDemoConfig');
+const getReadme = require('./utils/getReadme');
+const generateRaxDemo = require('./utils/generateRaxDemo');
+const { setModulesInfo } = require('./utils/getPortalModules');
 
-module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, modifyUserConfig, log }) => {
+module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, modifyUserConfig, log, registerMethod, setValue }) => {
   const { rootDir, userConfig, command, pkg, commandArgs } = context;
   const { plugins, targets, disableUMD, inlineStyle = true, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
@@ -36,6 +39,12 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   // register user config
   registerUserConfig(defaultUserConfig.concat(raxUserConfig));
   // disable demo when watch dist
+
+  registerMethod('pluginComponentGetDemoDir', getDemoDir);
+  registerMethod('pluginComponentGetDemos', getDemos);
+  registerMethod('pluginComponentGetReadme', getReadme);
+  registerMethod('pluginComponentSetPortalModules', setModulesInfo);
+  setValue('pluginComponentDir', __dirname);
 
   let entries = {};
   let serverBundles = {};
@@ -76,7 +85,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     if (raxBundles) {
       entries = raxBundles.entries;
       serverBundles = raxBundles.serverBundles;
-      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
+      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos, inlineStyle });
       registerTask('component-demo', demoConfig);
     }
   }
@@ -108,7 +117,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     fse.removeSync(path.join(rootDir, 'build'));
     fse.removeSync(path.join(rootDir, 'es'));
 
-    targets.forEach(target => {
+    targets.forEach((target) => {
       const options = { ...userConfig, target, inlineStyle };
       if (target === WEB) {
         registerTask(`component-build-${target}`, getDistConfig(context, options));
@@ -140,16 +149,22 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     });
   }
 
+  onHook(`before.${command}.run`, async () => {
+    await generateRaxDemo(demos, context);
+  });
+
   onHook('after.build.compile', async (args) => {
     buildCompileLog(args, targets, rootDir, userConfig);
     if (!skipDemo) {
       await modifyPkgHomePage(pkg, rootDir);
     }
   });
+
   onHook('after.start.compile', async (args) => {
     const devUrl = args.url;
     devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });
   });
+
   if (command === 'test') {
     // jest config
     onGetJestConfig((jestConfig) => {

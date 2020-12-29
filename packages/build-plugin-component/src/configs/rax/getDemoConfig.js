@@ -3,14 +3,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { hmrClient } = require('rax-compile-config');
 const getBaseWebpack = require('./getBaseWebpack');
-const generateRaxDemo = require('../../utils/generateRaxDemo');
 const setCSSRule = require('../../utils/setCSSRule');
+const { getRaxDemoEntryJs } = require('../../utils/handlePaths');
 
 module.exports = (context, options) => {
   const { command, rootDir } = context;
-  const { demos, entries } = options;
+  const { demos, entries, inlineStyle = true } = options;
   const config = getBaseWebpack(context, { ...options, name: 'demo' });
-  const portalPath = generateRaxDemo(demos, context);
+  const portalPath = getRaxDemoEntryJs(rootDir);
   if (command === 'start') {
     config
       .entry('portal')
@@ -23,7 +23,7 @@ module.exports = (context, options) => {
   config.output.filename('[name].js');
   config.output.publicPath('./');
   config.output.path(path.join(rootDir, 'build'));
-  setCSSRule(config, command !== 'start');
+  setCSSRule(config, inlineStyle);
   if (command === 'start') {
     config.output.publicPath('/demo');
   } else {
@@ -38,6 +38,8 @@ module.exports = (context, options) => {
           filename: `demo/${entryKey}.html`,
           chunks: [entryKey],
           jsPath: `./${entryKey}.js`,
+          cssPath: `./${entryKey}.css`,
+          inlineStyle,
           template: path.resolve(__dirname, '../../template/raxDemo.html'),
         },
       ]);

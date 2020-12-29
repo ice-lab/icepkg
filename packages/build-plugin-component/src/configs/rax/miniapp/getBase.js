@@ -10,6 +10,7 @@ const parseTarget = (target) => (target === MINIAPP ? 'ali-miniapp' : target);
 module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   const { rootDir, command } = context;
   const { distDir = '' } = options[target] || {};
+
   const outputPath = getOutputPath(context, { target, distDir });
   const config = getWebpackBase(context, {
     disableRegenerator: true,
