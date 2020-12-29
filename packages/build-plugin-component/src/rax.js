@@ -85,7 +85,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     if (raxBundles) {
       entries = raxBundles.entries;
       serverBundles = raxBundles.serverBundles;
-      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos });
+      const demoConfig = getDemoConfig(context, { ...compileOptions, entries, demos, inlineStyle });
       registerTask('component-demo', demoConfig);
     }
   }

@@ -8,7 +8,7 @@ const { getRaxDemoEntryJs } = require('../../utils/handlePaths');
 
 module.exports = (context, options) => {
   const { command, rootDir } = context;
-  const { entries } = options;
+  const { demos, entries, inlineStyle = true } = options;
   const config = getBaseWebpack(context, { ...options, name: 'demo' });
   const portalPath = getRaxDemoEntryJs(rootDir);
   if (command === 'start') {
@@ -23,7 +23,7 @@ module.exports = (context, options) => {
   config.output.filename('[name].js');
   config.output.publicPath('./');
   config.output.path(path.join(rootDir, 'build'));
-  setCSSRule(config, command !== 'start');
+  setCSSRule(config, inlineStyle);
   if (command === 'start') {
     config.output.publicPath('/demo');
   } else {
@@ -38,6 +38,8 @@ module.exports = (context, options) => {
           filename: `demo/${entryKey}.html`,
           chunks: [entryKey],
           jsPath: `./${entryKey}.js`,
+          cssPath: `./${entryKey}.css`,
+          inlineStyle,
           template: path.resolve(__dirname, '../../template/raxDemo.html'),
         },
       ]);
