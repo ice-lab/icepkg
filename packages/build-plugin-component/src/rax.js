@@ -153,8 +153,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   }
 
   onHook(`before.${command}.run`, async () => {
-    const skipGenRaxDemo = !skipDemo && !watchDist && raxBundles;
-    if (!skipGenRaxDemo) {
+    if (!skipDemo && !watchDist && raxBundles) {
       await generateRaxDemo(demos, context);
     }
   });
