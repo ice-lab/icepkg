@@ -7,6 +7,22 @@ const getOutputPath = require('./getOutputPath');
 const { MINIAPP } = require('../../../constants');
 
 const parseTarget = (target) => (target === MINIAPP ? 'ali-miniapp' : target);
+
+const suffixMap = {
+  miniapp: 'ali',
+  'wechat-miniprogram': 'wechat',
+};
+
+const genEntry = (rootDir, target) => {
+  const srcDir = path.join(rootDir, 'src');
+  const files = glob.sync(`index.${suffixMap[target]}.?(ts|tsx|js|jsx)`, { cwd: srcDir });
+  if (files.length) {
+    return `./src/index.${suffixMap[target]}`;
+  }
+  return './src/index';
+};
+
+
 module.exports = (context, target, options = {}, onGetWebpackConfig) => {
   const { rootDir, command } = context;
   const { distDir = '' } = options[target] || {};
@@ -16,7 +32,9 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
     disableRegenerator: true,
     name: 'miniapp',
   });
-  let entryPath = './src/index';
+  let entryPath = genEntry(rootDir, target);
+
+  console.log('entryPath', entryPath);
   if (command === 'start') {
     const miniappDemoFolder = 'miniapp-demo';
     const filesPath = glob.sync('index.*', { cwd: path.join(rootDir, miniappDemoFolder) });
