@@ -23,6 +23,13 @@ module.exports = (config, useStylesheetLoader) => {
       .use('sass-loader')
       .loader(require.resolve('sass-loader'));
   } else {
+    const cssLoaderOptions = {
+      modules: {
+        auto: /\.module\.\w+$/i,
+        localIdentName: '[path][name]__[local]--[hash:base64:5]',
+      },
+    };
+
     const postcssOptions = {
       ident: 'postcss',
       plugins: () => [
@@ -44,6 +51,7 @@ module.exports = (config, useStylesheetLoader) => {
       .end()
       .use('css')
       .loader(require.resolve('css-loader'))
+      .options(cssLoaderOptions)
       .end()
       .use('postcss')
       .loader(require.resolve('postcss-loader'))
