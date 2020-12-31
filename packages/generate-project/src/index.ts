@@ -11,6 +11,7 @@ export interface IEjsOptions {
   targets?: string[];
   miniappType?: 'runtime' | 'compile';
   mpa?: boolean;
+  pha?: boolean;
 }
 
 export async function downloadAndGenerateProject(
@@ -28,6 +29,7 @@ export async function downloadAndGenerateProject(
     targets: ['web'],
     miniappType: 'runtime',
     mpa: false,
+    pha: false,
     ...ejsOptions,
   };
 
