@@ -32,9 +32,9 @@ module.exports = (context, target, options = {}, onGetWebpackConfig) => {
     disableRegenerator: true,
     name: 'miniapp',
   });
+
   let entryPath = genEntry(rootDir, target);
 
-  console.log('entryPath', entryPath);
   if (command === 'start') {
     const miniappDemoFolder = 'miniapp-demo';
     const filesPath = glob.sync('index.*', { cwd: path.join(rootDir, miniappDemoFolder) });
