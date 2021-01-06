@@ -20,7 +20,7 @@ function generatePortalModules(context) {
 }
 
 function generateRaxDemo(demos, context, applyMethod) {
-  const { rootDir, command, userConfig } = context;
+  const { rootDir, command, userConfig, pkg } = context;
 
   const modulesPath = path.join(rootDir, './build');
 
@@ -36,7 +36,7 @@ function generateRaxDemo(demos, context, applyMethod) {
     params: {
       targets: userConfig.targets,
       command,
-      title: meta.title,
+      title: meta.title || pkg.name,
       docHtml: readme,
       demos,
       modulesPath,
