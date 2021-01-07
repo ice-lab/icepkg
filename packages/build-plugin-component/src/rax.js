@@ -66,8 +66,11 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     }
     return false;
   };
+
+  let raxBundles = false;
+
   if (!watchDist && !skipDemo) {
-    let raxBundles = getRaxBundles();
+    raxBundles = getRaxBundles();
     // watch demo changes
     if (command === 'start') {
       const demoWatcher = chokidar.watch(demoDir, {
@@ -150,7 +153,9 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   }
 
   onHook(`before.${command}.run`, async () => {
-    await generateRaxDemo(demos, context);
+    if (!skipDemo && !watchDist && raxBundles) {
+      await generateRaxDemo(demos, context);
+    }
   });
 
   onHook('after.build.compile', async (args) => {
