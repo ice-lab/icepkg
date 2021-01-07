@@ -61,7 +61,7 @@ export default async function formatProject(projectDir: string, projectName?: st
           },
         };
 
-        let defPluginVersion = '^2.0.0';
+        let defPluginVersion = '^3.0.0';
 
         if (pkgData.devDependencies['build-plugin-rax-app'] && !pkgData.devDependencies['rax-app']) {
           defPluginVersion = '^1.0.2';
