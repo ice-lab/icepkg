@@ -58,7 +58,7 @@ export async function downloadAndGenerateProject(
   await ejsRenderDir(projectDir, ejsOptions);
 
   try {
-    await formatProject(projectDir, projectName);
+    await formatProject(projectDir, projectName, ejsOptions);
   } catch (err) {
     console.warn('formatProject error', err.message);
   }

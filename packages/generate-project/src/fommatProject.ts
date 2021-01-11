@@ -2,12 +2,16 @@ import * as path from 'path';
 import * as fse from 'fs-extra';
 import { ALI_YUEQU_URL } from '@iceworks/constant';
 import { checkAliInternal } from 'ice-npm-utils';
+import { IEjsOptions } from './index';
 
-export default async function formatProject(projectDir: string, projectName?: string): Promise<void> {
+export default async function formatProject(projectDir: string, projectName?: string, ejsOptions?: IEjsOptions): Promise<void> {
   await fse.remove(path.join(projectDir, 'build'));
 
   let abcData = {};
+  const { targets } = ejsOptions;
   const abcPath = path.join(projectDir, 'abc.json');
+  const miniappCompiledPath = path.join(projectDir, 'src', 'miniapp-compiled');
+  const miniappProjectJsonPath = path.join(projectDir, 'mini.project.json');
   const pkgPath = path.join(projectDir, 'package.json');
   const pkgData = fse.readJsonSync(pkgPath);
   const isAliInternal = await checkAliInternal();
@@ -121,4 +125,13 @@ export default async function formatProject(projectDir: string, projectName?: st
   fse.writeJSONSync(pkgPath, pkgData, {
     spaces: 2,
   });
+
+  // Only miniapp projects will exist miniapp-compiled dir
+  if (targets.indexOf('miniapp') === -1) {
+    // Only Alibaba (Taobao) MiniApp needs mini.project.json
+    fse.removeSync(miniappProjectJsonPath);
+    if (targets.indexOf('wechat-miniprogram') === -1) {
+      fse.removeSync(miniappCompiledPath);
+    }
+  }
 }
