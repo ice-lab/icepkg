@@ -1,10 +1,10 @@
 # `@iceworks/generate-project`
 
-## 1.1.7
+## 1.2.1
 
 - add `pha` ejs option
 
-## 1.1.6
+## 1.2.0
 
 - 升级 plugin-def 到 3.x
 
