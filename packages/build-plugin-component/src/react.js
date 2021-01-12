@@ -25,7 +25,7 @@ module.exports = (
   { context, registerTask, registerCliOption, registerUserConfig, onGetWebpackConfig, onHook, log, onGetJestConfig },
 ) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
-  const { plugins, ...compileOptions } = userConfig;
+  const { plugins = [], ...compileOptions } = userConfig;
   const { library, demoTemplate = 'template-component-demo', basicComponents = [] } = compileOptions;
 
   // config htmlInjection for once
@@ -109,7 +109,7 @@ module.exports = (
       });
     }
 
-    onGetWebpackConfig(taskName, config => {
+    onGetWebpackConfig(taskName, (config) => {
       baseConfig(config, params);
       if (command === 'start') {
         // component dev
@@ -133,7 +133,16 @@ module.exports = (
     hasMain = true;
   }
   // pack the right entry files to dist
-  if (extNames && library && command === 'build') {
+
+  const isPluginRaxSeedInclued = plugins.some((plugin) => {
+    if (typeof plugin === 'string') {
+      return plugin === '@ali/build-plugin-rax-seed';
+    }
+    return plugin.includes('@ali/build-plugin-rax-seed');
+  });
+
+  const buildDist = command === 'build' && extNames && (library || isPluginRaxSeedInclued);
+  if (buildDist) {
     registerTask('component-dist', getUMDWebpack({ context, compileOptions, extNames, hasMain }));
   }
 
@@ -153,6 +162,7 @@ module.exports = (
       ignoreInitial: true,
       interval: 1000,
     });
+
     watcher.on('change', (file) => {
       log.info(`${file} changed, start compile library.`);
       babelCompiler(context, log, basicComponents, compileOptions, 'react');

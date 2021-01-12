@@ -26,11 +26,6 @@ module.exports = [
     name: 'disableUMD',
     validation: 'boolean',
   },
-  // compatible with plugins which modifyUserConfig of outputDir
-  {
-    name: 'outputDir',
-    validation: 'string',
-  },
   {
     /**
      * support disable mock node env

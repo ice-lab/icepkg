@@ -83,7 +83,7 @@ exports.markdownParser = function markdownParser(md, options = {}) {
   };
 
   if (splited) {
-    result.meta = yaml.safeLoad(splited[0]);
+    result.meta = yaml.load(splited[0]);
     result.content = splited[1];
   }
 

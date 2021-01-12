@@ -68,4 +68,9 @@ module.exports = [
       }
     },
   },
+  // compatible with plugins which modifyUserConfig of outputDir
+  {
+    name: 'outputDir',
+    validation: 'string',
+  },
 ];
