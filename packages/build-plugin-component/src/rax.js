@@ -34,6 +34,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   }
   const { skipDemo } = commandArgs;
   const watchDist = commandArgs.watchDist || userConfig.watchDist;
+
   // compatible with rax-seed
   modifyUserConfig('watchDist', !!watchDist);
   // register user config
