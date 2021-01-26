@@ -61,15 +61,28 @@ export default async function formatProject(projectDir: string, projectName?: st
           },
         };
 
-        let defPluginVersion = '^2.0.0';
-
+        let defPluginVersion = '^3.0.0';
         if (pkgData.devDependencies['build-plugin-rax-app'] && !pkgData.devDependencies['rax-app']) {
+          // 兼容 rax-app@2.0
           defPluginVersion = '^1.0.2';
         }
 
         // add @ali/build-plugin-rax-app-def
         pkgData.devDependencies['@ali/build-plugin-rax-app-def'] = defPluginVersion;
         buildData.plugins.push('@ali/build-plugin-rax-app-def');
+
+        // TODO: remove src/app.js for mpa project
+        // if (
+        //   (buildData.web && buildData.web.mpa)
+        //   || buildData.mpa // 未来有可能把 mpa 提上去
+        // ) {
+        //   try {
+        //     fse.removeSync(path.join(projectDir, './src/app.js'));
+        //     fse.removeSync(path.join(projectDir, './src/app.ts'));
+        //   } catch (err) {
+        //     // ignore error
+        //   }
+        // }
       } else {
         abcData = {
           type: 'ice-app',
