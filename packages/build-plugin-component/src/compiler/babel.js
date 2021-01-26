@@ -81,7 +81,7 @@ module.exports = function babelCompiler(
   const srcPath = path.join(rootDir, 'src');
   // compile task es and lib
   const compileTargets = ['es', 'lib'];
-  const filesPath = glob.sync('**/*.*', { cwd: srcPath, ignore: ['node_modules/**', '*.d.ts'] });
+  const filesPath = glob.sync('**/*.*', { cwd: srcPath, ignore: ['node_modules/**', '*.d.ts', '*.?(ali|wechat).?(ts|tsx|js|jsx)'] });
   // traverse to compile the js files
   const compileInfo = [];
   compileTargets.forEach((target) => {
