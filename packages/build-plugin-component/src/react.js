@@ -141,13 +141,14 @@ module.exports = (
     return plugin.includes('@ali/build-plugin-rax-seed');
   });
 
-  const buildDist = command === 'build' && extNames && (library || isPluginRaxSeedInclued);
+  const buildDist = (command === 'build' || commandArgs.watchDist) && extNames && (library || isPluginRaxSeedInclued);
+
   if (buildDist) {
     registerTask('component-dist', getUMDWebpack({ context, compileOptions, extNames, hasMain }));
   }
 
   // register cli options
-  const cliOptions = ['watch', 'skip-demo'];
+  const cliOptions = ['watch', 'skip-demo', 'watch-dist'];
   registerCliOption(cliOptions.map((name) => ({
     name,
     commands: ['start', 'build'],
