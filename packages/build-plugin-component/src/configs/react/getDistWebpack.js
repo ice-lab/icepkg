@@ -10,12 +10,10 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
     minify,
     // dist sourceMap
     sourceMap,
-    // library name
-    library,
-    // library target
-    libraryTarget = 'umd',
-    // library export, default is undefined
-    libraryExport,
+
+    // entryName
+    entryName = 'index',
+
     // externals dependencies
     externals = {
       react: {
@@ -46,13 +44,11 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   } = compileOptions;
   const { jsExt, styleExt } = extNames;
   // file name
-  const filename = compileOptions.filename || library;
   const jsPath = path.resolve(rootDir, `src/index${jsExt}`);
 
   config.context(rootDir);
 
   // - set entry
-  const entryName = filename;
   if (hasMain || styleExt) {
     const cssPath = path.resolve(
       rootDir,
@@ -66,10 +62,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   config.output
     .path(path.resolve(rootDir, 'dist'))
     .filename('[name].js')
-    .publicPath('./dist/')
-    .library(library)
-    .libraryExport(libraryExport)
-    .libraryTarget(libraryTarget);
+    .publicPath('./dist/');
 
   // - set externals
   if (externals) {

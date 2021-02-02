@@ -8,7 +8,8 @@ const { markdownParser } = require('./utils/markdownHelper');
 const getDemoDir = require('./utils/getDemoDir');
 const getDemos = require('./utils/getDemos');
 const getReadme = require('./utils/getReadme');
-const getUMDWebpack = require('./utils/getUMDWebpack');
+const getDistWebpack = require('./configs/react/getDistWebpack');
+const getUMDWebpack = require('./configs/react/getUMDWebpack');
 const generateEntryJs = require('./utils/generateEntry');
 const formatPathForWin = require('./utils/formatPathForWin');
 const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
@@ -25,7 +26,7 @@ module.exports = (
   { context, registerTask, registerCliOption, registerUserConfig, onGetWebpackConfig, onHook, log, onGetJestConfig },
 ) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
-  const { plugins = [], ...compileOptions } = userConfig;
+  const { ...compileOptions } = userConfig;
   const { library, demoTemplate = 'template-component-demo', basicComponents = [] } = compileOptions;
 
   // config htmlInjection for once
@@ -134,19 +135,14 @@ module.exports = (
   }
   // pack the right entry files to dist
 
-  const isPluginRaxSeedInclued = plugins.some((plugin) => {
-    if (typeof plugin === 'string') {
-      return plugin === '@ali/build-plugin-rax-seed';
+
+  if ((command === 'build' || commandArgs.watchDist) && extNames) {
+    if (library) {
+      registerTask('component-dist', getUMDWebpack({ context, compileOptions, extNames, hasMain }));
     }
-    return plugin.includes('@ali/build-plugin-rax-seed');
-  });
 
-  const buildDist = (command === 'build' || commandArgs.watchDist) && extNames && (library || isPluginRaxSeedInclued);
-
-  if (buildDist) {
-    registerTask('component-dist', getUMDWebpack({ context, compileOptions, extNames, hasMain }));
+    registerTask('component-dist-bundle', getDistWebpack({ context, compileOptions, extNames, hasMain }));
   }
-
   // register cli options
   const cliOptions = ['watch', 'skip-demo', 'watch-dist'];
   registerCliOption(cliOptions.map((name) => ({
