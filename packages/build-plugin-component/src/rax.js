@@ -147,7 +147,15 @@ module.exports = ({
               if (stats.hasErrors()) {
                 console.log(stats.toString('minimal').errors.join('\n'));
               } else {
-                applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
+                // if copy task has finished, build herbox directly
+                if (fse.existsSync(path.resolve(runtimeTargetDir, 'root.axml'))) {
+                  applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
+                } else {
+                  copyRuntimeMiniappFiles(runtimeTargetDir, () => {
+                    // source: build-plugin-miniapp-preview, for building herbox
+                    applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
+                  });
+                }
               }
             },
           );
@@ -164,7 +172,6 @@ module.exports = ({
     const disableGenerateLib = userConfig[MINIAPP] && userConfig[MINIAPP].omitLib;
 
     // clean build results
-    fse.removeSync(path.join(rootDir, 'build'));
     fse.removeSync(path.join(rootDir, 'lib'));
     fse.removeSync(path.join(rootDir, 'dist'));
     fse.removeSync(path.join(rootDir, 'es'));
@@ -220,13 +227,6 @@ module.exports = ({
   onHook('after.start.compile', async (args) => {
     const devUrl = args.url;
     devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });
-
-    if (isRuntimeMiniapp) {
-      copyRuntimeMiniappFiles(runtimeTargetDir, () => {
-        // from  build-plugin-miniapp-preview, for building herbox
-        applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
-      });
-    }
   });
 
   if (command === 'test') {
