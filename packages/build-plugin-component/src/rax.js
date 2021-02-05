@@ -3,13 +3,16 @@ const fse = require('fs-extra');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const getJestConfig = require('rax-jest-config');
-const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE } = require('./constants');
+const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE, RUNTIME } = require('./constants');
 const getMiniappConfig = require('./configs/rax/miniapp/getBase');
+const getMiniappRuntimeConfig = require('./configs/rax/getRuntimeMiniappConfig');
 const getBaseWebpack = require('./configs/rax/getBaseWebpack');
 const getDistConfig = require('./configs/rax/getDistConfig');
 const getUMDConfig = require('./configs/rax/getUMDConfig');
 const getES6Config = require('./configs/rax/getES6Config');
 const generateRaxEntry = require('./utils/generateRaxEntry');
+const generateRuntimeDemoEntry = require('./utils/generateRuntimeDemoEntry');
+const copyRuntimeMiniappFiles = require('./utils/copyRuntimeMiniappFiles');
 const getDemoDir = require('./utils/getDemoDir');
 const getDemos = require('./utils/getDemos');
 const { markdownParser } = require('./utils/markdownHelper');
@@ -23,17 +26,36 @@ const getDemoConfig = require('./configs/rax/getDemoConfig');
 const getReadme = require('./utils/getReadme');
 const generateRaxDemo = require('./utils/generateRaxDemo');
 const { setModulesInfo } = require('./utils/getPortalModules');
+const webpack = require('webpack');
 
-module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, modifyUserConfig, log, registerMethod, setValue }) => {
+module.exports = ({
+  registerTask,
+  registerUserConfig,
+  applyMethod,
+  context,
+  onHook,
+  registerCliOption,
+  onGetWebpackConfig,
+  onGetJestConfig,
+  modifyUserConfig,
+  log,
+  registerMethod,
+  setValue,
+}) => {
   const { rootDir, userConfig, command, pkg, commandArgs } = context;
-  const { plugins, targets, disableUMD, inlineStyle = true, ...compileOptions } = userConfig;
+  const { plugins, targets, disableUMD, inlineStyle = true, miniapp, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
-    console.error(chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'));
+    console.error(
+      chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'),
+    );
     console.log();
     process.exit(1);
   }
   const { skipDemo } = commandArgs;
   const watchDist = commandArgs.watchDist || userConfig.watchDist;
+  const isRuntimeMiniapp = miniapp && miniapp.buildType === RUNTIME && targets.includes(MINIAPP);
+  const runtimeTargetDir = path.resolve(rootDir, 'build/ali-miniapp');
+
 
   // compatible with rax-seed
   modifyUserConfig('watchDist', !!watchDist);
@@ -44,8 +66,11 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   registerMethod('pluginComponentGetDemoDir', getDemoDir);
   registerMethod('pluginComponentGetDemos', getDemos);
   registerMethod('pluginComponentGetReadme', getReadme);
+  registerMethod('pluginComponentGetMiniappRuntimeConfig', getMiniappRuntimeConfig);
+  registerMethod('pluginComponentCopyRuntimeMiniappFiles', copyRuntimeMiniappFiles);
   registerMethod('pluginComponentSetPortalModules', setModulesInfo);
   setValue('pluginComponentDir', __dirname);
+  setValue('pluginComponentIsRuntimeMiniapp', isRuntimeMiniapp);
 
   let entries = {};
   let serverBundles = {};
@@ -53,10 +78,12 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
 
   // register cli options
   const cliOptions = ['watch-dist', '--skip-demo'];
-  registerCliOption(cliOptions.map((name) => ({
-    name,
-    commands: ['start', 'build'],
-  })));
+  registerCliOption(
+    cliOptions.map((name) => ({
+      name,
+      commands: ['start', 'build'],
+    })),
+  );
   const demoDir = getDemoDir(rootDir);
   const getRaxBundles = () => {
     if (demoDir) {
@@ -70,6 +97,8 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
 
   let raxBundles = false;
 
+  fse.removeSync(path.join(rootDir, 'build'));
+
   if (!watchDist && !skipDemo) {
     raxBundles = getRaxBundles();
     // watch demo changes
@@ -81,6 +110,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
       demoWatcher.on('all', () => {
         // re-generate entry files when demo changes
         raxBundles = getRaxBundles();
+        generateRuntimeDemoEntry(demos, rootDir);
       });
       demoWatcher.on('error', (error) => {
         log.error('fail to watch demo', error);
@@ -105,10 +135,35 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
         configDev(defaultConfig, context, { ...options, entries, serverBundles });
         registerTask(`component-build-${target}`, defaultConfig);
       } else if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
-        options[target] = options[target] || {};
-        addMiniappTargetParam(target, options[target]);
-        const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
-        registerTask(`component-build-${target}`, config);
+        if (isRuntimeMiniapp && target === MINIAPP) {
+          const runtimeMiniappConfig = getMiniappRuntimeConfig(context, options);
+          const compiler = webpack(runtimeMiniappConfig.toConfig());
+
+          compiler.watch(
+            {
+              aggregateTimeout: 300,
+              poll: undefined,
+            },
+            (err, stats) => {
+              // if copy task has finished, build herbox directly
+              if (stats.hasErrors()) {
+                console.log(stats.toString('minimal').errors.join('\n'));
+              } else if (fse.existsSync(path.resolve(runtimeTargetDir, 'root.axml'))) {
+                applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
+              } else {
+                copyRuntimeMiniappFiles(runtimeTargetDir, () => {
+                  // source: build-plugin-miniapp-preview, for building herbox
+                  applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
+                });
+              }
+            },
+          );
+        } else {
+          options[target] = options[target] || {};
+          addMiniappTargetParam(target, options[target]);
+          const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
+          registerTask(`component-build-${target}`, config);
+        }
       }
     });
   } else if (command === 'build' || watchDist) {
@@ -118,11 +173,11 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     // clean build results
     fse.removeSync(path.join(rootDir, 'lib'));
     fse.removeSync(path.join(rootDir, 'dist'));
-    fse.removeSync(path.join(rootDir, 'build'));
     fse.removeSync(path.join(rootDir, 'es'));
 
     targets.forEach((target) => {
       const options = { ...userConfig, target, inlineStyle };
+
       if (target === WEB) {
         registerTask(`component-build-${target}`, getDistConfig(context, options));
         registerTask(`component-build-${target}-es6`, getES6Config(context, options));
@@ -133,10 +188,12 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
         const distConfig = getDistConfig(context, { ...options, inlineStyle: true, entryName: 'index-weex' });
         registerTask('component-build-weex', distConfig);
       } else if (target === MINIAPP || target === WECHAT_MINIPROGRAM) {
-        options[target] = options[target] || {};
-        addMiniappTargetParam(target, options[target]);
-        const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
-        registerTask(`component-build-${target}`, config);
+        if (!isRuntimeMiniapp) {
+          options[target] = options[target] || {};
+          addMiniappTargetParam(target, options[target]);
+          const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
+          registerTask(`component-build-${target}`, config);
+        }
       }
     });
     onHook('before.build.load', async () => {

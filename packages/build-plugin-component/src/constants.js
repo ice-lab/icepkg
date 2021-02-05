@@ -5,4 +5,6 @@ module.exports = {
   WECHAT_MINIPROGRAM: 'wechat-miniprogram',
   BYTEDANCE: 'bytedance-microapp',
   NODE: 'node',
+  RUNTIME: 'runtime',
+  COMPILE: 'compile',
 };

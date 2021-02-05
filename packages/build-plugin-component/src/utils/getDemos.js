@@ -3,6 +3,7 @@
  */
 const { readdirSync, readFileSync, existsSync } = require('fs');
 const { join } = require('path');
+const camelcase = require('camelcase');
 const { markdownParser: defaultMarkdownParser } = require('../utils/markdownHelper');
 
 module.exports = function getDemos(demoPath, markdownParser = defaultMarkdownParser) {
@@ -33,6 +34,7 @@ module.exports = function getDemos(demoPath, markdownParser = defaultMarkdownPar
       return {
         href,
         filename,
+        pascalCaseName: camelcase(filename, { pascalCase: true }),
         filePath,
         ...meta,
         highlightedCode,

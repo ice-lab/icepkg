@@ -1,0 +1,972 @@
+<import-sjs name="tool" from="./tool.sjs"/>
+
+<template name="element">
+  <template is="{{r.nodeType}}" data="{{r: r}}" />
+</template>
+
+<template name="children">
+  <block a:for="{{r}}" a:key="nodeId">
+    <block a:if="{{item.nodeId}}">
+      <template is="element" data="{{r: item}}" />
+    </block>
+    <block a:else>
+      <block>{{item.content}}</block>
+    </block>
+  </block>
+</template>
+
+<!--Container-->
+<template name="view">
+  <view
+    style="{{r.style}}"
+    class="{{r.class}}"
+    id="{{r.id}}"
+    hidden="{{r.hidden}}"
+    animation="{{r.animation}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onLongTap="onLongTap"
+
+    onFirstAppear="onViewFirstAppear"
+    onAppear="onViewAppear"
+    onDisappear="onViewDisappear"
+
+    disable-scroll="{{r['disable-scroll']}}"
+    hover-class="{{r['hover-class']}}"
+    hover-start-time="{{r['hover-start-time']}}"
+    hover-stay-time="{{r['hover-stay-time']}}"
+    hidden="{{r.hidden}}"
+    hover-stop-propagation="{{r['hover-stop-propagation']}}"
+    role="{{r.role}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </view>
+</template>
+
+<template name="swiper">
+  <swiper
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+
+    onChange="onSwiperChange"
+    onTransition="onSwiperTransition"
+    onAnimationEnd="onSwiperAnimationEnd"
+
+    indicator-dots="{{tool.processVal(r['indicator-dots'], 'rgba(0, 0, 0, .3)')}}"
+    indicator-color="{{r['indicator-color']}}"
+    indicator-active-color="{{tool.processVal(r['indicator-active-color'], '#000000')}}"
+    active-class="{{r['active-class']}}"
+    changing-class="{{r['changing-class']}}"
+    autoplay="{{r.autoplay}}"
+    current="{{tool.processVal(r.current, 0)}}"
+    duration="{{tool.processVal(r.duration, 500)}}"
+    interval="{{tool.processVal(r.interval, 5000)}}"
+    circular="{{r.circular}}"
+    vertical="{{r.vertical}}"
+    previous-margin	="{{tool.processVal(r['previous-margin'], '0px')}}"
+    next-margin	="{{tool.processVal(r['next-margin'], '0px')}}"
+    acceleration="{{r.acceleration}}"
+    disable-programmatic-animation="{{tool.processVal(r['disable-programmatic-animation'], 1)}}"
+    disable-touch="{{r['disable-touch']}}"
+  >
+    <swiper-item
+      a:for="{{r.children}}"
+      a:if="{{item.nodeType !== 'h-comment'}}"
+      a:key="nodeId"
+      style="{{item.style}}"
+      class="{{item.class}}"
+      id="{{item.id}}"
+      item-id="{{item['item-id']}}"
+      data-private-node-id="{{item.nodeId}}"
+    >
+      <template is="children" data="{{r: item.children}}" />
+    </swiper-item>
+  </swiper>
+</template>
+
+<template name="scroll-view">
+  <scroll-view
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onScrollToUpper="onScrollViewScrollToUpper"
+    onScrollToLower="onScrollViewScrollToLower"
+    onScroll="onScrollViewScroll"
+
+    scroll-x="{{r['scroll-x']}}"
+    scroll-y="{{r['scroll-y']}}"
+    upper-threshold="{{tool.processVal(r['upper-threshold'], 50)}}"
+    lower-threshold="{{tool.processVal(r['lower-threshold'], 50)}}"
+    scroll-top="{{r['scroll-top']}}"
+    scroll-left="{{r['scroll-left']}}"
+    scroll-into-view="{{tool.processVal(r['scroll-into-view'], '')}}"
+    scroll-with-animation="{{r['scroll-with-animation']}}"
+    scroll-animation-duration="{{r['scroll-animation-duration']}}"
+    enable-back-to-top="{{r['enable-back-to-top']}}"
+    trap-scroll="{{r['trap-scroll']}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </scroll-view>
+</template>
+
+<template name="cover-view">
+  <cover-view
+    style="{{r.style}}"
+    class="{{r.class}}"
+    id="{{r.id}}"
+    hidden="{{r.hidden}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </cover-view>
+</template>
+
+<template name="cover-image">
+  <cover-image
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+
+    src="{{r.src}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </cover-image>
+</template>
+
+<template name="movable-area">
+  <movable-area
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    scale-area="{{r['scale-area']}}"
+  >
+    <movable-view
+      a:for="{{r.children}}"
+      a:key="nodeId"
+      a:if="{{item.nodeType !== 'h-comment'}}"
+      style="{{item.style}}"
+      class="{{item.class}}"
+      hidden="{{item.hidden}}"
+      id="{{item.id}}"
+      data-private-node-id="{{item.nodeId}}"
+
+      onTap="onTap"
+      onTouchStart="onTouchStart"
+      onTouchMove="onTouchMove"
+      onTouchEnd="onTouchEnd"
+      onTouchCancel="onTouchCancel"
+
+      animation="{{tool.processVal(r.animation, true)}}"
+      direction="{{tool.processVal(item.direction, 'none')}}"
+      inertia="{{item.inertia}}"
+      out-of-bounds="{{item['out-of-bounds']}}"
+      x="{{item.x}}"
+      y="{{item.y}}"
+      damping="{{item.damping}}"
+      friction="{{item.friction}}"
+      disabled="{{item.disabled}}"
+      scale="{{item.scale}}"
+      scale-min="{{tool.processVal(item['scale-min'], 0.5)}}"
+      scale-max="{{tool.processVal(item['scale-max'], 10)}}"
+      scale-value="{{tool.processVal(item['scale-value'], 1)}}"
+    >
+      <template is="children" data="{{r: item.children}}" />
+    </movable-view>
+  </movable-area>
+</template>
+
+<!--HTML component -->
+<template name="h-element">
+  <view
+    style="{{r.style}}"
+    class="{{r.class}}"
+    id="{{r.id}}"
+    animation="{{r.animation}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </view>
+</template>
+
+<template name="h-comment">
+</template>
+
+
+<!--Base content-->
+<template name="text">
+  <text
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    animation="{{r.animation}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+
+    decode="{{r.decode}}"
+    space="{{r.space}}"
+    decode="{{r.decode}}"
+    number-of-lines="{{r['number-of-lines']}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </text>
+</template>
+
+<template name="icon">
+  <icon
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+
+    type="{{r.type}}"
+    size="{{tool.processVal(r.size, '23')}}"
+    color="{{r.color}}"
+  >
+  </icon>
+</template>
+
+<template name="progress">
+  <progress
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+
+    onActiveEnd="onProgressActiveEnd"
+
+    percent="{{tool.processVal(r.percent, 0)}}"
+    show-info="{{r['show-info']}}"
+    stroke-width="{{tool.processVal(r['stroke-width'], '6')}}"
+    active="{{tool.processVal(r.active, false)}}"
+    background-color="{{r['background-color']}}"
+    active-color="{{tool.processVal(r['active-color'], '#09BB07')}}"
+  >
+  </progress>
+</template>
+
+<template name="rich-text">
+  <rich-text
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onLongTap="onLongTap"
+
+    nodes="{{tool.processVal(r.nodes, [])}}"
+  >
+  </rich-text>
+</template>
+
+<!--Form-->
+<template name="button">
+  <button
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    animation="{{r.animation}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+
+    onGetUserInfo="onButtonGetUserInfo"
+    onContact="onButtonContact"
+    onGetPhoneNumber="onButtonGetPhoneNumber"
+    onError="onButtonError"
+    onOpenSetting="onButtonOpenSetting"
+    onLaunchApp="onButtonLaunchApp"
+
+    onGetAuthorize="onButtonGetAuthorize"
+
+    size="{{tool.processVal(r.size, 'default')}}"
+    type="{{tool.processVal(r.type, 'default')}}"
+    plain="{{tool.processVal(r.plain, false)}}"
+    disabled="{{tool.processVal(r.disabled, false)}}"
+    loading="{{tool.processVal(r.loading, false)}}"
+    form-type="{{tool.processVal(r['form-type'], '')}}"
+    open-type="{{tool.processVal(r['open-type'], '')}}"
+    scope="{{tool.processVal(r.scope, '')}}"
+    hover-class="{{tool.processVal(r['hover-class'], 'button-hover')}}"
+    hover-stop-propagation="{{tool.processVal(r['hover-stop-propagation'], false)}}"
+    hover-start-time="{{tool.processVal(r['hover-start-time'], 20)}}"
+    hover-stay-time="{{tool.processVal(r['hover-stay-time'], 70)}}"
+    lang="{{tool.processVal(r.lang, 'en')}}"
+    session-from="{{tool.processVal(r['session-from'], '')}}"
+    send-message-title="{{tool.processVal(r['send-message-title'], '')}}"
+    send-message-path="{{tool.processVal(r['send-message-path'], '')}}"
+    send-message-img="{{tool.processVal(r['send-message-img'], '')}}"
+    app-parameter="{{tool.processVal(r['app-parameter'], '')}}"
+    show-message-card="{{tool.processVal(r['show-message-card'], '')}}"
+    public-id="{{tool.processVal(r['public-id'], '')}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </button>
+</template>
+
+<template name="form">
+  <form
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+
+    onSubmit="onFormSubmit"
+    onReset="onFormReset"
+
+    report-submit="{{r['report-submit']}}"
+    report-submit-timeout="{{tool.processVal(r['report-submit-timeout'], 0)}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </form>
+</template>
+
+<template name="label">
+  <label
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onTouchMove="onTouchMove"
+    onTouchStart="onTouchStart"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+
+    for="{{tool.processVal(r.for, '')}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </label>
+</template>
+
+<template name="input">
+  <input
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+
+    onInput="onInputInput"
+    onFocus="onInputFocus"
+    onBlur="onInputBlur"
+    onConfirm="onInputConfirm"
+    onKeyboardHeightChange="onInputKeyBoardHeightChange"
+
+    value="{{r.value}}"
+    type="{{r.type}}"
+    password="{{r.password}}"
+    placeholder="{{r.placeholder}}"
+    placeholder-style="{{tool.processPlaceholderStyle(r['placeholder-style'], r.placeholderColor)}}"
+    placeholder-class="{{r['placeholder-class']}}"
+    disabled="{{r.disabled}}"
+    maxlength="{{r.maxlength}}"
+    cursor-spacing="{{r['cursor-spacing']}}"
+    focus="{{r['focus-state']}}"
+    controlled="{{r.controlled}}"
+    confirm-type="{{r['confirm-type']}}"
+    confirm-hold="{{r['confirm-hold']}}"
+    cursor="{{r.cursor}}"
+    selection-start="{{r['selection-start']}}"
+    selection-end="{{r['selection-end']}}"
+    adjust-position="{{r['adjust-position']}}"
+  >
+  </input>
+</template>
+
+<template name="textarea">
+  <textarea
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+
+    onFocus="onTextareaFocus"
+    onBlur="onTextareaBlur"
+    onLineChange="onTextareaLineChange"
+    onInput="onTextareaInput"
+    onConfirm="onTextareaConfirm"
+    onKeyboardHeightChange="onTextareaKeyBoardHeightChange"
+
+    value="{{tool.processVal(r.value, '')}}"
+    name="{{tool.processVal(r.name, '')}}"
+    placeholder="{{r.placeholder}}"
+    placeholder-style="{{tool.processPlaceholderStyle(r['placeholder-style'], r.placeholderColor)}}"
+    placeholder-class="{{r['placeholder-class']}}"
+    disabled="{{r.disabled}}"
+    maxlength="{{tool.processVal(r.maxlength, 140)}}"
+    focus="{{r['focus-state']}}"
+    controlled="{{r.controlled}}"
+    auto-height="{{r['auto-height']}}"
+    fixed="{{r.fixed}}"
+    cursor-spacing="{{tool.processVal(r['cursor-spacing'], 0)}}"
+    cursor="{{tool.processVal(r.cursor, -1)}}"
+    show-confirm-bar="{{tool.processVal(r['show-confirm-bar'], true)}}"
+    selection-start="{{tool.processVal(r['selection-start'], -1)}}"
+    selection-end="{{tool.processVal(r['selection-end'], -1)}}"
+    adjust-position="{{tool.processVal(r['adjust-position'], true)}}"
+  >
+  </textarea>
+</template>
+
+<template name="radio">
+  <radio
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+
+    value="{{tool.processVal(r.value, '')}}"
+    name="{{tool.processVal(r.name, '')}}"
+    checked="{{tool.processVal(r.checked, false)}}"
+    disabled="{{tool.processVal(r.disabled, false)}}"
+    color="{{tool.processVal(r.color, '')}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </radio>
+</template>
+
+<template name="radio-group">
+  <radio-group
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onChange="onRadioChange"
+
+    name="{{tool.processVal(r.name, '')}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </radio-group>
+</template>
+
+<template name="checkbox">
+  <checkbox
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onChange="onCheckboxItemChange"
+
+    name="{{r.name}}"
+    value="{{tool.processVal(r.value, '')}}"
+    disabled="{{r.disabled}}"
+    checked="{{r.checked}}"
+    color="{{r.color}}"
+  >
+  </checkbox>
+</template>
+
+<template name="checkbox-group">
+  <checkbox-group
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onChange="onCheckboxChange"
+
+    name="{{r.name}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </checkbox-group>
+</template>
+
+<template name="switch">
+  <switch
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onChange="onSwitchChange"
+
+    name="{{tool.processVal(r.name, '')}}"
+    checked="{{r.checked}}"
+    disabled="{{r.disabled}}"
+    type="{{tool.processVal(r.type, 'switch')}}"
+    color="{{r.color}}"
+  >
+  </switch>
+</template>
+
+<template name="slider">
+  <slider
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTap="onTap"
+    onChange="onSliderChange"
+    onChanging="onSliderChanging"
+
+    name="{{tool.processVal(r.name, '')}}"
+    min="{{tool.processVal(r.min, 0)}}"
+    max="{{tool.processVal(r.max, 100)}}"
+    step="{{tool.processVal(r.step, 1)}}"
+    disabled="{{r.disabled}}"
+    value="{{tool.processVal(r.value, 0)}}"
+    color="{{tool.processVal(r.color, '#e9e9e9')}}"
+    active-color="{{tool.processVal(r['active-color'], '#108ee9')}}"
+    background-color="{{tool.processVal(r['background-color'], '#ddd')}}"
+    block-size="{{tool.processVal(r['block-size'], 28)}}"
+    block-color="{{tool.processVal(r['block-color'], '#ffffff')}}"
+    show-value="{{r['show-value']}}"
+  >
+  </slider>
+</template>
+
+<template name="picker-view">
+  <picker-view
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onChange="onPickerViewChange"
+    onPickStart="onPickerViewPickstart"
+    onPickEnd="onPickerViewPickend"
+
+    indicator-style="{{tool.processVal(r['indicator-style'], '')}}"
+    indicator-class="{{tool.processVal(r['indicator-class'], '')}}"
+    mask-style="{{tool.processVal(r['mask-style'], '')}}"
+    mask-class="{{tool.processVal(r['mask-class'], '')}}"
+    value="{{tool.processVal(r.value, [])}}"
+  >
+    <picker-view-column
+      a:for="{{r.children}}"
+      a:key="nodeId"
+      a:if="{{item.nodeType !== 'h-comment'}}"
+      style="{{item.style}}"
+      class="{{item.class}}"
+      hidden="{{item.hidden}}"
+      id="{{item.id}}"
+      data-private-node-id="{{item.nodeId}}"
+
+      onTouchStart="onTouchStart"
+      onTouchMove="onTouchMove"
+      onTouchEnd="onTouchEnd"
+      onTouchCancel="onTouchCancel"
+      onTap="onTap"
+    >
+      <view a:for="{{item.children}}" a:for-item="pickerColumnItem">
+        <block a:if="{{pickerColumnItem.nodeId}}">
+          <template is="{{pickerColumnItem.nodeType}}" data="{{r: pickerColumnItem}}" />
+        </block>
+        <block a:else>
+          <block>{{pickerColumnItem.content}}</block>
+        </block>
+      </view>
+    </picker-view-column>
+  </picker-view>
+</template>
+
+<template name="picker">
+  <picker
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onTap="onTap"
+
+    onChange="onPickerChange"
+    onCancel="onPickerCancel"
+
+    name="{{r.name}}"
+    disabled="{{r.disabled}}"
+    range="{{tool.processVal(r.range, [])}}"
+    range-key="{{tool.processVal(r['range-key'], '')}}"
+    value="{{r.value}}"
+  >
+    <view><template is="children" data="{{r: r.children}}" /></view>
+  </picker>
+</template>
+
+<template name="navigator">
+  <navigator
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onTap="onTap"
+
+    onSuccess="onNavigatorSuccess"
+    onFail="onNavigatorFail"
+    onComplete="onNavigatorComplete"
+
+    url="{{tool.processVal(r.url, '')}}"
+    open-type="{{tool.processVal(r['open-type'], 'navigate')}}"
+    hover-class="{{tool.processVal(r['hover-class'], 'none')}}"
+    hover-stop-propagation="{{r['hover-stop-propagation']}}"
+    hover-start-time="{{tool.processVal(r['hover-start-time'], 50)}}"
+    hover-stay-time="{{tool.processVal(r['hover-stay-time'], 600)}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </navigator>
+</template>
+
+<template name="image">
+  <image
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onTap="onTap"
+
+    onLoad="onImageLoad"
+    onError="onImageError"
+
+    rendering-mode="{{r['rendering-mode']}}"
+    src="{{r.src}}"
+    mode="{{r.mode || 'scaleToFill'}}"
+    lazy-load="{{r['lazy-load']}}"
+    default-source="{{r['default-source']}}"
+  >
+  </image>
+</template>
+
+<template name="video">
+  <video
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onTap="onTap"
+
+    onPlay="onVideoPlay"
+    onPause="onVideoPause"
+    onEnded="onVideoEnded"
+    onTimeUpdate="onVideoTimeUpdate"
+    onFullScreenChange="onVideoFullScreenChange"
+    onWaiting="onVideoWaiting"
+    onError="onVideoError"
+    onProgress="onVideoProgress"
+
+    src="{{r.src}}"
+    duration="{{tool.processVal(r.duration, 0)}}"
+    controls="{{r.controls}}"
+    autoplay="{{r.autoplay}}"
+    loop="{{r.loop}}"
+    muted="{{r.muted}}"
+    initial-time="{{tool.processVal(r['initial-time'], 0)}}"
+    direction="{{tool.processVal(r.direction, -1)}}"
+    show-progress="{{tool.processVal(r['show-progress'], true)}}"
+    show-fullscreen-btn="{{tool.processVal(r['show-fullscreen-btn'], true)}}"
+    show-play-btn="{{tool.processVal(r['show-play-btn'], true)}}"
+    show-center-play-btn="{{tool.processVal(r['show-center-play-btn'], true)}}"
+    enable-progress-gesture="{{tool.processVal(r['enable-progress-gesture'], true)}}"
+    object-fit="{{tool.processVal(r['object-fit'], 'contain')}}"
+    poster="{{r.poster}}"
+    show-mute-btn="{{r['show-mute-btn']}}"
+    title="{{tool.processVal(r.title, '')}}"
+    play-btn-position="{{tool.processVal(r['play-btn-position'], 'bottom')}}"
+    enable-play-gesture="{{r['enable-play-gesture']}}"
+    auto-pause-if-navigate="{{tool.processVal(r['auto-pause-if-navigate'], true)}}"
+    auto-pause-if-open-native="{{tool.processVal(r['auto-pause-if-open-native'], true)}}"
+    vslide-gesture="{{r['vslide-gesture']}}"
+    vslide-gesture-in-fullscreen="{{tool.processVal(r['vslide-gesture-in-fullscreen'], true)}}"
+    enableNative="{{r.enableNative}}"
+    playsinline="{{r.playsinline}}"
+    rawControls="{{r.rawControls}}"
+    extraInfo="{{r.extraInfo}}"
+  >
+  </video>
+</template>
+
+<template name="map">
+  <map
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onTap="onTap"
+
+    onMarkerTap="onMapMarkerTap"
+    onControlTap="onMapControlTap"
+    onCalloutTap="onMapCalloutTap"
+    onUpdated="onMapUpdated"
+    onRegionChange="onMapRegionChange"
+    onPanelTap="onMapPanelTap"
+
+    longitude="{{tool.processVal(r.longitude, 39.92)}}"
+    latitude="{{tool.processVal(r.latitude, 116.46)}}"
+    scale="{{tool.processVal(r.scale, 16)}}"
+    markers="{{tool.processVal(r.markers, [])}}"
+    polyline="{{tool.processVal(r.polyline, [])}}"
+    circles="{{tool.processVal(r.circles, [])}}"
+    controls="{{tool.processVal(r.controls, [])}}"
+    include-points="{{tool.processVal(r['include-points'], [])}}"
+    show-location="{{r['show-location']}}"
+    polygons="{{tool.processVal(r.polygons, [])}}"
+    subkey="{{tool.processVal(r.subkey, '')}}"
+    layer-style="{{tool.processVal(r['layer-style'], 1)}}"
+    rotate="{{tool.processVal(r.rotate, 0)}}"
+    skew="{{tool.processVal(r.skew, 0)}}"
+    enable-3D="{{r['enable-3D']}}"
+    show-compass="{{r['show-compass']}}"
+    enable-overlooking="{{r['enable-overlooking']}}"
+    enable-zoom="{{r['enable-zoom']}}"
+    enable-scroll="{{r['enable-scroll']}}"
+    enable-rotate="{{r['enable-rotate']}}"
+    enable-satellite="{{r['enable-satellite']}}"
+    enable-traffic="{{r['enable-traffic']}}"
+  >
+    <template is="children" data="{{r: r.children}}" />
+  </map>
+</template>
+
+<template name="canvas">
+  <canvas
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onTap="onTap"
+
+    onLongTap="onCanvasLongTap"
+    onError="onCanvasError"
+
+    id="{{r['canvas-id']}}"
+    disable-scroll="{{r['disable-scroll']}}"
+    width="{{r['width']}}"
+    height="{{r['height']}}"
+  >
+  </canvas>
+</template>
+
+<template name="web-view">
+  <web-view
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onTap="onTap"
+
+    onMessage="onWebviewMessage"
+    onLoad="onWebviewLoad"
+    onError="onWebviewError"
+
+    src="{{r.src}}"
+  >
+  </web-view>
+</template>
+
+<template name="open-avatar">
+  <open-avatar
+    style="{{r.style}}"
+    class="{{r.class}}"
+    hidden="{{r.hidden}}"
+    id="{{r.id}}"
+    data-private-node-id="{{r.nodeId}}"
+
+    onTouchStart="onTouchStart"
+    onTouchMove="onTouchMove"
+    onTouchEnd="onTouchEnd"
+    onTouchCancel="onTouchCancel"
+    onTap="onTap"
+
+    userId="{{r.userId}}"
+    openId="{{r.openId}}"
+    nickName="{{r.nickName}}"
+    avatar="{{r.avatar}}"
+    size="{{tool.processVal(r.size, 'normal')}}"
+  >
+  </open-avatar>
+</template>
+
+<template name="lottie">
+  <lottie
+    style="{{r.style}}"
+    class="{{r.class}}"
+    id="{{r.id}}"
+
+    autoplay="{{tool.processVal(r.autoplay, false)}}"
+    path="{{r.path}}"
+    speed="{{tool.processVal(r.speed, 1.0)}}"
+    repeatCount="{{tool.processVal(r.repeatCount, 0)}}"
+    autoReverse="{{tool.processVal(r.autoReverse, false)}}"
+    assetsPath="{{r.assetsPath}}"
+    placeholder="{{r.placeholder}}"
+    djangoId="{{r.djangoId}}"
+    md5="{{r.md5}}"
+    optimize="{{tool.processVal(r.optimize, false)}}"
+  >
+  </lottie>
+</template>
+
+<template name="live-player">
+  <live-player
+    src="{{r.src}}"
+    mode="{{tool.processVal(r.mode, 'live')}}"
+    autoplay="{{tool.processVal(r.autoplay, false)}}"
+    muted="{{tool.processVal(r.muted, false)}}"
+    orientation="{{tool.processVal(r.orientation, 'vertical')}}"
+    object-fit="{{tool.processVal(r['object-fit'], 'contain')}}"
+    min-cache="{{tool.processVal(r['min-cache'], 1)}}"
+    max-cache="{{tool.processVal(r['max-cache'], 3)}}"
+    floating-mode="{{tool.processVal(r['floating-mode'], 'none')}}"
+
+    onStateChange="onLivePlayerStateChange"
+    onError="onLivePlayerError"
+    onFullScreenChange="onLivePlayerFullScreenChange"
+    onUserAction="onLiverPlayerUserAction"
+  >
+  </live-player>
+</template>
+
+<template name="live-pusher">
+  <live-pusher
+    url="{{r.url}}"
+    mode="{{tool.processVal(r.mode, 'SD')}}"
+    muted="{{tool.processVal(r.muted, false)}}"
+    autoFocus="{{tool.processVal(r.autoFocus, true)}}"
+    orientation="{{tool.processVal(r.orientation, 'vertical')}}"
+    autopush="{{tool.processVal(r.autopush, true)}}"
+    beauty="{{tool.processVal(r.beauty, 0)}}"
+    devicePosition="{{tool.processVal(r.devicePosition, 'front')}}"
+    backgroundMute="{{tool.processVal(r.backgroundMute, false)}}"
+    local-mirror="{{tool.processVal(r['local-mirror'], 'auto')}}"
+    remote-mirror="{{tool.processVal(r['remote-mirror'], false)}}"
+
+    onStateChange="onLivePusherStateChange"
+    onError="onLivePusherError"
+    onNetStatus="onLivePusherNetStatus"
+  >
+  </live-pusher>
+</template>
+
+
