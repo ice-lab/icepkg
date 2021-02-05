@@ -144,18 +144,16 @@ module.exports = ({
               poll: undefined,
             },
             (err, stats) => {
+              // if copy task has finished, build herbox directly
               if (stats.hasErrors()) {
                 console.log(stats.toString('minimal').errors.join('\n'));
+              } else if (fse.existsSync(path.resolve(runtimeTargetDir, 'root.axml'))) {
+                applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
               } else {
-                // if copy task has finished, build herbox directly
-                if (fse.existsSync(path.resolve(runtimeTargetDir, 'root.axml'))) {
+                copyRuntimeMiniappFiles(runtimeTargetDir, () => {
+                  // source: build-plugin-miniapp-preview, for building herbox
                   applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
-                } else {
-                  copyRuntimeMiniappFiles(runtimeTargetDir, () => {
-                    // source: build-plugin-miniapp-preview, for building herbox
-                    applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
-                  });
-                }
+                });
               }
             },
           );
