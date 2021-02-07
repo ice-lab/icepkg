@@ -145,10 +145,10 @@ module.exports = ({
               poll: undefined,
             },
             (err, stats) => {
-              // if copy task has finished, build herbox directly
               if (stats.hasErrors()) {
-                console.log(stats.toString('minimal').errors.join('\n'));
+                console.log(stats.toString('minimal'));
               } else if (fse.existsSync(path.resolve(runtimeTargetDir, 'root.axml'))) {
+                // if copy task has finished, build herbox directly
                 applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
               } else {
                 copyRuntimeMiniappFiles(runtimeTargetDir, () => {
