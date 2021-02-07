@@ -56,6 +56,7 @@ module.exports = ({
   const isRuntimeMiniapp = miniapp && miniapp.buildType === RUNTIME && targets.includes(MINIAPP);
   const runtimeTargetDir = path.resolve(rootDir, 'build/ali-miniapp');
 
+
   // compatible with rax-seed
   modifyUserConfig('watchDist', !!watchDist);
   // register user config
