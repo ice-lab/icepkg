@@ -7,21 +7,25 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no"
     />
     <title>RAX Component Portal</title>
+    <link rel="stylesheet" href="https://g.alicdn.com/code/lib/normalize/8.0.1/normalize.min.css" />
     <link
       rel="stylesheet"
-      href="https://g.alicdn.com/code/lib/normalize/8.0.1/normalize.min.css"
+      href="//g.alicdn.com/fusion-platform/material-center-static/0.4.1/pages/prism-theme-css/index.bundle.css"
     />
-    <link rel="stylesheet" href="//g.alicdn.com/fusion-platform/material-center-static/0.4.1/pages/prism-theme-css/index.bundle.css">
-    <link rel="stylesheet" href="//g.alicdn.com/fusion-platform/material-center-static/0.4.1/pages/demo-static-css/index.bundle.css">
+    <link
+      rel="stylesheet"
+      href="//g.alicdn.com/fusion-platform/material-center-static/0.4.1/pages/demo-static-css/index.bundle.css"
+    />
+    <script src="https://g.alipay.com/jr-qrcode@1.1.4/dist/jr-qrcode.js"></script>
     <style>
-      pre[class*=language-]{
+      pre[class*='language-'] {
         padding: 24px;
       }
-      .markdown code:not([class*=language-]) {
+      .markdown code:not([class*='language-']) {
         border: none;
         padding: 2px 4px;
       }
-      .markdown pre code:not([class*=language-]) {
+      .markdown pre code:not([class*='language-']) {
         background: none;
         padding: 0;
       }
@@ -29,16 +33,17 @@
       .markdown .highlight pre {
         margin-top: 0;
         margin-bottom: 0;
-        word-break: normal
+        word-break: normal;
       }
 
-      .markdown .highlight pre, .markdown pre {
+      .markdown .highlight pre,
+      .markdown pre {
         background-color: #f6f8fa;
         border-radius: 3px;
         font-size: 85%;
         line-height: 1.45;
         overflow: auto;
-        padding: 16px
+        padding: 16px;
       }
 
       .code-box {
@@ -62,14 +67,13 @@
       .main-container {
         flex: 1;
       }
-      .main-container h1{
+      .main-container h1 {
         margin-top: 0;
       }
 
       .device-view {
         border-radius: 32px;
-        box-shadow: 0 0 0 14px #090a0d, 0 0 0 17px #9fa3a8,
-          0 0 34px 17px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 0 14px #090a0d, 0 0 0 17px #9fa3a8, 0 0 34px 17px rgba(0, 0, 0, 0.2);
         height: 543px;
         margin: 50px;
         width: 320;
@@ -95,7 +99,7 @@
         background-color: rgba(0, 0, 0, 0.5);
         border-radius: 2px;
         bottom: 6px;
-        content: "";
+        content: '';
         display: block;
         height: 4px;
         left: 50%;
@@ -160,7 +164,7 @@
         transition: all 0.5s ease;
       }
 
-      .demo-item:hover{
+      .demo-item:hover {
         box-shadow: 0 0 4px #3b9aff;
       }
 
@@ -202,7 +206,7 @@
         text-transform: capitalize;
         -webkit-transition: all 0.4s ease;
         transition: all 0.4s ease;
-        line-height:  2;
+        line-height: 2;
       }
 
       .demo-box-title a {
@@ -227,11 +231,17 @@
         width: 16px;
         height: 16px;
         margin-left: 8px;
-        background-size: cover;
-        background-position: 0 0;
+        padding: 4px;
         background-repeat: no-repeat;
+        background-size: 70%;
+        background-position: center;
         cursor: pointer;
         line-height: 1;
+        transition: all 0.25s;
+      }
+
+      .demo-item .icon:hover {
+        background-color: rgba(59, 154, 255, 0.2);
       }
 
       .demo-item .icon.disabled {
@@ -239,19 +249,19 @@
       }
 
       .demo-item .web {
-        background-image: url("https://img.alicdn.com/tfs/TB1ZLmBci_1gK0jSZFqXXcpaXXa-200-200.png");
+        background-image: url('https://img.alicdn.com/tfs/TB1ZLmBci_1gK0jSZFqXXcpaXXa-200-200.png');
       }
 
       .demo-item .weex {
-        background-image: url("https://img.alicdn.com/tfs/TB1aK9Bchn1gK0jSZKPXXXvUXXa-200-200.png");
+        background-image: url('https://img.alicdn.com/tfs/TB1aK9Bchn1gK0jSZKPXXXvUXXa-200-200.png');
       }
 
       .demo-item .miniapp {
-        background-image: url("https://img.alicdn.com/tfs/TB1NBuBcoT1gK0jSZFrXXcNCXXa-200-200.png");
+        background-image: url('https://img.alicdn.com/tfs/TB1NBuBcoT1gK0jSZFrXXcNCXXa-200-200.png');
       }
 
       .demo-item .fullscreen {
-        background-image: url("https://gw.alipayobjects.com/zos/rmsportal/OpROPHYqWmrMDBFMZtKF.svg");
+        background-image: url('https://gw.alipayobjects.com/zos/rmsportal/OpROPHYqWmrMDBFMZtKF.svg');
       }
 
       .demo-item .highlight-wrapper {
@@ -272,5 +282,5 @@
       }
     </style>
   </head>
-  <body style="padding: 0;margin: 0"></body>
+  <body style="padding: 0; margin: 0"></body>
 </html>
