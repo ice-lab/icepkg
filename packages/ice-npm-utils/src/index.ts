@@ -25,7 +25,7 @@ function getNpmTarball(npm: string, version?: string, registry?: string): Promis
       return json.versions[version].dist.tarball;
     }
 
-    return Promise.reject(new Error(`${npm}@${version} 尚未发布`));
+    return Promise.reject(new Error(`没有在 ${registry} 源上找到 ${npm}@${version} 包`));
   });
 }
 
