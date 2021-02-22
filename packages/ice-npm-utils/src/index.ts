@@ -263,6 +263,7 @@ export {
   getNpmRegistry,
   getUnpkgHost,
   getNpmClient,
+  getVersions,
   isAliNpm,
   getNpmInfo,
   checkAliInternal,
