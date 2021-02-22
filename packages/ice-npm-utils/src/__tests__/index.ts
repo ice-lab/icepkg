@@ -7,6 +7,7 @@ import {
   getNpmRegistry,
   getUnpkgHost,
   getNpmLatestSemverVersion,
+  getSatisfiesVersions,
   getLatestVersion,
   getNpmInfo,
   getNpmClient,
@@ -66,6 +67,13 @@ test('getNpmLatestSemverVersion', () => {
   // 找一个非常稳定的包
   return getNpmLatestSemverVersion('co', '3.0.0').then((version) => {
     expect(version).toBe('3.1.0');
+  });
+});
+
+test('getSatisfiesVersions', () => {
+  // 找一个非常稳定的包
+  return getSatisfiesVersions('co', '<= 1.1').then((versions) => {
+    expect(versions).toEqual(['1.1.0', '1.0.0']);
   });
 });
 
