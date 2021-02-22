@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.0
+- [feat] add `getVersions` and `getSatisfiesVersions` method
+
 ## 1.4.1
 
 - [chore] remove cacheData for server use
