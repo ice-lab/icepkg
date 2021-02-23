@@ -109,7 +109,7 @@ module.exports = (
       });
     }
 
-    onGetWebpackConfig(taskName, config => {
+    onGetWebpackConfig(taskName, (config) => {
       baseConfig(config, params);
       if (command === 'start') {
         // component dev
@@ -133,12 +133,12 @@ module.exports = (
     hasMain = true;
   }
   // pack the right entry files to dist
-  if (extNames && library && command === 'build') {
+  if (extNames && library && (command === 'build' || commandArgs.watchDist)) {
     registerTask('component-dist', getUMDWebpack({ context, compileOptions, extNames, hasMain }));
   }
 
   // register cli options
-  const cliOptions = ['watch', 'skip-demo'];
+  const cliOptions = ['watch', 'skip-demo', 'watch-dist'];
   registerCliOption(cliOptions.map((name) => ({
     name,
     commands: ['start', 'build'],

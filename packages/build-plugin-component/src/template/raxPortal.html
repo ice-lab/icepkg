@@ -14,9 +14,16 @@
     <link rel="stylesheet" href="//g.alicdn.com/fusion-platform/material-center-static/0.4.1/pages/prism-theme-css/index.bundle.css">
     <link rel="stylesheet" href="//g.alicdn.com/fusion-platform/material-center-static/0.4.1/pages/demo-static-css/index.bundle.css">
     <style>
+      pre[class*=language-]{
+        padding: 24px;
+      }
       .markdown code:not([class*=language-]) {
         border: none;
+        padding: 2px 4px;
+      }
+      .markdown pre code:not([class*=language-]) {
         background: none;
+        padding: 0;
       }
 
       .markdown .highlight pre {
@@ -49,11 +56,14 @@
         flex-direction: row;
         justify-content: flex-start;
         align-items: flex-start;
-        padding: 24px;
+        padding: 56px;
       }
 
       .main-container {
         flex: 1;
+      }
+      .main-container h1{
+        margin-top: 0;
       }
 
       .device-view {
@@ -150,14 +160,14 @@
         transition: all 0.5s ease;
       }
 
-      .demo-item:hover,
-      .demo-item.active {
-        box-shadow: 0 0 4px rgba(16, 142, 233, 0.5);
+      .demo-item:hover{
+        box-shadow: 0 0 4px #3b9aff;
       }
 
       .demo-item.active {
-        border: 1px solid rgba(16, 142, 233, 0.7);
+        border: 1px solid #3b9aff;
       }
+
       .demo-item:hover {
         position: relative;
         z-index: 10;
@@ -166,7 +176,7 @@
 
       .demo-box-meta {
         position: relative;
-        padding: 12px 16px;
+        padding: 0 24px;
         border-radius: 6px 6px 0 0;
         -webkit-transition: background-color 0.4s ease;
         transition: background-color 0.4s ease;
@@ -192,7 +202,7 @@
         text-transform: capitalize;
         -webkit-transition: all 0.4s ease;
         transition: all 0.4s ease;
-        margin-bottom: 8px;
+        line-height:  2;
       }
 
       .demo-box-title a {
@@ -258,7 +268,7 @@
 
       .demo-body {
         margin-top: -20px;
-        padding: 10px 30px 30px 10px;
+        padding: 8px 24px 12px 24px;
       }
     </style>
   </head>

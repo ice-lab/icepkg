@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.4
+
+- [feat] 支持 react 组件 watchDist ([#120](https://github.com/ice-lab/iceworks-cli/issues/120))
+- [feat] 支持小程序跨端使用不同的后缀的类型文件
+- [feat] 支持 css module
+- [fix] 修复 rax 组件 demo 使用 rax-portal 报错 ([#110](https://github.com/ice-lab/iceworks-cli/issues/110))
+- [fix] 修复 yaml 升级 v4 导致 api 变更 ([#116](https://github.com/ice-lab/iceworks-cli/issues/116))
+
+## 1.3.0
+
+- [feat] 支持小程序预览 ([#66](https://github.com/ice-lab/iceworks-cli/issues/66), [#53](https://github.com/ice-lab/iceworks-cli/issues/53))
+- [feat] 修改 demo 样式
+- [fix] 修复 inlineStyle 为 false 下，同步到 Fusion 物料样式失效
 ## 0.2.22
 
 - [fix] fix invalid homepage
