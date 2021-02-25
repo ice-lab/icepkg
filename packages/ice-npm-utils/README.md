@@ -32,6 +32,14 @@ Return `Promise.resolve(version)`
 
 Return `Promise.resolve(version)`
 
+### getVersions(npmName)
+
+Return `Promise.resolve(versions)`
+
+### getSatisfiesVersions(npmName, semverRange)
+
+Return `Promise.resolve(versions)`
+
 ### getNpmInfo(npmName)
 
 Return `Promise.resolve(response.data)`

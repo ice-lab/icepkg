@@ -7,5 +7,5 @@ const markdownContent = `{{{markdownContent}}}`;
 if (Component) {
   const matchCSS = markdownContent.match(/<style>([\s\S]*?)<\/style>/);
   const cssContent = matchCSS ? {__html: matchCSS[1] || ''} : '';
-  render(cssContent ? <><style dangerouslySetInnerHTML={cssContent} /><Component /></> : <Component />, document.body, { driver: DriverUniversal, hydrate: true });
+  render(cssContent ? <><style dangerouslySetInnerHTML={cssContent} /><Component /></> : <Component />, document.body, { driver: DriverUniversal });
 }

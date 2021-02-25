@@ -25,7 +25,7 @@ function getNpmTarball(npm: string, version?: string, registry?: string): Promis
       return json.versions[version].dist.tarball;
     }
 
-    return Promise.reject(new Error(`${name}@${version} 尚未发布`));
+    return Promise.reject(new Error(`${npm}@${version} 尚未发布`));
   });
 }
 
@@ -131,6 +131,19 @@ function getVersions(npm: string, registry?: string): Promise<string[]> {
   return getNpmInfo(npm, registry).then((body: any) => {
     const versions = Object.keys(body.versions);
     return versions;
+  });
+}
+
+/**
+ * 根据指定范围（比如：1.x，< 5.x），获取符合的所有版本号
+ */
+function getSatisfiesVersions(npm: string, range: string, registry?: string) {
+  return getVersions(npm, registry).then((versions) => {
+    return versions
+      .filter((version) => semver.satisfies(version, range))
+      .sort((a, b) => {
+        return semver.gt(b, a);
+      });
   });
 }
 
@@ -263,6 +276,8 @@ export {
   getNpmRegistry,
   getUnpkgHost,
   getNpmClient,
+  getVersions,
+  getSatisfiesVersions,
   isAliNpm,
   getNpmInfo,
   checkAliInternal,
