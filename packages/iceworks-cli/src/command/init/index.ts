@@ -99,10 +99,13 @@ async function selectTemplate(type: string): Promise<string> {
     }, {
       npmName: '@icedesign/template-rax',
       description: 'Rax + TypeScript',
+    }, {
+      npmName: '@icedesign/template-icestark-module',
+      description: 'Icestark Module + React + TypeScript',
     }],
   };
   const templates = typeToTemplates[type];
-  const defaultTemplate = templates.find(item => item.default === true);
+  const defaultTemplate = templates.find((item) => item.default === true);
 
   return inquirer
     .prompt({
@@ -110,7 +113,7 @@ async function selectTemplate(type: string): Promise<string> {
       name: 'template',
       message: 'Please select a template',
       default: defaultTemplate,
-      choices: templates.map(item => {
+      choices: templates.map((item) => {
         return {
           name: item.description,
           value: item.npmName,
