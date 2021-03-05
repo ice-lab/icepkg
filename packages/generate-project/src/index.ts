@@ -55,16 +55,13 @@ export async function downloadAndGenerateProject(
     (state) => {
       spinner.text = `download npm tarball progress: ${Math.floor(state.percent * 100)}%`;
     },
-    formatFilename,
   );
   spinner.succeed('download npm tarball successfully.');
 
-  await ejsRenderDir(projectDir, ejsOptions);
-
   try {
-    await formatProject(projectDir, projectName);
+    await formatScaffoldToProject(projectDir, projectName, ejsOptions);
   } catch (err) {
-    console.warn('formatProject error', err.message);
+    console.warn('format scaffold to project error', err.message);
   }
 }
 
