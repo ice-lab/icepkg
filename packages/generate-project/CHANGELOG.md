@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.2.2
+
+- add `formatScaffoldToProject` method, which formats filename and formats to project
+
 ## 1.2.1
 
 - add `pha` ejs option
