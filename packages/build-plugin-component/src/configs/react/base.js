@@ -24,7 +24,7 @@ module.exports = (config, { pkg, rootDir, entry }) => {
     .add(path.join(rootDir, 'node_modules'))
     .add(path.resolve(__dirname, '../../node_modules'));
 
-  ['jsx', 'tsx'].forEach(rule => {
+  ['jsx', 'tsx'].forEach((rule) => {
     config.module
       .rule(rule)
       .exclude.clear()
@@ -54,10 +54,10 @@ module.exports = (config, { pkg, rootDir, entry }) => {
     .use('demo')
     .loader(require.resolve('../../webpackLoader/reactDemoLoader'));
   // add packagename to webpack alias
-  ['.js', '.jsx', '.json', '.html', '.ts', '.tsx'].forEach(extension => {
+  ['.js', '.jsx', '.json', '.html', '.ts', '.tsx'].forEach((extension) => {
     config.resolve.extensions.add(extension);
   });
-  config.resolve.alias.set(pkg.name, path.resolve(rootDir, 'src/index'));
+  config.resolve.alias.set(`${pkg.name}$`, path.resolve(rootDir, 'src/index'));
 
   config.module.rule('jsx').test(/\.jsx?$|\.md$/); // Issue: https://github.com/webpack/webpack/issues/4411
   config.output.filename('[name].js');
