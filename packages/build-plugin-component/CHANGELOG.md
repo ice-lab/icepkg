@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0
+
+- [feat] 支持开发时构建 Kraken 产物 ([#142](https://github.com/ice-lab/iceworks-cli/issues/142))
+- [feat] 升级 makedown parser 至 2.x ([#136](https://github.com/ice-lab/iceworks-cli/issues/136))
+- [fix] pkg.name alias 精确匹配 ([#145](https://github.com/ice-lab/iceworks-cli/issues/145))
+
 ## 1.3.4
 
 - [feat] 支持 react 组件 watchDist ([#120](https://github.com/ice-lab/iceworks-cli/issues/120))
