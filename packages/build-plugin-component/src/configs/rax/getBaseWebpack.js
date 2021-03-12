@@ -127,7 +127,7 @@ module.exports = (context, options) => {
   }
 
   if (pkg.name) {
-    config.resolve.alias.set(pkg.name, path.resolve(rootDir, 'src/index'));
+    config.resolve.alias.set(`${pkg.name}$`, path.resolve(rootDir, 'src/index'));
   }
   config
     .plugin('ProgressPlugin')
