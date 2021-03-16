@@ -14,5 +14,5 @@ export default async function formatScaffoldToProject(projectDir: string, projec
   // render ejs template
   await ejsRenderDir(projectDir, ejsOptions);
   // format project
-  await formatProject(projectDir, projectName);
+  await formatProject(projectDir, projectName, ejsOptions);
 }
