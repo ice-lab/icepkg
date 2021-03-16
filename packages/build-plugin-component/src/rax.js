@@ -3,7 +3,7 @@ const fse = require('fs-extra');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const getJestConfig = require('rax-jest-config');
-const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE, RUNTIME } = require('./constants');
+const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE } = require('./constants');
 const getMiniappConfig = require('./configs/rax/miniapp/getBase');
 const getMiniappRuntimeConfig = require('./configs/rax/getRuntimeMiniappConfig');
 const getBaseWebpack = require('./configs/rax/getBaseWebpack');
@@ -64,7 +64,6 @@ module.exports = ({
   registerMethod('pluginComponentGetMiniappRuntimeConfig', getMiniappRuntimeConfig);
   registerMethod('pluginComponentSetPortalModules', setModulesInfo);
   setValue('pluginComponentDir', __dirname);
-  setValue('pluginComponentIsRuntimeMiniapp', isRuntimeMiniapp);
 
   let entries = {};
   let serverBundles = {};
