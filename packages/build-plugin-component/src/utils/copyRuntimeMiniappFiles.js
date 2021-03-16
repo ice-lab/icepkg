@@ -1,7 +1,7 @@
 const fse = require('fs-extra');
 const path = require('path');
 
-module.exports = function (targetDir, callback) {
+module.exports = function (targetDir) {
   fse.ensureDirSync(targetDir);
   fse.copy(
     path.resolve(__dirname, '../template/miniapp/ali-miniapp-runtime/'),
@@ -11,11 +11,6 @@ module.exports = function (targetDir, callback) {
         // filter out invalid demo dir
         return !/pages\/Demo/.test(filepath);
       },
-    },
-    () => {
-      if (callback) {
-        callback();
-      }
     },
   );
 };

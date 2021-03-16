@@ -1,8 +1,9 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const getBaseWebpack = require('./getBaseWebpack');
-const runtimeFunctionWrapperPlugin = require('../../webpackPlugins/runtimeFunctionWrapperPlugin');
+const runtimeFunctionWrapperPlugin = require('../../webpackPlugins/runtime/RuntimeFunctionWrapperPlugin');
 const setCSSRule = require('../../utils/setCSSRule');
+const copyRuntimeMiniappFiles = require('../../utils/copyRuntimeMiniappFiles');
 
 module.exports = (context, options) => {
   const config = getBaseWebpack(
@@ -16,9 +17,14 @@ module.exports = (context, options) => {
   const { entryName = 'index', targetDir = path.resolve(rootDir, 'build/ali-miniapp') } = options;
   const entryPath = path.resolve(rootDir, 'node_modules/.runtime-preview-entry/index.jsx');
 
+  // copy unchanged miniapp files to target dir
+  copyRuntimeMiniappFiles(targetDir);
+
   config.entry(entryName).add(entryPath);
 
-  config.mode('production');
+  // `inline` mode insert hot-reload script into bundle
+  config.devServer
+    .inline(false);
 
   config.externals([
     function (ctx, request, callback) {
@@ -32,12 +38,13 @@ module.exports = (context, options) => {
       callback();
     },
   ]);
-  // 输出到 dist 目录
 
   config.output.path(targetDir);
   config.output.filename('bundle.js');
 
-  setCSSRule(config, options.inlineStyle);
+  // as for runtime miniapp, `inlineStyle` is always `false`
+  // for other files depend on `bundle.css.acss`
+  setCSSRule(config, false);
 
   config.plugin('minicss').use(MiniCssExtractPlugin, [
     {

@@ -12,7 +12,6 @@ const getUMDConfig = require('./configs/rax/getUMDConfig');
 const getES6Config = require('./configs/rax/getES6Config');
 const generateRaxEntry = require('./utils/generateRaxEntry');
 const generateRuntimeDemoEntry = require('./utils/generateRuntimeDemoEntry');
-const copyRuntimeMiniappFiles = require('./utils/copyRuntimeMiniappFiles');
 const getDemoDir = require('./utils/getDemoDir');
 const getDemos = require('./utils/getDemos');
 const { markdownParser } = require('./utils/markdownHelper');
@@ -26,12 +25,10 @@ const getDemoConfig = require('./configs/rax/getDemoConfig');
 const getReadme = require('./utils/getReadme');
 const generateRaxDemo = require('./utils/generateRaxDemo');
 const { setModulesInfo } = require('./utils/getPortalModules');
-const webpack = require('webpack');
 
 module.exports = ({
   registerTask,
   registerUserConfig,
-  applyMethod,
   context,
   onHook,
   registerCliOption,
@@ -46,16 +43,14 @@ module.exports = ({
   const { plugins, targets, disableUMD, inlineStyle = true, miniapp, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
     console.error(
-      chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'),
+      chalk.red('build-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'),
     );
     console.log();
     process.exit(1);
   }
   const { skipDemo } = commandArgs;
   const watchDist = commandArgs.watchDist || userConfig.watchDist;
-  const isRuntimeMiniapp = miniapp && miniapp.buildType === RUNTIME && targets.includes(MINIAPP);
-  const runtimeTargetDir = path.resolve(rootDir, 'build/ali-miniapp');
-
+  const isRuntimeMiniapp = targets.includes(MINIAPP) && miniapp && miniapp.buildType === 'runtime';
 
   // compatible with rax-seed
   modifyUserConfig('watchDist', !!watchDist);
@@ -67,7 +62,6 @@ module.exports = ({
   registerMethod('pluginComponentGetDemos', getDemos);
   registerMethod('pluginComponentGetReadme', getReadme);
   registerMethod('pluginComponentGetMiniappRuntimeConfig', getMiniappRuntimeConfig);
-  registerMethod('pluginComponentCopyRuntimeMiniappFiles', copyRuntimeMiniappFiles);
   registerMethod('pluginComponentSetPortalModules', setModulesInfo);
   setValue('pluginComponentDir', __dirname);
   setValue('pluginComponentIsRuntimeMiniapp', isRuntimeMiniapp);
@@ -110,7 +104,7 @@ module.exports = ({
       demoWatcher.on('all', () => {
         // re-generate entry files when demo changes
         raxBundles = getRaxBundles();
-        generateRuntimeDemoEntry(demos, rootDir);
+        isRuntimeMiniapp && generateRuntimeDemoEntry(demos, rootDir);
       });
       demoWatcher.on('error', (error) => {
         log.error('fail to watch demo', error);
@@ -134,30 +128,12 @@ module.exports = ({
         const defaultConfig = getBaseWebpack(context, options);
         configDev(defaultConfig, context, { ...options, entries, serverBundles });
         registerTask(`component-build-${target}`, defaultConfig);
-      } else if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
+      }
+
+      if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
         if (isRuntimeMiniapp && target === MINIAPP) {
           const runtimeMiniappConfig = getMiniappRuntimeConfig(context, options);
-          const compiler = webpack(runtimeMiniappConfig.toConfig());
-
-          compiler.watch(
-            {
-              aggregateTimeout: 300,
-              poll: undefined,
-            },
-            (err, stats) => {
-              if (stats.hasErrors()) {
-                console.log(stats.toString('minimal'));
-              } else if (fse.existsSync(path.resolve(runtimeTargetDir, 'root.axml'))) {
-                // if copy task has finished, build herbox directly
-                applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
-              } else {
-                copyRuntimeMiniappFiles(runtimeTargetDir, () => {
-                  // source: build-plugin-miniapp-preview, for building herbox
-                  applyMethod('pluginMiniappPreviewBuildHerbox', context, runtimeTargetDir);
-                });
-              }
-            },
-          );
+          registerTask('component-build-runtime-miniapp', runtimeMiniappConfig);
         } else {
           options[target] = options[target] || {};
           addMiniappTargetParam(target, options[target]);
@@ -184,16 +160,18 @@ module.exports = ({
         if (!disableUMD) {
           registerTask(`component-build-${target}-umd`, getUMDConfig(context, options));
         }
-      } else if (target === WEEX) {
+      }
+
+      if (target === WEEX) {
         const distConfig = getDistConfig(context, { ...options, inlineStyle: true, entryName: 'index-weex' });
         registerTask('component-build-weex', distConfig);
-      } else if (target === MINIAPP || target === WECHAT_MINIPROGRAM) {
-        if (!isRuntimeMiniapp) {
-          options[target] = options[target] || {};
-          addMiniappTargetParam(target, options[target]);
-          const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
-          registerTask(`component-build-${target}`, config);
-        }
+      }
+
+      if ((target === MINIAPP && !isRuntimeMiniapp) || target === WECHAT_MINIPROGRAM) {
+        options[target] = options[target] || {};
+        addMiniappTargetParam(target, options[target]);
+        const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
+        registerTask(`component-build-${target}`, config);
       }
     });
     onHook('before.build.load', async () => {

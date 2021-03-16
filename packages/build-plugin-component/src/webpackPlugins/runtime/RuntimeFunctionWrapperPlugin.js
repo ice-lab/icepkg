@@ -1,10 +1,10 @@
 const fse = require('fs-extra');
 const path = require('path');
-const generateRuntimeMiniappPages = require('../utils/generateRuntimeMiniappPages');
-const generateAppJson = require('../utils/generateRuntimeAppJson');
-const { markdownParser } = require('../utils/markdownHelper');
-const getDemos = require('../utils/getDemos');
-const getDemoDir = require('../utils/getDemoDir');
+const generateRuntimeMiniappPages = require('../../utils/generateRuntimeMiniappPages');
+const generateAppJson = require('../../utils/generateRuntimeAppJson');
+const { markdownParser } = require('../../utils/markdownHelper');
+const getDemos = require('../../utils/getDemos');
+const getDemoDir = require('../../utils/getDemoDir');
 
 const prefix = `Function = function(){ return function() { return Symbol; } }; if (typeof
 Function.prototype.call === 'undefined') { Function.prototype.call = function
@@ -54,12 +54,21 @@ class BuildWrapper {
         }
 
         const bundleJS = compilation.assets['bundle.js'];
+        const bundleCss = compilation.assets['bundle.css.acss'];
 
         if (bundleJS) {
           const { existsAt, _cachedSource } = bundleJS;
 
           if (existsAt) {
             fse.outputFileSync(existsAt, `${prefix} ${_cachedSource} \n ${suffix}`);
+          }
+        }
+
+        // otherwise you need to write to disk explicitly
+        if (bundleCss) {
+          const { existsAt, _cachedSource } = bundleCss;
+          if (existsAt) {
+            fse.outputFileSync(existsAt, _cachedSource);
           }
         }
       });
