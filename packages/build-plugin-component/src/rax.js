@@ -3,7 +3,7 @@ const fse = require('fs-extra');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const getJestConfig = require('rax-jest-config');
-const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE } = require('./constants');
+const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE, KRAKEN } = require('./constants');
 const getMiniappConfig = require('./configs/rax/miniapp/getBase');
 const getMiniappRuntimeConfig = require('./configs/rax/getRuntimeMiniappConfig');
 const getBaseWebpack = require('./configs/rax/getBaseWebpack');
@@ -121,7 +121,7 @@ module.exports = ({
   if (command === 'start' && !watchDist) {
     targets.forEach((target) => {
       const options = { ...compileOptions, target, inlineStyle };
-      if ([WEB, WEEX, NODE].includes(target)) {
+      if ([WEB, WEEX, NODE, KRAKEN].includes(target)) {
         // eslint-disable-next-line
         const configDev = require(`./configs/rax/${target}/dev`);
         const defaultConfig = getBaseWebpack(context, options);

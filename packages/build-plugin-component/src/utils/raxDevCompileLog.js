@@ -72,6 +72,16 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
     });
   }
 
+  if (targets.includes('kraken')) {
+    console.log(chalk.green('[Kraken] Development server at:'));
+
+    Object.keys(entries).forEach((entry) => {
+      // Use Weex App to scan ip address (mobile phone can't visit localhost).
+      const krakenUrl = `${devUrl}kraken/${entry}.js`;
+      console.log('   ', chalk.underline.white(krakenUrl));
+    });
+  }
+
   Object.entries(platformMap).forEach(([platform, config]) => {
     if (targets.includes(platform)) {
       let outputPath = '';
