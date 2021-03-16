@@ -4,9 +4,8 @@ import ejsRenderDir from './ejsRenderDir';
 import * as readFiles from 'fs-readdir-recursive';
 import * as fse from 'fs-extra';
 import * as path from 'path';
-import { IEjsOptions } from './';
 
-export default async function formatScaffoldToProject(projectDir: string, projectName?: string, ejsOptions: IEjsOptions = {}) {
+export default async function formatScaffoldToProject(projectDir: string, projectName?: string, ejsOptions: any = {}) {
   // format filename
   const files = readFiles(projectDir);
   files.forEach((file) => {

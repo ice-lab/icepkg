@@ -2,9 +2,8 @@ import * as path from 'path';
 import * as fse from 'fs-extra';
 import { ALI_YUEQU_URL } from '@iceworks/constant';
 import { checkAliInternal } from 'ice-npm-utils';
-import { IEjsOptions } from './';
 
-export default async function formatProject(projectDir: string, projectName?: string, ejsOptions: IEjsOptions = {}): Promise<void> {
+export default async function formatProject(projectDir: string, projectName?: string, ejsOptions: any = {}): Promise<void> {
   await fse.remove(path.join(projectDir, 'build'));
 
   const { targets = [] } = ejsOptions;
@@ -139,8 +138,8 @@ export default async function formatProject(projectDir: string, projectName?: st
       fse.writeJSONSync(miniProjectJsonPath, {
         miniprogramRoot: 'build/miniapp',
         scripts: {
-          beforeUpload: 'npm run build'
-        }
+          beforeUpload: 'npm run build',
+        },
       }, { spaces: 2 });
     }
   }
