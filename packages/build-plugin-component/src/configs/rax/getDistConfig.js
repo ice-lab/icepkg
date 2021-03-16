@@ -1,5 +1,5 @@
 const path = require('path');
-// const nodeExternals = require('webpack-node-externals');
+const nodeExternals = require('webpack-node-externals');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const getBaseWebpack = require('./getBaseWebpack');
 const setCSSRule = require('../../utils/setCSSRule');
@@ -23,7 +23,7 @@ module.exports = (context, options) => {
       }
       callback();
     },
-    // nodeExternals(),
+    nodeExternals(),
   ]);
   // 输出到 dist 目录
   config.output.path(path.join(rootDir, 'dist'));
