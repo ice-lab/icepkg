@@ -1,5 +1,8 @@
 # `@iceworks/generate-project`
 
+## 1.2.3
+
+- add `mini.project.json` for ali (taobao) miniapp
 ## 1.2.2
 
 - add `formatScaffoldToProject` method, which formats filename and formats to project
