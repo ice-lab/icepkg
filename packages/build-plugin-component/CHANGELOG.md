@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.0
+
+- [feat] 支持 rax 运行时小程序预览 ([#121](https://github.com/ice-lab/iceworks-cli/issues/121))
 ## 1.4.0
 
 - [feat] 支持开发时构建 Kraken 产物 ([#142](https://github.com/ice-lab/iceworks-cli/issues/142))
