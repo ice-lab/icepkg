@@ -5,11 +5,13 @@ const chokidar = require('chokidar');
 const getJestConfig = require('rax-jest-config');
 const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE, KRAKEN } = require('./constants');
 const getMiniappConfig = require('./configs/rax/miniapp/getBase');
+const getMiniappRuntimeConfig = require('./configs/rax/getRuntimeMiniappConfig');
 const getBaseWebpack = require('./configs/rax/getBaseWebpack');
 const getDistConfig = require('./configs/rax/getDistConfig');
 const getUMDConfig = require('./configs/rax/getUMDConfig');
 const getES6Config = require('./configs/rax/getES6Config');
 const generateRaxEntry = require('./utils/generateRaxEntry');
+const generateRuntimeDemoEntry = require('./utils/generateRuntimeDemoEntry');
 const getDemoDir = require('./utils/getDemoDir');
 const getDemos = require('./utils/getDemos');
 const { markdownParser } = require('./utils/markdownHelper');
@@ -24,16 +26,32 @@ const getReadme = require('./utils/getReadme');
 const generateRaxDemo = require('./utils/generateRaxDemo');
 const { setModulesInfo } = require('./utils/getPortalModules');
 
-module.exports = ({ registerTask, registerUserConfig, context, onHook, registerCliOption, onGetWebpackConfig, onGetJestConfig, modifyUserConfig, log, registerMethod, setValue }) => {
+module.exports = ({
+  registerTask,
+  registerUserConfig,
+  context,
+  onHook,
+  registerCliOption,
+  onGetWebpackConfig,
+  onGetJestConfig,
+  modifyUserConfig,
+  log,
+  registerMethod,
+  setValue,
+}) => {
   const { rootDir, userConfig, command, pkg, commandArgs } = context;
-  const { plugins, targets, disableUMD, inlineStyle = true, ...compileOptions } = userConfig;
+  const { plugins, targets, disableUMD, inlineStyle = true, miniapp, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
-    console.error(chalk.red('rax-plugin-component need to set targets, e.g. ["rax-plugin-component", targets: ["web", "weex"]]'));
+    console.error(
+      chalk.red('build-plugin-component need to set targets, e.g. ["build-plugin-component", targets: ["web", "weex"]]'),
+    );
     console.log();
     process.exit(1);
   }
   const { skipDemo } = commandArgs;
   const watchDist = commandArgs.watchDist || userConfig.watchDist;
+  const isRuntimeMiniapp = targets.includes(MINIAPP) && miniapp && miniapp.buildType === 'runtime';
+
   // compatible with rax-seed
   modifyUserConfig('watchDist', !!watchDist);
   // register user config
@@ -43,6 +61,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
   registerMethod('pluginComponentGetDemoDir', getDemoDir);
   registerMethod('pluginComponentGetDemos', getDemos);
   registerMethod('pluginComponentGetReadme', getReadme);
+  registerMethod('pluginComponentGetMiniappRuntimeConfig', getMiniappRuntimeConfig);
   registerMethod('pluginComponentSetPortalModules', setModulesInfo);
   setValue('pluginComponentDir', __dirname);
 
@@ -52,10 +71,12 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
 
   // register cli options
   const cliOptions = ['watch-dist', '--skip-demo'];
-  registerCliOption(cliOptions.map((name) => ({
-    name,
-    commands: ['start', 'build'],
-  })));
+  registerCliOption(
+    cliOptions.map((name) => ({
+      name,
+      commands: ['start', 'build'],
+    })),
+  );
   const demoDir = getDemoDir(rootDir);
   const getRaxBundles = () => {
     if (demoDir) {
@@ -69,6 +90,8 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
 
   let raxBundles = false;
 
+  fse.emptyDirSync(path.join(rootDir, 'build'));
+
   if (!watchDist && !skipDemo) {
     raxBundles = getRaxBundles();
     // watch demo changes
@@ -80,6 +103,7 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
       demoWatcher.on('all', () => {
         // re-generate entry files when demo changes
         raxBundles = getRaxBundles();
+        isRuntimeMiniapp && generateRuntimeDemoEntry(demos, rootDir);
       });
       demoWatcher.on('error', (error) => {
         log.error('fail to watch demo', error);
@@ -103,11 +127,18 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
         const defaultConfig = getBaseWebpack(context, options);
         configDev(defaultConfig, context, { ...options, entries, serverBundles });
         registerTask(`component-build-${target}`, defaultConfig);
-      } else if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
-        options[target] = options[target] || {};
-        addMiniappTargetParam(target, options[target]);
-        const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
-        registerTask(`component-build-${target}`, config);
+      }
+
+      if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
+        if (isRuntimeMiniapp && target === MINIAPP) {
+          const runtimeMiniappConfig = getMiniappRuntimeConfig(context, options);
+          registerTask('component-build-runtime-miniapp', runtimeMiniappConfig);
+        } else {
+          options[target] = options[target] || {};
+          addMiniappTargetParam(target, options[target]);
+          const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
+          registerTask(`component-build-${target}`, config);
+        }
       }
     });
   } else if (command === 'build' || watchDist) {
@@ -117,21 +148,25 @@ module.exports = ({ registerTask, registerUserConfig, context, onHook, registerC
     // clean build results
     fse.removeSync(path.join(rootDir, 'lib'));
     fse.removeSync(path.join(rootDir, 'dist'));
-    fse.removeSync(path.join(rootDir, 'build'));
     fse.removeSync(path.join(rootDir, 'es'));
 
     targets.forEach((target) => {
       const options = { ...userConfig, target, inlineStyle };
+
       if (target === WEB) {
         registerTask(`component-build-${target}`, getDistConfig(context, options));
         registerTask(`component-build-${target}-es6`, getES6Config(context, options));
         if (!disableUMD) {
           registerTask(`component-build-${target}-umd`, getUMDConfig(context, options));
         }
-      } else if (target === WEEX) {
+      }
+
+      if (target === WEEX) {
         const distConfig = getDistConfig(context, { ...options, inlineStyle: true, entryName: 'index-weex' });
         registerTask('component-build-weex', distConfig);
-      } else if (target === MINIAPP || target === WECHAT_MINIPROGRAM) {
+      }
+
+      if ((target === MINIAPP && !isRuntimeMiniapp) || target === WECHAT_MINIPROGRAM) {
         options[target] = options[target] || {};
         addMiniappTargetParam(target, options[target]);
         const config = getMiniappConfig(context, target, options, onGetWebpackConfig);

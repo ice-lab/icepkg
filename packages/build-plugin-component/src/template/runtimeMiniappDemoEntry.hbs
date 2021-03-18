@@ -1,0 +1,21 @@
+/* eslint-disable no-global-assign */
+import { createElement, render } from 'rax';
+import DriverUniversal from 'driver-universal';
+
+{{#each demos}}
+import {{pascalCaseName}} from '../../demo/{{filename}}.md';
+{{/each}}
+
+// @ts-ignore
+window.__pagesRenderInfo = [
+{{#each demos}}
+  {
+  path: 'pages/{{pascalCaseName}}/index',
+  render: () => {
+  render(<{{pascalCaseName}} />, document.body, { driver: DriverUniversal });
+  },
+  // eslint-disable-next-line no-return-assign
+  setDocument: (value) => document = value,
+  },
+{{/each}}
+];

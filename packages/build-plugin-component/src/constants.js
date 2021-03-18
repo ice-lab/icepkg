@@ -6,4 +6,6 @@ module.exports = {
   BYTEDANCE: 'bytedance-microapp',
   NODE: 'node',
   KRAKEN: 'kraken',
+  RUNTIME: 'runtime',
+  COMPILE: 'compile',
 };
