@@ -26,19 +26,6 @@ module.exports = (context, options) => {
   config.devServer
     .inline(false);
 
-  config.externals([
-    function (ctx, request, callback) {
-      if (request.indexOf('@weex-module') !== -1) {
-        return callback(null, `commonjs ${request}`);
-      }
-      // Built-in modules in QuickApp
-      if (request.indexOf('@system') !== -1) {
-        return callback(null, `commonjs ${request}`);
-      }
-      callback();
-    },
-  ]);
-
   config.output.path(targetDir);
   config.output.filename('bundle.js');
 
