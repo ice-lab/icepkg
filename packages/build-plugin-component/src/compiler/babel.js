@@ -74,10 +74,16 @@ module.exports = function babelCompiler(
   type,
 ) {
   const { rootDir, pkg } = context;
-  const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, subComponents } = userOptions;
+  const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, subComponents, externals = {} } = userOptions;
+
+  let externalLibNames = [];
+  if (typeof externals === 'object') {
+    externalLibNames = Object.keys(externals);
+  }
+
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
-  const componentLibs = analyzePackage(pkg, basicComponents);
+  const componentLibs = analyzePackage(pkg, basicComponents).filter(i => !externalLibNames.includes(i));
   const srcPath = path.join(rootDir, 'src');
   // compile task es and lib
   const compileTargets = ['es', 'lib'];
