@@ -32,6 +32,10 @@ module.exports = [
     validation: 'string',
   },
   {
+    name: 'htmlInjection',
+    validation: 'object',
+  },
+  {
     /**
      * support disable mock node env
      * https://webpack.js.org/configuration/node/
