@@ -1,14 +1,18 @@
 <!doctype html>
-<html>
+<html<%= htmlAttrs %>>
 <head>
+  <%= headPrepend %>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>Rax Component Demo</title>
 <% if (!htmlWebpackPlugin.options.inlineStyle) { %>
   <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cssPath %>"></link>
 <% } %>
+  <%= headAppend %>
 </head>
 <body style="padding: 0;margin: 0">
-<script type="text/javascript" src="<%= htmlWebpackPlugin.options.jsPath %>"></script>
+  <%= bodyPrepend %>
+  <script type="text/javascript" src="<%= htmlWebpackPlugin.options.jsPath %>"></script>
+  <%= bodyAppend %>
 </body>
 </html>
