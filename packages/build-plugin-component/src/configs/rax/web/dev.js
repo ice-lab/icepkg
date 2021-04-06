@@ -3,20 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { hmrClient } = require('rax-compile-config');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const setCSSRule = require('../../../utils/setCSSRule');
-const defaultConfig = require('./defaultConfig.js');
-const { configHTMLPlugin, configHTMLContent, configWebpack } = require('../../../utils/htmlInjection');
+const { configHTMLPlugin } = require('../../../utils/htmlInjection');
 
 module.exports = (config, context, options) => {
   const { entries } = options;
-  const { userConfig } = context;
-
-  // set default content of html
-  configHTMLContent(defaultConfig);
-
-  // config htmlInjection for once
-  if (userConfig.htmlInjection) {
-    configWebpack(userConfig.htmlInjection);
-  }
 
   const entrieKeys = Object.keys(entries);
 
@@ -26,7 +16,7 @@ module.exports = (config, context, options) => {
       .add(hmrClient)
       .add(entries[entryKey]);
 
-    config.plugin(entrieKeys > 1 ? `HtmlWebpackPlugin_${entryKey}` : `HtmlWebpackPlugin`).use(HtmlWebpackPlugin, [
+    config.plugin(entrieKeys.length > 1 ? `HtmlWebpackPlugin_${entryKey}` : `HtmlWebpackPlugin`).use(HtmlWebpackPlugin, [
       {
         inject: false,
         filename: entryKey,
@@ -35,6 +25,9 @@ module.exports = (config, context, options) => {
       },
     ]);
   });
+
+  // custom html config
+  configHTMLPlugin(config);
 
   config.output
     .filename('[name].js');
