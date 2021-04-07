@@ -170,7 +170,7 @@ async function requestFusion(options: AxiosRequestConfig, fusionHost: string) {
       err.noAuth = true;
       console.log();
       console.log();
-      console.log(`鉴权失败，请前往 ${fusionHost} 重新获取 token 或 请站点所有者把你添加为站点成员。`);
+      console.log(`鉴权失败，请前往 ${fusionHost} 重新获取 token 或 请站点所有者把你添加为站点成员，完成后重新执行命令。`);
       console.log(`token 文档: ${chalk.yellow(`${fusionHost}/help.html#/dev-create-site`)}`);
       console.log(`添加成员文档: ${chalk.yellow(`${fusionHost}/help.html#/site-user-management`)}`);
       if (err.response.data.success === false) {

@@ -125,13 +125,13 @@ program
 
 program
   .command('config [type] [key] [value]')
-  .description('operate iceworks global config')
+  .description('operate iceworks global config, support keys registry,unpkgHost,fusion-token,fusion-token-ali')
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
     console.log('');
     console.log('Use the available 3.0.0 release');
-    console.log('  $ iceworks config lis, support keys registry,unpkgHost,fusion-token,fusion-token-ali');
+    console.log('  $ iceworks config list');
     console.log('  $ iceworks config get registry');
     console.log('  $ iceworks config set registry https://registry.npmjs.org');
     console.log('  $ iceworks config set registry');

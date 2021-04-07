@@ -67,11 +67,11 @@ export default async (options) => {
       fusionSite = await fusionSDK.getSite(fusionToken);
     } catch (err) {
       if (err.noAuth) {
-        // token 失效，重置掉
+        // token 失效，重置掉本地 token
         await config.set(tokenKey, null);
-        log.error('本地 token 已失效，请重新执行 sync 命令并按照引导填入 token');
       } else {
-        log.error(`获取站点列表失败，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`iceworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
+        // 接口异常、列表为空
+        log.error(`${err.message}，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`iceworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
       }
       throw err;
     }
@@ -99,6 +99,8 @@ export default async (options) => {
     if (err.noAuth) {
       // token 失效，重置掉
       await config.set(tokenKey, null);
+    } else {
+      log.error(`${err.message}，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`iceworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
     }
     throw err;
   }
