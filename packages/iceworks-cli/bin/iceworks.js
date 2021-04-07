@@ -18,26 +18,6 @@ program.arguments('<command>').action((cmd) => {
 });
 
 program
-  .command('start')
-  .description('start and open the iceworks')
-  .on('--help', () => {
-    console.log('');
-    console.log('Examples:');
-    console.log('');
-    console.log('  $ iceworks start');
-  })
-  .action(async () => {
-    try {
-      // eslint-disable-next-line global-require
-      await require('../lib/command/start').default();
-    } catch (err) {
-      log.error('iceworks start error', err.message);
-      console.error(err.stack);
-      process.exit(1);
-    }
-  });
-
-program
   .command('init [type] [npmName]')
   .description('init material-collection/component by template')
   .on('--help', () => {
@@ -144,29 +124,6 @@ program
   });
 
 program
-  .command('use <version>')
-  .description('specify the iceworks-core version')
-  .on('--help', () => {
-    console.log('');
-    console.log('Examples:');
-    console.log('');
-    console.log('Use the available 3.0.0 release');
-    console.log('  $ iceworks use 3.0.0');
-  })
-  .action(async (version, cmd) => {
-    const options = cleanArgs(cmd);
-    options.version = version;
-    try {
-      // eslint-disable-next-line global-require
-      await require('../lib/command/start').default(options);
-    } catch (err) {
-      log.error('iceworks start error', err.message);
-      console.error(err.stack);
-      process.exit(1);
-    }
-  });
-
-program
   .command('config [type] [key] [value]')
   .description('operate iceworks global config')
   .on('--help', () => {
@@ -174,9 +131,10 @@ program
     console.log('Examples:');
     console.log('');
     console.log('Use the available 3.0.0 release');
-    console.log('  $ iceworks config list');
+    console.log('  $ iceworks config lis, support keys registry,unpkgHost,fusion-token,fusion-token-ali');
     console.log('  $ iceworks config get registry');
     console.log('  $ iceworks config set registry https://registry.npmjs.org');
+    console.log('  $ iceworks config set registry');
   })
   .action(async (type, key, value, cmd) => {
     const options = cleanArgs(cmd);
@@ -197,6 +155,7 @@ program
 program.on('--help', () => {
   console.log();
   console.log(`  Run ${chalk.cyan('iceworks <command> --help')} for detailed usage of given command.`);
+  console.log(`  Add LOG_LEVEL=verbose env will output debug log, like: ${chalk.cyan('LOG_LEVEL=verbose iceworks sync')}`);
   console.log();
 });
 

@@ -2,6 +2,7 @@ import * as path from 'path';
 import { checkAliInternal, isAliNpm } from 'ice-npm-utils';
 import * as inquirer from 'inquirer';
 import * as fse from 'fs-extra';
+import * as chalk from 'chalk';
 import { DB_PATH, TOKEN_ALI_KEY, TOKEN_KEY } from '../../utils/constants';
 import FusionSDK from './fusionSDK';
 import goldlog from '../../utils/goldlog';
@@ -68,6 +69,9 @@ export default async (options) => {
       if (err.noAuth) {
         // token 失效，重置掉
         await config.set(tokenKey, null);
+        log.error('本地 token 已失效，请重新执行 sync 命令并按照引导填入 token');
+      } else {
+        log.error(`获取站点列表失败，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`iceworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
       }
       throw err;
     }

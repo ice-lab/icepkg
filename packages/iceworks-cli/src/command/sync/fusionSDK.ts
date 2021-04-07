@@ -35,7 +35,7 @@ export default class FusionSDK {
   public async getToken() {
     const helpUrl = `${this.fusionHost}/help.html#/dev-create-site`;
     console.log();
-    console.log(`如果这是你第一次使用该功能，或者不知道如何获取Token。\n请查看文档: ${chalk.yellow(helpUrl)}`);
+    console.log(`如果这是你第一次使用该功能，或者不知道如何获取 token。\n请查看文档: ${chalk.yellow(helpUrl)}`);
     console.log();
 
     const { token } = await inquirer.prompt([
