@@ -16,7 +16,7 @@ module.exports = (config, context, options) => {
       .add(hmrClient)
       .add(entries[entryKey]);
 
-    config.plugin(entrieKeys.length > 1 ? `HtmlWebpackPlugin_${entryKey}` : `HtmlWebpackPlugin`).use(HtmlWebpackPlugin, [
+    config.plugin(entrieKeys.length > 1 ? `HtmlWebpackPlugin_${entryKey}` : 'HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
       {
         inject: false,
         filename: entryKey,

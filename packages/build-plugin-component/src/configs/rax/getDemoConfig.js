@@ -38,7 +38,7 @@ module.exports = (context, options) => {
         .add(entries[entryKey]);
 
       // config.plugin(`html4${entryKey}`).use(HtmlWebpackPlugin, [
-      config.plugin(entrieKeys.length > 1 ? `HtmlWebpackPlugin_demo/${entryKey}` : `HtmlWebpackPlugin`).use(HtmlWebpackPlugin, [
+      config.plugin(entrieKeys.length > 1 ? `HtmlWebpackPlugin_demo/${entryKey}` : 'HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
         {
           inject: true,
           filename: `demo/${entryKey}.html`,
@@ -66,7 +66,6 @@ module.exports = (context, options) => {
     } else {
       config.entry('portal').add(portalPath);
     }
-    
     config.plugin('minicss').use(MiniCssExtractPlugin, [
       {
         filename: '[name].css',

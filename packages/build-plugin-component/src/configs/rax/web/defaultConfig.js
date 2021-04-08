@@ -24,5 +24,5 @@ module.exports = {
       innerHTML: 'DEMO 预览',
     },
   ],
-  rootContainer: '<div id="root"></div>'
-}
+  rootContainer: '<div id="root"></div>',
+};
