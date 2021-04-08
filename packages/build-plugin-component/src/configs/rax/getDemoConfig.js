@@ -54,23 +54,24 @@ module.exports = (context, options) => {
     // custom html config
     configHTMLPlugin(config);
 
-    /**
-     * 后移的原因是entries数量会受portal的影响
-     * 导致htmlInjection插件名生成与上面不一致
-     */
-    if (command === 'start') {
-      config
-        .entry('portal')
-        .add(hmrClient)
-        .add(portalPath);
-    } else {
-      config.entry('portal').add(portalPath);
-    }
     config.plugin('minicss').use(MiniCssExtractPlugin, [
       {
         filename: '[name].css',
       },
     ]);
+  }
+
+  /**
+   * 后移的原因是entries数量会受portal的影响
+   * 导致htmlInjection插件名生成与上面不一致
+   */
+  if (command === 'start') {
+    config
+      .entry('portal')
+      .add(hmrClient)
+      .add(portalPath);
+  } else {
+    config.entry('portal').add(portalPath);
   }
 
   config.plugin('html').use(HtmlWebpackPlugin, [
