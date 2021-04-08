@@ -5,7 +5,7 @@ const { hmrClient } = require('rax-compile-config');
 const getBaseWebpack = require('./getBaseWebpack');
 const setCSSRule = require('../../utils/setCSSRule');
 const { getRaxDemoEntryJs } = require('../../utils/handlePaths');
-const defaultConfig = require('./web/defaultConfig.js');
+const defaultConfig = require('./web/defaultHtmlConfig.js');
 const { configHTMLPlugin, configHTMLContent, configWebpack } = require('../../utils/htmlInjection');
 
 module.exports = (context, options) => {
