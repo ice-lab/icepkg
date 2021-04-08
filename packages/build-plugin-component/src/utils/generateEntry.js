@@ -14,10 +14,7 @@ module.exports = function generateEntryJS({
     return str.replace(/-([a-z])/g, (math) => (math[1].toUpperCase()));
   });
   hbs.registerHelper('escape', (str) => {
-    return (str || '')
-      .replace(/`/g, '&#x60;')
-      // escape $ for `$` make sense
-      .replace(/\$/g, '&#36;');
+    return (str || '').replace(/`/g, '&#x60;');
   });
   const compileTemplateContent = hbs.compile(hbsTemplateContent);
 
