@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.4.3
+
+- [chore] remove `iceworks start` command
+- [chore] optimize sync failed log
+
 ## 3.4.0
 
 - [feat] support page material  

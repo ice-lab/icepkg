@@ -1,10 +1,8 @@
 import * as ora from 'ora';
 import { isAliNpm, getNpmTarball, getAndExtractTarball } from 'ice-npm-utils';
 import { ALI_NPM_REGISTRY } from '@iceworks/constant';
-import ejsRenderDir from './ejsRenderDir';
 import formatProject from './formatProject';
 import checkEmpty from './checkEmpty';
-import formatFilename from './formatFilename';
 import formatScaffoldToProject from './formatScaffoldToProject';
 
 export { formatProject, checkEmpty, formatScaffoldToProject };
