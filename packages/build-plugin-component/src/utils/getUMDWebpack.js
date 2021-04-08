@@ -80,7 +80,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   const externalsNextOfLib = basicComponents.includes('@alifd/next');
   // - set externals
   if (externals) {
-    const localExternals = externals;
+    const localExternals = [].concat(externals);
 
     if (externalsNext && externalsNextOfLib) {
       localExternals.push((_context, request, callback) => {
@@ -89,8 +89,9 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
         if (isNext || isDesignBase) {
           const componentName = isNext ? request.match(nextRegex)[3] : request.match(baseRegex)[1];
           const externalKey = isNext ? 'Next' : 'ICEDesignBase';
+
           if (componentName) {
-            return callback(null, [externalKey, upperFirst(camelCase(componentName))]);
+            return callback(null, [externalKey, upperFirst(camelCase(componentName))], 'commonjs');
           }
         } else if (nextRegex.test(_context) && /\.(scss|css)$/.test(request)) {
           // external style files imported by next style.js
