@@ -5,7 +5,7 @@ const { hmrClient } = require('rax-compile-config');
 const getBaseWebpack = require('./getBaseWebpack');
 const setCSSRule = require('../../utils/setCSSRule');
 const { getRaxDemoEntryJs } = require('../../utils/handlePaths');
-const defaultConfig = require('./web/defaultHtmlConfig.js');
+const defaultHtmlConfig = require('./web/defaultHtmlConfig.js');
 const { configHTMLPlugin, configHTMLContent, configWebpack } = require('../../utils/htmlInjection');
 
 module.exports = (context, options) => {
@@ -20,7 +20,7 @@ module.exports = (context, options) => {
   setCSSRule(config, inlineStyle);
 
   // set default content of html
-  configHTMLContent(defaultConfig);
+  configHTMLContent(defaultHtmlConfig);
 
   // config htmlInjection for once
   if (userConfig.htmlInjection) {
