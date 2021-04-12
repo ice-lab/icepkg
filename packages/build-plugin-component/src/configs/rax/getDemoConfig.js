@@ -5,7 +5,7 @@ const { hmrClient } = require('rax-compile-config');
 const getBaseWebpack = require('./getBaseWebpack');
 const setCSSRule = require('../../utils/setCSSRule');
 const { getRaxDemoEntryJs } = require('../../utils/handlePaths');
-const defaultConfig = require('./web/defaultConfig.js');
+const defaultHtmlConfig = require('./web/defaultHtmlConfig.js');
 const { configHTMLPlugin, configHTMLContent, configWebpack } = require('../../utils/htmlInjection');
 
 module.exports = (context, options) => {
@@ -20,7 +20,7 @@ module.exports = (context, options) => {
   setCSSRule(config, inlineStyle);
 
   // set default content of html
-  configHTMLContent(defaultConfig);
+  configHTMLContent(defaultHtmlConfig);
 
   // config htmlInjection for once
   if (userConfig.htmlInjection) {
@@ -54,23 +54,24 @@ module.exports = (context, options) => {
     // custom html config
     configHTMLPlugin(config);
 
-    /**
-     * 后移的原因是entries数量会受portal的影响
-     * 导致htmlInjection插件名生成与上面不一致
-     */
-    if (command === 'start') {
-      config
-        .entry('portal')
-        .add(hmrClient)
-        .add(portalPath);
-    } else {
-      config.entry('portal').add(portalPath);
-    }
     config.plugin('minicss').use(MiniCssExtractPlugin, [
       {
         filename: '[name].css',
       },
     ]);
+  }
+
+  /**
+   * 后移的原因是entries数量会受portal的影响
+   * 导致htmlInjection插件名生成与上面不一致
+   */
+  if (command === 'start') {
+    config
+      .entry('portal')
+      .add(hmrClient)
+      .add(portalPath);
+  } else {
+    config.entry('portal').add(portalPath);
   }
 
   config.plugin('html').use(HtmlWebpackPlugin, [
