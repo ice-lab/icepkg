@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1
+
+- [chore] better error message
+
 ## 2.1.0
 - [feat] add `getVersions` and `getSatisfiesVersions` method
 
