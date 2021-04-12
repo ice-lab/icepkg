@@ -135,6 +135,19 @@ function getVersions(npm: string, registry?: string): Promise<string[]> {
 }
 
 /**
+ * 根据指定范围（比如：1.x，< 5.x），获取符合的所有版本号
+ */
+function getSatisfiesVersions(npm: string, range: string, registry?: string) {
+  return getVersions(npm, registry).then((versions) => {
+    return versions
+      .filter((version) => semver.satisfies(version, range))
+      .sort((a, b) => {
+        return semver.gt(b, a);
+      });
+  });
+}
+
+/**
  * 根据指定 version 获取符合 semver 规范的最新版本号
  *
  * @param {String} baseVersion 指定的基准 version
@@ -263,6 +276,8 @@ export {
   getNpmRegistry,
   getUnpkgHost,
   getNpmClient,
+  getVersions,
+  getSatisfiesVersions,
   isAliNpm,
   getNpmInfo,
   checkAliInternal,

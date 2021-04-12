@@ -3,12 +3,14 @@ import * as fse from 'fs-extra';
 import { ALI_YUEQU_URL } from '@iceworks/constant';
 import { checkAliInternal } from 'ice-npm-utils';
 
-export default async function formatProject(projectDir: string, projectName?: string): Promise<void> {
+export default async function formatProject(projectDir: string, projectName?: string, ejsOptions: any = {}): Promise<void> {
   await fse.remove(path.join(projectDir, 'build'));
 
+  const { targets = [] } = ejsOptions;
   let abcData = {};
   const abcPath = path.join(projectDir, 'abc.json');
   const pkgPath = path.join(projectDir, 'package.json');
+  const miniProjectJsonPath = path.join(projectDir, 'mini.project.json');
   const pkgData = fse.readJsonSync(pkgPath);
   const isAliInternal = await checkAliInternal();
   const initialVersion = '0.1.0';
@@ -125,10 +127,21 @@ export default async function formatProject(projectDir: string, projectName?: st
     }
   }
 
-  if (isAliInternal && !fse.existsSync(abcPath)) {
-    fse.writeJSONSync(abcPath, abcData, {
-      spaces: 2,
-    });
+  if (isAliInternal) {
+    if (!fse.existsSync(abcPath)) {
+      fse.writeJSONSync(abcPath, abcData, {
+        spaces: 2,
+      });
+    }
+    // Only Alibaba (Taobao) MiniApp needs mini.project.json
+    if (targets.includes('miniapp') && !fse.existsSync(miniProjectJsonPath)) {
+      fse.writeJSONSync(miniProjectJsonPath, {
+        miniprogramRoot: 'build/miniapp',
+        scripts: {
+          beforeUpload: 'npm run build',
+        },
+      }, { spaces: 2 });
+    }
   }
 
   fse.writeJSONSync(pkgPath, pkgData, {

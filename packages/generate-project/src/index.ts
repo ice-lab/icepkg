@@ -1,11 +1,11 @@
 import * as ora from 'ora';
 import { isAliNpm, getNpmTarball, getAndExtractTarball } from 'ice-npm-utils';
 import { ALI_NPM_REGISTRY } from '@iceworks/constant';
-import ejsRenderDir from './ejsRenderDir';
-import formatProject from './fommatProject';
+import formatProject from './formatProject';
 import checkEmpty from './checkEmpty';
+import formatScaffoldToProject from './formatScaffoldToProject';
 
-export { formatProject, checkEmpty };
+export { formatProject, checkEmpty, formatScaffoldToProject };
 
 export interface IEjsOptions {
   targets?: string[];
@@ -53,16 +53,13 @@ export async function downloadAndGenerateProject(
     (state) => {
       spinner.text = `download npm tarball progress: ${Math.floor(state.percent * 100)}%`;
     },
-    formatFilename,
   );
   spinner.succeed('download npm tarball successfully.');
 
-  await ejsRenderDir(projectDir, ejsOptions);
-
   try {
-    await formatProject(projectDir, projectName);
+    await formatScaffoldToProject(projectDir, projectName, ejsOptions);
   } catch (err) {
-    console.warn('formatProject error', err.message);
+    console.warn('format scaffold to project error', err.message);
   }
 }
 
@@ -74,29 +71,4 @@ async function getNpmRegistry(npmName: string): Promise<string> {
   } else {
     return 'https://registry.npm.taobao.org';
   }
-}
-
-/**
- * 下载 npm 后的文件名处理
- */
-function formatFilename(filename) {
-  // 只转换特定文件，防止误伤
-  const dotFilenames = [
-    '_eslintrc.js',
-    '_eslintrc',
-    '_eslintignore',
-    '_gitignore',
-    '_stylelintrc.js',
-    '_stylelintrc',
-    '_stylelintignore',
-    '_editorconfig',
-    '_prettierrc.js',
-    '_prettierignore',
-  ];
-  if (dotFilenames.indexOf(filename) !== -1) {
-    // _eslintrc.js -> .eslintrc.js
-    filename = filename.replace(/^_/, '.');
-  }
-
-  return filename;
 }

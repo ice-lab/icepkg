@@ -2,6 +2,7 @@ import * as path from 'path';
 import { checkAliInternal, isAliNpm } from 'ice-npm-utils';
 import * as inquirer from 'inquirer';
 import * as fse from 'fs-extra';
+import * as chalk from 'chalk';
 import { DB_PATH, TOKEN_ALI_KEY, TOKEN_KEY } from '../../utils/constants';
 import FusionSDK from './fusionSDK';
 import goldlog from '../../utils/goldlog';
@@ -66,8 +67,11 @@ export default async (options) => {
       fusionSite = await fusionSDK.getSite(fusionToken);
     } catch (err) {
       if (err.noAuth) {
-        // token 失效，重置掉
+        // token 失效，重置掉本地 token
         await config.set(tokenKey, null);
+      } else {
+        // 接口异常、列表为空
+        log.error(`${err.message}，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`iceworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
       }
       throw err;
     }
@@ -95,6 +99,8 @@ export default async (options) => {
     if (err.noAuth) {
       // token 失效，重置掉
       await config.set(tokenKey, null);
+    } else {
+      log.error(`${err.message}，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`iceworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
     }
     throw err;
   }
