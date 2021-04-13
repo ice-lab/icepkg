@@ -2,9 +2,6 @@ const path = require('path');
 const { upperFirst, camelCase } = require('lodash');
 const { getWebpackConfig } = require('build-scripts-config');
 
-const nextRegex = /@(alife|alifd)\/next\/(es|lib)\/([-\w+]+)$/;
-const baseRegex = /@icedesign\/base\/lib\/([-\w+]+)$/;
-
 module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   const mode = 'production';
   const config = getWebpackConfig(mode);
@@ -47,7 +44,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
         amd: 'moment',
       },
     },
-    basicComponents = [],
+    basicComponents = ['@alifd/next'],
   } = compileOptions;
   const { jsExt, styleExt } = extNames;
   // file name
@@ -76,30 +73,42 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
     .libraryExport(libraryExport)
     .libraryTarget(libraryTarget);
 
-  const externalsNext = Object.keys(externals).includes('@alifd/next');
-  const externalsNextOfLib = basicComponents.includes('@alifd/next');
   // - set externals
   if (externals) {
     const localExternals = [].concat(externals);
 
-    if (externalsNext && externalsNextOfLib) {
-      localExternals.push((_context, request, callback) => {
-        const isNext = nextRegex.test(request);
-        const isDesignBase = baseRegex.test(request);
-        if (isNext || isDesignBase) {
-          const componentName = isNext ? request.match(nextRegex)[3] : request.match(baseRegex)[1];
-          const externalKey = isNext ? 'Next' : 'ICEDesignBase';
+    /**
+     * see [rfc](https://github.com/ice-lab/iceworks-cli/issues/153)
+     * plugin-fusion is not required in Rax Component project
+    */
+    const validBasicComponent = basicComponents
+      .filter((externalKey) => Object.keys(externals).includes(externalKey));
 
-          if (componentName) {
-            return callback(null, [externalKey, upperFirst(camelCase(componentName))], 'commonjs');
+    if (validBasicComponent.length) {
+      const regexs = validBasicComponent.map((name) => ({
+        name,
+        regex: new RegExp(`${name.replace('/', '\\/') }\\/(es|lib)\\/([-\\w+]+)$`),
+      }));
+
+      localExternals.push((_context, request, callback) => {
+        for (let i = 0; i < regexs.length; i++) {
+          const { name, regex } = regexs[i];
+          if (regex.test(request)) {
+            const componentName = request.match(regex)[2];
+            const externalKey = typeof externals[name] === 'string' ? externals[name] : externals[name].root;
+
+            if (componentName) {
+              return callback(null, [externalKey, upperFirst(camelCase(componentName))], 'global');
+            }
+          } else if (regex.test(_context) && /\.(scss|less|css)$/.test(request)) {
+            const externalKey = typeof externals[name] === 'string' ? externals[name] : externals[name].root;
+            return callback(null, externalKey);
           }
-        } else if (nextRegex.test(_context) && /\.(scss|css)$/.test(request)) {
-          // external style files imported by next style.js
-          return callback(null, 'Next');
         }
         return callback();
       });
     }
+
 
     // set externals
     config.externals(localExternals);
