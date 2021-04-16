@@ -5,12 +5,11 @@ const { hmrClient } = require('rax-compile-config');
 const getBaseWebpack = require('./getBaseWebpack');
 const setCSSRule = require('../../utils/setCSSRule');
 const { getRaxDemoEntryJs } = require('../../utils/handlePaths');
-const defaultHtmlConfig = require('./web/defaultHtmlConfig.js');
-const { configHTMLPlugin, configHTMLContent, configWebpack } = require('../../utils/htmlInjection');
+const { configHTMLPlugin, configWebpack } = require('../../utils/htmlInjection');
 
 module.exports = (context, options) => {
   const { command, rootDir, userConfig } = context;
-  const { demos, entries, inlineStyle = true } = options;
+  const { entries, inlineStyle = true } = options;
   const config = getBaseWebpack(context, { ...options, name: 'demo' });
   const portalPath = getRaxDemoEntryJs(rootDir);
 
@@ -18,9 +17,6 @@ module.exports = (context, options) => {
   config.output.publicPath('./');
   config.output.path(path.join(rootDir, 'build'));
   setCSSRule(config, inlineStyle);
-
-  // set default content of html
-  configHTMLContent(defaultHtmlConfig);
 
   // config htmlInjection for once
   if (userConfig.htmlInjection) {
