@@ -1,6 +1,7 @@
 const path = require('path');
 const { upperFirst, camelCase } = require('lodash');
 const { getWebpackConfig } = require('build-scripts-config');
+const { defaultDynamicImportLibraries } = require('../compiler/depAnalyze');
 
 module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   const mode = 'production';
@@ -44,7 +45,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
         amd: 'moment',
       },
     },
-    basicComponents = ['@alifd/next'],
+    basicComponents = defaultDynamicImportLibraries,
   } = compileOptions;
   const { jsExt, styleExt } = extNames;
   // file name
@@ -82,7 +83,8 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
      * plugin-fusion is not required in Rax Component project
     */
     const validBasicComponent = basicComponents
-      .filter((externalKey) => Object.keys(externals).includes(externalKey));
+      // if `external` item is a function，one have to deal with it himself
+      .filter((externalKey) => Object.keys(externals).includes(externalKey) && typeof externals(externalKey) !== 'function');
 
     if (validBasicComponent.length) {
       const regexs = validBasicComponent.map((name) => ({
