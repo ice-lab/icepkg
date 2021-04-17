@@ -43,10 +43,11 @@ module.exports = (context, options) => {
           inject: true,
           filename: `demo/${entryKey}.html`,
           chunks: [entryKey],
-          jsPath: `./${entryKey}.js`,
-          cssPath: `./${entryKey}.css`,
-          inlineStyle,
-          template: path.resolve(__dirname, '../../template/raxDemo.html'),
+          template: path.resolve(__dirname, '../../template/demo.html'),
+          templateParameters: {
+            headAppend: [`<link rel="stylesheet" href="./${entryKey}.css" />`],
+            bodyAppend: [`<script type="text/javascript" src="./${entryKey}.js"></script>`],
+          }
         },
       ]);
     });
