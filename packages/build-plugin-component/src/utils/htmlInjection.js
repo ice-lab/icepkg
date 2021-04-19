@@ -88,13 +88,33 @@ function modifyHTMLPluginOptions(config, pluginName, options, params) {
       Object.keys(HTML_POSITIONS).forEach((positionKey) => {
         defaultValues[positionKey] = HTML_POSITIONS[positionKey].defaultValue;
       });
+
+      const templateParameters = {
+        ...defaultValues, // default value of html positions
+        ...params,
+      }
+      /**
+       * 由原先的templateParameters覆盖方式改为合并方式
+       * 实现build构建阶段多demo定制css/js，但在使用
+       * templateParameters时也需注意现在是合并，不会覆盖，
+       * 避免重复内容构建到产物中
+       */
+      if (args.templateParameters) {
+        Object.keys(args.templateParameters).forEach(k => {
+          let value = args.templateParameters[k];
+          if (Array.isArray(value)) {
+            value = value.join('\n');
+          }
+          if (templateParameters[k]) {
+            templateParameters[k] += `\n${value}`;
+          } else {
+            templateParameters[k] = value;
+          }
+        })
+      }
       const pluginOptions = {
         ...args,
-        templateParameters: {
-          ...(args.templateParameters || {}),
-          ...defaultValues, // default value of html positions
-          ...params,
-        },
+        templateParameters,
         ...options,
       };
       return [pluginOptions];
