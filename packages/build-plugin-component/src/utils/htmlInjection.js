@@ -68,14 +68,14 @@ function parseHTMLContent(content) {
 
 function parseHTMLAttrs(attrs) {
   const attrKeys = Object.keys(attrs);
-  return attrKeys.length ? ` ${attrKeys.map(attrKey => `${attrKey}="${attrs[attrKey]}"`).join(' ')}` : '';
+  return attrKeys.length ? ` ${attrKeys.map((attrKey) => `${attrKey}="${attrs[attrKey]}"`).join(' ')}` : '';
 }
 
 function getHTMLParams(htmlContent) {
   const htmlParams = {};
   Object.keys(htmlContent).forEach((htmlPosition) => {
     const htmlTags = htmlContent[htmlPosition];
-    htmlParams[htmlPosition] = Array.isArray(htmlTags) ? htmlTags.map(htmlTag => parseHTMLContent(htmlTag)).join('\n') : parseHTMLContent(htmlTags);
+    htmlParams[htmlPosition] = Array.isArray(htmlTags) ? htmlTags.map((htmlTag) => parseHTMLContent(htmlTag)).join('\n') : parseHTMLContent(htmlTags);
   });
   return htmlParams;
 }
@@ -89,32 +89,25 @@ function modifyHTMLPluginOptions(config, pluginName, options, params) {
         defaultValues[positionKey] = HTML_POSITIONS[positionKey].defaultValue;
       });
 
-      const templateParameters = {
-        ...defaultValues, // default value of html positions
-        ...params,
-      }
       /**
-       * 由原先的templateParameters覆盖方式改为合并方式
-       * 实现build构建阶段多demo定制css/js，但在使用
-       * templateParameters时也需注意现在是合并，不会覆盖，
-       * 避免重复内容构建到产物中
+       * for getDemoConfig needs extra info to inject to html.
+       * merge htmlAppendInjection to params for getDemoConfig.
        */
-      if (args.templateParameters) {
-        Object.keys(args.templateParameters).forEach(k => {
-          let value = args.templateParameters[k];
-          if (Array.isArray(value)) {
-            value = value.join('\n');
-          }
-          if (templateParameters[k]) {
-            templateParameters[k] += `\n${value}`;
-          } else {
-            templateParameters[k] = value;
-          }
-        })
+      const { htmlAppendInjection } = args || {};
+
+      if (htmlAppendInjection) {
+        Object.keys(htmlAppendInjection).forEach((position) => {
+          // eslint-disable-next-line no-param-reassign
+          params[position] = (params[position] || '').concat(htmlAppendInjection[position]);
+        });
       }
+
       const pluginOptions = {
         ...args,
-        templateParameters,
+        templateParameters: {
+          ...defaultValues, // default value of html positions
+          ...params,
+        },
         ...options,
       };
       return [pluginOptions];
@@ -162,9 +155,9 @@ function configHTMLContent(htmlInjection, entryKey) {
           const { tagId, tag } = tagInfo;
           let index = -1;
           if (tag === 'title') {
-            index = (storage[optionKey] || []).findIndex(item => item.tag === tag);
+            index = (storage[optionKey] || []).findIndex((item) => item.tag === tag);
           } else if (tagId) {
-            index = (storage[optionKey] || []).findIndex(item => item.tagId === tagId);
+            index = (storage[optionKey] || []).findIndex((item) => item.tagId === tagId);
           }
 
           if (index > -1) {

@@ -33,16 +33,15 @@ module.exports = (context, options) => {
         .entry(`demo/${entryKey}`)
         .add(entries[entryKey]);
 
-      // config.plugin(`html4${entryKey}`).use(HtmlWebpackPlugin, [
       config.plugin(entrieKeys.length > 1 ? `HtmlWebpackPlugin_demo/${entryKey}` : 'HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
         {
           inject: true,
           filename: `demo/${entryKey}.html`,
           chunks: [entryKey],
           template: path.resolve(__dirname, '../../template/demo.html'),
-          templateParameters: {
-            headAppend: [`<link rel="stylesheet" href="./${entryKey}.css" />`],
-            bodyAppend: [`<script type="text/javascript" src="./${entryKey}.js"></script>`],
+          htmlAppendInjection: {
+            headAppend: `<link rel="stylesheet" href="./${entryKey}.css" />`,
+            bodyAppend: `<script type="text/javascript" src="./${entryKey}.js"></script>`,
           },
         },
       ]);
