@@ -58,8 +58,7 @@ module.exports = (context, options) => {
   }
 
   /**
-   * 后移的原因是entries数量会受portal的影响
-   * 导致htmlInjection插件名生成与上面不一致
+   * move this line back, for it will challenge `entrieKeys.length > 1`.
    */
   if (command === 'start') {
     config
