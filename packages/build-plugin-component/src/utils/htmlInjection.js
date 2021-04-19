@@ -105,6 +105,7 @@ function modifyHTMLPluginOptions(config, pluginName, options, params) {
       const pluginOptions = {
         ...args,
         templateParameters: {
+          ...(args.templateParameters || {}),
           ...defaultValues, // default value of html positions
           ...params,
         },
