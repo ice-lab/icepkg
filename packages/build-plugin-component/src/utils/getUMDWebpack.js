@@ -1,5 +1,7 @@
 const path = require('path');
+const { upperFirst, camelCase } = require('lodash');
 const { getWebpackConfig } = require('build-scripts-config');
+const { defaultDynamicImportLibraries } = require('../compiler/depAnalyze');
 
 module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   const mode = 'production';
@@ -43,6 +45,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
         amd: 'moment',
       },
     },
+    basicComponents = [],
   } = compileOptions;
   const { jsExt, styleExt } = extNames;
   // file name
@@ -73,7 +76,46 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
 
   // - set externals
   if (externals) {
-    config.externals(externals);
+    const localExternals = [].concat(externals);
+
+    /**
+     * see [rfc](https://github.com/ice-lab/iceworks-cli/issues/153).
+     * if `basicComponents` is `undefined`，concat `defaultDynamicImportLibraries`.
+     * if `basicComponents` is `false`, escape all default behavior.
+     * otherwise, merge `defaultDynamicImportLibraries` to `basicComponets` and deduplicate.
+    */
+    const validBasicComponent = (basicComponents ? [...basicComponents, ...defaultDynamicImportLibraries] : [])
+      // if `external` item is a function，one have to deal with it himself
+      .filter((externalKey) => Object.keys(externals).includes(externalKey) && typeof externals[externalKey] !== 'function');
+
+    if (validBasicComponent.length) {
+      const regexs = validBasicComponent.map((name) => ({
+        name,
+        regex: new RegExp(`${name.replace('/', '\\/') }\\/(es|lib)\\/([-\\w+]+)$`),
+      }));
+
+      localExternals.push((_context, request, callback) => {
+        for (let i = 0; i < regexs.length; i++) {
+          const { name, regex } = regexs[i];
+          if (regex.test(request)) {
+            const componentName = request.match(regex)[2];
+            const externalKey = typeof externals[name] === 'string' ? externals[name] : externals[name].root;
+
+            if (componentName) {
+              return callback(null, [externalKey, upperFirst(camelCase(componentName))], 'global');
+            }
+          } else if (regex.test(_context) && /\.(scss|less|css)$/.test(request)) {
+            const externalKey = typeof externals[name] === 'string' ? externals[name] : externals[name].root;
+            return callback(null, externalKey);
+          }
+        }
+        return callback();
+      });
+    }
+
+
+    // set externals
+    config.externals(localExternals);
   }
 
   // sourceMap

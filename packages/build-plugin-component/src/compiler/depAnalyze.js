@@ -10,19 +10,23 @@ const getPkgJSON = (cwd, module) => {
   return JSON.parse(jsonString);
 };
 
+const defaultDynamicImportLibraries = [
+  'antd',
+  '@alifd/next',
+  '@alife/next',
+  '@icedesign/base',
+];
+
 function analyzePackage(pkg, basicComponents) {
   // get dependencies from pakage.json
   const { dependencies = {}, devDependencies = {}, peerDependencies = {} } = pkg;
   const libraryNames = [];
   if (basicComponents) {
-    Object.keys({ ...dependencies, ...devDependencies, ...peerDependencies }).forEach(depName => {
+    Object.keys({ ...dependencies, ...devDependencies, ...peerDependencies }).forEach((depName) => {
       // basic component: antd、@alifd/next、@alife/next、@icedesign/base
       if (
         [
-          'antd',
-          '@alifd/next',
-          '@alife/next',
-          '@icedesign/base',
+          ...defaultDynamicImportLibraries,
           ...basicComponents,
         ].includes(depName)
       ) {
@@ -34,7 +38,7 @@ function analyzePackage(pkg, basicComponents) {
 }
 
 function filterDeps({ deps, rootDir, basicComponents }) {
-  return deps.filter(dep => {
+  return deps.filter((dep) => {
     // relative path
     if (/^\./.test(dep)) {
       return false;
@@ -50,14 +54,14 @@ function filterDeps({ deps, rootDir, basicComponents }) {
       /antd\/.*/,
     ];
     if (basicComponents) {
-      basicComponents.forEach(component => {
+      basicComponents.forEach((component) => {
         basicLibrary.push(new RegExp(`${component}/.*`));
       });
     } else {
       // clear basicLibrary if set basicComponents to false
       basicLibrary = [];
     }
-    const isBasicLibrary = basicLibrary.some(library => {
+    const isBasicLibrary = basicLibrary.some((library) => {
       return library.test(dep);
     });
 
@@ -149,7 +153,7 @@ function analyzeDependencies(entryFilePath, rootDir, basicComponents) {
     const analyzeResult = dedupe(analyzeAST(fileContent));
 
     result = result.concat(analyzeResult);
-    analyzeResult.forEach(module => {
+    analyzeResult.forEach((module) => {
       if (/^\./.test(module)) {
         const modulePath = require.resolve(
           path.join(path.dirname(filename), module),
@@ -166,4 +170,5 @@ function analyzeDependencies(entryFilePath, rootDir, basicComponents) {
 module.exports = {
   analyzeDependencies,
   analyzePackage,
+  defaultDynamicImportLibraries,
 };

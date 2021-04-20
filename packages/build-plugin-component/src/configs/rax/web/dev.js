@@ -3,38 +3,31 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { hmrClient } = require('rax-compile-config');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const setCSSRule = require('../../../utils/setCSSRule');
+const { configHTMLPlugin } = require('../../../utils/htmlInjection');
 
 module.exports = (config, context, options) => {
   const { entries } = options;
 
-  Object.keys(entries).forEach((entryKey) => {
+  const entrieKeys = Object.keys(entries);
+
+  entrieKeys.forEach((entryKey) => {
     config
       .entry(entryKey)
       .add(hmrClient)
       .add(entries[entryKey]);
 
-    config.plugin(`html4${entryKey}`).use(HtmlWebpackPlugin, [
+    config.plugin(entrieKeys.length > 1 ? `HtmlWebpackPlugin_${entryKey}` : 'HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
       {
         inject: false,
         filename: entryKey,
         chunks: [entryKey],
-        templateParameters: {
-          htmlAttrs: '',
-          headPrepend: [
-            '<meta charset="UTF-8">',
-            '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
-            '<meta http-equiv="X-UA-Compatible" content="ie=edge">',
-          ].join(''),
-          headAppend: ['<title>DEMO 预览</title>'],
-          rootContainer: '<div id="root"></div>',
-          bodyPrepend: '',
-          bodyAppend: '',
-          bodyAttrs: '',
-        },
         template: path.resolve(__dirname, '../../../template/demo.html'),
       },
     ]);
   });
+
+  // custom html config
+  configHTMLPlugin(config);
 
   config.output
     .filename('[name].js');
