@@ -45,7 +45,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
         amd: 'moment',
       },
     },
-    basicComponents = defaultDynamicImportLibraries,
+    basicComponents = [],
   } = compileOptions;
   const { jsExt, styleExt } = extNames;
   // file name
@@ -79,10 +79,12 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
     const localExternals = [].concat(externals);
 
     /**
-     * see [rfc](https://github.com/ice-lab/iceworks-cli/issues/153)
-     * plugin-fusion is not required in Rax Component project
+     * see [rfc](https://github.com/ice-lab/iceworks-cli/issues/153).
+     * if `basicComponents` is `undefined`，concat `defaultDynamicImportLibraries`.
+     * if `basicComponents` is `false`, escape all default behavior.
+     * otherwise, merge `defaultDynamicImportLibraries` to `basicComponets` and deduplicate.
     */
-    const validBasicComponent = basicComponents
+    const validBasicComponent = (basicComponents ? [...basicComponents, ...defaultDynamicImportLibraries] : [])
       // if `external` item is a function，one have to deal with it himself
       .filter((externalKey) => Object.keys(externals).includes(externalKey) && typeof externals(externalKey) !== 'function');
 
