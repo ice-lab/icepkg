@@ -1,4 +1,35 @@
 const { BYTEDANCE, MINIAPP, WECHAT_MINIPROGRAM } = require('../../constants');
+const htmlInjection = require('../../utils/htmlInjection');
+
+// set default content of html
+htmlInjection.configHTMLContent({
+  headPrepend: [
+    {
+      tag: 'meta',
+      charset: 'utf-8',
+      tagId: 'meta-charset',
+    },
+    {
+      tag: 'meta',
+      'http-equiv': 'x-ua-compatible',
+      content: 'ie=edge,chrome=1',
+      tagId: 'meta-compatible',
+    },
+    {
+      tag: 'meta',
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no',
+      tagId: 'meta-viewport',
+    },
+  ],
+  headAppend: [
+    {
+      tag: 'title',
+      innerHTML: 'DEMO 预览',
+    },
+  ],
+  rootContainer: '<div id="root"></div>',
+});
 
 const CONFIG = {
   process: false,
@@ -30,6 +61,10 @@ module.exports = [
   {
     name: 'outputDir',
     validation: 'string',
+  },
+  {
+    name: 'htmlInjection',
+    validation: 'object',
   },
   {
     /**
