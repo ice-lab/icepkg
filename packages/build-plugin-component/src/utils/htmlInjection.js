@@ -95,10 +95,14 @@ function modifyHTMLPluginOptions(config, pluginName, options, params) {
        */
       const { htmlAppendInjection } = args || {};
 
+      const _params = {
+        ...params,
+      };
+
       if (htmlAppendInjection) {
         Object.keys(htmlAppendInjection).forEach((position) => {
           // eslint-disable-next-line no-param-reassign
-          params[position] = (params[position] || '').concat(htmlAppendInjection[position]);
+          _params[position] = (_params[position] || '').concat(htmlAppendInjection[position]);
         });
       }
 
@@ -107,7 +111,7 @@ function modifyHTMLPluginOptions(config, pluginName, options, params) {
         templateParameters: {
           ...(args.templateParameters || {}),
           ...defaultValues, // default value of html positions
-          ...params,
+          ..._params,
         },
         ...options,
       };

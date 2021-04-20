@@ -86,7 +86,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
     */
     const validBasicComponent = (basicComponents ? [...basicComponents, ...defaultDynamicImportLibraries] : [])
       // if `external` item is a function，one have to deal with it himself
-      .filter((externalKey) => Object.keys(externals).includes(externalKey) && typeof externals(externalKey) !== 'function');
+      .filter((externalKey) => Object.keys(externals).includes(externalKey) && typeof externals[externalKey] !== 'function');
 
     if (validBasicComponent.length) {
       const regexs = validBasicComponent.map((name) => ({
