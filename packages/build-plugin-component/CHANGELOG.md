@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0
+- [feat] Rax demos 支持注入自定义内容 ([#157](https://github.com/ice-lab/iceworks-cli/issues/157))
+- [fix] 优化 react 组件分包下 external 的规则 ([#153](https://github.com/ice-lab/iceworks-cli/issues/153))
+- [fix] 修复 demo 文件中，`$` 未被转义 ([#159](https://github.com/ice-lab/iceworks-cli/pull/159))
+
 ## 1.5.0
 
 - [feat] 支持 rax 运行时小程序预览 ([#121](https://github.com/ice-lab/iceworks-cli/issues/121))
