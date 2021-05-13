@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.2.4
+
+- add `"builtInLibrary": { "lib-mtop": false }` to `src/app.json`
+
 ## 1.2.3
 
 - add `mini.project.json` for ali (taobao) miniapp
