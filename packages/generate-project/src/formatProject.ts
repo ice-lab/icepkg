@@ -144,7 +144,7 @@ export default async function formatProject(projectDir: string, projectName?: st
       }, { spaces: 2 });
     }
     // Add builtInLibrary: { lib-mtop: false } to app.json
-    if (fse.existsSync(appJSONPath)) {
+    if (targets.includes('web') && fse.existsSync(appJSONPath)) {
       const appJSONData = fse.readJsonSync(appJSONPath);
       fse.writeJSONSync(appJSONPath, {
         ...appJSONData,
