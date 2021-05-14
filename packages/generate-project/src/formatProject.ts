@@ -149,7 +149,7 @@ export default async function formatProject(projectDir: string, projectName?: st
       fse.writeJSONSync(appJSONPath, {
         ...appJSONData,
         builtInLibrary: {
-          "lib-mtop": false
+          'lib-mtop': false,
         },
       }, { spaces: 2 });
     }
