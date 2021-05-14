@@ -11,6 +11,7 @@ export default async function formatProject(projectDir: string, projectName?: st
   const abcPath = path.join(projectDir, 'abc.json');
   const pkgPath = path.join(projectDir, 'package.json');
   const miniProjectJsonPath = path.join(projectDir, 'mini.project.json');
+  const appJSONPath = path.join(projectDir, 'src/app.json');
   const pkgData = fse.readJsonSync(pkgPath);
   const isAliInternal = await checkAliInternal();
   const initialVersion = '0.1.0';
@@ -139,6 +140,16 @@ export default async function formatProject(projectDir: string, projectName?: st
         miniprogramRoot: 'build/miniapp',
         scripts: {
           beforeUpload: 'npm run build',
+        },
+      }, { spaces: 2 });
+    }
+    // Add builtInLibrary: { lib-mtop: false } to app.json
+    if (targets.includes('web') && fse.existsSync(appJSONPath)) {
+      const appJSONData = fse.readJsonSync(appJSONPath);
+      fse.writeJSONSync(appJSONPath, {
+        ...appJSONData,
+        builtInLibrary: {
+          'lib-mtop': false,
         },
       }, { spaces: 2 });
     }
