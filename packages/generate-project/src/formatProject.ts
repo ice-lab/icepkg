@@ -74,6 +74,11 @@ export default async function formatProject(projectDir: string, projectName?: st
         pkgData.devDependencies['@ali/build-plugin-rax-app-def'] = defPluginVersion;
         buildData.plugins.push('@ali/build-plugin-rax-app-def');
 
+        // add @ali/build-plugin-event-tracking-register and @ali/universal-event-tracking
+        pkgData.devDependencies['@ali/build-plugin-event-tracking-register'] = '^1.0.0';
+        pkgData.dependencies['@ali/universal-event-tracking'] = '^1.0.0';
+        buildData.plugins.push('@ali/build-plugin-event-tracking-register');
+
         // TODO: remove src/app.js for mpa project
         // if (
         //   (buildData.web && buildData.web.mpa)

@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.3.0
+
+- add `@ali/build-plugin-event-tracking-register` and `@ali/universal-event-tracking`
+
 ## 1.2.4
 
 - add `"builtInLibrary": { "lib-mtop": false }` to `src/app.json`
