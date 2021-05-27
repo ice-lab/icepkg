@@ -79,18 +79,18 @@ export default async function formatProject(projectDir: string, projectName?: st
         pkgData.dependencies['@ali/universal-event-tracking'] = '^1.0.0';
         buildData.plugins.push('@ali/build-plugin-event-tracking-register');
 
-        // remove src/app.js for mpa project
-        if (
-          (buildData.web && buildData.web.mpa)
-          || buildData.mpa // 未来有可能把 mpa 提上去
-        ) {
-          try {
-            fse.removeSync(path.join(projectDir, './src/app.js'));
-            fse.removeSync(path.join(projectDir, './src/app.ts'));
-          } catch (err) {
-            // ignore error
-          }
-        }
+        // TODO: remove src/app.js for mpa project
+        // if (
+        //   (buildData.web && buildData.web.mpa)
+        //   || buildData.mpa // 未来有可能把 mpa 提上去
+        // ) {
+        //   try {
+        //     fse.removeSync(path.join(projectDir, './src/app.js'));
+        //     fse.removeSync(path.join(projectDir, './src/app.ts'));
+        //   } catch (err) {
+        //     // ignore error
+        //   }
+        // }
       } else {
         abcData = {
           type: 'ice-app',
