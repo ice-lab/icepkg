@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.3.1
+
+- set `goldlog: false` of `@ali/build-plugin-event-tracking-register`
+
 ## 1.3.0
 
 - add `@ali/build-plugin-event-tracking-register` and `@ali/universal-event-tracking`
