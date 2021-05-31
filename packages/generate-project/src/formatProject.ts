@@ -78,7 +78,7 @@ export default async function formatProject(projectDir: string, projectName?: st
         pkgData.devDependencies['@ali/build-plugin-event-tracking-register'] = '^1.0.0';
         pkgData.dependencies['@ali/universal-event-tracking'] = '^1.0.0';
         buildData.plugins.push(['@ali/build-plugin-event-tracking-register', {
-          goldlog: false    // 默认关闭埋点方案的创建和同步，免于在初建时，出现权限相关提示，预留手动指定 appInfoId 的时机
+          goldlog: false, // 默认关闭埋点方案的创建和同步，免于在初建时，出现权限相关提示，预留手动指定 appInfoId 的时机
         }]);
 
         // TODO: remove src/app.js for mpa project
