@@ -9,10 +9,10 @@ const parseStyleStatement = ({ target, module, rootDir }) => {
     // compatible for component without es folder
     stylePaths.push('lib/style.js');
   }
-  stylePaths.every(stylePath => {
+  stylePaths.every((stylePath) => {
     let keepSearch = true;
     try {
-      require.resolve(path.join(rootDir, 'node_modules', module, stylePath));
+      require.resolve(`${module}/${stylePath}`);
       styleStatement = `${module}/${stylePath}`;
       keepSearch = false;
     } catch (err) {
@@ -39,7 +39,7 @@ module.exports = ({ rootDir, basicComponents, destPath, target, log, folder }) =
   const stylePath = path.join(destPath, 'style.js');
   // check index.scss and main.scss
   let styleContent = '';
-  ['index.scss', 'index.less', 'index.css', 'main.scss'].every(cssFile => {
+  ['index.scss', 'index.less', 'index.css', 'main.scss'].every((cssFile) => {
     if (fs.existsSync(path.join(destPath, cssFile))) {
       styleContent =
         target === 'es'
@@ -51,7 +51,7 @@ module.exports = ({ rootDir, basicComponents, destPath, target, log, folder }) =
     return true;
   });
   const styleSatements = styleDependencies
-    .map(module => parseStyleStatement({ module, rootDir, target }))
+    .map((module) => parseStyleStatement({ module, rootDir, target }))
     .join('\n');
   styleContent =
     styleSatements || styleContent
