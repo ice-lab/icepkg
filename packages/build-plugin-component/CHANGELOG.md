@@ -1,6 +1,10 @@
 # Changelog
 
+## 1.6.1
+
+- [fix] 修复 lerna 包下 `style.js` 内容缺失
 ## 1.6.0
+
 - [feat] Rax demos 支持注入自定义内容 ([#157](https://github.com/ice-lab/iceworks-cli/issues/157))
 - [fix] 优化 react 组件分包下 external 的规则 ([#153](https://github.com/ice-lab/iceworks-cli/issues/153))
 - [fix] 修复 demo 文件中，`$` 未被转义 ([#159](https://github.com/ice-lab/iceworks-cli/pull/159))
