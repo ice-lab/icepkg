@@ -6,8 +6,7 @@
 
 ## 1.6.1
 
-- [fix] 修复 babel compiler 只在当前 node_modules 下查找
-
+- [fix] 修复 lerna 包下 `style.js` 内容缺失
 ## 1.6.0
 
 - [feat] Rax demos 支持注入自定义内容 ([#157](https://github.com/ice-lab/iceworks-cli/issues/157))
