@@ -28,10 +28,16 @@ interface IOptions {
   cwd: string;
   projectType: string;
   template: string;
+  templateFramework: string;
+  templateLanguage: string;
 }
 
 export default async function ({
-  cwd, projectType, template,
+  cwd,
+  projectType,
+  template,
+  templateFramework,
+  templateLanguage,
 }: IOptions): Promise<void> {
   log.verbose('initMaterialAndComponent', projectType, template);
 
@@ -53,22 +59,26 @@ export default async function ({
       npmName,
       description,
       template,
+      templateFramework,
+      templateLanguage,
       version: '0.1.0',
       materialConfig: templatePkg.materialConfig,
     });
     await fse.copy(tempRootFilesDir, cwd);
 
     // 2. add block
-    await Promise.all(['block'].map((item) => {
-      return addSingleMaterial({
-        materialDir: tempMaterialDir,
-        cwd,
-        useDefaultOptions: true,
-        npmScope,
-        materialType: item,
-        projectType,
-      });
-    }));
+    await Promise.all(
+      ['block'].map((item) => {
+        return addSingleMaterial({
+          materialDir: tempMaterialDir,
+          cwd,
+          useDefaultOptions: true,
+          npmScope,
+          materialType: item,
+          projectType,
+        });
+      }),
+    );
     console.log(`
       Initialize material successfully!
       Inside that directory, you can run several commands:
@@ -117,7 +127,6 @@ export default async function ({
   await fse.remove(tempMaterialDir);
 }
 
-
 interface IResult {
   npmScope: string;
   projectName: string;
@@ -139,40 +148,37 @@ async function initMaterialAsk(cwd, projectType): Promise<IResult> {
 
   const { forInnerNet } = await (isInnerNet
     ? inquirer.prompt([
-      {
-        type: 'confirm',
-        message: '当前处于阿里内网环境，生成只在内网可用的物料',
-        name: 'forInnerNet',
-      },
-    ])
+        {
+          type: 'confirm',
+          message: '当前处于阿里内网环境，生成只在内网可用的物料',
+          name: 'forInnerNet',
+        },
+      ])
     : { forInnerNet: false });
 
-  const { npmScope } = forInnerNet ? await inquirer.prompt([
-    {
-      type: 'list',
-      message: 'please select the npm scope',
-      name: 'npmScope',
-      default: '@ali',
-      choices: [
-        '@ali',
-        '@alife',
-        '@alipay',
-        '@kaola',
-      ],
-    },
-  ]) : await inquirer.prompt([
-    {
-      type: 'input',
-      message: 'npm scope (eg: @ice)',
-      name: 'npmScope',
-      validate: (value) => {
-        if (value && !/^@/.test(value)) {
-          return 'npm scope should starts with @, eg: @ice';
-        }
-        return true;
-      },
-    },
-  ]);
+  const { npmScope } = forInnerNet
+    ? await inquirer.prompt([
+        {
+          type: 'list',
+          message: 'please select the npm scope',
+          name: 'npmScope',
+          default: '@ali',
+          choices: ['@ali', '@alife', '@alipay', '@kaola'],
+        },
+      ])
+    : await inquirer.prompt([
+        {
+          type: 'input',
+          message: 'npm scope (eg: @ice)',
+          name: 'npmScope',
+          validate: (value) => {
+            if (value && !/^@/.test(value)) {
+              return 'npm scope should starts with @, eg: @ice';
+            }
+            return true;
+          },
+        },
+      ]);
   result.npmScope = npmScope;
 
   // 初始化单个组件无需关心

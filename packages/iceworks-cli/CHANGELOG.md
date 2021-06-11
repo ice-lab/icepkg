@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.4.4
+
+- [chore] add `rax-js` template and adjust default template
+- [chore] upgrade `@ice/spec` to `@iceworks/spec`
+
 ## 3.4.3
 
 - [chore] remove `iceworks start` command
@@ -7,7 +12,7 @@
 
 ## 3.4.0
 
-- [feat] support page material  
+- [feat] support page material
 
 ## 3.2.0
 
@@ -69,7 +74,7 @@
 
 ## 3.0.6
 
-- [fix] update node engines to 8.3.0  #2784
+- [fix] update node engines to 8.3.0 #2784
 
 ## 3.0.5
 
@@ -92,7 +97,7 @@
 
 ## 3.0.1
 
--  [feat] add DAU statistics
+- [feat] add DAU statistics
 
 ## 3.0.0
 
