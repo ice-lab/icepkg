@@ -56,6 +56,10 @@ export default async function ({
 
     const tempRootFilesDir = path.join(tempMaterialDir, 'temp');
     await fse.copy(templatePath, tempRootFilesDir);
+    if (templateLanguage !== 'ts') {
+      await fse.remove(path.join(tempRootFilesDir, 'tsconfig.json'));
+    }
+
     await ejsRenderDir(tempRootFilesDir, {
       npmName,
       description,
