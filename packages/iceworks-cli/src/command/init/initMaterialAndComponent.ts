@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /**
  * init material&component
  *
