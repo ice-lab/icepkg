@@ -1,8 +1,8 @@
-# Custom ICE Materials
+# Custom Materials
 
-[Docs](https://ice.work/docs/materials/about).
+[Docs](https://appworks.site/materials/about.html).
 
-## Install Iceworks
+## Install Iceworks CLI
 
 ```bash
 $ npm i -g iceworks
@@ -53,6 +53,6 @@ $ iceworks generate
 $ iceworks sync
 ```
 
-## Use materials in Iceworks
+## Use materials in AppWorks
 
-Add the materials data url to Iceworks.
+Add the materials data url to [AppWorks](https://appworks.site/pack/basic/materials.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%89%A9%E6%96%99%E6%BA%90).
