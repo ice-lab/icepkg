@@ -2,7 +2,7 @@ import React from 'react';
 import { CodeBox } from './CodeBox';
 import './index.css';
 
-export const Playground = ({ data, children }) => {
+export const Playground = ({ data, children, pkg }) => {
   const {
     filename,
     meta,
@@ -10,14 +10,16 @@ export const Playground = ({ data, children }) => {
     highlightedStyle,
     markdownContent,
     readme,
+    code,
   } = data;
 
   // add style scope
   let htmlContent = markdownContent || '';
   const matchCss = htmlContent.match(/<style>([\s\S]*?)<\/style>/);
+  let replaceContent = ''
   if (matchCss) {
     const matchContent = matchCss[1];
-    const replaceContent = matchContent.split('}').map((content) => {
+    replaceContent = matchContent.split('}').map((content) => {
       let cssContent = content;
       if (content[0] === '.') {
         cssContent = `#${filename} ${cssContent}`;
@@ -33,6 +35,9 @@ export const Playground = ({ data, children }) => {
       <div className="preview">
         {renderMarkdownContent(htmlContent)}
         <CodeBox
+          jsCode={code}
+          cssContent={replaceContent}
+          pkg={pkg}
           filename={filename}
           highlightedCode={highlightedCode}
           highlightedStyle={highlightedStyle}

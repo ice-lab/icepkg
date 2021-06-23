@@ -5,7 +5,7 @@ import * as queryString from 'query-string';
 import { Playground } from './Playground';
 import { BuildLayout, Layout } from './Layout';
 
-const App = ({ demoData, readmeData }) => {
+const App = ({ demoData, readmeData, pkg }) => {
   const demos= readmeData ? [].concat(readmeData, demoData) : demoData;
   const items = (demos || []).sort((a, b) => a.order - b.order);
   
@@ -17,7 +17,7 @@ const App = ({ demoData, readmeData }) => {
           <div key={data.filename}>
             <a name={`container_${data.filename}`} />
             {data.title && data.filename !== 'readme' && <h3>{data.title}</h3>}
-            <Playground data={data}>
+            <Playground data={data} pkg={pkg}>
               {typeof Comp === 'function' && <Comp />}
             </Playground>
           </div>
@@ -27,12 +27,12 @@ const App = ({ demoData, readmeData }) => {
   );
 };
 
-const Demo = ({ location, demoData, readmeData }) => {
+const Demo = ({ location, demoData, readmeData, pkg }) => {
   const { demo } = queryString.parse(location && location.search);
   const demos = demoData.find((item) => item[0] && item[0].demoKey === demo);
   return (
     <Layout demos={[].concat(readmeData, demoData)} matchedFilename={demo}>
-      { demos ? <App demoData={demos} /> : <Playground data={readmeData} /> }
+      { demos ? <App demoData={demos} pkg={pkg} /> : <Playground data={readmeData} pkg={pkg} /> }
     </Layout>
   );
 };

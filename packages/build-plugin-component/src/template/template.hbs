@@ -37,9 +37,10 @@ const readmeData = {
   ...readme.meta
 };
 const templateProps = {{{templateProps}}};
+const pkg = {{{pkg}}};
 
 ReactDOM.render((
-  <App readmeData={readmeData} demoData={parsedData} env={process.env.NODE_ENV} templateProps={templateProps} />
+  <App readmeData={readmeData} demoData={parsedData} env={process.env.NODE_ENV} templateProps={templateProps} pkg={pkg} />
 ), document.getElementById('root'));
 
 if (module.hot) {

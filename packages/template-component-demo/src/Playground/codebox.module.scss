@@ -1,16 +1,40 @@
 .actions {
   text-align: end;
   background: #f6f7f9;
-  
+  display: flex;
+  justify-content: flex-end;
+  padding: 11px 12px 12px;
+  opacity: .7;
+  transition: opacity .3s;
+
   button {
-    cursor: pointer;
-    outline: none;
+    margin: 0;
+    padding: 0;
     border: none;
-    font-size: 12px;
-    text-transform: uppercase;
-    transition: color 0.3s;
-    padding: 3px 10px;
-    border-left: 1px solid #ced4de;
+    outline: none;
+    background-color: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+}
+
+.codeAction {
+  height: 20px;
+  width: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 24px;
+  color: rgba(0,0,0,.45);
+  cursor: pointer;
+  transition: all .24s;
+
+  :hover {
+    color: #03c1fd;
+    fill: #03c1fd;
+    background-color: rgba(3,193,253,.12);
+    box-shadow: 0 0 2px 2px rgba(3,193,253,.12);
+    border-radius: 2px;
   }
 }
 
