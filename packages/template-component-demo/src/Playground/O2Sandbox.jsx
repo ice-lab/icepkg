@@ -31,7 +31,7 @@ const O2Sandbox = ({ cssContent, jsCode, pkg }) => {
 
   return (
     <form action="https://o2.alibaba-inc.com/sandbox/define" method="POST" target="_blank" className={styles.codeAction}>
-      <input type="hidden" name="data" value={`{\"name\":\"demo\",\"tags\":[\"fusion\"],\"type\":\"sandpack\",\"entry\":\"src/index.tsx\",\"files\":${JSON.stringify(files)}}`} />
+      <input type="hidden" name="data" value={`{\"name\":\"demo\",\"tags\":[\"fusion\"],\"type\":\"sandpack\",\"entry\":\"index.tsx\",\"files\":${JSON.stringify(files)}}`} />
       <button
         type="submit"
         title="O2"
