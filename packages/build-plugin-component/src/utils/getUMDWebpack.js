@@ -113,7 +113,11 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
               });
             }
           } else if (regex.test(_context) && /\.(scss|less|css)$/.test(request)) {
-            return callback();
+            /**
+             * to exclude styles of externals. As a side effect, a unused varible is generated.
+             */
+            const externalKey = typeof externals[name] === 'string' ? externals[name] : externals[name].root;
+            return callback(null, externalKey);
           }
         }
         return callback();
