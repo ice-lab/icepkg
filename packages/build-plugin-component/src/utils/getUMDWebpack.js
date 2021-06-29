@@ -102,9 +102,20 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
             const externalKey = typeof externals[name] === 'string' ? externals[name] : externals[name].root;
 
             if (componentName) {
-              return callback(null, [externalKey, upperFirst(camelCase(componentName))], 'global');
+              const externalInfo = [externalKey, upperFirst(camelCase(componentName))];
+              const commonExternal = [name, upperFirst(camelCase(componentName))];
+
+              return callback(null, {
+                root: externalInfo,
+                amd: commonExternal,
+                commonjs: commonExternal,
+                commonjs2: commonExternal,
+              });
             }
           } else if (regex.test(_context) && /\.(scss|less|css)$/.test(request)) {
+            /**
+             * to exclude styles of externals. As a side effect, a unused varible is generated.
+             */
             const externalKey = typeof externals[name] === 'string' ? externals[name] : externals[name].root;
             return callback(null, externalKey);
           }
