@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import * as camelCase from 'camelcase';
-import * as readFiles from 'fs-readdir-recursive';
 import * as pkgDir from 'pkg-dir';
 import * as glob from 'glob';
 import * as transformTsToJs from 'transform-ts-to-js';
@@ -11,6 +10,8 @@ import log from '../../utils/log';
 import { TEMP_PATH } from '../../utils/constants';
 import getNpmTarball from '../../utils/getNpmTarball';
 import getNpmRegistry from '../../utils/getNpmRegistry';
+
+import readFiles = require('fs-readdir-recursive');
 
 export default async (options, destDir) => {
   const tempDir = TEMP_PATH;
@@ -39,10 +40,13 @@ async function addBlock(options, destDir, tempDir) {
   }
   const blockDirPath = path.resolve(destDir, blockDirName);
 
-  return fse.pathExists(blockDirPath)
+  return fse
+    .pathExists(blockDirPath)
     .then((exists) => {
       if (exists) {
-        return Promise.reject(new Error(`${blockDirPath} already exists, you can use cli -n option to custom block directory name`));
+        return Promise.reject(
+          new Error(`${blockDirPath} already exists, you can use cli -n option to custom block directory name`),
+        );
       }
       return Promise.resolve();
     })
@@ -96,7 +100,7 @@ async function addBlock(options, destDir, tempDir) {
 function getBlockType(blockDirPath) {
   const files = readFiles(path.join(blockDirPath, 'src'));
 
-  const index = files.findIndex(item => {
+  const index = files.findIndex((item) => {
     return /\.ts(x)/.test(item);
   });
 
@@ -109,8 +113,9 @@ function getProjectType(destDir) {
   log.verbose('projectDir: ', projectDir);
 
   const hasTsconfig = fse.existsSync(path.join(projectDir, 'tsconfig.json'));
-  const hasAppJs = fse.existsSync(path.join(projectDir, 'src/app.js')) || fse.existsSync(path.join(projectDir, 'src/app.jsx'));
+  const hasAppJs =
+    fse.existsSync(path.join(projectDir, 'src/app.js')) || fse.existsSync(path.join(projectDir, 'src/app.jsx'));
 
   // icejs 都有 tsconfig，因此需要通过 src/app.js[x] 进一步区分
-  return (hasTsconfig && !hasAppJs) ? 'ts' : 'js';
+  return hasTsconfig && !hasAppJs ? 'ts' : 'js';
 }
