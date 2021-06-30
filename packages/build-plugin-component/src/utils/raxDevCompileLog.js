@@ -12,7 +12,7 @@ function devCompileLog(devCompleted, context, options) {
   consoleClear(true);
 
   const { userConfig: { targets }, rootDir, commandArgs: { port } } = context;
-  const { entries } = options;
+  const { entries, watchDist } = options;
 
   const { err, stats, url } = devCompleted;
 
@@ -25,7 +25,7 @@ function devCompileLog(devCompleted, context, options) {
   console.log(chalk.green('Rax development server has been started:'));
   console.log();
 
-  if (options.watchDist) {
+  if (watchDist) {
     console.log(chalk.green('[Dist] Development pages:'));
     const distBundles = [];
     if (targets.includes(WEB)) {
