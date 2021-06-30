@@ -1,7 +1,6 @@
 const chalk = require('chalk');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-
-const isWebIDE = process.env.CLOUDIDE_ENV;
+const { getIsO2WebIDE, getWebIDEDevUrl } = require('./webIDEHelper');
 
 module.exports = ({ urls, stats, log, context }) => {
   const { port } = context.commandArgs;
@@ -32,11 +31,13 @@ module.exports = ({ urls, stats, log, context }) => {
     timings: false,
   }));
 
+  const isWebIDE = getIsO2WebIDE();
+
   if (!hasError) {
     log.info('');
     log.info(chalk.green(' Starting the development server at:'));
     if (isWebIDE) {
-      log.info('   - IDE server: ', `https://${process.env.WORKSPACE_UUID}-${port}.${process.env.WORKSPACE_HOST}`);
+      log.info('   - IDE server: ', getWebIDEDevUrl(port));
     } else {
       log.info('   - Local  : ', chalk.underline.white(urls.localUrlForBrowser));
       log.info('   - Network: ', chalk.underline.white(urls.lanUrlForTerminal));

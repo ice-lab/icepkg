@@ -6,10 +6,17 @@ const qrcode = require('qrcode-terminal');
 const { handleWebpackErr } = require('rax-compile-config');
 const { platformMap } = require('miniapp-builder-shared');
 const { WEB, WEEX, NODE, MINIAPP } = require('../constants');
+const { getIsO2WebIDE, getWebIDEDevUrl } = require('./webIDEHelper');
 
-function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options) {
+function devCompileLog(devCompleted, context, options) {
   consoleClear(true);
-  const { err, stats } = devCompleted;
+
+  const { userConfig: { targets }, rootDir, commandArgs: { port } } = context;
+  const { entries } = options;
+
+  const { err, stats, url } = devCompleted;
+
+  const devUrl = getIsO2WebIDE() ? getWebIDEDevUrl(port) : url;
 
   if (!handleWebpackErr(err, stats)) {
     return;
