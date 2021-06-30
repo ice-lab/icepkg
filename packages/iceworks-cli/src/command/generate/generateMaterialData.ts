@@ -3,6 +3,8 @@ import * as fse from 'fs-extra';
 import * as chalk from 'chalk';
 import * as urlJoin from 'url-join';
 import axios from 'axios';
+import { getLatestVersion } from 'ice-npm-utils';
+
 import getNpmRegistry from '../../utils/getNpmRegistry';
 import getUnpkgHost from '../../utils/getUnpkgHost';
 import log from '../../utils/log';
@@ -12,10 +14,16 @@ export default async function generateMaterialData(pkgPath, materialType, materi
   const pkg = await fse.readJson(pkgPath);
 
   const materialItemConfig = pkg[`${materialType}Config`] || {};
-  const { name: npmName, version } = pkg;
+  const { name: npmName } = pkg;
+  let version = pkg.version;
+
   const unpkgHost = await getUnpkgHost(npmName, materialConfig);
   // 默认情况不能用 taobao 源，因为存在不同步问题
   const registry = await getNpmRegistry(npmName, materialConfig, pkg.publishConfig, false);
+
+  if (version === 'latest') {
+    version = await getLatestVersion(npmName, registry);
+  }
 
   // 检查包是否发布并补全时间
   // log.verbose('getNpmPublishTime start', npmName, version, registry);
@@ -24,11 +32,11 @@ export default async function generateMaterialData(pkgPath, materialType, materi
 
   const screenshot = materialItemConfig.screenshot
     || materialItemConfig.snapshot
-    || (fse.existsSync(path.join(projectPath, 'screenshot.png')) && `${unpkgHost}/${npmName}@${pkg.version}/screenshot.png`)
-    || (fse.existsSync(path.join(projectPath, 'screenshot.jpg')) && `${unpkgHost}/${npmName}@${pkg.version}/screenshot.jpg`)
-    || `${unpkgHost}/${npmName}@${pkg.version}/screenshot.png`;
+    || (fse.existsSync(path.join(projectPath, 'screenshot.png')) && `${unpkgHost}/${npmName}@${version}/screenshot.png`)
+    || (fse.existsSync(path.join(projectPath, 'screenshot.jpg')) && `${unpkgHost}/${npmName}@${version}/screenshot.jpg`)
+    || `${unpkgHost}/${npmName}@${version}/screenshot.png`;
   const screenshots = materialItemConfig.screenshots || (screenshot && [screenshot]);
-  const homepage = pkg.homepage || `${unpkgHost}/${npmName}@${pkg.version}/build/index.html`;
+  const homepage = pkg.homepage || `${unpkgHost}/${npmName}@${version}/build/index.html`;
 
   const { categories: originCategories, category: originCategory } = materialItemConfig;
   // categories 字段：即将废弃，但是展示端还依赖该字段，因此短期内不能删除，同时需要兼容新的物料无 categories 字段
@@ -57,7 +65,7 @@ export default async function generateMaterialData(pkgPath, materialType, materi
     source: {
       type: 'npm',
       npm: npmName,
-      version: pkg.version,
+      version,
       registry,
       author: pkg.author,
     },

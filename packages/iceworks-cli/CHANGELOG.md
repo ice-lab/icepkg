@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4.5
+
+- [feat] support `version: 'latest'` material package
+
 ## 3.4.4
 
 - [chore] add `rax-js` template and adjust default template
