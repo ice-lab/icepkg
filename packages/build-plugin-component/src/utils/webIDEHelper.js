@@ -3,7 +3,7 @@ function getIsO2WebIDE() {
 }
 
 function getWebIDEDevUrl(port) {
-  return `https://${process.env.WORKSPACE_UUID}-${port}.${process.env.WORKSPACE_HOST}`;
+  return `https://${process.env.WORKSPACE_UUID}-${port}.${process.env.WORKSPACE_HOST}/`;
 }
 
 module.exports = {
