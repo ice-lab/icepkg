@@ -18,6 +18,7 @@ const devConfig = require('./configs/react/dev');
 const buildConfig = require('./configs/react/build');
 const defaultUserConfig = require('./configs/userConfig');
 const reactUserConfig = require('./configs/react/userConfig');
+const setDevLog = require('./utils/setDevLog');
 
 const babelCompiler = require('./compiler/babel');
 
@@ -107,6 +108,9 @@ module.exports = (
       demoWatcher.on('error', (error) => {
         log.error('fail to watch demo', error);
       });
+
+      // disable default stats
+      process.env.DISABLE_STATS = true;
     }
 
     onGetWebpackConfig(taskName, (config) => {
@@ -186,6 +190,11 @@ module.exports = (
     if (!commandArgs.skipDemo) {
       await modifyPkgHomePage(pkg, rootDir);
     }
+  });
+
+  onHook('after.start.compile', async ({ urls, stats }) => {
+    // 自定义 log 内容
+    setDevLog({ log, context, urls, stats });
   });
 
   onHook('after.start.devServer', ({ url }) => {

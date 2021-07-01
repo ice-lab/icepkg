@@ -6,10 +6,17 @@ const qrcode = require('qrcode-terminal');
 const { handleWebpackErr } = require('rax-compile-config');
 const { platformMap } = require('miniapp-builder-shared');
 const { WEB, WEEX, NODE, MINIAPP } = require('../constants');
+const { isWebIDE, getWebIDEDevUrl } = require('./webIDEHelper');
 
-function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options) {
+function devCompileLog(devCompleted, context, options) {
   consoleClear(true);
-  const { err, stats } = devCompleted;
+
+  const { userConfig: { targets }, rootDir, commandArgs: { port } } = context;
+  const { entries, watchDist } = options;
+
+  const { err, stats, url } = devCompleted;
+
+  const devUrl = isWebIDE ? getWebIDEDevUrl(port) : url;
 
   if (!handleWebpackErr(err, stats)) {
     return;
@@ -18,7 +25,7 @@ function devCompileLog(devCompleted, devUrl, targets, entries, rootDir, options)
   console.log(chalk.green('Rax development server has been started:'));
   console.log();
 
-  if (options.watchDist) {
+  if (watchDist) {
     console.log(chalk.green('[Dist] Development pages:'));
     const distBundles = [];
     if (targets.includes(WEB)) {

@@ -201,8 +201,7 @@ module.exports = ({
   });
 
   onHook('after.start.compile', async (args) => {
-    const devUrl = args.url;
-    devCompileLog(args, devUrl, targets, entries, rootDir, { ...userConfig, watchDist });
+    devCompileLog(args, context, { ...userConfig, watchDist, entries });
   });
 
   if (command === 'test') {
