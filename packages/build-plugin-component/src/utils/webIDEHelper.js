@@ -1,4 +1,4 @@
-function getIsO2WebIDE() {
+function isWebIDE() {
   return !!process.env.CLOUDIDE_ENV;
 }
 
@@ -7,6 +7,6 @@ function getWebIDEDevUrl(port) {
 }
 
 module.exports = {
-  getIsO2WebIDE,
+  isWebIDE,
   getWebIDEDevUrl,
 };

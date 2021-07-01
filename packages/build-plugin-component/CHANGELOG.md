@@ -2,7 +2,8 @@
 
 ## 1.6.3
 
-- [feat] 支持 o2 IDE 开发调试
+- [feat] 支持 O2 IDE 开发调试
+
 ## 1.6.2
 
 - [fix] 修复 external 下包错误引入的问题 ([#180](https://github.com/ice-lab/iceworks-cli/issues/180))
