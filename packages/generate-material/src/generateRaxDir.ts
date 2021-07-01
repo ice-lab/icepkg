@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
-import { ITemplateOptions, ENV_MAP } from './types';
+import { ITemplateOptions, EnvTypeMap } from './types';
 
 const ENV_MAP = {
   web: 'isWeb',
@@ -8,14 +8,14 @@ const ENV_MAP = {
   miniapp: 'isMiniApp',
   'wechat-miniprogram': 'isWechatMiniProgram',
   kraken: 'isKraken',
-}
+};
 
 export default (rootDir: string, templateOptions: ITemplateOptions) => {
-  const targets: (keyof ENV_MAP)[] = templateOptions.projectTargets;
+  const targets: (keyof EnvTypeMap)[] = templateOptions.projectTargets;
 
   // Remove not expected target dir
   Object.keys(ENV_MAP)
-    .filter((target: keyof ENV_MAP) => !targets.includes(target))
+    .filter((target: keyof EnvTypeMap) => !targets.includes(target))
     .forEach(target => {
       const dir = path.join(rootDir, 'src', target);
       fse.removeSync(dir);
@@ -24,7 +24,7 @@ export default (rootDir: string, templateOptions: ITemplateOptions) => {
   // Generate entry file
   const entryPath = fse.existsSync(path.join(rootDir, 'tsconfig.json')) ? 'src/index.tsx' : 'src/index.js';
   let entryContent = 'let MyComponent;';
-  let importList = [];
+  const importList = [];
   //
   /**
    * Make web as the first
@@ -47,13 +47,13 @@ if (isWeb) {
       if (target !== 'web') {
         entryContent += ` else if (${ENV_MAP[target]}) {
   MyComponent = require('./${target}').default;
-}`
+}`;
       }
     });
     entryContent += ` else {
   // Use web as default implement for SSR or other web like containers
   MyComponent = require('./web').default;
-}`
+}`;
   } else {
     /**
      * Example:
@@ -80,4 +80,4 @@ if (isWeb) {
   // import { isWeb, isMiniApp } from 'universal-env';
   entryContent = `import { ${importList.join(', ')} } from 'universal-env';\n` + entryContent + '\nexport default MyComponent;';
   fse.writeFileSync(path.join(rootDir, entryPath), entryContent);
-}
+};
