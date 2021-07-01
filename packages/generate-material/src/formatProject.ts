@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as fse from 'fs-extra';
 import { isAliNpm } from 'ice-npm-utils';
 import { ITemplateOptions } from './types';
+import generateRaxDir from './generateRaxDir';
 
 interface IOptions {
   rootDir: string;
@@ -46,6 +47,10 @@ export default async function formatProject({
         },
       ]);
     }
+  }
+
+  if (materialType === 'component' && Array.isArray(templateOptions.projectTargets)) {
+    generateRaxDir(rootDir, templateOptions);
   }
 
   abcData && fse.writeJSONSync(abcPath, abcData, { spaces: 2 });

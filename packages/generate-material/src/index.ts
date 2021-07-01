@@ -39,7 +39,7 @@ export async function generateMaterial({
     kebabCaseName: name,
     npmScope,
     title: '示例组件',
-    description: '这个组件的功能是 balabala',
+    description: '组件功能描述',
     className: camelcase(name, { pascalCase: true }),
     version: '0.1.0',
     category: '',
