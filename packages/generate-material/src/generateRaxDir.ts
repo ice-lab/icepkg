@@ -12,17 +12,36 @@ const ENV_MAP = {
 
 export default (rootDir: string, templateOptions: ITemplateOptions) => {
   const targets: (keyof EnvTypeMap)[] = templateOptions.projectTargets;
+  const wholeTargets = Object.keys(ENV_MAP) as (keyof EnvTypeMap)[];
+  const entryPath = fse.existsSync(path.join(rootDir, 'tsconfig.json')) ? 'src/index.tsx' : 'src/index.js';
+
+  // Use normal template with miniapp compile mode
+  if (templateOptions.miniappComponentBuildType === 'compile') {
+    fse.writeFileSync(path.join(rootDir, entryPath), `import { createElement } from 'rax';
+    import View from 'rax-view';
+    import Text from 'rax-text';
+    import './index.css';
+
+    const MyComponent = () => {
+      return (
+        <View>
+          <Text className="rax-demo-title">Hello world!</Text>
+        </View>
+      );
+    };
+
+    export default MyComponent;
+    `);
+
+    // Remove all target dir in miniapp compile mode
+    removeUselessDir(rootDir, wholeTargets);
+    return;
+  }
 
   // Remove not expected target dir
-  Object.keys(ENV_MAP)
-    .filter((target: keyof EnvTypeMap) => !targets.includes(target))
-    .forEach(target => {
-      const dir = path.join(rootDir, 'src', target);
-      fse.removeSync(dir);
-    });
+  removeUselessDir(rootDir, wholeTargets.filter((target: keyof EnvTypeMap) => !targets.includes(target)));
 
   // Generate entry file
-  const entryPath = fse.existsSync(path.join(rootDir, 'tsconfig.json')) ? 'src/index.tsx' : 'src/index.js';
   let entryContent = 'let MyComponent;';
   const importList = [];
   //
@@ -81,3 +100,10 @@ if (isWeb) {
   entryContent = `import { ${importList.join(', ')} } from 'universal-env';\n` + entryContent + '\nexport default MyComponent;';
   fse.writeFileSync(path.join(rootDir, entryPath), entryContent);
 };
+
+function removeUselessDir(rootDir: string, targets: (keyof EnvTypeMap)[]) {
+  targets.forEach(target => {
+    const dir = path.join(rootDir, 'src', target);
+    fse.removeSync(dir);
+  });
+}
