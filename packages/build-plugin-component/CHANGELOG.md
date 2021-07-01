@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.4
+
+- [fix] 修复 win32 路径问题
+
 ## 1.6.3
 
 - [feat] 支持 O2 IDE 开发调试
