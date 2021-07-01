@@ -34,7 +34,7 @@ module.exports = ({ urls, stats, log, context }) => {
   if (!hasError) {
     log.info('');
     log.info(chalk.green(' Starting the development server at:'));
-    if (isWebIDE()) {
+    if (isWebIDE) {
       log.info('   - IDE server: ', chalk.underline.white(getWebIDEDevUrl(port)));
     } else {
       log.info('   - Local  : ', chalk.underline.white(urls.localUrlForBrowser));

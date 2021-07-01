@@ -16,7 +16,7 @@ function devCompileLog(devCompleted, context, options) {
 
   const { err, stats, url } = devCompleted;
 
-  const devUrl = isWebIDE() ? getWebIDEDevUrl(port) : url;
+  const devUrl = isWebIDE ? getWebIDEDevUrl(port) : url;
 
   if (!handleWebpackErr(err, stats)) {
     return;
