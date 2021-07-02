@@ -68,5 +68,5 @@ if (isWeb) {
 };
 
 function addMappedRequire(target) {
-  return `MyComponent = require('./${target}').default;`
+  return `MyComponent = require('./${target}').default;`;
 }
