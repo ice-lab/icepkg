@@ -1,7 +1,9 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import { isAliNpm } from 'ice-npm-utils';
-import { ITemplateOptions } from './types';
+import { ITemplateOptions, EnvMapType } from './types';
+import generateEntryFile from './template/generateEntryFile';
+import { ENV_MAP } from './constants';
 
 interface IOptions {
   rootDir: string;
@@ -48,7 +50,29 @@ export default async function formatProject({
     }
   }
 
+  const targets = templateOptions.projectTargets;
+  if (materialType === 'component' && Array.isArray(targets)) {
+    const wholeTargets = Object.keys(ENV_MAP) as (keyof EnvMapType)[];
+    let uselessTargets = [];
+    if (templateOptions.miniappComponentBuildType === 'compile') {
+      uselessTargets = wholeTargets;
+    } else {
+      uselessTargets = wholeTargets.filter((target: keyof EnvMapType) => !targets.includes(target));
+      // Generate src/index.tsx
+      generateEntryFile(rootDir, templateOptions);
+    }
+    // Remove not expected target dir
+    removeUselessDir(rootDir, uselessTargets);
+  }
+
   abcData && fse.writeJSONSync(abcPath, abcData, { spaces: 2 });
   fse.writeJSONSync(buildJsonPath, buildData, { spaces: 2 });
   fse.writeJSONSync(pkgPath, pkgData, { spaces: 2 });
+}
+
+function removeUselessDir(rootDir: string, targets: (keyof EnvMapType)[]) {
+  targets.forEach(target => {
+    const dir = path.join(rootDir, 'src', target);
+    fse.removeSync(dir);
+  });
 }

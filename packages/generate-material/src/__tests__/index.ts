@@ -58,3 +58,40 @@ test('generate scaffold', async () => {
     },
   });
 });
+
+test('generate rax component', async () => {
+  const projectDir = path.resolve(tmpPath, 'rax-component');
+  const materialTemplateDir = path.join(projectDir, '.tmp');
+  await fs.ensureDir(projectDir);
+
+  await downloadMaterialTemplate(materialTemplateDir, '@icedesign/template-rax', registry);
+  await generateMaterial({
+    rootDir: projectDir,
+    materialTemplateDir,
+    materialType: 'component',
+    templateOptions: {
+      npmName: 'rax-example',
+      projectTargets: ['web', 'miniapp'],
+      miniappComponentBuildType: 'runtime',
+      isAliInternal: false
+    },
+  });
+  const webPath = path.join(projectDir, 'src/web');
+  expect(fs.existsSync(webPath)).toBeTrue();
+  const miniappPath = path.join(projectDir, 'src/miniapp');
+  expect(fs.existsSync(miniappPath)).toBeTrue();
+  const weexPath = path.join(projectDir, 'src/weex');
+  expect(fs.existsSync(weexPath)).toBeFalse();
+  const entryContent = fs.readFileSync(path.join(projectDir, 'src/index.tsx'), 'utf-8');
+  expect(entryContent).toEqual(`import { isWeb, isMiniApp } from 'universal-env';
+let MyComponent;
+if (isWeb) {
+  MyComponent = require('./web').default;
+} else if (isMiniApp) {
+  MyComponent = require('./miniapp').default;
+} else {
+  // Use web as default implement for SSR or other web like containers
+  MyComponent = require('./web').default;
+}
+export default MyComponent;`);
+});
