@@ -1,4 +1,4 @@
-export type EnvTypeMap = {
+export type EnvMapType = {
   web: 'isWeb';
   weex: 'isWeex';
   miniapp: 'isMiniApp';
@@ -17,7 +17,7 @@ export interface ITemplateOptions {
   version?: string;
   category?: string;
   // web, miniapp...
-  projectTargets?: Array<keyof EnvTypeMap>;
+  projectTargets?: Array<keyof EnvMapType>;
   adaptor?: boolean;
   miniappComponentBuildType?: 'runtime' | 'compile'; // miniapp build type
   isAliInternal?: boolean;
