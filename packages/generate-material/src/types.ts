@@ -17,7 +17,7 @@ export interface ITemplateOptions {
   version?: string;
   category?: string;
   // web, miniapp...
-  projectTargets?: Array<keyof EnvMapType>;
+  projectTargets?: (keyof EnvMapType)[];
   adaptor?: boolean;
   miniappComponentBuildType?: 'runtime' | 'compile'; // miniapp build type
   isAliInternal?: boolean;
