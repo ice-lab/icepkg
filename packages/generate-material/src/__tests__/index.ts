@@ -71,7 +71,7 @@ test('generate rax component', async () => {
     materialType: 'component',
     templateOptions: {
       npmName: 'rax-example',
-      projectTargets: ['web'],
+      projectTargets: ['web', 'miniapp'],
       miniappComponentBuildType: 'runtime',
       isAliInternal: false
     },
