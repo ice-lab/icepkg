@@ -50,11 +50,11 @@ export default async function formatProject({
     }
   }
 
-  const targets = templateOptions.projectTargets;
+  const { miniappComponentBuildType = 'compile', projectTargets: targets = [] } = templateOptions;
   if (materialType === 'component' && Array.isArray(targets)) {
     const wholeTargets = Object.keys(ENV_MAP) as (keyof EnvMapType)[];
     let uselessTargets = [];
-    if (templateOptions.miniappComponentBuildType === 'compile') {
+    if (miniappComponentBuildType === 'compile' || targets.length === 1) {
       uselessTargets = wholeTargets;
     } else {
       uselessTargets = wholeTargets.filter((target: keyof EnvMapType) => !targets.includes(target));
