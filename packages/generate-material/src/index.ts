@@ -7,6 +7,8 @@ import { IOptions, ITemplateOptions } from './types';
 import ejsRenderDir from './ejsRenderDir';
 import formatProject from './formatProject';
 
+export * from './types';
+
 /**
  * init component by template
  */
