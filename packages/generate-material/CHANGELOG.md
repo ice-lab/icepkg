@@ -1,5 +1,9 @@
 # `@iceworks/generate-material`
 
+## 1.0.6
+
+- fix: `templateOptions.miniappComponentBuildType` is `undefined`
+
 ## 1.0.5
 
 - feat: dynamic generate rax entry file

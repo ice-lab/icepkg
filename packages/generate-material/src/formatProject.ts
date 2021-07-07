@@ -54,12 +54,12 @@ export default async function formatProject({
   if (materialType === 'component' && Array.isArray(targets)) {
     const wholeTargets = Object.keys(ENV_MAP) as (keyof EnvMapType)[];
     let uselessTargets = [];
-    if (templateOptions.miniappComponentBuildType === 'compile') {
-      uselessTargets = wholeTargets;
-    } else {
+    if (targets.length > 1 && templateOptions.miniappComponentBuildType === 'runtime') {
       uselessTargets = wholeTargets.filter((target: keyof EnvMapType) => !targets.includes(target));
       // Generate src/index.tsx
       generateEntryFile(rootDir, templateOptions);
+    } else {
+      uselessTargets = wholeTargets;
     }
     // Remove not expected target dir
     removeUselessDir(rootDir, uselessTargets);
