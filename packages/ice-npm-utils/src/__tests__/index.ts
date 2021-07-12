@@ -18,9 +18,16 @@ import {
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
 // HACK: taobao 源返回的信息里是这个
-const cnpmRegistry = 'https://registry.nlark.com';
+let cnpmRegistry =defaultRegistry ;
 
 jest.setTimeout(10 * 1000);
+
+beforeAll(async () => {
+  const isAli = await checkAliInternal();
+  if (isAli) {
+    cnpmRegistry = 'https://registry.nlark.com';
+  }
+});
 
 test('getNpmRegistry', () => {
   expect(getNpmRegistry('koa')).toBe(defaultRegistry);
