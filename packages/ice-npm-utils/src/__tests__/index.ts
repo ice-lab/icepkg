@@ -17,6 +17,8 @@ import {
 } from '../index';
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
+// HACK: taobao 源返回的信息里是这个
+const cnpmRegistry = 'https://registry.nlark.com';
 
 jest.setTimeout(10 * 1000);
 
@@ -121,13 +123,13 @@ test('checkAliInternal', () => {
 
 test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
-    expect(tarball).toBe(`${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`);
+    expect(tarball).toBe(`${cnpmRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`);
   });
 });
 
 test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
-    expect(tarball).toBe(`${defaultRegistry}/http/download/http-0.0.1-security.tgz`);
+    expect(tarball).toBe(`${cnpmRegistry}/http/download/http-0.0.1-security.tgz`);
   });
 });
 

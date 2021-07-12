@@ -7,6 +7,7 @@ module.exports = {
     '__tests__/tmp/',
     '.tmp/',
     '/node_modules/',
+    'examples/'
   ],
   modulePathIgnorePatterns: [
     // '<rootDir>/packages/generate-project/',
