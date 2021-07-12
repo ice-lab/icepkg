@@ -5,6 +5,7 @@ const generateEntry = require('./generateEntry');
 const getReadme = require('./getReadme');
 const { getModulesInfo } = require('./getPortalModules');
 const { getRaxDemoEntryJs } = require('./handlePaths');
+const formatPathForWin = require('./formatPathForWin');
 
 function generatePortalModules(context) {
   const { rootDir } = context;
@@ -22,7 +23,7 @@ function generatePortalModules(context) {
 function generateRaxDemo(demos, context, applyMethod) {
   const { rootDir, command, userConfig, pkg } = context;
 
-  const modulesPath = path.join(rootDir, './build');
+  const modulesPath = formatPathForWin(path.join(rootDir, './build'));
 
   fse.ensureDirSync(modulesPath);
 
