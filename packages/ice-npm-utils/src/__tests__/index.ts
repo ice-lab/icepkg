@@ -17,8 +17,17 @@ import {
 } from '../index';
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
+let cnpmResponseRegistry = defaultRegistry ;
 
 jest.setTimeout(10 * 1000);
+
+beforeAll(async () => {
+  const isAli = await checkAliInternal();
+  if (isAli) {
+    // hack: taobao 源内网的返回格式
+    cnpmResponseRegistry = 'https://registry.nlark.com';
+  }
+});
 
 test('getNpmRegistry', () => {
   expect(getNpmRegistry('koa')).toBe(defaultRegistry);
@@ -121,13 +130,13 @@ test('checkAliInternal', () => {
 
 test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
-    expect(tarball).toBe(`${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`);
+    expect(tarball).toBe(`${cnpmResponseRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`);
   });
 });
 
 test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
-    expect(tarball).toBe(`${defaultRegistry}/http/download/http-0.0.1-security.tgz`);
+    expect(tarball).toBe(`${cnpmResponseRegistry}/http/download/http-0.0.1-security.tgz`);
   });
 });
 
