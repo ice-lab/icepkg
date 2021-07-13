@@ -1,17 +1,10 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "target": "es6",
+    "target": "es5",
     "jsx": "react",
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "lib": ["es6", "dom"],
-    "sourceMap": true,
-    "allowJs": true,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "skipLibCheck": true
+    "experimentalDecorators": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "lib": ["es5", "dom"]
   }
 }
