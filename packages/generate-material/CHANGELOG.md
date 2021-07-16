@@ -1,5 +1,9 @@
 # `@iceworks/generate-material`
 
+## 1.0.7
+
+- feat: support runtime mode when building miniapp plugin
+
 ## 1.0.6
 
 - fix: `templateOptions.miniappComponentBuildType` is `undefined`

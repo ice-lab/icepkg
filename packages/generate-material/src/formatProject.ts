@@ -50,19 +50,25 @@ export default async function formatProject({
     }
   }
 
-  const { miniappComponentBuildType = 'compile', projectTargets: targets = [] } = templateOptions;
+  const { miniappComponentBuildType = 'compile', miniappPluginBuildType = 'compile', projectTargets: targets = [] } = templateOptions;
   if (materialType === 'component' && Array.isArray(targets)) {
-    const wholeTargets = Object.keys(ENV_MAP) as (keyof EnvMapType)[];
-    let uselessTargets = [];
-    if (miniappComponentBuildType === 'compile' || targets.length === 1) {
-      uselessTargets = wholeTargets;
+    // If miniappPluginBuildType is configured, means its a miniapp plugin project
+    if (miniappPluginBuildType === 'runtime') {
+      // Remove src/index.tsx because runtime mode doesn't support js api build for now
+      fse.removeSync(path.join(rootDir, 'src', 'index'));
     } else {
-      uselessTargets = wholeTargets.filter((target: keyof EnvMapType) => !targets.includes(target));
-      // Generate src/index.tsx
-      generateEntryFile(rootDir, templateOptions);
+      const wholeTargets = Object.keys(ENV_MAP) as (keyof EnvMapType)[];
+      let uselessTargets = [];
+      if (miniappComponentBuildType === 'compile' || targets.length === 1) {
+        uselessTargets = wholeTargets;
+      } else {
+        uselessTargets = wholeTargets.filter((target: keyof EnvMapType) => !targets.includes(target));
+        // Generate src/index.tsx
+        generateEntryFile(rootDir, templateOptions);
+      }
+      // Remove not expected target dir
+      removeUselessDir(rootDir, uselessTargets);
     }
-    // Remove not expected target dir
-    removeUselessDir(rootDir, uselessTargets);
   }
 
   abcData && fse.writeJSONSync(abcPath, abcData, { spaces: 2 });
