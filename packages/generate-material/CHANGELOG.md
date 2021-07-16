@@ -1,5 +1,9 @@
 # `@iceworks/generate-material`
 
+## 1.0.7
+
+- chore: typo `isWeChatMiniProgram`
+
 ## 1.0.6
 
 - fix: `templateOptions.miniappComponentBuildType` is `undefined`
