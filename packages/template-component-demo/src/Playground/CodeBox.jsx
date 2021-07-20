@@ -21,6 +21,7 @@ export class CodeBox extends React.Component {
       jsCode,
       cssContent,
       pkg,
+      codesandbox,
     } = this.props;
     const { check } = this.state;
     if (!children) return null;
@@ -32,7 +33,7 @@ export class CodeBox extends React.Component {
           </div>
         )}
         <div className={styles.actions}>
-          <O2Sandbox jsCode={jsCode} cssContent={cssContent} pkg={pkg} />
+          {codesandbox.includes('o2') && <O2Sandbox jsCode={jsCode} cssContent={cssContent} pkg={pkg} />}
           <button
             type="button"
             title="Close editor"

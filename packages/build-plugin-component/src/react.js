@@ -85,6 +85,7 @@ module.exports = (
           templateProps: JSON.stringify(templateProps || {}),
           demoData,
           pkg: JSON.stringify(pkg || {}),
+          codesandbox: JSON.stringify(userConfig.codesandbox || []),
         },
       });
       // wirte demo content

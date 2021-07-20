@@ -2,6 +2,7 @@
   "htmlInjection": {
     "headAppend": ["<link href=\"test.css\">"]
   },
+  "codesandbox": ["o2"],
   "plugins": [
     "build-plugin-component",
     "build-plugin-fusion",

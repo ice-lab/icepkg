@@ -2,7 +2,7 @@ import React from 'react';
 import { CodeBox } from './CodeBox';
 import './index.css';
 
-export const Playground = ({ data, children, pkg }) => {
+export const Playground = ({ data, children, pkg, codesandbox }) => {
   const {
     filename,
     meta,
@@ -35,6 +35,7 @@ export const Playground = ({ data, children, pkg }) => {
       <div className="preview">
         {renderMarkdownContent(htmlContent)}
         <CodeBox
+          codesandbox={codesandbox}
           jsCode={code}
           cssContent={replaceContent}
           pkg={pkg}
