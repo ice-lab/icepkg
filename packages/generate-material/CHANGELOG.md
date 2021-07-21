@@ -1,5 +1,9 @@
 # `@iceworks/generate-material`
 
+## 1.0.9
+
+- fix: remove src/index.ts when building miniapp plugin with runtime mode
+
 ## 1.0.8
 
 - feat: support runtime mode when building miniapp plugin
