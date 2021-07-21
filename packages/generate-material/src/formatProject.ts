@@ -54,8 +54,8 @@ export default async function formatProject({
   if (materialType === 'component' && Array.isArray(targets)) {
     // If miniappPluginBuildType is configured, means its a miniapp plugin project
     if (miniappPluginBuildType === 'runtime') {
-      // Remove src/index.tsx because runtime mode doesn't support js api build for now
-      fse.removeSync(path.join(rootDir, 'src', 'index'));
+      // Remove src/index.ts because runtime mode doesn't support js api build for now
+      fse.removeSync(path.join(rootDir, 'src', 'index.ts'));
     } else {
       const wholeTargets = Object.keys(ENV_MAP) as (keyof EnvMapType)[];
       let uselessTargets = [];
