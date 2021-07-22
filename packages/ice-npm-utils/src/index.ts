@@ -1,5 +1,5 @@
 import * as fsExtra from 'fs-extra';
-import { ALI_NPM_REGISTRY, ALI_UNPKG_URL, ALI_CHECKNODE_URL } from '@iceworks/constant';
+import { ALI_NPM_REGISTRY, ALI_UNPKG_URL, ALI_CHECKNODE_URL } from '@appworks/constant';
 
 import request = require('request-promise');
 import semver = require('semver');

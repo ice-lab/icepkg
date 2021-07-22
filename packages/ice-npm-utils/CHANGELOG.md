@@ -1,10 +1,15 @@
 # Changelog
 
+## 2.1.2
+
+- [chore] remove `@iceworks/constant`, use `@appworks/constant`
+
 ## 2.1.1
 
 - [chore] better error message
 
 ## 2.1.0
+
 - [feat] add `getVersions` and `getSatisfiesVersions` method
 
 ## 1.4.1

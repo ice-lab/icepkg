@@ -1,6 +1,6 @@
 {
   "name": "ice-npm-utils",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "npm utils for ice",
   "main": "lib/index.js",
   "files": [
@@ -11,6 +11,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@appworks/constant": "^0.1.2",
     "fs-extra": "^8.1.0",
     "mkdirp": "^0.5.1",
     "request": "^2.88.0",
@@ -18,8 +19,7 @@
     "request-promise": "^4.2.4",
     "semver": "^6.0.0",
     "tar": "^4.4.8",
-    "url-join": "^4.0.1",
-    "@iceworks/constant": "^0.1.0"
+    "url-join": "^4.0.1"
   },
   "publishConfig": {
     "access": "public"

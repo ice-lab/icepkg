@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
-import { ALI_YUEQU_URL } from '@iceworks/constant';
+import { ALI_YUEQU_URL } from '@appworks/constant';
 import { checkAliInternal } from 'ice-npm-utils';
 
 export default async function formatProject(projectDir: string, projectName?: string, ejsOptions: any = {}): Promise<void> {

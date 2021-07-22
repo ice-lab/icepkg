@@ -2,7 +2,7 @@ import 'jest-extended';
 import * as path from 'path';
 import { tmpdir } from 'os';
 import * as rimraf from 'rimraf';
-import { ALI_NPM_REGISTRY, ALI_UNPKG_URL } from '@iceworks/constant';
+import { ALI_NPM_REGISTRY, ALI_UNPKG_URL } from '@appworks/constant';
 import {
   getNpmRegistry,
   getUnpkgHost,
