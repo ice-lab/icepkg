@@ -1,6 +1,6 @@
 import * as ora from 'ora';
 import { isAliNpm, getNpmTarball, getAndExtractTarball } from 'ice-npm-utils';
-import { ALI_NPM_REGISTRY } from '@iceworks/constant';
+import { ALI_NPM_REGISTRY } from '@appworks/constant';
 import formatProject from './formatProject';
 import checkEmpty from './checkEmpty';
 import formatScaffoldToProject from './formatScaffoldToProject';

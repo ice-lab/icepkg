@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.3.2
+
+- remove `@iceworks/constant`, use `@appworks/constant`
+
 ## 1.3.1
 
 - set `goldlog: false` of `@ali/build-plugin-event-tracking-register`
@@ -15,6 +19,7 @@
 ## 1.2.3
 
 - add `mini.project.json` for ali (taobao) miniapp
+
 ## 1.2.2
 
 - add `formatScaffoldToProject` method, which formats filename and formats to project
