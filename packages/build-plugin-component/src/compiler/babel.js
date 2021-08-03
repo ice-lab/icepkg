@@ -14,14 +14,23 @@ const { analyzePackage } = require('./depAnalyze');
 const generateStyle = require('./generateStyle');
 const dtsCompiler = require('./dts');
 
-const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOptions, type, alias }) => {
+const getBabelConfig = ({
+  target,
+  componentLibs,
+  rootDir,
+  babelPlugins,
+  babelOptions,
+  type,
+  alias,
+  inlineStyle,
+}) => {
   const params = target === 'es' ? { modules: false } : {};
   let babelConfig;
   if (type === 'react') {
     babelConfig = getCompileBabel(params, { babelPlugins, babelOptions, rootDir });
   } else {
     babelConfig = getRaxBabelConfig({
-      styleSheet: true,
+      styleSheet: inlineStyle,
       custom: {
         ignore: ['**/**/*.d.ts'],
       },
@@ -73,7 +82,7 @@ module.exports = function babelCompiler(
   userOptions = {},
   type,
 ) {
-  const { rootDir, pkg } = context;
+  const { rootDir, pkg, userConfig: { inlineStyle = false } } = context;
   const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, subComponents } = userOptions;
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
@@ -108,6 +117,7 @@ module.exports = function babelCompiler(
           babelOptions,
           type,
           alias,
+          inlineStyle,
         });
         // compile file by babel
         // TODO use context.babel
