@@ -58,10 +58,11 @@ module.exports = (context, options) => {
     .test(/\.tsx?$/)
     .use('babel-loader')
     .loader(require.resolve('babel-loader'))
-    .options(babelConfig)
-    .end()
-    .use('ts')
-    .loader(require.resolve('ts-loader'));
+    .options(babelConfig);
+  // temp remove ts-loader
+  // .end()
+  // .use('ts')
+  // .loader(require.resolve('ts-loader'));
 
   if (options.enablePlatformLoader && target) {
     ['jsx', 'tsx'].forEach((rule) => {
