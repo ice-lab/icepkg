@@ -2,7 +2,7 @@
 
 ## 1.4.0
 
-- remove `fs-readdir-recursive`, use `glob`
+- remove `fs-readdir-recursive` use `glob`. Add ignore directories such as `node_modules`, `.rax`, `.ice` and `build`.
 
 ## 1.3.2
 
