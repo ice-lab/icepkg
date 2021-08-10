@@ -17,7 +17,7 @@ import {
 } from '../index';
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
-let cnpmResponseRegistry = defaultRegistry ;
+let cnpmResponseRegistry = defaultRegistry;
 
 jest.setTimeout(10 * 1000);
 
@@ -129,7 +129,7 @@ test('checkAliInternal', () => {
 });
 
 test('getNpmTarball', () => {
-  return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
+  return getNpmTarball('ice-npm-utils', '1.0.0', cnpmResponseRegistry).then((tarball) => {
     expect(tarball).toBe(`${cnpmResponseRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`);
   });
 });
