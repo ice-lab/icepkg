@@ -129,8 +129,8 @@ test('checkAliInternal', () => {
 });
 
 test('getNpmTarball', () => {
-  return getNpmTarball('ice-npm-utils', '2.1.1').then((tarball) => {
-    expect(tarball).toBe(`${cnpmResponseRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`);
+  return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
+    expect(tarball).toBe(`https://registry.nlark.com/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz"`);
   });
 });
 
