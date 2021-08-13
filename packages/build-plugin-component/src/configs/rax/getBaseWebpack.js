@@ -10,7 +10,7 @@ const TimeFixPlugin = require('time-fix-plugin');
 
 module.exports = (context, options) => {
   const { rootDir, command, pkg, webpack } = context;
-  const { isES6, target, name, inlineStyle = true } = options || {};
+  const { isES6, target, name, inlineStyle = true, https } = options || {};
   const config = new Chain();
 
   const babelConfig = getBabelConfig({
@@ -101,6 +101,8 @@ module.exports = (context, options) => {
   if (command === 'start') {
     config.mode('development');
     config.devtool('inline-module-source-map');
+
+    https && config.devServer.https(true);
   } else if (command === 'build') {
     config.mode('production');
     // support production sourcemap

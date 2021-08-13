@@ -1,6 +1,7 @@
 const setAssetsPath = require('../../utils/setAssetsPath');
 
-module.exports = (config) => {
+module.exports = (config, options) => {
+  const { https } = options;
   setAssetsPath(config, { js: 'js', css: 'css' });
   // config loglevel
   config.merge({
@@ -12,4 +13,6 @@ module.exports = (config) => {
     .hot(true)
     .disableHostCheck(true)
     .clientLogLevel('silent');
+
+  https && config.devServer.https(true);
 };
