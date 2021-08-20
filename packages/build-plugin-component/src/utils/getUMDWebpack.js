@@ -46,6 +46,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
       },
     },
     basicComponents = [],
+    define,
   } = compileOptions;
   const { jsExt, styleExt } = extNames;
   // file name
@@ -142,6 +143,16 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   if (!minify) {
     // disable minify code
     config.optimization.minimize(minify);
+  }
+
+  if (define && config.plugins.get('DefinePlugin')) {
+    const defineVariables = {};
+    Object.keys(define).forEach((defineKey) => {
+      defineVariables[defineKey] = JSON.stringify(define[defineKey]);
+    });
+    config
+      .plugin('DefinePlugin')
+      .tap((args) => [Object.assign(...args, defineVariables)]);
   }
 
   return config;
