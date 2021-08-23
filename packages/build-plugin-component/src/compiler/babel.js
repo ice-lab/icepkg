@@ -79,14 +79,9 @@ module.exports = function babelCompiler(
 
   babelPlugins = Array.isArray(babelPlugins) ? babelPlugins : [babelPlugins]
   if (define && !babelPlugins.length) {
-    const defineVariables = {};
-    Object.keys(define).forEach((defineKey) => {
-      defineVariables[defineKey] = JSON.stringify(define[defineKey]);
-    });
-
     babelPlugins.push([
       require.resolve('babel-plugin-transform-define'),
-      defineVariables
+      define
     ]);
   }
 
