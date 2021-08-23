@@ -1,6 +1,6 @@
 {
   "name": "build-plugin-component",
-  "version": "1.6.5-3",
+  "version": "1.6.5-4",
   "description": "build plugin for component development",
   "main": "src/index.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "@babel/types": "^7.7.2",
     "babel-plugin-import": "^1.12.2",
     "babel-plugin-module-resolver": "^4.0.0",
+    "babel-plugin-transform-define": "^2.0.0",
     "build-scripts-config": "^0.1.0",
     "camelcase": "^6.2.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
@@ -76,6 +77,7 @@
   },
   "devDependencies": {
     "@types/node": "^12.12.18",
+    "babel-plugin-transform-define": "^2.0.0",
     "webpack": "^4.41.1"
   }
 }

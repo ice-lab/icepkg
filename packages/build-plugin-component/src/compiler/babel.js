@@ -74,7 +74,22 @@ module.exports = function babelCompiler(
   type,
 ) {
   const { rootDir, pkg } = context;
-  const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, subComponents } = userOptions;
+  const { compilerOptions = {}, babelOptions = [], alias, subComponents, define } = userOptions;
+  let { babelPlugins = [] } = userOptions;
+
+  babelPlugins = Array.isArray(babelPlugins) ? babelPlugins : [babelPlugins]
+  if (define && !babelPlugins.length) {
+    const defineVariables = {};
+    Object.keys(define).forEach((defineKey) => {
+      defineVariables[defineKey] = JSON.stringify(define[defineKey]);
+    });
+
+    babelPlugins.push([
+      require.resolve('babel-plugin-transform-define'),
+      defineVariables
+    ]);
+  }
+
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
   const componentLibs = analyzePackage(pkg, basicComponents);
