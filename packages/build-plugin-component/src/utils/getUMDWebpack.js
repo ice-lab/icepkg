@@ -2,6 +2,7 @@ const path = require('path');
 const { upperFirst, camelCase } = require('lodash');
 const { getWebpackConfig } = require('build-scripts-config');
 const { defaultDynamicImportLibraries } = require('../compiler/depAnalyze');
+const webpack = require('webpack');
 
 module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   const mode = 'production';
@@ -145,14 +146,21 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
     config.optimization.minimize(minify);
   }
 
-  if (define && config.plugins.get('DefinePlugin')) {
+  if (define) {
     const defineVariables = {};
     Object.keys(define).forEach((defineKey) => {
       defineVariables[defineKey] = JSON.stringify(define[defineKey]);
     });
-    config
-      .plugin('DefinePlugin')
-      .tap((args) => [Object.assign(...args, defineVariables)]);
+  
+    if (config.plugins.get('DefinePlugin')) {
+      config
+        .plugin('DefinePlugin')
+        .tap((args) => [Object.assign(...args, defineVariables)]);
+    } else {
+      config.plugin('DefinePlugin')
+        .use(webpack.DefinePlugin, [defineVariables])
+    }
+
   }
 
   return config;
