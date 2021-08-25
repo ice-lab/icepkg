@@ -24,7 +24,7 @@ module.exports = (context, options) => {
   }
 
   if (command === 'start') {
-    config.output.publicPath('/demo');
+    config.output.publicPath('/demo/');
   } else {
     const entrieKeys = Object.keys(entries);
 
@@ -72,7 +72,7 @@ module.exports = (context, options) => {
   config.plugin('html').use(HtmlWebpackPlugin, [
     {
       inject: true,
-      filename: command === 'start' ? 'portal' : 'index.html',
+      filename: command === 'start' ? 'portal.html' : 'index.html',
       chunks: ['portal'],
       template: path.resolve(__dirname, '../../template/raxPortal.html'),
     },

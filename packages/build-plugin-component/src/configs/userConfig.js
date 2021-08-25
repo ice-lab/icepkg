@@ -53,18 +53,29 @@ module.exports = [
     name: 'devServer',
     validation: 'object',
     defaultValue: {
-      logLevel: 'silent',
-      compress: true,
-      disableHostCheck: true,
-      clientLogLevel: 'error',
+      liveReload: false,
       hot: true,
-      quiet: true,
-      overlay: false,
+      compress: true,
+      webSocketServer: 'ws',
+      devMiddleware: {
+        writeToDisk: true,
+      },
+      client: {
+        overlay: false,
+        logging: 'info',
+      },
     },
     configWebpack: (config, devServer, context) => {
       const { command } = context;
       if (command === 'start' && devServer) {
-        config.merge({ devServer });
+        config.merge({
+          devServer,
+          infrastructureLogging: {
+            level: 'error'
+          }
+        });
+
+        console.log('fsdfsf', config.toConfig())
       }
     },
   },

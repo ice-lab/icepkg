@@ -19,7 +19,7 @@ module.exports = (config, context, options) => {
     config.plugin(entrieKeys.length > 1 ? `HtmlWebpackPlugin_${entryKey}` : 'HtmlWebpackPlugin').use(HtmlWebpackPlugin, [
       {
         inject: false,
-        filename: entryKey,
+        filename: `${entryKey}.html`,
         chunks: [entryKey],
         template: path.resolve(__dirname, '../../../template/demo.html'),
       },
@@ -38,8 +38,15 @@ module.exports = (config, context, options) => {
       filename: '[name].css',
     }]);
 
-  // rewrite a request that matches the /\/index/ pattern to /index.html.
-  config.devServer.set('historyApiFallback', true);
+  config.devServer.historyApiFallback({
+    rewrites: [
+      { from: /^\/demo\/portal/, to: '/demo/portal.html' },
+      ...entrieKeys.map(entryKey => ({
+        from: new RegExp(`^/${entryKey}`),
+        to: `/${entryKey}.html`
+      }))
+    ]
+  });
 
   return config;
 };

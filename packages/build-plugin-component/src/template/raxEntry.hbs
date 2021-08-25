@@ -147,7 +147,7 @@ function Portal(props){
         </div>
       </div>
       <Device active={active}>
-        <iframe src={ '{{command}}' === 'build' ? `./demo/${active}.html` :`/${active}`} style={iframeStyle}></iframe>
+        <iframe src={ '{{command}}' === 'build' ? `./demo/${active}.html` :`/${active}.html`} style={iframeStyle}></iframe>
       </Device>
     </div>
   );
