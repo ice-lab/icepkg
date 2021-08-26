@@ -62,7 +62,7 @@ module.exports = [
       },
       client: {
         overlay: false,
-        logging: 'info',
+        logging: 'error',
       },
     },
     configWebpack: (config, devServer, context) => {
@@ -74,8 +74,6 @@ module.exports = [
             level: 'error'
           }
         });
-
-        console.log('fsdfsf', config.toConfig())
       }
     },
   },
