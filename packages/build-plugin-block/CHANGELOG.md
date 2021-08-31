@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.2.1
+
+- [feat] upgarde `build-scripts` to 1.x
+
 ## 1.2.0
 
-- [feat] support ejs template file  
+- [feat] support ejs template file
 
 ## 1.0.0
 
