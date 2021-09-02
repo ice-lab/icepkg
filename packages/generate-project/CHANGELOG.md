@@ -1,5 +1,13 @@
 # `@iceworks/generate-project`
 
+## 1.4.1
+
+- support default def version
+
+## 1.4.0
+
+- remove `fs-readdir-recursive` use `glob`. Add ignore directories such as `node_modules`, `.rax`, `.ice` and `build`.
+
 ## 1.3.2
 
 - remove `@iceworks/constant`, use `@appworks/constant`
