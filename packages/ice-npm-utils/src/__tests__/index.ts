@@ -22,11 +22,11 @@ let cnpmResponseRegistry = defaultRegistry ;
 jest.setTimeout(10 * 1000);
 
 beforeAll(async () => {
-  // const isAli = await checkAliInternal();
-  // if (isAli) {
-  //   // hack: taobao 源内网的返回格式
-  cnpmResponseRegistry = 'https://registry.nlark.com';
-  // }
+  const isAli = await checkAliInternal();
+  if (isAli) {
+    // hack: cnpm 源在阿里内网的返回格式
+    cnpmResponseRegistry = 'https://registry.nlark.com';
+  }
 });
 
 test('getNpmRegistry', () => {
