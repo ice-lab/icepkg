@@ -2,7 +2,7 @@
 
 ## 1.2.1
 
-- [feat] upgarde `build-scripts` to 1.x
+- [feat] be compatible with `build-scripts` 1.x
 
 ## 1.2.0
 
