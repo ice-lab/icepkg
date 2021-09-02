@@ -1,7 +1,8 @@
 # Changelog
 
-
 ## 1.6.5
+
+- [fix] 修复 inlineStyle 为 false 时，不支持引入多份 css 文件 ([#199](https://github.com/ice-lab/iceworks-cli/issues/199))
 
 ## 1.6.4
 
