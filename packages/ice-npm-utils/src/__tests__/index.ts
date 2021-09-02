@@ -22,11 +22,11 @@ let cnpmResponseRegistry = defaultRegistry ;
 jest.setTimeout(10 * 1000);
 
 beforeAll(async () => {
-  const isAli = await checkAliInternal();
-  if (isAli) {
+  // const isAli = await checkAliInternal();
+  // if (isAli) {
     // hack: cnpm 源在阿里内网的返回格式
     cnpmResponseRegistry = 'https://registry.nlark.com';
-  }
+  // }
 });
 
 test('getNpmRegistry', () => {
@@ -130,12 +130,14 @@ test('checkAliInternal', () => {
 
 test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
+    console.log('getNpmTarball ice-npm-utils', tarball);
     expect(tarball).toBe(`${cnpmResponseRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`);
   });
 });
 
 test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
+    console.log('getNpmTarball http', tarball);
     expect(tarball).toBe(`${cnpmResponseRegistry}/http/download/http-0.0.1-security.tgz`);
   });
 });
