@@ -55,7 +55,7 @@ export default async function generateMaterialData(pkgPath, materialType, materi
     languageType,
     homepage,
     description: pkg.description,
-    repository: (pkg.repository && pkg.repository.url) || pkg.repository,
+    repository: pkg.repository?.url || pkg.repository,
 
     // 允许扩展字段、同时允许覆盖上面的四个字段
     ...materialItemConfig,
