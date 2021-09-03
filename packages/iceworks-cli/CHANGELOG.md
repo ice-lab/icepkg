@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.4.6
+
+- [chore] 允许 pkg.scaffoldConfig 覆盖自动检测的 languageType 字段
+- [feat] 去除初始化业务组件时询问是否接入 fusion cool 选项
+
 ## 3.4.5
 
 - [feat] support `version: 'latest'` material package

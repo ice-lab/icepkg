@@ -1,17 +1,15 @@
 /**
  * material add [block|component|scaffold|page]:
  *  1. get options by materialType
- *  2. 仅 component: adaptor
- *  3. copy and ejsRender，文件名称转换：
+ *  2. copy and ejsRender，文件名称转换：
  *    - _package.json -> package.json
  *    - xxx.js.ejs -> xxx.js
  *    - _eslintxxx -> .eslintxxx (scaffold 不转换)
- *  4. 仅 component：remove eslint 相关文件，只有 component/scaffold 会有这些文件（因为有单独开发的需求）
+ *  3. 仅 component：remove eslint 相关文件，只有 component/scaffold 会有这些文件（因为有单独开发的需求）
  *
  * init component:
  *  1. get options by materialType
- *  2. adaptor
- *  3. copy and ejsRender，文件名称转换
+ *  2. copy and ejsRender，文件名称转换
  *
  */
 import * as path from 'path';
@@ -137,12 +135,6 @@ function nameQuestion(type, npmScope, cwd) {
 function getQuestions(npmScope, cwd) {
   return {
     component: [
-      {
-        type: 'confirm',
-        name: 'adaptor',
-        message: '组件是否需要接入 Fusion Cool & 设计板块？',
-        default: false,
-      },
       nameQuestion('component', npmScope, cwd),
       {
         type: 'input',
