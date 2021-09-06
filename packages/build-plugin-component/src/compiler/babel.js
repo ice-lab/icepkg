@@ -82,7 +82,7 @@ module.exports = function babelCompiler(
   userOptions = {},
   type,
 ) {
-  const { rootDir, pkg, userConfig: { inlineStyle = false } } = context;
+  const { rootDir, pkg, userConfig: { inlineStyle = true } } = context;
   const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, subComponents } = userOptions;
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
