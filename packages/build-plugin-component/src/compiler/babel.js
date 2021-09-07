@@ -22,7 +22,6 @@ const getBabelConfig = ({
   babelOptions,
   type,
   alias,
-  inlineStyle,
 }) => {
   const params = target === 'es' ? { modules: false } : {};
   let babelConfig;
@@ -30,7 +29,8 @@ const getBabelConfig = ({
     babelConfig = getCompileBabel(params, { babelPlugins, babelOptions, rootDir });
   } else {
     babelConfig = getRaxBabelConfig({
-      styleSheet: inlineStyle,
+      // Be careful~ change it's value by inlineStyle may cause break-change
+      styleSheet: true,
       custom: {
         ignore: ['**/**/*.d.ts'],
       },
@@ -82,7 +82,7 @@ module.exports = function babelCompiler(
   userOptions = {},
   type,
 ) {
-  const { rootDir, pkg, userConfig: { inlineStyle = true } } = context;
+  const { rootDir, pkg } = context;
   const { compilerOptions = {}, babelPlugins = [], babelOptions = [], alias, subComponents } = userOptions;
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
@@ -117,7 +117,6 @@ module.exports = function babelCompiler(
           babelOptions,
           type,
           alias,
-          inlineStyle,
         });
         // compile file by babel
         // TODO use context.babel
