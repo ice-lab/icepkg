@@ -17,17 +17,11 @@ import {
 } from '../index';
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
-let cnpmResponseRegistry = defaultRegistry ;
+// 也有可能返回这个源
+const cnpmResponseRegistry = 'https://registry.nlark.com' ;
 
 jest.setTimeout(10 * 1000);
 
-beforeAll(async () => {
-  const isAli = await checkAliInternal();
-  if (isAli) {
-    // hack: taobao 源内网的返回格式
-    cnpmResponseRegistry = 'https://registry.nlark.com';
-  }
-});
 
 test('getNpmRegistry', () => {
   expect(getNpmRegistry('koa')).toBe(defaultRegistry);
@@ -130,13 +124,21 @@ test('checkAliInternal', () => {
 
 test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
-    expect(tarball).toBe(`https://registry.nlark.com/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`);
+    console.log('getNpmTarball ice-npm-utils', tarball);
+    expect(
+      tarball === `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`
+      || tarball === `${cnpmResponseRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`
+    ).toBeTruthy();
   });
 });
 
 test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
-    expect(tarball).toBe(`${cnpmResponseRegistry}/http/download/http-0.0.1-security.tgz`);
+    console.log('getNpmTarball http', tarball);
+    expect(
+      tarball === `${defaultRegistry}/http/download/http-0.0.1-security.tgz`
+      || tarball === `${cnpmResponseRegistry}/http/download/http-0.0.1-security.tgz`
+    ).toBeTruthy();
   });
 });
 
