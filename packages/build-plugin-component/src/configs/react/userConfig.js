@@ -66,6 +66,6 @@ module.exports = [
   },
   {
     name: 'define',
-    validation: 'object'
-  }
+    validation: 'object',
+  },
 ];

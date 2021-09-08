@@ -151,16 +151,15 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
     Object.keys(define).forEach((defineKey) => {
       defineVariables[defineKey] = JSON.stringify(define[defineKey]);
     });
-  
+
     if (config.plugins.get('DefinePlugin')) {
       config
         .plugin('DefinePlugin')
         .tap((args) => [Object.assign(...args, defineVariables)]);
     } else {
       config.plugin('DefinePlugin')
-        .use(webpack.DefinePlugin, [defineVariables])
+        .use(webpack.DefinePlugin, [defineVariables]);
     }
-
   }
 
   return config;
