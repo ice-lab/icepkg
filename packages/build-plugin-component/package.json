@@ -1,6 +1,6 @@
 {
   "name": "build-plugin-component",
-  "version": "1.6.5-2",
+  "version": "1.6.6",
   "description": "build plugin for component development",
   "main": "src/index.js",
   "scripts": {
@@ -70,12 +70,13 @@
     "url-join": "^4.0.1",
     "user-home": "^2.0.0",
     "utils": "^0.3.1",
+    "webpack": "^4.41.1",
     "webpack-chain": "^6.5.1",
+    "webpack-dev-server": "^3.11.2",
     "webpack-node-externals": "^2.5.2",
     "webpackbar": "^5.0.0-3"
   },
   "devDependencies": {
-    "@types/node": "^12.12.18",
-    "webpack": "^4.41.1"
+    "@types/node": "^12.12.18"
   }
 }

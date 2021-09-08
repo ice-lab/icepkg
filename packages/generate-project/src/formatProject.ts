@@ -64,14 +64,16 @@ export default async function formatProject(projectDir: string, projectName?: st
           },
         };
 
-        let defPluginVersion = '^3.0.0';
-        if (pkgData.devDependencies['build-plugin-rax-app'] && !pkgData.devDependencies['rax-app']) {
-          // 兼容 rax-app@2.0
-          defPluginVersion = '^1.0.2';
+        // add @ali/build-plugin-rax-app-def
+        if (!pkgData.devDependencies['@ali/build-plugin-rax-app-def']) {
+          let defPluginVersion = '^3.0.0';
+          if (pkgData.devDependencies['build-plugin-rax-app'] && !pkgData.devDependencies['rax-app']) {
+            // 兼容 rax-app@2.0
+            defPluginVersion = '^1.0.2';
+          }
+          pkgData.devDependencies['@ali/build-plugin-rax-app-def'] = defPluginVersion;
         }
 
-        // add @ali/build-plugin-rax-app-def
-        pkgData.devDependencies['@ali/build-plugin-rax-app-def'] = defPluginVersion;
         buildData.plugins.push('@ali/build-plugin-rax-app-def');
 
         // add @ali/build-plugin-event-tracking-register and @ali/universal-event-tracking

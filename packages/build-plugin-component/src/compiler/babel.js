@@ -14,13 +14,22 @@ const { analyzePackage } = require('./depAnalyze');
 const generateStyle = require('./generateStyle');
 const dtsCompiler = require('./dts');
 
-const getBabelConfig = ({ target, componentLibs, rootDir, babelPlugins, babelOptions, type, alias }) => {
+const getBabelConfig = ({
+  target,
+  componentLibs,
+  rootDir,
+  babelPlugins,
+  babelOptions,
+  type,
+  alias,
+}) => {
   const params = target === 'es' ? { modules: false } : {};
   let babelConfig;
   if (type === 'react') {
     babelConfig = getCompileBabel(params, { babelPlugins, babelOptions, rootDir });
   } else {
     babelConfig = getRaxBabelConfig({
+      // Be careful~ change it's value by inlineStyle may cause break-change
       styleSheet: true,
       custom: {
         ignore: ['**/**/*.d.ts'],
