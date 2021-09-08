@@ -52,16 +52,21 @@ export default async function generateMaterialData(pkgPath, materialType, materi
   }
 
   const materialData = {
-    // 允许（但不推荐）自定义单个物料的数据
+    languageType,
+    homepage,
+    description: pkg.description,
+    repository: pkg.repository?.url || pkg.repository,
+
+    // 允许扩展字段、同时允许覆盖上面的四个字段
     ...materialItemConfig,
     name: materialItemConfig.name,
     title: materialItemConfig.title,
-    description: pkg.description,
-    languageType,
-    homepage,
+
     categories,
     category,
-    repository: (pkg.repository && pkg.repository.url) || pkg.repository,
+    screenshot,
+    screenshots,
+
     source: {
       type: 'npm',
       npm: npmName,
@@ -70,16 +75,9 @@ export default async function generateMaterialData(pkgPath, materialType, materi
       author: pkg.author,
     },
     dependencies: pkg.dependencies || {},
-    screenshot,
-    screenshots,
     publishTime,
     updateTime,
   };
-
-  if (materialItemConfig === 'block') {
-    // iceworks 2.x 依赖该字段，下个版本删除
-    materialData.source.sourceCodeDirectory = 'src/';
-  }
 
   return { materialData, materialType };
 }

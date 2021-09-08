@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.6.6
+
+- [hotfix] 修复 inlineStyle 默认为 true 这一行为逻辑的 break change ([#214](https://github.com/ice-lab/iceworks-cli/issues/214))
+
+## 1.6.5
+
+- [fix] 修复 inlineStyle 为 false 时，不支持引入多份 css 文件 ([#199](https://github.com/ice-lab/iceworks-cli/issues/199))
+- [feat] 兼容 build-scripts 1.x
+
 ## 1.6.4
 
 - [fix] 修复 win32 路径问题

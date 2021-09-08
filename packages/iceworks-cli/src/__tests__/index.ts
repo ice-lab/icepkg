@@ -20,13 +20,13 @@ beforeAll(async () => {
   await config({
     type: 'set',
     key: 'registry',
-    value: 'https://registry.npm.taobao.org'
+    value: 'https://registry.npmjs.com'
   });
   const registry = await config({
     type: 'get',
     key: 'registry'
   });
-  expect(registry).toBe('https://registry.npm.taobao.org');
+  expect(registry).toBe('https://registry.npmjs.com');
 });
 
 afterAll(async () => {
