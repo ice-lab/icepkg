@@ -87,10 +87,20 @@ module.exports = function babelCompiler(
   const { babelPlugins = [] } = userOptions;
 
   if (define) {
-    babelPlugins.push([
-      require.resolve('babel-plugin-transform-define'),
-      define,
-    ]);
+    const definePluginIdx = babelPlugins.findIndex(([pluginName]) => pluginName.includes('babel-plugin-transform-define'));
+
+    // If `babel-plugin-transform-define` exists
+    if (definePluginIdx > -1) {
+      babelPlugins[definePluginIdx][1] = {
+        ...babelPlugins[definePluginIdx][1],
+        ...define,
+      };
+    } else {
+      babelPlugins.push([
+        require.resolve('babel-plugin-transform-define'),
+        define,
+      ]);
+    }
   }
 
   // generate DTS for ts files, default is true
