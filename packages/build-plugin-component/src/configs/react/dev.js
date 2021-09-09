@@ -14,5 +14,5 @@ module.exports = (config, options) => {
     .disableHostCheck(true)
     .clientLogLevel('silent');
 
-  https && config.devServer.https(true);
+  config.devServer.https(Boolean(https));
 };

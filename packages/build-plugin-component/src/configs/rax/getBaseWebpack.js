@@ -102,7 +102,7 @@ module.exports = (context, options) => {
     config.mode('development');
     config.devtool('inline-module-source-map');
 
-    https && config.devServer.https(true);
+    config.devServer.https(Boolean(https));
   } else if (command === 'build') {
     config.mode('production');
     // support production sourcemap
