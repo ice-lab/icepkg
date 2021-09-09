@@ -84,10 +84,9 @@ module.exports = function babelCompiler(
 ) {
   const { rootDir, pkg } = context;
   const { compilerOptions = {}, babelOptions = [], alias, subComponents, define } = userOptions;
-  let { babelPlugins = [] } = userOptions;
+  const { babelPlugins = [] } = userOptions;
 
-  babelPlugins = Array.isArray(babelPlugins) ? babelPlugins : [babelPlugins];
-  if (define && !babelPlugins.length) {
+  if (define) {
     babelPlugins.push([
       require.resolve('babel-plugin-transform-define'),
       define,

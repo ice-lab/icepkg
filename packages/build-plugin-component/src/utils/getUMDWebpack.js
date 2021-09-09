@@ -2,12 +2,11 @@ const path = require('path');
 const { upperFirst, camelCase } = require('lodash');
 const { getWebpackConfig } = require('build-scripts-config');
 const { defaultDynamicImportLibraries } = require('../compiler/depAnalyze');
-const webpack = require('webpack');
 
 module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   const mode = 'production';
   const config = getWebpackConfig(mode);
-  const { rootDir } = context;
+  const { rootDir, webpack } = context;
   const {
     // dist minify
     minify,
