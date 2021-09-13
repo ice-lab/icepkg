@@ -48,7 +48,7 @@ module.exports = ({
     console.log();
     process.exit(1);
   }
-  const { skipDemo } = commandArgs;
+  const { skipDemo, https } = commandArgs;
   const watchDist = commandArgs.watchDist || userConfig.watchDist;
   const isRuntimeMiniapp = targets.includes(MINIAPP) && miniapp && miniapp.buildType === 'runtime';
 
@@ -70,7 +70,7 @@ module.exports = ({
   let demos = [];
 
   // register cli options
-  const cliOptions = ['watch-dist', '--skip-demo'];
+  const cliOptions = ['watch-dist', '--skip-demo', 'https'];
   registerCliOption(
     cliOptions.map((name) => ({
       name,
@@ -120,7 +120,12 @@ module.exports = ({
   // plugins depend on task names, change task name rule will cause break change.
   if (command === 'start' && !watchDist) {
     targets.forEach((target) => {
-      const options = { ...compileOptions, target, inlineStyle };
+      const options = {
+        ...compileOptions,
+        target,
+        inlineStyle,
+        https,
+      };
       if ([WEB, WEEX, NODE, KRAKEN].includes(target)) {
         // eslint-disable-next-line
         const configDev = require(`./configs/rax/${target}/dev`);
