@@ -64,4 +64,8 @@ module.exports = [
     name: 'htmlInjection',
     validation: 'object',
   },
+  {
+    name: 'define',
+    validation: 'object',
+  },
 ];
