@@ -1,5 +1,10 @@
 # `@iceworks/generate-material`
 
+## 1.0.10
+
+- chore: remove adaptor option and template
+- chore: add author template option
+
 ## 1.0.9
 
 - fix: remove src/index.ts when building miniapp plugin with runtime mode
