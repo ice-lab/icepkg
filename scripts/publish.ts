@@ -88,8 +88,10 @@ async function checkVersionExist(name: string, version: string, registry?: strin
 }
 
 function getPackagesPaths(dir) {
-  const packagesPaths: string[] = readdirSync(dir).filter((dirname) => {
-    return existsSync(join(dir, dirname));
+  const packagesPaths: string[] = readdirSync(dir).map(dirname => {
+    return join(dir, dirname);
+  }).filter((dirpath) => {
+    return existsSync(join(dirpath, 'package.json'));
   });
 
   return packagesPaths;
