@@ -51,8 +51,17 @@ export default async function generateMaterialData(pkgPath, materialType, materi
     log.warn('getProjectLanguageType warning', err.message);
   }
 
+  // antd、fusion
+  let componentType;
+  try {
+    componentType = await getProjectComponentType(pkg);
+  } catch (err) {
+    log.warn('getProjectComponentType warning', err.message);
+  }
+
   const materialData = {
     languageType,
+    componentType,
     homepage,
     description: pkg.description,
     repository: pkg.repository?.url || pkg.repository,
@@ -144,5 +153,23 @@ async function getProjectLanguageType(projectPath, pkgData) {
     }
 
     return 'ts';
+  }
+}
+
+
+async function getProjectComponentType(pkgData) {
+  const { dependencies = {}, devDependencies = {} } = pkgData;
+  const deps = { ...devDependencies, ...dependencies };
+
+  if (deps.antd) {
+    return 'antd';
+  }
+
+  if (deps['@alifd/next'] || deps['@alife/next'] || deps['@icedesign/base']) {
+    return 'fusion';
+  }
+
+  if (deps['@alifd/meet']) {
+    return 'fusion-mobile';
   }
 }

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4.7
+
+- [feat] 物料数据里增加 componentType(antd/fusion) 字段
+
 ## 3.4.6
 
 - [chore] 允许 pkg.scaffoldConfig 覆盖自动检测的 languageType 字段
