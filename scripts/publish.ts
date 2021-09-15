@@ -1,46 +1,92 @@
-/**
- * Scripts to check unpublished version and run publish
- */
+import { execSync } from 'child_process';
+import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
-import { spawnSync } from 'child_process';
-import { IPackageInfo, getPackageInfos } from './getPackageInfos';
+import * as fse from 'fs-extra';
+import * as axios from 'axios';
+import { getVersions } from 'ice-npm-utils';
 
-if (process.env.BRANCH_NAME !== 'master') {
-  console.log('No Publish', process.env.BRANCH_NAME);
-  process.exit(0);
+// Set by github actions
+const branchName = process.env.BRANCH_NAME;
+const rootDir = join(__dirname, '../');
+const REGISTRY = 'https://registry.npmjs.org/';
+
+if (!branchName) {
+  throw new Error('Only support publish in GitHub Actions env');
 }
 
-function publish(pkg: string, version: string, directory: string): void {
-  console.log('[PUBLISH]', `${pkg}@${version}`);
+(async () => {
+  const packageDirs = getPackagesPaths(join(rootDir, 'packages'));
 
-  spawnSync('npm', [
-    'publish',
-    // use default registry
-  ], {
-    stdio: 'inherit',
-    cwd: directory,
-  });
-}
-
-// Entry
-console.log('[PUBLISH] Start:');
-
-Promise.all([
-  getPackageInfos(join(__dirname, '../packages'))
-]).then((result: IPackageInfo[][]) => {
-
-  let publishedCount = 0;
-  // Publish
-  for (let i = 0; i < result.length; i++) {
-    const packageInfos: IPackageInfo[] = result[i];
-    for (let j = 0; j < packageInfos.length; j++) {
-      const { name, directory, localVersion, shouldPublish } = packageInfos[j];
-      if (shouldPublish) {
-        publishedCount++;
-        console.log(`--- ${name}@${localVersion} ---`);
-        publish(name, localVersion, directory);
-      }
-    }
+  for (const pkgDir of packageDirs) {
+    // eslint-disable-next-line no-await-in-loop
+    await publishPackage(pkgDir);
   }
-  console.log(`[PUBLISH] Complete (count=${publishedCount}).`)
+
+})().catch(err => {
+  console.error(err);
+  process.exit(1);
 });
+
+async function publishPackage(packageDir) {
+  const pkgData = await fse.readJSON(join(packageDir, 'package.json'));
+  const { version, name } = pkgData;
+  const npmTag = branchName === 'master' ? 'latest' : 'beta';
+
+  const versionExist = await checkVersionExist(name, version, REGISTRY);
+  if (versionExist) {
+    console.log(`${name}@${version} 已存在，无需发布。`);
+    return;
+  }
+
+  const isProdVersion = /^\d+\.\d+\.\d+$/.test(version);
+  if (branchName === 'master' && !isProdVersion) {
+    throw new Error(`禁止在 master 分支发布非正式版本 ${version}`);
+  }
+
+  if (branchName !== 'master' && isProdVersion) {
+    console.log(`非 master 分支 ${branchName}，不发布正式版本 ${version}`);
+    return;
+  }
+
+  console.log('start publish', version, npmTag);
+  execSync(`npm publish --tag ${npmTag} --ignore-scripts`, {
+    cwd: packageDir,
+    stdio: 'inherit',
+  });
+
+  console.log('start notify');
+  const response = await axios.default({
+    url: process.env.DING_WEBHOOK,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    data: {
+      msgtype: 'markdown',
+      markdown: {
+        title: `${name}@${version} 发布成功`,
+        text: `${name}@${version} 发布成功`,
+      },
+    },
+  });
+  console.log('notify success', response.data);
+}
+
+
+async function checkVersionExist(name: string, version: string, registry?: string): Promise<boolean> {
+  try {
+    const versions = await getVersions(name, registry);
+    return versions.indexOf(version) !== -1;
+  } catch (err) {
+    console.error('checkVersionExist error', err);
+    return false;
+  }
+}
+
+function getPackagesPaths(dir) {
+  const packagesPaths: string[] = readdirSync(dir).filter((dirname) => {
+    return existsSync(join(dir, dirname));
+  });
+
+  return packagesPaths;
+}
