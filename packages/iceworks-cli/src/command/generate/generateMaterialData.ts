@@ -158,8 +158,8 @@ async function getProjectLanguageType(projectPath, pkgData) {
 
 
 async function getProjectComponentType(pkgData) {
-  const { dependencies = {}, devDependencies = {} } = pkgData;
-  const deps = { ...devDependencies, ...dependencies };
+  const { dependencies = {}, devDependencies = {}, peerDependencies = {} } = pkgData;
+  const deps = { ...devDependencies, ...peerDependencies, ...dependencies };
 
   if (deps.antd) {
     return 'antd';
