@@ -49,7 +49,11 @@ async function publishPackage(packageDir) {
   }
 
   console.log('start publish', version, npmTag);
-  execSync(`npm publish --tag ${npmTag} --ignore-scripts`, {
+  execSync('npm install', {
+    cwd: packageDir,
+    stdio: 'inherit',
+  });
+  execSync(`npm publish --tag ${npmTag}`, {
     cwd: packageDir,
     stdio: 'inherit',
   });
