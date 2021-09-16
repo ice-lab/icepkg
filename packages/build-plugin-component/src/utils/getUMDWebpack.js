@@ -6,7 +6,7 @@ const { defaultDynamicImportLibraries } = require('../compiler/depAnalyze');
 module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   const mode = 'production';
   const config = getWebpackConfig(mode);
-  const { rootDir } = context;
+  const { rootDir, webpack } = context;
   const {
     // dist minify
     minify,
@@ -46,6 +46,7 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
       },
     },
     basicComponents = [],
+    define,
   } = compileOptions;
   const { jsExt, styleExt } = extNames;
   // file name
@@ -142,6 +143,22 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   if (!minify) {
     // disable minify code
     config.optimization.minimize(minify);
+  }
+
+  if (define) {
+    const defineVariables = {};
+    Object.keys(define).forEach((defineKey) => {
+      defineVariables[defineKey] = JSON.stringify(define[defineKey]);
+    });
+
+    if (config.plugins.get('DefinePlugin')) {
+      config
+        .plugin('DefinePlugin')
+        .tap((args) => [Object.assign(...args, defineVariables)]);
+    } else {
+      config.plugin('DefinePlugin')
+        .use(webpack.DefinePlugin, [defineVariables]);
+    }
   }
 
   return config;

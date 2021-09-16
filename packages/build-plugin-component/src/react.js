@@ -28,6 +28,7 @@ module.exports = (
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
   const { library, demoTemplate = 'template-component-demo', basicComponents = [] } = compileOptions;
+  const { https } = commandArgs;
 
   // config htmlInjection for once
   if (userConfig.htmlInjection) {
@@ -47,9 +48,11 @@ module.exports = (
     registerTask(taskName, webpackConfig);
     const outputDir = path.join(rootDir, 'node_modules', '_component_demo');
     fs.ensureDirSync(outputDir);
+
     const params = {
       rootDir,
       pkg,
+      https,
     };
 
     const generateDemoEntry = () => {
@@ -142,7 +145,7 @@ module.exports = (
   }
 
   // register cli options
-  const cliOptions = ['watch', 'skip-demo', 'watch-dist'];
+  const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https'];
   registerCliOption(cliOptions.map((name) => ({
     name,
     commands: ['start', 'build'],

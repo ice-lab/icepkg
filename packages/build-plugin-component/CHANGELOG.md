@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0
+
+- [feat] support `https` cli option
+- [feat] support `define` user config option
+- [fix] generate .d.ts files for win32
+
 ## 1.6.6
 
 - [hotfix] 修复 inlineStyle 默认为 true 这一行为逻辑的 break change ([#214](https://github.com/ice-lab/iceworks-cli/issues/214))
