@@ -7,6 +7,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const ts = require('typescript');
 const { REG_TS } = require('../configs/reg');
+const formatPathForWin = require('../utils/formatPathForWin');
 
 // compile options
 const options = {
@@ -34,13 +35,13 @@ module.exports = function dtsCompiler(compileInfo, log = console) {
   // Create a Program with an in-memory emit
   let createdFiles = {};
   const host = ts.createCompilerHost(options);
-  host.writeFile = (fileName, contents) => { createdFiles[path.resolve(fileName)] = contents; };
+  host.writeFile = (fileName, contents) => { createdFiles[fileName] = contents; };
 
   // Prepare and emit the d.ts files
   const program = ts.createProgram(needCompileList.map(({ sourceFile }) => sourceFile), options, host);
   const emitResult = program.emit();
   if (emitResult.diagnostics && emitResult.diagnostics.length > 0) {
-    emitResult.diagnostics.forEach(diagnostic => {
+    emitResult.diagnostics.forEach((diagnostic) => {
       const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
       if (diagnostic.file) {
         const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
@@ -52,7 +53,9 @@ module.exports = function dtsCompiler(compileInfo, log = console) {
   }
 
   needCompileList.forEach(({ targetPath, fileNamesDTS }) => {
-    const content = createdFiles[fileNamesDTS];
+    const content = createdFiles[
+      formatPathForWin(fileNamesDTS)
+    ];
     // write file
     if (content) {
       fse.ensureDirSync(path.dirname(targetPath));
