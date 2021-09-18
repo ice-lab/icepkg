@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x]
+        node-version: [12.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -27,5 +27,6 @@ jobs:
       - run: npm run publish:packages
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          DING_WEBHOOK: ${{secrets.DING_WEBHOOK}}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
