@@ -1,6 +1,6 @@
 {
   "name": "build-plugin-component",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "build plugin for component development",
   "main": "src/index.js",
   "scripts": {
@@ -50,8 +50,8 @@
     "jsx2mp-runtime": "^0.4.15",
     "loader-utils": "^1.2.3",
     "marked": "^2.0.0",
-    "miniapp-builder-shared": "^0.1.4",
-    "miniapp-compile-config": "^0.1.1",
+    "miniapp-builder-shared": "^0.2.10",
+    "miniapp-compile-config": "^0.2.5",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss-plugin-rpx2vw": "^0.0.2",
     "postcss-preset-env": "^6.7.0",

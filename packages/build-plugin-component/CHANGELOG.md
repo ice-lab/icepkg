@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 1.7.1
+
+- [chore] update miniapp-compile-config version to 0.2.x
+
 ## 1.7.0
 
 - [feat] support `https` cli option
