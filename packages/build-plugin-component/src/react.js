@@ -27,7 +27,7 @@ module.exports = (
 ) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
-  const { library, demoTemplate = 'template-component-demo' } = compileOptions;
+  const { library, demoTemplate = 'template-component-demo', disableGenerateStyle } = compileOptions;
   const { https } = commandArgs;
 
   // config htmlInjection for once
@@ -53,6 +53,7 @@ module.exports = (
       rootDir,
       pkg,
       https,
+      disableGenerateStyle,
     };
 
     const generateDemoEntry = () => {

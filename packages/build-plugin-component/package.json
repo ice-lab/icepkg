@@ -48,7 +48,7 @@
     "js-yaml": "^4.0.0",
     "json-loader": "^0.5.7",
     "jsx2mp-runtime": "^0.4.15",
-    "loader-utils": "^1.2.3",
+    "loader-utils": "^1.4.0",
     "marked": "^2.0.0",
     "miniapp-builder-shared": "^0.1.4",
     "miniapp-compile-config": "^0.1.1",
