@@ -75,15 +75,31 @@ const getBabelConfig = ({
   return babelConfig;
 };
 
-module.exports = function babelCompiler(
-  context,
-  log,
-  basicComponents,
-  userOptions = {},
-  type,
-) {
+module.exports = function babelCompiler(context,
+  {
+    log,
+    userOptions = {},
+    type,
+  }) {
   const { rootDir, pkg } = context;
-  const { compilerOptions = {}, babelOptions = [], alias, subComponents, define } = userOptions;
+
+  // FIXME: 没有 compilerOptions 这个参数
+  const {
+    compilerOptions = {},
+    babelOptions = [],
+    alias,
+    subComponents,
+    define,
+    disableGenerateStyle,
+  } = userOptions;
+
+
+  let { basicComponents = [] } = userOptions;
+
+  if (type === 'rax') {
+    basicComponents = false;
+  }
+
   const { babelPlugins = [] } = userOptions;
 
   if (define) {
@@ -95,7 +111,7 @@ module.exports = function babelCompiler(
 
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
-  const componentLibs = analyzePackage(pkg, basicComponents);
+  const componentLibs = disableGenerateStyle ? [] : analyzePackage(pkg, basicComponents);
   const srcPath = path.join(rootDir, 'src');
   // compile task es and lib
   const compileTargets = ['es', 'lib'];
@@ -106,6 +122,8 @@ module.exports = function babelCompiler(
     const destPath = path.join(rootDir, target);
     // clear dir
     fs.emptyDirSync(destPath);
+
+    // 这里使用 babel 来编译代码
     filesPath.forEach((filePath) => {
       const sourceFile = path.join(srcPath, filePath);
       if (!REG_JS.test(filePath) || REG_D_TS.test(filePath)) {
@@ -146,7 +164,8 @@ module.exports = function babelCompiler(
       }
     });
 
-    if (type === 'react') {
+    // 这里生成 styles
+    if (type === 'react' && !disableGenerateStyle) {
       if (subComponents) {
         // filter dir in destPath folder
         const folderList = fs.readdirSync(destPath).filter((filePath) => {

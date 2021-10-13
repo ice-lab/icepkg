@@ -27,7 +27,7 @@ module.exports = (
 ) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
-  const { library, demoTemplate = 'template-component-demo', basicComponents = [] } = compileOptions;
+  const { library, demoTemplate = 'template-component-demo' } = compileOptions;
   const { https } = commandArgs;
 
   // config htmlInjection for once
@@ -162,7 +162,11 @@ module.exports = (
     });
     watcher.on('change', (file) => {
       log.info(`${file} changed, start compile library.`);
-      babelCompiler(context, log, basicComponents, compileOptions, 'react');
+      babelCompiler(context, {
+        log,
+        userOptions: compileOptions,
+        type: 'react',
+      });
     });
 
     watcher.on('error', (error) => {
@@ -189,7 +193,12 @@ module.exports = (
     /**
      * # generate es and lib by using babel.
      */
-    babelCompiler(context, log, basicComponents, compileOptions, 'react');
+    babelCompiler(context, {
+      log,
+      userOptions: compileOptions,
+      type: 'react',
+    });
+
     if (!commandArgs.skipDemo) {
       await modifyPkgHomePage(pkg, rootDir);
     }
