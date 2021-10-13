@@ -113,17 +113,15 @@ module.exports = function babelCompiler(context,
   const { declaration = true } = compilerOptions;
   const componentLibs = disableGenerateStyle ? [] : analyzePackage(pkg, basicComponents);
   const srcPath = path.join(rootDir, 'src');
-  // compile task es and lib
   const compileTargets = ['es', 'lib'];
   const filesPath = glob.sync('**/*.*', { cwd: srcPath, ignore: ['node_modules/**', '*.d.ts', '*.?(ali|wechat).?(ts|tsx|js|jsx)'] });
   // traverse to compile the js files
   const compileInfo = [];
   compileTargets.forEach((target) => {
     const destPath = path.join(rootDir, target);
-    // clear dir
     fs.emptyDirSync(destPath);
 
-    // 这里使用 babel 来编译代码
+    // Compile code
     filesPath.forEach((filePath) => {
       const sourceFile = path.join(srcPath, filePath);
       if (!REG_JS.test(filePath) || REG_D_TS.test(filePath)) {
@@ -164,7 +162,7 @@ module.exports = function babelCompiler(context,
       }
     });
 
-    // 这里生成 styles
+    // Generate style.js
     if (type === 'react' && !disableGenerateStyle) {
       if (subComponents) {
         // filter dir in destPath folder
