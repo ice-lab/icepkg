@@ -49,7 +49,6 @@ module.exports = (config, {
       });
   });
 
-  console.log('fsfsbbbsf', disableGenerateStyle);
   // disable vendor
   config.optimization.splitChunks({ cacheGroups: {} });
   // remove CopyWebpackPlugin (component compile do not have public folder)
