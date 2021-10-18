@@ -18,7 +18,9 @@ import {
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
 // 也有可能返回这个源
-const cnpmResponseRegistry = 'https://registry.nlark.com' ;
+const cnpmResponseRegistry = 'https://registry.npmmirror.com';
+// 也有可能是这个
+const r = 'https://registry.nlark.com'
 
 jest.setTimeout(10 * 1000);
 
@@ -132,6 +134,12 @@ test('getNpmTarball', () => {
   });
 });
 
+test('getNpmTarball 404', () => {
+  return getNpmTarball('not-exis-npm-error').catch((err) => {
+    expect(err.statusCode).toBe(404);
+  });
+});
+
 test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
     console.log('getNpmTarball http', tarball);
@@ -144,10 +152,14 @@ test('getNpmTarball should get latest version', () => {
 
 test('getAndExtractTarball', () => {
   const tempDir = path.resolve(tmpdir(), 'ice_npm_utils_tarball');
-  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
+  let percent;
+  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`, (state) => {
+    percent = state.percent;
+  })
     .then((files) => {
       rimraf.sync(tempDir);
       expect(files.length > 0).toBe(true);
+      expect(percent).toBe(1);
     })
     .catch(() => {
       rimraf.sync(tempDir);

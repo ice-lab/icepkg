@@ -1,5 +1,6 @@
 import * as fsExtra from 'fs-extra';
 import { ALI_NPM_REGISTRY, ALI_UNPKG_URL, ALI_CHECKNODE_URL } from '@appworks/constant';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import request = require('request-promise');
 import semver = require('semver');
@@ -26,6 +27,10 @@ function getNpmTarball(npm: string, version?: string, registry?: string): Promis
     }
 
     return Promise.reject(new Error(`没有在 ${registry} 源上找到 ${npm}@${version} 包`));
+  }).catch(err => {
+    // 兼容原先的 request
+    err.statusCode = err.response && err.response.status;
+    throw err;
   });
 }
 
@@ -112,15 +117,12 @@ function getNpmInfo(npm: string, registry?: string): Promise<any> {
   const register = registry || getNpmRegistry(npm);
   const url = urlJoin(register, npm);
 
-  return request.get(url).then((response) => {
-    let body;
-    try {
-      body = JSON.parse(response);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-
-    return body;
+  return axios({ url }).then((response) => {
+    return response.data;
+  }).catch(err => {
+    // 兼容原先的 request
+    err.statusCode = err.response && err.response.status;
+    throw err;
   });
 }
 
@@ -232,16 +234,15 @@ function getNpmClient(npmName = ''): string {
 }
 
 function checkAliInternal(): Promise<boolean> {
-  return request({
+  return axios({
     url: ALI_CHECKNODE_URL,
     timeout: 3 * 1000,
-    resolveWithFullResponse: true,
   })
-    .catch(() => {
-      return false;
-    })
     .then((response) => {
-      return response.statusCode === 200 && /success/.test(response.body);
+      return response.status === 200 && /success/.test(response.data as string);
+    })
+    .catch((err) => {
+      return false;
     });
 }
 
