@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.4.2
+
+- chore: upgrade ice-npm-utils from 2.x to 3.x
+
 ## 1.4.1
 
 - support default def version

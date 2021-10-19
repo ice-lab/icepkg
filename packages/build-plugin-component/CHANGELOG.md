@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.1
+
+- [chore] upgrade ice-npm-utils from 2.x to 3.x
+
 ## 1.7.0
 
 - [feat] support `https` cli option
