@@ -1,14 +1,13 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import * as mkdirp from 'mkdirp';
+import * as semver  from 'semver';
+import * as zlib from 'zlib';
+import * as tar from 'tar';
 import * as fsExtra from 'fs-extra';
 import { ALI_NPM_REGISTRY, ALI_UNPKG_URL, ALI_CHECKNODE_URL } from '@appworks/constant';
-import axios, { AxiosRequestConfig } from 'axios';
-
-import semver = require('semver');
-import fs = require('fs');
-import mkdirp = require('mkdirp');
-import path = require('path');
-import urlJoin = require('url-join');
-import zlib = require('zlib');
-import tar = require('tar');
+import axios from 'axios';
+import * as urlJoin from 'url-join';
 
 /**
  * 获取指定 npm 包版本的 tarball

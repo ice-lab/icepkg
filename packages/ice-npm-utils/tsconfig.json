@@ -4,7 +4,8 @@
     "baseUrl": "./",
     "rootDir": "src",
     "outDir": "lib",
-    "module": "ES2020"
+    "module": "ES2020",
+    "moduleResolution": "node"
   },
   "exclude": ["src/__tests__", "lib"]
 }

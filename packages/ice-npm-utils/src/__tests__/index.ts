@@ -154,7 +154,6 @@ test('getAndExtractTarball', () => {
   const tempDir = path.resolve(tmpdir(), 'ice_npm_utils_tarball');
   let percent;
   return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`, (state) => {
-    console.log(111, state);
     percent = state.percent;
   })
     .then((files) => {
