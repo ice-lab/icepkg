@@ -16,16 +16,15 @@
   "dependencies": {
     "@appworks/constant": "^0.1.2",
     "axios": "^0.23.0",
-    "fs-extra": "^8.1.0",
-    "mkdirp": "^0.5.1",
-    "semver": "^6.0.0",
-    "tar": "^4.4.8",
+    "fs-extra": "^10.0.0",
+    "mkdirp": "^1.0.0",
+    "semver": "^7.0.0",
+    "tar": "^6.0.0",
     "url-join": "^4.0.1"
   },
   "publishConfig": {
     "access": "public"
   },
   "license": "MIT",
-  "gitHead": "fc5b35f95ab4cc24898845916acf598c2f34d576",
-  "devDependencies": {}
+  "gitHead": "fc5b35f95ab4cc24898845916acf598c2f34d576"
 }

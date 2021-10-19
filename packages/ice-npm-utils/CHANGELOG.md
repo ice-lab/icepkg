@@ -4,6 +4,11 @@
 
 - [chore] migrate request to axios
 - [chore] output esmodule
+- [chore] upgrade deps:
+  - fs-extra 8 -> 10
+  - mkdirp 0.5.x -> 1.x
+  - semver 6.x -> 7.x
+  - tar 0.4.x -> 0.6.x
 
 ## 2.1.2
 
