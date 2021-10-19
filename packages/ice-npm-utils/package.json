@@ -1,8 +1,8 @@
 {
   "name": "ice-npm-utils",
-  "version": "2.1.2",
+  "version": "3.0.0-0",
   "description": "npm utils for ice",
-  "main": "lib/index.js",
+  "exports": "lib/index.js",
   "files": [
     "lib"
   ],
@@ -15,9 +15,6 @@
     "axios": "^0.23.0",
     "fs-extra": "^8.1.0",
     "mkdirp": "^0.5.1",
-    "request": "^2.88.0",
-    "request-progress": "^3.0.0",
-    "request-promise": "^4.2.4",
     "semver": "^6.0.0",
     "tar": "^4.4.8",
     "url-join": "^4.0.1"

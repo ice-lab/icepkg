@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0
+
+- [chore] migrate request to axios
+- [chore] output esmodule
+
 ## 2.1.2
 
 - [chore] remove `@iceworks/constant`, use `@appworks/constant`

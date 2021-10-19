@@ -20,7 +20,7 @@ const defaultRegistry = 'https://registry.npm.taobao.org';
 // 也有可能返回这个源
 const cnpmResponseRegistry = 'https://registry.npmmirror.com';
 // 也有可能是这个
-const r = 'https://registry.nlark.com'
+// const r = 'https://registry.nlark.com'
 
 jest.setTimeout(10 * 1000);
 
@@ -90,7 +90,7 @@ test('getNpmInfo success', () => {
 
 test('getNpmInfo 404 error case', () => {
   return getNpmInfo('not-exis-npm-error').catch((err) => {
-    expect(err.statusCode).toBe(404);
+    expect(err.response.status).toBe(404);
   });
 });
 
@@ -136,7 +136,7 @@ test('getNpmTarball', () => {
 
 test('getNpmTarball 404', () => {
   return getNpmTarball('not-exis-npm-error').catch((err) => {
-    expect(err.statusCode).toBe(404);
+    expect(err.response.status).toBe(404);
   });
 });
 
@@ -154,6 +154,7 @@ test('getAndExtractTarball', () => {
   const tempDir = path.resolve(tmpdir(), 'ice_npm_utils_tarball');
   let percent;
   return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`, (state) => {
+    console.log(111, state);
     percent = state.percent;
   })
     .then((files) => {

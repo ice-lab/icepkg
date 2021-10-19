@@ -2,13 +2,11 @@ import * as fsExtra from 'fs-extra';
 import { ALI_NPM_REGISTRY, ALI_UNPKG_URL, ALI_CHECKNODE_URL } from '@appworks/constant';
 import axios, { AxiosRequestConfig } from 'axios';
 
-import request = require('request-promise');
 import semver = require('semver');
 import fs = require('fs');
 import mkdirp = require('mkdirp');
 import path = require('path');
 import urlJoin = require('url-join');
-import progress = require('request-progress');
 import zlib = require('zlib');
 import tar = require('tar');
 
@@ -27,12 +25,9 @@ function getNpmTarball(npm: string, version?: string, registry?: string): Promis
     }
 
     return Promise.reject(new Error(`没有在 ${registry} 源上找到 ${npm}@${version} 包`));
-  }).catch(err => {
-    // 兼容原先的 request
-    err.statusCode = err.response && err.response.status;
-    throw err;
   });
 }
+
 
 /**
  * 获取 tar 并将其解压到指定的文件夹
@@ -56,57 +51,68 @@ function getAndExtractTarball(
     const allWriteStream = [];
     const dirCollector = [];
 
-    progress(
-      request({
-        url: tarball,
-        timeout: 10000,
-      }),
-    )
-      .on('progress', progressFunc)
-      .on('error', reject)
-      // @ts-ignore
-      .pipe(zlib.Unzip())
-      // @ts-ignore
-      .pipe(new tar.Parse())
-      .on('entry', (entry) => {
-        if (entry.type === 'Directory') {
-          entry.resume();
-          return;
-        }
-
-        const realPath = entry.path.replace(/^package\//, '');
-
-        let filename = path.basename(realPath);
-        filename = formatFilename(filename);
-
-        const destPath = path.join(destDir, path.dirname(realPath), filename);
-        const dirToBeCreate = path.dirname(destPath);
-        if (!dirCollector.includes(dirToBeCreate)) {
-          dirCollector.push(dirToBeCreate);
-          mkdirp.sync(dirToBeCreate);
-        }
-
-        allFiles.push(destPath);
-        allWriteStream.push(
-          new Promise((streamResolve) => {
-            entry
-              .pipe(fs.createWriteStream(destPath))
-              .on('finish', () => streamResolve())
-              .on('close', () => streamResolve()); // resolve when file is empty in node v8
-          }),
-        );
-      })
-      .on('end', () => {
-        if (progressFunc) {
+    axios({
+      url: tarball,
+      timeout: 10000,
+      responseType: 'stream',
+      onDownloadProgress: (progressEvent) => {
+        progressFunc(progressEvent);
+      },
+    }).then((response) => {
+      const totalLength = Number(response.headers['content-length']);
+      let downloadLength = 0;
+      response.data
+        // @ts-ignore
+        .on('data', (chunk) => {
+          downloadLength += chunk.length;
           progressFunc({
-            percent: 1,
+            percent: (downloadLength - 50) / totalLength
           });
-        }
+        })
+        // @ts-ignore
+        .pipe(zlib.Unzip())
+        // @ts-ignore
+        .pipe(new tar.Parse())
+        .on('entry', (entry) => {
+          if (entry.type === 'Directory') {
+            entry.resume();
+            return;
+          }
 
-        Promise.all(allWriteStream)
-          .then(() => resolve(allFiles))
-          .catch(reject);
-      });
+          const realPath = entry.path.replace(/^package\//, '');
+
+          let filename = path.basename(realPath);
+          filename = formatFilename(filename);
+
+          const destPath = path.join(destDir, path.dirname(realPath), filename);
+          const dirToBeCreate = path.dirname(destPath);
+          if (!dirCollector.includes(dirToBeCreate)) {
+            dirCollector.push(dirToBeCreate);
+            mkdirp.sync(dirToBeCreate);
+          }
+
+          allFiles.push(destPath);
+          allWriteStream.push(
+            new Promise((streamResolve) => {
+              entry
+                .pipe(fs.createWriteStream(destPath))
+                .on('finish', () => streamResolve())
+                .on('close', () => streamResolve()); // resolve when file is empty in node v8
+            }),
+          );
+        })
+        .on('end', () => {
+          if (progressFunc) {
+            progressFunc({
+              percent: 1,
+            });
+          }
+
+          Promise.all(allWriteStream)
+            .then(() => resolve(allFiles))
+            .catch(reject);
+        });
+    });
   });
 }
 
@@ -119,10 +125,6 @@ function getNpmInfo(npm: string, registry?: string): Promise<any> {
 
   return axios({ url }).then((response) => {
     return response.data;
-  }).catch(err => {
-    // 兼容原先的 request
-    err.statusCode = err.response && err.response.status;
-    throw err;
   });
 }
 
