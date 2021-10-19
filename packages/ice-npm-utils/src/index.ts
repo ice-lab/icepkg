@@ -66,7 +66,7 @@ function getAndExtractTarball(
         .on('data', (chunk) => {
           downloadLength += chunk.length;
           progressFunc({
-            percent: (downloadLength - 50) / totalLength
+            percent: (downloadLength - 50) / totalLength,
           });
         })
         // @ts-ignore
