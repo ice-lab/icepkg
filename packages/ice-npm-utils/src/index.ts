@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as mkdirp from 'mkdirp';
-import * as semver  from 'semver';
+import * as semver from 'semver';
 import * as zlib from 'zlib';
 import * as tar from 'tar';
 import * as fsExtra from 'fs-extra';
