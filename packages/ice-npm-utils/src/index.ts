@@ -196,7 +196,6 @@ function isAliNpm(npmName?: string): boolean {
 }
 
 function getNpmRegistry(npmName = ''): string {
-  console.log('getNpmRegistry--->', process.env.REGISTRY, ALI_NPM_REGISTRY);
   if (process.env.REGISTRY) {
     return process.env.REGISTRY;
   }
