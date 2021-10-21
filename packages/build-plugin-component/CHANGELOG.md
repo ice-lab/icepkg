@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.0
+
+- [feat] use `disableGenerateStyle` to bypass `style.js` ([#4705](https://github.com/alibaba/ice/issues/4705))
+
 ## 1.7.0
 
 - [feat] support `https` cli option

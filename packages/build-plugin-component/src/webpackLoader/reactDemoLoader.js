@@ -4,9 +4,13 @@ const { parse } = require('@babel/parser');
 const t = require('@babel/types');
 const traverse = require('@babel/traverse');
 const generator = require('@babel/generator');
+const loaderUtils = require('loader-utils');
 const { markdownParser } = require('../utils/markdownHelper');
 
+
 module.exports = function demoLoader(markdown) {
+  const options = loaderUtils.getOptions(this);
+
   const filePath = this.resourcePath;
   const fileName = basename(filePath, '.md');
 
@@ -17,14 +21,17 @@ module.exports = function demoLoader(markdown) {
   // get style file
   let styleStatement = '';
   let stylePath = '';
-  ['index.scss', 'index.less', 'index.css', 'main.scss'].every(file => {
-    stylePath = join(process.cwd(), 'src', file);
-    if (existsSync(stylePath)) {
-      styleStatement = `import ${JSON.stringify(stylePath)};`;
-      return false;
-    }
-    return true;
-  });
+
+  if (options && !options.disableGenerateStyle) {
+    ['index.scss', 'index.less', 'index.css', 'main.scss'].every((file) => {
+      stylePath = join(process.cwd(), 'src', file);
+      if (existsSync(stylePath)) {
+        styleStatement = `import ${JSON.stringify(stylePath)};`;
+        return false;
+      }
+      return true;
+    });
+  }
 
   let sourceCode = '';
   const mountNode = `const mountNode = document.getElementById('${fileName}');`;
