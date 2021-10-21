@@ -3,7 +3,6 @@
 ## 3.0.0
 
 - [chore] migrate request to axios
-- [chore] output esmodule
 - [chore] upgrade deps:
   - fs-extra 8 -> 10
   - mkdirp 0.5.x -> 1.x
