@@ -37,6 +37,11 @@ const getBabelConfig = ({
       ...params,
     });
     babelConfig.presets.push([require.resolve('@babel/preset-typescript'), { jsxPragma: 'createElement' }]);
+
+    babelConfig.plugins = [
+      ...babelConfig.plugins,
+      ...(babelPlugins || []),
+    ];
   }
   // generate babel-plugin-import config
   const plugins = [];

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.1
+
+- [fix] provide consistency of `define` between rax & react ([#235](https://github.com/ice-lab/iceworks-cli/issues/235))
+
 ## 1.8.0
 
 - [feat] use `disableGenerateStyle` to bypass `style.js` ([#4705](https://github.com/alibaba/ice/issues/4705))

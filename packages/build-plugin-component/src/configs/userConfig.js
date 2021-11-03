@@ -68,4 +68,8 @@ module.exports = [
       }
     },
   },
+  {
+    name: 'define',
+    validation: 'object',
+  },
 ];
