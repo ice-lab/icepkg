@@ -2,6 +2,7 @@
 
 ## 1.8.1
 
+- [feat] support babelPlugins in `type: rax`.
 - [fix] provide consistency of `define` between rax & react ([#235](https://github.com/ice-lab/iceworks-cli/issues/235))
 
 ## 1.8.0
