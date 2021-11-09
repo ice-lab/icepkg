@@ -100,4 +100,8 @@ module.exports = [
     name: WECHAT_MINIPROGRAM,
     validation: 'object',
   },
+  {
+    name: 'babelPlugins',
+    validation: 'array',
+  },
 ];

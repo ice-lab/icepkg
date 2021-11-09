@@ -6,7 +6,7 @@
 const path = require('path');
 const fse = require('fs-extra');
 const ts = require('typescript');
-const { REG_TS } = require('../configs/reg');
+const { REG_JS } = require('../configs/reg');
 const formatPathForWin = require('../utils/formatPathForWin');
 
 // compile options
@@ -17,10 +17,10 @@ const options = {
 };
 
 module.exports = function dtsCompiler(compileInfo, log = console) {
-  const needCompileList = compileInfo.filter(({ filePath }) => REG_TS.test(filePath)).map((data) => {
+  const needCompileList = compileInfo.filter(({ filePath }) => REG_JS.test(filePath)).map((data) => {
     const { filePath, destPath, sourceFile } = data;
-    const targetPath = path.join(destPath, filePath.replace(REG_TS, '.d.ts'));
-    const fileNamesDTS = sourceFile.replace(REG_TS, '.d.ts');
+    const targetPath = path.join(destPath, filePath.replace(REG_JS, '.d.ts'));
+    const fileNamesDTS = sourceFile.replace(REG_JS, '.d.ts');
     return {
       ...data,
       targetPath,
