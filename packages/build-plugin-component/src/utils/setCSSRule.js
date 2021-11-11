@@ -77,6 +77,9 @@ module.exports = (config, useStylesheetLoader) => {
       .test(/\.scss?$/)
       .use('MiniCssExtractPlugin.loader')
       .loader(MiniCssExtractPlugin.loader)
+      .options({
+        esModule: false,
+      })
       .end()
       .use('css-loader')
       .loader(require.resolve('css-loader'))
