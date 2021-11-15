@@ -61,7 +61,7 @@ export default async function formatProject(projectDir: string, projectName?: st
           assets: {
             type: 'builder',
             name: '@ali/builder-rax-v1'
-          }
+          },
         };
 
         // add @ali/build-plugin-rax-app-def
@@ -101,7 +101,7 @@ export default async function formatProject(projectDir: string, projectName?: st
           assets: {
             type: 'builder',
             name: '@ali/builder-ice-app',
-          }
+          },
         };
 
         // add @ali/build-plugin-ice-def
