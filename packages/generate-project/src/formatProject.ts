@@ -57,10 +57,10 @@ export default async function formatProject(projectDir: string, projectName?: st
       if (pkgData.dependencies.rax) {
         // For Rax project
         abcData = {
-          kit: "rax",
+          kit: 'rax',
           assets: {
-            type: "builder",
-            name: "@ali/builder-rax-v1"
+            type: 'builder',
+            name: '@ali/builder-rax-v1'
           }
         };
 
