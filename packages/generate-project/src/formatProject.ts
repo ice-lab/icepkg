@@ -60,7 +60,7 @@ export default async function formatProject(projectDir: string, projectName?: st
           kit: 'rax',
           assets: {
             type: 'builder',
-            name: '@ali/builder-rax-v1'
+            name: '@ali/builder-rax-v1',
           },
         };
 
