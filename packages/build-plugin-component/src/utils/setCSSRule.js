@@ -48,6 +48,9 @@ module.exports = (config, useStylesheetLoader) => {
       .test(/\.css?$/)
       .use('MiniCssExtractPlugin.loader')
       .loader(MiniCssExtractPlugin.loader)
+      .options({
+        esModule: false,
+      })
       .end()
       .use('css')
       .loader(require.resolve('css-loader'))
@@ -61,6 +64,9 @@ module.exports = (config, useStylesheetLoader) => {
       .test(/\.less?$/)
       .use('MiniCssExtractPlugin.loader')
       .loader(MiniCssExtractPlugin.loader)
+      .options({
+        esModule: false,
+      })
       .end()
       .use('css-loader')
       .loader(require.resolve('css-loader'))
