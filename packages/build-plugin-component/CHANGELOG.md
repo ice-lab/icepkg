@@ -4,6 +4,7 @@
 
 - [feat] upgrade `build-scripts-config` to 3.x.
 - [fix] compatible with mini-css-extract-plugin 1.x.
+- [fix] avoid wrong result when compiling `Class` with babel.
 
 ## 1.8.1
 
