@@ -14,6 +14,9 @@ module.exports = (options = {}, { babelPlugins, babelOptions, rootDir }) => {
       regenerator: true,
       useESModules: false,
     },
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    ['@babel/plugin-proposal-private-methods', { loose: true }],
+    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
   ]);
   defaultBabel.plugins = [...defaultBabel.plugins, ...((babelPlugins || []).map((plugin) => {
     const [plguinName, pluginOptions, ...restOptions] = Array.isArray(plugin) ? plugin : [plugin];
@@ -29,7 +32,7 @@ module.exports = (options = {}, { babelPlugins, babelOptions, rootDir }) => {
     }
   }))];
   // modify @babel/preset-env options
-  defaultBabel.presets = defaultBabel.presets.map(preset => {
+  defaultBabel.presets = defaultBabel.presets.map((preset) => {
     const [presetPath, presetOptions] = Array.isArray(preset) ? preset : [preset];
     const targetConfig = babelOptions.find(({ name }) => (formatPathForWin(presetPath).indexOf(name) > -1));
     const modifyOptions = targetConfig && targetConfig.options;
