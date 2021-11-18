@@ -6,6 +6,10 @@
 - [fix] compatible with mini-css-extract-plugin 1.x.
 - [fix] avoid wrong result when compiling `Class` with babel.
 
+## 1.8.2
+
+- [chore] update miniapp-compile-config version to 0.2.x
+
 ## 1.8.1
 
 - [feat] support babelPlugins in `type: rax`.
