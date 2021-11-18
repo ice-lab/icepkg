@@ -37,6 +37,11 @@ const getBabelConfig = ({
       ...params,
     });
     babelConfig.presets.push([require.resolve('@babel/preset-typescript'), { jsxPragma: 'createElement' }]);
+
+    babelConfig.plugins = [
+      ...babelConfig.plugins,
+      ...(babelPlugins || []),
+    ];
   }
   // generate babel-plugin-import config
   const plugins = [];
@@ -75,15 +80,31 @@ const getBabelConfig = ({
   return babelConfig;
 };
 
-module.exports = function babelCompiler(
-  context,
-  log,
-  basicComponents,
-  userOptions = {},
-  type,
-) {
+module.exports = function babelCompiler(context,
+  {
+    log,
+    userOptions = {},
+    type,
+  }) {
   const { rootDir, pkg } = context;
-  const { compilerOptions = {}, babelOptions = [], alias, subComponents, define } = userOptions;
+
+  // FIXME: 没有 compilerOptions 这个参数
+  const {
+    compilerOptions = {},
+    babelOptions = [],
+    alias,
+    subComponents,
+    define,
+    disableGenerateStyle,
+  } = userOptions;
+
+
+  let { basicComponents = [] } = userOptions;
+
+  if (type === 'rax') {
+    basicComponents = false;
+  }
+
   const { babelPlugins = [] } = userOptions;
 
   if (define) {
@@ -95,17 +116,17 @@ module.exports = function babelCompiler(
 
   // generate DTS for ts files, default is true
   const { declaration = true } = compilerOptions;
-  const componentLibs = analyzePackage(pkg, basicComponents);
+  const componentLibs = disableGenerateStyle ? [] : analyzePackage(pkg, basicComponents);
   const srcPath = path.join(rootDir, 'src');
-  // compile task es and lib
   const compileTargets = ['es', 'lib'];
   const filesPath = glob.sync('**/*.*', { cwd: srcPath, ignore: ['node_modules/**', '*.d.ts', '*.?(ali|wechat).?(ts|tsx|js|jsx)'] });
   // traverse to compile the js files
   const compileInfo = [];
   compileTargets.forEach((target) => {
     const destPath = path.join(rootDir, target);
-    // clear dir
     fs.emptyDirSync(destPath);
+
+    // Compile code
     filesPath.forEach((filePath) => {
       const sourceFile = path.join(srcPath, filePath);
       if (!REG_JS.test(filePath) || REG_D_TS.test(filePath)) {
@@ -146,7 +167,8 @@ module.exports = function babelCompiler(
       }
     });
 
-    if (type === 'react') {
+    // Generate style.js
+    if (type === 'react' && !disableGenerateStyle) {
       if (subComponents) {
         // filter dir in destPath folder
         const folderList = fs.readdirSync(destPath).filter((filePath) => {

@@ -2,7 +2,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { configHTMLPlugin } = require('../../utils/htmlInjection');
 
-module.exports = (config, { pkg, rootDir, entry }) => {
+module.exports = (config, {
+  pkg,
+  rootDir,
+  entry,
+  disableGenerateStyle,
+}) => {
   config.target('web');
   config.context(rootDir);
 
@@ -43,6 +48,7 @@ module.exports = (config, { pkg, rootDir, entry }) => {
         };
       });
   });
+
   // disable vendor
   config.optimization.splitChunks({ cacheGroups: {} });
   // remove CopyWebpackPlugin (component compile do not have public folder)
@@ -52,7 +58,10 @@ module.exports = (config, { pkg, rootDir, entry }) => {
     .rule('demo-loader')
     .test(/\.md$/i)
     .use('demo')
-    .loader(require.resolve('../../webpackLoader/reactDemoLoader'));
+    .loader(require.resolve('../../webpackLoader/reactDemoLoader'))
+    .options({
+      disableGenerateStyle,
+    });
   // add packagename to webpack alias
   ['.js', '.jsx', '.json', '.html', '.ts', '.tsx'].forEach((extension) => {
     config.resolve.extensions.add(extension);
