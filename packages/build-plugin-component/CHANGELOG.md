@@ -1,8 +1,27 @@
 # Changelog
 
-## 1.7.1
+## 1.9.1
 
 - [chore] upgrade ice-npm-utils from 2.x to 3.x
+
+## 1.9.0
+
+- [feat] upgrade `build-scripts-config` to 3.x.
+- [fix] compatible with mini-css-extract-plugin 1.x.
+- [fix] avoid wrong result when compiling `Class` with babel.
+
+## 1.8.2
+
+- [chore] update miniapp-compile-config version to 0.2.x
+
+## 1.8.1
+
+- [feat] support babelPlugins in `type: rax`.
+- [fix] provide consistency of `define` between rax & react ([#235](https://github.com/ice-lab/iceworks-cli/issues/235))
+
+## 1.8.0
+
+- [feat] use `disableGenerateStyle` to bypass `style.js` ([#4705](https://github.com/alibaba/ice/issues/4705))
 
 ## 1.7.0
 

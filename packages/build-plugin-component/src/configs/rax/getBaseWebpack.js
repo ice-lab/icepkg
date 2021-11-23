@@ -7,9 +7,10 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ProgressPlugin = require('webpackbar');
 const TimeFixPlugin = require('time-fix-plugin');
+const setDefine = require('../../useConfig/define');
 
 module.exports = (context, options) => {
-  const { rootDir, command, pkg, webpack } = context;
+  const { rootDir, command, pkg, webpack, userConfig: { define } } = context;
   const { isES6, target, name, inlineStyle = true, https } = options || {};
   const config = new Chain();
 
@@ -141,6 +142,11 @@ module.exports = (context, options) => {
     ]);
   // fix: https://github.com/webpack/watchpack/issues/25
   config.plugin('TimeFixPlugin').use(TimeFixPlugin);
+
+
+  if (define) {
+    setDefine(config, define, context);
+  }
 
   return config;
 };

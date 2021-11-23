@@ -22,6 +22,9 @@ const cnpmResponseRegistry = 'https://registry.npmmirror.com';
 // 也有可能是这个
 // const r = 'https://registry.nlark.com'
 
+// 或者是这个源
+const npmMirrorRegistry = 'https://registry.npmmirror.com';
+
 jest.setTimeout(10 * 1000);
 
 
@@ -128,8 +131,8 @@ test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
     console.log('getNpmTarball ice-npm-utils', tarball);
     expect(
-      tarball === `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`
-      || tarball === `${cnpmResponseRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`
+      [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
+        .some(registry => tarball === `${registry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
     ).toBeTruthy();
   });
 });
@@ -144,8 +147,8 @@ test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
     console.log('getNpmTarball http', tarball);
     expect(
-      tarball === `${defaultRegistry}/http/download/http-0.0.1-security.tgz`
-      || tarball === `${cnpmResponseRegistry}/http/download/http-0.0.1-security.tgz`
+      [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
+        .some(registry => tarball === `${registry}/http/download/http-0.0.1-security.tgz`)
     ).toBeTruthy();
   });
 });

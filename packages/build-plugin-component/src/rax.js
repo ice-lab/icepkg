@@ -180,7 +180,11 @@ module.exports = ({
     });
     onHook('before.build.load', async () => {
       if (!disableGenerateLib) {
-        babelCompiler(context, log, false, compileOptions, 'rax');
+        babelCompiler(context, {
+          log,
+          userOptions: compileOptions,
+          type: 'rax',
+        });
       }
     });
   }

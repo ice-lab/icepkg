@@ -65,7 +65,7 @@ module.exports = [
     validation: 'object',
   },
   {
-    name: 'define',
-    validation: 'object',
+    name: 'disableGenerateStyle',
+    validation: 'boolean',
   },
 ];
