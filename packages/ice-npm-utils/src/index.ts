@@ -235,11 +235,12 @@ function getNpmClient(npmName = ''): string {
 
 function checkAliInternal(): Promise<boolean> {
   return axios({
-    url: ALI_CHECKNODE_URL,
+    url: 'https://alilang-intranet.alibaba-inc.com/is_white_list.json',
     timeout: 3 * 1000,
   })
     .then((response) => {
-      return response.status === 200 && /success/.test(response.data as string);
+      const data: any = response.data;
+      return response.data && data.content === true && data.hasError === false;
     })
     .catch((err) => {
       return false;

@@ -114,7 +114,7 @@ test('getNpmClient', () => {
   expect(getNpmClient('@alixxx/ice-test')).toBe(defaultData);
 });
 
-test('checkAliInternal', () => {
+test.only('checkAliInternal', () => {
   return checkAliInternal().then((internal) => {
     console.log('checkAliInternal', internal);
     expect(internal).toBeBoolean();
