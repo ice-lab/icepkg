@@ -9,6 +9,14 @@ import { getVersions } from 'ice-npm-utils';
 const branchName = process.env.BRANCH_NAME;
 const rootDir = join(__dirname, '../');
 const REGISTRY = 'https://registry.npmjs.org/';
+// 依赖关系影响发布顺序
+const orderedPackages = [
+  'ice-npm-utils',
+  '@iceworks/generate-project',
+  '@iceworks/generate-material',
+  'build-plugin-component',
+  'iceworks',
+];
 
 if (!branchName) {
   throw new Error('Only support publish in GitHub Actions env');
@@ -16,10 +24,18 @@ if (!branchName) {
 
 (async () => {
   const packageDirs = getPackagesPaths(join(rootDir, 'packages'));
+  const packages = packageDirs.map(pkgDir => {
+    const pkgData = fse.readJSONSync(join(pkgDir, 'package.json'));
+    return { pkgDir, pkgData };
+  }).sort((a, b) => {
+    const aIndex = orderedPackages.indexOf(a.pkgData.name);
+    const bIndex = orderedPackages.indexOf(b.pkgData.name);
+    return aIndex - bIndex;
+  });
 
-  for (const pkgDir of packageDirs) {
+  for (const pkgInfo of packages) {
     // eslint-disable-next-line no-await-in-loop
-    await publishPackage(pkgDir);
+    await publishPackage(pkgInfo);
   }
 
 })().catch(err => {
@@ -27,8 +43,7 @@ if (!branchName) {
   process.exit(1);
 });
 
-async function publishPackage(packageDir) {
-  const pkgData = await fse.readJSON(join(packageDir, 'package.json'));
+async function publishPackage({ pkgDir, pkgData }) {
   const { version, name } = pkgData;
   const npmTag = branchName === 'master' ? 'latest' : 'beta';
 
@@ -50,11 +65,11 @@ async function publishPackage(packageDir) {
 
   console.log('start publish', version, npmTag);
   execSync('npm install', {
-    cwd: packageDir,
+    cwd: pkgDir,
     stdio: 'inherit',
   });
   execSync(`npm publish --tag ${npmTag}`, {
-    cwd: packageDir,
+    cwd: pkgDir,
     stdio: 'inherit',
   });
 

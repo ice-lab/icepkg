@@ -17,11 +17,8 @@ import {
 } from '../index';
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
-// 也有可能返回这个源
-const cnpmResponseRegistry = 'https://registry.nlark.com' ;
-
-// 或者是这个源
-const npmMirrorRegistry = 'https://registry.npmmirror.com';
+// 可能会返回不同的源
+const tbRegisties = [defaultRegistry, 'https://registry.npmmirror.com'];
 
 jest.setTimeout(10 * 1000);
 
@@ -91,7 +88,7 @@ test('getNpmInfo success', () => {
 
 test('getNpmInfo 404 error case', () => {
   return getNpmInfo('not-exis-npm-error').catch((err) => {
-    expect(err.statusCode).toBe(404);
+    expect(err.response.status).toBe(404);
   });
 });
 
@@ -117,7 +114,7 @@ test('getNpmClient', () => {
   expect(getNpmClient('@alixxx/ice-test')).toBe(defaultData);
 });
 
-test('checkAliInternal', () => {
+test.only('checkAliInternal', () => {
   return checkAliInternal().then((internal) => {
     console.log('checkAliInternal', internal);
     expect(internal).toBeBoolean();
@@ -129,9 +126,15 @@ test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
     console.log('getNpmTarball ice-npm-utils', tarball);
     expect(
-      [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
+      tbRegisties
         .some(registry => tarball === `${registry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
     ).toBeTruthy();
+  });
+});
+
+test('getNpmTarball 404', () => {
+  return getNpmTarball('not-exis-npm-error').catch((err) => {
+    expect(err.response.status).toBe(404);
   });
 });
 
@@ -139,7 +142,7 @@ test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
     console.log('getNpmTarball http', tarball);
     expect(
-      [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
+      tbRegisties
         .some(registry => tarball === `${registry}/http/download/http-0.0.1-security.tgz`)
     ).toBeTruthy();
   });
@@ -147,10 +150,14 @@ test('getNpmTarball should get latest version', () => {
 
 test('getAndExtractTarball', () => {
   const tempDir = path.resolve(tmpdir(), 'ice_npm_utils_tarball');
-  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
+  let percent;
+  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`, (state) => {
+    percent = state.percent;
+  })
     .then((files) => {
       rimraf.sync(tempDir);
       expect(files.length > 0).toBe(true);
+      expect(percent).toBe(1);
     })
     .catch(() => {
       rimraf.sync(tempDir);
