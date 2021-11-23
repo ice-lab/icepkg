@@ -2,7 +2,7 @@
 
 ## 1.9.1
 
-- [chore] upgrade ice-npm-utils from 2.x to 3.x
+- [chore] upgrade ice-npm-utils from 1.x to 3.x
 
 ## 1.9.0
 
