@@ -17,13 +17,8 @@ import {
 } from '../index';
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
-// 也有可能返回这个源
-const cnpmResponseRegistry = 'https://registry.npmmirror.com';
-// 也有可能是这个
-// const r = 'https://registry.nlark.com'
-
-// 或者是这个源
-const npmMirrorRegistry = 'https://registry.npmmirror.com';
+// 可能会返回不同的源
+const tbRegisties = [defaultRegistry, 'https://registry.npmmirror.com'];
 
 jest.setTimeout(10 * 1000);
 
@@ -131,7 +126,7 @@ test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
     console.log('getNpmTarball ice-npm-utils', tarball);
     expect(
-      [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
+      tbRegisties
         .some(registry => tarball === `${registry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
     ).toBeTruthy();
   });
@@ -147,7 +142,7 @@ test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
     console.log('getNpmTarball http', tarball);
     expect(
-      [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
+      tbRegisties
         .some(registry => tarball === `${registry}/http/download/http-0.0.1-security.tgz`)
     ).toBeTruthy();
   });

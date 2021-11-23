@@ -2,7 +2,8 @@
 
 ## 3.0.0
 
-- [chore] migrate request to axios
+- [chore] change cnpm registry to `registry.npmmirror.com`
+- [chore] migrate request to axios, notice `error.statusCode` -> `error.response && error.response.status === 404`
 - [chore] upgrade deps:
   - fs-extra 8 -> 10
   - mkdirp 0.5.x -> 1.x
