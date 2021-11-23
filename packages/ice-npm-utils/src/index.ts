@@ -4,7 +4,7 @@ import * as semver from 'semver';
 import * as zlib from 'zlib';
 import * as tar from 'tar';
 import * as fse from 'fs-extra';
-import { ALI_NPM_REGISTRY, ALI_UNPKG_URL, ALI_CHECKNODE_URL } from '@appworks/constant';
+import { ALI_NPM_REGISTRY, ALI_UNPKG_URL } from '@appworks/constant';
 import axios from 'axios';
 import * as urlJoin from 'url-join';
 
@@ -206,7 +206,7 @@ function getNpmRegistry(npmName = ''): string {
     return ALI_NPM_REGISTRY;
   }
 
-  return 'https://registry.npm.taobao.org';
+  return 'https://registry.npmmirror.com';
 }
 
 function getUnpkgHost(npmName = ''): string {

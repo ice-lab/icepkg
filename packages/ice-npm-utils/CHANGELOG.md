@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1
+
+- [feat] optimize checkAliInternal
+
 ## 3.0.0
 
 - [chore] change cnpm registry to `registry.npmmirror.com`
