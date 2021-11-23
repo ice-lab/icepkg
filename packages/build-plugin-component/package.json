@@ -45,7 +45,7 @@
     "handlebars": "^4.5.3",
     "handlebars-loader": "^1.7.1",
     "html-webpack-plugin": "^4.5.0",
-    "ice-npm-utils": "^3.0.0-0",
+    "ice-npm-utils": "^3.0.0",
     "image-source-loader": "^0.6.5",
     "ip": "^1.1.5",
     "js-yaml": "^4.0.0",
