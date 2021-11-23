@@ -1,10 +1,9 @@
-import * as fs from 'fs';
 import * as path from 'path';
 import * as mkdirp from 'mkdirp';
 import * as semver from 'semver';
 import * as zlib from 'zlib';
 import * as tar from 'tar';
-import * as fsExtra from 'fs-extra';
+import * as fse from 'fs-extra';
 import { ALI_NPM_REGISTRY, ALI_UNPKG_URL, ALI_CHECKNODE_URL } from '@appworks/constant';
 import axios from 'axios';
 import * as urlJoin from 'url-join';
@@ -94,7 +93,7 @@ function getAndExtractTarball(
           allWriteStream.push(
             new Promise((streamResolve) => {
               entry
-                .pipe(fs.createWriteStream(destPath))
+                .pipe(fse.createWriteStream(destPath))
                 .on('finish', () => streamResolve())
                 .on('close', () => streamResolve()); // resolve when file is empty in node v8
             }),
@@ -251,12 +250,12 @@ const packageJSONFilename = 'package.json';
 
 async function readPackageJSON(projectPath: string) {
   const packagePath = path.join(projectPath, packageJSONFilename);
-  const packagePathIsExist = await fsExtra.pathExists(packagePath);
+  const packagePathIsExist = await fse.pathExists(packagePath);
   if (!packagePathIsExist) {
     // eslint-disable-next-line quotes
     throw new Error("Project's package.json file not found in local environment");
   }
-  const content = await fsExtra.readJson(packagePath);
+  const content = await fse.readJson(packagePath);
   return content;
 }
 
@@ -268,7 +267,7 @@ async function readPackageJSON(projectPath: string) {
  */
 function getPackageLocalVersion(projectPath: string, packageName: string): string {
   const packageJsonPath = path.join(projectPath, 'node_modules', packageName, 'package.json');
-  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+  const packageJson = JSON.parse(fse.readFileSync(packageJsonPath, 'utf-8'));
   return packageJson.version;
 }
 
