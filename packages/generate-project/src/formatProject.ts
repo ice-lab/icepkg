@@ -57,11 +57,8 @@ export default async function formatProject(projectDir: string, projectName?: st
       if (pkgData.dependencies.rax) {
         // For Rax project
         abcData = {
-          kit: 'rax',
-          assets: {
-            type: 'builder',
-            name: '@ali/builder-rax-v1',
-          },
+          type: 'rax',
+          builder: '@ali/builder-rax-v1',
         };
 
         // add @ali/build-plugin-rax-app-def
@@ -97,11 +94,8 @@ export default async function formatProject(projectDir: string, projectName?: st
         // }
       } else {
         abcData = {
-          kit: 'ice-app',
-          assets: {
-            type: 'builder',
-            name: '@ali/builder-ice-app',
-          },
+          type: 'ice-app',
+          builder: '@ali/builder-ice-app',
         };
 
         // add @ali/build-plugin-ice-def
