@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4.8
+
+- [chore] change content of `abc.json`
+
 ## 3.4.7
 
 - [feat] 物料数据里增加 componentType(antd/fusion) 字段
