@@ -1,9 +1,9 @@
 # Changelog
 
-
 ## 1.9.2
 
-- [fix] compile error may occur when compile `.d.ts` for JavaScript
+- [feat] `allowJs` to support compile `.d.ts` for JavaScript who uses jsdoc.
+- [fix] compile error may occur when compile `.d.ts` for JavaScript. ([#246](https://github.com/ice-lab/iceworks-cli/issues/246))
 
 ## 1.9.1
 
