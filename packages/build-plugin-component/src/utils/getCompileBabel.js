@@ -5,17 +5,20 @@ module.exports = (options = {}, { babelPlugins, babelOptions, rootDir }) => {
   const { modules } = options;
 
   const defaultBabel = getBabelConfig();
-  // add @babel/plugin-transform-runtime
-  defaultBabel.plugins.push([
-    require.resolve('@babel/plugin-transform-runtime'),
-    {
+
+  const additionalPlugins = [
+    ['@babel/plugin-transform-runtime', {
       corejs: false,
       helpers: true,
       regenerator: true,
       useESModules: false,
-    },
-  ]);
-  defaultBabel.plugins = [...defaultBabel.plugins, ...((babelPlugins || []).map((plugin) => {
+    }],
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    ['@babel/plugin-proposal-private-methods', { loose: true }],
+    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+  ];
+
+  defaultBabel.plugins = [...defaultBabel.plugins, ...additionalPlugins, ...((babelPlugins || []).map((plugin) => {
     const [plguinName, pluginOptions, ...restOptions] = Array.isArray(plugin) ? plugin : [plugin];
     const pluginPath = require.resolve(plguinName, { paths: [rootDir] });
     if (pluginOptions) {
@@ -29,7 +32,7 @@ module.exports = (options = {}, { babelPlugins, babelOptions, rootDir }) => {
     }
   }))];
   // modify @babel/preset-env options
-  defaultBabel.presets = defaultBabel.presets.map(preset => {
+  defaultBabel.presets = defaultBabel.presets.map((preset) => {
     const [presetPath, presetOptions] = Array.isArray(preset) ? preset : [preset];
     const targetConfig = babelOptions.find(({ name }) => (formatPathForWin(presetPath).indexOf(name) > -1));
     const modifyOptions = targetConfig && targetConfig.options;

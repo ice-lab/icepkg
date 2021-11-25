@@ -27,5 +27,5 @@ export default async function getNpmTarball(npm: string, version: string, regist
     return tarball;
   }
 
-  throw new Error(`${name}@${version} 尚未发布`);
+  throw new Error(`${npm}@${version} 尚未发布`);
 }

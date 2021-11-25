@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4.8
+
+- [chore] upgrade ice-npm-utils from 2.x to 3.x
+
 ## 3.4.7
 
 - [feat] 物料数据里增加 componentType(antd/fusion) 字段

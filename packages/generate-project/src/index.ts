@@ -37,7 +37,7 @@ export async function downloadAndGenerateProject(
   try {
     tarballURL = await getNpmTarball(npmName, version || 'latest', registry);
   } catch (error) {
-    if (error.statusCode === 404) {
+    if (error.response && error.response.status === 404) {
       return Promise.reject(new Error(`获取模板 npm 信息失败，当前的模板地址是：${registry}/${npmName}。`));
     } else {
       return Promise.reject(error);

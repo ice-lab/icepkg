@@ -1,5 +1,9 @@
 # `@iceworks/generate-material`
 
+## 1.0.10
+
+- chore: upgrade ice-npm-utils from 2.x to 3.x
+
 ## 1.0.9
 
 - fix: remove src/index.ts when building miniapp plugin with runtime mode

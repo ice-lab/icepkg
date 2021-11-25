@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.9.1
+
+- [chore] upgrade ice-npm-utils from 1.x to 3.x
+
+## 1.9.0
+
+- [feat] upgrade `build-scripts-config` to 3.x.
+- [fix] compatible with mini-css-extract-plugin 1.x.
+- [fix] avoid wrong result when compiling `Class` with babel.
+
+## 1.8.2
+
+- [chore] update miniapp-compile-config version to 0.2.x
+
 ## 1.8.1
 
 - [feat] support babelPlugins in `type: rax`.
