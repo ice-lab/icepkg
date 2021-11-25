@@ -18,9 +18,9 @@ const options = {
 
 module.exports = function dtsCompiler(compileInfo, {
   log,
-  allowJs,
+  generateTypesForJs,
 }) {
-  const regexFile = allowJs ? REG_JS : REG_TS;
+  const regexFile = generateTypesForJs ? REG_JS : REG_TS;
 
   const needCompileList = compileInfo.filter(({ filePath }) => regexFile.test(filePath)).map((data) => {
     const { filePath, destPath, sourceFile } = data;

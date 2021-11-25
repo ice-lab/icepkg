@@ -73,7 +73,7 @@ module.exports = [
     validation: 'object',
   },
   {
-    name: 'allowJs',
+    name: 'generateTypesForJs',
     validation: 'boolean',
     default: false,
   },

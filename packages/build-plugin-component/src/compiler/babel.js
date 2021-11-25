@@ -96,7 +96,7 @@ module.exports = function babelCompiler(context,
     subComponents,
     define,
     disableGenerateStyle,
-    allowJs = false,
+    generateTypesForJs = false,
   } = userOptions;
 
 
@@ -186,7 +186,7 @@ module.exports = function babelCompiler(context,
   if (declaration) {
     dtsCompiler(compileInfo, {
       log,
-      allowJs,
+      generateTypesForJs,
     });
   }
   log.info('Generate es and lib successfully!');
