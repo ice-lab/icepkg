@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.9.2
+
+- [feat] `generateTypesForJs` to support compile `.d.ts` for JavaScript who uses jsdoc.
+- [fix] compile error may occur when compile `.d.ts` for JavaScript. ([#246](https://github.com/ice-lab/iceworks-cli/issues/246))
+
 ## 1.9.1
 
 - [chore] upgrade ice-npm-utils from 1.x to 3.x

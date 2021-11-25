@@ -72,4 +72,9 @@ module.exports = [
     name: 'define',
     validation: 'object',
   },
+  {
+    name: 'generateTypesForJs',
+    validation: 'boolean',
+    default: false,
+  },
 ];
