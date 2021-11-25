@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.4.2
+
+- change content of `abc.json`
+
 ## 1.4.1
 
 - support default def version
