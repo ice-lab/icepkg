@@ -59,9 +59,6 @@ export default async function formatProject(projectDir: string, projectName?: st
         abcData = {
           type: 'rax',
           builder: '@ali/builder-rax-v1',
-          info: {
-            raxVersion: '1.x',
-          },
         };
 
         // add @ali/build-plugin-rax-app-def

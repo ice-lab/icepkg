@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.4.3
+
+- change content of `abc.json`
+
 ## 1.4.2
 
 - chore: upgrade ice-npm-utils from 2.x to 3.x
