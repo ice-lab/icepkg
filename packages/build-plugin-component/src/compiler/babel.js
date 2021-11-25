@@ -96,6 +96,7 @@ module.exports = function babelCompiler(context,
     subComponents,
     define,
     disableGenerateStyle,
+    allowJs = false,
   } = userOptions;
 
 
@@ -183,7 +184,10 @@ module.exports = function babelCompiler(context,
   });
   // generate DTS for TS files
   if (declaration) {
-    dtsCompiler(compileInfo, log);
+    dtsCompiler(compileInfo, {
+      log,
+      allowJs,
+    });
   }
   log.info('Generate es and lib successfully!');
 };

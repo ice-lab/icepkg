@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 1.9.2
+
+- [fix] compile error may occur when compile `.d.ts` for JavaScript
+
 ## 1.9.1
 
 - [chore] upgrade ice-npm-utils from 1.x to 3.x

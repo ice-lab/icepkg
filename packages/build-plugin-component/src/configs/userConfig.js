@@ -72,4 +72,9 @@ module.exports = [
     name: 'define',
     validation: 'object',
   },
+  {
+    name: 'allowJs',
+    validation: 'boolean',
+    default: false,
+  },
 ];
