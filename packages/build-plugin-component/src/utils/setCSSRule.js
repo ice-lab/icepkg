@@ -21,7 +21,13 @@ module.exports = (config, useStylesheetLoader) => {
       .loader(require.resolve('stylesheet-loader'))
       .end()
       .use('sass-loader')
-      .loader(require.resolve('sass-loader'));
+      .loader(require.resolve('sass-loader'))
+      .options({
+        // prevent compressed by default
+        sassOptions: {
+          outputStyle: 'expanded',
+        },
+      });
   } else {
     const cssLoaderOptions = {
       modules: {
@@ -96,6 +102,12 @@ module.exports = (config, useStylesheetLoader) => {
       .options(postcssOptions)
       .end()
       .use('sass-loader')
-      .loader(require.resolve('sass-loader'));
+      .loader(require.resolve('sass-loader'))
+      .options({
+        // prevent compressed by default
+        sassOptions: {
+          outputStyle: 'expanded',
+        },
+      });
   }
 };

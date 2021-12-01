@@ -19,6 +19,7 @@ const buildConfig = require('./configs/react/build');
 const defaultUserConfig = require('./configs/userConfig');
 const reactUserConfig = require('./configs/react/userConfig');
 const setDevLog = require('./utils/setDevLog');
+const setSassStyleExpanded = require('./utils/setSassStyleExpanded');
 
 const babelCompiler = require('./compiler/babel');
 
@@ -40,6 +41,8 @@ module.exports = (
    */
   const mode = command === 'start' ? 'development' : 'production';
   const webpackConfig = getWebpackConfig(mode);
+
+  setSassStyleExpanded(webpackConfig);
 
   // get demo information
   const demoDir = getDemoDir(rootDir);

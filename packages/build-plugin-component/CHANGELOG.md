@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.3
+
+- [fix] disable minimize sass output by default. ([#250](https://github.com/ice-lab/iceworks-cli/issues/250))
+
 ## 1.9.2
 
 - [feat] `generateTypesForJs` to support compile `.d.ts` for JavaScript who uses jsdoc.
