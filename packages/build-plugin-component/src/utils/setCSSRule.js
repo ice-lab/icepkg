@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const setSassStyleExpanded = require('./setSassStyleExpanded');
 
 module.exports = (config, useStylesheetLoader) => {
   if (useStylesheetLoader) {
@@ -21,13 +22,7 @@ module.exports = (config, useStylesheetLoader) => {
       .loader(require.resolve('stylesheet-loader'))
       .end()
       .use('sass-loader')
-      .loader(require.resolve('sass-loader'))
-      .options({
-        // prevent compressed by default
-        sassOptions: {
-          outputStyle: 'expanded',
-        },
-      });
+      .loader(require.resolve('sass-loader'));
   } else {
     const cssLoaderOptions = {
       modules: {
@@ -102,12 +97,8 @@ module.exports = (config, useStylesheetLoader) => {
       .options(postcssOptions)
       .end()
       .use('sass-loader')
-      .loader(require.resolve('sass-loader'))
-      .options({
-        // prevent compressed by default
-        sassOptions: {
-          outputStyle: 'expanded',
-        },
-      });
+      .loader(require.resolve('sass-loader'));
   }
+
+  setSassStyleExpanded(config);
 };
