@@ -6,12 +6,12 @@ import { Playground } from './Playground';
 import { BuildLayout, Layout } from './Layout';
 import { ReactDoc } from './ReactDoc';
 
-const App = ({ demoData, readmeData, componentData }) => {
+const App = ({ demoData, readmeData, reactDocs }) => {
   const demos = readmeData ? [].concat(readmeData, demoData) : demoData;
   const items = (demos || []).sort((a, b) => a.order - b.order);
 
   return (
-    <BuildLayout demos={items} componentData={componentData}>
+    <BuildLayout demos={items} reactDocs={reactDocs}>
       {items.map((data) => {
         const Comp = data.component;
         return (
@@ -25,7 +25,7 @@ const App = ({ demoData, readmeData, componentData }) => {
       <div>
         <h2>API</h2>
         <a name="container_api" />
-        {componentData.map((data) => (
+        {reactDocs.map((data) => (
           <ReactDoc key={data.filename} data={data} />
         ))}
       </div>

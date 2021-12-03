@@ -72,7 +72,7 @@ module.exports = ({
       const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
       const demoData = [];
       const readme = getReadme(rootDir, markdownParser, log);
-      const componentData = getReactDocs(path.join(rootDir, 'src'));
+      const reactDocs = getReactDocs(path.join(rootDir, 'src'));
       searchDirs.forEach((markdownDir) => {
         const demoKey = markdownDir || 'index';
         const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser);
@@ -90,8 +90,8 @@ module.exports = ({
       const entryPath = path.join(outputDir, 'demo-entry.js');
       const demoDataFile = 'demos-data.js';
       const demoDataPath = path.join(outputDir, demoDataFile);
-      const componentDataFile = 'component-data.js';
-      const componentDataPath = path.join(outputDir, componentDataFile);
+      const reactDocsFile = 'react-docs.js';
+      const reactDocsPath = path.join(outputDir, reactDocsFile);
       const [templateName, templateProps] = Array.isArray(demoTemplate) ? demoTemplate : [demoTemplate];
       generateEntryJs({
         template: 'template.hbs',
@@ -102,12 +102,12 @@ module.exports = ({
           templateName,
           templateProps: JSON.stringify(templateProps || {}),
           demoData,
-          componentDataFile,
+          reactDocsFile,
         },
       });
       // wirte demo content
       fs.writeFileSync(demoDataPath, `const data = ${JSON.stringify(demoData)};export default data;`);
-      fs.writeFileSync(componentDataPath, `const data = ${JSON.stringify(componentData)};export default data;`);
+      fs.writeFileSync(reactDocsPath, `const data = ${JSON.stringify(reactDocs)};export default data;`);
       params.entry = { index: entryPath };
     };
 

@@ -9,8 +9,6 @@ interface ComponentProps {
 
 /**
  * This is an example component
- *
- * @since 0.1.0
  */
 export default function ExampleComponent({ type = 'native', ...others }: ComponentProps) {
   return (

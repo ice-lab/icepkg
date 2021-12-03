@@ -32,7 +32,7 @@ export class BuildLayout extends React.Component {
   };
 
   render() {
-    const { demos, children, componentData } = this.props;
+    const { demos, children, reactDocs } = this.props;
     const { currentHash } = this.state;
     return (
       <div>
@@ -50,7 +50,7 @@ export class BuildLayout extends React.Component {
               </li>
             );
           })}
-          {componentData && (
+          {reactDocs && reactDocs.length > 0 && (
             <li>
               <a href="#container_api" onClick={this.handleChangeHash}>
                 API
