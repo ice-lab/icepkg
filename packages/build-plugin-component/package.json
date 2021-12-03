@@ -68,6 +68,7 @@
     "rax-jest-config": "^0.0.4",
     "rax-server-renderer": "^1.2.0",
     "react-dev-utils": "^10.0.0",
+    "react-docgen": "^5.4.0",
     "sass-loader": "^10.0.5",
     "style-loader": "^1.2.1",
     "template-component-demo": "^2.0.0",

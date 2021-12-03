@@ -7,6 +7,7 @@ const getRightEntryExtname = require('./utils/getRightEntryExtname');
 const { markdownParser } = require('./utils/markdownHelper');
 const getDemoDir = require('./utils/getDemoDir');
 const getDemos = require('./utils/getDemos');
+const getReactComponents = require('./utils/getReactComponents');
 const getReadme = require('./utils/getReadme');
 const getUMDWebpack = require('./utils/getUMDWebpack');
 const generateEntryJs = require('./utils/generateEntry');
@@ -22,9 +23,16 @@ const setDevLog = require('./utils/setDevLog');
 
 const babelCompiler = require('./compiler/babel');
 
-module.exports = (
-  { context, registerTask, registerCliOption, registerUserConfig, onGetWebpackConfig, onHook, log, onGetJestConfig },
-) => {
+module.exports = ({
+  context,
+  registerTask,
+  registerCliOption,
+  registerUserConfig,
+  onGetWebpackConfig,
+  onHook,
+  log,
+  onGetJestConfig,
+}) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
   const { library, demoTemplate = 'template-component-demo', disableGenerateStyle } = compileOptions;
@@ -58,10 +66,13 @@ module.exports = (
 
     const generateDemoEntry = () => {
       // get multi demos from demo dir
-      const markdownDirs = fs.readdirSync(demoDir).filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
+      const markdownDirs = fs
+        .readdirSync(demoDir)
+        .filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
       const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
       const demoData = [];
       const readme = getReadme(rootDir, markdownParser, log);
+      const componentData = getReactComponents(path.join(rootDir, 'src'));
       searchDirs.forEach((markdownDir) => {
         const demoKey = markdownDir || 'index';
         const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser);
@@ -79,6 +90,8 @@ module.exports = (
       const entryPath = path.join(outputDir, 'demo-entry.js');
       const demoDataFile = 'demos-data.js';
       const demoDataPath = path.join(outputDir, demoDataFile);
+      const componentDataFile = 'component-data.js';
+      const componentDataPath = path.join(outputDir, componentDataFile);
       const [templateName, templateProps] = Array.isArray(demoTemplate) ? demoTemplate : [demoTemplate];
       generateEntryJs({
         template: 'template.hbs',
@@ -89,10 +102,12 @@ module.exports = (
           templateName,
           templateProps: JSON.stringify(templateProps || {}),
           demoData,
+          componentDataFile,
         },
       });
       // wirte demo content
       fs.writeFileSync(demoDataPath, `const data = ${JSON.stringify(demoData)};export default data;`);
+      fs.writeFileSync(componentDataPath, `const data = ${JSON.stringify(componentData)};export default data;`);
       params.entry = { index: entryPath };
     };
 
@@ -147,10 +162,12 @@ module.exports = (
 
   // register cli options
   const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https'];
-  registerCliOption(cliOptions.map((name) => ({
-    name,
-    commands: ['start', 'build'],
-  })));
+  registerCliOption(
+    cliOptions.map((name) => ({
+      name,
+      commands: ['start', 'build'],
+    })),
+  );
 
   // register user config
   registerUserConfig(defaultUserConfig.concat(reactUserConfig));

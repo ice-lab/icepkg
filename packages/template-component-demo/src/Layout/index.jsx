@@ -29,25 +29,34 @@ export class BuildLayout extends React.Component {
         currentHash: window.location.hash,
       });
     }, 0);
-    
-  }
+  };
 
   render() {
-    const { demos, children } = this.props;
+    const { demos, children, componentData } = this.props;
     const { currentHash } = this.state;
     return (
       <div>
-        <div className={styles.layout}>
-          {children}
-        </div>
+        <div className={styles.layout}>{children}</div>
         <ul className={styles.fixNav}>
           {demos.map((item) => {
             return (
-              <li key={item.filename} className={currentHash.replace('#container_', '') === item.filename ? styles.selected : ''}>
-                <a href={`#container_${item.filename}`} onClick={this.handleChangeHash}>{item.title || item.filename}</a>
+              <li
+                key={item.filename}
+                className={currentHash.replace('#container_', '') === item.filename ? styles.selected : ''}
+              >
+                <a href={`#container_${item.filename}`} onClick={this.handleChangeHash}>
+                  {item.title || item.filename}
+                </a>
               </li>
             );
           })}
+          {componentData && (
+            <li>
+              <a href="#container_api" onClick={this.handleChangeHash}>
+                API
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     );
