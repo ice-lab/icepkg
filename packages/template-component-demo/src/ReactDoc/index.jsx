@@ -10,21 +10,21 @@ export function ReactDoc({ data }) {
       <table>
         <thead>
           <tr>
-            <th>属性</th>
+            <th>属性名</th>
+            <th>描述</th>
             <th>类型</th>
             <th>必填</th>
             <th>默认值</th>
-            <th>说明</th>
           </tr>
         </thead>
         <tbody>
           {Object.keys(props).map((key) => (
             <tr key={key}>
               <td>{key}</td>
+              <td>{props[key].description}</td>
               <td>{props[key].tsType?.raw || props[key].tsType?.name}</td>
               <td>{props[key].required && '✓'}</td>
               <td>{props[key].defaultValue?.value}</td>
-              <td>{props[key].description}</td>
             </tr>
           ))}
         </tbody>
