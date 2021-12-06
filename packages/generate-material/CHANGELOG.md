@@ -1,5 +1,9 @@
 # `@iceworks/generate-material`
 
+## 1.0.11
+
+- chore: remove using target dir
+
 ## 1.0.10
 
 - chore: upgrade ice-npm-utils from 2.x to 3.x

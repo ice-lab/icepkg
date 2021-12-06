@@ -1,11 +1,3 @@
-export type EnvMapType = {
-  web: 'isWeb';
-  weex: 'isWeex';
-  miniapp: 'isMiniApp';
-  'wechat-miniprogram': 'isWeChatMiniProgram';
-  kraken: 'isKraken';
-};
-
 export interface ITemplateOptions {
   npmName: string; // @icedesign/ice-label
   name?: string; // ice-label (english and variable)
@@ -17,7 +9,7 @@ export interface ITemplateOptions {
   version?: string;
   category?: string;
   // web, miniapp...
-  projectTargets?: (keyof EnvMapType)[];
+  projectTargets?: string[];
   adaptor?: boolean;
   miniappComponentBuildType?: 'runtime' | 'compile'; // miniapp component build type,
   miniappPluginBuildType?: 'runtime' | 'compile'; // miniapp plugin build type
