@@ -3,14 +3,17 @@
     "headAppend": ["<link href=\"test.css\">"]
   },
   "plugins": [
-    "build-plugin-component",
+    [
+      "build-plugin-component",
+      {
+        "reactDocgenIncludes": ["src/*.tsx"]
+      }
+    ],
     "build-plugin-fusion",
     [
       "build-plugin-moment-locales",
       {
-        "locales": [
-          "zh-cn"
-        ]
+        "locales": ["zh-cn"]
       }
     ]
   ]

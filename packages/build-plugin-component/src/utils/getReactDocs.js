@@ -1,21 +1,23 @@
 /**
- * get demos from demo dir
+ * get React docs from glob patterns
  */
-const { readdirSync, readFileSync, existsSync } = require('fs');
+const { readFileSync, existsSync } = require('fs');
 const { join } = require('path');
 const camelcase = require('camelcase');
 const reactDocgen = require('react-docgen');
 const formatPathForWin = require('./formatPathForWin');
+const glob = require('fast-glob');
 
-module.exports = function getReactDocs(srcPath) {
-  if (!existsSync(srcPath)) {
+module.exports = function getReactDocs(rootPath, patterns = ['src/**/*.{js,jsx,ts,tsx}']) {
+  if (!existsSync(rootPath)) {
     return [];
   }
 
-  return readdirSync(srcPath)
-    .filter((file) => /.*\.[tj]sx?$/.test(file))
+  const paths = glob.sync(patterns, { base: rootPath });
+
+  return paths
     .map((filename) => {
-      const filePath = formatPathForWin(join(srcPath, filename));
+      const filePath = formatPathForWin(join(rootPath, filename));
       const content = readFileSync(filePath, 'utf-8');
 
       try {
