@@ -1,6 +1,6 @@
 {
   "name": "@iceworks/generate-project",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Generator project",
   "files": [
     "lib/"
