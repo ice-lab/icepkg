@@ -52,6 +52,11 @@ export default async function formatProject(projectDir: string, projectName?: st
 
     delete buildData.publicPath;
 
+    if (!isAliInternal) {
+      // 对社区不透出 pha
+      delete buildData.web?.pha;
+    }
+
     // generate abcData && add plugin-def to build.json&package.json
     if (isAliInternal && bizTeam !== 'govfe') {
       if (pkgData.dependencies.rax) {

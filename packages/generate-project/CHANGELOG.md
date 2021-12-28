@@ -1,5 +1,9 @@
 # `@iceworks/generate-project`
 
+## 1.4.4
+
+- [chore] 非内网环境则删除 `build.json` 里的 `web.pha` 字段，对社区不透出 pha 概念
+
 ## 1.4.3
 
 - change content of `abc.json`
