@@ -25,7 +25,7 @@ const babelCompiler = require('./compiler/babel');
 
 module.exports = (
   { context, registerTask, registerCliOption, registerUserConfig, onGetWebpackConfig, onHook, log, onGetJestConfig },
-  options,
+  options = {},
 ) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
