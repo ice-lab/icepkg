@@ -60,6 +60,12 @@ module.exports = [
       hot: true,
       quiet: true,
       overlay: false,
+      before: (app) => {
+        app.use((req, res, next) => {
+          res.set('Access-Control-Allow-Origin', '*');
+          next();
+        });
+      },
     },
     configWebpack: (config, devServer, context) => {
       const { command } = context;
