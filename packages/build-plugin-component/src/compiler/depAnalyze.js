@@ -92,9 +92,13 @@ function analyzeAST(code) {
   const visitor = {
     CallExpression(nodePath) {
       const { callee, arguments: args } = nodePath.node;
-      if (
+      const isImportNode = (
         callee.type === 'Identifier' &&
-        callee.name === 'require' &&
+        callee.name === 'require'
+      ) || callee.type === 'Import';
+
+      if (
+        isImportNode &&
         args.length === 1 &&
         args[0].type === 'StringLiteral'
       ) {
