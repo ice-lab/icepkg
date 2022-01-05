@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.3
+
+- [feat] add default cors handler.
+
 ## 1.9.2
 
 - [feat] `generateTypesForJs` to support compile `.d.ts` for JavaScript who uses jsdoc.
