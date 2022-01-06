@@ -7,15 +7,15 @@ module.exports = (options = {}, { babelPlugins, babelOptions, rootDir }) => {
   const defaultBabel = getBabelConfig();
 
   const additionalPlugins = [
-    ['@babel/plugin-transform-runtime', {
+    [require.resolve('@babel/plugin-transform-runtime'), {
       corejs: false,
       helpers: true,
       regenerator: true,
       useESModules: false,
     }],
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+    [require.resolve('@babel/plugin-proposal-class-properties'), { loose: true }],
+    [require.resolve('@babel/plugin-proposal-private-methods'), { loose: true }],
+    [require.resolve('@babel/plugin-proposal-private-property-in-object'), { loose: true }],
   ];
 
   defaultBabel.plugins = [...defaultBabel.plugins, ...additionalPlugins, ...((babelPlugins || []).map((plugin) => {
