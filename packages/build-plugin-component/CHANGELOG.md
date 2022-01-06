@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.4
+
+- [fix] styles will missing in style.js if React.lazy is used，where dynamic import is ignored by ASTParser ([#260](https://github.com/ice-lab/iceworks-cli/pull/260))
+
+```
+var PlatformMap = {
+  mobile: /*#__PURE__*/React.lazy(function () {
+    return import('./mobile');
+  })
+};
+```
+
 ## 1.9.3
 
 - [feat] add default cors handler.
