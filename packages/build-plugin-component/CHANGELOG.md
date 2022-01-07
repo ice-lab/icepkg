@@ -12,6 +12,9 @@ var PlatformMap = {
 };
 ```
 
+- [fix] use babel-plugin-import transform `import { Foo } from 'package'` consider `esm/` libraryDirectory, for `@formily/next-components`
+- [chore] use `require.resolve` transform babel plugins path
+
 ## 1.9.3
 
 - [feat] add default cors handler.

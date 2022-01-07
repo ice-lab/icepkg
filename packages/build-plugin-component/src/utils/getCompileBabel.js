@@ -7,30 +7,26 @@ module.exports = (options = {}, { babelPlugins, babelOptions, rootDir }) => {
   const defaultBabel = getBabelConfig();
 
   const additionalPlugins = [
-    ['@babel/plugin-transform-runtime', {
+    [require.resolve('@babel/plugin-transform-runtime'), {
       corejs: false,
       helpers: true,
       regenerator: true,
       useESModules: false,
     }],
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+    [require.resolve('@babel/plugin-proposal-class-properties'), { loose: true }],
+    [require.resolve('@babel/plugin-proposal-private-methods'), { loose: true }],
+    [require.resolve('@babel/plugin-proposal-private-property-in-object'), { loose: true }],
   ];
 
-  defaultBabel.plugins = [...defaultBabel.plugins, ...additionalPlugins, ...((babelPlugins || []).map((plugin) => {
-    const [plguinName, pluginOptions, ...restOptions] = Array.isArray(plugin) ? plugin : [plugin];
-    const pluginPath = require.resolve(plguinName, { paths: [rootDir] });
-    if (pluginOptions) {
-      return [
-        pluginPath,
-        pluginOptions,
-        ...(restOptions || []),
-      ];
-    } else {
-      return pluginPath;
-    }
-  }))];
+  const formatedBabelPlugins = (babelPlugins || []).map((plugin) => {
+    const [pluginName, pluginOptions, ...restOptions] = Array.isArray(plugin) ? plugin : [plugin];
+    // 用户自定义的 babelPlugins 需要从项目目录寻址
+    const pluginPath = require.resolve(pluginName, { paths: [rootDir] });
+    return pluginOptions ? [pluginPath, pluginOptions, ...(restOptions || [])] : pluginPath;
+  });
+
+  defaultBabel.plugins = [...defaultBabel.plugins, ...additionalPlugins, ...formatedBabelPlugins];
+
   // modify @babel/preset-env options
   defaultBabel.presets = defaultBabel.presets.map((preset) => {
     const [presetPath, presetOptions] = Array.isArray(preset) ? preset : [preset];
