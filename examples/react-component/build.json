@@ -6,7 +6,7 @@
     [
       "build-plugin-component",
       {
-        "reactDocgenIncludes": ["src/*.tsx"]
+        "docGenIncludes": ["src/*.tsx"]
       }
     ],
     "build-plugin-fusion",

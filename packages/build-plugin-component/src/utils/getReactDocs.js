@@ -8,8 +8,8 @@ const reactDocgen = require('react-docgen');
 const formatPathForWin = require('./formatPathForWin');
 const glob = require('fast-glob');
 
-module.exports = function getReactDocs(rootPath, patterns = ['src/**/*.{js,jsx,ts,tsx}']) {
-  if (!existsSync(rootPath)) {
+module.exports = function getReactDocs(rootPath, patterns) {
+  if (!patterns || !existsSync(rootPath)) {
     return [];
   }
 
