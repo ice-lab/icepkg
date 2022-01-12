@@ -25,13 +25,7 @@ module.exports = function getReactDocs(rootPath, patterns) {
           filename: filePath,
         });
 
-        filename = filename.replace(/\.[tj]sx?$/, '');
-        const href = `/?demo=${filename}`;
-
         return {
-          href,
-          filename,
-          pascalCaseName: camelcase(filename, { pascalCase: true }),
           filePath,
           reactDoc,
         };

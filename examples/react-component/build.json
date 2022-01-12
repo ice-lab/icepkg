@@ -1,14 +1,10 @@
 {
+  "docGenIncludes": ["src/*.tsx"],
   "htmlInjection": {
     "headAppend": ["<link href=\"test.css\">"]
   },
   "plugins": [
-    [
-      "build-plugin-component",
-      {
-        "docGenIncludes": ["src/*.tsx"]
-      }
-    ],
+    "build-plugin-component",
     "build-plugin-fusion",
     [
       "build-plugin-moment-locales",
