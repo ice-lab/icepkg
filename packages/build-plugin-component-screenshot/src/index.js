@@ -5,10 +5,7 @@ const screenshotWithLocalServer = require('./screenshot');
 
 const DEFAULT_PORT = 8100;
 
-module.exports = (
-  { context, onHook, log },
-  pluginOptions = {},
-) => {
+module.exports = ({ context, onHook, log }, pluginOptions = {}) => {
   const { rootDir, pkg } = context;
   const { cloud = false } = pluginOptions;
   onHook('after.build.compile', async () => {
@@ -31,13 +28,14 @@ module.exports = (
     debug('viewsPath', viewsPath);
     const demos = (await fse.readdir(demoPath)) || [];
     debug('demos', demos);
-    const selectors = demos.filter(item => /^.*\.md$/g.test(item)).map(item => item.replace(/\.md$/g, ''));
+    const selectors = demos.filter((item) => /^.*\.md$/g.test(item)).map((item) => item.replace(/\.md$/g, ''));
     debug('selectors', selectors);
     if (!selectors.length) {
       return;
     }
     const snapshots = await screenshotWithLocalServer(serverPath, port, targetUrl, selectors, viewsPath);
     debug('snapshots', snapshots);
+    fse.writeFileSync(`${rootDir}/build/screenshots.json`, JSON.stringify(snapshots));
     pkg.snapshots = snapshots;
   });
 };
