@@ -6,7 +6,7 @@ const imageminPngquant = require('imagemin-pngquant');
 const createServer = require('../utils/createServer');
 const getPuppeteer = require('../utils/getPuppeteer');
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * minify an image
@@ -36,7 +36,11 @@ async function screenshot(url, selectors = [], viewsPath, timeout) {
     const puppeteer = await getPuppeteer();
 
     // start puppeteer
-    const browser = await puppeteer.launch();
+    const options = {};
+    if (process.env.BUILD_ENV === 'cloud') {
+      options.args = ['--no-sandbox'];
+    }
+    const browser = await puppeteer.launch(options);
 
     // create a new page
     const page = await browser.newPage();
@@ -54,13 +58,15 @@ async function screenshot(url, selectors = [], viewsPath, timeout) {
       await sleep(timeout);
     }
 
-    const res = await Promise.all(selectors.map(async item => {
-      const output = `${viewsPath}/${item}.png`;
-      const el = await page.$(`#${item}`);
-      await el.screenshot({ path: output });
-      await minifyImg(output, output);
-      return `views/${item}.png`;
-    }));
+    const res = await Promise.all(
+      selectors.map(async (item) => {
+        const output = `${viewsPath}/${item}.png`;
+        const el = await page.$(`#${item}`);
+        await el.screenshot({ path: output });
+        await minifyImg(output, output);
+        return `views/${item}.png`;
+      }),
+    );
 
     // close chromium
     await browser.close();
@@ -74,14 +80,17 @@ async function screenshot(url, selectors = [], viewsPath, timeout) {
     if (err.message === 'Chromium revision is not downloaded. Run "npm install" or "yarn install"') {
       console.log(chalk.red('\n\nPuppeteer Install fail. \nPlease install puppeteer using the following commands:'));
       console.log(chalk.white('\n  npm uninstall puppeteer -g'));
-      console.log(chalk.white('\n  PUPPETEER_DOWNLOAD_HOST=https://storage.googleapis.com.cnpmjs.org npm i puppeteer -g --registry=https://registry.npm.taobao.org'));
+      console.log(
+        chalk.white(
+          '\n  PUPPETEER_DOWNLOAD_HOST=https://storage.googleapis.com.cnpmjs.org npm i puppeteer -g --registry=https://registry.npm.taobao.org',
+        ),
+      );
       console.log(chalk.white('\n  screenshot -u http://www.example.com\n'));
     } else {
       console.error(err);
     }
   }
 }
-
 
 /**
  * take a screenshot with local server
@@ -93,7 +102,6 @@ async function screenshot(url, selectors = [], viewsPath, timeout) {
  * @param {string} viewsPath output path
  */
 async function screenshotWithLocalServer(serverPath, port, targetUrl, selectors = [], viewsPath, timeout) {
-
   const server = createServer(serverPath, port);
   debug('screenshot start');
   const res = await screenshot(targetUrl, selectors, viewsPath, timeout);
