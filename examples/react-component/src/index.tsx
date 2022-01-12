@@ -1,4 +1,7 @@
 import * as React from 'react';
+import {DatePicker} from '@formily/next-components';
+
+console.log(111, DatePicker);
 
 type ComponentProps = {
   title: string,
