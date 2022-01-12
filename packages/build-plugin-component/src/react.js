@@ -146,7 +146,7 @@ module.exports = (
   }
 
   // register cli options
-  const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https'];
+  const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https', 'disableOpen'];
   registerCliOption(cliOptions.map((name) => ({
     name,
     commands: ['start', 'build'],
