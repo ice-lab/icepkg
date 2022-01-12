@@ -211,9 +211,7 @@ module.exports = (
   });
 
   onHook('after.start.devServer', ({ url }) => {
-    if (!commandArgs.disableOpen) {
       // do not open browser when restart dev
-      if (!process.env.RESTART_DEV) openBrowser(url);
-    }
+      if (!process.env.RESTART_DEV || !commandArgs.disableOpen) openBrowser(url);
   });
 };
