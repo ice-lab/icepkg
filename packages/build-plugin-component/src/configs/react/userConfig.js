@@ -68,4 +68,18 @@ module.exports = [
     name: 'disableGenerateStyle',
     validation: 'boolean',
   },
+  {
+    name: 'docGenIncludes',
+    validation: (val) => {
+      if (!Array.isArray(val)) {
+        return false;
+      }
+      for (let i = 0; i < val.length; i++) {
+        if (typeof val[i] !== 'string') {
+          return false;
+        }
+      }
+      return true;
+    },
+  },
 ];

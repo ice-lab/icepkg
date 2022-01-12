@@ -1,4 +1,5 @@
 {
+  "docGenIncludes": ["src/*.tsx"],
   "htmlInjection": {
     "headAppend": ["<link href=\"test.css\">"]
   },
@@ -8,9 +9,7 @@
     [
       "build-plugin-moment-locales",
       {
-        "locales": [
-          "zh-cn"
-        ]
+        "locales": ["zh-cn"]
       }
     ]
   ]
