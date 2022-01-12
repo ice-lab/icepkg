@@ -1,4 +1,4 @@
-module.exports = (api, options) => {
+module.exports = (api) => {
   const { context, log } = api;
   const { userConfig } = context;
   if (userConfig.type && !['rax', 'react'].includes(userConfig.type)) {
@@ -6,6 +6,6 @@ module.exports = (api, options) => {
   } else {
     const componentType = userConfig.type || 'react';
     // eslint-disable-next-line
-    require(`./${componentType}`)(api, options);
+    require(`./${componentType}`)(api);
   }
 };

@@ -23,13 +23,19 @@ const setDevLog = require('./utils/setDevLog');
 
 const babelCompiler = require('./compiler/babel');
 
-module.exports = (
-  { context, registerTask, registerCliOption, registerUserConfig, onGetWebpackConfig, onHook, log, onGetJestConfig },
-  options = {},
-) => {
+module.exports = ({
+  context,
+  registerTask,
+  registerCliOption,
+  registerUserConfig,
+  onGetWebpackConfig,
+  onHook,
+  log,
+  onGetJestConfig,
+}) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
-  const { library, demoTemplate = 'template-component-demo', disableGenerateStyle } = compileOptions;
+  const { library, demoTemplate = 'template-component-demo', disableGenerateStyle, docGenIncludes } = compileOptions;
   const { https } = commandArgs;
 
   // config htmlInjection for once
@@ -66,7 +72,7 @@ module.exports = (
       const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
       const demoData = [];
       const readme = getReadme(rootDir, markdownParser, log);
-      const reactDocs = getReactDocs(rootDir, options.docGenIncludes);
+      const reactDocs = getReactDocs(rootDir, docGenIncludes);
       searchDirs.forEach((markdownDir) => {
         const demoKey = markdownDir || 'index';
         const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser);
