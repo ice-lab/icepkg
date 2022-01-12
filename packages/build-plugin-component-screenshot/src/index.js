@@ -5,16 +5,9 @@ const screenshotWithLocalServer = require('./screenshot');
 
 const DEFAULT_PORT = 8100;
 
-module.exports = ({ context, onHook, log }, pluginOptions = {}) => {
+module.exports = ({ context, onHook, log }) => {
   const { rootDir, pkg } = context;
-  const { cloud = false } = pluginOptions;
   onHook('after.build.compile', async () => {
-    debug('cloud', cloud);
-    // cloud build support
-    if (!cloud && process.env.BUILD_ENV === 'cloud') {
-      log.warn('current environment not support screenshot');
-      return;
-    }
     log.info('generate demo snapshot ...');
     const demoPath = `${rootDir}/demo`;
     const serverPath = `${rootDir}/build`;
