@@ -7,7 +7,18 @@
 - 支持构建 UMD 产物，对应 `dist/`，使用 webpack 构建
 - 支持使用 markdown 写 demo 同时构建文档产物，对应 `build/`，使用 webpack 构建
 
-## 初始化
+**该方案同时支持 React 和 Rax 业务组件开发，如果是开发 Rax 组件请查阅 [Rax 官方文档](https://rax.js.org/docs/guide/com-dev)，本文档主要介绍 React 组件开发。**
+
+## 目录
+
+- [创建组件](#创建组件)
+- [组件调试构建](#组件调试构建)
+- [组件目录](#组件目录)
+- [工程配置](#工程配置)
+- [版本升级](#版本升级)
+- [高阶用法](#高阶用法)
+
+## 创建组件
 
 通过命令行初始化一个业务组件项目：
 
@@ -20,16 +31,16 @@ $ mkdir my-component && cd my-component
 $ iceworks init component
 ```
 
-> 如果是**阿里内部**的同学并且想接入 DEF 发布 npm 包，可以参考文档 [组件开发接入 DEF](https://yuque.alibaba-inc.com/ice/rdy99p/gbekwv)
+> 如果是**阿里内部**的同学并且想接入 DEF 发布 NPM 包，可以参考文档 [组件开发接入 DEF](https://yuque.alibaba-inc.com/ice/rdy99p/gbekwv)
 
-## 组件调试&构建
+## 组件调试构建
 
 ```bash
 $ cd my-component
 $ npm install
 $ npm start
 
-# 实时编译 lib&es 产物（Rax 项目不支持）
+# 实时编译 lib&es 产物
 $ npm start -- --watch
 
 # 实时编译 dist 产物
@@ -128,7 +139,7 @@ ReactDOM.render(<App />, mountNode);
 
 ```json
 {
-  "alias": {},
+  "type": "react",
   "plugins": [
     [
       "build-plugin-component"
@@ -139,14 +150,7 @@ ReactDOM.render(<App />, mountNode);
 
 通过 build-plugin-component 这个基础插件，我们支持了以下配置项：
 
-### type
-
-- 类型：string, `react` | `rax`
-- 默认值：`react`
-
-设置业务组件是 react 还是 rax 类型。
-
-### alias `>1.0.0`
+### alias
 
 - 类型：object
 - 默认值：`{}`
@@ -246,10 +250,6 @@ ReactDOM.render(<App />, mountNode);
 }
 ```
 
-## React 工程配置
-
-如果设置了 `type: react` 则支持以下特有工程配置项：
-
 ### externals
 
 - 类型： object
@@ -341,59 +341,11 @@ demo 预览组件默认接受如下参数：
 - `env`：当前运行环境 `development|production`
 - `templateProps`：模版自定义参数，可以通过设置 `"demoTemplate": ["template-component-demo", { "platform": "h5" }]` 的方式为模版定义参数
 
-## Rax 工程配置
+## 版本升级
 
-如果设置了 `type: rax` 则支持以下特有工程配置项：
+### 0.x -> 1.x
 
-### targets
-
-- 类型：array
-- 默认值：``
-
-### inlineStyle
-
-- 类型：boolean
-- 默认值：``
-
-### enablePlatformLoader
-
-- 类型：boolean
-- 默认值：``
-
-### watchDist
-
-- 类型：boolean
-- 默认值：``
-
-### disableUMD
-
-- 类型：boolean
-- 默认值：``
-
-### outputDir
-
-- 类型：boolean
-- 默认值：``
-
-### mockNodeEnv
-
-- 类型：boolean
-- 默认值：`true`
-
-### bytedance-microapp
-
-- 类型：object
-- 默认值：`null`
-
-### miniapp
-
-- 类型：object
-- 默认值：`null`
-
-### wechat-miniprogram
-
-- 类型：object
-- 默认值：`null`
+build-plugin-component@1.x 完全向前兼容，因此直接修改 `package.json` 中的对应依赖即可。
 
 ## 高阶用法
 
