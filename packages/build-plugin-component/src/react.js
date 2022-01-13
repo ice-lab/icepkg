@@ -161,13 +161,11 @@ module.exports = ({
   }
 
   // register cli options
-  const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https'];
-  registerCliOption(
-    cliOptions.map((name) => ({
-      name,
-      commands: ['start', 'build'],
-    })),
-  );
+  const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https', 'disable-open'];
+  registerCliOption(cliOptions.map((name) => ({
+    name,
+    commands: ['start', 'build'],
+  })));
 
   // register user config
   registerUserConfig(defaultUserConfig.concat(reactUserConfig));
@@ -228,7 +226,7 @@ module.exports = ({
   });
 
   onHook('after.start.devServer', ({ url }) => {
-    // do not open browser when restart dev
-    if (!process.env.RESTART_DEV) openBrowser(url);
+      // do not open browser when restart dev
+      if (!process.env.RESTART_DEV || !commandArgs.disableOpen) openBrowser(url);
   });
 };
