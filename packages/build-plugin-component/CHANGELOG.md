@@ -106,6 +106,7 @@ var PlatformMap = {
 - [feat] 支持小程序预览 ([#66](https://github.com/ice-lab/iceworks-cli/issues/66), [#53](https://github.com/ice-lab/iceworks-cli/issues/53))
 - [feat] 修改 demo 样式
 - [fix] 修复 inlineStyle 为 false 下，同步到 Fusion 物料样式失效
+
 ## 0.2.22
 
 - [fix] fix invalid homepage
