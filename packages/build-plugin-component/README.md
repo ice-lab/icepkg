@@ -383,7 +383,7 @@ function App() {
   return <ExampleComponent />;
 }
 
-ReactDOM.render(<App />, mountNode);
+export default App;
 ```
 
 修改 `demo/usage.md`：
