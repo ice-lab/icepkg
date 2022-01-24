@@ -353,11 +353,13 @@ demo 预览组件默认接受如下参数：
 
 ```js
 interface ComponentProps {
+  /** Title of the example  */
   title: string;
+  /** Type of the example  */
   type?: 'native' | 'hybrid';
 }
 
-export default function ReactComponentDemo(props: ComponentProps) {
+export default function ExampleComponent(props: ComponentProps) {
   ...
 }
 ```
@@ -366,7 +368,14 @@ export default function ReactComponentDemo(props: ComponentProps) {
 
 ![](https://gw.alicdn.com/imgextra/i1/O1CN01y2GRoH1thMar8I3Be_!!6000000005933-2-tps-2200-624.png)
 
-该能力目前支持 PropType、TypeScript 等方式的类型注解，具体可详见 [react-docgen 文档](https://github.com/reactjs/react-docgen#proptypes)。
+该能力目前支持 PropType、TypeScript 等方式的类型注解，具体可详见 [react-docgen 文档](https://github.com/reactjs/react-docgen#proptypes)。需要注意的是，`react-docgen` 不支持为匿名组件生成 api 预览：
+
+```js
+// 不支持匿名组件
+export default (props: ComponentProps) => {
+  ...
+}
+```
 
 ## 版本升级
 
