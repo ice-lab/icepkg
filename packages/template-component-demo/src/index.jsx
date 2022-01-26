@@ -9,6 +9,7 @@ import { ReactDoc } from './ReactDoc';
 const App = ({ demoData, readmeData, reactDocs }) => {
   const demos = readmeData ? [].concat(readmeData, demoData) : demoData;
   const items = (demos || []).sort((a, b) => a.order - b.order);
+  const hasReactDocs = reactDocs && reactDocs.length;
 
   return (
     <BuildLayout demos={items} reactDocs={reactDocs}>
@@ -22,13 +23,18 @@ const App = ({ demoData, readmeData, reactDocs }) => {
           </div>
         );
       })}
-      <div>
-        <h2>API</h2>
-        <a name="container_api" />
-        {reactDocs.map((data) => (
-          <ReactDoc key={data.filename} data={data} />
-        ))}
-      </div>
+      {
+        hasReactDocs && (
+          <div>
+            <h2>API</h2>
+            <a name="container_api" />
+            {reactDocs.map((data) => (
+              <ReactDoc key={data.filename} data={data} />
+            ))}
+          </div>
+        )
+      }
+
     </BuildLayout>
   );
 };
