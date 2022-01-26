@@ -9,7 +9,7 @@ import { ReactDoc } from './ReactDoc';
 const App = ({ demoData, readmeData, reactDocs }) => {
   const demos = readmeData ? [].concat(readmeData, demoData) : demoData;
   const items = (demos || []).sort((a, b) => a.order - b.order);
-  const hasReactDocs = reactDocs && reactDocs.length;
+  const hasReactDocs = !!(reactDocs && reactDocs.length);
 
   return (
     <BuildLayout demos={items} reactDocs={reactDocs}>
