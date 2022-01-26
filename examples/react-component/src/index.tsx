@@ -3,14 +3,20 @@ import {DatePicker} from '@formily/next-components';
 
 console.log(111, DatePicker);
 
-type ComponentProps = {
-  title: string,
-};
+interface ComponentProps {
+  /** Title of the example */
+  title: string;
+  /** Type of the example */
+  type?: 'native' | 'hybird';
+}
 
-export default function ExampleComponent(props: ComponentProps) {
-  const { type, ...others } = props;
-
+/**
+ * This is an example component
+ */
+export default function ExampleComponent({ type = 'native', ...others }: ComponentProps) {
   return (
-    <div className="ExampleComponent" {...others}>Hello ExampleComponent</div>
+    <div className="ExampleComponent" {...others}>
+      Hello ExampleComponent
+    </div>
   );
 }

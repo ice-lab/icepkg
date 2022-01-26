@@ -52,6 +52,9 @@ $ npm start -- --https
 # 跳过 demo 构建
 $ npm start -- --skip-demo
 $ npm build -- --skip-demo
+
+# 跳过自动打开预览链接
+$ npm start -- --disable-open
 ```
 
 ## 组件目录
@@ -340,6 +343,39 @@ demo 预览组件默认接受如下参数：
 - `demoData`：demo 文件夹下 markdowm 内容解析的数据
 - `env`：当前运行环境 `development|production`
 - `templateProps`：模版自定义参数，可以通过设置 `"demoTemplate": ["template-component-demo", { "platform": "h5" }]` 的方式为模版定义参数
+
+### docGenIncludes
+
+- 类型：Array<string>
+- 默认值：`[]`
+
+使用 [react-docgen](https://github.com/reactjs/react-docgen) 自动生成 demo api 预览。比如以下代码：
+
+```js
+interface ComponentProps {
+  /** Title of the example  */
+  title: string;
+  /** Type of the example  */
+  type?: 'native' | 'hybrid';
+}
+
+export default function ExampleComponent(props: ComponentProps) {
+  ...
+}
+```
+
+则会生成对应的 api 预览：
+
+![](https://gw.alicdn.com/imgextra/i1/O1CN01y2GRoH1thMar8I3Be_!!6000000005933-2-tps-2200-624.png)
+
+该能力目前支持 PropType、TypeScript 等方式的类型注解，具体可详见 [react-docgen 文档](https://github.com/reactjs/react-docgen#proptypes)。需要注意的是，`react-docgen` 不支持为匿名组件生成 api 预览：
+
+```js
+// 不支持匿名组件
+export default (props: ComponentProps) => {
+  ...
+}
+```
 
 ## 版本升级
 
