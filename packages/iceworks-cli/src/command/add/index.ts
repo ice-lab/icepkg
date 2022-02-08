@@ -27,7 +27,7 @@ export default async (options) => {
   const nameParts = name.split('/');
   const npmScope = nameParts[1] ? nameParts[0] : null;
 
-  log.verbose('iceworks add', options, npmScope);
+  log.verbose('appworks add', options, npmScope);
 
   if (!materialConfig) {
     throw new Error('Invalid ice materials project, Missing `materialConfig` property in package.json file.');

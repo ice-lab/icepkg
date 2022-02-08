@@ -2,11 +2,11 @@
 
 [Docs](https://appworks.site/materials/about.html).
 
-## Install Iceworks CLI
+## Install appworks CLI
 
 ```bash
-$ npm i -g iceworks
-$ iceworks --help
+$ npm i -g appworks
+$ appworks --help
 ```
 
 ## Install Deps
@@ -37,20 +37,20 @@ $ npm run start
 ## Add new material
 
 ```bash
-$ iceworks add  # select block|component|scaffold|page
+$ appworks add  # select block|component|scaffold|page
 ```
 
 ## Generate materials data
 
 ```bash
-$ iceworks generate
+$ appworks generate
 ```
 
 ## Publish materials data
 
 ```bash
 # sync to fusion material center
-$ iceworks sync
+$ appworks sync
 ```
 
 ## Use materials in AppWorks

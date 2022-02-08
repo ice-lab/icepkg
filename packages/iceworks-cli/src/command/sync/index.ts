@@ -71,7 +71,7 @@ export default async (options) => {
         await config.set(tokenKey, null);
       } else {
         // 接口异常、列表为空
-        log.error(`${err.message}，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`iceworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
+        log.error(`${err.message}，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`appworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
       }
       throw err;
     }
@@ -92,7 +92,7 @@ export default async (options) => {
   try {
     const materialUrl = await fusionSDK.uploadMaterialsData(fusionToken, fusionSite, materialsData);
     console.log();
-    log.info('Sync:', '物料上传完成，可以在 iceworks 中添加自定义物料使用啦！');
+    log.info('Sync:', '物料上传完成，可以在 appworks 中添加自定义物料使用啦！');
     log.info('物料地址：', materialUrl);
     console.log();
   } catch (err) {
@@ -100,7 +100,7 @@ export default async (options) => {
       // token 失效，重置掉
       await config.set(tokenKey, null);
     } else {
-      log.error(`${err.message}，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`iceworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
+      log.error(`${err.message}，如果怀疑是 token 问题，可通过命令 ${chalk.cyan(`appworks config set ${tokenKey}`)} 手动清除 token，然后再次执行 sync 命令`);
     }
     throw err;
   }

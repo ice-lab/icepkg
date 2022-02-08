@@ -54,12 +54,12 @@ test('init material', async () => {
   blockPkgData.version = '1.0.8';
   fse.writeJSONSync(blockPkgPath, blockPkgData);
 
-  // iceworks generate
+  // appworks generate
   await generate({
     rootDir: projectDir,
   });
 
-  // iceworks add component
+  // appworks add component
   await add({
     materialType: 'component',
     type: 'material',
@@ -67,7 +67,7 @@ test('init material', async () => {
   });
 
   try {
-    // iceworks generate
+    // appworks generate
     await generate({
       rootDir: projectDir,
     });

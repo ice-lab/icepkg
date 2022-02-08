@@ -99,8 +99,8 @@ export default async function ({
         Generate materials json.
       ${chalk.cyan('    npm run generate')}
 
-        You can upload the JSON file to a static web server and put the URL at iceworks settings panel.
-        You will see your materials in iceworks
+        You can upload the JSON file to a static web server and put the URL at appworks settings panel.
+        You will see your materials in appworks
 
         We suggest that you can sync the materials json to fusion.design by run:
       ${chalk.cyan('    npm run sync')}

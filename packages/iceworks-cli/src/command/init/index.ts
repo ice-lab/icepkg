@@ -24,7 +24,7 @@ export default async function (options: IOptions = {}): Promise<void> {
   let framework = 'react';
   let language = 'js';
 
-  log.verbose('iceworks init options', options as string);
+  log.verbose('appworks init options', options as string);
 
   if (options.type && options.type === 'project') {
     console.log('');
@@ -47,7 +47,7 @@ export default async function (options: IOptions = {}): Promise<void> {
   }
 
   goldlog('init', { npmName, type });
-  log.verbose('iceworks init', type, npmName);
+  log.verbose('appworks init', type, npmName);
 
   await initMaterialAndComponent({
     cwd,

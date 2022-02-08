@@ -7,7 +7,7 @@ export default function checkEmpty(dir): Promise<boolean> {
     fs.readdir(dir, (err, files) => {
       // filter some special files
       files = files.filter((filename) => {
-        return ['node_modules', '.git', '.DS_Store', '.iceworks-tmp'].indexOf(filename) === -1;
+        return ['node_modules', '.git', '.DS_Store', '.appworks-tmp'].indexOf(filename) === -1;
       });
       log.verbose('checkEmpty', files.join(', '));
       if (files && files.length) {

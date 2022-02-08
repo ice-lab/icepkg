@@ -1,11 +1,10 @@
 {
-  "name": "iceworks",
-  "version": "3.4.8",
-  "description": "Iceworks CLI for develop project/material-collection/component.",
-  "main": "bin/iceworks.js",
+  "name": "@appworks/cli",
+  "version": "0.1.0",
+  "description": "Appworks CLI for develop project/material-collection/component.",
+  "main": "bin/appworks.js",
   "bin": {
-    "iceworks": "bin/iceworks.js",
-    "ice": "bin/iceworks.js"
+    "appworks": "bin/appworks.js"
   },
   "engines": {
     "node": ">=12"
@@ -21,12 +20,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ice-lab/iceworks-cli.git"
+    "url": "git+https://github.com/apptools-lab/AppWorks.git"
   },
   "bugs": {
-    "url": "https://github.com/ice-lab/iceworks-cli/issues"
+    "url": "https://github.com/apptools-lab/AppWorks/issues"
   },
-  "homepage": "https://ice.work/docs/materials/about",
+  "homepage": "https://appworks.site/materials/about.html",
   "dependencies": {
     "@iceworks/generate-material": "^1.0.0",
     "axios": "^0.18.0",

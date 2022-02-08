@@ -1,20 +1,20 @@
-# Iceworks CLI
+# Appworks CLI
 
-CLI for Iceworks.
+Appworks CLI for develop project/material-collection/component.
 
 ## Features
 
 - init project by scaffold
 - develop material collection
 - init single component by scaffold
-- start Iceworks ui
+- start appworks ui
 
 ## Usage
 
 ```bash
-$ npm i iceworks -g
-# start iceworks ui
-$ iceworks
+$ npm i @appworks/cli -g
+# start appworks ui
+$ appworks
 # init project/component/material-collection
-$ iceworks init
+$ appworks init
 ```

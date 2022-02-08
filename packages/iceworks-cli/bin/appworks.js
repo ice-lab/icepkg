@@ -23,8 +23,8 @@ program
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
-    console.log('  $ iceworks init');
-    console.log('  $ iceworks init component');
+    console.log('  $ appworks init');
+    console.log('  $ appworks init component');
   })
   .action(async (type, npmName, cmd) => {
     // 兼容 iceworks init @icedesign/pro-scaffold
@@ -42,7 +42,7 @@ program
       await require('../lib/command/init').default(options);
     } catch (err) {
       await fse.remove(TEMP_PATH);
-      log.error('iceworks init error', err.message);
+      log.error('appworks init error', err.message);
       console.error(err.stack);
       process.exit(1);
     }
@@ -55,10 +55,10 @@ program
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
-    console.log('  $ iceworks add');
-    console.log('  $ iceworks add block');
-    console.log('  $ iceworks add @icedesign/user-landing-block');
-    console.log('  $ iceworks add @icedesign/user-landing-block -n CustomBlock');
+    console.log('  $ appworks add');
+    console.log('  $ appworks add block');
+    console.log('  $ appworks add @icedesign/user-landing-block');
+    console.log('  $ appworks add @icedesign/user-landing-block -n CustomBlock');
   })
   .action(async (materialType, npmName, cmd) => {
     // 兼容 iceworks add @icedesign/block-test
@@ -76,7 +76,7 @@ program
       await require('../lib/command/add').default(options);
     } catch (err) {
       await fse.remove(TEMP_PATH);
-      log.error('iceworks add error', err.message);
+      log.error('appworks add error', err.message);
       console.error(err.stack);
       process.exit(1);
     }
@@ -88,14 +88,14 @@ program
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
-    console.log('  $ iceworks generate');
+    console.log('  $ appworks generate');
   })
   .action(async () => {
     try {
       // eslint-disable-next-line global-require
       await require('../lib/command/generate').default();
     } catch (err) {
-      log.error('iceworks generate error', err.message);
+      log.error('appworks generate error', err.message);
       console.error(err.stack);
       process.exit(1);
     }
@@ -108,8 +108,8 @@ program
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
-    console.log('  $ iceworks sync');
-    console.log('  $ iceworks sync --env daily');
+    console.log('  $ appworks sync');
+    console.log('  $ appworks sync --env daily');
   })
   .action(async (cmd) => {
     const options = cleanArgs(cmd);
@@ -117,7 +117,7 @@ program
       // eslint-disable-next-line global-require
       await require('../lib/command/sync').default(options);
     } catch (err) {
-      log.error('iceworks sync error', err.message);
+      log.error('appworks sync error', err.message);
       console.error(err.stack);
       process.exit(1);
     }
@@ -125,16 +125,16 @@ program
 
 program
   .command('config [type] [key] [value]')
-  .description('operate iceworks global config, support keys registry,unpkgHost,fusion-token,fusion-token-ali')
+  .description('operate appworks global config, support keys registry,unpkgHost,fusion-token,fusion-token-ali')
   .on('--help', () => {
     console.log('');
     console.log('Examples:');
     console.log('');
     console.log('Use the available 3.0.0 release');
-    console.log('  $ iceworks config list');
-    console.log('  $ iceworks config get registry');
-    console.log('  $ iceworks config set registry https://registry.npmjs.org');
-    console.log('  $ iceworks config set registry');
+    console.log('  $ appworks config list');
+    console.log('  $ appworks config get registry');
+    console.log('  $ appworks config set registry https://registry.npmjs.org');
+    console.log('  $ appworks config set registry');
   })
   .action(async (type, key, value, cmd) => {
     const options = cleanArgs(cmd);
@@ -145,7 +145,7 @@ program
       // eslint-disable-next-line global-require
       await require('../lib/command/config').default(options);
     } catch (err) {
-      log.error('iceworks config error', err.message);
+      log.error('appworks config error', err.message);
       console.error(err.stack);
       process.exit(1);
     }
@@ -154,8 +154,8 @@ program
 // add some useful info on help
 program.on('--help', () => {
   console.log();
-  console.log(`  Run ${chalk.cyan('iceworks <command> --help')} for detailed usage of given command.`);
-  console.log(`  Add LOG_LEVEL=verbose env will output debug log, like: ${chalk.cyan('LOG_LEVEL=verbose iceworks sync')}`);
+  console.log(`  Run ${chalk.cyan('appworks <command> --help')} for detailed usage of given command.`);
+  console.log(`  Add LOG_LEVEL=verbose env will output debug log, like: ${chalk.cyan('LOG_LEVEL=verbose appworks sync')}`);
   console.log();
 });
 
@@ -169,8 +169,8 @@ logCLIVersion();
 // check node version
 checkNodeVersion();
 
-// check iceworks version
-checkIceworksVersion();
+// check @appworks/cli version
+checkAppworksCLIVersion();
 
 if (!process.argv.slice(2).length) {
   program.help();
@@ -209,24 +209,24 @@ function checkNodeVersion() {
   }
 }
 
-async function checkIceworksVersion() {
-  const packageName = 'iceworks';
+async function checkAppworksCLIVersion() {
+  const packageName = '@appworks/cli';
   const packageVersion = packageConfig.version;
   const latestVersion = await checkVersion(packageName, packageVersion);
   if (latestVersion) {
     console.log(
       chalk.yellow(
-        `A newer version of iceworks-cli is available(CHANGELOG: ${chalk.blue(
-          'https://github.com/ice-lab/iceworks-cli/releases',
+        `A newer version of @appworks/cli is available(CHANGELOG: ${chalk.blue(
+          'https://github.com/apptools-lab/AppWorks',
         )})`,
       ),
     );
     console.log(`  latest:     + ${chalk.yellow(latestVersion)}`);
     console.log(`  installed:  + ${chalk.red(packageVersion)} \n`);
-    console.log(`  how to update: ${chalk.red('npm install iceworks@latest -g')} \n`);
+    console.log(`  how to update: ${chalk.red('npm install @appworks/cli@latest -g')} \n`);
   }
 }
 
 function logCLIVersion() {
-  console.log(chalk.grey('iceworks CLI:', packageConfig.version));
+  console.log(chalk.grey('@appworks/cli:', packageConfig.version));
 }
