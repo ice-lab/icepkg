@@ -360,7 +360,7 @@ demo 预览组件默认接受如下参数：
 }
 ```
 
-便会扫描代码文件 `src/index.tsx`：
+便会扫描代码文件 `src` 文件夹下的所有 `*.tsx` 文件（不包含子文件夹）：
 
 ```js
 interface ComponentProps {
