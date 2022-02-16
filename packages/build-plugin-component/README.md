@@ -349,7 +349,18 @@ demo 预览组件默认接受如下参数：
 - 类型：Array<string>
 - 默认值：`[]`
 
-使用 [react-docgen](https://github.com/reactjs/react-docgen) 自动生成 demo api 预览。比如以下代码：
+使用 [react-docgen](https://github.com/reactjs/react-docgen) 自动生成 demo api 预览。需要配置代码扫描路径才会生效，例如：
+
+```json
+{
+  "plugins": [
+    "build-plugin-component"
+  ],
+  "docGenIncludes": [ "src/*.tsx" ]
+}
+```
+
+便会扫描代码文件 `src` 文件夹下的所有 `*.tsx` 文件（不包含子文件夹）：
 
 ```js
 interface ComponentProps {
