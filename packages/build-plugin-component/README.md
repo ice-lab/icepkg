@@ -382,12 +382,19 @@ export default (props: ComponentProps) => {
 }
 ```
 
-如果是多组件项目，且配置了多页文档，可以在 demo 下面的 \*.md 文件头部配置此页面包含哪些接口文档：
+如果是多组件项目，且配置了多页文档，例如文件结构为：
+
+- demo
+  - List
+    - usage.md
+    - customize-styles.md
+
+可以在 demo/List/ 下面新建 api.md 文件，并在头部配置此页面包含哪些接口文档。（正文可以留空，也可以补充内容）
 
 ```md
 ---
-title: 列表组件
-order: 1
+title: 列表组件 API
+order: 3
 docGenIncludes:
   - src/components/List.tsx
   - src/components/ListItem.tsx
