@@ -1,6 +1,6 @@
 import React from 'react';
 import { CodeBox } from './CodeBox';
-import { ReactDoc } from './ReactDoc';
+import { ReactDoc } from '../ReactDoc';
 import './index.css';
 
 export const Playground = ({ data, children }) => {
@@ -33,8 +33,8 @@ export const Playground = ({ data, children }) => {
           {children}
         </CodeBox>
       </div>
-      {reactDocs.map((docData) => (
-        <ReactDoc key={docData.filename} data={docData} />
+      {reactDocs?.map((docData) => (
+        <ReactDoc key={docData.filename} data={docData} heading="h4" />
       ))}
     </div>
   );
