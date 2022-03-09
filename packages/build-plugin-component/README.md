@@ -143,11 +143,7 @@ ReactDOM.render(<App />, mountNode);
 ```json
 {
   "type": "react",
-  "plugins": [
-    [
-      "build-plugin-component"
-    ]
-  ]
+  "plugins": [["build-plugin-component"]]
 }
 ```
 
@@ -353,10 +349,8 @@ demo 预览组件默认接受如下参数：
 
 ```json
 {
-  "plugins": [
-    "build-plugin-component"
-  ],
-  "docGenIncludes": [ "src/*.tsx" ]
+  "plugins": ["build-plugin-component"],
+  "docGenIncludes": ["src/*.tsx"]
 }
 ```
 
@@ -386,6 +380,18 @@ export default function ExampleComponent(props: ComponentProps) {
 export default (props: ComponentProps) => {
   ...
 }
+```
+
+如果是多组件项目，且配置了多页文档，可以在 demos 下面的 \*.md 文件头部配置此页面包含哪些接口文档：
+
+```md
+---
+title: 列表组件
+order: 1
+docGenIncludes:
+  - src/components/List.tsx
+  - src/components/ListItem.tsx
+---
 ```
 
 ## 版本升级
