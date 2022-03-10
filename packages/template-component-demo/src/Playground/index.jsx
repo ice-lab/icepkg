@@ -34,7 +34,7 @@ export const Playground = ({ data, children }) => {
         </CodeBox>
       </div>
       {reactDocs?.map((docData) => (
-        <ReactDoc key={docData.filename} data={docData} heading="h4" />
+        <ReactDoc key={docData.filename} data={docData} />
       ))}
     </div>
   );
