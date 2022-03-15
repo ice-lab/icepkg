@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4.9
+
+- [feat] add component template for `@ice/pkg-cli`
+
 ## 3.4.8
 
 - [chore] upgrade ice-npm-utils from 2.x to 3.x

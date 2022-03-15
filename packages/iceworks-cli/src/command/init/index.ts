@@ -116,7 +116,6 @@ async function selectTemplate(type: string): Promise<ITemplate> {
       {
         npmName: '@icedesign/ice-react-ts-material-template',
         description: 'React + TypeScript',
-        default: true,
         framework: 'react',
         language: 'ts',
       },
@@ -127,9 +126,9 @@ async function selectTemplate(type: string): Promise<ITemplate> {
         language: 'js',
       },
       {
-        // FIXME: actual tempalte
-        npmName: '@icedesign/ice-react-material-template',
+        npmName: '@icedesign/ice-pkg-cli-ts',
         description: 'Next generation of ice component',
+        default: true,
         framework: 'react',
         language: 'ts',
       },
