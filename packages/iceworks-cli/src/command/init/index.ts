@@ -127,6 +127,13 @@ async function selectTemplate(type: string): Promise<ITemplate> {
         language: 'js',
       },
       {
+        // FIXME: actual tempalte
+        npmName: '@icedesign/ice-react-material-template',
+        description: 'Next generation of ice component',
+        framework: 'react',
+        language: 'ts',
+      },
+      {
         npmName: '@icedesign/template-rax',
         description: 'Rax + TypeScript',
         framework: 'rax',
