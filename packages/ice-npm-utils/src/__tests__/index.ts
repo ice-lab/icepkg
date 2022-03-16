@@ -24,8 +24,8 @@ jest.setTimeout(10 * 1000);
 
 
 test('getNpmRegistry', () => {
-  expect(getNpmRegistry('koa')).toBe(defaultRegistry);
-  expect(getNpmRegistry('@alixxx/ice-test')).toBe(defaultRegistry);
+  expect(tbRegisties.includes(getNpmRegistry('koa'))).toBeTruthy();
+  expect(tbRegisties.includes(getNpmRegistry('@alixxx/ice-test'))).toBeTruthy();
   expect(getNpmRegistry('@ali/ice-test')).toBe(ALI_NPM_REGISTRY);
   expect(getNpmRegistry('@alife/ice-test')).toBe(ALI_NPM_REGISTRY);
   expect(getNpmRegistry('@alipay/ice-test')).toBe(ALI_NPM_REGISTRY);
@@ -114,7 +114,7 @@ test('getNpmClient', () => {
   expect(getNpmClient('@alixxx/ice-test')).toBe(defaultData);
 });
 
-test.only('checkAliInternal', () => {
+test('checkAliInternal', () => {
   return checkAliInternal().then((internal) => {
     console.log('checkAliInternal', internal);
     expect(internal).toBeBoolean();
@@ -127,7 +127,7 @@ test('getNpmTarball', () => {
     console.log('getNpmTarball ice-npm-utils', tarball);
     expect(
       tbRegisties
-        .some(registry => tarball === `${registry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
+        .some(registry => tarball === `${registry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`)
     ).toBeTruthy();
   });
 });
@@ -143,7 +143,7 @@ test('getNpmTarball should get latest version', () => {
     console.log('getNpmTarball http', tarball);
     expect(
       tbRegisties
-        .some(registry => tarball === `${registry}/http/download/http-0.0.1-security.tgz`)
+        .some(registry => tarball === `${registry}/http/-/http-0.0.1-security.tgz`)
     ).toBeTruthy();
   });
 });
@@ -151,7 +151,7 @@ test('getNpmTarball should get latest version', () => {
 test('getAndExtractTarball', () => {
   const tempDir = path.resolve(tmpdir(), 'ice_npm_utils_tarball');
   let percent;
-  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`, (state) => {
+  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`, (state) => {
     percent = state.percent;
   })
     .then((files) => {
