@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.2
+
+- [feat] compareFunction of Array.sort should not returns boolean value. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#description
+
 ## 3.0.1
 
 - [feat] optimize checkAliInternal
