@@ -159,7 +159,7 @@ function getLatestSemverVersion(baseVersion: string, versions: string[]): string
   versions = versions
     .filter((version) => semver.satisfies(version, `^${baseVersion}`))
     .sort((a, b) => {
-      return semver.gt(b, a);
+      return semver.gt(b, a) ? 1 : -1;
     });
   return versions[0];
 }
