@@ -130,7 +130,7 @@ test('getNpmTarball', () => {
     console.log('getNpmTarball ice-npm-utils', tarball);
     expect(
       [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
-        .some(registry => tarball === `${registry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
+        .some(registry => tarball === `${registry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`)
     ).toBeTruthy();
   });
 });
@@ -140,14 +140,14 @@ test('getNpmTarball should get latest version', () => {
     console.log('getNpmTarball http', tarball);
     expect(
       [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
-        .some(registry => tarball === `${registry}/http/download/http-0.0.1-security.tgz`)
+        .some(registry => tarball === `${registry}/http/-/http-0.0.1-security.tgz`)
     ).toBeTruthy();
   });
 });
 
 test('getAndExtractTarball', () => {
   const tempDir = path.resolve(tmpdir(), 'ice_npm_utils_tarball');
-  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
+  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`)
     .then((files) => {
       rimraf.sync(tempDir);
       expect(files.length > 0).toBe(true);
