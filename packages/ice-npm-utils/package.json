@@ -1,6 +1,7 @@
 {
   "name": "ice-npm-utils",
   "version": "2.1.2",
+  "tag": "release-2",
   "description": "npm utils for ice",
   "main": "lib/index.js",
   "files": [

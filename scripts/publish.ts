@@ -44,8 +44,8 @@ if (!branchName) {
 });
 
 async function publishPackage({ pkgDir, pkgData }) {
-  const { version, name } = pkgData;
-  const npmTag = branchName === 'master' ? 'latest' : 'beta';
+  const { version, name, tag } = pkgData;
+  const npmTag = tag || (branchName === 'stable/0.x' ? 'latest' : 'beta');
 
   const versionExist = await checkVersionExist(name, version, REGISTRY);
   if (versionExist) {
@@ -54,11 +54,11 @@ async function publishPackage({ pkgDir, pkgData }) {
   }
 
   const isProdVersion = /^\d+\.\d+\.\d+$/.test(version);
-  if (branchName === 'master' && !isProdVersion) {
+  if (branchName === 'stable/0.x' && !isProdVersion) {
     throw new Error(`禁止在 master 分支发布非正式版本 ${version}`);
   }
 
-  if (branchName !== 'master' && isProdVersion) {
+  if (branchName !== 'stable/0.x' && isProdVersion) {
     console.log(`非 master 分支 ${branchName}，不发布正式版本 ${version}`);
     return;
   }
