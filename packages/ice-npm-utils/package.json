@@ -1,6 +1,6 @@
 {
   "name": "ice-npm-utils",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "tag": "release-2",
   "description": "npm utils for ice",
   "main": "lib/index.js",
