@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.3
+
+- [feat] change cnpm registry to `registry.npmmirror.com`
+
 ## 2.1.2
 
 - [chore] remove `@iceworks/constant`, use `@appworks/constant`

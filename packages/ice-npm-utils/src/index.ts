@@ -157,7 +157,7 @@ function getLatestSemverVersion(baseVersion: string, versions: string[]): string
   versions = versions
     .filter((version) => semver.satisfies(version, `^${baseVersion}`))
     .sort((a, b) => {
-      return semver.gt(b, a);
+      return semver.gt(b, a) ? 1 : -1;
     });
   return versions[0];
 }
@@ -204,7 +204,7 @@ function getNpmRegistry(npmName = ''): string {
     return ALI_NPM_REGISTRY;
   }
 
-  return 'https://registry.npm.taobao.org';
+  return 'https://registry.npmmirror.com';
 }
 
 function getUnpkgHost(npmName = ''): string {

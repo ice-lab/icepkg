@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4.9
+
+- [chore] 添加提示，建议用户迁移到 `@appworks/cli`
+
 ## 3.4.8
 
 - [chore] upgrade ice-npm-utils from 2.x to 3.x
