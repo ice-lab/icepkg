@@ -1,8 +1,0 @@
-{
-  "type": "rax",
-  "targets": ["web", "miniapp", "wechat-miniprogram", "weex"],
-  "inlineStyle": false,
-  "plugins": [
-    "build-plugin-component"
-  ]
-}

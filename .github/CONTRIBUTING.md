@@ -2,17 +2,13 @@
 
 Hi! I’m really excited that you are interested in contributing to ICE. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
 
-## Directory
+## 历史分支
 
-```md
-.
-├── extensions // VS Code extensions
-│   ├── app   // Core App Extension
-├── packages // Common packages
-│   ├── add-block
-│   └── config
-└── scripts
-```
+### [stable/0.x](https://github.com/ice-lab/pkg-cli/tree/stable/0.x/)
+
+- build-plugin-component@1.x 历史版本，以及相关包（已发布新方案）
+- ice-npm-utils@2.x 历史版本（已发布 3.x）
+- iceworks CLI 历史版本（已迁移 @appworks/cli）
 
 ## Setup Environment
 
@@ -20,11 +16,6 @@ clone repo and initialize the setup environment：
 
 ```bash
 $ git clone git@github.com:ice-lab/iceworks.git
-$ cd iceworks
-
-$ npm run install:deps
-$ npm run packages:build
-$ npm test
 ```
 
 ## Pull Request Guidelines
