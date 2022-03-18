@@ -1,25 +1,24 @@
 {
   "name": "ice-npm-utils",
-  "version": "3.0.2",
+  "version": "2.1.2",
   "description": "npm utils for ice",
   "main": "lib/index.js",
   "files": [
     "lib"
   ],
-  "engines": {
-    "node": ">=12"
-  },
   "scripts": {
     "build": "rm -rf lib && tsc",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@appworks/constant": "^0.1.2",
-    "axios": "^0.23.0",
-    "fs-extra": "^10.0.0",
-    "mkdirp": "^1.0.0",
-    "semver": "^7.0.0",
-    "tar": "^6.0.0",
+    "fs-extra": "^8.1.0",
+    "mkdirp": "^0.5.1",
+    "request": "^2.88.0",
+    "request-progress": "^3.0.0",
+    "request-promise": "^4.2.4",
+    "semver": "^6.0.0",
+    "tar": "^4.4.8",
     "url-join": "^4.0.1"
   },
   "publishConfig": {

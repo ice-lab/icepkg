@@ -1,23 +1,5 @@
 # Changelog
 
-## 3.0.2
-
-- [fix] compareFunction of Array.sort should not returns boolean value. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#description
-
-## 3.0.1
-
-- [feat] optimize checkAliInternal
-
-## 3.0.0
-
-- [chore] change cnpm registry to `registry.npmmirror.com`
-- [chore] migrate request to axios, notice `error.statusCode` -> `error.response && error.response.status === 404`
-- [chore] upgrade deps:
-  - fs-extra 8 -> 10, Only support Node.js 12+
-  - mkdirp 0.5.x -> 1.x
-  - semver 6.x -> 7.x
-  - tar 0.4.x -> 0.6.x
-
 ## 2.1.2
 
 - [chore] remove `@iceworks/constant`, use `@appworks/constant`

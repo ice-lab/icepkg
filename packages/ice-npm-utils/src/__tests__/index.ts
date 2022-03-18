@@ -17,15 +17,18 @@ import {
 } from '../index';
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
-// 可能会返回不同的源
-const tbRegisties = [defaultRegistry, 'https://registry.npmmirror.com'];
+// 也有可能返回这个源
+const cnpmResponseRegistry = 'https://registry.nlark.com' ;
+
+// 或者是这个源
+const npmMirrorRegistry = 'https://registry.npmmirror.com';
 
 jest.setTimeout(10 * 1000);
 
 
 test('getNpmRegistry', () => {
-  expect(tbRegisties.includes(getNpmRegistry('koa'))).toBeTruthy();
-  expect(tbRegisties.includes(getNpmRegistry('@alixxx/ice-test'))).toBeTruthy();
+  expect(getNpmRegistry('koa')).toBe(defaultRegistry);
+  expect(getNpmRegistry('@alixxx/ice-test')).toBe(defaultRegistry);
   expect(getNpmRegistry('@ali/ice-test')).toBe(ALI_NPM_REGISTRY);
   expect(getNpmRegistry('@alife/ice-test')).toBe(ALI_NPM_REGISTRY);
   expect(getNpmRegistry('@alipay/ice-test')).toBe(ALI_NPM_REGISTRY);
@@ -88,7 +91,7 @@ test('getNpmInfo success', () => {
 
 test('getNpmInfo 404 error case', () => {
   return getNpmInfo('not-exis-npm-error').catch((err) => {
-    expect(err.response.status).toBe(404);
+    expect(err.statusCode).toBe(404);
   });
 });
 
@@ -126,15 +129,9 @@ test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
     console.log('getNpmTarball ice-npm-utils', tarball);
     expect(
-      tbRegisties
-        .some(registry => tarball === `${registry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`)
+      [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
+        .some(registry => tarball === `${registry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
     ).toBeTruthy();
-  });
-});
-
-test('getNpmTarball 404', () => {
-  return getNpmTarball('not-exis-npm-error').catch((err) => {
-    expect(err.response.status).toBe(404);
   });
 });
 
@@ -142,22 +139,18 @@ test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
     console.log('getNpmTarball http', tarball);
     expect(
-      tbRegisties
-        .some(registry => tarball === `${registry}/http/-/http-0.0.1-security.tgz`)
+      [defaultRegistry, cnpmResponseRegistry, npmMirrorRegistry]
+        .some(registry => tarball === `${registry}/http/download/http-0.0.1-security.tgz`)
     ).toBeTruthy();
   });
 });
 
 test('getAndExtractTarball', () => {
   const tempDir = path.resolve(tmpdir(), 'ice_npm_utils_tarball');
-  let percent;
-  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`, (state) => {
-    percent = state.percent;
-  })
+  return getAndExtractTarball(tempDir, `${defaultRegistry}/ice-npm-utils/download/ice-npm-utils-1.0.0.tgz`)
     .then((files) => {
       rimraf.sync(tempDir);
       expect(files.length > 0).toBe(true);
-      expect(percent).toBe(1);
     })
     .catch(() => {
       rimraf.sync(tempDir);
