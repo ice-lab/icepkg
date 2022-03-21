@@ -1,0 +1,49 @@
+// @ts-check
+// Note: type annotations allow type checking and IDEs autocompletion
+const extractCode = require('@ice/pkg-plugin-docusarus/remark/extractCode');
+
+/** @type {import('@docusaurus/types').Config} */
+const config = {
+  title: '{{title}}',
+  tagline: 'ICE Component Cool',
+  url: '{{url}}',
+  baseUrl: '{{baseUrl}}',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
+  favicon: '{{favicon}}',
+
+  plugins: [
+    require.resolve('@ice/pkg-plugin-docusarus/plugin.js'),
+  ],
+
+  presets: [
+    [
+      'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
+        docs: {
+          remarkPlugins: [
+            extractCode,
+          ],
+          routeBasePath: '/',
+        },
+        theme: {
+          customCss: require.resolve('@ice/pkg-plugin-docusarus/css/custom.css'),
+        },
+      }),
+    ],
+  ],
+
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      navbar: {
+        title: '{{navBarTitle}}',
+        logo: {
+          src: '{{navBarLogo}}',
+        },
+      },
+    }),
+};
+
+module.exports = config;

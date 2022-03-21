@@ -1,0 +1,28 @@
+{
+  "name": "package-basic",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "./es/index.js",
+  "exports": "./es/index.js",
+  "scripts": {
+    "build": "CONSOLA_LEVEL=4 pkg-cli build",
+    "start": "CONSOLA_LEVEL=4 pkg-cli start",
+    "help": "pkg-cli --help",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@ice/pkg-plugin-docusarus": "workspace: *",
+    "@ice/pkg-cli": "workspace: *",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "consola": "^2.15.3"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^3.21.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "regenerator-runtime": "^0.13.9"
+  }
+}

@@ -9,9 +9,10 @@ coverage/
 node_modules
 extensions/*/out
 .vscode-test
-packages/*/lib/
-packages/*/es/
-packages/*/build/
+packages/**/lib/
+packages/**/es/
+packages/**/esnext/
+packages/**/build/
 packages/build-plugin-component/*/template
 app/main_dist/
 app/build/
@@ -23,3 +24,13 @@ __tests__
 # 忽略文件
 **/*-min.js
 **/*.min.js
+
+lib
+node_modules
+__tests__
+examples/**/esm
+examples/**/es
+examples/**/esnext
+examples/**/lib
+examples/**/dist
+examples/**/build

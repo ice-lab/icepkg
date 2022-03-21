@@ -9,13 +9,13 @@ import { getVersions } from 'ice-npm-utils';
 const branchName = process.env.BRANCH_NAME;
 const rootDir = join(__dirname, '../');
 const REGISTRY = 'https://registry.npmjs.org/';
+
 // 依赖关系影响发布顺序
 const orderedPackages = [
   'ice-npm-utils',
-  '@iceworks/generate-project',
-  '@iceworks/generate-material',
-  'build-plugin-component',
-  'iceworks',
+  '@ice/pkg-cli',
+  '@ice/pkg-plugin-compoent',
+  '@ice/pkg-plugin-docusarus',
 ];
 
 if (!branchName) {
@@ -24,7 +24,7 @@ if (!branchName) {
 
 (async () => {
   const packageDirs = getPackagesPaths(join(rootDir, 'packages'));
-  const packages = packageDirs.map(pkgDir => {
+  const packages = packageDirs.map((pkgDir) => {
     const pkgData = fse.readJSONSync(join(pkgDir, 'package.json'));
     return { pkgDir, pkgData };
   }).sort((a, b) => {
@@ -37,8 +37,7 @@ if (!branchName) {
     // eslint-disable-next-line no-await-in-loop
     await publishPackage(pkgInfo);
   }
-
-})().catch(err => {
+})().catch((err) => {
   console.error(err);
   process.exit(1);
 });
@@ -103,7 +102,7 @@ async function checkVersionExist(name: string, version: string, registry?: strin
 }
 
 function getPackagesPaths(dir) {
-  const packagesPaths: string[] = readdirSync(dir).map(dirname => {
+  const packagesPaths: string[] = readdirSync(dir).map((dirname) => {
     return join(dir, dirname);
   }).filter((dirpath) => {
     return existsSync(join(dirpath, 'package.json'));

@@ -1,7 +1,7 @@
-import 'jest-extended';
-import * as path from 'path';
+import { test, expect } from 'vitest';
+import path from 'path';
 import { tmpdir } from 'os';
-import * as rimraf from 'rimraf';
+import rimraf from 'rimraf';
 import { ALI_NPM_REGISTRY, ALI_UNPKG_URL } from '@appworks/constant';
 import {
   getNpmRegistry,
@@ -14,14 +14,11 @@ import {
   checkAliInternal,
   getNpmTarball,
   getAndExtractTarball,
-} from '../index';
+} from '../src/index';
 
 const defaultRegistry = 'https://registry.npm.taobao.org';
 // 可能会返回不同的源
 const tbRegisties = [defaultRegistry, 'https://registry.npmmirror.com'];
-
-jest.setTimeout(10 * 1000);
-
 
 test('getNpmRegistry', () => {
   expect(tbRegisties.includes(getNpmRegistry('koa'))).toBeTruthy();
@@ -117,8 +114,7 @@ test('getNpmClient', () => {
 test('checkAliInternal', () => {
   return checkAliInternal().then((internal) => {
     console.log('checkAliInternal', internal);
-    expect(internal).toBeBoolean();
-    // expect().toBeInstanceOf();
+    expect(typeof internal === 'boolean').toBeTruthy();
   });
 });
 

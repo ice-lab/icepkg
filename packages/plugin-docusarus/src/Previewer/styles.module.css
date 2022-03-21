@@ -1,0 +1,32 @@
+.container {
+  margin-top: 20px;
+  border: 1px solid #eee;
+}
+
+.unfoldContainer {
+  margin-bottom: 20px;
+}
+
+.preview {
+  padding: 24px;
+}
+
+.operations {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 40px;
+  border-top: 1px solid #eee;
+}
+
+.item {
+  cursor: pointer;
+  padding: 0 12px;
+}
+
+.codeWrapper {
+  border-width: 0 1px 0px 1px;
+  border-color: #eee;
+  border-style: solid;
+}
