@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.4.0
+
+- [feat] 不再支持 `add page`
+
 ## 3.4.9
 
 - [chore] 添加提示，建议用户迁移到 `@appworks/cli`
