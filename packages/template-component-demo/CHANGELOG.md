@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.4
+
+- [fix] peerDependencies
+  - react: `^16.3` -> `>=16.8`
+  - @alifd/next: removed
+
 ## 2.0.3
 
 - [hotfix] shadow api when `docGenIncludes` is not set.
