@@ -27,17 +27,12 @@ $ npm run start
 $ cd blocks/ExampleBlock
 $ npm install
 $ npm run start
-
-# page
-$ cd pages/ExamplePage
-$ npm install
-$ npm run start
 ```
 
 ## Add new material
 
 ```bash
-$ iceworks add  # select block|component|scaffold|page
+$ iceworks add  # select block|component|scaffold
 ```
 
 ## Generate materials data
