@@ -6,7 +6,9 @@ import * as tar from 'tar';
 import * as fse from 'fs-extra';
 import { ALI_NPM_REGISTRY, ALI_UNPKG_URL } from '@appworks/constant';
 import axios from 'axios';
-import * as urlJoin from 'url-join';
+import urlJoin from 'url-join';
+
+import type { AxiosResponse } from 'axios';
 
 /**
  * 获取指定 npm 包版本的 tarball
@@ -94,8 +96,8 @@ function getAndExtractTarball(
             new Promise((streamResolve) => {
               entry
                 .pipe(fse.createWriteStream(destPath))
-                .on('finish', () => streamResolve())
-                .on('close', () => streamResolve()); // resolve when file is empty in node v8
+                .on('finish', () => streamResolve(true))
+                .on('close', () => streamResolve(true)); // resolve when file is empty in node v8
             }),
           );
         })
@@ -238,8 +240,8 @@ function checkAliInternal(): Promise<boolean> {
     url: 'https://alilang-intranet.alibaba-inc.com/is_white_list.json',
     timeout: 3 * 1000,
   })
-    .then((response) => {
-      const data: any = response.data;
+    .then((response: AxiosResponse<any>) => {
+      const { data } = response;
       return response.data && data.content === true && data.hasError === false;
     })
     .catch((err) => {

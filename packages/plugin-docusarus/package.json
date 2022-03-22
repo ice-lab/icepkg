@@ -1,0 +1,48 @@
+{
+  "name": "@ice/pkg-plugin-docusarus",
+  "version": "1.0.0",
+  "description": "Plugin for component previewing",
+  "main": "esnext/index.js",
+  "exports": {
+    ".": "./esnext/index.mjs",
+    "./remark/extractCode": "./esnext/remark/extractCode.js",
+    "./plugin.js": "./esnext/plugin.js",
+    "./css/custom.css": "./esnext/css/custom.css"
+  },
+  "files": [
+    "es",
+    "esnext",
+    "Previewer",
+    "remark",
+    "template",
+    "css",
+    "plugin.js"
+  ],
+  "scripts": {
+    "build": "rm -rf es && pnpm pkg-cli build",
+    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
+    "prepublishOnly": "pnpm run-s lint build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-beta.17",
+    "@docusaurus/preset-classic": "2.0.0-beta.17",
+    "@mdx-js/react": "^1.6.22",
+    "consola": "^2.15.3",
+    "copy-text-to-clipboard": "^3.0.1",
+    "es-module-lexer": "^0.10.0",
+    "fs-extra": "^10.0.0",
+    "handlebars": "^4.7.7",
+    "hast-util-find-and-replace": "3",
+    "react-tooltip": "^4.2.21",
+    "unist-util-remove": "2.1.0",
+    "unist-util-visit": "2.0.3"
+  },
+  "devDependencies": {
+    "@ice/pkg-cli": "1.0.0-beta.3",
+    "react": "^17",
+    "react-dom": "^17"
+  }
+}
