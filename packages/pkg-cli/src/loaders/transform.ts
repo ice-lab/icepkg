@@ -26,7 +26,7 @@ export interface File {
 }
 
 export default async function runTransform(cfg: ComponentConfig, ctx: ComponentContext) {
-  const { rootDir } = ctx;
+  const { rootDir, userConfig } = ctx;
   const { outputDir, entry, rollupPlugins } = cfg;
 
   const logger = createLogger('transform');
@@ -36,9 +36,11 @@ export default async function runTransform(cfg: ComponentConfig, ctx: ComponentC
 
   if (isDirectory(entry)) {
     files =
-      loadEntryFiles(
-        resolve(rootDir, entryDir),
-      )
+      loadEntryFiles({
+        cwd: resolve(rootDir, entryDir),
+        include: userConfig?.include,
+        exclude: userConfig?.exclude,
+      })
         .map((filePath) => ({
           filePath,
           absolutePath: resolve(rootDir, entryDir, filePath),

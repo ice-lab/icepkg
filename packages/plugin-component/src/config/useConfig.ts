@@ -40,6 +40,14 @@ export const registerdUserConfig = [
     defaultValue: false,
   },
   {
+    name: 'exclude',
+    validation: 'string|array',
+  },
+  {
+    name: 'include',
+    validation: 'string|array',
+  },
+  {
     name: 'generateTypesForJs',
     validation: 'boolean',
     default: false,

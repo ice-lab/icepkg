@@ -2,7 +2,7 @@
 import * as glob from 'globby';
 import { join } from 'path';
 import fs from 'fs-extra';
-import { safeRequire } from '../utils.js';
+import { safeRequire, toArray } from '../utils.js';
 
 /**
  * load package.json
@@ -18,10 +18,19 @@ export function loadPkg(cwd: string) {
  * @param entry
  * @returns
  */
-export function loadEntryFiles(entry: string) {
-  return glob.sync('**/*.*', {
-    cwd: entry,
-    ignore: ['node_modules/**', '*.d.ts'],
+export function loadEntryFiles({
+  cwd,
+  include,
+  exclude,
+}: {
+  cwd: string;
+  include?: string;
+  exclude?: string;
+}) {
+  const pattern = include ?? '**/*.*';
+  return glob.sync(pattern, {
+    cwd,
+    ignore: ['node_modules/**', '*.d.ts', ...toArray(exclude)],
     onlyFiles: true,
   });
 }

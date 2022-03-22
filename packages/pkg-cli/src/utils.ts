@@ -19,6 +19,9 @@ import remapping from '@ampproject/remapping';
 import type { FSWatcher } from 'chokidar';
 
 export function toArray<T>(any: T | T[]): T[] {
+  if (typeof any === 'undefined') {
+    return [];
+  }
   return Array.isArray(any) ? any : [any];
 }
 

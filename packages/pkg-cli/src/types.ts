@@ -2,24 +2,41 @@ import type { RollupOptions, Plugin } from 'rollup';
 import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
 import type { Config, JsMinifyOptions, JscTarget, EnvConfig } from '@swc/core';
 
-interface Json<T> {
-  [str: string]: T;
-}
-
 export type PlainObject = Record<string, string | boolean | number | object>;
 
 export type RollupPluginFn<T> = (args: T) => Plugin;
 
 export interface ComponentConfig {
+  /**
+   * There are two ways to handle source files
+   * - 'transform' to transform files one by one to support tree shaking
+   * - 'bundle' to bundle files into single file
+   */
   type: 'bundle' | 'transform';
   /**
-   * TODO: explainations
+   * Entry for a specific task
+   * @default `./src` for transforming task, and `./src/index[j|t]s` for bundling task
    */
   entry?: string;
+  /**
+   * Output directory
+   */
   outputDir?: string;
+  /**
+   * Extra rollup plugins
+   */
   rollupPlugins?: Plugin[];
 
+  /**
+   * Extra rollup options
+   * @see https://rollupjs.org/guide/en/
+   */
   rollupOptions?: RollupOptions;
+
+  /**
+   * Extra swc compile options
+   * @see https://swc.rs/docs/configuration/compilationv
+   */
   swcCompileOptions?: Config;
 }
 
@@ -33,11 +50,6 @@ export type ComponentPlugin = IPlugin<ComponentConfig, ExtendsPluginAPI>;
 
 export interface ExtendsPluginAPI {
   queryString: (name: string) => void;
-}
-
-
-export interface Declation {
-  js?: boolean;
 }
 
 export interface UserConfig {
@@ -75,6 +87,20 @@ export interface UserConfig {
    * @default false
    */
   lib?: boolean;
+
+  /**
+   * Include all files matching any of those conditions.
+   * @see exclude
+   */
+  include?: string | string[];
+
+  /**
+   * Exclude all files matching any of those conditions.
+   * - `string` to match any paths by `minimatch` glob patterns
+   * - An `array` to match at least one of the conditions
+   * @see https://github.com/isaacs/minimatch
+   */
+  exclude?: string | string[];
 
   umd?: {
     /**
