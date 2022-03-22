@@ -1,5 +1,11 @@
 module.exports = {
-  mode: 'development',
+  mode: 'production',
+  optimization: {
+    minimize: false,
+  },
+  resolve: {
+    conditionNames: ['esnext'],
+  },
   entry: './index.js',
   module: {
     rules: [

@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
-  "main": "./es/index.js",
-  "exports": "./es/index.js",
+  "module": "./es/index.js",
+  "exports": {
+    "esnext": "./esnext/index.js",
+    "import": "./es/index.js",
+    "default": "./es/index.js"
+  },
   "scripts": {
     "build": "CONSOLA_LEVEL=4 pkg-cli build",
     "start": "CONSOLA_LEVEL=4 pkg-cli start",
