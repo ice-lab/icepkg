@@ -6,7 +6,9 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "setup": "rm -rf node_modules && rm -rf ./packages/*/node_modules && pnpm i --registry=https://registry.npmmirror.com && npm run build",
-    "build": "pnpm run clean && pnpm -r --filter ./packages --filter !./packages/plugin-docusarus run build && pnpm --filter ./packages/plugin-docusarus run build",
+    "build": "pnpm run clean && pnpm run build-ahead && pnpm run build-behind",
+    "build-ahead": "pnpm -r --filter ./packages/pkg-cli --filter ./packages/plugin-component run build",
+    "build-behind": "pnpm --parallel --filter ./packages --filter !./packages/pkg-cli --filter !./packages/plugin-component run build",
     "clean": "rm -rf packages/*/lib",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
