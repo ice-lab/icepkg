@@ -1,10 +1,10 @@
 {
-  "name": "@ice/create-pkg-cli",
+  "name": "@ice/create-pkg",
   "version": "1.0.0",
-  "description": "npm init @ice/pkg-cli",
+  "description": "npm init @ice/pkg",
   "exports": "./es/index.mjs",
   "bin": {
-    "@ice/create-pkg-cli": "./es/index.mjs"
+    "@ice/create-pkg": "./es/index.mjs"
   },
   "scripts": {
     "build": "pkg-cli build"

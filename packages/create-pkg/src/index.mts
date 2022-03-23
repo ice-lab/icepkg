@@ -11,7 +11,7 @@ import inquirer from 'inquirer';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const cli = cac('@ice/create-pkg-cli');
+const cli = cac('@ice/create-pkg');
 
 (async () => {
   cli.command('[...args]', 'Target dirname to generate', {
@@ -29,7 +29,7 @@ const cli = cac('@ice/create-pkg-cli');
 
   const pkgPath = path.join(__dirname, '../package.json');
   const { version } = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-  consola.info('@ice/create-pkg-cli version: ', version);
+  consola.info('@ice/create-pkg version: ', version);
 
   cli.version(version);
 
