@@ -482,7 +482,7 @@ swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuratio
 
 ### 组件预览
 
-`@ice/pkg-cli` 依赖 [@ice/pkg-plugin-docusarus](https://github.com/ice-lab/component-next/tree/main/packages/plugin-docusarus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。用法：
+`@ice/pkg-cli` 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/component-next/tree/main/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。用法：
 
 ```shell
 # 若存在 docs 文件夹，则默认启动文档预览；并启动 es/lib 编译
@@ -646,10 +646,10 @@ import MyComponent from 'my-component';
 
 #### 插件配置
 
-`@ice/pkg-plugin-docusarus` 插件接受如下配置：
+`@ice/pkg-plugin-docusaurus` 插件接受如下配置：
 
 ```typescript
-export interface PluginDocusarusOptions {
+export interface PluginDocusaurusOptions {
   /**
    * 文档的 title，默认为 "飞冰组件"
    */
@@ -688,7 +688,7 @@ import { defineConfig } from '@ice/pkg-cli';
 
 export default defineConfig({
   plugins: [
-    ['@ice/pkg-plugin-docusarus', {
+    ['@ice/pkg-plugin-docusaurus', {
       title: '标题'
     }]
   ]

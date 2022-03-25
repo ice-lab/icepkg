@@ -4,7 +4,7 @@ export default defineConfig({
   minify: false,
   babelPlugins: ['transform-remove-console'],
   plugins: [
-    '@ice/pkg-plugin-docusarus',
+    '@ice/pkg-plugin-docusaurus',
     // './plugin.js',
   ],
   sourceMaps: true,

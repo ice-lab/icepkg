@@ -1,5 +1,5 @@
 {
-  "name": "@ice/pkg-plugin-docusarus",
+  "name": "@ice/pkg-plugin-docusaurus",
   "version": "1.0.0",
   "description": "Plugin for component previewing",
   "main": "esnext/index.js",

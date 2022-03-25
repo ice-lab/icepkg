@@ -1,6 +1,6 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
-const extractCode = require('@ice/pkg-plugin-docusarus/remark/extractCode');
+const extractCode = require('@ice/pkg-plugin-docusaurus/remark/extractCode');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -13,7 +13,7 @@ const config = {
   favicon: '{{favicon}}',
 
   plugins: [
-    require.resolve('@ice/pkg-plugin-docusarus/plugin.js'),
+    require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
   ],
 
   presets: [
@@ -28,7 +28,7 @@ const config = {
           routeBasePath: '/',
         },
         theme: {
-          customCss: require.resolve('@ice/pkg-plugin-docusarus/css/custom.css'),
+          customCss: require.resolve('@ice/pkg-plugin-docusaurus/css/custom.css'),
         },
       }),
     ],

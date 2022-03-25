@@ -3,11 +3,11 @@ import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 import hbs from 'handlebars';
 
-import type { PluginDocusarusOptions } from './index.mjs';
+import type { PluginDocusaurusOptions } from './index.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export function configureDocusaurus(rootDir: string, params: PluginDocusarusOptions) {
+export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOptions) {
   const templatePath = path.join(__dirname, './template/docusaurus.hbs');
   const templateContents = fs.readFileSync(templatePath, 'utf-8');
 

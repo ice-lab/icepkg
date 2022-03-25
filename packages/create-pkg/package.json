@@ -2,13 +2,14 @@
   "name": "@ice/create-pkg",
   "version": "1.0.0",
   "description": "npm init @ice/pkg",
-  "exports": "./es/index.mjs",
+  "type": "module",
+  "exports": "./es/index.js",
   "files": [
     "es",
     "esnext"
   ],
   "bin": {
-    "create-pkg": "./es/index.mjs"
+    "create-pkg": "./es/index.js"
   },
   "scripts": {
     "build": "pkg-cli build"
