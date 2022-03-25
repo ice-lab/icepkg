@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "npm init @ice/pkg",
   "type": "module",
-  "exports": "./es/index.js",
+  "exports": "./esnext/index.js",
   "files": [
     "es",
     "esnext"
   ],
   "bin": {
-    "create-pkg": "./es/index.js"
+    "create-pkg": "./esnext/index.js"
   },
   "scripts": {
     "build": "pkg-cli build"
@@ -24,10 +24,8 @@
     "@iceworks/generate-project": "^1.4.5",
     "cac": "^6.7.12",
     "consola": "^2.15.3",
-    "core-js": "^3.21.1",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.2.1",
-    "picocolors": "^1.0.0",
-    "regenerator-runtime": "^0.13.9"
+    "picocolors": "^1.0.0"
   }
 }
