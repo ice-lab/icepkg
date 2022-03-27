@@ -5,7 +5,6 @@ import consola from 'consola';
 import { cac } from 'cac';
 import fs from 'fs-extra';
 import path from 'path';
-import { checkEmpty } from '@iceworks/generate-project';
 import initMaterialAndComponent from '@appworks/cli/lib/command/init/initMaterialAndComponent.js';
 import inquirer from 'inquirer';
 
@@ -63,4 +62,16 @@ async function create(dirPath: string, dirname: string): Promise<void> {
     templateFramework: 'react',
     templateLanguage: 'ts',
   });
+}
+
+async function checkEmpty(dir: string): Promise<boolean> {
+  let files: string[] = fs.readdirSync(dir);
+  files = files.filter((filename) => {
+    return ['node_modules', '.git', '.DS_Store', '.iceworks-tmp', 'build', '.bzbconfig'].indexOf(filename) === -1;
+  });
+  if (files.length && files.length > 0) {
+    return false;
+  } else {
+    return true;
+  }
 }
