@@ -5,8 +5,8 @@ import consola from 'consola';
 import { cac } from 'cac';
 import fs from 'fs-extra';
 import path from 'path';
-import { downloadAndGenerateProject, checkEmpty } from '@iceworks/generate-project';
-import picocolors from 'picocolors';
+import { checkEmpty } from '@iceworks/generate-project';
+import initMaterialAndComponent from '@appworks/cli/lib/command/init/initMaterialAndComponent.js';
 import inquirer from 'inquirer';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -55,15 +55,12 @@ async function create(dirPath: string, dirname: string): Promise<void> {
     if (!go) process.exit(1);
   }
 
-  await downloadAndGenerateProject(dirPath, '@icedesign/ice-pkg-cli-ts');
-
-  consola.info('\n');
-  consola.info('Starts the development server.');
-  consola.info('\n');
-  consola.info(picocolors.cyan(`    cd ${dirname}`));
-
-  consola.info(picocolors.cyan('    npm install'));
-  consola.info(picocolors.cyan('    npm start'));
-
-  consola.info('\n');
+  // @ts-ignore
+  await initMaterialAndComponent?.default({
+    cwd: dirPath,
+    projectType: 'component',
+    template: '@ice/template-pkg-react',
+    templateFramework: 'react',
+    templateLanguage: 'ts',
+  });
 }
