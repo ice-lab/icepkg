@@ -161,7 +161,7 @@ module.exports = ({
     && (library || libraryTarget)
     && (command === 'build' || commandArgs.watchDist)
   ) {
-    const libraryTargets = Array.isArray(libraryTarget) ? libraryTarget : [libraryTarget ?? 'umd'];
+    const libraryTargets = Array.isArray(libraryTarget) ? libraryTarget : [libraryTarget || 'umd'];
     libraryTargets.forEach(target => {
       // Compatible with `component-dist`
       const bundleTaskName = target === 'umd' ? 'component-dist' : `component-dist-${target}`;
