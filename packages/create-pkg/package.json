@@ -1,0 +1,32 @@
+{
+  "name": "@ice/create-pkg",
+  "version": "1.0.1",
+  "description": "npm init @ice/pkg",
+  "type": "module",
+  "exports": "./esnext/index.js",
+  "files": [
+    "es",
+    "esnext"
+  ],
+  "bin": {
+    "create-pkg": "./esnext/index.js"
+  },
+  "scripts": {
+    "build": "pkg-cli build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@ice/pkg-cli": "1.0.0-beta.3",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@iceworks/generate-material": "^1.0.12",
+    "cac": "^6.7.12",
+    "consola": "^2.15.3",
+    "fs-extra": "^10.0.0",
+    "ice-npm-utils": "^3.0.2",
+    "inquirer": "^8.2.1",
+    "validate-npm-package-name": "^3.0.0"
+  }
+}

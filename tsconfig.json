@@ -4,6 +4,6 @@
     { "path": "packages/ice-npm-utils" },
     { "path": "packages/pkg-cli" },
     { "path": "packages/plugin-component" },
-    { "path": "packages/plugin-docusarus" }
+    { "path": "packages/plugin-docusaurus" }
   ]
 }

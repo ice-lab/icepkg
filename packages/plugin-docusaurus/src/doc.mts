@@ -4,11 +4,11 @@ import { fork } from 'child_process';
 import { createRequire } from 'module';
 import consola from 'consola';
 
-import type { PluginDocusarusOptions } from './index.mjs';
+import type { PluginDocusaurusOptions } from './index.mjs';
 
 const require = createRequire(import.meta.url);
 
-export const doc = (api, options: PluginDocusarusOptions) => {
+export const doc = (api, options: PluginDocusaurusOptions) => {
   const { context } = api;
   const { rootDir, command } = context;
 
@@ -16,7 +16,7 @@ export const doc = (api, options: PluginDocusarusOptions) => {
   const docusaurusConfigFileExist = fs.pathExistsSync(maybeCustomPath);
 
   if (docusaurusConfigFileExist) {
-    consola.warn('PLUGIN-DOCUSARUS', 'Found docusaurus.config.js in current project. And you should configure docusaurus by yourself.');
+    consola.warn('PLUGIN-DOCUSAURUS', 'Found docusaurus.config.js in current project. And you should configure docusaurus by yourself.');
   }
 
   const binPath = require.resolve('@docusaurus/core/bin/docusaurus.mjs');

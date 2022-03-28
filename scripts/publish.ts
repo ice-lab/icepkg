@@ -15,7 +15,7 @@ const orderedPackages = [
   'ice-npm-utils',
   '@ice/pkg-cli',
   '@ice/pkg-plugin-compoent',
-  '@ice/pkg-plugin-docusarus',
+  '@ice/pkg-plugin-docusaurus',
 ];
 
 if (!branchName) {
