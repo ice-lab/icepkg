@@ -5,8 +5,10 @@ import consola from 'consola';
 import { cac } from 'cac';
 import fs from 'fs-extra';
 import path from 'path';
-import initMaterialAndComponent from '@appworks/cli/lib/command/init/initMaterialAndComponent.js';
 import inquirer from 'inquirer';
+import { downloadMaterialTemplate, generateMaterial } from '@iceworks/generate-material';
+import { checkEmpty } from './checkEmpty.js';
+import { initInquirer } from './initInquirer.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -54,24 +56,27 @@ async function create(dirPath: string, dirname: string): Promise<void> {
     if (!go) process.exit(1);
   }
 
-  // @ts-ignore
-  await initMaterialAndComponent?.default({
-    cwd: dirPath,
-    projectType: 'component',
-    template: '@ice/template-pkg-react',
-    templateFramework: 'react',
-    templateLanguage: 'ts',
+  const tempDir = path.join(dirPath, '.tmp');
+
+  await downloadMaterialTemplate(tempDir, '@ice/template-pkg-react');
+
+  const inquirAnwsers = await initInquirer(dirPath);
+
+  await generateMaterial({
+    rootDir: dirPath,
+    templateOptions: inquirAnwsers,
+    materialTemplateDir: tempDir,
+    materialType: 'component',
   });
+
+  await fs.remove(tempDir);
+
+  console.log();
+  console.log('Initialize component successfully.');
+  console.log();
+  console.log(`    cd ${dirname}`);
+  console.log('    npm install');
+  console.log('    npm start');
+  console.log();
 }
 
-async function checkEmpty(dir: string): Promise<boolean> {
-  let files: string[] = fs.readdirSync(dir);
-  files = files.filter((filename) => {
-    return ['node_modules', '.git', '.DS_Store', '.iceworks-tmp', 'build', '.bzbconfig'].indexOf(filename) === -1;
-  });
-  if (files.length && files.length > 0) {
-    return false;
-  } else {
-    return true;
-  }
-}
