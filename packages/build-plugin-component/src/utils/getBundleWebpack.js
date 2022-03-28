@@ -1,13 +1,14 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 const { upperFirst, camelCase } = require('lodash');
 const { getWebpackConfig } = require('build-scripts-config');
 const { defaultDynamicImportLibraries } = require('../compiler/depAnalyze');
 const setDefine = require('../useConfig/define');
 
-module.exports = ({ context, compileOptions, extNames, hasMain }) => {
+module.exports = ({ libraryTarget, context, compileOptions, extNames, hasMain }) => {
   const mode = 'production';
   const config = getWebpackConfig(mode);
-  const { rootDir, webpack } = context;
+  const { rootDir } = context;
   const {
     // dist minify
     minify,
@@ -15,8 +16,6 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
     sourceMap,
     // library name
     library,
-    // library target
-    libraryTarget = 'umd',
     // library export, default is undefined
     libraryExport,
     // externals dependencies
@@ -70,7 +69,8 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   // - output library files
   config.output
     .path(path.resolve(rootDir, 'dist'))
-    .filename('[name].js')
+    // Forward compatibility
+    .filename(libraryTarget === 'umd' ? '[name].js' : `[name].${libraryTarget}.js`)
     .publicPath('./dist/')
     .library(library)
     .libraryExport(libraryExport)
@@ -126,6 +126,10 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
       });
     }
 
+    // Exclude node_modules if commonjs
+    if (['commonjs', 'commonjs2'].includes(libraryTarget)) {
+      localExternals.push(nodeExternals())
+    }
 
     // set externals
     config.externals(localExternals);

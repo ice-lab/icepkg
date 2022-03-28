@@ -31,7 +31,9 @@ module.exports = [
   },
   {
     name: 'libraryTarget',
-    validation: 'string',
+    validation: (val) => {
+      return Array.isArray(val) || (typeof val === 'string');
+    },
   },
   {
     name: 'filename',

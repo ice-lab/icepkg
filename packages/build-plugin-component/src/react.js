@@ -9,7 +9,7 @@ const getDemoDir = require('./utils/getDemoDir');
 const getDemos = require('./utils/getDemos');
 const getReactDocs = require('./utils/getReactDocs');
 const getReadme = require('./utils/getReadme');
-const getUMDWebpack = require('./utils/getUMDWebpack');
+const getBundleWebpack = require('./utils/getBundleWebpack');
 const generateEntryJs = require('./utils/generateEntry');
 const formatPathForWin = require('./utils/formatPathForWin');
 const modifyPkgHomePage = require('./utils/modifyPkgHomePage');
@@ -35,7 +35,7 @@ module.exports = ({
 }) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
-  const { library, demoTemplate = 'template-component-demo', disableGenerateStyle, docGenIncludes } = compileOptions;
+  const { library, libraryTarget, demoTemplate = 'template-component-demo', disableGenerateStyle, docGenIncludes } = compileOptions;
   const { https } = commandArgs;
 
   // config htmlInjection for once
@@ -156,8 +156,17 @@ module.exports = ({
     hasMain = true;
   }
   // pack the right entry files to dist
-  if (extNames && library && (command === 'build' || commandArgs.watchDist)) {
-    registerTask('component-dist', getUMDWebpack({ context, compileOptions, extNames, hasMain }));
+  if (
+    extNames
+    && (library || libraryTarget)
+    && (command === 'build' || commandArgs.watchDist)
+  ) {
+    const libraryTargets = Array.isArray(libraryTarget) ? libraryTarget : [libraryTarget ?? 'umd'];
+    libraryTargets.forEach(target => {
+      // Compatible with `component-dist`
+      const taskName = target === 'umd' ? 'component-dist' : `component-dist-${target}`;
+      registerTask(taskName, getBundleWebpack({ libraryTarget: target, context, compileOptions, extNames, hasMain }));
+    })
   }
 
   // register cli options

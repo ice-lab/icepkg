@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.11.0
+
+- [feat] outputs multi bundle files ([#258](https://github.com/ice-lab/pkg-cli/issues/258)).
+
+## 1.10.0
+
+- [feat] support docgen to generate api automatically.
+- [feat] use `disable-open` commandg args to disable opening browser automatically.
+
 ## 1.9.4
 
 - [fix] styles will missing in style.js if React.lazy is used，where dynamic import is ignored by ASTParser ([#260](https://github.com/ice-lab/iceworks-cli/pull/260))
