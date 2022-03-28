@@ -8,7 +8,7 @@ import path from 'path';
 import inquirer from 'inquirer';
 import { downloadMaterialTemplate, generateMaterial } from '@iceworks/generate-material';
 import { checkEmpty } from './checkEmpty.js';
-import { initInquirer } from './initInquirer.js';
+import { inquirPackageName } from './inquirPackageName.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -60,11 +60,13 @@ async function create(dirPath: string, dirname: string): Promise<void> {
 
   await downloadMaterialTemplate(tempDir, '@ice/template-pkg-react');
 
-  const inquirAnwsers = await initInquirer();
+  const npmName = await inquirPackageName();
 
   await generateMaterial({
     rootDir: dirPath,
-    templateOptions: inquirAnwsers,
+    templateOptions: {
+      npmName,
+    },
     materialTemplateDir: tempDir,
     materialType: 'component',
   });
