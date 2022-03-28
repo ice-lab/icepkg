@@ -164,8 +164,8 @@ module.exports = ({
     const libraryTargets = Array.isArray(libraryTarget) ? libraryTarget : [libraryTarget ?? 'umd'];
     libraryTargets.forEach(target => {
       // Compatible with `component-dist`
-      const taskName = target === 'umd' ? 'component-dist' : `component-dist-${target}`;
-      registerTask(taskName, getBundleWebpack({ libraryTarget: target, context, compileOptions, extNames, hasMain }));
+      const bundleTaskName = target === 'umd' ? 'component-dist' : `component-dist-${target}`;
+      registerTask(bundleTaskName, getBundleWebpack({ libraryTarget: target, context, compileOptions, extNames, hasMain }));
     })
   }
 
