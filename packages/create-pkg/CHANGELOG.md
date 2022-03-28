@@ -2,7 +2,7 @@
 
 ## 1.0.1
 
-- [fix] remove `@iceworks/cli`.
+- [fix] remove `@@appworks/cli`.
 
 ## 1.0.0
 

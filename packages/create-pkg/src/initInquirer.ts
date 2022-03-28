@@ -1,4 +1,3 @@
-
 import inquirer from 'inquirer';
 import { checkAliInternal } from 'ice-npm-utils';
 import validateName from 'validate-npm-package-name';
