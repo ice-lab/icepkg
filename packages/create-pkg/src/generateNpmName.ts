@@ -1,7 +1,7 @@
 import decamelize from 'decamelize';
 
-export function generateNpmName (name: string, npmScope?: string): string {
+export function generateNpmName(name: string, npmScope?: string): string {
   // WebkitTransform -> webkit-transform
-  name = decamelize(name, { separator: '-' });
-  return npmScope ? `${npmScope}/${name}` : name;
+  const decamelizeName = decamelize(name, { separator: '-' });
+  return npmScope ? `${npmScope}/${decamelizeName}` : decamelizeName;
 }

@@ -60,7 +60,7 @@ async function create(dirPath: string, dirname: string): Promise<void> {
 
   await downloadMaterialTemplate(tempDir, '@ice/template-pkg-react');
 
-  const inquirAnwsers = await initInquirer(dirPath);
+  const inquirAnwsers = await initInquirer();
 
   await generateMaterial({
     rootDir: dirPath,

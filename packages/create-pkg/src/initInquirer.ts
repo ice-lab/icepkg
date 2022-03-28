@@ -4,7 +4,7 @@ import { checkAliInternal } from 'ice-npm-utils';
 import validateName from 'validate-npm-package-name';
 import { generateNpmName } from './generateNpmName.js';
 
-function getRestInquirers (npmScope: string, cwd: string) {
+function getRestInquirers(npmScope: string) {
   return [
     {
       type: 'input',
@@ -13,7 +13,7 @@ function getRestInquirers (npmScope: string, cwd: string) {
       default: 'ExampleComponent',
       validate: (value) => {
         if (!/^[A-Z][a-zA-Z0-9]*$/.test(value)) {
-          return `Name must be a Upper Camel Case word, e.g. ExampleComponent}.`;
+          return 'Name must be a Upper Camel Case word, e.g. ExampleComponent}.';
         }
 
         const npmName = generateNpmName(value, npmScope);
@@ -81,47 +81,47 @@ function getRestInquirers (npmScope: string, cwd: string) {
         return answer;
       },
     },
-  ]
+  ];
 }
 
-export async function initInquirer (cwd: string) {
+export async function initInquirer() {
   const isIntranet = checkAliInternal();
 
   const { forIntranet } = await (isIntranet
     ? inquirer.prompt([
-        {
-          type: 'confirm',
-          message: 'generate components that are only available on the Intranet',
-          name: 'forIntranet',
-        },
-      ])
+      {
+        type: 'confirm',
+        message: 'generate components that are only available on the Intranet',
+        name: 'forIntranet',
+      },
+    ])
     : { forIntranet: false });
 
   const { npmScope } = forIntranet
     ? await inquirer.prompt([
-        {
-          type: 'list',
-          message: 'please select the npm scope',
-          name: 'npmScope',
-          default: '@ali',
-          choices: ['@ali', '@alife', '@alipay', '@kaola'],
-        },
-      ])
+      {
+        type: 'list',
+        message: 'please select the npm scope',
+        name: 'npmScope',
+        default: '@ali',
+        choices: ['@ali', '@alife', '@alipay', '@kaola'],
+      },
+    ])
     : await inquirer.prompt([
-        {
-          type: 'input',
-          message: 'npm scope (eg: @ice)',
-          name: 'npmScope',
-          validate: (value) => {
-            if (value && !/^@/.test(value)) {
-              return 'npm scope should starts with @, eg: @ice';
-            }
-            return true;
-          },
+      {
+        type: 'input',
+        message: 'npm scope (eg: @ice)',
+        name: 'npmScope',
+        validate: (value) => {
+          if (value && !/^@/.test(value)) {
+            return 'npm scope should starts with @, eg: @ice';
+          }
+          return true;
         },
-      ]);
+      },
+    ]);
 
-  const restInquirers = getRestInquirers(npmScope, cwd);
+  const restInquirers = getRestInquirers(npmScope);
 
   const answers = await inquirer.prompt(restInquirers);
 
