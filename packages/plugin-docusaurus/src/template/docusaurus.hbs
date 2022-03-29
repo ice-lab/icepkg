@@ -11,6 +11,9 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: '{{favicon}}',
+  {{#unless haveStaticFiles}}
+  staticDirectories: [],
+  {{/unless}}
 
   plugins: [
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
@@ -18,10 +21,13 @@ const config = {
 
   presets: [
     [
-      'classic',
+      '{{docusaurusClassPresetPath}}',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          {{#if sidebarItemsGenerator}}
+          sidebarItemsGenerator: {{{sidebarItemsGenerator}}},
+          {{/if}}
           remarkPlugins: [
             extractCode,
           ],

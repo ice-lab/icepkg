@@ -6,14 +6,16 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "setup": "rm -rf node_modules && rm -rf ./packages/*/node_modules && pnpm i --registry=https://registry.npmmirror.com && npm run build",
-    "build": "pnpm run clean && pnpm run build-ahead && pnpm run build-behind",
+    "build": "pnpm run-s clean build-ahead build-behind",
     "build-ahead": "pnpm -r --filter ./packages/pkg-cli --filter ./packages/plugin-component run build",
     "build-behind": "pnpm --parallel --filter ./packages --filter !./packages/pkg-cli --filter !./packages/plugin-component run build",
     "clean": "rm -rf packages/*/lib",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
-    "publish:packages": "ts-node ./scripts/publish.ts"
+    "publish:packages": "ts-node ./scripts/publish.ts",
+    "doc": "pkg-cli start",
+    "doc-build": "pkg-cli build"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +23,9 @@
     "@commitlint/cli": "^15.0.0",
     "@ice/pkg-cli": "workspace: *",
     "@ice/pkg-plugin-compoent": "workspace: *",
+    "@ice/pkg-plugin-docusaurus": "workspace: *",
     "@iceworks/spec": "^1.5.0",
+    "ice-npm-utils": "workspace: *",
     "eslint": "^8.5.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
@@ -29,10 +33,11 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "ice-npm-utils": "workspace: *",
     "@types/node": "^17.0.2",
     "axios": "^0.23.0",
     "c8": "^7.11.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "ts-node": "^10.7.0",
     "vitest": "^0.7.6"
   }
