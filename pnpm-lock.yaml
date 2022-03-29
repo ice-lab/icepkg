@@ -64,7 +64,7 @@ importers:
 
   examples/package:
     specifiers:
-      '@ice/pkg-cli': 'workspace: *'
+      '@ice/pkg-cli': ^1.0.0-beta.3
       '@ice/pkg-plugin-docusaurus': 'workspace: *'
       babel-plugin-transform-remove-console: ^6.9.4
       consola: ^2.15.3
