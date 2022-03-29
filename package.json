@@ -21,7 +21,7 @@
   "license": "ISC",
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
-    "@ice/pkg-cli": "^1.0.0-beta.3",
+    "@ice/pkg-cli": "1.0.0-beta.3",
     "@ice/pkg-plugin-compoent": "workspace: *",
     "@ice/pkg-plugin-docusaurus": "workspace: *",
     "@iceworks/spec": "^1.5.0",

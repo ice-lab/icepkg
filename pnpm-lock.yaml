@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@commitlint/cli': ^15.0.0
-      '@ice/pkg-cli': ^1.0.0-beta.3
+      '@ice/pkg-cli': 1.0.0-beta.3
       '@ice/pkg-plugin-compoent': 'workspace: *'
       '@ice/pkg-plugin-docusaurus': 'workspace: *'
       '@iceworks/spec': ^1.5.0
@@ -32,7 +32,7 @@ importers:
       vitest: 0.7.12_c8@7.11.0
     devDependencies:
       '@commitlint/cli': 15.0.0
-      '@ice/pkg-cli': link:packages/pkg-cli
+      '@ice/pkg-cli': 1.0.0-beta.3_ts-node@10.7.0
       '@ice/pkg-plugin-compoent': link:packages/plugin-component
       '@ice/pkg-plugin-docusaurus': link:packages/plugin-docusaurus
       '@iceworks/spec': 1.6.0_3ba19388477f5a0d50ae808f6541db12
