@@ -10,13 +10,13 @@
     "default": "./es/index.js"
   },
   "scripts": {
-    "build": "CONSOLA_LEVEL=4 pkg-cli build",
-    "start": "CONSOLA_LEVEL=4 pkg-cli start",
-    "help": "pkg-cli --help",
+    "build": "CONSOLA_LEVEL=4 ice-pkg build",
+    "start": "CONSOLA_LEVEL=4 ice-pkg start",
+    "help": "ice-pkg --help",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@ice/pkg-cli": "workspace: *",
+    "@ice/pkg": "workspace: *",
     "@ice/pkg-plugin-docusaurus": "workspace: *",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "consola": "^2.15.3"

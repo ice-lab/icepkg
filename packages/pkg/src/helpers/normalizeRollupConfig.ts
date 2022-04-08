@@ -65,7 +65,7 @@ export const normalizeRollupConfig = (
       throw new Error(
         'Failed to resolve entry for current project.\n' +
         'This is most likely that \'src/index\' is not exist.\n' +
-        'Whereas @ice/pkg-cli treats it as the default option.',
+        'Whereas @ice/pkg treats it as the default option.',
       );
     }
 

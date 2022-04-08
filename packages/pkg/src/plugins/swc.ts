@@ -88,7 +88,7 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
   minifyWhenTransform = false,
 }) => {
   return {
-    name: 'ice-pkg-cli:swc',
+    name: 'ice-pkg:swc',
 
     resolveId(importee: string, importer?: string) {
       // Narrow importee from filters

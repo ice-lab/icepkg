@@ -1,4 +1,4 @@
-import { defineConfig } from '@ice/pkg-cli';
+import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   minify: false,

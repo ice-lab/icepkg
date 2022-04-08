@@ -11,7 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const getBuiltInPlugins = () => ['@ice/pkg-plugin-compoent'];
 
-const cli = cac('pkg-cli');
+const cli = cac('ice-pkg');
 
 (async () => {
   cli

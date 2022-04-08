@@ -1,4 +1,4 @@
-import type { UserConfig } from '@ice/pkg-cli';
+import type { UserConfig } from '@ice/pkg';
 
 export const registerdUserConfig = [
   {
