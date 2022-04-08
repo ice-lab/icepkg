@@ -13,7 +13,7 @@ const REGISTRY = 'https://registry.npmjs.org/';
 // 依赖关系影响发布顺序
 const orderedPackages = [
   'ice-npm-utils',
-  '@ice/pkg-cli',
+  '@ice/pkg',
   '@ice/pkg-plugin-compoent',
   '@ice/pkg-plugin-docusaurus',
 ];

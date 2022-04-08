@@ -12,12 +12,12 @@
     "create-pkg": "./esnext/index.js"
   },
   "scripts": {
-    "build": "pkg-cli build"
+    "build": "ice-pkg build"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@ice/pkg-cli": "1.0.0-beta.3",
+    "@ice/pkg": "workspace: *",
     "typescript": "^4.5.4"
   },
   "dependencies": {

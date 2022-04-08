@@ -1,12 +1,12 @@
 {
-  "name": "@ice/pkg-cli",
+  "name": "@ice/pkg",
   "version": "1.0.0",
   "description": "Core service of ice component",
   "main": "./lib/index.js",
   "type": "module",
   "exports": "./lib/index.js",
   "bin": {
-    "pkg-cli": "lib/cli.js"
+    "ice-pkg": "lib/cli.js"
   },
   "scripts": {
     "build": "rm -rf lib && tsc",

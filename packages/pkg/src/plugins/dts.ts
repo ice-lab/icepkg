@@ -15,7 +15,7 @@ const dtsFilter = createFilter(
 function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
   const files = [];
   return {
-    name: 'ice-pkg-cli:dts',
+    name: 'ice-pkg:dts',
     transform(_, id) {
       if (dtsFilter(id)) {
         files.push({

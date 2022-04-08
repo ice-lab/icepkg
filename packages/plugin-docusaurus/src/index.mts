@@ -1,7 +1,7 @@
 import { doc } from './doc.mjs';
 import { configureDocusaurus } from './configureDocusaurus.mjs';
 
-import type { ComponentPlugin } from '@ice/pkg-cli';
+import type { ComponentPlugin } from '@ice/pkg';
 
 export interface PluginDocusaurusOptions {
   /**

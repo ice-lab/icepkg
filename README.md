@@ -1,4 +1,4 @@
-# @ice/pkg-cli
+# @ice/pkg
 
 NPM 包的开发解决方案。
 
@@ -15,26 +15,26 @@ NPM 包的开发解决方案。
 在项目下安装：
 
 ```shell
-$ npm i -D @ice/pkg-cli
+$ npm i -D @ice/pkg
 
 # 或通过 pnpm 安装
-$ pnpm i -D @ice/pkg-cli
+$ pnpm i -D @ice/pkg
 ```
 
 ## 使用
 
 ```shell
 # 构建
-$ pkg-cli build
+$ ice-pkg build
 
 # 实时编译 es&lib 产物
-$ pkg-cli start
+$ ice-pkg start
 
 # 实时编译 dist 产物
-$ pkg-cli start --dist
+$ ice-pkg start --dist
 
 # 组件预览
-$ pkg-cli start --doc
+$ ice-pkg start --doc
 ```
 
 ### 编写代码限制
@@ -52,7 +52,7 @@ import { mulitply } from './directory'; // 引用相对路径下的默认的 ind
 ...
 ```
 
-在 esm 规范下，以上的写法属于**不规范写法**，因此 `@ice/pkg-cli` 亦不支持上述写法。正确的写法如下：
+在 esm 规范下，以上的写法属于**不规范写法**，因此 `@ice/pkg` 亦不支持上述写法。正确的写法如下：
 
 ```ts
 import { add } from './filename.js'; // 引用相对路径的文件
@@ -72,7 +72,7 @@ import { mulitply } from './directory/index.js'; // 引用相对路径下的默�
 
 ### Package Exports
 
-目前，Package 导出依赖 `main`、`module` 和 `exports` 等导出配置。`@ice/pkg-cli` 默认的导出配置为：
+目前，Package 导出依赖 `main`、`module` 和 `exports` 等导出配置。`@ice/pkg` 默认的导出配置为：
 
 ```json
 {
@@ -122,7 +122,7 @@ module.exports = {
 
 #### 编译 CommonJs 的 Packge Exports
 
-若开启 [lib](#lib) 配置，则 `@ice/pkg-cli` 会编译出 CommonJs 产物。此时，推荐的 Package Exports 配置如下：
+若开启 [lib](#lib) 配置，则 `@ice/pkg` 会编译出 CommonJs 产物。此时，推荐的 Package Exports 配置如下：
 
 ```diff
 {
@@ -143,7 +143,7 @@ module.exports = {
 
 ### 配置
 
-`@ice/pkg-cli` 支持的配置文件有：
+`@ice/pkg` 支持的配置文件有：
 
 + `build.json`
 + `build.config.js`
@@ -155,7 +155,7 @@ module.exports = {
 
 ```ts
 // build.config.ts
-import { defineConfig } from '@ice/pkg-cli';
+import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   minify: true,
@@ -174,7 +174,7 @@ export default defineConfig({
 比如，将 `@` 指向 `./src/` 目录。
 
 ```ts
-import { defineConfig } from '@ice/pkg-cli';
+import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   alias: {
@@ -188,7 +188,7 @@ export default defineConfig({
 + 类型 `boolean`
 + 默认 `false`
 
-设置为 `false` 可以禁用代码混淆能力。`@ice/pkg-cli` 使用 [swc](https://github.com/swc-project/swc) 进行混淆。
+设置为 `false` 可以禁用代码混淆能力。`@ice/pkg` 使用 [swc](https://github.com/swc-project/swc) 进行混淆。
 
 #### define
 
@@ -198,7 +198,7 @@ export default defineConfig({
 配置全局变量，在构建时会被静态替换。
 
 ```ts
-import { defineConfig } from '@ice/pkg-cli';
+import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   define: {
@@ -215,7 +215,7 @@ export default defineConfig({
 可以使用 [babelPlugin](https://babeljs.io/docs/en/plugins/) 来预处理一些代码片段。被 babelPlugin 处理过的代码，接下来仍会交给 swc 做进一步的处理。
 
 ```js
-import { defineConfig } from '@ice/pkg-cli';
+import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   plugins: [["transform-remove-console", { "exclude": ["error", "warn"] }]]
@@ -227,7 +227,7 @@ export default defineConfig({
 + 类型 `boolean`
 + 默认 `false`
 
-为 JavaScript 代码生成类型文件。`@ice/pkg-cli` 默认为文件后缀为 `.ts` 生成类型文件。
+为 JavaScript 代码生成类型文件。`@ice/pkg` 默认为文件后缀为 `.ts` 生成类型文件。
 
 如果使用 [jsdoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。
 
@@ -255,7 +255,7 @@ export function add(a: number, b: number): number;
 + 类型 `boolean`
 + 默认 `false`
 
-`@ice/pkg-cli` 默认生成 `esm` 模块规范的代码。`esm` 模块已广泛应用于 Node（^12.20.0 || ^14.13.1 || >=16.0.0）和 Browser 端（webpack 4 & webpack 5 & vite & rollup）。
+`@ice/pkg` 默认生成 `esm` 模块规范的代码。`esm` 模块已广泛应用于 Node（^12.20.0 || ^14.13.1 || >=16.0.0）和 Browser 端（webpack 4 & webpack 5 & vite & rollup）。
 
 若需要生成 `commonjs` 规范的产物，可以配置该选项，则会生成 `lib` 文件目录，存放 `commonjs` 产物。
 
@@ -273,14 +273,14 @@ export function add(a: number, b: number): number;
 + 类型 `array`
 + 默认 `[]`
 
-`@ice/pkg-cli` 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](#插件开发)。
+`@ice/pkg` 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](#插件开发)。
 
 #### umd
 
 + 类型 `object`
 + 默认 `{}`
 
-`@ice/pkg-cli` 提供过渡性的 [umd](https://github.com/umdjs/umd) bundle 产物。配置开启，则生成 `dist` 文件目录，存放 bundle 产物。
+`@ice/pkg` 提供过渡性的 [umd](https://github.com/umdjs/umd) bundle 产物。配置开启，则生成 `dist` 文件目录，存放 bundle 产物。
 
 `umd` 配置有以下参数：
 
@@ -310,7 +310,7 @@ library 导出的名称，可以通过 `window[name]` 访问。默认为 `packag
 + 类型 `boolean | object`
 + 默认 `true`
 
-混淆代码。也可以配置具体的 [混淆策略](https://swc.rs/docs/configuration/minification)。`@ali/pkg-cli` 使用 swc 进行代码混淆。
+混淆代码。也可以配置具体的 [混淆策略](https://swc.rs/docs/configuration/minification)。`@ice/pkg` 使用 swc 进行代码混淆。
 
 ##### env
 
@@ -324,7 +324,7 @@ library 导出的名称，可以通过 `window[name]` 访问。默认为 `packag
 若配置为：
 
 ```ts
-import { defineConfig } from '@ice/pkg-cli';
+import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   umd: {
@@ -339,16 +339,16 @@ export default defineConfig({
 })
 ```
 
-`@ice/pkg-cli` 会根据对应的 browserlist 进行对应的语法转换，以及添加对应的 polyfills。
+`@ice/pkg` 会根据对应的 browserlist 进行对应的语法转换，以及添加对应的 polyfills。
 
 ### 插件开发
 
-`@ice/pkg-cli` 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。通过 build-scripts 插件，可以极大地扩展 `@ice/pkg-cli` 的能力。
+`@ice/pkg` 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。通过 build-scripts 插件，可以极大地扩展 `@ice/pkg` 的能力。
 
 插件的使用如下：
 
 ```ts
-import { defineConfig } from '@ice/pkg-cli';
+import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   plugins: [
@@ -359,7 +359,7 @@ export default defineConfig({
 
 #### 修改默认配置
 
-可以通过 `onGetConfig` API，可以修改 Package 编译的入口、出口等 `@ice/pkg-cli` 等默认配置：
+可以通过 `onGetConfig` API，可以修改 Package 编译的入口、出口等 `@ice/pkg` 等默认配置：
 
 ```ts
 const plugin = (api) => {
@@ -375,7 +375,7 @@ const plugin = (api) => {
 }
 ```
 
-`@ice/pkg-cli` 注册三个 build-script 任务：
+`@ice/pkg` 注册三个 build-script 任务：
 
 + `component-es` - 主任务，默认启动
 + `component-esnext` - 主任务，默认启动
@@ -458,7 +458,7 @@ swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuratio
 
 #### 插件生命周期钩子
 
-`@ice/pkg-cli` 插件提供一下生命周期钩子：
+`@ice/pkg` 插件提供一下生命周期钩子：
 
 + build 命令：
 
@@ -482,17 +482,17 @@ swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuratio
 
 ### 组件预览
 
-`@ice/pkg-cli` 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/component-next/tree/main/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。用法：
+`@ice/pkg` 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/component-next/tree/main/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。用法：
 
 ```shell
 # 若存在 docs 文件夹，则默认启动文档预览；并启动 es/lib 编译
-$ pkg-cli start
+$ ice-pkg start
 
 # 不启动文档预览
-$ pkg-cli start --doc=false
+$ ice-pkg start --doc=false
 
 # 若存在 docs 文件夹，则默认构建预览产物
-$ pkg-cli build
+$ ice-pkg build
 ```
 
 #### 如何书写文档
@@ -684,7 +684,7 @@ export interface PluginDocusaurusOptions {
 使用方式如下：
 
 ```ts
-import { defineConfig } from '@ice/pkg-cli';
+import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   plugins: [

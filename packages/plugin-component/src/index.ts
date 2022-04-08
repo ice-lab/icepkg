@@ -1,6 +1,6 @@
 import { registerdUserConfig } from './config/useConfig.js';
 
-import type { ComponentPlugin } from '@ice/pkg-cli';
+import type { ComponentPlugin } from '@ice/pkg';
 
 const plugin: ComponentPlugin = (api) => {
   const {
