@@ -19,7 +19,7 @@
     "plugin.js"
   ],
   "scripts": {
-    "build": "rm -rf es && pnpm ice-pkg build",
+    "build": "rm -rf es && pnpm pkg-cli build",
     "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
     "prepublishOnly": "pnpm run-s lint build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -41,7 +41,7 @@
     "unist-util-visit": "2.0.3"
   },
   "devDependencies": {
-    "@ice/pkg": "workspace: *",
+    "@ice/pkg-cli": "1.0.0-beta.3",
     "react": "^17",
     "react-dom": "^17"
   }
