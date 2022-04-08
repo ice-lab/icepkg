@@ -43,6 +43,7 @@ importers:
       package-basic: 'workspace: *'
       react: ^17.0.2
       react-dom: ^17.0.2
+      source-map-loader: ^3.0.1
       style-loader: ^3.3.1
       webpack: ^5.69.1
       webpack-cli: ^4.9.2
@@ -50,6 +51,7 @@ importers:
       package-basic: link:../package
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      source-map-loader: 3.0.1_webpack@5.70.0
     devDependencies:
       css-loader: 6.7.1_webpack@5.70.0
       style-loader: 3.3.1_webpack@5.70.0
@@ -67,12 +69,14 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       regenerator-runtime: ^0.13.9
+      typescript: ^4.5.4
     dependencies:
       '@docusaurus/preset-classic': 2.0.0-beta.17_f20e6186fe6af3f477ab127b79656e9d
       core-js: 3.21.1
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       regenerator-runtime: 0.13.9
+      typescript: 4.6.3
     devDependencies:
       '@ice/pkg-cli': link:../../packages/pkg-cli
       '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
@@ -3692,6 +3696,10 @@ packages:
       through: 2.3.8
     dev: true
 
+  /abab/2.0.5:
+    resolution: {integrity: sha512-9IK9EadsbHo6jLWIpxpR6pL0sazTXV6+SQv25ZB+F7Bj9mJNaOc4nCRabwd5M/JwmUa8idz6Eci6eKfJryPs6Q==}
+    dev: false
+
   /accepts/1.3.8:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
@@ -6881,6 +6889,13 @@ packages:
 
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      safer-buffer: 2.1.2
+    dev: false
+
+  /iconv-lite/0.6.3:
+    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
@@ -10208,6 +10223,18 @@ packages:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
 
+  /source-map-loader/3.0.1_webpack@5.70.0:
+    resolution: {integrity: sha512-Vp1UsfyPvgujKQzi4pyDiTOnE3E4H+yHvkVRN3c/9PJmQS4CQJExvcDvaX/D+RV+xQben9HJ56jMJS3CgUeWyA==}
+    engines: {node: '>= 12.13.0'}
+    peerDependencies:
+      webpack: ^5.0.0
+    dependencies:
+      abab: 2.0.5
+      iconv-lite: 0.6.3
+      source-map-js: 1.0.2
+      webpack: 5.70.0_webpack-cli@4.9.2
+    dev: false
+
   /source-map-support/0.5.21:
     resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
     dependencies:
@@ -10659,7 +10686,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.1
-      webpack: 5.70.0
+      webpack: 5.70.0_webpack-cli@4.9.2
 
   /terser/5.12.1:
     resolution: {integrity: sha512-NXbs+7nisos5E+yXwAD+y7zrcTkMqb0dEJxIGtSKPdCBzopf7ni4odPul2aechpV7EXNvOudYOX2bb5tln1jbQ==}

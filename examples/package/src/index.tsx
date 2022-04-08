@@ -34,7 +34,7 @@ const App = () => {
 
   useEffect(() => {
     console.log('component-update');
-    // throw new Error('fsfds');
+    throw new Error('fsfds');
   }, []);
 
   const clickHanle = () => {
