@@ -1,5 +1,5 @@
 {
-  "name": "@ice/pkg-plugin-compoent",
+  "name": "@ice/pkg-plugin-component",
   "version": "1.0.0",
   "description": "Main plugin for @ice/pkg",
   "main": "lib/index.js",

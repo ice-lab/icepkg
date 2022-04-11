@@ -66,7 +66,7 @@ export interface UserConfig {
 
   /**
    * Plugins of build scripts
-   * @default @ice/pkg-plugin-compoent
+   * @default @ice/pkg-plugin-component
    */
   plugins?: any;
 

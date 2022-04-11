@@ -14,7 +14,7 @@ const REGISTRY = 'https://registry.npmjs.org/';
 const orderedPackages = [
   'ice-npm-utils',
   '@ice/pkg',
-  '@ice/pkg-plugin-compoent',
+  '@ice/pkg-plugin-component',
   '@ice/pkg-plugin-docusaurus',
 ];
 
