@@ -27,6 +27,10 @@ async function testPromise() {
   await Promise.resolve(true);
 }
 
+if (__DEV__) {
+  console.log('isDevelopment--');
+}
+
 console.log('testPromise', testPromise);
 
 const App = () => {

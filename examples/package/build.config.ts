@@ -1,10 +1,8 @@
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  minify: false,
-  babelPlugins: ['transform-remove-console'],
   plugins: [
-    '@ice/pkg-plugin-docusaurus',
+    // '@ice/pkg-plugin-docusaurus',
     // './plugin.js',
   ],
   sourceMaps: true,

@@ -4,7 +4,7 @@ import { getEntryDir, getEntryFile } from './getTaskEntry.js';
 import { getBundleSwcConfig, getTransformSwcConfig } from './getSwcConfig.js';
 import { normalizeRollupConfig } from './normalizeRollupConfig.js';
 
-import type { ComponentContext, ComponentConfig, ComponentTaskConfig } from '../types.js';
+import type { ComponentContext, ComponentConfig, ComponentTaskConfig, TaskName } from '../types.js';
 
 export const mergeConfigOptions = (
   cfg: ComponentTaskConfig,
@@ -21,14 +21,14 @@ export const mergeConfigOptions = (
     isBundleTask ? getEntryFile(rootDir) : getEntryDir(rootDir)
   );
 
-  // Configure task outputDir（Taskname 以 component-[dist|lib|esm 命名]）
+  // Configure task outputDir（Taskname 以 pkg-[cjs|esm|es2017 命名]）
   normalizedConfig.outputDir = outputDir || join(rootDir, taskName.split('-')[1]);
 
   // Configure swcOptions
   const swcOptionOverride = deepmerge(
     isBundleTask
       ? getBundleSwcConfig(userConfig as any)
-      : getTransformSwcConfig(userConfig as any, taskName),
+      : getTransformSwcConfig(userConfig as any, taskName as TaskName),
     swcCompileOptions,
   );
 

@@ -2566,6 +2566,7 @@ packages:
     dependencies:
       '@babel/core': 7.17.9
       '@babel/parser': 7.17.9
+      '@ice/pkg-plugin-compoent': 1.0.0-beta.4
       '@ice/pkg-plugin-component': 1.0.0-beta.4
       '@rollup/plugin-alias': 3.1.9_rollup@2.70.1
       '@rollup/plugin-commonjs': 21.0.3_rollup@2.70.1
@@ -2591,6 +2592,13 @@ packages:
     transitivePeerDependencies:
       - supports-color
       - ts-node
+    dev: true
+
+  /@ice/pkg-plugin-compoent/1.0.0-beta.4:
+    resolution: {integrity: sha512-sPgWraqvl293ZXtS2dvtwRfl+6ZULBBMwCWC7yDxDhxsFzOCttF+Rb71bA4ryusQBpDhlpVOI63ghU0RwE6qrQ==}
+    dependencies:
+      consola: 2.15.3
+      fs-extra: 10.0.1
     dev: true
 
   /@ice/pkg-plugin-component/1.0.0-beta.4:

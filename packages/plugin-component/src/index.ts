@@ -14,21 +14,29 @@ const plugin: ComponentPlugin = (api) => {
   // @ts-ignore
   registerUserConfig(registerdUserConfig);
 
-  registerTask('component-es', {
-    type: 'transform',
+
+  // FIXME: default value is not valid when `registerTask` ?
+  (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {
+    registerTask(`pkg-${format}`, {
+      type: 'transform',
+    });
   });
 
-  registerTask('component-esnext', {
-    type: 'transform',
-  });
+  // registerTask('component-esnext', {
+  //   type: 'transform',
+  // });
 
-  userConfig.lib && registerTask('component-lib', {
-    type: 'transform',
-  });
+  // registerTask('component-es', {
+  //   type: 'transform',
+  // });
 
-  userConfig.umd && registerTask('component-dist', {
-    type: 'bundle',
-  });
+  // userConfig.lib && registerTask('component-lib', {
+  //   type: 'transform',
+  // });
+
+  // userConfig.umd && registerTask('component-dist', {
+  //   type: 'bundle',
+  // });
 };
 
 export default plugin;

@@ -1,11 +1,11 @@
 import { booleanToObject, stringifyObject } from '../utils.js';
 
-import type { UserConfig } from '../types.js';
+import type { UserConfig, TaskName } from '../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
 
 export const getBundleSwcConfig = (userConfig: UserConfig): Config => {
-  const minify = userConfig?.umd?.minify ?? userConfig?.minify;
-  const sourceMaps = userConfig?.umd?.sourceMaps ?? userConfig?.sourceMaps;
+  const minify = true;
+  const sourceMaps = userConfig?.sourceMaps;
   const define = stringifyObject(userConfig?.define ?? {});
 
   return {
@@ -38,36 +38,36 @@ export const getBundleSwcConfig = (userConfig: UserConfig): Config => {
   };
 };
 
-export const getTransformSwcConfig = (userConfig: UserConfig, taskName: string): Config => {
-  const minify = userConfig?.minify;
+export const getTransformSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
   const sourceMaps = userConfig?.sourceMaps;
   const define = stringifyObject(userConfig?.define ?? {});
 
-  const module: ModuleConfig = taskName === 'component-lib'
+  const module: ModuleConfig = taskName === 'pkg-cjs'
     ? { type: 'commonjs' }
     : undefined;
 
-  const target = taskName === 'component-esnext' ? 'es2022' : 'es5';
+  const target = taskName === 'pkg-es2017' ? 'es2017' : 'es5';
 
   return {
     jsc: {
       target,
-      minify: {
-        compress: {
-          unused: false,
-        },
-        ...booleanToObject(minify),
-      },
       transform: {
         optimizer: {
           globals: {
-            vars: define,
+            vars: {
+              // Insert __DEV__ for users, can be overrided too.
+              __DEV__: "process.env.NODE_ENV === 'development'",
+              ...define,
+            },
           },
         },
       },
+      // FIXME: How to resolve @swc/helper
+      // Helpers function will not be inlined into the output files for sake of optimizing.
+      // Get more info https://github.com/ice-lab/ice-next/issues/95
+      externalHelpers: true,
     },
     module,
     sourceMaps,
-    minify: !!minify,
   };
 };
