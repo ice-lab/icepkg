@@ -5,12 +5,17 @@ export default defineConfig({
     // '@ice/pkg-plugin-docusaurus',
     // './plugin.js',
   ],
-  sourceMaps: true,
+  // sourceMaps: true,
   define: {
     __buildVersion: '0.1.2',
     __buildNumber: 15,
     __buildObject: {
       a: '2',
     },
+  },
+  bundle: {
+    development: true,
+    formats: ['umd', 'esm', 'es2017'],
+    externals: true,
   },
 });

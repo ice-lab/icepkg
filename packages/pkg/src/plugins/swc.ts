@@ -75,7 +75,6 @@ const resolveFile = (importee: string, isDir = false) => {
 
 export interface SwcPluginArgs {
   extraSwcOptions?: Config;
-  minifyWhenTransform?: boolean;
 }
 
 /**
@@ -85,7 +84,6 @@ export interface SwcPluginArgs {
  */
 const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
   extraSwcOptions,
-  minifyWhenTransform = false,
 }) => {
   return {
     name: 'ice-pkg:swc',
@@ -131,9 +129,8 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
         _,
         normalizeSwcConfig(file, {
           ...extraSwcOptions,
-          // Disable minimize on every file transform when bundling,
-          // While needs when tranforming
-          minify: minifyWhenTransform ? extraSwcOptions.minify : false,
+          // Disable minimize on every file transform when bundling
+          minify: false,
           // If filename is omitted, will lose filename info in sourcemap
           filename: id,
         }),
@@ -150,16 +147,16 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
       };
     },
 
-    renderChunk(_) {
-      // 这个 Hook 仅在 bunlde 时生效，bundle 时利用这个 hook 进行 minify
-      if (extraSwcOptions.minify) {
-        return swc.minifySync(_, {
-          ...(extraSwcOptions.minify as JsMinifyOptions),
-          sourceMap: !!extraSwcOptions.sourceMaps,
-        });
-      }
-      return null;
-    },
+    // renderChunk(_) {
+    //   // 这个 Hook 仅在 bunlde 时生效，bundle 时利用这个 hook 进行 minify
+    //   if (extraSwcOptions.minify) {
+    //     return swc.minifySync(_, {
+    //       ...(extraSwcOptions.minify as JsMinifyOptions),
+    //       sourceMap: !!extraSwcOptions.sourceMaps,
+    //     });
+    //   }
+    //   return null;
+    // },
   };
 };
 

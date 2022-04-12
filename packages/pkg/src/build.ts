@@ -2,9 +2,9 @@ import consola from 'consola';
 import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
 import { buildAll } from './buildAll.js';
 
-import type { ComponentContext } from './types.js';
+import type { PkgContext } from './types.js';
 
-export default async (context: ComponentContext) => {
+export default async (context: PkgContext) => {
   const { getConfig, applyHook, commandArgs } = context;
 
   const configs = getConfig();

@@ -2,9 +2,9 @@
 import runTransform from './loaders/transform.js';
 import runBundle from './loaders/bundle.js';
 
-import type { ComponentContext, ComponentConfig } from './types.js';
+import type { PkgContext, TaskConfig } from './types.js';
 
-export const buildAll = async (cfgArrs: ComponentConfig[], ctx: ComponentContext) => {
+export const buildAll = async (cfgArrs: TaskConfig[], ctx: PkgContext) => {
   for (let c = 0; c < cfgArrs.length; ++c) {
     const { type } = cfgArrs[c];
 

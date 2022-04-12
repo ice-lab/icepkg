@@ -4,9 +4,9 @@ import type { Config } from '@swc/core';
 
 export type PlainObject = Record<string, string | boolean | number | object>;
 
-export type RollupPluginFn<T> = (args: T) => Plugin;
+export type RollupPluginFn<T = {}> = (args: T) => Plugin;
 
-export interface ComponentConfig {
+export interface TaskConfig {
   /**
    * There are two ways to handle source files
    * - 'transform' to transform files one by one to support tree shaking
@@ -40,19 +40,15 @@ export interface ComponentConfig {
   swcCompileOptions?: Config;
 }
 
-export type ComponentTaskConfig = ITaskConfig<ComponentConfig>;
+export type PkgTaskConfig = ITaskConfig<TaskConfig>;
 
-export type ComponentContext = Context<ComponentConfig>;
+export type PkgContext = Context<TaskConfig, {}, UserConfig>;
 
-export type ComponentPluginAPI = IPluginAPI<ComponentConfig, ExtendsPluginAPI>;
+export type PkgPluginAPI = IPluginAPI<TaskConfig>;
 
-export type ComponentPlugin = IPlugin<ComponentConfig, ExtendsPluginAPI>;
+export type PkgPlugin = IPlugin<TaskConfig>;
 
-export interface ExtendsPluginAPI {
-  queryString: (name: string) => void;
-}
-
-export type TaskName = 'pkg-cjs' | 'pkg-esm' | 'pkg-es2017';
+export type TaskName = 'pkg-cjs' | 'pkg-esm' | 'pkg-es2017' | 'pkg-dist-es5' | 'pkg-dist-es2017';
 
 export interface UserConfig {
   /**
