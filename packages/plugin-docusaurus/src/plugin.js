@@ -20,7 +20,7 @@ module.exports = function (context) {
             'react/jsx-runtime': path.resolve(siteDir, 'node_modules/react/jsx-runtime'),
             '@mdx-js/react': mdxReact,
             // FIXME: I am not sure how to resolve the actual output folder
-            [pkgMeta.name]: path.resolve(siteDir, 'es/index'),
+            [pkgMeta.name]: path.resolve(siteDir, 'esm/index'),
           },
         },
       };
