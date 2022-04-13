@@ -1,3 +1,4 @@
+// Copy from https://github.com/sindresorhus/builtin-modules#readme
 export const builtinNodeModules = [
   'assert',
   'async_hooks',

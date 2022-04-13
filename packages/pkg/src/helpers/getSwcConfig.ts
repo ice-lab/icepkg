@@ -9,6 +9,7 @@ export const getBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): 
   const target = taskName === 'pkg-dist-es2017' ? 'es2017' : 'es5';
 
   const browserTargets = taskName === 'pkg-dist-es2017' ? {
+    // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
     chrome: 61,
     safari: 10.1,
     firefox: 60,
