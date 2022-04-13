@@ -15,7 +15,7 @@ export default defineConfig({
   },
   bundle: {
     development: true,
-    formats: ['umd', 'esm', 'es2017'],
+    formats: ['esm', 'es2017'],
     externals: true,
   },
 });

@@ -5,7 +5,7 @@ import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
 import { isDirectory, scriptsFilter } from '../utils.js';
 
-import type { Options as swcCompileOptions, Config, JsMinifyOptions } from '@swc/core';
+import type { Options as swcCompileOptions, Config } from '@swc/core';
 import type { RollupPluginFn } from '../types.js';
 import type { File } from '../loaders/transform.js';
 
@@ -65,11 +65,26 @@ const normalizeSwcConfig = (
 const RESOLVE_EXTENSIONS = ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.mts', '.cjs'];
 
 const resolveFile = (importee: string, isDir = false) => {
-  for (let i = 0; i < RESOLVE_EXTENSIONS.length; ++i) {
-    const path = isDir ? join(importee, `index${RESOLVE_EXTENSIONS[i]}`) : `${importee}${RESOLVE_EXTENSIONS[i]}`;
-    const exist = fs.pathExistsSync(path);
+  const ext = extname(importee);
+  if (ext === '') {
+    for (let i = 0; i < RESOLVE_EXTENSIONS.length; ++i) {
+      const path = isDir ? join(importee, `index${RESOLVE_EXTENSIONS[i]}`) : `${importee}${RESOLVE_EXTENSIONS[i]}`;
+      const exist = fs.pathExistsSync(path);
 
-    if (exist) return path;
+      if (exist) return path;
+    }
+  }
+
+  // File should suffix with `.js` in TypeScript project.
+  if (ext === '.js') {
+    const exist = fs.pathExistsSync(importee);
+    // Leave other plugins to resolve it.
+    if (exist) return null;
+
+    const tsFilePath = importee.replace('.js', '.ts');
+    const tsExist = fs.pathExistsSync(tsFilePath);
+
+    if (tsExist) return tsFilePath;
   }
 };
 
@@ -96,7 +111,6 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
 
       // Find relative importee
       if (importer && importee[0] === '.') {
-        // Path may be a folder
         const absolutePath = resolve(
           importer ? dirname(importer) : process.cwd(),
           importee,
@@ -104,6 +118,7 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
 
         let resolvedPath = resolveFile(absolutePath);
 
+        // Path may be a folder
         if (!resolvedPath &&
           fs.pathExistsSync(absolutePath) &&
           isDirectory(absolutePath)) {
@@ -146,17 +161,6 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
         },
       };
     },
-
-    // renderChunk(_) {
-    //   // 这个 Hook 仅在 bunlde 时生效，bundle 时利用这个 hook 进行 minify
-    //   if (extraSwcOptions.minify) {
-    //     return swc.minifySync(_, {
-    //       ...(extraSwcOptions.minify as JsMinifyOptions),
-    //       sourceMap: !!extraSwcOptions.sourceMaps,
-    //     });
-    //   }
-    //   return null;
-    // },
   };
 };
 

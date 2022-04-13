@@ -17,6 +17,7 @@ const minifyPlugin: RollupPluginFn<{
             unused: false,
           },
         } : minifyOption),
+        // FIXME: sourcemaps
         // sourceMap: !!extraSwcOptions.sourceMaps,
       });
     },

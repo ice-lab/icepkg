@@ -66,6 +66,7 @@ const getExternalsAndGlboals = (userConfig: UserConfig, pkg: any) => {
   const builtinExternals = [
     'react/jsx-runtime',
     'core-js',
+    'regenerator-runtime',
   ];
 
   switch (userConfig?.bundle?.externals ?? true) {

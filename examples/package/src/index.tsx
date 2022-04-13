@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { multiply } from './test.js';
+
 // import './index.css';
 // import './index.scss';
 
@@ -37,7 +39,7 @@ const App = () => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    console.log('component-update', [1, 2, 3].concat(8));
+    console.log('component-update', [1, 2, 3].concat(8), multiply(1)(2));
     // throw new Error('fsfds');
   }, []);
 
