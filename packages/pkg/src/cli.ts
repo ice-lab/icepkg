@@ -9,9 +9,9 @@ import componentService from './index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const getBuiltInPlugins = () => ['@ice/pkg-plugin-compoent'];
+const getBuiltInPlugins = () => ['@ice/pkg-plugin-component'];
 
-const cli = cac('pkg-cli');
+const cli = cac('ice-pkg');
 
 (async () => {
   cli

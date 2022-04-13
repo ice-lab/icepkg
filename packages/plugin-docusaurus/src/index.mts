@@ -1,7 +1,7 @@
 import { doc } from './doc.mjs';
 import { configureDocusaurus } from './configureDocusaurus.mjs';
 
-import type { ComponentPlugin } from '@ice/pkg-cli';
+import type { PkgPlugin } from '@ice/pkg';
 
 export interface PluginDocusaurusOptions {
   /**
@@ -50,7 +50,7 @@ const defaultOptions: PluginDocusaurusOptions = {
 };
 
 // @ts-ignore
-const plugin: ComponentPlugin = (api, options: PluginDocusaurusOptions) => {
+const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions) => {
   const {
     onHook,
     context,

@@ -1,6 +1,6 @@
 # @ice/create-pkg
 
-Create pkg-cli projects by npm initing.
+Create ice-pkg projects by npm initing.
 
 ## Usage
 

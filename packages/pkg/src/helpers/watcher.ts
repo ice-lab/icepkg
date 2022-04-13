@@ -2,9 +2,9 @@ import * as chokidar from 'chokidar';
 import { toArray, unique } from '../utils.js';
 import { createLogger } from './logger.js';
 
-import type { ComponentConfig } from '../types';
+import type { TaskConfig } from '../types';
 
-export const createWatcher = (cfgs: ComponentConfig[]) => {
+export const createWatcher = (cfgs: TaskConfig[]) => {
   const logger = createLogger('watcher');
   const inputs = unique(cfgs.map((cfg) => cfg.entry));
   const outputs = unique(cfgs.map((cfg) => cfg.outputDir));

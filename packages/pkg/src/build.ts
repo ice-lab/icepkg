@@ -2,9 +2,9 @@ import consola from 'consola';
 import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
 import { buildAll } from './buildAll.js';
 
-import type { ComponentContext } from './types.js';
+import type { PkgContext } from './types.js';
 
-export default async (context: ComponentContext) => {
+export default async (context: PkgContext) => {
   const { getConfig, applyHook, commandArgs } = context;
 
   const configs = getConfig();
@@ -12,7 +12,7 @@ export default async (context: ComponentContext) => {
 
   if (!configs.length) {
     const err = new Error('Could not Find any pending tasks when excuting \'build\' command.');
-
+    consola.error(err);
     await applyHook('error', {
       errCode: 'NO_CONFIG_FOUND',
       err,
