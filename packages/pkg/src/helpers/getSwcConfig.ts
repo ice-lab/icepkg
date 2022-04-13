@@ -4,7 +4,6 @@ import type { UserConfig, TaskName } from '../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
 
 export const getBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
-  const sourceMaps = userConfig?.sourceMaps;
   const define = stringifyObject(userConfig?.define ?? {});
 
   const target = taskName === 'pkg-dist-es2017' ? 'es2017' : 'es5';
@@ -36,7 +35,9 @@ export const getBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): 
       },
     },
     minify: false,
-    sourceMaps,
+    // Always generate map in bundle mode,
+    // and leave minify-plugin to tackle with it.
+    sourceMaps: true,
     // 由 env 字段统一处理 synax & polyfills
     env: {
       targets: browserTargets,
@@ -70,7 +71,6 @@ export const getTransformSwcConfig = (userConfig: UserConfig, taskName: TaskName
           },
         },
       },
-      // FIXME: How to resolve @swc/helper
       // Helpers function will not be inlined into the output files for sake of optimizing.
       // Get more info https://github.com/ice-lab/ice-next/issues/95
       externalHelpers: true,

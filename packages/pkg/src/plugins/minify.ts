@@ -3,9 +3,15 @@ import * as swc from '@swc/core';
 import type { JsMinifyOptions } from '@swc/core';
 import type { RollupPluginFn } from '../types.js';
 
-const minifyPlugin: RollupPluginFn<{
+export interface MinifyPluginOption {
   minifyOption: true | JsMinifyOptions;
-}> = ({ minifyOption }) => {
+  sourceMaps: boolean | 'inline';
+}
+
+const minifyPlugin: RollupPluginFn<MinifyPluginOption> = ({
+  minifyOption,
+  sourceMaps,
+}) => {
   return {
     name: 'ice-pkg:minify',
 
@@ -17,8 +23,8 @@ const minifyPlugin: RollupPluginFn<{
             unused: false,
           },
         } : minifyOption),
-        // FIXME: sourcemaps
-        // sourceMap: !!extraSwcOptions.sourceMaps,
+        // Rollup will determine whether inlined sourcemap or not
+        sourceMap: !!sourceMaps,
       });
     },
   };

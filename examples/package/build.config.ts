@@ -5,7 +5,7 @@ export default defineConfig({
     // '@ice/pkg-plugin-docusaurus',
     // './plugin.js',
   ],
-  // sourceMaps: true,
+  sourceMaps: 'inline',
   define: {
     __buildVersion: '0.1.2',
     __buildNumber: 15,

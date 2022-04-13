@@ -28,7 +28,6 @@ const normalizeSwcConfig = (
       loose: false, // No recommand
     },
     minify: false,
-    sourceMaps: false,
   };
 
   if (isTypeScript) {

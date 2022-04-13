@@ -55,7 +55,7 @@ export interface UserConfig {
    * Alias to file system paths
    * @default empty
    */
-  alias?: PlainObject;
+  alias?: Record<string, string>;
   /**
    * Define global constant replacements
    * @default empty
@@ -130,6 +130,6 @@ export interface UserConfig {
      * "object" - specific external dependencies.
      * @default true nono of dependencies will be bundled by default
      */
-    externals?: boolean | Object;
+    externals?: boolean | Record<string, string>;
   };
 }

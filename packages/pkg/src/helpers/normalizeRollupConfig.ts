@@ -16,6 +16,14 @@ import { builtinNodeModules } from './builtinModules.js';
 import type { Plugin as RollupPlugin, RollupOptions, OutputOptions } from 'rollup';
 import type { TaskConfig, PkgContext, TaskName, UserConfig } from '../types.js';
 
+interface PkgJson {
+  name: string;
+  version?: string;
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+  [k: string]: string | Record<string, string>;
+}
+
 const getRollupOutputs = ({
   userConfig,
   pkg,
@@ -24,7 +32,7 @@ const getRollupOutputs = ({
 }: {
   userConfig: UserConfig;
   outputDir: string;
-  pkg: any;
+  pkg: PkgJson;
   isES2017: boolean;
 }): OutputOptions[] => {
   const outputs: OutputOptions[] = [];
@@ -35,18 +43,20 @@ const getRollupOutputs = ({
   const filename = userConfig?.bundle?.filename ?? 'index';
   const name = userConfig?.bundle?.name ?? pkg.name;
 
+  const sourceMaps = userConfig?.sourceMaps ?? false;
+
   outputFormats.forEach((format) => {
     const commonOption = {
       name,
       format,
-      sourcemap: userConfig?.sourceMaps ?? false,
+      sourcemap: sourceMaps,
     };
 
     const filenamePrefix = `${filename}${format === 'umd' ? '.umd' : ''}${isES2017 ? '.es2017' : ''}`;
     outputs.push({
       ...commonOption,
       file: join(outputDir, `${filenamePrefix}.production.js`),
-      plugins: [minify({ minifyOption: true })],
+      plugins: [minify({ minifyOption: true, sourceMaps })],
     });
 
     if (uncompressedDevelopment) {
@@ -60,8 +70,9 @@ const getRollupOutputs = ({
   return outputs;
 };
 
-const getExternalsAndGlboals = (userConfig: UserConfig, pkg: any) => {
+const getExternalsAndGlboals = (userConfig: UserConfig, pkg: PkgJson) => {
   let externals: string[] = [];
+  let globals: Record<string, string> = {};
 
   const builtinExternals = [
     'react/jsx-runtime',
@@ -69,7 +80,9 @@ const getExternalsAndGlboals = (userConfig: UserConfig, pkg: any) => {
     'regenerator-runtime',
   ];
 
-  switch (userConfig?.bundle?.externals ?? true) {
+  const userExternals = userConfig?.bundle?.externals ?? true;
+
+  switch (userExternals) {
     case true:
       externals = [
         ...builtinNodeModules,
@@ -82,6 +95,8 @@ const getExternalsAndGlboals = (userConfig: UserConfig, pkg: any) => {
       externals = [];
       break;
     default:
+      externals = Object.keys(userExternals);
+      globals = userExternals;
       break;
   }
 
@@ -91,7 +106,7 @@ const getExternalsAndGlboals = (userConfig: UserConfig, pkg: any) => {
     ? () => false
     : (id: string) => externalPredicate.test(id);
 
-  return externalFun;
+  return [externalFun, globals];
 };
 
 export const normalizeRollupConfig = (
@@ -103,7 +118,6 @@ export const normalizeRollupConfig = (
   const { rootDir, userConfig, pkg } = ctx;
 
   const commonPlugins = [
-    // @ts-ignore FIXME: fix alias
     userConfig?.alias && alias({ entries: userConfig.alias }),
     userConfig?.babelPlugins?.length && babelPlugin(userConfig.babelPlugins),
     swcPlugin({
@@ -148,7 +162,7 @@ export const normalizeRollupConfig = (
       );
     }
 
-    const external = getExternalsAndGlboals(userConfig, pkg);
+    const external = getExternalsAndGlboals(userConfig, pkg as PkgJson);
 
     const resolvedRollupOptions = deepmerge.all([
       {
@@ -156,7 +170,7 @@ export const normalizeRollupConfig = (
         external,
         output: getRollupOutputs({
           userConfig,
-          pkg,
+          pkg: pkg as PkgJson,
           outputDir: cfg.outputDir,
           isES2017: taskName === 'pkg-dist-es2017',
         }),
