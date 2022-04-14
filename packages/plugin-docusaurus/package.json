@@ -41,7 +41,7 @@
     "unist-util-visit": "2.0.3"
   },
   "devDependencies": {
-    "@ice/pkg-cli": "1.0.0-beta.3",
+    "@ice/pkg": "1.0.0-beta.3",
     "react": "^17",
     "react-dom": "^17"
   }

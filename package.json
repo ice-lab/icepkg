@@ -22,6 +22,7 @@
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@ice/pkg": "workspace: *",
+    "@ice/pkg": "1.0.0-beta.3",
     "@ice/pkg-plugin-docusaurus": "workspace: *",
     "@ice/pkg-plugin-component": "workspace: *",
     "@iceworks/spec": "^1.5.0",
