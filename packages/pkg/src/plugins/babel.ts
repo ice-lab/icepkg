@@ -26,7 +26,7 @@ const getParserPlugins = (isTs?: boolean) => {
 
 const babelPlugin = (babelPlugins) => {
   return {
-    name: 'ice-pkg-cli:babel',
+    name: 'ice-pkg:babel',
 
     transform(code, id) {
       if (!scriptsFilter(id)) {

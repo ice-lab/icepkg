@@ -233,10 +233,6 @@ export const findDefaultEntryFile = (dirPath: string): string => {
     .find((file) => isFile(file));
 };
 
-export const addSuffixToFile = (file: string) => {
-  return path.extname(file) ? file : `${file}.js`;
-};
-
 export const isObject = (value: unknown): value is Record<string, any> => Object.prototype.toString.call(value) === '[object Object]';
 
 export const booleanToObject = (value: object | boolean): object => (isObject(value) ? value : {});

@@ -6,7 +6,7 @@ import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
-import type { ComponentContext, ComponentConfig } from '../types.js';
+import type { PkgContext, TaskConfig } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
 export interface File {
@@ -25,8 +25,8 @@ export interface File {
   map?: string | SourceMapInput;
 }
 
-export default async function runTransform(cfg: ComponentConfig, ctx: ComponentContext) {
-  const { rootDir } = ctx;
+export default async function runTransform(cfg: TaskConfig, ctx: PkgContext) {
+  const { rootDir, userConfig } = ctx;
   const { outputDir, entry, rollupPlugins } = cfg;
 
   const logger = createLogger('transform');
@@ -38,6 +38,7 @@ export default async function runTransform(cfg: ComponentConfig, ctx: ComponentC
     files =
       loadEntryFiles(
         resolve(rootDir, entryDir),
+        (userConfig?.transform?.excludes || []),
       )
         .map((filePath) => ({
           filePath,

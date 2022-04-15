@@ -4,7 +4,7 @@ Hi! I’m really excited that you are interested in contributing to ICE. Before 
 
 ## 历史分支
 
-### [stable/0.x](https://github.com/ice-lab/pkg-cli/tree/stable/0.x/)
+### [stable/0.x](https://github.com/ice-lab/icepkg/tree/stable/0.x/)
 
 - build-plugin-component@1.x 历史版本，以及相关包（已发布新方案）
 - ice-npm-utils@2.x 历史版本（已发布 3.x）

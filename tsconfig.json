@@ -2,7 +2,7 @@
   "files": [],
   "references": [
     { "path": "packages/ice-npm-utils" },
-    { "path": "packages/pkg-cli" },
+    { "path": "packages/pkg" },
     { "path": "packages/plugin-component" },
     { "path": "packages/plugin-docusaurus" }
   ]
