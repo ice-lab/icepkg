@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg-plugin-docusaurus",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0",
   "description": "Plugin for component previewing",
   "main": "esnext/index.js",
   "exports": {
