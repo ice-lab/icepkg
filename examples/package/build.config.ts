@@ -13,6 +13,9 @@ export default defineConfig({
       a: '2',
     },
   },
+  transform: {
+    excludes: '**/test/*',
+  },
   bundle: {
     development: true,
     formats: ['esm', 'es2017'],

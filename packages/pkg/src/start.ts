@@ -25,11 +25,6 @@ export default async (context: PkgContext) => {
   if (!configs.length) {
     const err = new Error('Could not Find any pending tasks when excuting \'start\' command.');
 
-    await applyHook('error', {
-      errCode: 'NO_CONFIG_FOUND',
-      err,
-    });
-
     throw err;
   }
 
