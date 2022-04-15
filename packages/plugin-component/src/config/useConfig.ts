@@ -1,36 +1,13 @@
-import type { UserConfig } from '@ice/pkg';
-
 export const registerdUserConfig = [
-  {
-    name: 'umd',
-    validation: (val: UserConfig['umd']) => {
-      // FIXME: build-scripts 支持下递归校验
-      return true;
-    },
-  },
-  {
-    name: 'lib',
-    validation: 'boolean',
-    defaultValue: false,
-  },
-  {
-    name: 'babelPlugins',
-    defaultValue: [],
-  },
-  {
-    name: 'define',
-    validation: 'object',
-    defaultValue: {},
-  },
   {
     name: 'alias',
     validation: 'object',
     defaultValue: {},
   },
   {
-    name: 'minify',
-    validation: 'boolean|object',
-    defaultValue: false,
+    name: 'define',
+    validation: 'object',
+    defaultValue: {},
   },
   {
     name: 'sourceMaps',
@@ -43,5 +20,20 @@ export const registerdUserConfig = [
     name: 'generateTypesForJs',
     validation: 'boolean',
     default: false,
+  },
+  // FIXME: validate values recursivly
+  {
+    name: 'transform',
+    validation: 'object',
+    defaultValue: {
+      formats: ['esm', 'es2017'],
+    },
+  },
+  {
+    name: 'bundle',
+    validation: 'object',
+    defaultValue: {
+      formats: ['esm', 'es2017'],
+    },
   },
 ];

@@ -14,7 +14,7 @@ const REGISTRY = 'https://registry.npmjs.org/';
 const orderedPackages = [
   'ice-npm-utils',
   '@ice/pkg',
-  '@ice/pkg-plugin-compoent',
+  '@ice/pkg-plugin-component',
   '@ice/pkg-plugin-docusaurus',
 ];
 
@@ -90,8 +90,11 @@ async function publishPackage({ pkgDir, pkgData }) {
   console.log('notify success', response.data);
 }
 
-
-async function checkVersionExist(name: string, version: string, registry?: string): Promise<boolean> {
+async function checkVersionExist(
+  name: string,
+  version: string,
+  registry?: string,
+): Promise<boolean> {
   try {
     const versions = await getVersions(name, registry);
     return versions.indexOf(version) !== -1;

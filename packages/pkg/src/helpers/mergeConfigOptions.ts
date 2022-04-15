@@ -4,12 +4,12 @@ import { getEntryDir, getEntryFile } from './getTaskEntry.js';
 import { getBundleSwcConfig, getTransformSwcConfig } from './getSwcConfig.js';
 import { normalizeRollupConfig } from './normalizeRollupConfig.js';
 
-import type { ComponentContext, ComponentConfig, ComponentTaskConfig } from '../types.js';
+import type { PkgContext, TaskConfig, PkgTaskConfig, TaskName } from '../types.js';
 
 export const mergeConfigOptions = (
-  cfg: ComponentTaskConfig,
-  ctx: ComponentContext,
-): ComponentConfig => {
+  cfg: PkgTaskConfig,
+  ctx: PkgContext,
+): TaskConfig => {
   const { rootDir, userConfig } = ctx;
   const { config: taskConfig, name: taskName } = cfg;
   const normalizedConfig = { ...taskConfig };
@@ -21,21 +21,25 @@ export const mergeConfigOptions = (
     isBundleTask ? getEntryFile(rootDir) : getEntryDir(rootDir)
   );
 
-  // Configure task outputDir（Taskname 以 component-[dist|lib|esm 命名]）
+  // Configure task outputDir（Taskname 以 pkg-[cjs|esm|es2017 命名]）
   normalizedConfig.outputDir = outputDir || join(rootDir, taskName.split('-')[1]);
 
   // Configure swcOptions
   const swcOptionOverride = deepmerge(
     isBundleTask
-      ? getBundleSwcConfig(userConfig as any)
-      : getTransformSwcConfig(userConfig as any, taskName),
+      ? getBundleSwcConfig(userConfig as any, taskName as TaskName)
+      : getTransformSwcConfig(userConfig as any, taskName as TaskName),
     swcCompileOptions,
   );
 
   normalizedConfig.swcCompileOptions = swcOptionOverride;
 
   // Configure rollup plugins & options
-  const [resolvedPlugins, resolvedRollupOption] = normalizeRollupConfig(normalizedConfig, ctx);
+  const [resolvedPlugins, resolvedRollupOption] = normalizeRollupConfig(
+    normalizedConfig,
+    ctx,
+    taskName as TaskName,
+  );
 
   normalizedConfig.rollupPlugins = resolvedPlugins;
   normalizedConfig.rollupOptions = resolvedRollupOption;

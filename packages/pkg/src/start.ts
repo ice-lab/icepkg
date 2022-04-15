@@ -4,10 +4,10 @@ import { createWatcher } from './helpers/watcher.js';
 import { debouncePromise } from './utils.js';
 import { buildAll } from './buildAll.js';
 
-import type { ComponentContext, ComponentConfig } from './types.js';
+import type { PkgContext, TaskConfig } from './types.js';
 
 const debouncedBuildAll = debouncePromise(
-  async (cfgArrs: ComponentConfig[], ctx: ComponentContext) => {
+  async (cfgArrs: TaskConfig[], ctx: PkgContext) => {
     await buildAll(cfgArrs, ctx);
   },
   100,
@@ -16,7 +16,7 @@ const debouncedBuildAll = debouncePromise(
   },
 );
 
-export default async (context: ComponentContext) => {
+export default async (context: PkgContext) => {
   const { getConfig, applyHook, commandArgs } = context;
 
   const configs = getConfig();
@@ -24,11 +24,6 @@ export default async (context: ComponentContext) => {
 
   if (!configs.length) {
     const err = new Error('Could not Find any pending tasks when excuting \'start\' command.');
-
-    await applyHook('error', {
-      errCode: 'NO_CONFIG_FOUND',
-      err,
-    });
 
     throw err;
   }

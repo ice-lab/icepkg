@@ -35,7 +35,8 @@ packages/*/es/
 **/pnpm-global
 examples/**/esm
 examples/**/es
-examples/**/esnext
+examples/**/es2017
+examples/**/cjs
 examples/**/lib
 examples/**/dist
 examples/**/.vscode

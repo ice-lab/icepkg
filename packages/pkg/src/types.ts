@@ -1,54 +1,65 @@
 import type { RollupOptions, Plugin } from 'rollup';
 import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
-import type { Config, JsMinifyOptions, JscTarget, EnvConfig } from '@swc/core';
-
-interface Json<T> {
-  [str: string]: T;
-}
+import type { Config } from '@swc/core';
 
 export type PlainObject = Record<string, string | boolean | number | object>;
 
-export type RollupPluginFn<T> = (args: T) => Plugin;
+export type RollupPluginFn<T = {}> = (args: T) => Plugin;
 
-export interface ComponentConfig {
+export interface TaskConfig {
+  /**
+   * There are two ways to handle source files
+   * - 'transform' to transform files one by one to support tree shaking
+   * - 'bundle' to bundle files into single file
+   */
   type: 'bundle' | 'transform';
   /**
-   * TODO: explainations
-   */
+  * Entry for a specific task
+  * @default `./src` for transforming task, and `./src/index[j|t]s` for bundling task
+  */
   entry?: string;
+  /**
+  * Output directory
+  */
   outputDir?: string;
+  /**
+  * Extra rollup plugins
+  */
   rollupPlugins?: Plugin[];
 
+  /**
+  * Extra rollup options
+  * @see https://rollupjs.org/guide/en/
+  */
   rollupOptions?: RollupOptions;
+
+  /**
+  * Extra swc compile options
+  * @see https://swc.rs/docs/configuration/compilationv
+  */
   swcCompileOptions?: Config;
 }
 
-export type ComponentTaskConfig = ITaskConfig<ComponentConfig>;
+export type PkgTaskConfig = ITaskConfig<TaskConfig>;
 
-export type ComponentContext = Context<ComponentConfig>;
+export type PkgContext = Context<TaskConfig, {}, UserConfig>;
 
-export type ComponentPluginAPI = IPluginAPI<ComponentConfig, ExtendsPluginAPI>;
+export type PkgPluginAPI = IPluginAPI<TaskConfig>;
 
-export type ComponentPlugin = IPlugin<ComponentConfig, ExtendsPluginAPI>;
+export type PkgPlugin = IPlugin<TaskConfig>;
 
-export interface ExtendsPluginAPI {
-  queryString: (name: string) => void;
-}
-
-
-export interface Declation {
-  js?: boolean;
-}
+export type TaskName = 'pkg-cjs' | 'pkg-esm' | 'pkg-es2017' | 'pkg-dist-es5' | 'pkg-dist-es2017';
 
 export interface UserConfig {
   /**
-   * minize output
-   * @default false
+   * Alias to file system paths
+   * @default empty
    */
-  minify?: boolean | JsMinifyOptions;
-
-  alias?: PlainObject;
-
+  alias?: Record<string, string>;
+  /**
+   * Define global constant replacements
+   * @default empty
+   */
   define?: PlainObject;
   /**
   * - true to generate a sourcemap for the code and include it in the result object.
@@ -62,46 +73,63 @@ export interface UserConfig {
   */
   generateTypesForJs?: boolean;
 
-  babelPlugins?: any;
-
   /**
    * Plugins of build scripts
-   * @default @ice/pkg-plugin-compoent
+   * @default @ice/pkg-plugin-component
    */
   plugins?: any;
 
   /**
-   * Whether or not to compile code to commonjs format
-   * @default false
+   * "transform mode" means transform files one by one
    */
-  lib?: boolean;
+  transform?: {
+    /**
+     * Which type of contents would be generated
+     * "cjs" - Commonjs with ES5 synatx (targeting Node version under 12);
+     * "esm" - ES Module with ES5 synatx (lagacy outputs);
+     * "es2017" - ES Module with ES2017 (targeting modern browsers and Node version upon 12)
+     * @default ['esm','es2017']
+     */
+    formats?: Array<'cjs' | 'esm' | 'es2017'>;
+    /**
+     * Exclude all files matching any of those conditions.
+     * - `string` to match any paths by `minimatch` glob patterns
+     * - An `array` to match at least one of the conditions
+     * @see https://github.com/isaacs/minimatch
+     */
+    excludes?: string | string[];
+  };
 
-  umd?: {
+  /**
+   * "bundle mode" means bundle everything up by using of Rollup
+   */
+  bundle?: {
     /**
      * Export name
      * @default package.name
      */
     name?: string;
-
-    sourceMaps?: boolean | 'inline';
-
-    minify?: boolean | JsMinifyOptions;
-
     /**
      * As the name of the generated file.
-     * @default index.js
+     * @default index
      */
     filename?: string;
 
+    development?: boolean;
     /**
-     * Configure polyfills & env all in once
+     * Which type of contents would be generated
+     * "umd"
+     * "esm"
+     * "es2017"
+     * @default ['esm','es2017']
      */
-    env?: JscTarget | EnvConfig;
-
+    formats?: Array<'umd' | 'esm' | 'es2017'>;
     /**
-     * Tree shaking unnecessary code by platform
-     * @default false
+     * Specify external dependencies.
+     * "boolean" - whether to bundle all dependencies or not;
+     * "object" - specific external dependencies.
+     * @default true nono of dependencies will be bundled by default
      */
-    enablePlatformLoader?: boolean;
+    externals?: boolean | Record<string, string>;
   };
 }

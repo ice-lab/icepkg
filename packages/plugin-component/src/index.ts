@@ -1,8 +1,8 @@
 import { registerdUserConfig } from './config/useConfig.js';
 
-import type { ComponentPlugin } from '@ice/pkg';
+import type { PkgPlugin } from '@ice/pkg';
 
-const plugin: ComponentPlugin = (api) => {
+const plugin: PkgPlugin = (api) => {
   const {
     registerUserConfig,
     registerTask,
@@ -11,24 +11,28 @@ const plugin: ComponentPlugin = (api) => {
 
   const { userConfig } = context;
 
-  // @ts-ignore
   registerUserConfig(registerdUserConfig);
 
-  registerTask('component-es', {
-    type: 'transform',
+  (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {
+    registerTask(`pkg-${format}`, {
+      type: 'transform',
+    });
   });
 
-  registerTask('component-esnext', {
-    type: 'transform',
-  });
+  if (userConfig?.bundle) {
+    const bundleTasks = (userConfig?.bundle?.formats || ['esm', 'es2017']);
+    if (bundleTasks.includes('umd') || bundleTasks.includes('esm')) {
+      registerTask('pkg-dist-es5', {
+        type: 'bundle',
+      });
+    }
 
-  userConfig.lib && registerTask('component-lib', {
-    type: 'transform',
-  });
-
-  userConfig.umd && registerTask('component-dist', {
-    type: 'bundle',
-  });
+    if (bundleTasks.includes('es2017')) {
+      registerTask('pkg-dist-es2017', {
+        type: 'bundle',
+      });
+    }
+  }
 };
 
 export default plugin;
