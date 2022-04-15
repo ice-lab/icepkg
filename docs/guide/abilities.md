@@ -43,7 +43,6 @@ if (__DEV__) {
 发生了什么？实际上，在 Package 编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV`。
 :::
 
-
 ## 生成类型文件
 
 `@ice/pkg` 默认为 TypeScript 生成类型文件，无需主动开启。

@@ -127,7 +127,6 @@ swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuratio
 | before.build.load   | { args: CommandArgs; config: PkgConfig[] } | 获取所有任务配置后|
 | before.build.run    | { args: CommandArgs; config: PkgConfig[]  } | 编译执行之前  |
 | after.build.compile | - | 编译结束              |
-| error | { errCode: string; err: Error } | 错误              |
 
 + start 命令
 
@@ -136,4 +135,3 @@ swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuratio
 | before.start.load   | { args: CommandArgs; config: PkgConfig[] } | 获取所有任务配置后|
 | before.start.run    | { args: CommandArgs; config: PkgConfig[]  } | 编译执行之前  |
 | after.start.compile | - | 编译结束              |
-| error | { errCode: string; err: Error } | 错误              |

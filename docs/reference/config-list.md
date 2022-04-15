@@ -19,6 +19,13 @@ export default defineConfig({
 })
 ```
 
+## define
+
++ 类型 `string|boolean|object|null|undefined`
++ 默认值 `{}`
+
+定义编译时环境变量，会在编译时被替换。详细介绍 [工程能力 - define](./)
+
 ## sourceMaps
 
 + 类型 `boolean | 'inline'`
