@@ -51,12 +51,12 @@ const plugin = (api) => {
 
   // 不指定 Task name
   onGetConfig(config => {
-    return (
+    return {
       ...config,
       rollupPlugins: [
         svelte(...) // 编译 svelte 文件则会进行对应的
       ]
-    )
+    }
   })
 }
 ```

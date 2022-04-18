@@ -6,7 +6,7 @@ Library 的开发场景主要有：
 + 同时提供未压缩的版本，满足开发态需求
 + 同时需要提供 NPM package 消费的产物
 
-`@ice/pkg` 的 transform 模式和 bundle 模式统统满足你的要求。现在，通过一下进行配置：
+`@ice/pkg` 的 transform 模式和 bundle 模式统统满足你的要求。现在，通过以下进行配置：
 
 ```ts title=build.config.ts
 import { defineConfig } from '@ice/pkg';

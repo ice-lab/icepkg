@@ -81,7 +81,7 @@ export function add(a: number, b: number): number;
 
 ## transfrom
 
-该字段定义 transform 模式下额外的配置。`bundle` 包含以下配置：
+该字段定义 [transform 模式](/#双模式) 下额外的配置。`bundle` 包含以下配置：
 
 :::tip
 transform 模式是 `@ice/pkg` 默认的编译模式。
@@ -140,7 +140,7 @@ export default defineConfig({
 
 ## bundle
 
-该字段定义 bundle 模式下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
+该字段定义 [bundle 模式](/#双模式) 下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
 
 ### formats
 

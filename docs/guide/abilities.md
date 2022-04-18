@@ -67,6 +67,87 @@ export default defineConfig({
 });
 ```
 
-## CSS 支持
+## 支持 CSS
 
+@ice/pkg 默认支持 css、sass、less 等语法。若 `src` 文件夹下存在 `index.ts` 和 `a.css` 和 `b.css` 文件，可以直接在 `index.ts` 引入样式文件。如：
 
+```ts
+import './a.css';
+import './b.css'
+```
+
+在 [transform 模式](/#双模式) 下，样式文件会伴随 `index.ts` 一起编译到目标目录，会保持引入关系（见 [使用场景 - 只需引入单 javascript 文件](/scenarios/component#只需引入单-javascript-文件)）。
+
+在 [bundle 模式下](/#双模式) 下，样式会整体打包输出（见 [使用场景 - 分别引入 javascript 和 css 文件](/scenarios/component#分别引入-javascript-和-css-文件)）。
+
+@ice/pkg 也支持 [css modules](https://github.com/css-modules/css-modules)，样式文件需以 `.module.css`、`.module.less` 或 `.module.sass` 结尾。
+
+```ts
+import styles from './index.module.css';
+```
+
+## 消费 es2017 产物
+
+@ice/pkg 支持额外输出 es2017 规范的 [Modern 产物](https://web.dev/publish-modern-javascript/)。这份产物在编译时会保留大部分的 JavaScript 语法特性，比如：
+
++ Class
++ 箭头函数
++ async/await
++ 解构
++ spread 运算符
++ Generator
+
+但可以运行在[大部分的现代浏览器版本](https://caniuse.com/async-functions,object-values,object-entries,mdn-javascript_builtins_object_getownpropertydescriptors,pad-start-end,mdn-javascript_grammar_trailing_commas_trailing_commas_in_functions)上（市场份额 > 95%）。当网站不再转译这些语法时，文件的字节数得以大幅减少，从而极大地改善脚本加载性能。
+
+以下面一个简单的 React 组件为例：
+
+```tsx
+import { useState } from 'react';
+
+const App = () => {
+  const [count, setCount] = useState(0);
+
+  const addCount = () => {
+    setCount((c: number) => c + 1);
+  };
+
+  return (
+    <div>
+      <button onClick={addCount}>Add Count</button>
+      <p>{count}</p>
+    </div>
+  );
+};
+
+export default App;
+```
+
+输出 es2017 产物与 es5 产物的大小对比：
+
+|  产物   | 大小  |
+|  ----  | ----  |
+| es2017 产物  | 3.7k |
+| es5 产物  | 1.8k |
+
+并且，产物大小会随着使用的现代语法特性增多，差距变得越来越大。
+
+:::tip
+传统的 NPM Package 开发中，大量的代码仍被编译到 es5 语法。若你想计算你的网站在使用 es2017 产物后可实现的产物大小和性能的改进，可以试试 [estimator.dev](https://estimator.dev/) 这个工具。
+:::
+
+@ice/pkg **默认**输出 es2017 产物。也可通过以下配置输出：
+
+```ts
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  // transform 模式输出 es2017 产物
+  transform: {
+    formats: ['es2017']
+  },
+  // bundle 模式输出 es2017 产物
+  bundle: {
+    formats: ['esm', 'es2017']
+  }
+});
+```
