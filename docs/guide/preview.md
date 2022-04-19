@@ -1,6 +1,31 @@
 # 文档预览
 
-`@ice/pkg` 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/component-next/tree/main/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。用法：
+@ice/pkg 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
+
+在使用文档预览功能前，你需要额外安装 `@ice/pkg-plugin-docusaurus` 插件：
+
+```shell
+npm install @ice/pkg-plugin-docusaurus --save-dev
+
+# Or pnpm
+pnpm add @ice/pkg-plugin-docusaurus -D
+```
+
+并通过 [配置文件](/guide/config-file) 进行加载：
+
+```ts
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    ['@ice/pkg-plugin-docusaurus', {
+      title: '标题'
+    }]
+  ]
+})
+```
+
+大功告成。你可以通过以下指令启动服务：
 
 ```shell
 # 若存在 docs 文件夹，则默认启动文档预览；并启动 es/lib 编译
@@ -17,7 +42,7 @@ $ pkg-cli build
 
 文档以 `.md` 或 `.mdx` 为后缀，采用 [yaml](https://yaml.org/) 和 [markdown](https://daringfireball.net/projects/markdown/) 语法。
 
-````markdown
+````markdown title=index.md
 ---
 title: Simple Usage
 sidebar_position: 1
@@ -175,18 +200,4 @@ export interface PluginDocusaurusOptions {
    */
   sidebarItemsGenerator?: Function;
 };
-```
-
-使用方式如下：
-
-```ts
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  plugins: [
-    ['@ice/pkg-plugin-docusaurus', {
-      title: '标题'
-    }]
-  ]
-})
 ```

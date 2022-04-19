@@ -16,7 +16,7 @@ import MyComponent from 'my-component';
 该使用方式是 @ice/pkg 推荐并默认的使用方式。
 :::
 
-`@ice/pkg` 对于这种 React 开发形态提供了默认的支持，等同于配置：
+@ice/pkg 对于这种 React 开发形态提供了默认的支持，等同于配置：
 
 ```ts title=build.config.ts
 import { defineConfig } from '@ice/pkg';
@@ -64,7 +64,7 @@ import 'my-component/dist/index.css';
 + 组件使用 [sass](https://github.com/sass/sass)、[less](https://github.com/less/less.js) 等 CSS 预处理器语言编写，但需要输出 `.css` 样式。
 + 组件样式提供配置能力，比如支持外部 [css variable](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 
-在 `@ice/pkg` 中，推荐如下配置：
+在 @ice/pkg 中，推荐如下配置：
 
 ```ts title=build.config.ts
 import { defineConfig } from '@ice/pkg';

@@ -2,7 +2,7 @@
 
 ## 这是什么
 
-@ice/pkg 是飞冰团队对外开源的 NPM 包开发解决方案，提供 React 组件开发、Node 模块开发、前端 Library 多场景需求。
+@ice/pkg 是飞冰团队对外开源的 NPM 包开发解决方案，提供 React 组件开发、Node 模块开发、前端 Library [多场景需求](/scenarios/component)。
 
 ## 特性
 
@@ -26,13 +26,21 @@
 
 ### 双模式
 
-社区的众多方案如 [microBunlde](https://github.com/developit/microbundle)、[tsup](https://github.com/egoist/tsup) 均只支持 bundle (将众多文件打包成一个文件输出) 模式。但 bundle 模式[并非总是最佳选择](https://github.com/ice-lab/icepkg/issues/301)。其中最为**显著的问题**在于：**对 Tree-Shaking 不友好**，无用的依赖总是会被打包到最终的输出产物中，继而影响应用的体积。
+社区的众多方案如 [microbundle](https://github.com/developit/microbundle)、[tsup](https://github.com/egoist/tsup) 均只支持 bundle (将众多文件打包成一个文件输出) 模式。但 bundle 模式[并非总是最佳选择](https://github.com/ice-lab/icepkg/issues/301)。其中最为**显著的问题**在于：**对 Tree-Shaking 不友好**，无用的依赖总是会被打包到最终的输出产物中，继而影响应用的体积。
 
 @ice/pkg 除支持 bundle 模式外，默认支持 transform 模式（将文件挨个编译到输出目录）。
 
 ### es2017 产物
 
-为现代浏览器提供 es2017 产物，可以减少产物体积，亦可加快执行速度。更多内容参考。
+为现代浏览器提供 es2017 产物，可以减少产物体积，亦可加快执行速度。更多内容参考 [指南 - 消费 es2017 产物](/guide/abilities#消费-es2017-产物)。
+
+### 多场景
+
+依赖 @ice/pkg 强大的 [双模式](#双模式) 能力，支持多类场景的额开发需求。
+
++ [React 组件开发](/scenarios/component)
++ [开发 Node 模块](/scenarios/node)
++ [开发前端 library](/scenarios/library)
 
 ### 强大的预览能力
 

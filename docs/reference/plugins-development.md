@@ -1,6 +1,6 @@
 # 插件开发
 
-`@ice/pkg` 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。通过 build-scripts 插件，可以极大地扩展 `@ice/pkg` 的能力。
+@ice/pkg 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。通过 build-scripts 插件，可以极大地扩展 @ice/pkg 的能力。
 
 插件的使用如下：
 
@@ -16,7 +16,7 @@ export default defineConfig({
 
 ## 修改默认配置
 
-可以通过 `onGetConfig` API，可以修改 Package 编译的入口、出口等 `@ice/pkg` 等默认配置：
+可以通过 `onGetConfig` API，可以修改 Package 编译的入口、出口等 @ice/pkg 等默认配置：
 
 ```ts
 const plugin = (api) => {
@@ -32,7 +32,7 @@ const plugin = (api) => {
 }
 ```
 
-`@ice/pkg` 注册五个 build-script 任务：
+@ice/pkg 注册五个 build-script 任务：
 
 + `component-esm` - 默认启动
 + `component-es2017` - 默认启动
@@ -105,7 +105,7 @@ const plugin = (api) => {
 + 类型：`object`
 + 默认值 `{}`
 
-当开启 [lib](#lib) 选项，可通过 `rollupOptions` 配置额外的 [rollup 配置](https://rollupjs.org/guide/en/#command-line-flags)。
+当 [开启 bundle 模式](/reference/config-list#bundle)，可通过 `rollupOptions` 配置额外的 [rollup 配置](https://rollupjs.org/guide/en/#command-line-flags)。
 
 当试图修改 `rollupOptions.plugins` 参数时，建议直接使用 [rollupPlugins](#rollupPlugins) 参数。
 
@@ -118,7 +118,7 @@ swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuratio
 
 ## 插件生命周期钩子
 
-`@ice/pkg` 插件提供一下生命周期钩子：
+@ice/pkg 插件提供一下生命周期钩子：
 
 + build 命令：
 

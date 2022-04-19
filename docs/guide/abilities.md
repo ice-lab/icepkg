@@ -31,7 +31,7 @@ declare const __VERSION__: string
 ```
 :::
 
-`@ice/pkg` 为你默认注入 `__DEV__` 全局变量，这个变量在输出一些仅在 development 环境的信息时非常有用。比如，输出在用户开发态才显示的警告信息。
+@ice/pkg 为你默认注入 `__DEV__` 全局变量，这个变量在输出一些仅在 development 环境的信息时非常有用。比如，输出在用户开发态才显示的警告信息。
 
 ```ts title=index.ts
 if (__DEV__) {
@@ -39,13 +39,49 @@ if (__DEV__) {
 }
 ```
 
-:::info
-发生了什么？实际上，在 Package 编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV`。
+:::info 发生了什么？
+实际上，在 Package 编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV`。
 :::
 
 ## 生成类型文件
 
-`@ice/pkg` 默认为 TypeScript 生成类型文件，无需主动开启。
+@ice/pkg 默认为 TypeScript 生成类型文件，**无需主动开启**。
+
+对于一些用户可能使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成注解，你可以主动开启为 JavaScript 代码生成类型文件的能力。
+
+比如，函数 `add` 通过 JSDoc 进行类型注解：
+
+```js
+/**
+ *
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+export function add(a, b) {
+  return a + b;
+}
+```
+
+为 JavaScript 文件开启 [generateTypesForJs](/reference/config-list#generatetypesforjs) 配置：
+
+```ts
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  sourceMaps: true,
+});
+```
+
+则会生成一个 `add.d.ts` 文件，内容如下：
+
+```ts
+export function add(a: number, b: number): number;
+```
+
+:::warning 谨慎使用该配置
+若贸然为没有使用 JSDoc 注解的 JavaScript 代码开启该配置，可能会出现自动类型推断错误的情况。
+:::
 
 ## sourcemap
 
@@ -132,7 +168,7 @@ export default App;
 并且，产物大小会随着使用的现代语法特性增多，差距变得越来越大。
 
 :::tip
-传统的 NPM Package 开发中，大量的代码仍被编译到 es5 语法。若你想计算你的网站在使用 es2017 产物后可实现的产物大小和性能的改进，可以试试 [estimator.dev](https://estimator.dev/) 这个工具。
+传统的 NPM 包 开发中，大量的代码仍被编译到 es5 语法。若你想计算你的网站在使用 es2017 产物后可实现的产物大小和性能的改进，可以试试 [estimator.dev](https://estimator.dev/) 这个工具。
 :::
 
 @ice/pkg **默认**输出 es2017 产物。也可通过以下配置输出：

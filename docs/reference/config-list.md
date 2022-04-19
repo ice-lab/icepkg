@@ -24,67 +24,37 @@ export default defineConfig({
 + 类型 `string|boolean|object|null|undefined`
 + 默认值 `{}`
 
-定义编译时环境变量，会在编译时被替换。详细介绍 [工程能力 - define](./)
+定义编译时环境变量，会在编译时被替换。详细介绍 [工程能力 - define](/guide/abilities#define)。
 
 ## sourceMaps
 
 + 类型 `boolean | 'inline'`
 + 默认 `false`
 
-是否生成 sourcemap，这在代码调试的时候非常有用。
+是否生成 sourcemap，这在代码调试的时候非常有用。详细介绍 [工程能力 - 生成类型文件](/guide/abilities#sourcemap)。
 
 ## generateTypesForJs
 
 + 类型 `boolean`
 + 默认 `false`
 
-为 JavaScript 代码生成类型文件。`@ice/pkg` 默认为文件后缀为 `.ts` 生成类型文件。
+为 JavaScript 代码生成类型文件。@ice/pkg 默认为文件后缀为 `.ts` 生成类型文件。
 
-如果使用 [jsdoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。
-
-```js
-// 下面通过 jsdoc 进行了类型注解
-/**
- *
- * @param {number} a
- * @param {number} b
- * @returns {number}
- */
-export function add(a, b) {
-  return a + b;
-}
-```
-
-若开启该配置，则生成如下 `.d.ts` 文件：
-
-```ts
-export function add(a: number, b: number): number;
-```
-
-#### lib
-
-+ 类型 `boolean`
-+ 默认 `false`
-
-`@ice/pkg` 默认生成 `esm` 模块规范的代码。`esm` 模块已广泛应用于 Node（^12.20.0 || ^14.13.1 || >=16.0.0）和 Browser 端（webpack 4 & webpack 5 & vite & rollup）。
-
-若需要生成 `commonjs` 规范的产物，可以配置该选项，则会生成 `lib` 文件目录，存放 `commonjs` 产物。
-
-> 相应地，可能需要修改 [Package Exports](#Package-Exports) 导出的配置。
+如果使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。详细介绍 [工程能力 - 生成类型文件](/guide/abilities#生成类型文件)。
 
 ## plugins
 
 + 类型 `array`
 + 默认 `[]`
 
-`@ice/pkg` 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](#插件开发)。
+@ice/pkg 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](#插件开发)。
 
 ## transfrom
 
 该字段定义 [transform 模式](/#双模式) 下额外的配置。`bundle` 包含以下配置：
 
 :::tip
-transform 模式是 `@ice/pkg` 默认的编译模式。
+transform 模式是 @ice/pkg 默认的编译模式。
 :::
 
 ### formats
@@ -92,14 +62,14 @@ transform 模式是 `@ice/pkg` 默认的编译模式。
 + 类型 `['esm', 'cjs', 'es2017']`
 + 默认 `['esm', 'es2017']`
 
-输出的类型。`@ice/pkg` 会默认编译出 `esm` (输出 ES module + es5 产物) 和 `es2017` (输出 ES module + es2017 产物) 两个文件夹。
+输出的类型。@ice/pkg 会默认编译出 `esm` (输出 ES module + es5 产物) 和 `es2017` (输出 ES module + es2017 产物) 两个文件夹。
 
 ```shell
 - esm # ES module + es5 产物
 - es2017 # ES module + es2017 产物
 ```
 
-若想要输出 Commonjs 产物，可如下配置：
+若想要输出 CommonJS 产物，可如下配置：
 
 ```ts
 import { defineConfig } from '@ice/pkg';
@@ -114,7 +84,7 @@ export default defineConfig({
 则输出如下文件夹：
 
 ```shell
-- cjs # commonjs + es5 产物
+- cjs # CommonJS + es5 产物
 - esm # ES module + es5 产物
 - es2017 # ES module + es2017 产物
 ```

@@ -4,9 +4,9 @@ Library 的开发场景主要有：
 
 + 类似 React、lodash、moment 等需要对外提供 UMD 产物
 + 同时提供未压缩的版本，满足开发态需求
-+ 同时需要提供 NPM package 消费的产物
++ 同时需要提供 NPM 包 消费的产物
 
-`@ice/pkg` 的 transform 模式和 bundle 模式统统满足你的要求。现在，通过以下进行配置：
+@ice/pkg 的 [transform 模式](/#双模式) 和 [bundle 模式](#双模式) 统统满足你的要求。现在，通过以下进行配置：
 
 ```ts title=build.config.ts
 import { defineConfig } from '@ice/pkg';
