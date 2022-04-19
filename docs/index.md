@@ -19,9 +19,9 @@
   fontSize:'13px',
   lineHeight:'20px'
 }}>
-  <img src="https://img.alicdn.com/imgextra/i3/O1CN01qfRmm128fH2PXwmDa_!!6000000007959-1-tps-1342-268.gif" alt="benchmark" />
+  <img src="https://img.alicdn.com/imgextra/i1/O1CN01MoY2ji23DGjyTw2Dh_!!6000000007221-2-tps-2972-638.png" alt="benchmark" />
 
-<figcaption>Above: benchmark 使用 <a href="https://github.com/maoxiaoke/pkg-benchmark">飞冰 fusion pro</a> 模板。单位 ms。</figcaption>
+<figcaption>Above: benchmark 使用 <a href="https://github.com/maoxiaoke/pkg-benchmark">飞冰 fusion pro</a> 模板</figcaption>
 </figure>
 
 ### 双模式
