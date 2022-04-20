@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 ## 今天、明天
 
 import Button from './Button.tsx';
@@ -20,6 +24,8 @@ export default function App () {
       {state}
       <button onClick={add}>Add</button>
       // 我这里加点东西，再加地阿内容个，这是真的真的可以随便
+
+      <a href="/">跳转</a>
       <Button />
     </div>
   )

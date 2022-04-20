@@ -61,6 +61,7 @@ importers:
       '@docusaurus/preset-classic': 2.0.0-beta.17
       '@ice/pkg': 'workspace: *'
       '@ice/pkg-plugin-docusaurus': 'workspace: *'
+      '@swc/helpers': ^0.3.8
       babel-plugin-transform-remove-console: ^6.9.4
       consola: ^2.15.3
       core-js: ^3.21.1
@@ -69,6 +70,7 @@ importers:
       regenerator-runtime: ^0.13.9
     dependencies:
       '@docusaurus/preset-classic': 2.0.0-beta.17_2fb1d923377af186ee0d98bcf52b6020
+      '@swc/helpers': 0.3.8
       core-js: 3.21.1
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -4892,7 +4894,7 @@ packages:
       postcss-modules-values: 4.0.0_postcss@8.4.12
       postcss-value-parser: 4.2.0
       semver: 7.3.7
-      webpack: 5.72.0_webpack-cli@4.9.2
+      webpack: 5.72.0
 
   /css-minimizer-webpack-plugin/3.4.1_clean-css@5.3.0+webpack@5.72.0:
     resolution: {integrity: sha512-1u6D71zeIfgngN2XNRJefc/hY7Ybsxd74Jm4qngIXyUEk7fss3VUzuHxLAq/R8NAba4QU9OUSaMZlbpRc7bM4Q==}

@@ -5,6 +5,7 @@ const importRegex = /import\s+?(?:(?:(?:[\w*\s{},]*)\s+from\s+?)|)(?:(?:"(.*?)")
 const resolveImports = (code, filePath) => {
   let _code = code;
   const matches = (code.replace(/\n$/, '')).match(new RegExp(importRegex, 'g'));
+  console.log('matches----', matches);
 
   if (matches) {
     const imports = matches.map((matchStr) => {

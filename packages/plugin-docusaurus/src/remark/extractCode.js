@@ -8,6 +8,8 @@ const DEMO_PREFIX = 'IcePkgDemo';
 const rootDir = process.cwd();
 const previewerComponentPath = path.join(__dirname, '../Previewer/index.js');
 const demoDir = path.join(rootDir, '.docusaurus/demos');
+const pagesDir = path.join(rootDir, '.docusaurus/pages');
+
 
 /** Use the md5 value of docPath */
 const uniqueFilename = (originalDocPath, count) => {
@@ -46,11 +48,26 @@ const plugin = () => {
 
         fse.writeFileSync(filePath, resolvedCode, 'utf-8');
 
+        // TEST: 生成 pages
+        fse.ensureDirSync(pagesDir);
+        const pageDemo = path.join(pagesDir, `${demoFilename}.jsx`);
+        const pageCode = `
+          import * as React from 'react';
+          import Demo from '${filePath}';
+          export default () => {
+            return (
+              <Demo />
+            )
+          }
+        `;
+        fse.writeFileSync(pageDemo, pageCode, 'utf-8');
+
         demosMeta.push({
           code: node.value,
           idx: index,
           uniqueName: demoFilename,
           filePath,
+          url: `/pages/${demoFilename}`,
         });
       }
     });
@@ -63,13 +80,13 @@ const plugin = () => {
       });
 
       for (let m = 0; m < demosMeta.length; ++m) {
-        const { idx, code, filePath, uniqueName } = demosMeta[m];
+        const { idx, code, filePath, uniqueName, url } = demosMeta[m];
         const actualIdx = m === 0 ? idx + 1 : idx + 2;
 
         // Remove original code block and insert components
         ast.children.splice(actualIdx, 1, {
           type: 'jsx',
-          value: `<Previewer code={\`${code}\`}> <${uniqueName} /> </Previewer>`,
+          value: `<Previewer code={\`${code}\`} mobilePreview url={\`${url}\`}> <${uniqueName} /> </Previewer>`,
         }, {
           type: 'import',
           value: `import ${uniqueName} from '${filePath}';`,

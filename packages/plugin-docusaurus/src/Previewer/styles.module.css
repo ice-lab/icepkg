@@ -30,3 +30,57 @@
   border-color: #eee;
   border-style: solid;
 }
+
+.mobileWrapper {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #eee;
+}
+
+.iframeWrapper {
+  padding-top: 75px;
+  width: 375px;
+  height: 730px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  /* border-radius: 20px; */
+  /* box-shadow: 8px 8px 12px 12px #ebedf0; */
+  background: url(./iphoneX.png) no-repeat;
+  background-size: 100%;
+}
+
+.mobilePreviewWrapper {
+  display: flex;
+}
+
+.mobilePreviewArea {
+  margin-left: 10px;
+}
+
+.previewOpreations {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.mobileCodeWrapper {
+  flex: 1;
+}
+
+.operationItem {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+}
+
+.test {
+  height: 640px;
+}
+
+:global {
+
+}
