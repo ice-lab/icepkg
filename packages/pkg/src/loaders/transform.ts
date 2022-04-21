@@ -80,7 +80,7 @@ export default async function runTransform(cfg: TaskConfig, ctx: PkgContext) {
 
     fs.ensureDirSync(dirname(dest));
 
-    const id = (await container.resolveId(files[i].filePath))?.id || files[i].filePath;
+    const id = (await container.resolveId(files[i].filePath))?.id || files[i].absolutePath;
 
     const loadResult = await container.load(id);
 
