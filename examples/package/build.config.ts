@@ -14,11 +14,12 @@ export default defineConfig({
     },
   },
   transform: {
+    formats: ['es2017'],
     excludes: '**/test/*',
   },
-  bundle: {
-    development: true,
-    formats: ['esm', 'es2017'],
-    externals: true,
-  },
+  // bundle: {
+  //   development: true,
+  //   formats: ['esm', 'es2017'],
+  //   externals: true,
+  // },
 });
