@@ -49,7 +49,6 @@ const plugin = (options) => {
 
         fse.writeFileSync(filePath, resolvedCode, 'utf-8');
 
-        // TEST: 生成 pages
         fse.ensureDirSync(pagesDir);
         const pageDemo = path.join(pagesDir, `${demoFilename}.jsx`);
         const pageCode = `
