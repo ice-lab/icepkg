@@ -17,7 +17,6 @@ function BiArrowsFullscreen(props) {
 }
 
 function MobilePreview({ code, url }) {
-  console.log('MobilePreview-----', url);
   const redirctFullScreen = () => {
     window.open(url);
   };
@@ -50,6 +49,7 @@ function MobilePreview({ code, url }) {
         </div>
         <div className={styles.iframeWrapper}>
           <iframe
+            className="hidden-scroller"
             style={{ width: '325px', height: '640px', backgroundColor: '#FFF' }}
             scrolling="yes"
             frameBorder="0"

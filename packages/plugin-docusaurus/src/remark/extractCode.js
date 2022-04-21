@@ -10,7 +10,6 @@ const previewerComponentPath = path.join(__dirname, '../Previewer/index.js');
 const demoDir = path.join(rootDir, '.docusaurus/demos');
 const pagesDir = path.join(rootDir, '.docusaurus/pages');
 
-
 /** Use the md5 value of docPath */
 const uniqueFilename = (originalDocPath, count) => {
   const hash = crypto.createHash('md5');
@@ -25,7 +24,9 @@ const uniqueFilename = (originalDocPath, count) => {
  * @param {*} options
  * @returns
  */
-const plugin = () => {
+const plugin = (options) => {
+  const { mobilePreview = false } = options;
+
   const transformer = async (ast, vfile) => {
     const demosMeta = [];
     let id = 0;
@@ -86,7 +87,7 @@ const plugin = () => {
         // Remove original code block and insert components
         ast.children.splice(actualIdx, 1, {
           type: 'jsx',
-          value: `<Previewer code={\`${code}\`} mobilePreview url={\`${url}\`}> <${uniqueName} /> </Previewer>`,
+          value: `<Previewer code={\`${code}\`} mobilePreview={${mobilePreview}} url={\`${url}\`}> <${uniqueName} /> </Previewer>`,
         }, {
           type: 'import',
           value: `import ${uniqueName} from '${filePath}';`,

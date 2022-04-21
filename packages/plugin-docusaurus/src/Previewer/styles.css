@@ -1,3 +1,7 @@
 .mobile-previewer pre {
   height: 720px;
 }
+
+.hidden-scroller::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}

@@ -3,7 +3,6 @@ import PcPreview from './Pc';
 import MobilePreview from './Mobile';
 
 function Previewer({ mobilePreview, children, ...props }) {
-  console.log('fsfd', mobilePreview);
   if (mobilePreview) {
     return <MobilePreview {...props} />;
   } else {

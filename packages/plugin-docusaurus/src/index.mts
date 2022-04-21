@@ -32,6 +32,11 @@ export interface PluginDocusaurusOptions {
    * DevServer port for your doc.
    */
   port?: number;
+
+  /**
+   * Whether preview components of mobile styles
+   */
+  mobilePreview?: boolean;
 }
 
 const defaultOptions: PluginDocusaurusOptions = {
