@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import CodeBlock from '@theme-original/CodeBlock';
-import copy from 'copy-text-to-clipboard';
 import styles from './styles.module.css';
 import './styles.css';
 
@@ -17,45 +16,46 @@ function BiArrowsFullscreen(props) {
 }
 
 function MobilePreview({ code, url }) {
+  const iframe = useRef(null);
   const redirctFullScreen = () => {
     window.open(url);
   };
+  const reloadIframe = () => {
+    iframe?.current?.contentWindow.location.reload();
+  };
+
   return (
     <div className={`${styles.mobileWrapper} mobile-previewer`}>
       <div className={styles.mobileCodeWrapper}>
-        <div className={styles.mobleOperations}>
-            <div className={styles.previewOpreations}>
-              <div className={styles.operationItem}><BiArrowRepeat /> &nbsp;刷新</div>
-        <div className={styles.operationItem}><BiArrowsFullscreen />  &nbsp;全屏模式</div>
-          </div>
-        </div>
-      <CodeBlock
-        children={code}
-        className="language-jsx"
-        mdxType= "code"
-        originalType="code"
-        parentName="pre" />
+        <CodeBlock
+          children={code}
+          className="language-jsx"
+          mdxType= "code"
+          originalType="code"
+          parentName="pre" />
       </div>
 
       <div className={styles.mobilePreviewArea}>
-        <div className={styles.mobleOperations}>
-          <div className={styles.previewOpreations}>
-            <div className={styles.operationItem}><BiArrowRepeat /> &nbsp;刷新</div>
-            <div
-              className={styles.operationItem}
-              onClick={redirctFullScreen}
-              ><BiArrowsFullscreen />  &nbsp;全屏模式</div>
-          </div>
+        <div className={styles.mobileOperations}>
+          <div
+            className={styles.operationItem}
+            onClick={reloadIframe}
+            ><BiArrowRepeat /> &nbsp;刷新</div>
+          <div
+            className={styles.operationItem}
+            onClick={redirctFullScreen}
+            ><BiArrowsFullscreen />  &nbsp;全屏模式</div>
         </div>
         <div className={styles.iframeWrapper}>
           <iframe
-            className="hidden-scroller"
-            style={{ width: '325px', height: '640px', backgroundColor: '#FFF' }}
+            ref={iframe}
+            style={{ width: '325px', height: '600px', backgroundColor: '#FFF' }}
             scrolling="yes"
             frameBorder="0"
             src={url}
             />
         </div>
+
       </div>
     </div>
   );

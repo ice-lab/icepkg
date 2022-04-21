@@ -43,8 +43,6 @@
   overflow: hidden;
   display: flex;
   justify-content: center;
-  /* border-radius: 20px; */
-  /* box-shadow: 8px 8px 12px 12px #ebedf0; */
   background: url(./iphoneX.png) no-repeat;
   background-size: 100%;
 }
@@ -54,14 +52,21 @@
 }
 
 .mobilePreviewArea {
-  margin-left: 10px;
+  margin-left: 20px;
+  position: relative;
 }
 
-.previewOpreations {
+.mobileOperations {
+  transform: translateX(-50%);
+  left: 50%;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-bottom: 5px;
+  position: absolute;
+  height: 40px;
+  width: 325px;
+  bottom: 20px;
+  border-top: 2px solid #eee;
 }
 
 .mobileCodeWrapper {
@@ -74,12 +79,4 @@
   font-size: 14px;
   color: #666;
   cursor: pointer;
-}
-
-.test {
-  height: 640px;
-}
-
-:global {
-
 }
