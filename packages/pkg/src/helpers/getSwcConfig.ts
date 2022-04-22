@@ -6,9 +6,9 @@ import type { Config, ModuleConfig } from '@swc/core';
 export const getBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
   const define = stringifyObject(userConfig?.define ?? {});
 
-  const target = taskName === 'pkg-dist-es2017' ? 'es2017' : 'es5';
+  const target = taskName === 'dist-es2017' ? 'es2017' : 'es5';
 
-  const browserTargets = taskName === 'pkg-dist-es2017' ? {
+  const browserTargets = taskName === 'dist-es2017' ? {
     // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
     chrome: 61,
     safari: 10.1,
@@ -52,11 +52,11 @@ export const getTransformSwcConfig = (userConfig: UserConfig, taskName: TaskName
   const sourceMaps = userConfig?.sourceMaps;
   const define = stringifyObject(userConfig?.define ?? {});
 
-  const module: ModuleConfig = taskName === 'pkg-cjs'
+  const module: ModuleConfig = taskName === 'cjs'
     ? { type: 'commonjs' }
     : undefined;
 
-  const target = taskName === 'pkg-es2017' ? 'es2017' : 'es5';
+  const target = taskName === 'es2017' ? 'es2017' : 'es5';
 
   return {
     jsc: {

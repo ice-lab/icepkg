@@ -5,8 +5,9 @@ import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/
 import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
+import { reportSize } from '../helpers/reportSize.js';
 
-import type { PkgContext, TaskConfig } from '../types.js';
+import type { PkgContext, TaskLoaderConfig } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
 export interface File {
@@ -25,11 +26,11 @@ export interface File {
   map?: string | SourceMapInput;
 }
 
-export default async function runTransform(cfg: TaskConfig, ctx: PkgContext) {
-  const { rootDir, userConfig } = ctx;
+export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContext) {
+  const { rootDir, userConfig, command } = ctx;
   const { outputDir, entry, rollupPlugins } = cfg;
 
-  const logger = createLogger('transform');
+  const logger = createLogger(cfg.name);
   const entryDir = entry;
 
   let files: File[];
@@ -66,7 +67,7 @@ export default async function runTransform(cfg: TaskConfig, ctx: PkgContext) {
 
   const transformStart = performance.now();
 
-  logger.info('Build start...');
+  logger.debug('Build start...');
 
   // @ts-ignore FIXME: ignore
   await container.buildStart(cfg);
@@ -143,7 +144,23 @@ export default async function runTransform(cfg: TaskConfig, ctx: PkgContext) {
 
   await container.close();
 
-  logger.info(`⚡️ Build success in ${(performance.now() - transformStart).toFixed(2)}ms`);
+  logger.info(`⚡️ Build success in ${timeFrom(transformStart)}`);
+
+  if (command === 'build') {
+    const reportSizeStart = performance.now();
+    reportSize(
+      files
+        .reduce((pre, chunk) => {
+          const relativeDest = relative(outputDir, chunk.dest);
+          return {
+            ...pre,
+            [relativeDest]: chunk.code ? chunk.code : fs.readFileSync(chunk.dest),
+          };
+        }, {}),
+    );
+
+    logger.debug(`ReportSize consume ${timeFrom(reportSizeStart)}`);
+  }
 
   return files;
 }

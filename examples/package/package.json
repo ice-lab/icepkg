@@ -10,7 +10,7 @@
     "default": "./es/index.js"
   },
   "scripts": {
-    "build": "CONSOLA_LEVEL=4 ice-pkg build",
+    "build": "ice-pkg build",
     "start": "CONSOLA_LEVEL=4 ice-pkg start",
     "help": "ice-pkg --help",
     "test": "echo \"Error: no test specified\" && exit 1"

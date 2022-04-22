@@ -4,12 +4,12 @@ import { getEntryDir, getEntryFile } from './getTaskEntry.js';
 import { getBundleSwcConfig, getTransformSwcConfig } from './getSwcConfig.js';
 import { normalizeRollupConfig } from './normalizeRollupConfig.js';
 
-import type { PkgContext, TaskConfig, PkgTaskConfig, TaskName } from '../types.js';
+import type { PkgContext, TaskLoaderConfig, PkgTaskConfig, TaskName } from '../types.js';
 
 export const mergeConfigOptions = (
   cfg: PkgTaskConfig,
   ctx: PkgContext,
-): TaskConfig => {
+): TaskLoaderConfig => {
   const { rootDir, userConfig } = ctx;
   const { config: taskConfig, name: taskName } = cfg;
   const normalizedConfig = { ...taskConfig };
@@ -21,8 +21,8 @@ export const mergeConfigOptions = (
     isBundleTask ? getEntryFile(rootDir) : getEntryDir(rootDir)
   );
 
-  // Configure task outputDir（Taskname 以 pkg-[cjs|esm|es2017 命名]）
-  normalizedConfig.outputDir = outputDir || join(rootDir, taskName.split('-')[1]);
+  // Configure task outputDir（Taskname 以 [cjs|esm|es2017|dist-es5|dist-es2017 命名]）
+  normalizedConfig.outputDir = outputDir || join(rootDir, taskName.split('-')[0]);
 
   // Configure swcOptions
   const swcOptionOverride = deepmerge(
@@ -44,5 +44,8 @@ export const mergeConfigOptions = (
   normalizedConfig.rollupPlugins = resolvedPlugins;
   normalizedConfig.rollupOptions = resolvedRollupOption;
 
-  return normalizedConfig;
+  return {
+    ...normalizedConfig,
+    name: taskName as TaskName,
+  };
 };

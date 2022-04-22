@@ -172,7 +172,7 @@ export const normalizeRollupConfig = (
           userConfig,
           pkg: pkg as PkgJson,
           outputDir: cfg.outputDir,
-          isES2017: taskName === 'pkg-dist-es2017',
+          isES2017: taskName === 'dist-es2017',
         }),
       },
       cfg.rollupOptions || {},

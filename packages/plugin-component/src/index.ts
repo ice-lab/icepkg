@@ -14,7 +14,7 @@ const plugin: PkgPlugin = (api) => {
   registerUserConfig(registerdUserConfig);
 
   (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {
-    registerTask(`pkg-${format}`, {
+    registerTask(`${format}`, {
       type: 'transform',
     });
   });
@@ -22,13 +22,13 @@ const plugin: PkgPlugin = (api) => {
   if (userConfig?.bundle) {
     const bundleTasks = (userConfig?.bundle?.formats || ['esm', 'es2017']);
     if (bundleTasks.includes('umd') || bundleTasks.includes('esm')) {
-      registerTask('pkg-dist-es5', {
+      registerTask('dist-es5', {
         type: 'bundle',
       });
     }
 
     if (bundleTasks.includes('es2017')) {
-      registerTask('pkg-dist-es2017', {
+      registerTask('dist-es2017', {
         type: 'bundle',
       });
     }

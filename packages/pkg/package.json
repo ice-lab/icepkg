@@ -38,6 +38,7 @@
     "escape-string-regexp": "^5.0.0",
     "fs-extra": "^10.0.0",
     "globby": "^11.0.4",
+    "gzip-size": "^7.0.0",
     "magic-string": "^0.25.7",
     "picocolors": "^1.0.0",
     "postcss": "^8.4.6",

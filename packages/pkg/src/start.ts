@@ -4,10 +4,10 @@ import { createWatcher } from './helpers/watcher.js';
 import { debouncePromise } from './utils.js';
 import { buildAll } from './buildAll.js';
 
-import type { PkgContext, TaskConfig } from './types.js';
+import type { PkgContext, TaskLoaderConfig } from './types.js';
 
 const debouncedBuildAll = debouncePromise(
-  async (cfgArrs: TaskConfig[], ctx: PkgContext) => {
+  async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
     await buildAll(cfgArrs, ctx);
   },
   100,

@@ -4,7 +4,11 @@ import type { Config } from '@swc/core';
 
 export type PlainObject = Record<string, string | boolean | number | object>;
 
-export type RollupPluginFn<T = {}> = (args: T) => Plugin;
+export type RollupPluginFn<T = {}> = (args?: T) => Plugin;
+
+export interface TaskLoaderConfig extends TaskConfig {
+  name: TaskName;
+}
 
 export interface TaskConfig {
   /**
@@ -48,7 +52,7 @@ export type PkgPluginAPI = IPluginAPI<TaskConfig>;
 
 export type PkgPlugin = IPlugin<TaskConfig>;
 
-export type TaskName = 'pkg-cjs' | 'pkg-esm' | 'pkg-es2017' | 'pkg-dist-es5' | 'pkg-dist-es2017';
+export type TaskName = 'cjs' | 'esm' | 'es2017' | 'dist-es5' | 'dist-es2017';
 
 export interface UserConfig {
   /**
