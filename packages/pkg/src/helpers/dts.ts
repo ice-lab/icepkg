@@ -51,8 +51,6 @@ export default function dtsCompile(files: File[]): DtsInputFile[] {
     host,
   );
 
-  logger.debug(timeFrom(dtsCompileStart));
-
   const emitResult = program.emit();
 
   if (emitResult.diagnostics && emitResult.diagnostics.length > 0) {
@@ -66,6 +64,8 @@ export default function dtsCompile(files: File[]): DtsInputFile[] {
       }
     });
   }
+
+  logger.debug(timeFrom(dtsCompileStart));
 
   return _files.map((file) => ({
     ...file,

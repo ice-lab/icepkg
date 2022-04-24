@@ -130,8 +130,8 @@ export const normalizeRollupConfig = (
   if (type === 'transform') {
     resolvedPlugins = [
       ...resolvedPlugins,
-      ...commonPlugins,
       dtsPlugin(cfg.entry, userConfig?.generateTypesForJs),
+      ...commonPlugins,
     ];
 
     return [resolvedPlugins, rollupOptions];

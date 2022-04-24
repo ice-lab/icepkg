@@ -11,31 +11,57 @@ const dtsFilter = createFilter(
   /node_modules/, // exclude
 );
 
+const cachedContents: Record<string, {
+  srcCode: string;
+  updated?: boolean;
+  ext?: string;
+  generatedCode?: string;
+  [index: string]: any;
+}> = {};
+
 // dtsPlugin is used to generate declartion file when transforming
 function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
-  const files = [];
+  const ids: string[] = [];
   return {
     name: 'ice-pkg:dts',
     transform(_, id) {
       if (dtsFilter(id)) {
-        files.push({
-          ext: extname(id),
-          filePath: id,
-        });
+        if (!cachedContents[id]) {
+          cachedContents[id] = { srcCode: _, updated: true, ext: extname(id) };
+        } else if (cachedContents[id].srcCode === _) {
+          cachedContents[id].updated = false;
+        } else {
+          cachedContents[id].srcCode = _;
+          cachedContents[id].updated = true;
+        }
+
+        ids.push(id);
       }
       // Always return null to escape transforming
       return null;
     },
 
     buildEnd() {
-      const compileFiles = files
+      const compileIds = ids
         .filter(
-          ({ ext, filePath }) =>
-            isTypescriptOnly(ext, filePath)
-          || (generateTypesForJs && isEcmascriptOnly(ext, filePath)),
+          (id) =>
+            isTypescriptOnly(cachedContents[id].ext, id)
+          || (generateTypesForJs && isEcmascriptOnly(cachedContents[id].ext, id)),
         );
 
-      const dtsFiles = dtsCompile(compileFiles);
+      const shouldUpdateDts = compileIds.some((id) => cachedContents[id].updated);
+
+      let dtsFiles;
+      if (shouldUpdateDts) {
+        const compileFiles = compileIds.map((id) => ({
+          ext: cachedContents[id].ext,
+          filePath: id,
+        }));
+        // @ts-ignore
+        dtsFiles = dtsCompile(compileFiles);
+      } else {
+        dtsFiles = ids.map((id) => cachedContents[id]);
+      }
 
       dtsFiles.forEach((file) => {
         this.emitFile({
@@ -43,6 +69,11 @@ function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypes
           fileName: relative(entry, file.dtsPath),
           source: file.dtsContent,
         });
+
+        cachedContents[file.filePath] = {
+          ...cachedContents[file.filePath],
+          ...file,
+        };
       });
     },
   };
