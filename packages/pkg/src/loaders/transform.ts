@@ -5,26 +5,9 @@ import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/
 import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
-import { reportSize } from '../helpers/reportSize.js';
 
-import type { PkgContext, TaskLoaderConfig } from '../types.js';
+import type { PkgContext, TaskLoaderConfig, OutputFile } from '../types.js';
 import type { SourceMapInput } from 'rollup';
-
-export interface File {
-  // globby parsed path, which is relative
-  filePath: string;
-  // absolute path
-  absolutePath: string;
-  // extension
-  // ext: 'jsx' | 'js' | 'ts' | 'tsx' | 'mjs' | 'png' | 'scss' | 'less' | 'css' | 'png' | 'jpg';
-  ext: string;
-  // where to store target files
-  dest?: string;
-  // parsed code
-  code?: string;
-  // source map
-  map?: string | SourceMapInput;
-}
 
 export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContext) {
   const { rootDir, userConfig, command } = ctx;
@@ -33,7 +16,7 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
   const logger = createLogger(cfg.name);
   const entryDir = entry;
 
-  let files: File[];
+  let files: OutputFile[];
 
   if (isDirectory(entry)) {
     files =
@@ -146,21 +129,5 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
 
   logger.info(`⚡️ Build success in ${timeFrom(transformStart)}`);
 
-  if (command === 'build') {
-    const reportSizeStart = performance.now();
-    reportSize(
-      files
-        .reduce((pre, chunk) => {
-          const relativeDest = relative(outputDir, chunk.dest);
-          return {
-            ...pre,
-            [relativeDest]: chunk.code ? chunk.code : fs.readFileSync(chunk.dest),
-          };
-        }, {}),
-    );
-
-    logger.debug(`ReportSize consume ${timeFrom(reportSizeStart)}`);
-  }
-
-  return files;
+  return files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) }));
 }

@@ -1,6 +1,5 @@
-import { join } from 'path';
 import deepmerge from 'deepmerge';
-import { getEntryDir, getEntryFile } from './getTaskEntry.js';
+import { getEntryDir, getEntryFile, getOutputDir } from './getTaskIO.js';
 import { getBundleSwcConfig, getTransformSwcConfig } from './getSwcConfig.js';
 import { normalizeRollupConfig } from './normalizeRollupConfig.js';
 
@@ -21,8 +20,8 @@ export const mergeConfigOptions = (
     isBundleTask ? getEntryFile(rootDir) : getEntryDir(rootDir)
   );
 
-  // Configure task outputDir（Taskname 以 [cjs|esm|es2017|dist-es5|dist-es2017 命名]）
-  normalizedConfig.outputDir = outputDir || join(rootDir, taskName.split('-')[0]);
+  // Configure task outputDir
+  normalizedConfig.outputDir = outputDir || getOutputDir(rootDir, taskName as TaskName);
 
   // Configure swcOptions
   const swcOptionOverride = deepmerge(
