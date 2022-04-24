@@ -15,7 +15,7 @@ export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOpt
   const mobilePreview = !!params.mobilePreview;
 
   const prismReactRendererPath = path.dirname(require.resolve('prism-react-renderer/package.json', {
-    paths: [__dirname, rootDir],
+    paths: [rootDir, __dirname],
   }));
 
   const templatePath = path.join(__dirname, './template/docusaurus.hbs');
