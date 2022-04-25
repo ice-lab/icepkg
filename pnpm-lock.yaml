@@ -148,7 +148,7 @@ importers:
       '@types/node': ^17.0.2
       acorn: ^8.7.0
       autoprefixer: ^10.4.2
-      build-scripts: ^2.0.0-17
+      build-scripts: 2.0.0-18
       cac: ^6.7.12
       chokidar: ^3.5.3
       consola: ^2.15.3
@@ -11649,7 +11649,7 @@ packages:
   /wide-align/1.1.5:
     resolution: {integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg==}
     dependencies:
-      string-width: 1.0.2
+      string-width: 4.2.3
 
   /widest-line/3.1.0:
     resolution: {integrity: sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==}
