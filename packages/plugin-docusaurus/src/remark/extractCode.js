@@ -58,9 +58,8 @@ const plugin = (options) => {
         fse.ensureDirSync(pagesDir);
         const pageDemo = path.join(pagesDir, `${demoFilename}.jsx`);
         const pageCode = `
-          import * as React from 'react';
           import Demo from '${filePath}';
-          export default () => <Demo />;
+          export default Demo;
         `;
         fse.writeFileSync(pageDemo, pageCode, 'utf-8');
 
