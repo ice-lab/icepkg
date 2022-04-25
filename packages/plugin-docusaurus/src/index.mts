@@ -34,6 +34,10 @@ export interface PluginDocusaurusOptions {
   port?: number;
 
   /**
+   * Function used to replace the sidebar items.
+   */
+  sidebarItemsGenerator?: Function;
+  /**
    * Whether preview components of mobile styles
    */
   mobilePreview?: boolean;

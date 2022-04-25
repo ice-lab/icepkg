@@ -11,6 +11,14 @@ const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOptions) {
+  const docusaurusClassPresetPath = require.resolve('@docusaurus/preset-classic', {
+    paths: [__dirname, rootDir],
+  });
+
+  const sidebarItemsGenerator = params?.sidebarItemsGenerator
+    ? params?.sidebarItemsGenerator.toString()
+    : false;
+
   const haveStaticFiles = fs.pathExistsSync(path.join(rootDir, 'static'));
   const mobilePreview = !!params.mobilePreview;
 
@@ -23,6 +31,8 @@ export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOpt
 
   const targetContents = hbs.compile(templateContents)({
     ...params,
+    docusaurusClassPresetPath,
+    sidebarItemsGenerator,
     haveStaticFiles,
     mobilePreview,
     prismReactRendererPath,

@@ -24,7 +24,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@docusaurus/preset-classic": "2.0.0-beta.17",
     "@swc/helpers": "^0.3.8",
     "core-js": "^3.21.1",
     "react": "^17.0.2",

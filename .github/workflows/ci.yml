@@ -35,6 +35,14 @@ jobs:
       - run: pnpm run test
       - run: pnpm run coverage
 
+      - run: pnpm run doc-build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        if: github.ref == 'refs/heads/feat/master'
+        with:
+          BRANCH: gh-pages
+          FOLDER: build
+
       # 暂时不发布 package
       # - run: npm run publish:packages
       #   env:
