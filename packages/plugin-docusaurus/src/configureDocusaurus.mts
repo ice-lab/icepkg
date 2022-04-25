@@ -2,13 +2,21 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 import hbs from 'handlebars';
+import { createRequire } from 'module';
 
 import type { PluginDocusaurusOptions } from './index.mjs';
+
+const require = createRequire(import.meta.url);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOptions) {
   const haveStaticFiles = fs.pathExistsSync(path.join(rootDir, 'static'));
+  const mobilePreview = !!params.mobilePreview;
+
+  const prismReactRendererPath = path.dirname(require.resolve('prism-react-renderer/package.json', {
+    paths: [rootDir, __dirname],
+  }));
 
   const templatePath = path.join(__dirname, './template/docusaurus.hbs');
   const templateContents = fs.readFileSync(templatePath, 'utf-8');
@@ -16,6 +24,8 @@ export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOpt
   const targetContents = hbs.compile(templateContents)({
     ...params,
     haveStaticFiles,
+    mobilePreview,
+    prismReactRendererPath,
   });
 
   // Write config to .docusaurus

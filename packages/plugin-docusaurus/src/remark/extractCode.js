@@ -8,6 +8,13 @@ const DEMO_PREFIX = 'IcePkgDemo';
 const rootDir = process.cwd();
 const previewerComponentPath = path.join(__dirname, '../Previewer/index.js');
 const demoDir = path.join(rootDir, '.docusaurus/demos');
+const pagesDir = path.join(rootDir, '.docusaurus/pages');
+
+const escapeCode = (code) => {
+  return (code || '')
+    .replace(/`/g, '&#x60;')
+    .replace(/\$/g, '&#36;');
+};
 
 /** Use the md5 value of docPath */
 const uniqueFilename = (originalDocPath, count) => {
@@ -23,7 +30,9 @@ const uniqueFilename = (originalDocPath, count) => {
  * @param {*} options
  * @returns
  */
-const plugin = () => {
+const plugin = (options) => {
+  const { mobilePreview = false } = options;
+
   const transformer = async (ast, vfile) => {
     const demosMeta = [];
     let id = 0;
@@ -46,11 +55,20 @@ const plugin = () => {
 
         fse.writeFileSync(filePath, resolvedCode, 'utf-8');
 
+        fse.ensureDirSync(pagesDir);
+        const pageDemo = path.join(pagesDir, `${demoFilename}.jsx`);
+        const pageCode = `
+          import Demo from '${filePath}';
+          export default Demo;
+        `;
+        fse.writeFileSync(pageDemo, pageCode, 'utf-8');
+
         demosMeta.push({
           code: node.value,
           idx: index,
           uniqueName: demoFilename,
           filePath,
+          url: `/pages/${demoFilename}`,
         });
       }
     });
@@ -63,13 +81,13 @@ const plugin = () => {
       });
 
       for (let m = 0; m < demosMeta.length; ++m) {
-        const { idx, code, filePath, uniqueName } = demosMeta[m];
+        const { idx, code, filePath, uniqueName, url } = demosMeta[m];
         const actualIdx = m === 0 ? idx + 1 : idx + 2;
 
         // Remove original code block and insert components
         ast.children.splice(actualIdx, 1, {
           type: 'jsx',
-          value: `<Previewer code={\`${code}\`}> <${uniqueName} /> </Previewer>`,
+          value: `<Previewer code={\`${escapeCode(code)}\`} mobilePreview={${mobilePreview}} url="${url}"> <${uniqueName} /> </Previewer>`,
         }, {
           type: 'import',
           value: `import ${uniqueName} from '${filePath}';`,
