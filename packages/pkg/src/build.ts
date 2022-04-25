@@ -20,6 +20,7 @@ export default async (context: PkgContext) => {
     config: configs,
   });
 
+  // @ts-ignore fixme
   const normalizedConfigs = configs.map((config) => mergeConfigOptions(config, context));
 
   try {
