@@ -32,7 +32,7 @@
     "@swc/helpers": "^0.3.8",
     "acorn": "^8.7.0",
     "autoprefixer": "^10.4.2",
-    "build-scripts": "^2.0.0-17",
+    "build-scripts": "2.0.0-18",
     "cac": "^6.7.12",
     "chokidar": "^3.5.3",
     "consola": "^2.15.3",
