@@ -12,9 +12,10 @@ import dtsPlugin from '../plugins/dts.js';
 import minify from '../plugins/minify.js';
 import babelPlugin from '../plugins/babel.js';
 import { builtinNodeModules } from './builtinModules.js';
+import { TaskName } from '../types.js';
 
 import type { Plugin as RollupPlugin, RollupOptions, OutputOptions } from 'rollup';
-import type { TaskConfig, PkgContext, TaskName, UserConfig } from '../types.js';
+import type { TaskConfig, PkgContext, UserConfig } from '../types.js';
 
 interface PkgJson {
   name: string;
@@ -172,7 +173,7 @@ export const normalizeRollupConfig = (
           userConfig,
           pkg: pkg as PkgJson,
           outputDir: cfg.outputDir,
-          isES2017: taskName === 'pkg-dist-es2017',
+          isES2017: taskName === TaskName.BUNDLE_ES2017,
         }),
       },
       cfg.rollupOptions || {},

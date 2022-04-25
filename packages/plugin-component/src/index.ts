@@ -1,4 +1,5 @@
 import { registerdUserConfig } from './config/useConfig.js';
+import { TaskName } from '@ice/pkg';
 
 import type { PkgPlugin } from '@ice/pkg';
 
@@ -14,7 +15,7 @@ const plugin: PkgPlugin = (api) => {
   registerUserConfig(registerdUserConfig);
 
   (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {
-    registerTask(`pkg-${format}`, {
+    registerTask(`transform-${format}`, {
       type: 'transform',
     });
   });
@@ -22,13 +23,13 @@ const plugin: PkgPlugin = (api) => {
   if (userConfig?.bundle) {
     const bundleTasks = (userConfig?.bundle?.formats || ['esm', 'es2017']);
     if (bundleTasks.includes('umd') || bundleTasks.includes('esm')) {
-      registerTask('pkg-dist-es5', {
+      registerTask(TaskName.BUNDLE_ES5, {
         type: 'bundle',
       });
     }
 
     if (bundleTasks.includes('es2017')) {
-      registerTask('pkg-dist-es2017', {
+      registerTask(TaskName.BUNDLE_ES2017, {
         type: 'bundle',
       });
     }

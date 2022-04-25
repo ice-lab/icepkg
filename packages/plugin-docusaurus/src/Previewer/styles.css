@@ -1,0 +1,7 @@
+.mobile-previewer pre {
+  height: 720px;
+}
+
+iframe body::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}

@@ -20,6 +20,11 @@ export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOpt
     : false;
 
   const haveStaticFiles = fs.pathExistsSync(path.join(rootDir, 'static'));
+  const mobilePreview = !!params.mobilePreview;
+
+  const prismReactRendererPath = path.dirname(require.resolve('prism-react-renderer/package.json', {
+    paths: [rootDir, __dirname],
+  }));
 
   const templatePath = path.join(__dirname, './template/docusaurus.hbs');
   const templateContents = fs.readFileSync(templatePath, 'utf-8');
@@ -29,6 +34,8 @@ export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOpt
     docusaurusClassPresetPath,
     sidebarItemsGenerator,
     haveStaticFiles,
+    mobilePreview,
+    prismReactRendererPath,
   });
 
   // Write config to .docusaurus

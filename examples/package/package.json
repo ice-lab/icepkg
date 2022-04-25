@@ -10,7 +10,7 @@
     "default": "./es/index.js"
   },
   "scripts": {
-    "build": "CONSOLA_LEVEL=4 ice-pkg build",
+    "build": "ice-pkg build",
     "start": "CONSOLA_LEVEL=4 ice-pkg start",
     "help": "ice-pkg --help",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +24,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@swc/helpers": "^0.3.8",
     "core-js": "^3.21.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
