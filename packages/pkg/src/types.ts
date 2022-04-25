@@ -1,10 +1,14 @@
-import type { RollupOptions, Plugin } from 'rollup';
+import type { RollupOptions, Plugin, SourceMapInput } from 'rollup';
 import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
 import type { Config } from '@swc/core';
 
 export type PlainObject = Record<string, string | boolean | number | object>;
 
-export type RollupPluginFn<T = {}> = (args: T) => Plugin;
+export type RollupPluginFn<T = {}> = (args?: T) => Plugin;
+
+export interface TaskLoaderConfig extends TaskConfig {
+  name: TaskName;
+}
 
 export interface TaskConfig {
   /**
@@ -40,7 +44,7 @@ export interface TaskConfig {
   swcCompileOptions?: Config;
 }
 
-export type PkgTaskConfig = ITaskConfig<TaskConfig>;
+export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;
 
 export type PkgContext = Context<TaskConfig, {}, UserConfig>;
 
@@ -48,7 +52,30 @@ export type PkgPluginAPI = IPluginAPI<TaskConfig>;
 
 export type PkgPlugin = IPlugin<TaskConfig>;
 
-export type TaskName = 'pkg-cjs' | 'pkg-esm' | 'pkg-es2017' | 'pkg-dist-es5' | 'pkg-dist-es2017';
+export enum TaskName {
+  'TRANSFORM_CJS' = 'transform-cjs',
+  'TRANSFORM_ESM' = 'transform-esm',
+  'TRANSFORM_ES2017' = 'transform-es2017',
+  'BUNDLE_ES5' = 'bundle-es5',
+  'BUNDLE_ES2017' = 'bundle-es2017',
+}
+
+export interface OutputFile {
+  // globby parsed path, which is relative
+  filePath?: string;
+  // Absolute path of source file
+  absolutePath?: string;
+  // ext: 'jsx' | 'js' | 'ts' | 'tsx' | 'mjs' | 'png' | 'scss' | 'less' | 'css' | 'png' | 'jpg';
+  ext?: string;
+  // Absolute path of output files
+  dest?: string;
+  // Filename of output file
+  filename?: string;
+  // Parsed code
+  code?: string | Uint8Array;
+  // Source map
+  map?: string | SourceMapInput;
+}
 
 export interface UserConfig {
   /**

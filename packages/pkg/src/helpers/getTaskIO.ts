@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { isDirectory, isFile } from '../utils.js';
+import { TaskName } from '../types.js';
 
 const DEFAULT_ENTRY_DIR = 'src';
 const DEFAULT_ENTRY_FILE = [
@@ -36,4 +37,11 @@ export const getEntryDir = (rootDir: string) => {
   }
 
   throw new Error(`Failed to resolve ${defaultEntryDir} as entry directory`);
+};
+
+export const getOutputDir = (rootDir: string, taskName: TaskName) => {
+  if (taskName.includes('transform')) {
+    return join(rootDir, taskName.split('-')[1]);
+  }
+  return join(rootDir, 'dist');
 };

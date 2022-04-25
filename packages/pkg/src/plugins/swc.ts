@@ -6,11 +6,10 @@ import { isTypescriptOnly } from '../helpers/suffix.js';
 import { isDirectory, scriptsFilter } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config } from '@swc/core';
-import type { RollupPluginFn } from '../types.js';
-import type { File } from '../loaders/transform.js';
+import type { RollupPluginFn, OutputFile } from '../types.js';
 
 const normalizeSwcConfig = (
-  file: File,
+  file: OutputFile,
   mergeOptions?: swcCompileOptions,
 ): swcCompileOptions => {
   const { filePath, ext } = file;

@@ -20,7 +20,7 @@ packages/*/es/
 
 **/.ice/
 .idea/
-
+.docusaurus
 **/package-lock.json
 **/build
 .history
