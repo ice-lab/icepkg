@@ -4,9 +4,11 @@ import { performance } from 'perf_hooks';
 import { timeFrom } from '../utils.js';
 import { createLogger } from './logger.js';
 
+export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'mjs' | 'mts';
+
 export interface File {
   filePath: string;
-  ext: 'js' | 'ts' | 'tsx' | 'jsx';
+  ext: FileExt;
 }
 
 const defaultTypescriptOptions = {
@@ -29,7 +31,7 @@ const nomalizeDtsInput = (file: File): DtsInputFile => {
   };
 };
 
-export default function dtsCompile(files: File[]): DtsInputFile[] {
+export function dtsCompile(files: File[]): DtsInputFile[] {
   if (!files.length) {
     return;
   }
@@ -51,6 +53,8 @@ export default function dtsCompile(files: File[]): DtsInputFile[] {
     host,
   );
 
+  logger.debug(`Initing program takes ${timeFrom(dtsCompileStart)}`);
+
   const emitResult = program.emit();
 
   if (emitResult.diagnostics && emitResult.diagnostics.length > 0) {
@@ -65,7 +69,7 @@ export default function dtsCompile(files: File[]): DtsInputFile[] {
     });
   }
 
-  logger.debug(timeFrom(dtsCompileStart));
+  logger.debug(`It consumes ${timeFrom(dtsCompileStart)}`);
 
   return _files.map((file) => ({
     ...file,

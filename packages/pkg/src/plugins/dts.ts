@@ -1,23 +1,23 @@
 import { extname, relative } from 'path';
 import { createFilter } from '@rollup/pluginutils';
-import dtsCompile from '../helpers/dts.js';
+import { dtsCompile } from '../helpers/dts.js';
 import { isEcmascriptOnly, isTypescriptOnly } from '../helpers/suffix.js';
 
 import type { Plugin } from 'rollup';
-import type { UserConfig } from '../types';
+import type { UserConfig } from '../types.js';
+import type { DtsInputFile, FileExt } from '../helpers/dts.js';
 
 const dtsFilter = createFilter(
   /\.m?[jt]sx?$/, // include
   /node_modules/, // exclude
 );
 
-const cachedContents: Record<string, {
+interface CachedContent extends DtsInputFile {
   srcCode: string;
   updated?: boolean;
-  ext?: string;
-  generatedCode?: string;
-  [index: string]: any;
-}> = {};
+}
+
+const cachedContents: Record<string, CachedContent> = {};
 
 // dtsPlugin is used to generate declartion file when transforming
 function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
@@ -27,7 +27,12 @@ function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypes
     transform(_, id) {
       if (dtsFilter(id)) {
         if (!cachedContents[id]) {
-          cachedContents[id] = { srcCode: _, updated: true, ext: extname(id) };
+          cachedContents[id] = {
+            srcCode: _,
+            updated: true,
+            ext: extname(id) as FileExt,
+            filePath: id,
+          };
         } else if (cachedContents[id].srcCode === _) {
           cachedContents[id].updated = false;
         } else {
@@ -49,6 +54,7 @@ function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypes
           || (generateTypesForJs && isEcmascriptOnly(cachedContents[id].ext, id)),
         );
 
+      // should re-run typescript programs
       const shouldUpdateDts = compileIds.some((id) => cachedContents[id].updated);
 
       let dtsFiles;
@@ -57,7 +63,6 @@ function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypes
           ext: cachedContents[id].ext,
           filePath: id,
         }));
-        // @ts-ignore
         dtsFiles = dtsCompile(compileFiles);
       } else {
         dtsFiles = ids.map((id) => cachedContents[id]);
