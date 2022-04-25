@@ -69,7 +69,7 @@ export function dtsCompile(files: File[]): DtsInputFile[] {
     });
   }
 
-  logger.debug(`It consumes ${timeFrom(dtsCompileStart)}`);
+  logger.debug(`Generating declaration files take ${timeFrom(dtsCompileStart)}`);
 
   return _files.map((file) => ({
     ...file,

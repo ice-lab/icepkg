@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { multiply } from './test.js';
 
-export interface A {
-  a: string;
-}
 // import './index.css';
 // import './index.scss';
 
