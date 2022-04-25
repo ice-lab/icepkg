@@ -3,7 +3,7 @@ import { getEntryDir, getEntryFile, getOutputDir } from './getTaskIO.js';
 import { getBundleSwcConfig, getTransformSwcConfig } from './getSwcConfig.js';
 import { normalizeRollupConfig } from './normalizeRollupConfig.js';
 
-import type { PkgContext, TaskLoaderConfig, PkgTaskConfig, TaskName } from '../types.js';
+import type { PkgContext, TaskLoaderConfig, PkgTaskConfig } from '../types.js';
 
 export const mergeConfigOptions = (
   cfg: PkgTaskConfig,
@@ -21,13 +21,13 @@ export const mergeConfigOptions = (
   );
 
   // Configure task outputDir
-  normalizedConfig.outputDir = outputDir || getOutputDir(rootDir, taskName as TaskName);
+  normalizedConfig.outputDir = outputDir || getOutputDir(rootDir, taskName);
 
   // Configure swcOptions
   const swcOptionOverride = deepmerge(
     isBundleTask
-      ? getBundleSwcConfig(userConfig as any, taskName as TaskName)
-      : getTransformSwcConfig(userConfig as any, taskName as TaskName),
+      ? getBundleSwcConfig(userConfig, taskName)
+      : getTransformSwcConfig(userConfig, taskName),
     swcCompileOptions,
   );
 
@@ -37,7 +37,7 @@ export const mergeConfigOptions = (
   const [resolvedPlugins, resolvedRollupOption] = normalizeRollupConfig(
     normalizedConfig,
     ctx,
-    taskName as TaskName,
+    taskName,
   );
 
   normalizedConfig.rollupPlugins = resolvedPlugins;
@@ -45,6 +45,6 @@ export const mergeConfigOptions = (
 
   return {
     ...normalizedConfig,
-    name: taskName as TaskName,
+    name: taskName,
   };
 };

@@ -44,7 +44,7 @@ export interface TaskConfig {
   swcCompileOptions?: Config;
 }
 
-export type PkgTaskConfig = ITaskConfig<TaskConfig>;
+export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;
 
 export type PkgContext = Context<TaskConfig, {}, UserConfig>;
 
