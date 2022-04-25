@@ -7,7 +7,7 @@ export default defineConfig({
     }],
     // './plugin.js',
   ],
-  sourceMaps: 'inline',
+  sourceMaps: true,
   define: {
     __buildVersion: '0.1.2',
     __buildNumber: 15,

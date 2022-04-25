@@ -272,7 +272,7 @@ export function debouncePromise<T extends unknown[]>(
 
 export const timeFrom = (start: number, subtract = 0): string => {
   const time: number | string = performance.now() - start - subtract;
-  const timeString = (`${time.toFixed(2)}ms`).padEnd(5, ' ');
+  const timeString = (`${time.toFixed(2)} ms`).padEnd(5, ' ');
   if (time < 10) {
     return picocolors.green(timeString);
   } else if (time < 50) {

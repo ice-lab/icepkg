@@ -6,33 +6,17 @@ import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
-import type { PkgContext, TaskConfig } from '../types.js';
+import type { PkgContext, TaskLoaderConfig, OutputFile } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
-export interface File {
-  // globby parsed path, which is relative
-  filePath: string;
-  // absolute path
-  absolutePath: string;
-  // extension
-  // ext: 'jsx' | 'js' | 'ts' | 'tsx' | 'mjs' | 'png' | 'scss' | 'less' | 'css' | 'png' | 'jpg';
-  ext: string;
-  // where to store target files
-  dest?: string;
-  // parsed code
-  code?: string;
-  // source map
-  map?: string | SourceMapInput;
-}
-
-export default async function runTransform(cfg: TaskConfig, ctx: PkgContext) {
-  const { rootDir, userConfig } = ctx;
+export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContext) {
+  const { rootDir, userConfig, command } = ctx;
   const { outputDir, entry, rollupPlugins } = cfg;
 
-  const logger = createLogger('transform');
+  const logger = createLogger(cfg.name);
   const entryDir = entry;
 
-  let files: File[];
+  let files: OutputFile[];
 
   if (isDirectory(entry)) {
     files =
@@ -66,7 +50,7 @@ export default async function runTransform(cfg: TaskConfig, ctx: PkgContext) {
 
   const transformStart = performance.now();
 
-  logger.info('Build start...');
+  logger.debug('Build start...');
 
   // @ts-ignore FIXME: ignore
   await container.buildStart(cfg);
@@ -143,7 +127,7 @@ export default async function runTransform(cfg: TaskConfig, ctx: PkgContext) {
 
   await container.close();
 
-  logger.info(`⚡️ Build success in ${(performance.now() - transformStart).toFixed(2)}ms`);
+  logger.info(`⚡️ Build success in ${timeFrom(transformStart)}`);
 
-  return files;
+  return files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) }));
 }
