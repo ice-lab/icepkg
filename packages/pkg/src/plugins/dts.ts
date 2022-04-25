@@ -35,7 +35,7 @@ function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypes
           || (generateTypesForJs && isEcmascriptOnly(ext, filePath)),
         );
 
-      const dtsFiles = dtsCompile(compileFiles);
+      const dtsFiles = dtsCompile(compileFiles) ?? [];
 
       dtsFiles.forEach((file) => {
         this.emitFile({

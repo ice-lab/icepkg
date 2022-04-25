@@ -26,13 +26,17 @@ const config = {
       ({
         docs: {
           remarkPlugins: [
-            extractCode,
+            [extractCode, { mobilePreview: {{mobilePreview}} }],
           ],
           routeBasePath: '/',
         },
         theme: {
           customCss: require.resolve('@ice/pkg-plugin-docusaurus/css/custom.css'),
         },
+        pages: {
+          path: '.docusaurus/pages',
+          routeBasePath: '/pages'
+        }
       }),
     ],
   ],
@@ -45,6 +49,10 @@ const config = {
         logo: {
           src: '{{navBarLogo}}',
         },
+      },
+      prism: {
+        theme: require('{{prismReactRendererPath}}/themes/github'),
+        darkTheme: require('{{prismReactRendererPath}}/themes/dracula'),
       },
     }),
 };

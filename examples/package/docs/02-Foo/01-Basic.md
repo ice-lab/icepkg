@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 ## 今天、明天
 
 import Button from './Button.tsx';
@@ -9,8 +13,9 @@ import React, { useState } from 'react';
 import Button from './Button';
 
 export default function App () {
+  const str = 'abc';
   const [state, setState] = useState(0);
-
+  const [testStr] = useState(`${str}-0`);
   const add = () => {
     setState(c => c + 1)
   }
@@ -20,6 +25,23 @@ export default function App () {
       {state}
       <button onClick={add}>Add</button>
       // 我这里加点东西，再加地阿内容个，这是真的真的可以随便
+      <p>在这里多加一点内容吧 { testStr}</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p><p>在这里多加一点内容吧</p>
+      <p>在这里多加一点内容吧</p>
+      <a href="/">跳转</a>
       <Button />
     </div>
   )
