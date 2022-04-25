@@ -10,6 +10,12 @@ const previewerComponentPath = path.join(__dirname, '../Previewer/index.js');
 const demoDir = path.join(rootDir, '.docusaurus/demos');
 const pagesDir = path.join(rootDir, '.docusaurus/pages');
 
+const escapeCode = (code) => {
+  return (code || '')
+    .replace(/`/g, '&#x60;')
+    .replace(/\$/g, '&#36;');
+};
+
 /** Use the md5 value of docPath */
 const uniqueFilename = (originalDocPath, count) => {
   const hash = crypto.createHash('md5');
@@ -54,11 +60,7 @@ const plugin = (options) => {
         const pageCode = `
           import * as React from 'react';
           import Demo from '${filePath}';
-          export default () => {
-            return (
-              <Demo />
-            )
-          }
+          export default () => <Demo />;
         `;
         fse.writeFileSync(pageDemo, pageCode, 'utf-8');
 
@@ -86,7 +88,7 @@ const plugin = (options) => {
         // Remove original code block and insert components
         ast.children.splice(actualIdx, 1, {
           type: 'jsx',
-          value: `<Previewer code={\`${code}\`} mobilePreview={${mobilePreview}} url={\`${url}\`}> <${uniqueName} /> </Previewer>`,
+          value: `<Previewer code={\`${escapeCode(code)}\`} mobilePreview={${mobilePreview}} url="${url}"> <${uniqueName} /> </Previewer>`,
         }, {
           type: 'import',
           value: `import ${uniqueName} from '${filePath}';`,
