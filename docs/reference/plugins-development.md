@@ -34,11 +34,11 @@ const plugin = (api) => {
 
 @ice/pkg 注册五个 build-script 任务：
 
-+ `component-esm` - 默认启动
-+ `component-es2017` - 默认启动
-+ `component-cjs` - 当 transform 配置了 `formats: ['cjs']` 启动
-+ `component-dist-esm` - 当bundle 配置了 `formats: ['esm']` 时启动
-+ `component-dist-es2017` - 当开启 bundle 配置了 `formats: ['es2017']` 时启动
++ `transform-esm` - 默认启动
++ `transform-es2017` - 默认启动
++ `transform-cjs` - 当 transform 配置了 `formats: ['cjs']` 启动
++ `bundle-es5 - 当bundle 配置了 `formats: ['esm']` 时启动
++ `bundle-es2017` - 当开启 bundle 配置了 `formats: ['es2017']` 时启动
 
 当不指定任务名（比如，指定 `component-esm`）时，配置对所有任务生效。
 
@@ -72,11 +72,11 @@ const plugin = (api) => {
 
 | 任务            | 默认值                |
 | -------------- | -------------------  |
-| component-esm  | `./src`              |
-| component-es2017   | `./src`              |
-| component-cjs  | `./src`              |
-| component-dist-esm  | `./src/index[j|t]s`  |
-| component-dist-es2017  | `./src/index[j|t]s`  |
+| transform-esm  | `./src`              |
+| transform-es2017   | `./src`              |
+| transform-cjs  | `./src`              |
+| bundle-es5 | `./src/index[j|t]s`  |
+| bundle-es2017  | `./src/index[j|t]s`  |
 
 ### outputDir
 
@@ -87,11 +87,11 @@ const plugin = (api) => {
 
 | 任务            | 默认值              |
 | -------------- | -------------------|
-| component-esm   | `esm`               |
-| component-es2017   | `es2017`               |
-| component-cjs  | `cjs`              |
-| component-dist-esm  | `dist`             |
-| component-dis-es2017  | `dist`  |
+| transform-esm   | `esm`               |
+| transform-es2017   | `es2017`               |
+| transform-cjs  | `cjs`              |
+| bundle-es5 | `dist`             |
+| bundle-es2017  | `dist`  |
 
 ### rollupPlugins
 

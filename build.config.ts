@@ -8,18 +8,13 @@ export default defineConfig({
         return [
           { type: 'doc', id: 'index' },
           { type: 'doc', id: 'quick-start' },
-          {
-            type: 'category',
-            label: '指南',
-            items: [
-              { type: 'doc', id: 'guide/config-file' },
-              { type: 'doc', id: 'guide/abilities' },
-              { type: 'doc', id: 'guide/preview' },
-            ],
-          },
+          { type: 'doc', id: 'guide/config-file' },
+          { type: 'doc', id: 'guide/abilities' },
+          { type: 'doc', id: 'guide/preview' },
           {
             type: 'category',
             label: '使用场景',
+            collapsed: false,
             items: [
               { type: 'doc', id: 'scenarios/component' },
               { type: 'doc', id: 'scenarios/node' },
@@ -29,6 +24,7 @@ export default defineConfig({
           {
             type: 'category',
             label: '参阅',
+            collapsed: false,
             items: [
               { type: 'doc', id: 'reference/config-list' },
               { type: 'doc', id: 'reference/plugins-development' },

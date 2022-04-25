@@ -152,12 +152,84 @@ export default App;
 
 > 需要注意的是，在 preview 的代码块中引入的样式会 **污染** 全局，因此建议使用 [css-module](https://github.com/css-modules/css-modules) 或 [css-in-js](https://cssinjs.org/) 等方式引入样式。
 
+### 将代码块渲染成 Mobile 预览的样式
+
+通过配置 `mobilePreview: true` 开启将预览方式设置成移动端预览的样式：
+
+```ts
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    ['@ice/pkg-plugin-docusaurus', {
+      mobilePreview: true
+    }]
+  ]
+})
+```
+
+同理，所有添加了 [preview: true](#将代码渲染成组件) 的代码块会渲染成下面的样式：
+
+![](https://gw.alicdn.com/imgextra/i2/O1CN01UVaMo71q7gujCYGSc_!!6000000005449-2-tps-1338-761.png)
+
 ### 给代码块添加 title
 
 若想要给代码块添加 title，可以使用 `title` 属性。
 
 ```jsx title=/src/components/index.js
 import MyComponent from 'my-component';
+```
+
+## 自定义侧边栏
+
+若你想要完全自定义侧边栏，比如有以下平铺结构：
+
+```shell
+├── index.md
+├── a.md
+├── b.md
+└── c.md
+```
+
+并试图将 `a.md`、`b.md` 和 `c.md` 收敛到一个 `示例` 的目录下，可以通过 `sidebarItemsGenerator` 进行配置：
+
+```ts
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    ['@ice/pkg-plugin-docusaurus', {
+      sidebarItemsGenerator: async () => {
+        return [
+          { type: 'doc', id: 'index' },
+          {
+            type: 'category',  // 收敛到一个目录中
+            label: '实例',      // 目录名
+            collapsed: false,  // 目录是否折叠
+            items: [
+              { type: 'doc', id: 'a' },
+              { type: 'doc', id: 'b' },
+              { type: 'doc', id: 'c' },
+            ],
+          },
+        ];
+      },
+    }],
+  ],
+});
+```
+
+## 隐藏文档右侧导航
+
+在 [Mobile 组件预览](#将代码块渲染成-mobile-预览的样式) 下，若感觉整体内容区比较窄。或因为其他原因，想要隐藏右侧导航栏。可在文档顶部添加 `hide_table_of_contents` 这一配置。
+
+```md
+---
+hide_table_of_contents: true
+---
+
+## 本 Demo 演示一行文字的用法
+
 ```
 
 ## 插件配置
@@ -199,5 +271,10 @@ export interface PluginDocusaurusOptions {
    * 自定义 sidebar
    */
   sidebarItemsGenerator?: Function;
+
+  /**
+   * 开启移动端组件预览
+   */
+  mobilePreview?: boolean;
 };
 ```
