@@ -38,7 +38,7 @@ jobs:
       - run: pnpm run doc-build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.0
-        if: github.ref == 'refs/heads/feat/master'
+        if: github.ref == 'refs/heads/master'
         with:
           BRANCH: gh-pages
           FOLDER: build
