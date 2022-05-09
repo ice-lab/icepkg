@@ -21,18 +21,25 @@ const config = {
 
   presets: [
     [
-      'classic',
+      '{{docusaurusClassPresetPath}}',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          {{#if sidebarItemsGenerator}}
+          sidebarItemsGenerator: {{{sidebarItemsGenerator}}},
+          {{/if}}
           remarkPlugins: [
-            extractCode,
+            [extractCode, { mobilePreview: {{mobilePreview}} }],
           ],
           routeBasePath: '/',
         },
         theme: {
           customCss: require.resolve('@ice/pkg-plugin-docusaurus/css/custom.css'),
         },
+        pages: {
+          path: '.docusaurus/pages',
+          routeBasePath: '/pages'
+        }
       }),
     ],
   ],
@@ -46,6 +53,11 @@ const config = {
           src: '{{navBarLogo}}',
         },
       },
+      prism: {
+        theme: require('{{prismReactRendererPath}}/themes/github'),
+        darkTheme: require('{{prismReactRendererPath}}/themes/dracula'),
+      },
+      autoCollapseSidebarCategories: false,
     }),
 };
 

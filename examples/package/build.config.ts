@@ -2,10 +2,12 @@ import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   plugins: [
-    // '@ice/pkg-plugin-docusaurus',
+    ['@ice/pkg-plugin-docusaurus', {
+      mobilePreview: true,
+    }],
     // './plugin.js',
   ],
-  sourceMaps: 'inline',
+  sourceMaps: true,
   define: {
     __buildVersion: '0.1.2',
     __buildNumber: 15,

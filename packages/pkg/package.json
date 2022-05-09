@@ -16,7 +16,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
   "dependencies": {
     "@babel/core": "^7.17.5",
     "@babel/parser": "^7.17.3",
@@ -29,7 +32,7 @@
     "@swc/helpers": "^0.3.8",
     "acorn": "^8.7.0",
     "autoprefixer": "^10.4.2",
-    "build-scripts": "^2.0.0-17",
+    "build-scripts": "2.0.0-18",
     "cac": "^6.7.12",
     "chokidar": "^3.5.3",
     "consola": "^2.15.3",
@@ -38,6 +41,7 @@
     "escape-string-regexp": "^5.0.0",
     "fs-extra": "^10.0.0",
     "globby": "^11.0.4",
+    "gzip-size": "^7.0.0",
     "magic-string": "^0.25.7",
     "picocolors": "^1.0.0",
     "postcss": "^8.4.6",
