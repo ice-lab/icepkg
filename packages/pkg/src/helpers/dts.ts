@@ -53,7 +53,7 @@ export function dtsCompile(files: File[]): DtsInputFile[] {
     host,
   );
 
-  logger.debug(`Initing program takes ${timeFrom(dtsCompileStart)}`);
+  logger.debug(`Initializing program takes ${timeFrom(dtsCompileStart)}`);
 
   const emitResult = program.emit();
 
