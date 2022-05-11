@@ -23,16 +23,20 @@ const cli = cac('ice-pkg');
     .option('--root--dir <rootDir>', 'Determine root directory', {
       default: 'pwd',
     })
-    .action((options) => {
+    .action(async (options) => {
       delete options['--'];
 
-      componentService.run({
-        command: 'build',
-        commandArgs: {
-          ...options,
-        },
-        getBuiltInPlugins,
-      });
+      try {
+        await componentService.run({
+          command: 'build',
+          commandArgs: {
+            ...options,
+          },
+          getBuiltInPlugins,
+        });
+      } catch (e) {
+        consola.error('Compile Error', e);
+      }
     });
 
   cli
@@ -47,16 +51,19 @@ const cli = cac('ice-pkg');
     .option('--dist', 'Watch dist files (especially with enabled-umd)', {
       default: false,
     })
-    .action((options) => {
+    .action(async (options) => {
       delete options['--'];
-
-      componentService.run({
-        command: 'start',
-        commandArgs: {
-          ...options,
-        },
-        getBuiltInPlugins,
-      });
+      try {
+        await componentService.run({
+          command: 'start',
+          commandArgs: {
+            ...options,
+          },
+          getBuiltInPlugins,
+        });
+      } catch (e) {
+        consola.error(e);
+      }
     });
 
   cli.help();

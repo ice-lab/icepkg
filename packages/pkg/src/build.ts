@@ -28,7 +28,6 @@ export default async (context: PkgContext) => {
 
     await applyHook('after.build.compile');
   } catch (err) {
-    consola.error('Compile Error', err);
     await applyHook('error', {
       errCode: 'COMPILE_ERROR',
       err,

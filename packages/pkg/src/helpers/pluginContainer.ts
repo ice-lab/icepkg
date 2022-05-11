@@ -322,9 +322,10 @@ export async function createPluginContainer(
     position: number | { column: number; line: number } | undefined,
     ctx: Context,
   ) {
-    const err = (
+    let err = (
       typeof e === 'string' ? new Error(e) : e
     ) as postcss.CssSyntaxError & RollupError;
+
     if (err.pluginCode) {
       return err; // The plugin likely called `this.error`
     }
@@ -401,6 +402,12 @@ export async function createPluginContainer(
         }
       }
     }
+
+    // Be consistent of rollup https://github.com/rollup/rollup/blob/master/src/utils/pluginUtils.ts#L7
+    if (!(err instanceof Error)) {
+      err = Object.assign(new Error(err.message), err);
+    }
+
     return err;
   }
 
