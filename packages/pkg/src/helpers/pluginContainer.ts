@@ -326,15 +326,13 @@ export async function createPluginContainer(
       typeof e === 'string' ? new Error(e) : e
     ) as postcss.CssSyntaxError & RollupError;
 
-    if (err.pluginCode) {
-      return err; // The plugin likely called `this.error`
-    }
     if (err.file && err.name === 'CssSyntaxError') {
       err.id = normalizePath(err.file);
     }
     if (ctx._activePlugin) err.plugin = ctx._activePlugin.name;
     if (ctx._activeId && !err.id) err.id = ctx._activeId;
-    if (ctx._activeCode) {
+
+    if (ctx._activeCode && !err.pluginCode) {
       err.pluginCode = ctx._activeCode;
 
       const pos =
