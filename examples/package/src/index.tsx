@@ -4,7 +4,7 @@ const App = () => {
   const [count, setCount] = useState(0);
 
   const addCount = () => {
-    setCount((c: number) => c + 1);
+    setCount((c: number) => c + '1');
   };
 
   return (

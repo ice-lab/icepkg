@@ -12,7 +12,7 @@ import type { PlainObject } from './types';
 import type {
   DecodedSourceMap,
   RawSourceMap,
-} from '@ampproject/remapping/dist/types/types';
+} from '@ampproject/remapping';
 
 import remapping from '@ampproject/remapping';
 
