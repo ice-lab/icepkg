@@ -322,18 +322,17 @@ export async function createPluginContainer(
     position: number | { column: number; line: number } | undefined,
     ctx: Context,
   ) {
-    const err = (
+    let err = (
       typeof e === 'string' ? new Error(e) : e
     ) as postcss.CssSyntaxError & RollupError;
-    if (err.pluginCode) {
-      return err; // The plugin likely called `this.error`
-    }
+
     if (err.file && err.name === 'CssSyntaxError') {
       err.id = normalizePath(err.file);
     }
     if (ctx._activePlugin) err.plugin = ctx._activePlugin.name;
     if (ctx._activeId && !err.id) err.id = ctx._activeId;
-    if (ctx._activeCode) {
+
+    if (ctx._activeCode && !err.pluginCode) {
       err.pluginCode = ctx._activeCode;
 
       const pos =
@@ -401,6 +400,12 @@ export async function createPluginContainer(
         }
       }
     }
+
+    // Be consistent of rollup https://github.com/rollup/rollup/blob/master/src/utils/pluginUtils.ts#L7
+    if (!(err instanceof Error)) {
+      err = Object.assign(new Error(err.message), err);
+    }
+
     return err;
   }
 
