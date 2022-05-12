@@ -13,7 +13,6 @@ const dtsFilter = createFilter(
 );
 
 interface CachedContent extends DtsInputFile {
-  srcCode: string;
   updated?: boolean;
 }
 
@@ -62,6 +61,7 @@ function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypes
         const compileFiles = compileIds.map((id) => ({
           ext: cachedContents[id].ext,
           filePath: id,
+          srcCode: cachedContents[id].srcCode,
         }));
         dtsFiles = dtsCompile(compileFiles);
       } else {

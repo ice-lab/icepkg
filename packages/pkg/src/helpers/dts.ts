@@ -9,12 +9,15 @@ export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'mjs' | 'mts';
 export interface File {
   filePath: string;
   ext: FileExt;
+  srcCode?: string;
 }
 
 const defaultTypescriptOptions = {
   allowJs: true,
   declaration: true,
+  incremental: true,
   emitDeclarationOnly: true,
+  skipLibCheck: true,
 };
 
 export interface DtsInputFile extends File {
@@ -46,6 +49,17 @@ export function dtsCompile(files: File[]): DtsInputFile[] {
 
   const host = ts.createCompilerHost(defaultTypescriptOptions);
   host.writeFile = (fileName, contents) => { createdFiles[fileName] = contents; };
+
+  const _readFile = host.readFile;
+
+  // Hijack `readFile` to prevent reading file twice
+  host.readFile = (fileName) => {
+    const foundItem = files.find((file) => file.filePath === fileName);
+    if (foundItem && foundItem.srcCode) {
+      return foundItem.srcCode;
+    }
+    return _readFile(fileName);
+  };
 
   const program = ts.createProgram(
     _files.map(({ filePath }) => filePath),
