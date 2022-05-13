@@ -136,7 +136,23 @@ sidebar_label: 这是标题
 
 ### 将代码渲染成组件
 
-若想要预览组件，需要给代码块添加 `preview` 属性。下面展示的就是给代码块添加 preview 的效果。
+若想要预览组件，需要给代码块添加 `preview` 属性。
+
+````
+```tsx preview
+import AddCount from './Button.tsx';
+
+const App = () => {
+  return (
+    <AddCount />
+  )
+}
+
+export default App;
+```
+````
+
+下面展示的就是给上述代码块添加 preview 的效果。
 
 ```jsx preview
 import AddCount from './Button.tsx';
@@ -151,6 +167,10 @@ export default App;
 ```
 
 > 需要注意的是，在 preview 的代码块中引入的样式会 **污染** 全局，因此建议使用 [css-module](https://github.com/css-modules/css-modules) 或 [css-in-js](https://cssinjs.org/) 等方式引入样式。
+
+:::info 仅支持 React 组件
+目前只支持为 `jsx`、`tsx` 代码块添加 `preview` 属性。
+:::
 
 ### 将代码块渲染成 Mobile 预览的样式
 
@@ -171,6 +191,24 @@ export default defineConfig({
 同理，所有添加了 [preview: true](#将代码渲染成组件) 的代码块会渲染成下面的样式：
 
 ![](https://gw.alicdn.com/imgextra/i2/O1CN01UVaMo71q7gujCYGSc_!!6000000005449-2-tps-1338-761.png)
+
+
+### 引入 Package 的包名
+
+直接引入正在开发的 Package 包名，像真实的用户一样在文档中导入你这在开发的包。比如你正在开发一个 Package Name 为 `my-component` 的组件，你期望用户获得所见即所得的效果。
+
+```js
+// 'my-component' 是你正在开发的 Package name
+import MyComponent from 'my-component';
+
+const App = () => {
+  return (
+    <MyComponent />
+  )
+}
+
+export default App;
+```
 
 ### 给代码块添加 title
 

@@ -69,7 +69,7 @@ export function add(a, b) {
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  sourceMaps: true,
+  generateTypesForJs: true,
 });
 ```
 
@@ -99,7 +99,7 @@ export default defineConfig({
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  sourceMaps: true,
+  sourceMaps: 'inline',
 });
 ```
 
