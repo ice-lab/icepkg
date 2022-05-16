@@ -41,5 +41,10 @@
     "react-dom": "^17.0.2",
     "ts-node": "^10.7.0",
     "vitest": "^0.7.6"
+  },
+  "pnpm": {
+    "overrides": {
+      "build-scripts": "2.0.0-18"
+    }
   }
 }
