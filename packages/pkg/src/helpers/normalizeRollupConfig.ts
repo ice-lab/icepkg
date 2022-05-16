@@ -165,12 +165,13 @@ export const normalizeRollupConfig = (
       );
     }
 
-    const external = getExternalsAndGlboals(userConfig, pkg as PkgJson);
+    const [external, globals] = getExternalsAndGlboals(userConfig, pkg as PkgJson);
 
     const resolvedRollupOptions = deepmerge.all([
       {
         input: entry,
         external,
+        globals,
         output: getRollupOutputs({
           userConfig,
           pkg: pkg as PkgJson,
