@@ -8,15 +8,12 @@ module.exports = function (context) {
 
   const mdxReactPath = require.resolve('@mdx-js/react', requireOptions);
 
-  const sassLoaderPath = require.resolve('sass-loader', requireOptions)
-
   return {
     name: 'docusaurus-plugin',
     configureWebpack() {
       return {
         resolve: {
           alias: {
-            'sass-loader': sassLoaderPath,
             'react/jsx-runtime': path.resolve(siteDir, 'node_modules/react/jsx-runtime'),
             '@mdx-js/react': mdxReactPath,
             // FIXME: I am not sure how to resolve the actual output folder
