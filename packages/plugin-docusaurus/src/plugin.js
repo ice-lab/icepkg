@@ -4,12 +4,9 @@ module.exports = function (context) {
   const { siteDir } = context;
   const pkgMeta = require(path.resolve(siteDir, 'package.json'));
 
-  const mdxReact = require.resolve('@mdx-js/react', {
-    paths: [
-      siteDir,
-      __dirname,
-    ],
-  });
+  const requireOptions = { paths: [siteDir, __dirname] };
+
+  const mdxReactPath = require.resolve('@mdx-js/react', requireOptions);
 
   return {
     name: 'docusaurus-plugin',
@@ -18,7 +15,7 @@ module.exports = function (context) {
         resolve: {
           alias: {
             'react/jsx-runtime': path.resolve(siteDir, 'node_modules/react/jsx-runtime'),
-            '@mdx-js/react': mdxReact,
+            '@mdx-js/react': mdxReactPath,
             // FIXME: I am not sure how to resolve the actual output folder
             [pkgMeta.name]: path.resolve(siteDir, 'esm/index'),
           },

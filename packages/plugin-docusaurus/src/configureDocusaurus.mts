@@ -15,6 +15,10 @@ export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOpt
     paths: [__dirname, rootDir],
   });
 
+  const sassDocusaurusPluginPath = require.resolve('docusaurus-plugin-sass', {
+    paths: [__dirname, rootDir],
+  });
+
   const sidebarItemsGenerator = params?.sidebarItemsGenerator
     ? params?.sidebarItemsGenerator.toString()
     : false;
@@ -36,6 +40,7 @@ export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOpt
     haveStaticFiles,
     mobilePreview,
     prismReactRendererPath,
+    sassDocusaurusPluginPath,
   });
 
   // Write config to .docusaurus

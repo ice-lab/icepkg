@@ -17,6 +17,7 @@ const config = {
 
   plugins: [
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
+    '{{sassDocusaurusPluginPath}}'
   ],
 
   presets: [
@@ -57,7 +58,11 @@ const config = {
         theme: require('{{prismReactRendererPath}}/themes/github'),
         darkTheme: require('{{prismReactRendererPath}}/themes/dracula'),
       },
-      autoCollapseSidebarCategories: false,
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
+        },
+      },
     }),
 };
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './index.scss';
 
 const App = () => {
   const [count, setCount] = useState(0);
