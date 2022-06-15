@@ -11,6 +11,7 @@ import swcPlugin from '../plugins/swc.js';
 import dtsPlugin from '../plugins/dts.js';
 import minify from '../plugins/minify.js';
 import babelPlugin from '../plugins/babel.js';
+import aliasPlugin from '../plugins/alias.js';
 import { builtinNodeModules } from './builtinModules.js';
 import { TaskName } from '../types.js';
 
@@ -26,11 +27,13 @@ interface PkgJson {
 }
 
 const getRollupOutputs = ({
+  globals,
   userConfig,
   pkg,
   outputDir,
   isES2017,
 }: {
+  globals: Record<string, string>,
   userConfig: UserConfig;
   outputDir: string;
   pkg: PkgJson;
@@ -50,6 +53,7 @@ const getRollupOutputs = ({
     const commonOption = {
       name,
       format,
+      globals,
       sourcemap: sourceMaps,
     };
 
@@ -71,7 +75,7 @@ const getRollupOutputs = ({
   return outputs;
 };
 
-const getExternalsAndGlboals = (userConfig: UserConfig, pkg: PkgJson) => {
+const getExternalsAndGlboals = (userConfig: UserConfig, pkg: PkgJson): [(id?: string) => boolean, Record<string, string>] => {
   let externals: string[] = [];
   let globals: Record<string, string> = {};
 
@@ -116,16 +120,15 @@ export const normalizeRollupConfig = (
   taskName: TaskName,
 ): [RollupPlugin[], RollupOptions] => {
   const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = cfg;
-  const { rootDir, userConfig, pkg } = ctx;
-
+  const { rootDir, command, userConfig, pkg } = ctx;
   const commonPlugins = [
     userConfig?.alias && alias({ entries: userConfig.alias }),
     userConfig?.babelPlugins?.length && babelPlugin(userConfig.babelPlugins),
     swcPlugin({
+      componentFramework: userConfig?.componentFramework || 'react',
       extraSwcOptions: swcCompileOptions,
     }),
   ].filter(Boolean);
-
   let resolvedPlugins = rollupPlugins ?? [];
 
   if (type === 'transform') {
@@ -135,6 +138,10 @@ export const normalizeRollupConfig = (
       dtsPlugin(cfg.entry, userConfig?.generateTypesForJs),
       ...resolvedPlugins,
       ...commonPlugins,
+      aliasPlugin({
+        alias: userConfig?.alias,
+        command
+      }),
     ];
 
     return [resolvedPlugins, rollupOptions];
@@ -171,8 +178,8 @@ export const normalizeRollupConfig = (
       {
         input: entry,
         external,
-        globals,
         output: getRollupOutputs({
+          globals,
           userConfig,
           pkg: pkg as PkgJson,
           outputDir: cfg.outputDir,

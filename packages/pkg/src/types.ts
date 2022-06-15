@@ -2,6 +2,8 @@ import type { RollupOptions, Plugin, SourceMapInput } from 'rollup';
 import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
 import type { Config } from '@swc/core';
 
+export type ComponentFramework = 'react' | 'rax';
+
 export type PlainObject = Record<string, string | boolean | number | object>;
 
 export type RollupPluginFn<T = {}> = (args?: T) => Plugin;
@@ -78,6 +80,11 @@ export interface OutputFile {
 }
 
 export interface UserConfig {
+  /**
+   * Define framework in component development
+   * @default 'react'
+   */
+  componentFramework?: ComponentFramework;
   /**
    * Alias to file system paths
    * @default empty
