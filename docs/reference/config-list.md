@@ -47,7 +47,7 @@ export default defineConfig({
 + 类型 `array`
 + 默认 `[]`
 
-@ice/pkg 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](#插件开发)。
+@ice/pkg 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](/reference/plugins-development)。
 
 ## transfrom
 
