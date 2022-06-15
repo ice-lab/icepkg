@@ -6,7 +6,7 @@
 npm init @ice/pkg react-component
 
 # Or pnpm
-pnpm init @ice/pkg react-component
+pnpm create @ice/pkg react-component
 ```
 
 启动项目：
