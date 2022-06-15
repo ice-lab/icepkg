@@ -20,7 +20,7 @@ const normalizeSwcConfig = (
     jsc: {
       transform: {
         react: {
-          runtime: 'automatic'
+          runtime: 'automatic',
         },
         legacyDecorator: true,
       },
@@ -34,7 +34,7 @@ const normalizeSwcConfig = (
     commonOptions.jsc.transform.react = {
       runtime: 'classic',
       pragma: 'createElement',
-      pragmaFrag: 'Fragment'
+      pragmaFrag: 'Fragment',
     };
   }
 

@@ -12,8 +12,12 @@ interface AliasPluginOptions {
   command: CommandName;
 }
 
-async function redirectImport(code: string, imports: readonly ImportSpecifier[], aliasObject: Record<string, string>): Promise<MagicString> {
-  let str: MagicString = new MagicString(code);
+async function redirectImport(
+  code: string,
+  imports: readonly ImportSpecifier[],
+  aliasObject: Record<string, string>,
+): Promise<MagicString> {
+  const str: MagicString = new MagicString(code);
 
   imports.forEach((targetImport) => {
     if (targetImport.n in aliasObject) {
@@ -23,12 +27,11 @@ async function redirectImport(code: string, imports: readonly ImportSpecifier[],
   return str;
 }
 
-const aliasPlugin = (options: AliasPluginOptions = { alias: {}, command: 'start'}) => {
-
+const aliasPlugin = (options: AliasPluginOptions = { alias: {}, command: 'start' }) => {
   return {
     name: 'ice-pkg:alias',
 
-    async transform(code, id) {
+    async transform(code) {
       // only transform source code;
       if (!code) {
         return null;
@@ -44,25 +47,25 @@ const aliasPlugin = (options: AliasPluginOptions = { alias: {}, command: 'start'
       if (!imports.length) {
         return {
           code,
-          map: null
+          map: null,
         };
       }
       const str = await redirectImport(
         code,
         imports,
         // Only in dev mode should alias rax to rax-compat for preview
-        command === 'start' ? Object.assign({rax: 'rax-compat'}, alias) : alias
+        command === 'start' ? Object.assign({ rax: 'rax-compat' }, alias) : alias,
       );
 
       return {
         code: str.toString(),
         map: str.generateMap({
           hires: true,
-          includeContent: true
-        })
+          includeContent: true,
+        }),
       };
-    }
+    },
   };
 };
 
- export default aliasPlugin;
+export default aliasPlugin;

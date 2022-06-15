@@ -13,6 +13,7 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
+    "lint:fix": "npm run lint -- --fix",
     "publish:packages": "ts-node ./scripts/publish.ts",
     "doc": "pkg-cli start",
     "doc-build": "pkg-cli build"

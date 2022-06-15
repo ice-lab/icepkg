@@ -10,7 +10,7 @@ import type { PkgContext, TaskLoaderConfig, OutputFile } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
 export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContext) {
-  const { rootDir, userConfig, command } = ctx;
+  const { rootDir, userConfig } = ctx;
   const { outputDir, entry, rollupPlugins } = cfg;
 
   const logger = createLogger(cfg.name);

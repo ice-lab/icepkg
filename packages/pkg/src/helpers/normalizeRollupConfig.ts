@@ -33,7 +33,7 @@ const getRollupOutputs = ({
   outputDir,
   isES2017,
 }: {
-  globals: Record<string, string>,
+  globals: Record<string, string>;
   userConfig: UserConfig;
   outputDir: string;
   pkg: PkgJson;
@@ -140,7 +140,7 @@ export const normalizeRollupConfig = (
       ...commonPlugins,
       aliasPlugin({
         alias: userConfig?.alias,
-        command
+        command,
       }),
     ];
 
