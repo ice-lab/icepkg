@@ -10,7 +10,6 @@ import type { RollupPluginFn, OutputFile, ComponentFramework } from '../types.js
 
 const normalizeSwcConfig = (
   file: OutputFile,
-  componentFramework: ComponentFramework,
   mergeOptions?: swcCompileOptions,
 ): swcCompileOptions => {
   const { filePath, ext } = file;
@@ -29,14 +28,6 @@ const normalizeSwcConfig = (
     },
     minify: false,
   };
-  if (componentFramework === 'rax') {
-    // Use classic jsx transform, see https://swc.rs/docs/configuration/compilation#jsctransformreactruntime
-    commonOptions.jsc.transform.react = {
-      runtime: 'classic',
-      pragma: 'createElement',
-      pragmaFrag: 'Fragment',
-    };
-  }
 
   if (isTypeScript) {
     return deepmerge.all([
@@ -96,7 +87,6 @@ const resolveFile = (importee: string, isDir = false) => {
 };
 
 export interface SwcPluginArgs {
-  componentFramework?: ComponentFramework;
   extraSwcOptions?: Config;
 }
 
@@ -106,7 +96,6 @@ export interface SwcPluginArgs {
  * @returns
  */
 const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
-  componentFramework,
   extraSwcOptions,
 }) => {
   return {
@@ -151,7 +140,7 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
 
       const { code, map } = swc.transformSync(
         _,
-        normalizeSwcConfig(file, componentFramework, {
+        normalizeSwcConfig(file, {
           ...extraSwcOptions,
           // Disable minimize on every file transform when bundling
           minify: false,

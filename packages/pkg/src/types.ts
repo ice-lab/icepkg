@@ -81,11 +81,6 @@ export interface OutputFile {
 
 export interface UserConfig {
   /**
-   * Define framework in component development
-   * @default 'react'
-   */
-  componentFramework?: ComponentFramework;
-  /**
    * Alias to file system paths
    * @default empty
    */
