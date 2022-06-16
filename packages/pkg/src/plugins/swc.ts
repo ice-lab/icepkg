@@ -6,7 +6,7 @@ import { isTypescriptOnly } from '../helpers/suffix.js';
 import { isDirectory, scriptsFilter } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config } from '@swc/core';
-import type { RollupPluginFn, OutputFile, ComponentFramework } from '../types.js';
+import type { RollupPluginFn, OutputFile } from '../types.js';
 
 const normalizeSwcConfig = (
   file: OutputFile,
