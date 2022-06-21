@@ -120,7 +120,7 @@ export const normalizeRollupConfig = (
   taskName: TaskName,
 ): [RollupPlugin[], RollupOptions] => {
   const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = cfg;
-  const { rootDir, command, userConfig, pkg } = ctx;
+  const { rootDir, userConfig, pkg } = ctx;
   const commonPlugins = [
     userConfig?.alias && alias({ entries: userConfig.alias }),
     userConfig?.babelPlugins?.length && babelPlugin(userConfig.babelPlugins),
@@ -139,7 +139,6 @@ export const normalizeRollupConfig = (
       ...commonPlugins,
       aliasPlugin({
         alias: userConfig?.alias,
-        command,
       }),
     ];
 

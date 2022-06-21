@@ -9,7 +9,6 @@ import MagicString from 'magic-string';
 
 interface AliasPluginOptions {
   alias: Record<string, string>;
-  command: CommandName;
 }
 
 async function redirectImport(
@@ -27,7 +26,7 @@ async function redirectImport(
   return str;
 }
 
-const aliasPlugin = (options: AliasPluginOptions = { alias: {}, command: 'start' }) => {
+const aliasPlugin = (options: AliasPluginOptions = { alias: {} }) => {
   return {
     name: 'ice-pkg:alias',
 
@@ -36,7 +35,7 @@ const aliasPlugin = (options: AliasPluginOptions = { alias: {}, command: 'start'
       if (!code) {
         return null;
       }
-      const { alias, command } = options;
+      const { alias } = options;
       await init;
       let imports: readonly ImportSpecifier[] = [];
       try {
@@ -53,8 +52,7 @@ const aliasPlugin = (options: AliasPluginOptions = { alias: {}, command: 'start'
       const str = await redirectImport(
         code,
         imports,
-        // Only in dev mode should alias rax to rax-compat for preview
-        command === 'start' ? Object.assign({ rax: 'rax-compat' }, alias) : alias,
+        alias,
       );
 
       return {
