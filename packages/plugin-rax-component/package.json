@@ -1,13 +1,12 @@
 {
-  "name": "@ice/pkg-plugin-component",
+  "name": "@ice/pkg-plugin-rax-component",
   "version": "1.0.0",
-  "description": "Main plugin for @ice/pkg",
+  "description": "Rax component plugin for @ice/pkg",
   "main": "lib/index.js",
   "type": "module",
   "exports": "./lib/index.js",
   "files": [
-    "lib",
-    "docusaurus.config.js"
+    "lib"
   ],
   "scripts": {
     "build": "rm -rf lib && tsc",
@@ -19,11 +18,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "consola": "^2.15.3",
-    "fs-extra": "^10.0.0"
   },
   "devDependencies": {
-    "@ice/pkg": "workspace: ^1.0.0",
     "typescript": "^4.5.4"
   }
 }

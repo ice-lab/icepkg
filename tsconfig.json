@@ -5,5 +5,6 @@
     { "path": "packages/pkg" },
     { "path": "packages/plugin-component" },
     { "path": "packages/plugin-docusaurus" }
+    { "path": "packages/plugin-rax-component" },
   ]
 }
