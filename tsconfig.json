@@ -4,7 +4,7 @@
     { "path": "packages/ice-npm-utils" },
     { "path": "packages/pkg" },
     { "path": "packages/plugin-component" },
-    { "path": "packages/plugin-docusaurus" }
-    { "path": "packages/plugin-rax-component" },
+    { "path": "packages/plugin-docusaurus" },
+    { "path": "packages/plugin-rax-component" }
   ]
 }
