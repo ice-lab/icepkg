@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 import hbs from 'handlebars';
 import { createRequire } from 'module';
+import { DOCUSAURUS_DIR, DOCUSAURUS_CONFIG_FILE, DOCUSAURUS_BABEL_CONFIG_FILE } from './constants.mjs';
 
 import type { PluginDocusaurusOptions } from './index.mjs';
 
@@ -43,10 +44,27 @@ export function configureDocusaurus(rootDir: string, params: PluginDocusaurusOpt
     sassDocusaurusPluginPath,
   });
 
-  // Write config to .docusaurus
-  const output = path.join(rootDir, './.docusaurus');
+  const babelConfigContents = `
+module.exports = {
+  presets: [require.resolve('@docusaurus/core/lib/babel/preset')],
+  plugins: [
+    [
+      require.resolve('babel-plugin-module-resolver'),
+      {
+        alias: {
+          rax: 'rax-compat'
+        }
+      }
+    ]
+  ]
+};`
 
+  // Write config to .docusaurus
+  const output = path.join(rootDir, DOCUSAURUS_DIR);
   fs.ensureDirSync(output);
-  fs.writeFileSync(path.join(output, './docusaurus.config.cjs'), targetContents, 'utf-8');
+  fs.writeFileSync(path.join(output, DOCUSAURUS_CONFIG_FILE), targetContents, 'utf-8');
+  // babel config for rax components doc build
+  fs.writeFileSync(
+    path.join(output, DOCUSAURUS_BABEL_CONFIG_FILE), babelConfigContents, 'utf-8');
 }
 

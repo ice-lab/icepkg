@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import { fork } from 'child_process';
 import { createRequire } from 'module';
 import consola from 'consola';
+import { DOCUSAURUS_DIR, DOCUSAURUS_CONFIG_FILE, DOCUSAURUS_BABEL_CONFIG_FILE } from './constants.mjs';
 
 import type { PluginDocusaurusOptions } from './index.mjs';
 
@@ -25,12 +26,15 @@ export const doc = (api, options: PluginDocusaurusOptions) => {
     binPath,
     [
       command,
-      !docusaurusConfigFileExist && `--config=${rootDir}/.docusaurus/docusaurus.config.cjs`,
+      !docusaurusConfigFileExist && `--config=${rootDir}/${DOCUSAURUS_DIR}/${DOCUSAURUS_CONFIG_FILE}`,
       command === 'start' && `--port=${options.port}`,
     ].filter(Boolean),
     {
       cwd: rootDir,
-      env: process.env,
+      env: {
+        ...process.env,
+        DOCUSAURUS_BABEL_CONFIG_FILE_NAME: `${DOCUSAURUS_DIR}/${DOCUSAURUS_BABEL_CONFIG_FILE}`
+      },
     },
   );
 
