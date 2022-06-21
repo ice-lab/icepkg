@@ -52,7 +52,15 @@ module.exports = {
       require.resolve('babel-plugin-module-resolver'),
       {
         alias: {
-          rax: 'rax-compat'
+          rax: 'rax-compat',
+          'rax-children': 'rax-compat/children',
+          'rax-clone-element': 'rax-compat/clone-element',
+          'rax-create-class': 'rax-compat/create-class',
+          'rax-create-factory': 'rax-compat/create-factory',
+          'rax-create-portal': 'rax-compat/create-portal',
+          'rax-find-dom-node': 'rax-compat/find-dom-node',
+          'rax-is-valid-element': 'rax-compat/is-valid-element',
+          'rax-unmount-component-at-node': 'rax-compat/unmount-component-at-node',
         }
       }
     ]

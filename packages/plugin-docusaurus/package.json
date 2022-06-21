@@ -19,13 +19,11 @@
     "plugin.js"
   ],
   "scripts": {
-    "build": "rm -rf es && pnpm pkg-cli build",
+    "build": "rm -rf es && pnpm ice-pkg build",
     "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
     "prepublishOnly": "pnpm run-s lint build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@docusaurus/core": "2.0.0-beta.20",
     "@docusaurus/preset-classic": "2.0.0-beta.20",
@@ -45,7 +43,7 @@
     "unist-util-visit": "2.0.3"
   },
   "devDependencies": {
-    "@ice/pkg-cli": "1.0.0-beta.3",
+    "@ice/pkg": "^1.0.0",
     "react": "^17",
     "react-dom": "^17"
   }

@@ -15,13 +15,11 @@
     "prepublishOnly": "pnpm run-s lint build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "rax-compat": "^0.1.0-alpha.5"
   },
   "devDependencies": {
-    "@ice/pkg": "workspace: ^1.0.0",
+    "@ice/pkg": "^1.0.0",
     "typescript": "^4.5.4"
   }
 }
