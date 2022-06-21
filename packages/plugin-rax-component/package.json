@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "rax-compat": "^0.1.0-alpha.5"
   },
   "devDependencies": {
     "typescript": "^4.5.4"

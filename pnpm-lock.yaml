@@ -267,7 +267,10 @@ importers:
 
   packages/plugin-rax-component:
     specifiers:
+      rax-compat: ^0.1.0-alpha.5
       typescript: ^4.5.4
+    dependencies:
+      rax-compat: 0.1.0-beta.2
     devDependencies:
       typescript: 4.6.4
 
@@ -3665,6 +3668,10 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
+  /@uni/env/1.1.0:
+    resolution: {integrity: sha512-2GVgUzxIaO2vGElXEuc45+I7L6Jbw8inLDDFuC0K4htjKtPmYywKSE6oDhvmdAXb4GCOH8hmxECYtAh1rjsgoQ==}
+    dev: false
+
   /@webassemblyjs/ast/1.11.1:
     resolution: {integrity: sha512-ukBh14qFLjxTQNTXocdyksN5QdM28S1CxHt2rdskFyL+xFV7VremuBLVbmCePj+URalXBENx/9Lm7lnhihtCSw==}
     dependencies:
@@ -3981,6 +3988,13 @@ packages:
     dependencies:
       normalize-path: 3.0.0
       picomatch: 2.3.1
+
+  /appear-polyfill/0.1.2:
+    resolution: {integrity: sha512-s2113Awjp9pyyczgFqNK7DTjKCwfzwkerhHqa6YbsSQvi5ZuRYgirjzuPn9JJi/b0GE2R4lY9LrhoW5YDa65Ug==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      rax: ^1.0.0
+    dev: false
 
   /aproba/1.2.0:
     resolution: {integrity: sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==}
@@ -4948,6 +4962,13 @@ packages:
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
+
+  /create-react-class/15.7.0:
+    resolution: {integrity: sha512-QZv4sFWG9S5RUvkTYWbflxeZX+JG7Cz0Tn33rQBJ+WFQTqTfUTjMjiv9tnfXazjsO5r0KhPs+AqCjyrQX6h2ng==}
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+    dev: false
 
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
@@ -9495,6 +9516,19 @@ packages:
       unpipe: 1.0.0
     dev: false
 
+  /rax-compat/0.1.0-beta.2:
+    resolution: {integrity: sha512-2TgAlQizguSL1TnY8Uon7IgIZtdW3BJUOHXnhfb9WggEf7tAYbLwPCMLKBfOwHpHRIDN77sc87NoL83uUd0v0Q==}
+    peerDependencies:
+      react: ^18
+      react-dom: ^18
+    dependencies:
+      appear-polyfill: 0.1.2
+      create-react-class: 15.7.0
+      style-unit: 3.0.4
+    transitivePeerDependencies:
+      - rax
+    dev: false
+
   /rc/1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
@@ -10796,6 +10830,13 @@ packages:
       inline-style-parser: 0.1.1
     dev: false
 
+  /style-unit/3.0.4:
+    resolution: {integrity: sha512-jGYAsSmFvJGEAocNFmxsryWG+YUqtLZ8R8KmQtoVhBnhEVEaZE/53Yrg8I/2WLBrGxHC30wxGd4w9T+A7VxbfA==}
+    dependencies:
+      '@babel/runtime': 7.17.9
+      universal-env: 3.3.3
+    dev: false
+
   /stylehacks/5.1.0_postcss@8.4.13:
     resolution: {integrity: sha512-SzLmvHQTrIWfSgljkQCw2++C9+Ne91d/6Sp92I8c5uHTcy/PgeHamwITIbBW9wnFTY/3ZfSXR9HIL6Ikqmcu6Q==}
     engines: {node: ^10 || ^12 || >=14.0}
@@ -11380,6 +11421,13 @@ packages:
       '@types/unist': 2.0.6
       unist-util-is: 4.1.0
       unist-util-visit-parents: 3.1.1
+    dev: false
+
+  /universal-env/3.3.3:
+    resolution: {integrity: sha512-4ZyITvWhtcurCEA66Cb7jcd4zpEiAAo91wSwbEscbiu033pIsC2yjgT8LYyasFgsst6jZHD1gtVoSyYcL8oH1Q==}
+    engines: {npm: '>=3.0.0'}
+    dependencies:
+      '@uni/env': 1.1.0
     dev: false
 
   /universalify/0.1.2:
