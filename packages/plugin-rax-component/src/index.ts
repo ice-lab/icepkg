@@ -3,7 +3,7 @@ import type { PkgPlugin } from '@ice/pkg';
 const plugin: PkgPlugin = (api) => {
   const { onGetConfig } = api;
 
-  onGetConfig(config => {
+  onGetConfig((config) => {
     return {
       ...config,
       swcCompileOptions: {
@@ -20,9 +20,9 @@ const plugin: PkgPlugin = (api) => {
           externalHelpers: false,
           loose: false, // No recommand
         },
-      }
-    }
-  })
+      },
+    };
+  });
 };
 
 export default plugin;

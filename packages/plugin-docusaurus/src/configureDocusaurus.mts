@@ -57,7 +57,7 @@ module.exports = {
       }
     ]
   ]
-};`
+};`;
 
   // Write config to .docusaurus
   const output = path.join(rootDir, DOCUSAURUS_DIR);
@@ -65,6 +65,7 @@ module.exports = {
   fs.writeFileSync(path.join(output, DOCUSAURUS_CONFIG_FILE), targetContents, 'utf-8');
   // babel config for rax components doc build
   fs.writeFileSync(
-    path.join(output, DOCUSAURUS_BABEL_CONFIG_FILE), babelConfigContents, 'utf-8');
+    path.join(output, DOCUSAURUS_BABEL_CONFIG_FILE), babelConfigContents, 'utf-8',
+  );
 }
 

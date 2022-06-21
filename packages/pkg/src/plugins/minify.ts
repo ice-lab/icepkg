@@ -2,6 +2,7 @@ import * as swc from '@swc/core';
 
 import type { JsMinifyOptions } from '@swc/core';
 import type { RollupPluginFn } from '../types.js';
+
 export interface MinifyPluginOption {
   minifyOption: true | JsMinifyOptions;
   sourceMaps: boolean | 'inline';

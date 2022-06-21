@@ -33,7 +33,7 @@ export const doc = (api, options: PluginDocusaurusOptions) => {
       cwd: rootDir,
       env: {
         ...process.env,
-        DOCUSAURUS_BABEL_CONFIG_FILE_NAME: `${DOCUSAURUS_DIR}/${DOCUSAURUS_BABEL_CONFIG_FILE}`
+        DOCUSAURUS_BABEL_CONFIG_FILE_NAME: `${DOCUSAURUS_DIR}/${DOCUSAURUS_BABEL_CONFIG_FILE}`,
       },
     },
   );
