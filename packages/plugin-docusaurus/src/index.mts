@@ -43,6 +43,10 @@ export interface PluginDocusaurusOptions {
   mobilePreview?: boolean;
 }
 
+export interface ConfigureDocusaurusOptions extends PluginDocusaurusOptions {
+  configuredPlugins: ReturnType<Parameters<PkgPlugin>[0]['getAllPlugin']>;
+}
+
 const defaultOptions: PluginDocusaurusOptions = {
   title: '飞冰组件',
   url: 'https://your-docusaurus-test-site.com',
@@ -58,13 +62,16 @@ const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions) => {
   const {
     onHook,
     context,
+    getAllPlugin
   } = api;
 
   const { command, rootDir } = context;
 
+  const configuredPlugins = getAllPlugin();
   const pluginOptions = {
     ...defaultOptions,
     ...options,
+    configuredPlugins
   };
   configureDocusaurus(rootDir, pluginOptions);
 
