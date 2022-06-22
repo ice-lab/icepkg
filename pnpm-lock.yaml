@@ -94,7 +94,7 @@ importers:
 
   packages/create-pkg:
     specifiers:
-      '@ice/pkg': ^1.0.0
+      '@ice/pkg-cli': 1.0.0-beta.3
       '@iceworks/generate-material': ^1.0.12
       cac: ^6.7.12
       consola: ^2.15.3
@@ -112,7 +112,7 @@ importers:
       inquirer: 8.2.4
       validate-npm-package-name: 3.0.0
     devDependencies:
-      '@ice/pkg': link:../pkg
+      '@ice/pkg-cli': 1.0.0-beta.3
       typescript: 4.6.4
 
   packages/ice-npm-utils:
@@ -2828,7 +2828,7 @@ packages:
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
-    resolution: {integrity: sha1-dhnC6yGyVIP20WdUi0z9WnSIw9U=, tarball: '@nodelib/fs.scandir/download/@nodelib/fs.scandir-2.1.5.tgz'}
+    resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -12011,7 +12011,7 @@ packages:
   /wide-align/1.1.5:
     resolution: {integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg==}
     dependencies:
-      string-width: 1.0.2
+      string-width: 4.2.3
 
   /widest-line/3.1.0:
     resolution: {integrity: sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==}
