@@ -46,7 +46,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
   });
 
   const configuredPlugins = params?.configuredPlugins;
-  const isUsingRax = configuredPlugins.some(plugin => plugin.name === '@ice/pkg-plugin-rax-component');
+  const isUsingRax = configuredPlugins.some((plugin) => plugin.name === '@ice/pkg-plugin-rax-component');
 
   if (isUsingRax) {
     consola.warn('You are developing a rax component with compat mode which will alias rax to rax-compat');

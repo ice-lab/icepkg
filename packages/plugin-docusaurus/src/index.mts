@@ -62,7 +62,7 @@ const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions) => {
   const {
     onHook,
     context,
-    getAllPlugin
+    getAllPlugin,
   } = api;
 
   const { command, rootDir } = context;
@@ -71,7 +71,7 @@ const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions) => {
   const pluginOptions = {
     ...defaultOptions,
     ...options,
-    configuredPlugins
+    configuredPlugins,
   };
   configureDocusaurus(rootDir, pluginOptions);
 
