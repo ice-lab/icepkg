@@ -36,7 +36,6 @@ const aliasPlugin = (options: AliasPluginOptions = { alias: {} }) => {
       if (!code || !scriptsFilter(id)) {
         return null;
       }
-      console.log('id', id);
       const { alias } = options;
       await init;
       let imports: readonly ImportSpecifier[] = [];

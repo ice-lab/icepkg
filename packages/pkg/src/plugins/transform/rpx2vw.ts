@@ -15,7 +15,7 @@ const rpx2vwPlugin = () => {
         return null;
       }
 
-      const result = await postcss(PostcssPluginRpxToVw).process(code);
+      const result = await postcss(PostcssPluginRpxToVw).process(code, { from: id });
       return {
         code: result.css,
         map: null,
