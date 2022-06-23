@@ -14,7 +14,7 @@ module.exports = function (context) {
       const cssRules = config.module.rules.filter(rule => {
         const testRegExpStr = rule.test.toString();
         // eslint-disable-no-useless-escape
-        return testRegExpStr === '/.css$/i' || testRegExpStr === '/.module.css$/i';
+        return testRegExpStr === '/\\.css$/i' || testRegExpStr === '/\\.module\\.css$/i';
       });
       cssRules.forEach(rule => {
         const postcssUse = rule.use.find(u => u.loader.includes('postcss-loader'));
