@@ -18,7 +18,9 @@ module.exports = function (context) {
       });
       cssRules.forEach(rule => {
         const postcssUse = rule.use.find(u => u.loader.includes('postcss-loader'));
-        postcssUse.options.postcssOptions.plugins.push(require.resolve('postcss-plugin-rpx2vw'));
+        if (postcssUse) {
+          postcssUse.options.postcssOptions.plugins.push(require.resolve('postcss-plugin-rpx2vw'));
+        }
       });
       return {
         resolve: {
