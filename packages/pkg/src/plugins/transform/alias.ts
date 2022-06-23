@@ -3,9 +3,10 @@
  */
 import { init, parse } from 'es-module-lexer';
 import type { ImportSpecifier } from 'es-module-lexer';
-import type { CommandName } from 'build-scripts';
 import consola from 'consola';
 import MagicString from 'magic-string';
+import { scriptsFilter } from '../../utils.js';
+
 
 interface AliasPluginOptions {
   alias: Record<string, string>;
@@ -28,13 +29,14 @@ async function redirectImport(
 
 const aliasPlugin = (options: AliasPluginOptions = { alias: {} }) => {
   return {
-    name: 'ice-pkg:alias',
+    name: 'ice-pkg:transform-alias',
 
-    async transform(code) {
+    async transform(code, id) {
       // only transform source code;
-      if (!code) {
+      if (!code || !scriptsFilter(id)) {
         return null;
       }
+      console.log('id', id);
       const { alias } = options;
       await init;
       let imports: readonly ImportSpecifier[] = [];
