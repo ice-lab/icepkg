@@ -10,7 +10,15 @@ module.exports = function (context) {
 
   return {
     name: 'docusaurus-plugin',
-    configureWebpack() {
+    configureWebpack(config) {
+      const cssRules = config.module.rules.filter(rule => {
+        const testRegExpStr = rule.test.toString();
+        return testRegExpStr === '/\.css$/i' || testRegExpStr === '/\.module\.css$/i';
+      });
+      cssRules.forEach(rule => {
+        const postcssUse = rule.use.find(u => u.loader.includes('postcss-loader'));
+        postcssUse.options.postcssOptions.plugins.push(require.resolve('postcss-plugin-rpx2vw'));
+      });
       return {
         resolve: {
           alias: {
