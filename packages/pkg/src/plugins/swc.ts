@@ -20,7 +20,7 @@ const normalizeSwcConfig = (
       transform: {
         react: {
           runtime: 'automatic',
-          importSource: '@ice/runtime'
+          importSource: '@ice/runtime',
         },
         legacyDecorator: true,
       },
