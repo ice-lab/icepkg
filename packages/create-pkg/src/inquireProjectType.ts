@@ -9,15 +9,15 @@ export async function inquireProjectType() {
       default: 'react-component',
       choices: [{
         name: 'React component',
-        value: 'react'
+        value: 'react',
       }, {
         name: 'JS API',
-        value: 'api'
+        value: 'api',
       }, {
         name: 'Rax component',
-        value: 'rax'
-      }]
-    }
+        value: 'rax',
+      }],
+    },
   ]);
   return projectType;
 }

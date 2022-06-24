@@ -11,13 +11,13 @@ module.exports = function (context) {
   return {
     name: 'docusaurus-plugin',
     configureWebpack(config) {
-      const cssRules = config.module.rules.filter(rule => {
+      const cssRules = config.module.rules.filter((rule) => {
         const testRegExpStr = rule.test.toString();
         // eslint-disable-no-useless-escape
         return testRegExpStr === '/\\.css$/i' || testRegExpStr === '/\\.module\\.css$/i';
       });
-      cssRules.forEach(rule => {
-        const postcssUse = rule.use.find(u => u.loader.includes('postcss-loader'));
+      cssRules.forEach((rule) => {
+        const postcssUse = rule.use.find((u) => u.loader.includes('postcss-loader'));
         if (postcssUse) {
           postcssUse.options.postcssOptions.plugins.push(require.resolve('postcss-plugin-rpx2vw'));
         }
