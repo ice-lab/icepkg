@@ -10,7 +10,7 @@ function generateNpmName(name: string, npmScope?: string): string {
   return npmScope ? `${npmScope}/${name}` : name;
 }
 
-export async function inquirPackageName() {
+export async function inquirePackageName() {
   const isIntranet = checkAliInternal();
 
   const { forIntranet } = await (isIntranet
