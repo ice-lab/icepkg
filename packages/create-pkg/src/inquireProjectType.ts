@@ -1,20 +1,22 @@
 import inquirer from 'inquirer';
+import getInfo from './langs/index.js';
 
 export async function inquireProjectType() {
+  const info = await getInfo();
   const { projectType } = await inquirer.prompt([
     {
       type: 'list',
-      message: 'please select project type',
+      message: info.selectProjectType,
       name: 'projectType',
       default: 'react-component',
       choices: [{
-        name: 'React component',
+        name: info.npmPackage,
+        value: 'npm',
+      }, {
+        name: info.reactComponent,
         value: 'react',
-      }, {
-        name: 'JS API',
-        value: 'api',
-      }, {
-        name: 'Rax component',
+      },  {
+        name: info.raxComponent,
         value: 'rax',
       }],
     },
