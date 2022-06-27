@@ -11,4 +11,4 @@ export default {
   npmPackage: 'npm package',
   reactComponent: 'React Component',
   raxComponent: 'Rax Component',
-}
+};

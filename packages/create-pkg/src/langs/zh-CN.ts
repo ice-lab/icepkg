@@ -11,4 +11,4 @@ export default {
   npmPackage: 'npm 包',
   reactComponent: 'React 组件',
   raxComponent: 'Rax 组件',
-}
+};

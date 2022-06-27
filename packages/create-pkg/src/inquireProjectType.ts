@@ -15,7 +15,7 @@ export async function inquireProjectType() {
       }, {
         name: info.reactComponent,
         value: 'react',
-      },  {
+      }, {
         name: info.raxComponent,
         value: 'rax',
       }],

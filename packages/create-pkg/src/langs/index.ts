@@ -7,15 +7,16 @@ let lang: string;
 
 async function getLocale() {
   if (!lang) {
-    return lang = await osLocale();
+    lang = await osLocale();
+    return lang;
   }
   return lang;
 }
 
 
 export default async function getInfo() {
-  const lang = await getLocale();
-  if (lang.startsWith('zh')) {
+  const currentLang = await getLocale();
+  if (currentLang.startsWith('zh')) {
     return zhCN;
   } else {
     return enUS;
