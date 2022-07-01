@@ -30,7 +30,7 @@ const config = {
           sidebarItemsGenerator: {{{sidebarItemsGenerator}}},
           {{/if}}
           remarkPlugins: [
-            [extractCode, { mobilePreview: {{mobilePreview}} }],
+            [extractCode, { mobilePreview: {{mobilePreview}}, baseUrl: '{{baseUrl}}' }],
           ],
           routeBasePath: '/',
         },
