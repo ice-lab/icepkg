@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.5
+
+- [feat] support multiple pages
+
 ## 2.0.4
 
 - [fix] peerDependencies

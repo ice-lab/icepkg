@@ -1,6 +1,6 @@
 {
   "name": "template-component-demo",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "default demo style for component development",
   "files": [
     "es/",

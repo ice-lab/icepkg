@@ -1,9 +1,9 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 
-export function ReactDoc({ data }) {
-  const { reactDoc } = data || {};
-  const { displayName, description, props } = reactDoc || {};
+export function ReactDoc({ data = {} }) {
+  const { displayName, description, props } = data;
+  console.log(data);
   return (
     <div className="markdown">
       <h3>{displayName}</h3>
@@ -25,7 +25,7 @@ export function ReactDoc({ data }) {
               <td>
                 <Markdown>{props[key].description}</Markdown>
               </td>
-              <td>{props[key].tsType?.raw || props[key].tsType?.name}</td>
+              <td>{props[key].type?.raw || props[key].type?.name}</td>
               <td>{props[key].required && '✓'}</td>
               <td>{props[key].defaultValue?.value}</td>
             </tr>

@@ -6,8 +6,9 @@ const { join } = require('path');
 const camelcase = require('camelcase');
 const { markdownParser: defaultMarkdownParser } = require('../utils/markdownHelper');
 const formatPathForWin = require('./formatPathForWin');
+const getReactDocs = require('./getReactDocs');
 
-module.exports = function getDemos(demoPath, markdownParser = defaultMarkdownParser) {
+module.exports = function getDemos(demoPath, markdownParser = defaultMarkdownParser, rootPath) {
   if (!existsSync(demoPath)) {
     return [];
   }
@@ -29,6 +30,11 @@ module.exports = function getDemos(demoPath, markdownParser = defaultMarkdownPar
         demoPath,
       });
 
+      let reactDocs;
+      if (meta.docGenIncludes) {
+        reactDocs = getReactDocs(rootPath, meta.docGenIncludes);
+      }
+
       filename = filename.replace(/\.md$/, '');
       const href = `/?demo=${filename}`;
 
@@ -37,6 +43,7 @@ module.exports = function getDemos(demoPath, markdownParser = defaultMarkdownPar
         filename,
         pascalCaseName: camelcase(filename, { pascalCase: true }),
         filePath,
+        reactDocs,
         ...meta,
         highlightedCode,
         markdownContent,

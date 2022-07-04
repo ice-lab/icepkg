@@ -1,29 +1,26 @@
 import React from 'react';
 import { CodeBox } from './CodeBox';
+import { ReactDoc } from '../ReactDoc';
 import './index.css';
 
 export const Playground = ({ data, children }) => {
-  const {
-    filename,
-    meta,
-    highlightedCode,
-    highlightedStyle,
-    markdownContent,
-    readme,
-  } = data;
+  const { filename, meta, highlightedCode, highlightedStyle, markdownContent, readme, reactDocs } = data;
 
   // add style scope
   let htmlContent = markdownContent || '';
   const matchCss = htmlContent.match(/<style>([\s\S]*?)<\/style>/);
   if (matchCss) {
     const matchContent = matchCss[1];
-    const replaceContent = matchContent.split('}').map((content) => {
-      let cssContent = content;
-      if (content[0] === '.') {
-        cssContent = `#${filename} ${cssContent}`;
-      }
-      return `${cssContent}`;
-    }).join('}');
+    const replaceContent = matchContent
+      .split('}')
+      .map((content) => {
+        let cssContent = content;
+        if (content[0] === '.') {
+          cssContent = `#${filename} ${cssContent}`;
+        }
+        return `${cssContent}`;
+      })
+      .join('}');
     htmlContent = htmlContent.replace(matchContent, replaceContent);
   }
   return (
@@ -32,14 +29,13 @@ export const Playground = ({ data, children }) => {
       {renderReadMe(readme)}
       <div className="preview">
         {renderMarkdownContent(htmlContent)}
-        <CodeBox
-          filename={filename}
-          highlightedCode={highlightedCode}
-          highlightedStyle={highlightedStyle}
-        >
+        <CodeBox filename={filename} highlightedCode={highlightedCode} highlightedStyle={highlightedStyle}>
           {children}
         </CodeBox>
       </div>
+      {reactDocs?.map((docData) => (
+        <ReactDoc key={docData.filename} data={docData} />
+      ))}
     </div>
   );
 };
@@ -58,7 +54,7 @@ function renderMeta(meta) {
   return (
     <div className="meta">
       <ul className="meta-list">
-        {meta.map(item => {
+        {meta.map((item) => {
           return (
             <li className="meta-item">
               {item.key}: {item.value}
@@ -72,10 +68,5 @@ function renderMeta(meta) {
 
 /** 渲染MarkDown内容 */
 function renderMarkdownContent(markdownContent) {
-  return (
-    <div
-      className="markdown"
-      dangerouslySetInnerHTML={{ __html: markdownContent }}
-    />
-  );
+  return <div className="markdown" dangerouslySetInnerHTML={{ __html: markdownContent }} />;
 }

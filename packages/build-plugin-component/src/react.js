@@ -20,6 +20,7 @@ const buildConfig = require('./configs/react/build');
 const defaultUserConfig = require('./configs/userConfig');
 const reactUserConfig = require('./configs/react/userConfig');
 const setDevLog = require('./utils/setDevLog');
+const setSassStyleExpanded = require('./utils/setSassStyleExpanded');
 
 const babelCompiler = require('./compiler/babel');
 
@@ -49,6 +50,8 @@ module.exports = ({
   const mode = command === 'start' ? 'development' : 'production';
   const webpackConfig = getWebpackConfig(mode);
 
+  setSassStyleExpanded(webpackConfig);
+
   // get demo information
   const demoDir = getDemoDir(rootDir);
   const taskName = 'component-demo-web';
@@ -75,7 +78,7 @@ module.exports = ({
       const reactDocs = getReactDocs(rootDir, docGenIncludes);
       searchDirs.forEach((markdownDir) => {
         const demoKey = markdownDir || 'index';
-        const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser);
+        const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser, rootDir);
         demoData.push({
           demoKey,
           demos: demos.map((demo) => {
@@ -162,10 +165,12 @@ module.exports = ({
 
   // register cli options
   const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https', 'disable-open'];
-  registerCliOption(cliOptions.map((name) => ({
-    name,
-    commands: ['start', 'build'],
-  })));
+  registerCliOption(
+    cliOptions.map((name) => ({
+      name,
+      commands: ['start', 'build'],
+    })),
+  );
 
   // register user config
   registerUserConfig(defaultUserConfig.concat(reactUserConfig));

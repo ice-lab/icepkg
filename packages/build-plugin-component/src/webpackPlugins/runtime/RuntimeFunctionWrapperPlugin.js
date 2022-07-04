@@ -33,7 +33,7 @@ class BuildWrapper {
 
     if (compiler.hooks && compiler.hooks.done && compiler.hooks.done.tap) {
       compiler.hooks.afterEmit.tap('runtime-function-wrapper-plugin', (compilation) => {
-        const demos = getDemos(path.join(rootDir, demoDir), markdownParser);
+        const demos = getDemos(path.join(rootDir, demoDir), markdownParser, rootDir);
         const miniappOutputPath = targetDir;
 
         // 创建 createDemoDir(path, demoName);
