@@ -20,7 +20,7 @@ const resolveImports = (code, filePath) => {
     let importedReact = false;
     imports.forEach((i) => {
       if (i[0] === '.') {
-        _code = code.replace(i, path.resolve(fileDirname, i));
+        _code = _code.replace(i, path.resolve(fileDirname, i));
       }
 
       if (i === 'react') {

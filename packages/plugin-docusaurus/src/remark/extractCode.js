@@ -31,7 +31,7 @@ const uniqueFilename = (originalDocPath, count) => {
  * @returns
  */
 const plugin = (options) => {
-  const { mobilePreview = false } = options;
+  const { mobilePreview = false, baseUrl = '/' } = options;
 
   const transformer = async (ast, vfile) => {
     const demosMeta = [];
@@ -68,7 +68,7 @@ const plugin = (options) => {
           idx: index,
           uniqueName: demoFilename,
           filePath,
-          url: `/pages/${demoFilename}`,
+          url: baseUrl.startsWith('/') ? path.join(baseUrl, 'pages', demoFilename) : `/${path.join(baseUrl, 'pages', demoFilename)}`,
         });
       }
     });

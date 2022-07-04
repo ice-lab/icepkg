@@ -1,13 +1,12 @@
 {
-  "name": "@ice/pkg-plugin-component",
+  "name": "@ice/pkg-plugin-rax-component",
   "version": "1.0.0",
-  "description": "Main plugin for @ice/pkg",
+  "description": "Rax component plugin for @ice/pkg",
   "main": "lib/index.js",
   "type": "module",
   "exports": "./lib/index.js",
   "files": [
-    "lib",
-    "docusaurus.config.js"
+    "lib"
   ],
   "scripts": {
     "build": "rm -rf lib && tsc",
@@ -17,8 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "consola": "^2.15.3",
-    "fs-extra": "^10.0.0"
+    "rax-compat": "^0.1.0-alpha.5"
   },
   "devDependencies": {
     "@ice/pkg": "^1.0.0",

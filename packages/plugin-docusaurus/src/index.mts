@@ -45,6 +45,10 @@ export interface PluginDocusaurusOptions {
   mobilePreview?: boolean;
 }
 
+export interface ConfigureDocusaurusOptions extends PluginDocusaurusOptions {
+  configuredPlugins: ReturnType<Parameters<PkgPlugin>[0]['getAllPlugin']>;
+}
+
 const defaultOptions: PluginDocusaurusOptions = {
   title: 'ICE PKG',
   url: 'https://your-docusaurus-test-site.com',
@@ -57,12 +61,14 @@ const defaultOptions: PluginDocusaurusOptions = {
 
 // @ts-ignore
 const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions) => {
-  const { onHook, context } = api;
+  const { onHook, context, getAllPlugin } = api;
   const { command, rootDir } = context;
 
+  const configuredPlugins = getAllPlugin();
   const pluginOptions = {
     ...defaultOptions,
     ...options,
+    configuredPlugins,
   };
   configureDevServerPort(pluginOptions);
   configureDocusaurus(rootDir, pluginOptions);

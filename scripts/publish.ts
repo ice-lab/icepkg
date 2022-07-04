@@ -15,6 +15,7 @@ const orderedPackages = [
   'ice-npm-utils',
   '@ice/pkg',
   '@ice/pkg-plugin-component',
+  '@ice/pkg-plugin-rax-component',
   '@ice/pkg-plugin-docusaurus',
 ];
 
