@@ -8,7 +8,7 @@ export async function inquireProjectType() {
       type: 'list',
       message: info.selectProjectType,
       name: 'projectType',
-      default: 'react',
+      default: 'web',
       choices: [{
         name: info.webLibrary,
         value: 'web',
