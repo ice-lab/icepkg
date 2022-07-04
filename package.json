@@ -13,7 +13,8 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
-    "publish:packages": "ts-node ./scripts/publish.ts"
+    "publish:packages": "ts-node ./scripts/publish.ts",
+    "build:doc": "cd website && npm run build"
   },
   "author": "ICE Team",
   "devDependencies": {
