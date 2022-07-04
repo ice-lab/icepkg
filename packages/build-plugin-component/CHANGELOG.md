@@ -1,7 +1,8 @@
 # Changelog
 
-## 1.10.1
+## 1.11.0
 
+- [feat] Support docGenIncludes for all *.md files in demo([#285](https://github.com/ice-lab/iceworks-cli/issues/250)))
 - [fix] disable minimize sass output by default. ([#250](https://github.com/ice-lab/iceworks-cli/issues/250))
 
 ## 1.10.0
