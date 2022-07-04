@@ -28,7 +28,7 @@ import MyComponent from 'my-component';
 
 ICE PKG 对于这种 React 开发形态提供默认支持，等同于配置：
 
-```ts title=build.config.ts
+```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
@@ -74,7 +74,7 @@ import 'my-component/dist/index.css';
 
 在 ICE PKG 中，推荐如下配置：
 
-```ts title=build.config.ts
+```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({

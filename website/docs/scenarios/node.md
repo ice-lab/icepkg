@@ -22,7 +22,7 @@ ICE PKG 推荐使用 Pure ESM 的开发模式。
 
 Pure ESM 的开发形态下只需输出 `es2017` 的产物即可。配置如下：
 
-```ts title=build.config.ts
+```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
@@ -51,7 +51,7 @@ Node 10.x、Node 11.x 已在 [2021年4月](https://github.com/nodejs/Release#end
 
 支持 Dual 模式的模块需要额外输出 CommonJS 产物，配置如下：
 
-```ts title=build.config.ts
+```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({

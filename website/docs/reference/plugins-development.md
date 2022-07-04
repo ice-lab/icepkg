@@ -1,4 +1,4 @@
-# 插件开发
+# 开发插件
 
 ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。通过 build-scripts 插件，可以极大地扩展 ICE PKG 的能力。
 

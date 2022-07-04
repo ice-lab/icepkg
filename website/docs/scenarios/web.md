@@ -8,7 +8,7 @@
 
 ICE PKG 的 [transform 模式](/#双模式) 和 [bundle 模式](/#双模式) 统统满足你的要求。现在，通过以下进行配置：
 
-```ts title=build.config.ts
+```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({

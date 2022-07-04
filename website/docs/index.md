@@ -47,4 +47,4 @@ ICE PKG 除支持 bundle 模式外，也默认支持了 transform 模式（将�
 
 ## 社区
 
-如果你有疑问或者需要帮助，可以通过 [GitHub Discussions](https://github.com/ice-lab/icepkg/discussions/landing) 来寻求帮助。
+如果你有疑问或者需要帮助，可以通过 [GitHub Issues](https://github.com/ice-lab/icepkg/issues) 来寻求帮助。
