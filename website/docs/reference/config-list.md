@@ -14,9 +14,9 @@ import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   alias: {
-    '@': './src/'
-  }
-})
+    '@': './src/',
+  },
+});
 ```
 
 ## define
@@ -38,7 +38,7 @@ export default defineConfig({
 + 类型 `boolean`
 + 默认 `false`
 
-为 JavaScript 代码生成类型文件。@ice/pkg 默认为文件后缀为 `.ts` 生成类型文件。
+为 JavaScript 代码生成类型文件。ICE PKG 默认为文件后缀为 `.ts` 生成类型文件。
 
 如果使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。详细介绍 [工程能力 - 生成类型文件](/guide/abilities#生成类型文件)。
 
@@ -47,14 +47,14 @@ export default defineConfig({
 + 类型 `array`
 + 默认 `[]`
 
-@ice/pkg 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](#插件开发)。
+ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](#插件开发)。
 
 ## transfrom
 
 该字段定义 [transform 模式](/#双模式) 下额外的配置。`bundle` 包含以下配置：
 
 :::tip
-transform 模式是 @ice/pkg 默认的编译模式。
+transform 模式是 ICE PKG 默认的编译模式。
 :::
 
 ### formats
@@ -62,7 +62,7 @@ transform 模式是 @ice/pkg 默认的编译模式。
 + 类型 `['esm', 'cjs', 'es2017']`
 + 默认 `['esm', 'es2017']`
 
-输出的类型。@ice/pkg 会默认编译出 `esm` (输出 ES module + es5 产物) 和 `es2017` (输出 ES module + es2017 产物) 两个文件夹。
+输出的类型。ICE PKG 会默认编译出 `esm` (输出 ES module + es5 产物) 和 `es2017` (输出 ES module + es2017 产物) 两个文件夹。
 
 ```shell
 - esm # ES module + es5 产物
@@ -77,8 +77,8 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   transfrom: {
     formats: ['cjs', 'esm', 'es2017'],
-  }
-})
+  },
+});
 ```
 
 则输出如下文件夹：
@@ -102,8 +102,8 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   transfrom: {
     excludes: ['**/__tests__/**', '*.test.[j|t]s'],
-  }
-})
+  },
+});
 ```
 
 `excludes` 的配置完全遵循 [minimatch](https://github.com/isaacs/minimatch) 写法。
@@ -132,8 +132,8 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   bundle: {
     formats: ['umd', 'es2017'],
-  }
-})
+  },
+});
 ```
 
 则输出一下产物：
@@ -170,8 +170,8 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   bundle: {
     externals: false,
-  }
-})
+  },
+});
 ```
 
 若想要自定义配置 externals，参考如下配置：
@@ -185,8 +185,8 @@ export default defineConfig({
       react: 'React',
       'react-dom': 'ReactDOM',
     },
-  }
-})
+  },
+});
 ```
 
 ### development
@@ -202,8 +202,8 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   bundle: {
     development: true,
-  }
-})
+  },
+});
 ```
 
 上述配置会输出如下产物：

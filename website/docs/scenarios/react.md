@@ -31,7 +31,7 @@ ICE PKG 对于这种 React 开发形态提供默认支持，等同于配置：
 ```ts title=build.config.ts
 import { defineConfig } from '@ice/pkg';
 
-export default defineConfig(
+export default defineConfig({
   transform: {
     formats: ['esm', 'es2017'],
   },
@@ -77,12 +77,12 @@ import 'my-component/dist/index.css';
 ```ts title=build.config.ts
 import { defineConfig } from '@ice/pkg';
 
-export default defineConfig(
+export default defineConfig({
   bundle: {
     formats: ['esm', 'es2017'],
     externals: true,
   },
-})
+});
 ```
 
 该配置会在 `dist` 目录下输出以下文件：

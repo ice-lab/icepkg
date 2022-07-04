@@ -25,7 +25,7 @@ Pure ESM 的开发形态下只需输出 `es2017` 的产物即可。配置如下�
 ```ts title=build.config.ts
 import { defineConfig } from '@ice/pkg';
 
-export default defineConfig(
+export default defineConfig({
   transform: {
     formats: ['es2017'],
   },
@@ -54,7 +54,7 @@ Node 10.x、Node 11.x 已在 [2021年4月](https://github.com/nodejs/Release#end
 ```ts title=build.config.ts
 import { defineConfig } from '@ice/pkg';
 
-export default defineConfig(
+export default defineConfig({
   transform: {
     formats: ['cjs', 'es2017'],
   },

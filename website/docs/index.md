@@ -26,7 +26,7 @@ ICE PKG 是飞冰开源的 NPM 包开发解决方案，提供 [React 组件](/sc
 
 社区的众多方案如 [microbundle](https://github.com/developit/microbundle)、[tsup](https://github.com/egoist/tsup) 均只支持 bundle (将众多文件打包成一个文件输出) 模式。但 bundle 模式[并非总是最佳选择](https://github.com/ice-lab/icepkg/issues/301)。其中最为**显著的问题**在于：**对 Tree-Shaking 不友好**，无用的依赖总是会被打包到最终的输出产物中，继而影响应用的体积。
 
-@ice/pkg 除支持 bundle 模式外，默认支持 transform 模式（将文件挨个编译到输出目录）。
+ICE PKG 除支持 bundle 模式外，默认支持 transform 模式（将文件挨个编译到输出目录）。
 
 ### ES2017 产物
 
@@ -34,11 +34,12 @@ ICE PKG 是飞冰开源的 NPM 包开发解决方案，提供 [React 组件](/sc
 
 ### 多场景
 
-依赖 @ice/pkg 强大的 [双模式](#双模式) 能力，支持多类场景的额开发需求。
+依赖 ICE PKG 强大的 [双模式](#双模式) 能力，支持多类场景的额开发需求。
 
-+ [React 组件开发](/scenarios/component)
-+ [开发 Node 模块](/scenarios/node)
-+ [开发前端 library](/scenarios/library)
++ [React 组件](/scenarios/react)
++ [Rax 组件](/scenarios/rax)
++ [Node 模块](/scenarios/node)
++ [前端类库](/scenarios/web)
 
 ### 文档预览
 

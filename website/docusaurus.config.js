@@ -1,11 +1,7 @@
-// @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const extractCode = require('@ice/pkg-plugin-docusaurus/remark/extractCode');
 
-/** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'ICE PKG',
   url: 'https://pkg.ice.work',

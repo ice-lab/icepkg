@@ -1,6 +1,6 @@
 # 插件开发
 
-@ice/pkg 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。通过 build-scripts 插件，可以极大地扩展 @ice/pkg 的能力。
+ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。通过 build-scripts 插件，可以极大地扩展 ICE PKG 的能力。
 
 插件的使用如下：
 
@@ -9,14 +9,14 @@ import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   plugins: [
-    "./customPlugin.ts"
-  ]
-})
+    './customPlugin.ts',
+  ],
+});
 ```
 
 ## 修改默认配置
 
-可以通过 `onGetConfig` API，可以修改 Package 编译的入口、出口等 @ice/pkg 等默认配置：
+可以通过 `onGetConfig` API，可以修改 Package 编译的入口、出口等 ICE PKG 等默认配置：
 
 ```ts
 const plugin = (api) => {
@@ -24,15 +24,15 @@ const plugin = (api) => {
   const { rootDir } = context;
 
   onGetConfig('component-es', config => {
-    return (
+    return ({
       ...config,
       outputDir: path.join(rootDir, 'esm'), // 将出口修改为 esm 文件夹
-    )
-  })
-}
+    });
+  });
+};
 ```
 
-@ice/pkg 注册五个 build-script 任务：
+ICE PKG 注册五个 build-script 任务：
 
 + `transform-esm` - 默认启动
 + `transform-es2017` - 默认启动
@@ -50,15 +50,15 @@ const plugin = (api) => {
   const { rootDir } = context;
 
   // 不指定 Task name
-  onGetConfig(config => {
+  onGetConfig((config) => {
     return {
       ...config,
       rollupPlugins: [
-        svelte(...) // 编译 svelte 文件则会进行对应的
-      ]
-    }
-  })
-}
+        svelte(/* ... */), // 编译 svelte 文件则会进行对应的
+      ],
+    };
+  });
+};
 ```
 
 有以下参数可以配置：
@@ -118,7 +118,7 @@ swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuratio
 
 ## 插件生命周期钩子
 
-@ice/pkg 插件提供一下生命周期钩子：
+ICE PKG 插件提供一下生命周期钩子：
 
 + build 命令：
 
