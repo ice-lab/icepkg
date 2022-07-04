@@ -1,12 +1,15 @@
-import * as path from 'path';
-import * as mkdirp from 'mkdirp';
-import * as semver from 'semver';
-import * as zlib from 'zlib';
-import * as tar from 'tar';
-import * as fse from 'fs-extra';
-import { ALI_NPM_REGISTRY, ALI_UNPKG_URL } from '@appworks/constant';
-import axios from 'axios';
-import * as urlJoin from 'url-join';
+import * as fsExtra from 'fs-extra';
+import { ALI_NPM_REGISTRY, ALI_UNPKG_URL, ALI_CHECKNODE_URL } from '@appworks/constant';
+
+import request = require('request-promise');
+import semver = require('semver');
+import fs = require('fs');
+import mkdirp = require('mkdirp');
+import path = require('path');
+import urlJoin = require('url-join');
+import progress = require('request-progress');
+import zlib = require('zlib');
+import tar = require('tar');
 
 /**
  * 获取指定 npm 包版本的 tarball
@@ -25,7 +28,6 @@ function getNpmTarball(npm: string, version?: string, registry?: string): Promis
     return Promise.reject(new Error(`没有在 ${registry} 源上找到 ${npm}@${version} 包`));
   });
 }
-
 
 /**
  * 获取 tar 并将其解压到指定的文件夹
@@ -49,68 +51,57 @@ function getAndExtractTarball(
     const allWriteStream = [];
     const dirCollector = [];
 
-    axios({
-      url: tarball,
-      timeout: 10000,
-      responseType: 'stream',
-      onDownloadProgress: (progressEvent) => {
-        progressFunc(progressEvent);
-      },
-    }).then((response) => {
-      const totalLength = Number(response.headers['content-length']);
-      let downloadLength = 0;
-      response.data
-        // @ts-ignore
-        .on('data', (chunk) => {
-          downloadLength += chunk.length;
+    progress(
+      request({
+        url: tarball,
+        timeout: 10000,
+      }),
+    )
+      .on('progress', progressFunc)
+      .on('error', reject)
+      // @ts-ignore
+      .pipe(zlib.Unzip())
+      // @ts-ignore
+      .pipe(new tar.Parse())
+      .on('entry', (entry) => {
+        if (entry.type === 'Directory') {
+          entry.resume();
+          return;
+        }
+
+        const realPath = entry.path.replace(/^package\//, '');
+
+        let filename = path.basename(realPath);
+        filename = formatFilename(filename);
+
+        const destPath = path.join(destDir, path.dirname(realPath), filename);
+        const dirToBeCreate = path.dirname(destPath);
+        if (!dirCollector.includes(dirToBeCreate)) {
+          dirCollector.push(dirToBeCreate);
+          mkdirp.sync(dirToBeCreate);
+        }
+
+        allFiles.push(destPath);
+        allWriteStream.push(
+          new Promise((streamResolve) => {
+            entry
+              .pipe(fs.createWriteStream(destPath))
+              .on('finish', () => streamResolve())
+              .on('close', () => streamResolve()); // resolve when file is empty in node v8
+          }),
+        );
+      })
+      .on('end', () => {
+        if (progressFunc) {
           progressFunc({
-            percent: (downloadLength - 50) / totalLength,
+            percent: 1,
           });
-        })
-        // @ts-ignore
-        .pipe(zlib.Unzip())
-        // @ts-ignore
-        .pipe(new tar.Parse())
-        .on('entry', (entry) => {
-          if (entry.type === 'Directory') {
-            entry.resume();
-            return;
-          }
+        }
 
-          const realPath = entry.path.replace(/^package\//, '');
-
-          let filename = path.basename(realPath);
-          filename = formatFilename(filename);
-
-          const destPath = path.join(destDir, path.dirname(realPath), filename);
-          const dirToBeCreate = path.dirname(destPath);
-          if (!dirCollector.includes(dirToBeCreate)) {
-            dirCollector.push(dirToBeCreate);
-            mkdirp.sync(dirToBeCreate);
-          }
-
-          allFiles.push(destPath);
-          allWriteStream.push(
-            new Promise((streamResolve) => {
-              entry
-                .pipe(fse.createWriteStream(destPath))
-                .on('finish', () => streamResolve())
-                .on('close', () => streamResolve()); // resolve when file is empty in node v8
-            }),
-          );
-        })
-        .on('end', () => {
-          if (progressFunc) {
-            progressFunc({
-              percent: 1,
-            });
-          }
-
-          Promise.all(allWriteStream)
-            .then(() => resolve(allFiles))
-            .catch(reject);
-        });
-    });
+        Promise.all(allWriteStream)
+          .then(() => resolve(allFiles))
+          .catch(reject);
+      });
   });
 }
 
@@ -121,8 +112,15 @@ function getNpmInfo(npm: string, registry?: string): Promise<any> {
   const register = registry || getNpmRegistry(npm);
   const url = urlJoin(register, npm);
 
-  return axios({ url }).then((response) => {
-    return response.data;
+  return request.get(url).then((response) => {
+    let body;
+    try {
+      body = JSON.parse(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+
+    return body;
   });
 }
 
@@ -159,7 +157,7 @@ function getLatestSemverVersion(baseVersion: string, versions: string[]): string
   versions = versions
     .filter((version) => semver.satisfies(version, `^${baseVersion}`))
     .sort((a, b) => {
-      return semver.gt(b, a);
+      return semver.gt(b, a) ? 1 : -1;
     });
   return versions[0];
 }
@@ -234,16 +232,16 @@ function getNpmClient(npmName = ''): string {
 }
 
 function checkAliInternal(): Promise<boolean> {
-  return axios({
-    url: 'https://alilang-intranet.alibaba-inc.com/is_white_list.json',
+  return request({
+    url: ALI_CHECKNODE_URL,
     timeout: 3 * 1000,
+    resolveWithFullResponse: true,
   })
-    .then((response) => {
-      const data: any = response.data;
-      return response.data && data.content === true && data.hasError === false;
-    })
-    .catch((err) => {
+    .catch(() => {
       return false;
+    })
+    .then((response) => {
+      return response.statusCode === 200 && /success/.test(response.body);
     });
 }
 
@@ -251,12 +249,12 @@ const packageJSONFilename = 'package.json';
 
 async function readPackageJSON(projectPath: string) {
   const packagePath = path.join(projectPath, packageJSONFilename);
-  const packagePathIsExist = await fse.pathExists(packagePath);
+  const packagePathIsExist = await fsExtra.pathExists(packagePath);
   if (!packagePathIsExist) {
     // eslint-disable-next-line quotes
     throw new Error("Project's package.json file not found in local environment");
   }
-  const content = await fse.readJson(packagePath);
+  const content = await fsExtra.readJson(packagePath);
   return content;
 }
 
@@ -268,7 +266,7 @@ async function readPackageJSON(projectPath: string) {
  */
 function getPackageLocalVersion(projectPath: string, packageName: string): string {
   const packageJsonPath = path.join(projectPath, 'node_modules', packageName, 'package.json');
-  const packageJson = JSON.parse(fse.readFileSync(packageJsonPath, 'utf-8'));
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
   return packageJson.version;
 }
 

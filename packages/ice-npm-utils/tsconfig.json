@@ -3,9 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "rootDir": "src",
-    "outDir": "lib",
-    "target": "ES2019",
-    "lib": ["ES2019"]
+    "outDir": "lib"
   },
   "exclude": ["src/__tests__", "lib"]
 }

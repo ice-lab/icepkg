@@ -1,6 +1,6 @@
 {
   "name": "build-plugin-component-screenshot",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "build plugin for component development screenshot",
   "main": "src/index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "template-component-demo",
-  "version": "2.0.1",
+  "version": "2.0.4",
   "description": "default demo style for component development",
   "files": [
     "es/",
@@ -28,6 +28,7 @@
   ],
   "dependencies": {
     "query-string": "^6.13.5",
+    "react-markdown": "^7.1.1",
     "react-router-dom": "^5.1.2"
   },
   "devDependencies": {
@@ -39,7 +40,6 @@
     "@types/react-dom": "^16.9.4"
   },
   "peerDependencies": {
-    "react": "^15.6.0",
-    "@alifd/next": "1.x"
+    "react": ">=16.8"
   }
 }

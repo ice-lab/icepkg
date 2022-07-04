@@ -1,4 +1,6 @@
 {
+  "docGenIncludes": ["src/*.tsx"],
+  "basicComponents": ["@formily/next-components"],
   "htmlInjection": {
     "headAppend": ["<link href=\"test.css\">"]
   },
@@ -8,9 +10,7 @@
     [
       "build-plugin-moment-locales",
       {
-        "locales": [
-          "zh-cn"
-        ]
+        "locales": ["zh-cn"]
       }
     ]
   ]

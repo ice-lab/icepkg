@@ -52,10 +52,16 @@ const getBabelConfig = ({
       style: false, // style file will be require in style.js
     };
     if (target === 'es') {
-      const libPath = path.join(rootDir, 'node_modules', libraryName, 'es');
-      if (fs.existsSync(libPath)) {
-        pluginOption.libraryDirectory = 'es';
-      }
+      ['es', 'esm'].some((item) => {
+        const dirPath = path.join(rootDir, 'node_modules', libraryName, item);
+        const dirExist = fs.existsSync(dirPath);
+
+        if (dirExist) {
+          pluginOption.libraryDirectory = item;
+        }
+
+        return dirExist;
+      });
     }
     plugins.push([
       require.resolve('babel-plugin-import'),

@@ -1,8 +1,34 @@
 # Changelog
 
-## 1.9.3
+## 1.10.1
 
 - [fix] disable minimize sass output by default. ([#250](https://github.com/ice-lab/iceworks-cli/issues/250))
+
+## 1.10.0
+
+- [feat] support docgen.[#253](https://github.com/ice-lab/icepkg/pull/263)
+- [feat] support using --disable-open command to disable opening the browser automatically[#265](https://github.com/ice-lab/icepkg/pull/265)
+- [feat] upgrade build-plugin-component-screenshot version
+
+## 1.9.4
+
+- [fix] styles will missing in style.js if React.lazy is used，where dynamic import is ignored by ASTParser ([#260](https://github.com/ice-lab/iceworks-cli/pull/260))
+
+```
+var PlatformMap = {
+  mobile: /*#__PURE__*/React.lazy(function () {
+    return import('./mobile');
+  })
+};
+```
+
+- [fix] use babel-plugin-import transform `import { Foo } from 'package'` consider `esm/` libraryDirectory, for `@formily/next-components`
+- [chore] use `require.resolve` transform babel plugins path
+
+## 1.9.3
+
+- [feat] add default cors handler.
+
 
 ## 1.9.2
 
@@ -91,6 +117,7 @@
 - [feat] 支持小程序预览 ([#66](https://github.com/ice-lab/iceworks-cli/issues/66), [#53](https://github.com/ice-lab/iceworks-cli/issues/53))
 - [feat] 修改 demo 样式
 - [fix] 修复 inlineStyle 为 false 下，同步到 Fusion 物料样式失效
+
 ## 0.2.22
 
 - [fix] fix invalid homepage

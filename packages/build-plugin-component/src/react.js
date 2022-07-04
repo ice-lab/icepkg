@@ -7,6 +7,7 @@ const getRightEntryExtname = require('./utils/getRightEntryExtname');
 const { markdownParser } = require('./utils/markdownHelper');
 const getDemoDir = require('./utils/getDemoDir');
 const getDemos = require('./utils/getDemos');
+const getReactDocs = require('./utils/getReactDocs');
 const getReadme = require('./utils/getReadme');
 const getUMDWebpack = require('./utils/getUMDWebpack');
 const generateEntryJs = require('./utils/generateEntry');
@@ -23,12 +24,19 @@ const setSassStyleExpanded = require('./utils/setSassStyleExpanded');
 
 const babelCompiler = require('./compiler/babel');
 
-module.exports = (
-  { context, registerTask, registerCliOption, registerUserConfig, onGetWebpackConfig, onHook, log, onGetJestConfig },
-) => {
+module.exports = ({
+  context,
+  registerTask,
+  registerCliOption,
+  registerUserConfig,
+  onGetWebpackConfig,
+  onHook,
+  log,
+  onGetJestConfig,
+}) => {
   const { command, rootDir, pkg, commandArgs, userConfig } = context;
   const { plugins, ...compileOptions } = userConfig;
-  const { library, demoTemplate = 'template-component-demo', disableGenerateStyle } = compileOptions;
+  const { library, demoTemplate = 'template-component-demo', disableGenerateStyle, docGenIncludes } = compileOptions;
   const { https } = commandArgs;
 
   // config htmlInjection for once
@@ -61,10 +69,13 @@ module.exports = (
 
     const generateDemoEntry = () => {
       // get multi demos from demo dir
-      const markdownDirs = fs.readdirSync(demoDir).filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
+      const markdownDirs = fs
+        .readdirSync(demoDir)
+        .filter((file) => fs.statSync(path.join(demoDir, file)).isDirectory());
       const searchDirs = markdownDirs && markdownDirs.length ? markdownDirs : [''];
       const demoData = [];
       const readme = getReadme(rootDir, markdownParser, log);
+      const reactDocs = getReactDocs(rootDir, docGenIncludes);
       searchDirs.forEach((markdownDir) => {
         const demoKey = markdownDir || 'index';
         const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser);
@@ -82,6 +93,8 @@ module.exports = (
       const entryPath = path.join(outputDir, 'demo-entry.js');
       const demoDataFile = 'demos-data.js';
       const demoDataPath = path.join(outputDir, demoDataFile);
+      const reactDocsFile = 'react-docs.js';
+      const reactDocsPath = path.join(outputDir, reactDocsFile);
       const [templateName, templateProps] = Array.isArray(demoTemplate) ? demoTemplate : [demoTemplate];
       generateEntryJs({
         template: 'template.hbs',
@@ -92,10 +105,12 @@ module.exports = (
           templateName,
           templateProps: JSON.stringify(templateProps || {}),
           demoData,
+          reactDocsFile,
         },
       });
       // wirte demo content
       fs.writeFileSync(demoDataPath, `const data = ${JSON.stringify(demoData)};export default data;`);
+      fs.writeFileSync(reactDocsPath, `const data = ${JSON.stringify(reactDocs)};export default data;`);
       params.entry = { index: entryPath };
     };
 
@@ -149,7 +164,7 @@ module.exports = (
   }
 
   // register cli options
-  const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https'];
+  const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https', 'disable-open'];
   registerCliOption(cliOptions.map((name) => ({
     name,
     commands: ['start', 'build'],
@@ -215,6 +230,6 @@ module.exports = (
 
   onHook('after.start.devServer', ({ url }) => {
     // do not open browser when restart dev
-    if (!process.env.RESTART_DEV) openBrowser(url);
+    if (!process.env.RESTART_DEV && !commandArgs.disableOpen) openBrowser(url);
   });
 };

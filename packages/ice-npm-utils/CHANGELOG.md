@@ -1,18 +1,8 @@
 # Changelog
 
-## 3.0.1
+## 2.1.3
 
-- [feat] optimize checkAliInternal
-
-## 3.0.0
-
-- [chore] change cnpm registry to `registry.npmmirror.com`
-- [chore] migrate request to axios, notice `error.statusCode` -> `error.response && error.response.status === 404`
-- [chore] upgrade deps:
-  - fs-extra 8 -> 10, Only support Node.js 12+
-  - mkdirp 0.5.x -> 1.x
-  - semver 6.x -> 7.x
-  - tar 0.4.x -> 0.6.x
+- [feat] change cnpm registry to `registry.npmmirror.com`
 
 ## 2.1.2
 

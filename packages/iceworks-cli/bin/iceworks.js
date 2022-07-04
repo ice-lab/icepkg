@@ -62,7 +62,7 @@ program
   })
   .action(async (materialType, npmName, cmd) => {
     // 兼容 iceworks add @icedesign/block-test
-    if (materialType && ['scaffold', 'block', 'component', 'page'].indexOf(materialType) === -1) {
+    if (materialType && ['scaffold', 'block', 'component'].indexOf(materialType) === -1) {
       npmName = materialType;
       materialType = null;
     }
@@ -168,6 +168,19 @@ logCLIVersion();
 
 // check node version
 checkNodeVersion();
+
+// 提示用户迁移到 @appworks/cli
+console.log();
+console.log(
+  chalk.green(
+    'Iceworks 品牌已全面升级到 AppWorks，建议将物料开发工具迁移到 @appworks/cli，步骤：',
+  ),
+);
+console.log(chalk.green('1. 安装 AppWorks CLI: npm i -g @appworks/cli'));
+console.log(chalk.green('2. 移除 Iceworks CLI: npm rm -g iceworks'));
+console.log(chalk.green('3. 执行命令：appworks -V'));
+console.log(chalk.green('说明文档：https://appworks.site/materials/upgrade.html'));
+console.log();
 
 // check iceworks version
 checkIceworksVersion();
