@@ -1,23 +1,23 @@
 # 关于
 
-## 这是什么
+## ICE PKG
 
-@ice/pkg 是飞冰团队对外开源的 NPM 包开发解决方案，提供 React 组件开发、Node 模块开发、前端 Library [多场景需求](/scenarios/component)。
+ICE PKG 是飞冰开源的 NPM 包开发解决方案，提供 [React 组件](/scenarios/react)、[Rax 组件](/scenarios/rax)、[Node 模块](/scenarios/node)、[前端类库](/scenarios/web)等多场景需求。
 
 ## 特性
 
-- **更快**：代码使用 [swc](https://swc.rs/docs/configuration/swcrc) 编译和压缩，提升数十倍编译速度。
-- **支持 transform 和 bundle 双模式**：提供多种场景解决方案。
-- **零配置**：无需任何配置，提供 TypeScript 和 React JSX 支持。
-- **面向未来**：提供 es2017 产物，可打包出面向现代浏览器支持的产物。
-- **更强大的预览能力**：默认使用 [Docusaurus](https://docusaurus.io/) 作为组件预览，文档生成方案。
+- **📈 更快**：使用 [swc](https://swc.rs/docs/configuration/swcrc) 编译和压缩，提升数十倍编译速度
+- **🎊 双模式**：同时提供 transform + bundle 两种输出模式
+- **🅾️ 零配置**：无需任何配置，提供内建的 TypeScript、JSX 等构建支持
+- **☄️ 面向未来**：提供 ES2017 产物，打包出面向现代浏览器支持的产物
+- **☘️ 文档预览**：基于 [Docusaurus](https://docusaurus.io/) 提供预览文档、生成静态文档能力
 
 ### 更快
 
 <figure style={{
-  maxWidth:'800px',
-  fontSize:'13px',
-  lineHeight:'20px'
+  maxWidth: '800px',
+  fontSize: '13px',
+  lineHeight: '20px'
 }}>
   <img src="https://img.alicdn.com/imgextra/i1/O1CN01MoY2ji23DGjyTw2Dh_!!6000000007221-2-tps-2972-638.png" alt="benchmark" />
 
@@ -30,7 +30,7 @@
 
 @ice/pkg 除支持 bundle 模式外，默认支持 transform 模式（将文件挨个编译到输出目录）。
 
-### es2017 产物
+### ES2017 产物
 
 为现代浏览器提供 es2017 产物，可以减少产物体积，亦可加快执行速度。更多内容参考 [指南 - 消费 es2017 产物](/guide/abilities#消费-es2017-产物)。
 
@@ -42,9 +42,9 @@
 + [开发 Node 模块](/scenarios/node)
 + [开发前端 library](/scenarios/library)
 
-### 强大的预览能力
+### 文档预览
 
-结合 [Docusaurus](https://docusaurus.io/)，我们升级了文档预览的能力。更多内容参考 [指南 - 文档预览](/guide/preview)。
+结合 [Docusaurus](https://docusaurus.io/)，ICE PKG 升级了文档预览的能力。更多内容参考 [指南 - 文档预览](/guide/preview)。
 
 ## 社区
 

@@ -3,7 +3,7 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   plugins: [
     ['@ice/pkg-plugin-docusaurus', {
-      navBarTitle: 'ICE-PKG',
+      navBarTitle: 'ICE PKG',
       sidebarItemsGenerator: async () => {
         return [
           { type: 'doc', id: 'index' },

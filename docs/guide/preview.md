@@ -1,41 +1,41 @@
 # 文档预览
 
-@ice/pkg 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
+ICE PKG 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
 
-在使用文档预览功能前，你需要额外安装 `@ice/pkg-plugin-docusaurus` 插件：
+在使用文档预览功能前，你需要先手动安装 `@ice/pkg-plugin-docusaurus` 插件：
 
 ```shell
 npm install @ice/pkg-plugin-docusaurus --save-dev
-
-# Or pnpm
-pnpm add @ice/pkg-plugin-docusaurus -D
 ```
 
-并通过 [配置文件](/guide/config-file) 进行加载：
+并通过 [配置文件](/guide/config) 进行加载：
 
-```ts
+```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   plugins: [
-    ['@ice/pkg-plugin-docusaurus', {
-      title: '标题'
-    }]
-  ]
-})
+    [
+      '@ice/pkg-plugin-docusaurus', 
+      {
+        title: '标题'
+      },
+    ],
+  ],
+});
 ```
 
-大功告成。你可以通过以下指令启动服务：
+大功告成。你可以通过以下命令启动预览：
 
 ```shell
 # 若存在 docs 文件夹，则默认启动文档预览；并启动 es/lib 编译
-$ pkg-cli start
+$ npm start
 
 # 不启动文档预览
-$ pkg-cli start --doc=false
+$ npm start -- --doc=false
 
 # 若存在 docs 文件夹，则默认构建预览产物
-$ pkg-cli build
+$ npm run build
 ```
 
 ## 如何书写文档
@@ -44,7 +44,7 @@ $ pkg-cli build
 
 ````markdown title=index.md
 ---
-title: Simple Usage
+title: 简单的用法
 sidebar_position: 1
 ---
 
@@ -68,7 +68,7 @@ export default MyComponent;
 
 ## 扁平结构
 
-扁平结构的含义是可以将文档平铺在 `docs` 文件夹下：
+扁平结构的意思是可以将文档平铺在 `docs` 文件夹下：
 
 ```shell
 .
@@ -78,7 +78,7 @@ export default MyComponent;
 
 ## 嵌套结构
 
-此外还支持嵌套结构，比如：
+此外还支持嵌套结构，如：
 
 ```shell
 .
@@ -166,13 +166,13 @@ const App = () => {
 export default App;
 ```
 
-> 需要注意的是，在 preview 的代码块中引入的样式会 **污染** 全局，因此建议使用 [css-module](https://github.com/css-modules/css-modules) 或 [css-in-js](https://cssinjs.org/) 等方式引入样式。
+> 需要注意的是，在 preview 的代码块中引入的样式会 **污染** 全局，因此建议使用 [CSS Modules](https://github.com/css-modules/css-modules) 或 [css-in-js](https://cssinjs.org/) 等方式引入样式。
 
-:::info 仅支持 React 组件
+:::info 仅支持 React 组件和 Rax 组件
 目前只支持为 `jsx`、`tsx` 代码块添加 `preview` 属性。
 :::
 
-### 将代码块渲染成 Mobile 预览的样式
+### 将代码块渲染成移动端预览的样式
 
 通过配置 `mobilePreview: true` 开启将预览方式设置成移动端预览的样式：
 
@@ -181,11 +181,14 @@ import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   plugins: [
-    ['@ice/pkg-plugin-docusaurus', {
-      mobilePreview: true
-    }]
-  ]
-})
+    [
+      '@ice/pkg-plugin-docusaurus', 
+      {
+        mobilePreview: true,
+      },
+    ],
+  ],
+});
 ```
 
 同理，所有添加了 [preview: true](#将代码渲染成组件) 的代码块会渲染成下面的样式：
@@ -193,29 +196,29 @@ export default defineConfig({
 ![](https://gw.alicdn.com/imgextra/i2/O1CN01UVaMo71q7gujCYGSc_!!6000000005449-2-tps-1338-761.png)
 
 
-### 引入 Package 的包名
+### 引入当前包的包名
 
-直接引入正在开发的 Package 包名，像真实的用户一样在文档中导入你这在开发的包。比如你正在开发一个 Package Name 为 `my-component` 的组件，你期望用户获得所见即所得的效果。
+直接引入正在开发的包名 (package.json 中的 name 字段值)，像真实的用户一样在文档中导入你这在开发的包。比如你正在开发一个包名为 `my-component` 的组件：
 
 ```js
-// 'my-component' 是你正在开发的 Package name
+// 'my-component' 是你正在开发的包名
 import MyComponent from 'my-component';
 
-const App = () => {
+export default function App() {
   return (
     <MyComponent />
-  )
+  );
 }
-
-export default App;
 ```
 
-### 给代码块添加 title
+### 给代码块定制自定义标题
 
-若想要给代码块添加 title，可以使用 `title` 属性。
+若想要给代码块定制自定义标题，可以使用 `title` 属性。
 
 ```jsx title=/src/components/index.js
 import MyComponent from 'my-component';
+
+@TODO: 这个示例不完整
 ```
 
 ## 自定义侧边栏
@@ -259,7 +262,7 @@ export default defineConfig({
 
 ## 隐藏文档右侧导航
 
-在 [Mobile 组件预览](#将代码块渲染成-mobile-预览的样式) 下，若感觉整体内容区比较窄。或因为其他原因，想要隐藏右侧导航栏。可在文档顶部添加 `hide_table_of_contents` 这一配置。
+在 [Mobile 组件预览](#将代码块渲染成移动端预览的样式) 下，若感觉整体内容区比较窄。或因为其他原因，想要隐藏右侧导航栏。可在文档顶部添加 `hide_table_of_contents` 这一配置。
 
 ```md
 ---
@@ -272,7 +275,7 @@ hide_table_of_contents: true
 
 ## 插件配置
 
-`@ice/pkg-plugin-docusaurus` 插件接受如下配置：
+`@ice/pkg-plugin-docusaurus` 插件接受以下配置：
 
 ```typescript
 export interface PluginDocusaurusOptions {
