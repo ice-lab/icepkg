@@ -8,7 +8,8 @@ export default {
   packageName: 'Package name',
   packageNameValidateError: (name: string) => `npm package name ${name} not validate, please retry`,
   selectProjectType: 'Please select project type',
-  npmPackage: 'npm package',
+  webLibrary: 'Web library',
+  nodeModule: 'Node module',
   reactComponent: 'React Component',
   raxComponent: 'Rax Component',
 };

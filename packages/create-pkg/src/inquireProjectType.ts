@@ -8,10 +8,13 @@ export async function inquireProjectType() {
       type: 'list',
       message: info.selectProjectType,
       name: 'projectType',
-      default: 'react-component',
+      default: 'react',
       choices: [{
-        name: info.npmPackage,
-        value: 'npm',
+        name: info.webLibrary,
+        value: 'web',
+      }, {
+        name: info.nodeModule,
+        value: 'node',
       }, {
         name: info.reactComponent,
         value: 'react',

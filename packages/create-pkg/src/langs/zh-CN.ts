@@ -8,7 +8,8 @@ export default {
   packageName: '包名',
   packageNameValidateError: (name: string) => `npm 包名 ${name} 校验不通过，请重试`,
   selectProjectType: '请选择项目类型',
-  npmPackage: 'npm 包',
+  webLibrary: '前端类库',
+  nodeModule: 'Node 模块',
   reactComponent: 'React 组件',
   raxComponent: 'Rax 组件',
 };
