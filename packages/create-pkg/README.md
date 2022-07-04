@@ -8,6 +8,6 @@ Create ice-pkg projects by npm initing.
 $ npm init @ice/pkg component-name
 
 # or with pnpm
-$ pnpm init @ice/pkg component-name
+$ pnpm create @ice/pkg component-name
 ```
 
