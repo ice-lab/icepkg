@@ -62,11 +62,11 @@ transform 模式是 ICE PKG 默认的编译模式。
 + 类型 `['esm', 'cjs', 'es2017']`
 + 默认 `['esm', 'es2017']`
 
-输出的类型。ICE PKG 会默认编译出 `esm` (输出 ES module + es5 产物) 和 `es2017` (输出 ES module + es2017 产物) 两个文件夹。
+输出的类型。ICE PKG 会默认编译出 `esm` (输出 ES module + ES5 产物) 和 `es2017` (输出 ES module + ES2017 产物) 两个文件夹。
 
 ```shell
-- esm # ES module + es5 产物
-- es2017 # ES module + es2017 产物
+- esm # ES module + ES5 产物
+- es2017 # ES module + ES2017 产物
 ```
 
 若想要输出 CommonJS 产物，可如下配置：
@@ -84,9 +84,9 @@ export default defineConfig({
 则输出如下文件夹：
 
 ```shell
-- cjs # CommonJS + es5 产物
-- esm # ES module + es5 产物
-- es2017 # ES module + es2017 产物
+- cjs # CommonJS + ES5 产物
+- esm # ES module + ES5 产物
+- es2017 # ES module + ES2017 产物
 ```
 
 ### excludes
