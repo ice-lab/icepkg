@@ -1,6 +1,4 @@
-# 关于
-
-## ICE PKG
+# 关于 ICE PKG
 
 ICE PKG 是飞冰开源的 NPM 包开发解决方案，提供 [React 组件](/scenarios/react)、[Rax 组件](/scenarios/rax)、[Node 模块](/scenarios/node)、[前端类库](/scenarios/web)等多场景需求。
 
