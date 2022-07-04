@@ -35,7 +35,7 @@ jobs:
       - run: pnpm run test
       - run: pnpm run coverage
 
-      - run: pnpm run doc-build
+      - run: pnpm run build:doc
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.0
         if: github.ref == 'refs/heads/main'
