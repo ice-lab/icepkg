@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.10.1
+
+- [fix] disable minimize sass output by default. ([#250](https://github.com/ice-lab/iceworks-cli/issues/250))
+
+## 1.10.0
+
+- [feat] support docgen.[#253](https://github.com/ice-lab/icepkg/pull/263)
+- [feat] support using --disable-open command to disable opening the browser automatically[#265](https://github.com/ice-lab/icepkg/pull/265)
+- [feat] upgrade build-plugin-component-screenshot version
+
 ## 1.9.4
 
 - [fix] styles will missing in style.js if React.lazy is used，where dynamic import is ignored by ASTParser ([#260](https://github.com/ice-lab/iceworks-cli/pull/260))
@@ -18,6 +28,7 @@ var PlatformMap = {
 ## 1.9.3
 
 - [feat] add default cors handler.
+
 
 ## 1.9.2
 

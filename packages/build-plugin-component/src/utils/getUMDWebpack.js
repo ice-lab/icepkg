@@ -3,11 +3,12 @@ const { upperFirst, camelCase } = require('lodash');
 const { getWebpackConfig } = require('build-scripts-config');
 const { defaultDynamicImportLibraries } = require('../compiler/depAnalyze');
 const setDefine = require('../useConfig/define');
+const setSassStyleExpanded = require('./setSassStyleExpanded');
 
 module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   const mode = 'production';
   const config = getWebpackConfig(mode);
-  const { rootDir, webpack } = context;
+  const { rootDir } = context;
   const {
     // dist minify
     minify,
@@ -149,6 +150,9 @@ module.exports = ({ context, compileOptions, extNames, hasMain }) => {
   if (define) {
     setDefine(config, define, context);
   }
+
+  // prevent minify
+  setSassStyleExpanded(config);
 
   return config;
 };

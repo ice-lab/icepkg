@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const setSassStyleExpanded = require('./setSassStyleExpanded');
 
 module.exports = (config, useStylesheetLoader) => {
   if (useStylesheetLoader) {
@@ -98,4 +99,6 @@ module.exports = (config, useStylesheetLoader) => {
       .use('sass-loader')
       .loader(require.resolve('sass-loader'));
   }
+
+  setSassStyleExpanded(config);
 };
