@@ -299,3 +299,8 @@ export const scriptsFilter = createFilter(
   /\.m?[jt]sx?$/, // include
   /node_modules/, // exclude
 );
+
+export const stylesFilter = createFilter(
+  /\.(?:css|sass|less|stylus)$/, // include
+  /node_modules/, // exclude
+);

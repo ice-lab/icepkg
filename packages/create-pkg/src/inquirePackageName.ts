@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import { checkAliInternal } from 'ice-npm-utils';
 import validateName from 'validate-npm-package-name';
+import getInfo from './langs/index.js';
 
 function generateNpmName(name: string, npmScope?: string): string {
   if (name.charAt(0) === '@') {
@@ -10,14 +11,15 @@ function generateNpmName(name: string, npmScope?: string): string {
   return npmScope ? `${npmScope}/${name}` : name;
 }
 
-export async function inquirPackageName() {
+export async function inquirePackageName() {
+  const info = await getInfo();
   const isIntranet = checkAliInternal();
 
   const { forIntranet } = await (isIntranet
     ? inquirer.prompt([
       {
         type: 'confirm',
-        message: 'generate components that are only available on the Intranet',
+        message: info.generateIntranetComponent,
         name: 'forIntranet',
       },
     ])
@@ -28,7 +30,7 @@ export async function inquirPackageName() {
     npmScope = (await inquirer.prompt([
       {
         type: 'list',
-        message: 'please select the npm scope',
+        message: info.selectNpmScope,
         name: 'npmScope',
         default: '@ali',
         choices: ['@ali', '@alife', '@alipay', '@kaola'],
@@ -40,12 +42,12 @@ export async function inquirPackageName() {
     {
       type: 'input',
       name: 'npmName',
-      message: 'package name',
+      message: info.packageName,
       default: 'example-component',
       validate: (value) => {
         const name = generateNpmName(value, npmScope);
         if (!validateName(name).validForNewPackages) {
-          return `NPM package name ${name} not validate, please retry`;
+          return info.packageNameValidateError(name);
         }
         return true;
       },

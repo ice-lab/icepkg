@@ -1,6 +1,6 @@
 {
   "name": "@ice/create-pkg",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "npm init @ice/pkg",
   "type": "module",
   "exports": "./esnext/index.js",
@@ -27,6 +27,7 @@
     "fs-extra": "^10.0.0",
     "ice-npm-utils": "^3.0.2",
     "inquirer": "^8.2.1",
+    "os-locale": "^6.0.2",
     "validate-npm-package-name": "^3.0.0"
   }
 }

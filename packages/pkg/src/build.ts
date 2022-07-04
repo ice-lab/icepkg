@@ -1,4 +1,3 @@
-import consola from 'consola';
 import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
 import { buildAll } from './buildAll.js';
 
