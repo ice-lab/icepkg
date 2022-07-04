@@ -43,7 +43,9 @@ module.exports = ({
   const { plugins, targets, disableUMD, inlineStyle = true, miniapp, ...compileOptions } = userConfig;
   if (!(targets && targets.length)) {
     console.error(
-      chalk.red('build-plugin-component need to set targets, e.g. ["build-plugin-component", targets: ["web", "weex"]]'),
+      chalk.red(
+        'build-plugin-component need to set targets, e.g. ["build-plugin-component", targets: ["web", "weex"]]',
+      ),
     );
     console.log();
     process.exit(1);
@@ -80,7 +82,7 @@ module.exports = ({
   const demoDir = getDemoDir(rootDir);
   const getRaxBundles = () => {
     if (demoDir) {
-      demos = getDemos(path.join(rootDir, demoDir), markdownParser);
+      demos = getDemos(path.join(rootDir, demoDir), markdownParser, rootDir);
       if (demos && demos.length) {
         return generateRaxEntry(demos, rootDir, targets);
       }

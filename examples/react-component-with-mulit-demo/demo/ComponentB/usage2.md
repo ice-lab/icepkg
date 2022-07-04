@@ -20,7 +20,5 @@ class App extends Component {
   }
 }
 
-ReactDOM.render((
-  <App />
-), mountNode);
+ReactDOM.render(<App />, mountNode);
 ```

@@ -75,7 +75,7 @@ module.exports = ({
       const reactDocs = getReactDocs(rootDir, docGenIncludes);
       searchDirs.forEach((markdownDir) => {
         const demoKey = markdownDir || 'index';
-        const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser);
+        const demos = getDemos(path.join(rootDir, demoDir, markdownDir), markdownParser, rootDir);
         demoData.push({
           demoKey,
           demos: demos.map((demo) => {
@@ -162,10 +162,12 @@ module.exports = ({
 
   // register cli options
   const cliOptions = ['watch', 'skip-demo', 'watch-dist', 'https', 'disable-open'];
-  registerCliOption(cliOptions.map((name) => ({
-    name,
-    commands: ['start', 'build'],
-  })));
+  registerCliOption(
+    cliOptions.map((name) => ({
+      name,
+      commands: ['start', 'build'],
+    })),
+  );
 
   // register user config
   registerUserConfig(defaultUserConfig.concat(reactUserConfig));
