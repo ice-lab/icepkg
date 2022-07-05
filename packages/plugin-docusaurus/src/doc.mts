@@ -3,13 +3,14 @@ import fs from 'fs-extra';
 import { fork } from 'child_process';
 import { createRequire } from 'module';
 import consola from 'consola';
+import detect from 'detect-port';
 import { DOCUSAURUS_DIR, DOCUSAURUS_CONFIG_FILE, DOCUSAURUS_BABEL_CONFIG_FILE } from './constants.mjs';
 
 import type { PluginDocusaurusOptions } from './index.mjs';
 
 const require = createRequire(import.meta.url);
 
-export const doc = (api, options: PluginDocusaurusOptions) => {
+export const doc = async (api, options: PluginDocusaurusOptions) => {
   const { context } = api;
   const { rootDir, command } = context;
 
@@ -20,6 +21,8 @@ export const doc = (api, options: PluginDocusaurusOptions) => {
     consola.warn('PLUGIN-DOCUSAURUS', 'Found docusaurus.config.js in current project. And you should configure docusaurus by yourself.');
   }
 
+  const port = await detect(options.port);
+
   const binPath = require.resolve('@docusaurus/core/bin/docusaurus.mjs');
 
   const child = fork(
@@ -27,7 +30,7 @@ export const doc = (api, options: PluginDocusaurusOptions) => {
     [
       command,
       !docusaurusConfigFileExist && `--config=${rootDir}/${DOCUSAURUS_DIR}/${DOCUSAURUS_CONFIG_FILE}`,
-      command === 'start' && `--port=${options.port}`,
+      command === 'start' && `--port=${port}`,
     ].filter(Boolean),
     {
       cwd: rootDir,

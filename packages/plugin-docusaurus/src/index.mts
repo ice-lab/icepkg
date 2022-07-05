@@ -73,8 +73,8 @@ const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions) => {
   configureDevServerPort(pluginOptions);
   configureDocusaurus(rootDir, pluginOptions);
 
-  onHook(`before.${command}.run`, () => {
-    doc(api, pluginOptions);
+  onHook(`before.${command}.run`, async () => {
+    await doc(api, pluginOptions);
   });
 };
 
