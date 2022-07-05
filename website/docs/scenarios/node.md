@@ -6,7 +6,18 @@
 $ npm init @ice/pkg node
 ```
 
-会在当前目录生成巴拉巴拉@TODO...
+会在当前目录下新建 node 文件夹并在其中初始化 Node 模块项目，其文件目录结构如下：
+
+```shell
+.
+├── README.md
+├── abc.json
+├── build.config.mts
+├── package.json
+├── src
+│   └── index.ts
+└── tsconfig.json
+```
 
 ## 使用 Node 模块
 

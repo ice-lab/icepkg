@@ -6,7 +6,24 @@
 $ npm init @ice/pkg react-component
 ```
 
-会在当前目录生成巴拉巴拉@TODO...
+会在当前目录下新建 react-component 文件夹并在其中初始化 React 组件项目，其文件目录结构如下：
+
+```shell
+.
+├── README.md
+├── build.config.mts
+├── docs
+│   ├── index.md 
+│   ├── usage.js
+│   ├── usage.md
+│   └── usage.module.css
+├── package.json
+├── src                      
+│   ├── index.module.css    
+│   ├── index.tsx
+│   └── typings.d.ts
+└── tsconfig.json
+```
 
 ## 使用 React 组件
 

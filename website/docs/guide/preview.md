@@ -213,12 +213,30 @@ export default function App() {
 
 ### 给代码块定制自定义标题
 
-若想要给代码块定制自定义标题，可以使用 `title` 属性。
+若想要给代码块定制自定义标题，可以使用 `title` 属性：
+
+````
+```jsx title=/src/components/index.js
+import MyComponent from 'my-component';
+
+export default function Index() {
+  return (
+    <MyComponent />
+  );
+}
+```
+````
+
+文档渲染效果如下：
 
 ```jsx title=/src/components/index.js
 import MyComponent from 'my-component';
 
-@TODO: 这个示例不完整
+export default function Index() {
+  return (
+    <MyComponent />
+  );
+}
 ```
 
 ## 自定义侧边栏
@@ -300,11 +318,11 @@ export interface PluginDocusaurusOptions {
    */
   navBarLogo?: string;
   /**
-   * 侧边栏 title，默认为 "飞冰组件"
+   * 侧边栏 title，默认为 "ICE PKG"
    */
   navBarTitle?: string;
   /**
-   * 文档启动的端口，默认为 4444
+   * 文档启动的端口，默认为 4000
    */
   port?: number;
 
