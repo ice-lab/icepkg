@@ -41,5 +41,5 @@ export default function App() {
 }
 ```
 
-:::warning
+:::tip
 Rax 组件在开发预览时实际底层运行时为 React，而在执行 `npm run build` 后生成的构建产物仍为 Rax 组件，仍可应用于 Rax 应用项目中。
