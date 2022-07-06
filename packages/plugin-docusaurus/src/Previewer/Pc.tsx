@@ -58,12 +58,6 @@ function PcPreview({ children, code, url }) {
         <div className={styles.operations}>
           <div
             className={styles.item}
-            onClick={redirctFullScreen}
-            data-tip="全屏模式"
-          ><FullScreenSvg /></div>
-
-          <div
-            className={styles.item}
             onClick={() => doCopy()}
             data-tip="复制"
           ><CopySvg /></div>

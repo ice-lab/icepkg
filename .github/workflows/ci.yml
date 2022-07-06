@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -35,13 +35,13 @@ jobs:
       - run: pnpm run test
       - run: pnpm run coverage
 
-      - run: pnpm run doc-build
+      - run: pnpm run build:doc
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.0
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         with:
           BRANCH: gh-pages
-          FOLDER: build
+          FOLDER: website/build
 
       # 暂时不发布 package
       # - run: npm run publish:packages
