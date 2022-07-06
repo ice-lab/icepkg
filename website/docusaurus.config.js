@@ -78,6 +78,57 @@ const config = {
           alt: 'ICE PKG',
           src: 'https://gw.alicdn.com/imgextra/i2/O1CN01s9pEgU1noKxUm0VRK_!!6000000005136-55-tps-502-132.svg',
         },
+        items: [
+          {
+            type: 'search',
+            position: 'right',
+          },
+          {
+            label: '生态',
+            position: 'right',
+            items: [
+              {
+                label: '应用研发框架 ICE',
+                to: 'https://v3.ice.work/',
+              },
+              {
+                label: '微前端 ICESTARK',
+                to: 'http://micro-frontends.ice.work/',
+              },
+              {
+                label: '可视化工具 AppWorks',
+                to: 'https://appworks.site/',
+              },
+              {
+                label: '前端环境 AppToolkit',
+                to: 'https://github.com/appworks-lab/toolkit#readme',
+              },
+            ],
+          },
+          {
+            label: '资源',
+            position: 'right',
+            items: [
+              {
+                to: 'https://fusion.design/pc/doc/component/102',
+                label: 'Fusion 组件',
+              },
+              {
+                to: 'https://ant.design',
+                label: 'Antd 组件',
+              },
+              {
+                label: '社区钉钉群',
+                to: 'https://iceworks.oss-cn-hangzhou.aliyuncs.com/assets/images/ice-group.png',
+              },
+            ],
+          },
+          {
+            href: 'https://github.com/ice-lab/icepkg',
+            label: 'GitHub',
+            position: 'right',
+          },
+        ],
       },
       footer: {
         style: 'dark',
