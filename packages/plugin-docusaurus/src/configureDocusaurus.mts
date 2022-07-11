@@ -74,7 +74,16 @@ plugins: [
 `;
   const babelConfigContents = `
 module.exports = {
-  presets: [require.resolve('@docusaurus/core/lib/babel/preset')],
+  presets: [
+    require.resolve('@docusaurus/core/lib/babel/preset'),
+    [
+      require.resolve('@babel/preset-react'),
+      {
+        "importSource": "@ice/runtime",
+        "runtime": "automatic"
+      },
+    ],
+  ],
   ${isUsingRax ? raxAliasBabelPluginConfigContents : ''}
 };`;
 
