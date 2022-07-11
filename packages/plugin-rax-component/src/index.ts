@@ -17,7 +17,7 @@ const plugin: PkgPlugin = (api) => {
             },
             legacyDecorator: true,
           },
-          externalHelpers: false,
+          externalHelpers: true,
           loose: false, // No recommand
         },
       },
