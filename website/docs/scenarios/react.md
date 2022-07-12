@@ -97,10 +97,17 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   bundle: {
     formats: ['esm', 'es2017'],
-    externals: true,
+    externals: {
+      react: 'React',
+      'react-dom': 'ReactDOM'
+    }
   },
 });
 ```
+
+:::tip
+对于 React 组件的 bundle 产物而言，externals 配置 `react` 和 `react-dom` 是 ICE PKG 推荐的方式。
+:::
 
 该配置会在 `dist` 目录下输出以下文件：
 

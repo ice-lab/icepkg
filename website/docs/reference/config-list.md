@@ -162,14 +162,14 @@ library 导出的名称，可以通过 `window[name]` 访问。默认为 `packag
 + 类型 `boolean|object`
 + 默认 `true`
 
-默认情况下，bundle 的产物不包含依赖产物。该选项可修改这一结果。若想要 bundle 包含所有依赖产物，可如下配置：
+默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。若想要 bundle 不包含依赖产物，可如下配置：
 
 ```ts
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   bundle: {
-    externals: false,
+    externals: true,
   },
 });
 ```

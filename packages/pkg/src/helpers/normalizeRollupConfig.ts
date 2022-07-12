@@ -87,7 +87,7 @@ const getExternalsAndGlboals = (userConfig: UserConfig, pkg: PkgJson): [(id?: st
     'regenerator-runtime',
   ];
 
-  const userExternals = userConfig?.bundle?.externals ?? true;
+  const userExternals = userConfig?.bundle?.externals ?? false;
 
   switch (userExternals) {
     case true:
