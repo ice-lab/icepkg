@@ -196,3 +196,11 @@ export default defineConfig({
   },
 });
 ```
+
+## SWC 编译
+
+ICE PKG 采用 SWC 进行 JS 代码的 transform 及 minify。你可以通过自定义插件中的 [`swcCompileOptions`](/reference/plugins-development#swccompileoptions) 来配置 SWC 的编译选项。
+
+:::tip
+transform 模式的产物代码中可能依赖一些 helper 函数用以支持目标环境。ICE PKG 默认将这些 helper 函数统一从 `@swc/helpers` 中导出使用，以减小产物代码体积。因此，当你的产物代码中使用了 `@swc/helpers` 时，请务必将 `@swc/helpers` 加到项目的 dependencies 中并安装之。
+:::
