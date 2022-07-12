@@ -1,11 +1,10 @@
 import { performance } from 'perf_hooks';
 import { isAbsolute, resolve, extname, dirname, relative } from 'path';
 import fs from 'fs-extra';
-import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/load.js';
+import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE, loadPkg } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
-import { loadPkg } from '../helpers/load.js';
 
 import type { PkgContext, TaskLoaderConfig, OutputFile } from '../types.js';
 import type { SourceMapInput } from 'rollup';
@@ -139,7 +138,7 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
   logger.info(`⚡️ Build success in ${timeFrom(transformStart)}`);
 
   if (isTransformDistContainingSWCHelpers && !isSWCHelpersDeclaredInDependency) {
-    logger.warn(`⚠️ The transformed dist contains @swc/helpers, please make sure @swc/helpers is installed as a dependency.`);
+    logger.warn('⚠️ The transformed dist contains @swc/helpers, please make sure @swc/helpers is installed as a dependency.');
   }
 
   return files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) }));

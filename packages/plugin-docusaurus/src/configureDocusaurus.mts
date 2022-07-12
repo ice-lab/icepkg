@@ -130,6 +130,6 @@ module.exports = {
   // hijack createElement to support rpx in demo preview
   fs.writeFileSync(
     path.join(output, 'hijackCreateElement.js'), hijackCreateElementModuleContent, 'utf-8',
-  )
+  );
 }
 
