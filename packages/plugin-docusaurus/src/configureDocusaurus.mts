@@ -72,6 +72,37 @@ plugins: [
   ]
 ]
 `;
+
+  const hijackCreateElementModuleContent = `
+  import { createElement } from 'react';
+  import { convertUnit } from 'style-unit';
+
+  function isObject(obj) {
+    return typeof obj === 'object';
+  }
+
+  // From @ice/jsx-runtime
+  function hijackElementProps(props) {
+    if (props && 'style' in props) {
+      const { style } = props;
+      if (isObject(style)) {
+        const result = Object.assign({}, props);
+        const convertedStyle = {};
+        for (const prop in style) {
+          convertedStyle[prop] = convertUnit(style[prop]);
+        }
+        result['style'] = convertedStyle;
+        return result;
+      }
+    }
+    return props;
+  }
+
+  export default function _createElement(component, props, ...children) {
+    return createElement(component, hijackElementProps(props), ...children);
+  }
+  `;
+
   const babelConfigContents = `
 module.exports = {
   presets: [
@@ -79,8 +110,8 @@ module.exports = {
     [
       require.resolve('@babel/preset-react'),
       {
-        "importSource": "@ice/runtime",
-        "runtime": "automatic"
+        "pragma": "_createElement",
+        "runtime": "classic"
       },
     ],
   ],
@@ -95,5 +126,10 @@ module.exports = {
   fs.writeFileSync(
     path.join(output, DOCUSAURUS_BABEL_CONFIG_FILE), babelConfigContents, 'utf-8',
   );
+
+  // hijack createElement to support rpx in demo preview
+  fs.writeFileSync(
+    path.join(output, 'hijackCreateElement.js'), hijackCreateElementModuleContent, 'utf-8',
+  )
 }
 
