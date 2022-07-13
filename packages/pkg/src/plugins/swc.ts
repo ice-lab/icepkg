@@ -6,10 +6,11 @@ import { isTypescriptOnly } from '../helpers/suffix.js';
 import { isDirectory, scriptsFilter } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config } from '@swc/core';
-import type { RollupPluginFn, OutputFile } from '../types.js';
+import type { TaskConfig, RollupPluginFn, OutputFile } from '../types.js';
 
 const normalizeSwcConfig = (
   file: OutputFile,
+  type: TaskConfig['type'],
   mergeOptions?: swcCompileOptions,
 ): swcCompileOptions => {
   const { filePath, ext } = file;
@@ -19,7 +20,9 @@ const normalizeSwcConfig = (
     jsc: {
       transform: {
         react: {
-          runtime: 'automatic',
+          // In bundle task use classic runtime because of convenience for external react
+          // In transform task use automatic runtime so it isn't necessary to import react
+          runtime: type === 'transform' ? 'automatic' : 'classic',
         },
         legacyDecorator: true,
       },
@@ -87,6 +90,7 @@ const resolveFile = (importee: string, isDir = false) => {
 };
 
 export interface SwcPluginArgs {
+  type: TaskConfig['type'];
   extraSwcOptions?: Config;
 }
 
@@ -96,6 +100,7 @@ export interface SwcPluginArgs {
  * @returns
  */
 const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
+  type,
   extraSwcOptions,
 }) => {
   return {
@@ -140,7 +145,7 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
 
       const { code, map } = swc.transformSync(
         _,
-        normalizeSwcConfig(file, {
+        normalizeSwcConfig(file, type, {
           ...extraSwcOptions,
           // Disable minimize on every file transform when bundling
           minify: false,

@@ -125,6 +125,7 @@ export const normalizeRollupConfig = (
     userConfig?.alias && alias({ entries: userConfig.alias }),
     userConfig?.babelPlugins?.length && babelPlugin(userConfig.babelPlugins),
     swcPlugin({
+      type,
       extraSwcOptions: swcCompileOptions,
     }),
   ].filter(Boolean);
