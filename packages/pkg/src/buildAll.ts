@@ -27,7 +27,7 @@ export const buildAll = async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => 
       reportSize(outputFiles.reduce((pre, chunk) => {
         return {
           ...pre,
-          [chunk.filename]: chunk.code ? chunk.code : fs.readFileSync(chunk.dest),
+          [chunk.filename]: chunk.code ?? fs.readFileSync(chunk.dest),
         };
       }, ({} as any)));
     }
