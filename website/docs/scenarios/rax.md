@@ -100,8 +100,8 @@ export default defineConfig({
   bundle: {
     formats: ['esm', 'es2017'],
     externals: {
-      rax: 'Rax'
-    }
+      rax: 'Rax',
+    },
   },
 });
 ```

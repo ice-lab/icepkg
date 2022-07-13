@@ -99,8 +99,8 @@ export default defineConfig({
     formats: ['esm', 'es2017'],
     externals: {
       react: 'React',
-      'react-dom': 'ReactDOM'
-    }
+      'react-dom': 'ReactDOM',
+    },
   },
 });
 ```
