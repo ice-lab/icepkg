@@ -34,7 +34,7 @@ module.exports = function (context) {
         },
         plugins: [
           new webpack.ProvidePlugin({
-            _createElement: [path.resolve(siteDir, '.docusaurus', 'hijackCreateElement.js'), 'default'],
+            createElement: [path.resolve(siteDir, '.docusaurus', 'hijackCreateElement.js'), 'default'],
           }),
         ],
       };

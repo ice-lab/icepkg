@@ -74,7 +74,7 @@ plugins: [
 `;
 
   const hijackCreateElementModuleContent = `
-  import { createElement } from 'react';
+  import { createElement as _createElement } from 'react';
   import { convertUnit } from 'style-unit';
 
   function isObject(obj) {
@@ -98,8 +98,8 @@ plugins: [
     return props;
   }
 
-  export default function _createElement(component, props, ...children) {
-    return createElement(component, hijackElementProps(props), ...children);
+  export default function createElement(component, props, ...children) {
+    return _createElement(component, hijackElementProps(props), ...children);
   }
   `;
 
@@ -110,7 +110,7 @@ module.exports = {
     [
       require.resolve('@babel/preset-react'),
       {
-        "pragma": "_createElement",
+        "pragma": "createElement",
         "runtime": "classic"
       },
     ],
