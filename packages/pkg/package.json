@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Core service of ice component",
   "main": "./lib/index.js",
   "type": "module",
@@ -8,6 +8,9 @@
   "bin": {
     "ice-pkg": "lib/cli.js"
   },
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "rm -rf lib && tsc",
     "watch": "tsc -w",

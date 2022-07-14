@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg-plugin-rax-component",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Rax component plugin for @ice/pkg",
   "main": "lib/index.js",
   "type": "module",
