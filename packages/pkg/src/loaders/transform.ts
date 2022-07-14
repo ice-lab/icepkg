@@ -1,7 +1,7 @@
 import { performance } from 'perf_hooks';
 import { isAbsolute, resolve, extname, dirname, relative } from 'path';
 import fs from 'fs-extra';
-import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/load.js';
+import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE, loadPkg } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
@@ -9,7 +9,11 @@ import { createLogger } from '../helpers/logger.js';
 import type { PkgContext, TaskLoaderConfig, OutputFile } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
+const pkg = loadPkg(process.cwd());
+const isSWCHelpersDeclaredInDependency = Boolean(pkg?.denpendencies?.['@swc/helpers']);
+
 export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContext) {
+  let isTransformDistContainingSWCHelpers = false;
   const { rootDir, userConfig } = ctx;
   const { outputDir, entry, rollupPlugins } = cfg;
 
@@ -122,12 +126,20 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
       fs.writeFileSync(files[i].dest, code, 'utf-8');
     }
 
+    if (!isTransformDistContainingSWCHelpers) {
+      isTransformDistContainingSWCHelpers = code.includes('@swc/helpers');
+    }
+
     logger.debug(`Transform file ${files[i].absolutePath}`, timeFrom(traverseFileStart));
   }
 
   await container.close();
 
   logger.info(`⚡️ Build success in ${timeFrom(transformStart)}`);
+
+  if (isTransformDistContainingSWCHelpers && !isSWCHelpersDeclaredInDependency) {
+    logger.warn('⚠️ The transformed dist contains @swc/helpers, please make sure @swc/helpers is installed as a dependency.');
+  }
 
   return files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) }));
 }

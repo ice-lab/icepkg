@@ -136,12 +136,16 @@ export default defineConfig({
 });
 ```
 
-则输出一下产物：
+则输出以下产物：
 
 ```shell title=root/dist
 - index.umd.production.js # 输出 umd + es5 产物
 - index.umd.es2017.production.js # 输出 umd + es2017 产物
 ```
+
+:::tip
+bunlde 模式的 formats 如果单独配置 `['es2017']` 将不会生效，因为其仅决定产物语法层面规范，而无法决定产物的模块规范。因此其必须与 `'esm'` 和 `'umd'` 中的至少一项搭配配置才能正常生成对应模块规范的 ES2017 产物。
+:::
 
 ### name
 
@@ -162,14 +166,14 @@ library 导出的名称，可以通过 `window[name]` 访问。默认为 `packag
 + 类型 `boolean|object`
 + 默认 `true`
 
-默认情况下，bundle 的产物不包含依赖产物。该选项可修改这一结果。若想要 bundle 包含所有依赖产物，可如下配置：
+默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。若想要 bundle 不包含依赖产物，可如下配置：
 
 ```ts
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   bundle: {
-    externals: false,
+    externals: true,
   },
 });
 ```

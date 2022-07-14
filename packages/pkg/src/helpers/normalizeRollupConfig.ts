@@ -5,7 +5,6 @@ import { isFile, findDefaultEntryFile } from '../utils.js';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
-import PostcssPluginRpxToVw from 'postcss-plugin-rpx2vw';
 import alias from '@rollup/plugin-alias';
 import autoprefixer from 'autoprefixer';
 import swcPlugin from '../plugins/swc.js';
@@ -13,7 +12,6 @@ import dtsPlugin from '../plugins/dts.js';
 import minify from '../plugins/minify.js';
 import babelPlugin from '../plugins/babel.js';
 import aliasPlugin from '../plugins/transform/alias.js';
-import rpx2vwPlugin from '../plugins/transform/rpx2vw.js';
 import { builtinNodeModules } from './builtinModules.js';
 import { TaskName } from '../types.js';
 
@@ -87,7 +85,7 @@ const getExternalsAndGlboals = (userConfig: UserConfig, pkg: PkgJson): [(id?: st
     'regenerator-runtime',
   ];
 
-  const userExternals = userConfig?.bundle?.externals ?? true;
+  const userExternals = userConfig?.bundle?.externals ?? false;
 
   switch (userExternals) {
     case true:
@@ -127,6 +125,7 @@ export const normalizeRollupConfig = (
     userConfig?.alias && alias({ entries: userConfig.alias }),
     userConfig?.babelPlugins?.length && babelPlugin(userConfig.babelPlugins),
     swcPlugin({
+      type,
       extraSwcOptions: swcCompileOptions,
     }),
   ].filter(Boolean);
@@ -142,7 +141,6 @@ export const normalizeRollupConfig = (
       aliasPlugin({
         alias: userConfig?.alias,
       }),
-      rpx2vwPlugin(),
     ];
 
     return [resolvedPlugins, rollupOptions];
@@ -153,7 +151,7 @@ export const normalizeRollupConfig = (
       ...resolvedPlugins,
       ...commonPlugins,
       postcss({
-        plugins: [autoprefixer(), PostcssPluginRpxToVw],
+        plugins: [autoprefixer()],
         extract: resolve(rootDir, outputDir, 'index.css'),
         autoModules: true,
         minimize: true,

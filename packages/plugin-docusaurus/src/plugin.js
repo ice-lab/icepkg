@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = function (context) {
   const { siteDir } = context;
@@ -31,6 +32,11 @@ module.exports = function (context) {
             [pkgMeta.name]: path.resolve(siteDir, 'esm/index'),
           },
         },
+        plugins: [
+          new webpack.ProvidePlugin({
+            createElement: [path.resolve(siteDir, '.docusaurus', 'hijackCreateElement.js'), 'default'],
+          }),
+        ],
       };
     },
   };
