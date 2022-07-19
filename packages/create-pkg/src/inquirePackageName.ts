@@ -13,7 +13,7 @@ function generateNpmName(name: string, npmScope?: string): string {
 
 export async function inquirePackageName() {
   const info = await getInfo();
-  const isIntranet = checkAliInternal();
+  const isIntranet = await checkAliInternal();
 
   const { forIntranet } = await (isIntranet
     ? inquirer.prompt([
