@@ -3,7 +3,6 @@ export default {
   version: '@ice/create-pkg version: ',
   dirExistFiles: 'Files exist in the current directory already. Are you sure to continue ?',
   initSuccess: 'Initialize project successfully.',
-  generateIntranetComponent: 'Generate packages that are only available on the Intranet',
   selectNpmScope: 'Please select npm scope',
   packageName: 'Package name',
   packageNameValidateError: (name: string) => `npm package name ${name} not validate, please retry`,

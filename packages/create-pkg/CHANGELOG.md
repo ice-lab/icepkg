@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+- [fix] can't check ali Intranet correctly
+- [feat] remove prompt of scope choose if in ali Intranet
+
 ## 1.1.0
 
 - [feat] support rax component/web library/node module project type
