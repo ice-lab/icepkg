@@ -9,6 +9,8 @@ module.exports = function (context) {
 
   const mdxReactPath = require.resolve('@mdx-js/react', requireOptions);
 
+  const styleUnitPath = require.resolve('style-unit', requireOptions);
+
   return {
     name: 'docusaurus-plugin',
     configureWebpack(config) {
@@ -28,6 +30,7 @@ module.exports = function (context) {
           alias: {
             'react/jsx-runtime': path.resolve(siteDir, 'node_modules/react/jsx-runtime'),
             '@mdx-js/react': mdxReactPath,
+            'style-unit': styleUnitPath,
             // FIXME: I am not sure how to resolve the actual output folder
             [pkgMeta.name]: path.resolve(siteDir, 'esm/index'),
           },

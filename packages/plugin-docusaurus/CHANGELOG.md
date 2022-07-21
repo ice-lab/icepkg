@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- [fix] resolve `style-unit`. (#372)(https://github.com/ice-lab/icepkg/issues/372)
+
 ## 1.1.0
 
 - [feat] support rpx use in demo preview
