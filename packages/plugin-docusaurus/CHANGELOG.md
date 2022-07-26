@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+- [feat] support less
+
 ## 1.1.1
 
 - [fix] resolve `style-unit`. (#372)(https://github.com/ice-lab/icepkg/issues/372)

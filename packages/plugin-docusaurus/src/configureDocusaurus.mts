@@ -21,6 +21,10 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     paths: [__dirname, rootDir],
   });
 
+  const lessDocusaurusPluginPath = require.resolve('docusaurus-plugin-less', {
+    paths: [__dirname, rootDir],
+  });
+
   const sidebarItemsGenerator = params?.sidebarItemsGenerator
     ? params?.sidebarItemsGenerator.toString()
     : false;
@@ -43,6 +47,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     mobilePreview,
     prismReactRendererPath,
     sassDocusaurusPluginPath,
+    lessDocusaurusPluginPath,
   });
 
   const configuredPlugins = params?.configuredPlugins;
