@@ -338,6 +338,10 @@ hide_table_of_contents: true
 ```typescript
 export interface PluginDocusaurusOptions {
   /**
+   * 是否启用文档预览构建，默认为 true
+   */
+  enable?: boolean | { start: boolean; build: boolean };
+  /**
    * 文档的 title，默认为 "飞冰组件"
    */
   title?: string;
