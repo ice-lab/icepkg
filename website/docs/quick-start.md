@@ -4,7 +4,7 @@
 
 ### 1. Node.js
 
-使用 ICE PKG 开发前需要安装 [Node.js](https://nodejs.org)，并确保 node 版本是 14.x 或以上。
+使用 ICE PKG 开发前需要安装 [Node.js](https://nodejs.org)，并确保 node 版本是 16.14 或以上。
 
 ### 2. 包管理工具
 
