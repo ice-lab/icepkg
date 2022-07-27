@@ -19,7 +19,6 @@
   },
   "author": "ICE Team",
   "devDependencies": {
-    "@ice/pkg": "^1.0.0",
     "@commitlint/cli": "^15.0.0",
     "@iceworks/spec": "^1.6.0",
     "eslint": "^8.19.0",
