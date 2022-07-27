@@ -2,7 +2,9 @@
 
 ## 1.2.0
 
+- [feat] Add enable config to control doc build
 - [feat] support less
+- [refactor] use @ice/pkg to build package
 
 ## 1.1.1
 

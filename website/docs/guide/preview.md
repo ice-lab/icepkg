@@ -31,12 +31,52 @@ export default defineConfig({
 # 若存在 docs 文件夹，则默认启动文档预览；并启动 es/lib 编译
 $ npm start
 
-# 不启动文档预览
-$ npm start -- --doc=false
-
 # 若存在 docs 文件夹，则默认构建预览产物
 $ npm run build
 ```
+
+
+## 关闭文档预览
+
+`@ice/pkg-plugin-docusaurus` 插件接受 `enable` 配置以决定是否启用文档预览，该值默认为 `true`。如果需要关闭文档预览，可以配置如下：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    [
+      '@ice/pkg-plugin-docusaurus', 
+      {
+        enable: false
+      },
+    ],
+  ],
+});
+```
+
+你也可以根据启动的命令来配置是否开启文档预览构建：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    [
+      '@ice/pkg-plugin-docusaurus', 
+      {
+        // start 命令时启用文档预览，build 命令时关闭文档预览产物构建
+        enable: {
+          start: true,
+          build: false
+        }
+      },
+    ],
+  ],
+});
+```
+
+
 
 ## 如何书写文档
 

@@ -5,7 +5,16 @@ import type { PkgPlugin } from '@ice/pkg';
 
 const DEFAULT_DEV_SERVER_PORT = 4000;
 
+type EnableConfig = {
+  start?: boolean;
+  build?: boolean;
+}
+
 export interface PluginDocusaurusOptions {
+  /**
+   * Enable doc build
+   */
+  enable?: boolean | EnableConfig;
   /**
    * Title for your doc.
    */
@@ -60,9 +69,13 @@ const defaultOptions: PluginDocusaurusOptions = {
 };
 
 // @ts-ignore
-const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions) => {
+const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions = {}) => {
   const { onHook, context, getAllPlugin } = api;
   const { command, rootDir } = context;
+  const { enable = true } = options;
+  if (!checkPluginEnable(enable, command)) {
+    return;
+  }
 
   const configuredPlugins = getAllPlugin();
   const pluginOptions = {
@@ -77,6 +90,17 @@ const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions) => {
     await doc(api, pluginOptions);
   });
 };
+
+const checkPluginEnable = (enable: boolean | EnableConfig, command: string): boolean => {
+  if (typeof enable === 'boolean') {
+    if (!enable) {
+      return false;
+    }
+  } else if (!enable[command]) {
+    return false;
+  }
+  return true;
+}
 
 function configureDevServerPort(options) {
   // Port from environment variable is preferred.

@@ -6,7 +6,26 @@
 + 同时提供未压缩的版本，满足开发态需求
 + 同时需要提供 NPM 包消费的产物
 
-ICE PKG 的 [transform 模式](/#双模式) 和 [bundle 模式](/#双模式) 统统满足你的要求。现在，通过以下进行配置：
+## 初始化前端类库项目
+
+```bash
+$ npm init @ice/pkg web
+```
+
+项目类型选择『前端类库』，会在当前目录下新建 web 文件夹并在其中初始化前端类库项目，其文件目录结构如下：
+
+```shell
+.
+├── README.md
+├── abc.json
+├── build.config.mts
+├── package.json
+├── src
+│   └── index.ts
+└── tsconfig.json
+```
+
+推荐使用 ICE PKG 的 [transform 模式](/#双模式) 和 [bundle 模式](/#双模式) 进行开发。使用以下配置：
 
 ```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';

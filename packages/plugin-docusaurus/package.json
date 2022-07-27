@@ -2,19 +2,19 @@
   "name": "@ice/pkg-plugin-docusaurus",
   "version": "1.2.0",
   "description": "Plugin for component previewing",
-  "main": "esnext/index.js",
+  "main": "es2017/index.js",
   "exports": {
-    ".": "./esnext/index.mjs",
-    "./remark/extractCode": "./esnext/remark/extractCode.js",
-    "./plugin.js": "./esnext/plugin.js",
-    "./css/custom.css": "./esnext/css/custom.css"
+    ".": "./es2017/index.mjs",
+    "./remark/extractCode": "./es2017/remark/extractCode.js",
+    "./plugin.js": "./es2017/plugin.js",
+    "./css/custom.css": "./es2017/css/custom.css"
   },
   "files": [
-    "es",
-    "esnext"
+    "esm",
+    "es2017"
   ],
   "scripts": {
-    "build": "rm -rf es && pnpm pkg-cli build",
+    "build": "rm -rf es2017 esm && pnpm ice-pkg build",
     "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
     "prepublishOnly": "pnpm run-s lint build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,6 +23,7 @@
     "@docusaurus/core": "2.0.0-beta.22",
     "@docusaurus/preset-classic": "2.0.0-beta.22",
     "@mdx-js/react": "^1.6.22",
+    "@swc/helpers": "^0.4.3",
     "babel-plugin-module-resolver": "^4.1.0",
     "consola": "^2.15.3",
     "copy-text-to-clipboard": "^3.0.1",
@@ -44,6 +45,6 @@
     "unist-util-visit": "2.0.3"
   },
   "devDependencies": {
-    "@ice/pkg-cli": "1.0.0-beta.3"
+    "@ice/pkg": "^1.0.0"
   }
 }
