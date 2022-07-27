@@ -10,7 +10,7 @@ import type { PkgContext, TaskLoaderConfig, OutputFile } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
 const pkg = loadPkg(process.cwd());
-const isSWCHelpersDeclaredInDependency = Boolean(pkg?.denpendencies?.['@swc/helpers']);
+const isSWCHelpersDeclaredInDependency = Boolean(pkg?.dependencies?.['@swc/helpers']);
 
 export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContext) {
   let isTransformDistContainingSWCHelpers = false;
