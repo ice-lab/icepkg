@@ -4,6 +4,7 @@
 
 - [feat] Add enable config to control doc build
 - [feat] support less
+- [feat] support using BrowserOnly for components that only works in browsers
 - [refactor] use @ice/pkg to build package
 
 ## 1.1.1

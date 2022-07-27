@@ -5,6 +5,7 @@ const importRegex = /import\s+?(?:(?:(?:[\w*\s{},]*)\s+from\s+?)|)(?:(?:"(.*?)")
 const resolveImports = (code, filePath) => {
   let _code = code;
   const matches = (code.replace(/\n$/, '')).match(new RegExp(importRegex, 'g'));
+  let importedBrowserOnly = false;
 
   if (matches) {
     const imports = matches.map((matchStr) => {
@@ -26,6 +27,10 @@ const resolveImports = (code, filePath) => {
       if (i === 'react') {
         importedReact = true;
       }
+
+      if (i === '@docusaurus/BrowserOnly') {
+        importedBrowserOnly = true;
+      }
     });
 
 
@@ -33,6 +38,10 @@ const resolveImports = (code, filePath) => {
     if (!importedReact) {
       _code = `import React from 'react'; \n${_code}`;
     }
+  }
+
+  if (_code.includes('<BrowserOnly>') && !importedBrowserOnly) {
+    _code = `import BrowserOnly from '@docusaurus/BrowserOnly'; \n${_code}`;
   }
 
   return _code;
