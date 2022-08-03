@@ -5,7 +5,7 @@
   "description": "The next generation of npm package development kit.",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "setup": "rm -rf node_modules && rm -rf ./packages/*/node_modules && pnpm i --registry=https://registry.npmmirror.com --node-linker=isolated && npm run build",
+    "setup": "rm -rf node_modules && rm -rf ./packages/*/node_modules && pnpm i --registry=https://registry.npmmirror.com && npm run build",
     "build": "pnpm run-s clean build-ahead build-behind",
     "build-ahead": "pnpm -r --filter ./packages/pkg --filter ./packages/plugin-component --filter ./packages/plugin-rax-component run build",
     "build-behind": "pnpm --parallel --filter ./packages/plugin-docusaurus --filter ./packages/create-pkg --filter ./packages/ice-npm-utils run build",
@@ -20,6 +20,7 @@
   "author": "ICE Team",
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
+    "@ice/pkg": "^1.0.0",
     "@iceworks/spec": "^1.6.0",
     "eslint": "^8.19.0",
     "ice-npm-utils": "workspace:^3.0.2",
