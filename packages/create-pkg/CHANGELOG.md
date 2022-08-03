@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+- [feat] update builder
+
 ## 1.1.1
 
 - [fix] can't check ali Intranet correctly
