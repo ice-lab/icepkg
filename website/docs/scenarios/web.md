@@ -25,7 +25,7 @@ $ npm init @ice/pkg web
 └── tsconfig.json
 ```
 
-推荐使用 ICE PKG 的 transform 模式和 bundle 模式进行开发。使用以下配置：
+推荐使用 ICE PKG 的 [transform 模式](/#双模式) 和 [bundle 模式](/#双模式) 进行开发。使用以下配置：
 
 ```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';
