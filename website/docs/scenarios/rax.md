@@ -6,7 +6,7 @@
 $ npm init @ice/pkg rax-component
 ```
 
-会在当前目录下新建 rax-component 文件夹并在其中初始化 Rax 组件项目，其文件目录结构如下：
+项目类型选择『Rax 组件』，会在当前目录下新建 rax-component 文件夹并在其中初始化 Rax 组件项目，其文件目录结构如下：
 
 ```shell
 .

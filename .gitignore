@@ -30,6 +30,8 @@ packages/*/es/
 /packages/**/lib
 /packages/**/es
 /packages/**/esnext
+/packages/**/es2017
+/packages/**/esm
 **/node_modules
 /.pnpm-debug.log
 **/pnpm-global

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- [fix] resolve @ice/pkg-plugin-component
+
 ## 1.1.0
 
 - [feat] Remove built-in rpx support

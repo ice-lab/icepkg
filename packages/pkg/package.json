@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Core service of ice component",
   "main": "./lib/index.js",
   "type": "module",
@@ -59,5 +59,10 @@
     "@types/node": "^17.0.2",
     "sass": "^1.49.8",
     "source-map": "0.6.1"
+  },
+  "publishConfig": {
+    "executableFiles": [
+      "./lib/cli.js"
+    ]
   }
 }
