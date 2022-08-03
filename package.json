@@ -20,7 +20,6 @@
   "author": "ICE Team",
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
-    "@ice/pkg": "^1.0.0",
     "@iceworks/spec": "^1.6.0",
     "eslint": "^8.19.0",
     "ice-npm-utils": "workspace:^3.0.2",
