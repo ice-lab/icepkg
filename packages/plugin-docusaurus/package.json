@@ -14,7 +14,7 @@
     "es2017"
   ],
   "scripts": {
-    "build": "rm -rf es2017 esm && pnpm ice-pkg build",
+    "build": "rm -rf es2017 esm && pnpm exec node_modules/.bin/ice-pkg build",
     "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
     "prepublishOnly": "pnpm run-s lint build",
     "test": "echo \"Error: no test specified\" && exit 1"
