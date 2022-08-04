@@ -74,6 +74,7 @@ async function create(dirPath: string, dirname: string): Promise<void> {
     },
     materialTemplateDir: tempDir,
     materialType: 'component',
+    builder: '@ali/builder-ice-pkg',
   });
 
   await fs.remove(tempDir);
