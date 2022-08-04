@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- [fix] can't resolve @docusaurus/core/lib/babel/preset in npm
+
 ## 1.2.0
 
 - [feat] Add enable config to control doc build
