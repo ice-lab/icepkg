@@ -333,22 +333,21 @@ hide_table_of_contents: true
 
 ## 预览仅浏览器端可用的组件
 
-开发者在开发组件时，可能会使用到 BOM/DOM API（例如代码中访问了 `window` 或者 `document` 变量），则该组件仅为浏览器端可用。在执行 `npm run build` 命令进行文档预览产物的静态构建时，该组件在服务端环境下将无法正确构建渲染，并会导致文档构建失败。此时可使用 [`<BrowserOnly>`](https://docusaurus.io/docs/docusaurus-core/#browseronly) 组件来包裹用户开发的组件，示例如下：
+开发者在开发组件时，可能会使用到 BOM/DOM API（例如代码中访问了 `window` 或者 `document` 变量），则该组件仅为浏览器端可用。在执行 `npm run build` 命令进行文档预览产物的静态构建时，该组件在服务端环境下将无法正确构建渲染，并会导致文档构建失败。此时可在文档中的代码块内使用 [`<BrowserOnly>`](https://docusaurus.io/docs/docusaurus-core/#browseronly) 组件来包裹用户开发的组件，示例如下：
 
 ```js
 // ICE PKG 自动注入 BrowserOnly，无需手动引入
 export default function App() {
   return (
     <BrowserOnly>
-        {
-          () => {
-            // 'my-component' 是你正在开发的包名
-            const MyComponent = require('my-component').default;
-            return <MyComponent />
-          }
+      {
+        () => {
+          // 'my-component' 是你正在开发的包名
+          const MyComponent = require('my-component').default;
+          return <MyComponent />
         }
-      </BrowserOnly>
-    <MyComponent />
+      }
+    </BrowserOnly>
   );
 }
 ```
