@@ -3,10 +3,10 @@
 ## 初始化 React 组件项目
 
 ```bash
-$ npm init @ice/pkg react-component
+$ npm init @ice/pkg react-component-project
 ```
 
-项目类型选择『React 组件』，会在当前目录下新建 react-component 文件夹并在其中初始化 React 组件项目，其文件目录结构如下：
+项目类型选择『React 组件』，会在当前目录下新建 react-component-project 文件夹并在其中初始化 React 组件项目，其文件目录结构如下：
 
 ```shell
 .

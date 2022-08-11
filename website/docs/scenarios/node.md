@@ -3,10 +3,10 @@
 ## 初始化 Node 模块项目
 
 ```bash
-$ npm init @ice/pkg node
+$ npm init @ice/pkg node-project
 ```
 
-项目类型选择『Node 模块』，会在当前目录下新建 node 文件夹并在其中初始化 Node 模块项目，其文件目录结构如下：
+项目类型选择『Node 模块』，会在当前目录下新建 node-project 文件夹并在其中初始化 Node 模块项目，其文件目录结构如下：
 
 ```shell
 .
