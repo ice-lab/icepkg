@@ -4,6 +4,8 @@ import { TaskName } from '../types.js';
 import type { UserConfig } from '../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
 
+const __DEV__ = `${process.env.NODE_ENV === 'development'}`;
+
 export const getBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
   const define = stringifyObject(userConfig?.define ?? {});
 
@@ -29,7 +31,7 @@ export const getBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): 
           globals: {
             vars: {
               // Insert __DEV__ for users, can be overrided too.
-              __DEV__: "process.env.NODE_ENV === 'development'",
+              __DEV__,
               ...define,
             },
           },
@@ -67,7 +69,7 @@ export const getTransformSwcConfig = (userConfig: UserConfig, taskName: TaskName
           globals: {
             vars: {
               // Insert __DEV__ for users, can be overrided too.
-              __DEV__: "process.env.NODE_ENV === 'development'",
+              __DEV__,
               ...define,
             },
           },
