@@ -1,10 +1,10 @@
-import type { RollupOptions, Plugin, SourceMapInput } from 'rollup';
-import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
+import type { RollupOptions, Plugin as RollupPlugin, SourceMapInput } from 'rollup';
+import type { Context, PluginAPI, Plugin, TaskConfig as BuildTask } from 'build-scripts';
 import type { Config } from '@swc/core';
 
 export type PlainObject = Record<string, string | boolean | number | object>;
 
-export type RollupPluginFn<T = {}> = (args?: T) => Plugin;
+export type RollupPluginFn<T = {}> = (args?: T) => RollupPlugin;
 
 export interface TaskLoaderConfig extends TaskConfig {
   name: TaskName;
@@ -29,7 +29,7 @@ export interface TaskConfig {
   /**
   * Extra rollup plugins
   */
-  rollupPlugins?: Plugin[];
+  rollupPlugins?: RollupPlugin[];
 
   /**
   * Extra rollup options
@@ -44,13 +44,13 @@ export interface TaskConfig {
   swcCompileOptions?: Config;
 }
 
-export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;
+export type PkgTaskConfig = BuildTask<TaskConfig, TaskName>;
 
 export type PkgContext = Context<TaskConfig, {}, UserConfig>;
 
-export type PkgPluginAPI = IPluginAPI<TaskConfig>;
+export type PkgPluginAPI = PluginAPI<TaskConfig>;
 
-export type PkgPlugin = IPlugin<TaskConfig>;
+export type PkgPlugin = Plugin<TaskConfig>;
 
 export enum TaskName {
   'TRANSFORM_CJS' = 'transform-cjs',
