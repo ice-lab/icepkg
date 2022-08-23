@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+- [fix] bump version of build-scripts@2.0.0-24
+
 ## 1.1.1
 
 - [fix] resolve @ice/pkg-plugin-component

@@ -17,9 +17,9 @@ const debouncedBuildAll = debouncePromise(
 );
 
 export default async (context: PkgContext) => {
-  const { getConfig, applyHook, commandArgs } = context;
+  const { getTaskConfig, applyHook, commandArgs } = context;
 
-  const configs = getConfig();
+  const configs = getTaskConfig();
   await applyHook('before.start.load', { args: commandArgs, config: configs });
 
   if (!configs.length) {

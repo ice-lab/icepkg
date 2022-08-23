@@ -1,8 +1,5 @@
 lockfileVersion: 5.4
 
-overrides:
-  build-scripts: 2.0.0-18
-
 importers:
 
   .:
@@ -140,7 +137,7 @@ importers:
       '@types/node': ^17.0.2
       acorn: ^8.7.0
       autoprefixer: ^10.4.2
-      build-scripts: 2.0.0-18
+      build-scripts: 2.0.0-24
       cac: ^6.7.12
       chokidar: ^3.5.3
       consola: ^2.15.3
@@ -170,7 +167,7 @@ importers:
       '@swc/core': 1.2.211
       acorn: 8.7.1
       autoprefixer: 10.4.7_postcss@8.4.14
-      build-scripts: 2.0.0-18
+      build-scripts: 2.0.0-24
       cac: 6.7.12
       chokidar: 3.5.3
       consola: 2.15.3
@@ -5289,6 +5286,24 @@ packages:
       npmlog: 4.1.2
       picocolors: 1.0.0
       semver: 7.3.7
+    dev: true
+
+  /build-scripts/2.0.0-24:
+    resolution: {integrity: sha512-FoGyAZ+Xz3B51ui8mMnAtswVL7rxPjeA67ggzG08mDYK29XPdLdnS8rAI6cagxFiPjQ6o4BMzR2uFXcegxmBgA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      camelcase: 5.3.1
+      commander: 2.20.3
+      consola: 2.15.3
+      esbuild: 0.14.49
+      fast-glob: 3.2.11
+      fs-extra: 8.1.0
+      json5: 2.2.1
+      lodash: 4.17.21
+      npmlog: 4.1.2
+      picocolors: 1.0.0
+      semver: 7.3.7
+    dev: false
 
   /builtin-modules/3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
@@ -13139,7 +13154,7 @@ packages:
   /wide-align/1.1.5:
     resolution: {integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg==}
     dependencies:
-      string-width: 1.0.2
+      string-width: 4.2.3
 
   /widest-line/3.1.0:
     resolution: {integrity: sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==}
