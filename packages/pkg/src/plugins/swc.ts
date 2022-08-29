@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import * as swc from '@swc/core';
 import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
-import { isDirectory, scriptsFilter } from '../utils.js';
+import { isDirectory, scriptsFilter, cwd } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config } from '@swc/core';
 import type { TaskConfig, RollupPluginFn, OutputFile } from '../types.js';
@@ -115,7 +115,7 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
       // Find relative importee
       if (importer && importee[0] === '.') {
         const absolutePath = resolve(
-          importer ? dirname(importer) : process.cwd(),
+          importer ? dirname(importer) : cwd,
           importee,
         );
 

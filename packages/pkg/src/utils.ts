@@ -304,3 +304,5 @@ export const stylesFilter = createFilter(
   /\.(?:css|sass|less|stylus)$/, // include
   /node_modules/, // exclude
 );
+
+export const cwd = process.cwd();
