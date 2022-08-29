@@ -15,7 +15,7 @@ module.exports = function (context) {
 
   const insertPostcssPlugin = (rule, pluginName) => {
     const postcssLoader = rule.use.find((u) => u.loader.includes('postcss-loader'));
-    postcssLoader.options.postcssOptions.plugins.push(require.resolve(pluginName));
+    postcssLoader?.options.postcssOptions.plugins.push(require.resolve(pluginName));
   };
 
   return {
