@@ -11,18 +11,31 @@ module.exports = function (context) {
 
   const styleUnitPath = require.resolve('style-unit', requireOptions);
 
+  const styleRegExpStrs = ['/\\.css$/i', '/\\.module\\.css$/i', '/\\.s[ca]ss$/', '/\\.less$/'];
+
+  const insertPostcssPlugin = (rule, pluginName) => {
+    const postcssLoader = rule.use.find((u) => u.loader.includes('postcss-loader'));
+    postcssLoader.options.postcssOptions.plugins.push(require.resolve(pluginName));
+  }
+
   return {
     name: 'docusaurus-plugin',
     configureWebpack(config) {
       const cssRules = config.module.rules.filter((rule) => {
         const testRegExpStr = rule.test.toString();
         // eslint-disable-no-useless-escape
-        return testRegExpStr === '/\\.css$/i' || testRegExpStr === '/\\.module\\.css$/i';
+        return styleRegExpStrs.includes(testRegExpStr);
       });
       cssRules.forEach((rule) => {
-        const postcssUse = rule.use.find((u) => u.loader.includes('postcss-loader'));
-        if (postcssUse) {
-          postcssUse.options.postcssOptions.plugins.push(require.resolve('postcss-plugin-rpx2vw'));
+        if (!!rule.use) {
+          insertPostcssPlugin(rule, 'postcss-plugin-rpx2vw');
+        } else if (!!rule.oneOf) {
+          rule.oneOf.forEach((o) => {
+            if (!!o.use) {
+              insertPostcssPlugin(o, 'postcss-plugin-rpx2vw');
+            }
+          }
+          );
         }
       });
       return {

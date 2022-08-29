@@ -20,9 +20,9 @@ const config = {
   {{/unless}}
 
   plugins: [
-    require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
     '{{sassDocusaurusPluginPath}}',
     '{{lessDocusaurusPluginPath}}',
+    require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
   ],
 
   presets: [
