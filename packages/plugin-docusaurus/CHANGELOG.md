@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- [feat] support using rpx in sass and less
+
 ## 1.2.0
 
 - [feat] Add enable config to control doc build
