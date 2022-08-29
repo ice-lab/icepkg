@@ -17,7 +17,7 @@ async function redirectImport(
   code: string,
   imports: readonly ImportSpecifier[],
   aliasRecord: Record<string, string>,
-  filePath: string
+  filePath: string,
 ): Promise<MagicString> {
   const str: MagicString = new MagicString(code);
 
@@ -79,8 +79,8 @@ const aliasPlugin = (options: AliasPluginOptions = { alias: {} }) => {
           }
           return result;
         },
-        {}
-      )
+        {},
+      );
       const str = await redirectImport(
         code,
         imports,

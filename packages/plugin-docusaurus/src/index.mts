@@ -5,7 +5,7 @@ import type { PkgPlugin } from '@ice/pkg';
 
 const DEFAULT_DEV_SERVER_PORT = 4000;
 
-type EnableConfig = {
+interface EnableConfig {
   start?: boolean;
   build?: boolean;
 }
@@ -100,7 +100,7 @@ const checkPluginEnable = (enable: boolean | EnableConfig, command: string): boo
     return false;
   }
   return true;
-}
+};
 
 function configureDevServerPort(options) {
   // Port from environment variable is preferred.

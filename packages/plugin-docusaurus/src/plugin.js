@@ -16,7 +16,7 @@ module.exports = function (context) {
   const insertPostcssPlugin = (rule, pluginName) => {
     const postcssLoader = rule.use.find((u) => u.loader.includes('postcss-loader'));
     postcssLoader.options.postcssOptions.plugins.push(require.resolve(pluginName));
-  }
+  };
 
   return {
     name: 'docusaurus-plugin',
@@ -27,15 +27,14 @@ module.exports = function (context) {
         return styleRegExpStrs.includes(testRegExpStr);
       });
       cssRules.forEach((rule) => {
-        if (!!rule.use) {
+        if (rule.use) {
           insertPostcssPlugin(rule, 'postcss-plugin-rpx2vw');
-        } else if (!!rule.oneOf) {
+        } else if (rule.oneOf) {
           rule.oneOf.forEach((o) => {
-            if (!!o.use) {
+            if (o.use) {
               insertPostcssPlugin(o, 'postcss-plugin-rpx2vw');
             }
-          }
-          );
+          });
         }
       });
       return {
