@@ -4,17 +4,17 @@
 
 ## alias
 
-+ 类型 `object`
++ 类型 `Record<string, string>`
 + 默认值 `{}`
 
-比如，将 `@` 指向 `./src/` 目录。
+比如，将 `@` 指向 `./src` 目录。
 
 ```ts
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   alias: {
-    '@': './src/',
+    '@': './src',
   },
 });
 ```
