@@ -400,5 +400,15 @@ export interface PluginDocusaurusOptions {
    * 开启移动端组件预览
    */
   mobilePreview?: boolean;
+
+  /**
+   * 文档默认语言，默认值为 zh-Hans，即中文
+   */
+  defaultLocale?: string;
+
+  /**
+   * 文档需要构建的多语言版本，必须包含 defaultLocale，默认值为 ['en', 'zh-Hans']，即英文和中文
+   */ 
+  locales?: string[];
 };
 ```

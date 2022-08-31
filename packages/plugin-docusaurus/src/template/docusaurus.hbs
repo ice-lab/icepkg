@@ -9,8 +9,8 @@ const config = {
   url: '{{url}}',
   baseUrl: '{{baseUrl}}',
   i18n: {
-    defaultLocale: 'zh-Hans',
-    locales: ['en', 'zh-Hans'],
+    defaultLocale: '{{defaultLocale}}',
+    locales: [{{#each locales}}'{{this}}',{{/each}}],
   },
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
