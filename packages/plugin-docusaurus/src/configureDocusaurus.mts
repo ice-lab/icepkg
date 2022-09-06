@@ -90,7 +90,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
   const babelConfigContents = `
 module.exports = {
   presets: [
-    require.resolve('@docusaurus/core/lib/babel/preset'),
+    require.resolve('${require.resolve('@docusaurus/core/lib/babel/preset')}'),
     [
       require.resolve('@babel/preset-react'),
       {
