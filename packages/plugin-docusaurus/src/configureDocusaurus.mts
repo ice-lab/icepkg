@@ -57,27 +57,6 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     consola.warn('You are developing a rax component with compat mode which will alias rax to rax-compat');
   }
 
-  const raxAliasBabelPluginConfigContents = `
-plugins: [
-  [
-    require.resolve('babel-plugin-module-resolver'),
-    {
-      alias: {
-        rax: require.resolve('rax-compat'),
-        'rax-children': require.resolve('rax-compat/children'),
-        'rax-clone-element': require.resolve('rax-compat/clone-element'),
-        'rax-create-class': require.resolve('rax-compat/create-class'),
-        'rax-create-factory': require.resolve('rax-compat/create-factory'),
-        'rax-create-portal': require.resolve('rax-compat/create-portal'),
-        'rax-find-dom-node': require.resolve('rax-compat/find-dom-node'),
-        'rax-is-valid-element': require.resolve('rax-compat/is-valid-element'),
-        'rax-unmount-component-at-node': require.resolve('rax-compat/unmount-component-at-node'),
-      }
-    }
-  ]
-]
-`;
-
   const hijackCreateElementModuleContent = `
   import { createElement as _createElement } from 'react';
   import { convertUnit } from 'style-unit';
@@ -120,7 +99,6 @@ module.exports = {
       },
     ],
   ],
-  ${isUsingRax ? raxAliasBabelPluginConfigContents : ''}
 };`;
 
   // Write config to .docusaurus
