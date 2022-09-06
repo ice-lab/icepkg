@@ -62,14 +62,13 @@ module.exports = function (context) {
       });
       return {
         resolve: {
-          alias: {
+          alias2: Object.assign({
             'react/jsx-runtime': path.resolve(siteDir, 'node_modules/react/jsx-runtime'),
             '@mdx-js/react': mdxReactPath,
             'style-unit': styleUnitPath,
             // FIXME: I am not sure how to resolve the actual output folder
             [pkgMeta.name]: path.resolve(siteDir, 'esm/index'),
-            ...raxAlias,
-          },
+          }, raxAlias),
         },
         plugins: [
           new webpack.ProvidePlugin({
