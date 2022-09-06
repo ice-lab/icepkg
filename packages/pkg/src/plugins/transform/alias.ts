@@ -1,12 +1,12 @@
 /**
  * This plugin is used to handle alias only in transform task
  */
-import { isAbsolute, resolve, relative, join, dirname } from 'path';
+import { isAbsolute, resolve, relative, join, dirname, win32 } from 'path';
 import { init, parse } from 'es-module-lexer';
 import type { ImportSpecifier } from 'es-module-lexer';
 import consola from 'consola';
 import MagicString from 'magic-string';
-import { scriptsFilter, cwd } from '../../utils.js';
+import { scriptsFilter, cwd, normalizeSlashes } from '../../utils.js';
 
 
 interface AliasPluginOptions {
@@ -38,7 +38,7 @@ async function redirectImport(
 
     if (absoluteImportPath) {
       const relativePath = relative(dirname(filePath), absoluteImportPath);
-      const relativeImportPath = relativePath.startsWith('..') ? relativePath : `./${relativePath}`;
+      const relativeImportPath = normalizeSlashes(relativePath.startsWith('..') ? relativePath : `./${relativePath}`);
       str.overwrite(targetImport.s, targetImport.e, relativeImportPath);
     }
   });

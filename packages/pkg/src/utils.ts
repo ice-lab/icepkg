@@ -306,3 +306,7 @@ export const stylesFilter = createFilter(
 );
 
 export const cwd = process.cwd();
+
+export function normalizeSlashes(file: string) {
+  return file.split(path.win32.sep).join('/');
+}
