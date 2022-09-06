@@ -55,14 +55,14 @@ module.exports = function (context) {
           rule.oneOf.forEach((o) => {
             if (o.use) {
               insertPostcssPlugin(o, 'postcss-plugin-rpx2vw');
-              updateLoaderOptions(rule, 'mini-css-extract-plugin', { esModule: false });
+              updateLoaderOptions(o, 'mini-css-extract-plugin', { esModule: false });
             }
           });
         }
       });
       return {
         resolve: {
-          alias2: Object.assign({
+          alias: Object.assign({
             'react/jsx-runtime': path.resolve(siteDir, 'node_modules/react/jsx-runtime'),
             '@mdx-js/react': mdxReactPath,
             'style-unit': styleUnitPath,
