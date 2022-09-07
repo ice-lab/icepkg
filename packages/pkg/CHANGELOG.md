@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+- [fix] alias not work in transform mode
+
 ## 1.1.1
 
 - [fix] resolve @ice/pkg-plugin-component

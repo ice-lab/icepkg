@@ -304,3 +304,9 @@ export const stylesFilter = createFilter(
   /\.(?:css|sass|less|stylus)$/, // include
   /node_modules/, // exclude
 );
+
+export const cwd = process.cwd();
+
+export function normalizeSlashes(file: string) {
+  return file.split(path.win32.sep).join('/');
+}
