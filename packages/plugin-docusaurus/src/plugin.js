@@ -11,7 +11,7 @@ const raxAliasMap = {
   'rax-find-dom-node': 'rax-compat/find-dom-node',
   'rax-is-valid-element': 'rax-compat/is-valid-element',
   'rax-unmount-component-at-node': 'rax-compat/unmount-component-at-node',
-}
+};
 
 module.exports = function (context) {
   const { siteDir } = context;
@@ -63,11 +63,13 @@ module.exports = function (context) {
 
       const raxAlias = {};
       try {
-        for (let aliasKey in raxAliasMap) {
+        for (const aliasKey in raxAliasMap) {
           const resolvePath = require.resolve(raxAliasMap[aliasKey]);
           raxAlias[aliasKey] = resolvePath;
         }
-      } catch (e) {}
+      } catch (e) {
+        /* continue regardless of error */
+      }
       return {
         resolve: {
           alias: Object.assign({
