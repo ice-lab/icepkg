@@ -138,7 +138,8 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
   logger.info(`⚡️ Build success in ${timeFrom(transformStart)}`);
 
   if (isTransformDistContainingSWCHelpers && !isSWCHelpersDeclaredInDependency) {
-    logger.warn('⚠️ The transformed dist contains @swc/helpers, please make sure @swc/helpers is installed as a dependency.');
+    logger.error('⚠️ The transformed dist contains @swc/helpers, please make sure @swc/helpers is installed as a dependency.');
+    process.exit(1);
   }
 
   return files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) }));
