@@ -2,15 +2,12 @@ import { extname, relative } from 'path';
 import { createFilter } from '@rollup/pluginutils';
 import { dtsCompile } from '../helpers/dts.js';
 import { isEcmascriptOnly, isTypescriptOnly } from '../helpers/suffix.js';
+import { dtsFilter } from '../utils.js';
 
 import type { Plugin } from 'rollup';
 import type { UserConfig } from '../types.js';
 import type { DtsInputFile, FileExt } from '../helpers/dts.js';
 
-const dtsFilter = createFilter(
-  /\.m?[jt]sx?$/, // include
-  /node_modules/, // exclude
-);
 
 interface CachedContent extends DtsInputFile {
   updated?: boolean;
