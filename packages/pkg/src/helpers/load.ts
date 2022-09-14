@@ -21,7 +21,7 @@ export function loadPkg(cwd: string) {
 export function loadEntryFiles(entry: string, excludes: string | string[]) {
   return glob.sync('**/*.*', {
     cwd: entry,
-    ignore: ['node_modules/**', '*.d.ts', ...toArray(excludes ?? [])],
+    ignore: ['node_modules/**', ...toArray(excludes ?? [])],
     onlyFiles: true,
   });
 }

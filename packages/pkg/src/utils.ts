@@ -297,7 +297,12 @@ export const stringifyObject = (obj: PlainObject) => {
 
 export const scriptsFilter = createFilter(
   /\.m?[jt]sx?$/, // include
-  /node_modules/, // exclude
+  [/node_modules/, /\.d\.ts$/], // exclude
+);
+
+export const dtsFilter = createFilter(
+  /\.m?tsx?$/, // include
+  [/node_modules/, /\.d\.ts$/], // exclude
 );
 
 export const stylesFilter = createFilter(
