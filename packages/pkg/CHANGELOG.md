@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0
+
+- [feat] support json in bundle task
+- [fix] can't transform d.ts file
+- [fix] error when generating types for js files
+- [refactor] exit process is @swc/helpers is not installed
+
 ## 1.1.2
 
 - [fix] alias not work in transform mode
