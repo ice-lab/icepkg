@@ -7,6 +7,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
 import alias from '@rollup/plugin-alias';
 import autoprefixer from 'autoprefixer';
+import json from '@rollup/plugin-json';
 import swcPlugin from '../plugins/swc.js';
 import dtsPlugin from '../plugins/dts.js';
 import minify from '../plugins/minify.js';
@@ -157,6 +158,7 @@ export const normalizeRollupConfig = (
         minimize: true,
         sourceMap: userConfig?.sourceMaps,
       }),
+      json(),
       nodeResolve(), // To locates modules using the node resolution algorithm,
       commonjs(), // To convert commonjs to import, make it capabile for rollup to bundle
     ];
