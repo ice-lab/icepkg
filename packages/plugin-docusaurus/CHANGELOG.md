@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1
+
+- [fix] miss sass dependency
+- [refactor] exit preview sub process is @swc/helpers is not installed
+- [fix] error if rax-compat is not installed
+
 ## 1.3.0
 
 - [feat] support using rpx in sass and less

@@ -46,4 +46,10 @@ export const doc = async (api, options: PluginDocusaurusOptions) => {
       throw new Error('Doc build failed!');
     }
   });
+
+  // If transofrm task failed and main process exit,
+  // then doc process should be killed too
+  process.on('exit', () => {
+    child.kill();
+  });
 };
