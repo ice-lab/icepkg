@@ -13,6 +13,7 @@ const getCompileBabel = require('../utils/getCompileBabel');
 const { analyzePackage } = require('./depAnalyze');
 const generateStyle = require('./generateStyle');
 const dtsCompiler = require('./dts');
+const mergeBabelPlugins = require('../utils/mergeBabelPlugins');
 
 const getBabelConfig = ({
   target,
@@ -38,10 +39,7 @@ const getBabelConfig = ({
     });
     babelConfig.presets.push([require.resolve('@babel/preset-typescript'), { jsxPragma: 'createElement' }]);
 
-    babelConfig.plugins = [
-      ...babelConfig.plugins,
-      ...(babelPlugins || []),
-    ];
+    babelConfig.babelConfig.plugins = mergeBabelPlugins(babelConfig.plugins, (babelPlugins || []));
   }
   // generate babel-plugin-import config
   const plugins = [];
