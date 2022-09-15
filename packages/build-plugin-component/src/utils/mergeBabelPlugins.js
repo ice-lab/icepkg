@@ -1,6 +1,6 @@
 module.exports = (defaultPlugins, babelPlugins) => {
   const pluginsMap = {};
-  const createMap = item => {
+  const appendNewPluginsToMap = item => {
     if (typeof item === 'string') {
       pluginsMap[item] = item;
     } else {
@@ -8,7 +8,7 @@ module.exports = (defaultPlugins, babelPlugins) => {
       pluginsMap[key] = item
     }
   }
-  defaultPlugins.map(createMap);
-  babelPlugins.map(createMap);
+  defaultPlugins.map(appendNewPluginsToMap);
+  babelPlugins.map(appendNewPluginsToMap);
   return Object.values(pluginsMap);
 }

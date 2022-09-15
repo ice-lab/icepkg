@@ -39,7 +39,7 @@ const getBabelConfig = ({
     });
     babelConfig.presets.push([require.resolve('@babel/preset-typescript'), { jsxPragma: 'createElement' }]);
 
-    babelConfig.babelConfig.plugins = mergeBabelPlugins(babelConfig.plugins, (babelPlugins || []));
+    babelConfig.plugins = mergeBabelPlugins(babelConfig.plugins, (babelPlugins || []));
   }
   // generate babel-plugin-import config
   const plugins = [];
