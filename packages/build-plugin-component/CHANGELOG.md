@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.12.0
+- [feat] Add bytedance microapp support 
+
 ## 1.11.0
 
 - [feat] Support docGenIncludes for all *.md files in demo([#285](https://github.com/ice-lab/iceworks-cli/issues/250)))
