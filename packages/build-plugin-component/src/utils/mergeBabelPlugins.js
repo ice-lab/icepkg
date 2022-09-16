@@ -1,15 +1,15 @@
 module.exports = (defaultPlugins, babelPlugins) => {
   const pluginsMap = {};
-  // 把插件名作为key，pluginsMap不存在key则新增插件，存在则覆盖插件
+  // 把插件名作为 key，pluginsMap 不存在 key 则新增插件，存在则覆盖插件
   const appendNewPluginsToMap = item => {
     if (typeof item === 'string') {
       pluginsMap[item] = item;
     } else {
       const key = item[0];
-      pluginsMap[key] = item
+      pluginsMap[key] = item;
     }
   }
-  // 默认插件存入pluginsMap
+  // 默认插件存入 pluginsMap
   defaultPlugins.map(appendNewPluginsToMap);
   // 业务自定义插件存入pluginsMap
   babelPlugins.map(appendNewPluginsToMap);
