@@ -3,7 +3,7 @@ const fse = require('fs-extra');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const getJestConfig = require('rax-jest-config');
-const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE, KRAKEN } = require('./constants');
+const { WEB, WEEX, MINIAPP, WECHAT_MINIPROGRAM, NODE, KRAKEN, BYTEDANCE } = require('./constants');
 const getMiniappConfig = require('./configs/rax/miniapp/getBase');
 const getMiniappRuntimeConfig = require('./configs/rax/getRuntimeMiniappConfig');
 const getBaseWebpack = require('./configs/rax/getBaseWebpack');
@@ -136,7 +136,7 @@ module.exports = ({
         registerTask(`component-build-${target}`, defaultConfig);
       }
 
-      if ([MINIAPP, WECHAT_MINIPROGRAM].includes(target)) {
+      if ([MINIAPP, WECHAT_MINIPROGRAM, BYTEDANCE].includes(target)) {
         if (isRuntimeMiniapp && target === MINIAPP) {
           const runtimeMiniappConfig = getMiniappRuntimeConfig(context, options);
           registerTask('component-build-runtime-miniapp', runtimeMiniappConfig);
@@ -173,7 +173,7 @@ module.exports = ({
         registerTask('component-build-weex', distConfig);
       }
 
-      if ((target === MINIAPP && !isRuntimeMiniapp) || target === WECHAT_MINIPROGRAM) {
+      if ((target === MINIAPP && !isRuntimeMiniapp) || target === WECHAT_MINIPROGRAM || target === BYTEDANCE) {
         options[target] = options[target] || {};
         addMiniappTargetParam(target, options[target]);
         const config = getMiniappConfig(context, target, options, onGetWebpackConfig);
@@ -237,6 +237,9 @@ function addMiniappTargetParam(target, originalConfig = {}) {
   switch (target) {
     case WECHAT_MINIPROGRAM:
       originalConfig.platform = 'wechat';
+      break;
+    case BYTEDANCE:
+      originalConfig.platform = 'bytedance';
       break;
     default:
       break;
