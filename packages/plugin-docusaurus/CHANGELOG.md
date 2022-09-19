@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.2
+
+- [fix] react resolve error in npm
+
 ## 1.3.1
 
 - [fix] miss sass dependency
