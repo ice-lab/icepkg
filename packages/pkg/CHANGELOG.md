@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- [fix] update engines in package.json
+
 ## 1.2.0
 
 - [feat] support json in bundle task

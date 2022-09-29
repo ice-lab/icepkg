@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Core service of ice component",
   "main": "./lib/index.js",
   "type": "module",
@@ -21,7 +21,7 @@
   "author": "",
   "license": "MIT",
   "engines": {
-    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+    "node": ">=16.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.17.5",
