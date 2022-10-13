@@ -12,7 +12,7 @@ export default defineConfig({
 ```
 
 :::tip
-完整配置项请[参阅文档](/reference/config-list)。
+完整配置项请[参阅文档](../reference/config-list)。
 :::
 
 注：ICE PKG 支持的配置文件类型包括：

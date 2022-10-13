@@ -1,6 +1,6 @@
 # ICE PKG
 
-ICE PKG 是飞冰开源的 NPM 包开发解决方案，提供 [React 组件](/scenarios/react)、[Rax 组件](/scenarios/rax)、[Node 模块](/scenarios/node)、[前端类库](/scenarios/web) 等多场景 NPM 包的研发。
+ICE PKG 是飞冰开源的 NPM 包开发解决方案，提供 [React 组件](./scenarios/react)、[Rax 组件](./scenarios/rax)、[Node 模块](./scenarios/node)、[前端类库](./scenarios/web) 等多场景 NPM 包的研发。
 
 ## 特性
 
@@ -30,20 +30,20 @@ ICE PKG 除支持 bundle 模式外，也默认支持了 transform 模式（将�
 
 ### ES2017 产物
 
-为现代浏览器提供 ES2017 产物，可以减少产物体积，亦可加快执行速度。更多内容参考 [指南 - 消费 es2017 产物](/guide/abilities#消费-es2017-产物)。
+为现代浏览器提供 ES2017 产物，可以减少产物体积，亦可加快执行速度。更多内容参考 [指南 - 消费 es2017 产物](./guide/abilities#消费-es2017-产物)。
 
 ### 多场景
 
 依赖 ICE PKG 强大的 [双模式](#双模式) 能力，支持多类场景的额开发需求。
 
-+ [React 组件](/scenarios/react)
-+ [Rax 组件](/scenarios/rax)
-+ [Node 模块](/scenarios/node)
-+ [前端类库](/scenarios/web)
++ [React 组件](./scenarios/react)
++ [Rax 组件](./scenarios/rax)
++ [Node 模块](./scenarios/node)
++ [前端类库](./scenarios/web)
 
 ### 文档预览
 
-结合 [Docusaurus](https://docusaurus.io/)，ICE PKG 升级了文档预览的能力。更多内容参考 [指南 - 文档预览](/guide/preview)。
+结合 [Docusaurus](https://docusaurus.io/)，ICE PKG 升级了文档预览的能力。更多内容参考 [指南 - 文档预览](./guide/preview)。
 
 ## 社区
 
