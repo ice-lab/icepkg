@@ -105,7 +105,7 @@ const plugin = (api) => {
 + 类型：`object`
 + 默认值 `{}`
 
-当 [开启 bundle 模式](/reference/config-list#bundle)，可通过 `rollupOptions` 配置额外的 [rollup 配置](https://rollupjs.org/guide/en/#command-line-flags)。
+当 [开启 bundle 模式](./config-list#bundle)，可通过 `rollupOptions` 配置额外的 [rollup 配置](https://rollupjs.org/guide/en/#command-line-flags)。
 
 当试图修改 `rollupOptions.plugins` 参数时，建议直接使用 [rollupPlugins](#rollupPlugins) 参数。
 
