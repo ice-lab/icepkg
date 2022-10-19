@@ -73,7 +73,7 @@ module.exports = function (context) {
       return {
         resolve: {
           alias: Object.assign({
-            'react': path.resolve(siteDir, 'node_modules/react'),
+            react: path.resolve(siteDir, 'node_modules/react'),
             'react-dom': path.resolve(siteDir, 'node_modules/react-dom'),
             'react/jsx-runtime': path.resolve(siteDir, 'node_modules/react/jsx-runtime'),
             '@mdx-js/react': mdxReactPath,

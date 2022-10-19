@@ -74,9 +74,9 @@ const plugin = (options) => {
     }}
   </BrowserOnly>
 </Previewer>`,
-        },{
+        }, {
           type: 'import',
-          value: `import BrowserOnly from '@docusaurus/BrowserOnly';`,
+          value: 'import BrowserOnly from \'@docusaurus/BrowserOnly\';',
         });
       }
     }
