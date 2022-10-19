@@ -85,7 +85,7 @@ module.exports = function (context) {
         plugins: [
           new webpack.ProvidePlugin({
             createElement: [path.resolve(siteDir, '.docusaurus', 'hijackCreateElement.js'), 'default'],
-            Fragment: ['react', 'Fragment']
+            Fragment: ['react', 'Fragment'],
           }),
         ],
       };
