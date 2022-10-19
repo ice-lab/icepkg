@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 1.3.3
+
+- [fix] can't use short syntax (<></>) of fragment
+
 ## 1.3.2
 
 - [fix] react resolve error in npm

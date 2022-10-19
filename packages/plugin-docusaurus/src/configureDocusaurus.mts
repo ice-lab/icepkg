@@ -95,6 +95,7 @@ module.exports = {
       require.resolve('@babel/preset-react'),
       {
         "pragma": "createElement",
+        "pragmaFrag": "Fragment",
         "runtime": "classic"
       },
     ],
