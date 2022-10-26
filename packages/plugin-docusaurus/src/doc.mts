@@ -31,6 +31,7 @@ export const doc = async (api, options: PluginDocusaurusOptions) => {
       command,
       !docusaurusConfigFileExist && `--config=${rootDir}/${DOCUSAURUS_DIR}/${DOCUSAURUS_CONFIG_FILE}`,
       command === 'start' && `--port=${port}`,
+      command === 'start' && '--host=0.0.0.0',
     ].filter(Boolean),
     {
       cwd: rootDir,

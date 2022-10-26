@@ -1,6 +1,8 @@
 # Changelog
 
-
+## 1.3.4
+- [feat] support scan qrcode at mobile preview
+- [feat] support external ip access at start stage
 ## 1.3.3
 
 - [fix] can't generate demo pages in build command if mobilePreview is turned on
