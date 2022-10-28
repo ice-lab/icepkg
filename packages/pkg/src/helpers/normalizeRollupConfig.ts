@@ -27,6 +27,11 @@ interface PkgJson {
   [k: string]: string | Record<string, string>;
 }
 
+const getFilenamePrefix = (filename: string, format: string, isES2017: boolean): string => {
+  const formatPrefix = (format === 'umd' || format === 'cjs') ? `.${format}` : '';
+  return `${filename}${formatPrefix}${isES2017 ? '.es2017' : ''}`;
+};
+
 const getRollupOutputs = ({
   globals,
   userConfig,
@@ -57,11 +62,6 @@ const getRollupOutputs = ({
       globals,
       sourcemap: sourceMaps,
     };
-
-    const getFilenamePrefix = (filename: string, format: string, isES2017: boolean): string => {
-       const formatPrefix = (format === 'umd' || format === 'cjs') ? `.${format}` : '';
-       return `${filename}${formatPrefix}${isES2017 ? '.es2017' : ''}`;
-    }
 
     const filenamePrefix = getFilenamePrefix(filename, format, isES2017);
     outputs.push({

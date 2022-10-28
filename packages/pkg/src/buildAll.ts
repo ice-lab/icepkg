@@ -10,7 +10,7 @@ import { timeFrom } from './utils.js';
 import type { PkgContext, TaskLoaderConfig, OutputFile, OutputResult } from './types.js';
 
 export const buildAll = async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
-  let outputResults: Array<OutputResult> = [];
+  const outputResults: OutputResult[] = [];
   for (let c = 0; c < cfgArrs.length; ++c) {
     const { type, name } = cfgArrs[c];
 

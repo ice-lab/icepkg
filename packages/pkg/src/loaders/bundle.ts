@@ -38,5 +38,5 @@ export default async (cfg: TaskLoaderConfig): Promise<OutputResult> => {
     taskName: cfg.name,
     outputFiles,
     modules: bundle.cache.modules,
-  }
+  };
 };
