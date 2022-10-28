@@ -1,4 +1,4 @@
-import type { RollupOptions, Plugin, SourceMapInput } from 'rollup';
+import type { RollupOptions, Plugin, SourceMapInput, ModuleJSON } from 'rollup';
 import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
 import type { Config } from '@swc/core';
 
@@ -77,6 +77,13 @@ export interface OutputFile {
   map?: string | SourceMapInput;
 }
 
+export interface OutputResult {
+  taskName: string;
+  outputFiles: OutputFile[];
+  // Only exist in rollup bundle task
+  modules?: ModuleJSON[];
+}
+
 export interface UserConfig {
   /**
    * Alias to file system paths
@@ -150,7 +157,7 @@ export interface UserConfig {
      * "es2017"
      * @default ['esm','es2017']
      */
-    formats?: Array<'umd' | 'esm' | 'es2017'>;
+    formats?: Array<'umd' | 'esm' | 'cjs' | 'es2017'>;
     /**
      * Specify external dependencies.
      * "boolean" - whether to bundle all dependencies or not;

@@ -42,7 +42,6 @@ export const mergeConfigOptions = (
 
   normalizedConfig.rollupPlugins = resolvedPlugins;
   normalizedConfig.rollupOptions = resolvedRollupOption;
-
   return {
     ...normalizedConfig,
     name: taskName,

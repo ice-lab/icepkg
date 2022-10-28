@@ -23,9 +23,9 @@ export default async (context: PkgContext) => {
   const normalizedConfigs = configs.map((config) => mergeConfigOptions(config, context));
 
   try {
-    await buildAll(normalizedConfigs, context);
+    const outputResults = await buildAll(normalizedConfigs, context);
 
-    await applyHook('after.build.compile');
+    await applyHook('after.build.compile', outputResults);
   } catch (err) {
     await applyHook('error', {
       errCode: 'COMPILE_ERROR',

@@ -22,7 +22,7 @@ const plugin: PkgPlugin = (api) => {
 
   if (userConfig?.bundle) {
     const bundleTasks = (userConfig?.bundle?.formats || ['esm', 'es2017']);
-    if (bundleTasks.includes('umd') || bundleTasks.includes('esm')) {
+    if (bundleTasks.includes('umd') || bundleTasks.includes('esm') || bundleTasks.includes('cjs')) {
       registerTask(TaskName.BUNDLE_ES5, {
         type: 'bundle',
       });

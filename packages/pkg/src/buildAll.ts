@@ -7,19 +7,23 @@ import runBundle from './loaders/bundle.js';
 import { createLogger } from './helpers/logger.js';
 import { timeFrom } from './utils.js';
 
-import type { PkgContext, TaskLoaderConfig, OutputFile } from './types.js';
+import type { PkgContext, TaskLoaderConfig, OutputFile, OutputResult } from './types.js';
 
 export const buildAll = async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
+  let outputResults: Array<OutputResult> = [];
   for (let c = 0; c < cfgArrs.length; ++c) {
-    const { type } = cfgArrs[c];
+    const { type, name } = cfgArrs[c];
 
     let outputFiles: OutputFile[] = [];
     if (type === 'bundle') {
-      outputFiles = await runBundle(cfgArrs[c]);
+      const bundleResult = await runBundle(cfgArrs[c]);
+      outputResults.push(bundleResult);
+      outputFiles = bundleResult.outputFiles;
     }
 
     if (type === 'transform') {
       outputFiles = await runTransform(cfgArrs[c], ctx);
+      outputResults.push({ outputFiles, taskName: name });
     }
 
     const reportSizeStart = performance.now();
@@ -35,5 +39,6 @@ export const buildAll = async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => 
     const logger = createLogger('report-size');
     logger.debug(`ReportSize consume ${timeFrom(reportSizeStart)}`);
   }
+  return outputResults;
 };
 

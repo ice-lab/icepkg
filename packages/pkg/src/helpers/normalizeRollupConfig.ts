@@ -43,7 +43,7 @@ const getRollupOutputs = ({
   const outputs: OutputOptions[] = [];
 
   const uncompressedDevelopment = userConfig?.bundle?.development;
-  const outputFormats = (userConfig?.bundle?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm'>;
+  const outputFormats = (userConfig?.bundle?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
 
   const filename = userConfig?.bundle?.filename ?? 'index';
   const name = userConfig?.bundle?.name ?? pkg.name;
@@ -58,7 +58,12 @@ const getRollupOutputs = ({
       sourcemap: sourceMaps,
     };
 
-    const filenamePrefix = `${filename}${format === 'umd' ? '.umd' : ''}${isES2017 ? '.es2017' : ''}`;
+    const getFilenamePrefix = (filename: string, format: string, isES2017: boolean): string => {
+       const formatPrefix = (format === 'umd' || format === 'cjs') ? `.${format}` : '';
+       return `${filename}${formatPrefix}${isES2017 ? '.es2017' : ''}`;
+    }
+
+    const filenamePrefix = getFilenamePrefix(filename, format, isES2017);
     outputs.push({
       ...commonOption,
       file: join(outputDir, `${filenamePrefix}.production.js`),
