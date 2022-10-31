@@ -118,7 +118,7 @@ swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuratio
 
 ## 插件生命周期钩子
 
-ICE PKG 插件提供一下生命周期钩子：
+ICE PKG 插件提供以下生命周期钩子：
 
 + build 命令：
 
@@ -126,7 +126,7 @@ ICE PKG 插件提供一下生命周期钩子：
 | ------------------- | ----------------------------------------------------- | --------------------- |
 | before.build.load   | { args: CommandArgs; config: PkgConfig[] } | 获取所有任务配置后|
 | before.build.run    | { args: CommandArgs; config: PkgConfig[]  } | 编译执行之前  |
-| after.build.compile | - | 编译结束              |
+| after.build.compile | { taskName: string; outputFiles: OutputFile[]; modules?: rollup.ModuleJSON[] } | 编译结束              |
 
 + start 命令
 
@@ -134,4 +134,15 @@ ICE PKG 插件提供一下生命周期钩子：
 | ------------------- | ----------------------------------------------------- | --------------------- |
 | before.start.load   | { args: CommandArgs; config: PkgConfig[] } | 获取所有任务配置后|
 | before.start.run    | { args: CommandArgs; config: PkgConfig[]  } | 编译执行之前  |
-| after.start.compile | - | 编译结束              |
+| after.start.compile | { taskName: string; outputFiles: OutputFile[]; modules?: rollup.ModuleJSON[] } | 编译结束              |
+
+使用方式如下示例：
+
+```js
+const plugin = (api) => {
+  const { onHook } = api;
+  onHook('after.build.compile', (args) => {
+    console.log(args.taskName, '编译结束');
+  });
+};
+```

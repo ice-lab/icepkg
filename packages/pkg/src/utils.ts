@@ -7,7 +7,7 @@ import debug from 'debug';
 import { createRequire } from 'module';
 import { createFilter } from '@rollup/pluginutils';
 
-import type { PlainObject } from './types';
+import type { PlainObject, OutputResult } from './types';
 
 import type {
   DecodedSourceMap,
@@ -238,7 +238,7 @@ export const isObject = (value: unknown): value is Record<string, any> => Object
 export const booleanToObject = (value: object | boolean): object => (isObject(value) ? value : {});
 
 export function debouncePromise<T extends unknown[]>(
-  fn: (...args: T) => Promise<void>,
+  fn: (...args: T) => Promise<OutputResult[]>,
   delay: number,
   onError: (err: unknown) => void,
 ) {
@@ -256,16 +256,20 @@ export function debouncePromise<T extends unknown[]>(
       };
     } else {
       if (timeout != null) clearTimeout(timeout);
-
-      timeout = setTimeout(() => {
-        timeout = undefined;
-        promiseInFly = fn(...args)
-          .catch(onError)
-          .finally(() => {
-            promiseInFly = undefined;
-            if (callbackPending) callbackPending();
-          });
-      }, delay);
+      return new Promise(resolve => {
+        timeout = setTimeout(() => {
+          timeout = undefined;
+          promiseInFly = fn(...args)
+            .then(outputResults => {
+              resolve(outputResults);
+            })
+            .catch(onError)
+            .finally(() => {
+              promiseInFly = undefined;
+              if (callbackPending) callbackPending();
+            });
+        }, delay);
+      })
     }
   };
 }

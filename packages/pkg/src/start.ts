@@ -8,7 +8,7 @@ import type { PkgContext, TaskLoaderConfig } from './types.js';
 
 const debouncedBuildAll = debouncePromise(
   async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
-    await buildAll(cfgArrs, ctx);
+    return await buildAll(cfgArrs, ctx);
   },
   100,
   (err) => {
@@ -36,15 +36,15 @@ export default async (context: PkgContext) => {
   // @ts-ignore fixme
   const normalizedConfigs = configs.map((config) => mergeConfigOptions(config, context));
 
-  await buildAll(normalizedConfigs, context);
+  const outputResults = await buildAll(normalizedConfigs, context);
 
   const wather = createWatcher(normalizedConfigs);
-  await applyHook('after.start.compile');
+  await applyHook('after.start.compile', outputResults);
 
   wather.on('change', async () => {
-    await debouncedBuildAll(normalizedConfigs, context);
+    const outputResults = await debouncedBuildAll(normalizedConfigs, context);
 
-    await applyHook('after.start.compile');
+    await applyHook('after.start.compile', outputResults);
   });
 
   wather.on('error', (err) => {
