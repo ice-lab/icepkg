@@ -114,7 +114,7 @@ export default defineConfig({
 
 ### formats
 
-+ 类型 `['esm', 'umd', 'es2017']`
++ 类型 `['esm', 'umd', 'cjs', 'es2017']`
 + 默认 `['esm', 'es2017']`
 
 输出的类型，默认是输出 `esm` 和 `es2017` 产物。
@@ -143,8 +143,10 @@ export default defineConfig({
 - index.umd.es2017.production.js # 输出 umd + es2017 产物
 ```
 
+cjs 规范产物同理将 `formats` 配置为 `['cjs', 'es2017']` 即可。
+
 :::tip
-bunlde 模式的 formats 如果单独配置 `['es2017']` 将不会生效，因为其仅决定产物语法层面规范，而无法决定产物的模块规范。因此其必须与 `'esm'` 和 `'umd'` 中的至少一项搭配配置才能正常生成对应模块规范的 ES2017 产物。
+bunlde 模式的 formats 如果单独配置 `['es2017']` 将不会生效，因为其仅决定产物语法层面规范，而无法决定产物的模块规范。因此其必须与 `'esm'`、`'umd'` 和 `'cjs'` 中的至少一项搭配配置才能正常生成对应模块规范的 ES2017 产物。
 :::
 
 ### name
