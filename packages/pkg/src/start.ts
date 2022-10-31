@@ -42,9 +42,9 @@ export default async (context: PkgContext) => {
   await applyHook('after.start.compile', outputResults);
 
   wather.on('change', async () => {
-    const outputResults = await debouncedBuildAll(normalizedConfigs, context);
+    const newOutputResults = await debouncedBuildAll(normalizedConfigs, context);
 
-    await applyHook('after.start.compile', outputResults);
+    await applyHook('after.start.compile', newOutputResults);
   });
 
   wather.on('error', (err) => {
