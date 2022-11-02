@@ -24,14 +24,14 @@ export default defineConfig({
 + 类型 `string|boolean|object|null|undefined`
 + 默认值 `{}`
 
-定义编译时环境变量，会在编译时被替换。详细介绍 [工程能力 - define](/guide/abilities#define)。
+定义编译时环境变量，会在编译时被替换。详细介绍 [工程能力 - define](../guide/abilities#define)。
 
 ## sourceMaps
 
 + 类型 `boolean | 'inline'`
 + 默认 `false`
 
-是否生成 sourcemap，这在代码调试的时候非常有用。详细介绍 [工程能力 - 生成类型文件](/guide/abilities#sourcemap)。
+是否生成 sourcemap，这在代码调试的时候非常有用。详细介绍 [工程能力 - 生成类型文件](../guide/abilities#sourcemap)。
 
 ## generateTypesForJs
 
@@ -40,18 +40,18 @@ export default defineConfig({
 
 为 JavaScript 代码生成类型文件。ICE PKG 默认为文件后缀为 `.ts` 生成类型文件。
 
-如果使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。详细介绍 [工程能力 - 生成类型文件](/guide/abilities#生成类型文件)。
+如果使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。详细介绍 [工程能力 - 生成类型文件](../guide/abilities#生成类型文件)。
 
 ## plugins
 
 + 类型 `array`
 + 默认 `[]`
 
-ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](/reference/plugins-development)。
+ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](../reference/plugins-development)。
 
 ## transfrom
 
-该字段定义 [transform 模式](/#双模式) 下额外的配置。`bundle` 包含以下配置：
+该字段定义 [transform 模式](../#双模式) 下额外的配置。`bundle` 包含以下配置：
 
 :::tip
 transform 模式是 ICE PKG 默认的编译模式。
@@ -110,7 +110,7 @@ export default defineConfig({
 
 ## bundle
 
-该字段定义 [bundle 模式](/#双模式) 下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
+该字段定义 [bundle 模式](../#双模式) 下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
 
 ### formats
 

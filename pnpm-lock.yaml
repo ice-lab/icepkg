@@ -10989,6 +10989,7 @@ packages:
       - eslint
       - supports-color
       - vue-template-compiler
+      - webpack
     dev: false
 
   /react-dev-utils/12.0.1_webpack@5.73.0:
@@ -11030,6 +11031,7 @@ packages:
       - eslint
       - supports-color
       - vue-template-compiler
+      - webpack
     dev: false
 
   /react-dom/17.0.2_react@17.0.2:
