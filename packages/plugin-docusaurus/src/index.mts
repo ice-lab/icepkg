@@ -1,5 +1,6 @@
 import { doc } from './doc.mjs';
 import { configureDocusaurus } from './configureDocusaurus.mjs';
+import genDemoPages from './genDemoPages/index.mjs';
 
 import type { PkgPlugin } from '@ice/pkg';
 
@@ -77,7 +78,7 @@ const defaultOptions: PluginDocusaurusOptions = {
   navBarTitle: 'ICE PKG',
   port: undefined,
   defaultLocale: 'zh-Hans',
-  locales: ['en', 'zh-Hans'],
+  locales: ['zh-Hans'],
 };
 
 // @ts-ignore
@@ -99,6 +100,11 @@ const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions = {}) => {
   configureDocusaurus(rootDir, pluginOptions);
 
   onHook(`before.${command}.run`, async () => {
+    if (command === 'build') {
+      // Pages must be generated before build
+      // because remark plugin of docusaurus-plugin-content-docs works after docusaurus-plugin-content-pages reads the pages dir
+      genDemoPages(rootDir);
+    }
     await doc(api, pluginOptions);
   });
 };
