@@ -16,8 +16,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@ice/pkg": "workspace: *",
-    "@ice/pkg-plugin-docusaurus": "workspace: *",
+    "@ice/pkg": "workspace:*",
+    "@ice/pkg-plugin-docusaurus": "workspace:*",
+    "pkg-plugin-example": "workspace:*",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "consola": "^2.15.3"
   },

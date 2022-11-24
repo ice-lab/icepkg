@@ -61,12 +61,13 @@ importers:
 
   examples/package:
     specifiers:
-      '@ice/pkg': 'workspace: *'
-      '@ice/pkg-plugin-docusaurus': 'workspace: *'
+      '@ice/pkg': workspace:*
+      '@ice/pkg-plugin-docusaurus': workspace:*
       '@swc/helpers': ^0.3.8
       babel-plugin-transform-remove-console: ^6.9.4
       consola: ^2.15.3
       core-js: ^3.21.1
+      pkg-plugin-example: workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
       regenerator-runtime: ^0.13.9
@@ -81,6 +82,15 @@ importers:
       '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
       babel-plugin-transform-remove-console: 6.9.4
       consola: 2.15.3
+      pkg-plugin-example: link:../plugin
+
+  examples/plugin:
+    specifiers:
+      '@ice/pkg': ^1.0.0
+      typescript: ^4.5.4
+    devDependencies:
+      '@ice/pkg': link:../../packages/pkg
+      typescript: 4.7.4
 
   packages/create-pkg:
     specifiers:

@@ -42,6 +42,12 @@ export interface TaskConfig {
   * @see https://swc.rs/docs/configuration/compilationv
   */
   swcCompileOptions?: Config;
+
+  /**
+   * Files extensions
+   * @see https://www.npmjs.com/package/@rollup/plugin-node-resolve
+   */
+  extensions?: string[];
 }
 
 export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;

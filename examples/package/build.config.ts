@@ -5,7 +5,7 @@ export default defineConfig({
     ['@ice/pkg-plugin-docusaurus', {
       mobilePreview: true,
     }],
-    // './plugin.js',
+    ['pkg-plugin-example'],
   ],
   sourceMaps: true,
   define: {

@@ -139,7 +139,7 @@ export const normalizeRollupConfig = (
 
   if (type === 'transform') {
     resolvedPlugins = [
-      // dts plugin should append ahead for obtainig source code.
+      // dts plugin should append ahead for including source code.
       // And dts plugin would never change the contents of file.
       dtsPlugin(cfg.entry, userConfig?.generateTypesForJs),
       ...resolvedPlugins,
@@ -164,7 +164,9 @@ export const normalizeRollupConfig = (
         sourceMap: userConfig?.sourceMaps,
       }),
       json(),
-      nodeResolve(), // To locates modules using the node resolution algorithm,
+      nodeResolve({
+        extensions: cfg.extensions,
+      }), // To locates modules using the node resolution algorithm,
       commonjs(), // To convert commonjs to import, make it capabile for rollup to bundle
     ];
 
