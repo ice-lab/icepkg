@@ -1,4 +1,4 @@
-import { registerdUserConfig } from './config/useConfig.js';
+import * as config from './config/index.js';
 import { TaskName } from '@ice/pkg';
 
 import type { PkgPlugin } from '@ice/pkg';
@@ -12,7 +12,7 @@ const plugin: PkgPlugin = (api) => {
 
   const { userConfig } = context;
 
-  registerUserConfig(registerdUserConfig);
+  registerUserConfig(config.userConfig);
 
   (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {
     registerTask(`transform-${format}`, {

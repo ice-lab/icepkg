@@ -1,4 +1,4 @@
-export const registerdUserConfig = [
+const userConfig = [
   {
     name: 'alias',
     validation: 'object',
@@ -37,3 +37,5 @@ export const registerdUserConfig = [
     },
   },
 ];
+
+export default userConfig;
