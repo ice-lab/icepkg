@@ -15,8 +15,7 @@
     "build": "rm -rf lib && tsc",
     "watch": "tsc -w",
     "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
-    "prepublishOnly": "pnpm run-s lint build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublishOnly": "pnpm run-s lint build"
   },
   "author": "",
   "license": "MIT",

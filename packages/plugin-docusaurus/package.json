@@ -14,10 +14,10 @@
     "es2017"
   ],
   "scripts": {
+    "watch": "pnpm exec ../pkg/lib/cli.js start",
     "build": "rm -rf es2017 esm && chmod 777 ../pkg/lib/cli.js && pnpm exec ../pkg/lib/cli.js build",
     "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
-    "prepublishOnly": "pnpm run-s lint build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublishOnly": "pnpm run-s lint build"
   },
   "dependencies": {
     "@docusaurus/core": "^2.0.0",

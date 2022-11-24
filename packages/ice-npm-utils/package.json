@@ -10,6 +10,7 @@
     "node": ">=12"
   },
   "scripts": {
+    "watch": "tsc -w",
     "build": "rm -rf lib && tsc",
     "prepublishOnly": "npm run build"
   },

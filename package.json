@@ -6,7 +6,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "setup": "rm -rf node_modules && rm -rf ./packages/*/node_modules && pnpm i --registry=https://registry.npmmirror.com && pnpm run build",
-    "build": "pnpm run-s clean build-ahead build-behind",
+    "build": "pnpm run clean && pnpm -r --filter ./packages/* run build",
+    "watch": "pnpm --parallel --filter=./packages/* run watch",
     "build-ahead": "pnpm -r --filter ./packages/pkg --filter ./packages/plugin-component --filter ./packages/plugin-rax-component run build",
     "build-behind": "pnpm --parallel --filter ./packages/plugin-docusaurus --filter ./packages/create-pkg --filter ./packages/ice-npm-utils run build",
     "clean": "rm -rf packages/*/lib",

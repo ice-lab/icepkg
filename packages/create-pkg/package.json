@@ -12,6 +12,7 @@
     "create-pkg": "./esnext/index.js"
   },
   "scripts": {
+    "watch": "pkg-cli start",
     "build": "pkg-cli build"
   },
   "author": "",
