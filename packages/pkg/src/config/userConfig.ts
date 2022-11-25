@@ -1,8 +1,31 @@
+import type { TaskConfig, UserConfig } from '../types.js';
+
+const mergeDefaultValue = <T>(config: TaskConfig, key: string, value: T): TaskConfig => {
+  if (value) {
+    if (typeof value === 'object') {
+      return {
+        ...config,
+        [key]: {
+          ...(config[key] || {}),
+          ...value,
+        },
+      };
+    } else {
+      config[key] = value;
+      return config;
+    }
+  }
+  return config;
+};
+
 const userConfig = [
   {
     name: 'alias',
     validation: 'object',
     defaultValue: {},
+    setConfig: (config: TaskConfig, alias: UserConfig['alias']) => {
+      return mergeDefaultValue(config, 'alias', alias);
+    },
   },
   {
     name: 'define',

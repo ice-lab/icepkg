@@ -48,6 +48,11 @@ export interface TaskConfig {
    * @see https://www.npmjs.com/package/@rollup/plugin-node-resolve
    */
   extensions?: string[];
+
+  /**
+   *  Alias to file system paths
+   */
+  alias?: Record<string, string>;
 }
 
 export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;
@@ -93,7 +98,7 @@ export interface OutputResult {
 export interface UserConfig {
   /**
    * Alias to file system paths
-   * @default empty
+   * @default {}
    */
   alias?: Record<string, string>;
   /**

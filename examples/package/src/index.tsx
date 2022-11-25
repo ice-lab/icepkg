@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.module.css';
-import Button from './button';
+import Button from '@/button';
 
 interface ComponentProps {
   /** Title for PkgReactComponentExample. */

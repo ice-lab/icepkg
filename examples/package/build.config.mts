@@ -9,4 +9,7 @@ export default defineConfig({
   bundle: {
     formats: ['esm', 'es2017'],
   },
+  alias: {
+    '@': './src',
+  },
 });

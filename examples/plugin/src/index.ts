@@ -3,7 +3,7 @@ import type { PkgPlugin } from '@ice/pkg';
 
 const plugin: PkgPlugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(TaskName.BUNDLE_ES2017, async (config) => {
+  const bundleTaskCallback: Parameters<typeof onGetConfig>[0] = async (config) => {
     config.extensions = [
       '.js',
       '.json',
@@ -12,19 +12,11 @@ const plugin: PkgPlugin = (api) => {
       '.tsx',
       '.html',
     ];
+    config.alias = { ...config.alias };
     return config;
-  });
-  onGetConfig(TaskName.BUNDLE_ES5, async (config) => {
-    config.extensions = [
-      '.js',
-      '.json',
-      '.jsx',
-      '.ts',
-      '.tsx',
-      '.html',
-    ];
-    return config;
-  });
+  };
+  onGetConfig(TaskName.BUNDLE_ES2017, bundleTaskCallback);
+  onGetConfig(TaskName.BUNDLE_ES5, bundleTaskCallback);
 };
 
 export default plugin;

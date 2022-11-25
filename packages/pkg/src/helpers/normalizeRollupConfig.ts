@@ -128,7 +128,6 @@ export const normalizeRollupConfig = (
   const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = cfg;
   const { rootDir, userConfig, pkg } = ctx;
   const commonPlugins = [
-    userConfig?.alias && alias({ entries: userConfig.alias }),
     userConfig?.babelPlugins?.length && babelPlugin(userConfig.babelPlugins),
     swcPlugin({
       type,
@@ -145,7 +144,7 @@ export const normalizeRollupConfig = (
       ...resolvedPlugins,
       ...commonPlugins,
       aliasPlugin({
-        alias: userConfig?.alias,
+        alias: cfg.alias || {},
       }),
     ];
 
@@ -155,6 +154,12 @@ export const normalizeRollupConfig = (
   if (type === 'bundle') {
     resolvedPlugins = [
       ...resolvedPlugins,
+      alias({
+        entries: Object.entries(cfg.alias || {}).map(([key, value]) => ({
+          find: key,
+          replacement: resolve(rootDir, value),
+        })),
+      }),
       ...commonPlugins,
       postcss({
         plugins: [autoprefixer()],
