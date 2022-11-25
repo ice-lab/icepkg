@@ -57,6 +57,7 @@ const userConfig = [
     validation: 'object',
     defaultValue: {
       formats: ['esm', 'es2017'],
+      minify: true,
     },
     setConfig: (config: TaskConfig, bundle: UserConfig['bundle']) => {
       return mergeDefaultValue(config, 'bundle', bundle);

@@ -172,7 +172,7 @@ export const normalizeRollupConfig = (
         plugins: [autoprefixer()],
         extract: resolve(rootDir, outputDir, 'index.css'),
         autoModules: true,
-        minimize: true,
+        minimize: taskConfig.bundle.minify,
         sourceMap: userConfig?.sourceMaps,
       }),
       image(),

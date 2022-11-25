@@ -26,7 +26,7 @@ interface BundleOptions {
    * "es2017"
    * @default ['esm','es2017']
    */
-  formats?: Array<'umd' | 'esm' | 'cjs' | 'es2017'>;
+  formats: Array<'umd' | 'esm' | 'cjs' | 'es2017'>;
   /**
    * Specify external dependencies.
    * "boolean" - whether to bundle all dependencies or not;
@@ -34,8 +34,12 @@ interface BundleOptions {
    * @default true All of dependencies will be bundled by default.
    */
   externals?: boolean | Record<string, string>;
-}
 
+  /**
+   * Minify JS and CSS.
+   */
+  minify: boolean;
+}
 export interface TaskLoaderConfig extends TaskConfig {
   name: TaskName;
 }
@@ -87,7 +91,7 @@ export interface TaskConfig {
   /**
    * "bundle mode" means bundle everything up by using Rollup
    */
-  bundle?: BundleOptions;
+  bundle: BundleOptions;
 }
 
 export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;

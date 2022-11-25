@@ -12,16 +12,18 @@ export default function PkgReactComponentExample(props: ComponentProps) {
 
   return (
     <main>
-      {title}
-      <div>
+      <h1>{title}</h1>
+      <p>
         <h2>Button</h2>
-        <Button>Default Button</Button>
-        <Button type="primary">Primary Button</Button>
-      </div>
-      <div>
+        <div style={{ flexWrap: 'wrap', gap: '8px', display: 'flex' }}>
+          <Button>Default Button</Button>
+          <Button type="primary">Primary Button</Button>
+        </div>
+      </p>
+      <p>
         <h2>Avatar</h2>
         <Avatar />
-      </div>
+      </p>
     </main>
   );
 }
