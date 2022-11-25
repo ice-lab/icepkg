@@ -4,7 +4,8 @@
   "description": "npm utils for ice",
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "!lib/**/*.map"
   ],
   "engines": {
     "node": ">=12"

@@ -9,7 +9,8 @@
     "ice-pkg": "./lib/cli.js"
   },
   "files": [
-    "lib"
+    "lib",
+    "!lib/**/*.map"
   ],
   "scripts": {
     "build": "rm -rf lib && tsc",

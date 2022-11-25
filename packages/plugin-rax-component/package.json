@@ -6,7 +6,8 @@
   "type": "module",
   "exports": "./lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "!lib/**/*.map"
   ],
   "scripts": {
     "build": "rm -rf lib && tsc",

@@ -8,7 +8,8 @@
     "create-pkg": "./lib/index.mjs"
   },
   "files": [
-    "lib"
+    "lib",
+    "!lib/**/*.map"
   ],
   "scripts": {
     "watch": "tsc -w",
