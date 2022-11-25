@@ -15,6 +15,7 @@ import babelPlugin from '../plugins/babel.js';
 import aliasPlugin from '../plugins/transform/alias.js';
 import { builtinNodeModules } from './builtinModules.js';
 import { TaskName } from '../types.js';
+import image from '@rollup/plugin-image';
 
 import type { Plugin as RollupPlugin, RollupOptions, OutputOptions } from 'rollup';
 import type { TaskConfig, PkgContext, UserConfig } from '../types.js';
@@ -174,6 +175,7 @@ export const normalizeRollupConfig = (
         minimize: true,
         sourceMap: userConfig?.sourceMaps,
       }),
+      image(),
       json(),
       nodeResolve({
         extensions: [
