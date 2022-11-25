@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from './index.module.css';
+import Button from './button';
 
 interface ComponentProps {
   /** Title for PkgReactComponentExample. */
@@ -10,6 +11,9 @@ export default function PkgReactComponentExample(props: ComponentProps) {
   const { title = 'Hello World!' } = props;
 
   return (
-    <div className={styles.PkgReactComponentExample}>{title}</div>
+    <div className={styles.PkgReactComponentExample}>
+      {title}
+      <Button>我是按钮</Button>
+    </div>
   );
 }

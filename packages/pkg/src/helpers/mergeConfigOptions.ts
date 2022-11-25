@@ -34,14 +34,14 @@ export const mergeConfigOptions = (
   normalizedConfig.swcCompileOptions = swcOptionOverride;
 
   // Configure rollup plugins & options
-  const [resolvedPlugins, resolvedRollupOption] = normalizeRollupConfig(
+  const [resolvedPlugins, resolvedRollupOptions] = normalizeRollupConfig(
     normalizedConfig,
     ctx,
     taskName,
   );
 
   normalizedConfig.rollupPlugins = resolvedPlugins;
-  normalizedConfig.rollupOptions = resolvedRollupOption;
+  normalizedConfig.rollupOptions = resolvedRollupOptions;
   return {
     ...normalizedConfig,
     name: taskName,

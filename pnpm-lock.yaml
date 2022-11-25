@@ -65,6 +65,7 @@ importers:
       '@ice/pkg-plugin-docusaurus': ^1.0.0
       '@types/react': ^18.0.0
       '@types/react-dom': ^18.0.0
+      pkg-plugin-example: ^0.0.0
       react: ^18.0.0
       react-dom: ^18.0.0
       style-unit: ^3.0.4
@@ -73,6 +74,7 @@ importers:
       '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
       '@types/react': 18.0.15
       '@types/react-dom': 18.0.9
+      pkg-plugin-example: link:../plugin
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       style-unit: 3.0.4
@@ -87,7 +89,6 @@ importers:
 
   packages/create-pkg:
     specifiers:
-      '@ice/pkg': ^1.2.0
       '@iceworks/generate-material': ^1.0.12
       cac: ^6.7.12
       consola: ^2.15.3
@@ -107,7 +108,6 @@ importers:
       os-locale: 6.0.2
       validate-npm-package-name: 3.0.0
     devDependencies:
-      '@ice/pkg': link:../pkg
       typescript: 4.7.4
 
   packages/ice-npm-utils:

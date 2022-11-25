@@ -1,9 +1,8 @@
-import { resolve, extname, dirname, join } from 'path';
-import fs from 'fs-extra';
+import { extname } from 'path';
 import * as swc from '@swc/core';
 import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
-import { isDirectory, scriptsFilter, cwd } from '../utils.js';
+import { scriptsFilter } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config } from '@swc/core';
 import type { TaskConfig, RollupPluginFn, OutputFile } from '../types.js';
@@ -63,32 +62,6 @@ const normalizeSwcConfig = (
   ]);
 };
 
-const RESOLVE_EXTENSIONS = ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.mts', '.cjs'];
-
-const resolveFile = (importee: string, isDir = false) => {
-  const ext = extname(importee);
-  if (ext === '') {
-    for (let i = 0; i < RESOLVE_EXTENSIONS.length; ++i) {
-      const path = isDir ? join(importee, `index${RESOLVE_EXTENSIONS[i]}`) : `${importee}${RESOLVE_EXTENSIONS[i]}`;
-      const exist = fs.pathExistsSync(path);
-
-      if (exist) return path;
-    }
-  }
-
-  // File should suffix with `.js` in TypeScript project.
-  if (ext === '.js') {
-    const exist = fs.pathExistsSync(importee);
-    // Leave other plugins to resolve it.
-    if (exist) return null;
-
-    const tsFilePath = importee.replace('.js', '.ts');
-    const tsExist = fs.pathExistsSync(tsFilePath);
-
-    if (tsExist) return tsFilePath;
-  }
-};
-
 export interface SwcPluginArgs {
   type: TaskConfig['type'];
   extraSwcOptions?: Config;
@@ -105,32 +78,6 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
 }) => {
   return {
     name: 'ice-pkg:swc',
-
-    resolveId(importee: string, importer?: string) {
-      // Narrow importee from filters
-      if (!scriptsFilter(importer)) {
-        return null;
-      }
-
-      // Find relative importee
-      if (importer && importee[0] === '.') {
-        const absolutePath = resolve(
-          importer ? dirname(importer) : cwd,
-          importee,
-        );
-
-        let resolvedPath = resolveFile(absolutePath);
-
-        // Path may be a folder
-        if (!resolvedPath &&
-          fs.pathExistsSync(absolutePath) &&
-          isDirectory(absolutePath)) {
-          resolvedPath = resolveFile(absolutePath, true);
-        }
-
-        return resolvedPath;
-      }
-    },
 
     transform(_, id) {
       if (!scriptsFilter(id)) {

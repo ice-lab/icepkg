@@ -15,5 +15,8 @@
     "@ice/pkg": "^1.0.0",
     "typescript": "^4.5.4"
   },
+  "peerDependencies": {
+    "@ice/pkg": "^1.0.0"
+  },
   "private": true
 }

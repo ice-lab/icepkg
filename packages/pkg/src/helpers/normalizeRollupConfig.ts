@@ -81,7 +81,7 @@ const getRollupOutputs = ({
   return outputs;
 };
 
-const getExternalsAndGlboals = (userConfig: UserConfig, pkg: PkgJson): [(id?: string) => boolean, Record<string, string>] => {
+const getExternalsAndGlobals = (userConfig: UserConfig, pkg: PkgJson): [(id?: string) => boolean, Record<string, string>] => {
   let externals: string[] = [];
   let globals: Record<string, string> = {};
 
@@ -165,9 +165,18 @@ export const normalizeRollupConfig = (
       }),
       json(),
       nodeResolve({
-        extensions: cfg.extensions,
+        extensions: [
+          '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
+          '.ts', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
+          ...(cfg.extensions || []),
+        ],
       }), // To locates modules using the node resolution algorithm,
-      commonjs(), // To convert commonjs to import, make it capabile for rollup to bundle
+      commonjs({
+        extensions: [
+          '.js', // plugin-commonjs default extensions
+          ...(cfg.extensions || []),
+        ],
+      }), // To convert commonjs to import, make it capabile for rollup to bundle
     ];
 
     const entry = isFile(cfg.entry) ? cfg.entry : findDefaultEntryFile(cfg.entry);
@@ -180,7 +189,7 @@ export const normalizeRollupConfig = (
       );
     }
 
-    const [external, globals] = getExternalsAndGlboals(userConfig, pkg as PkgJson);
+    const [external, globals] = getExternalsAndGlobals(userConfig, pkg as PkgJson);
 
     const resolvedRollupOptions = deepmerge.all([
       {

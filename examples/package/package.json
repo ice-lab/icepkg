@@ -1,6 +1,7 @@
 {
   "name": "pkg-react-component-example",
   "version": "0.0.0",
+  "private": true,
   "files": [
     "esm",
     "cjs",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@ice/pkg": "^1.0.0",
     "@ice/pkg-plugin-docusaurus": "^1.0.0",
+    "pkg-plugin-example": "^0.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "@types/react": "^18.0.0",
