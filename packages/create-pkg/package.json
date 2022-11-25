@@ -3,22 +3,18 @@
   "version": "1.1.2",
   "description": "npm init @ice/pkg",
   "type": "module",
-  "exports": "./esnext/index.js",
-  "files": [
-    "es",
-    "esnext"
-  ],
+  "exports": "./lib/index.mjs",
   "bin": {
-    "create-pkg": "./esnext/index.js"
+    "create-pkg": "./lib/index.mjs"
   },
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "watch": "pkg-cli start",
-    "build": "pkg-cli build"
+    "watch": "tsc -w",
+    "build": "rm -rf lib && tsc"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "@ice/pkg-cli": "1.0.0-beta.3",
     "typescript": "^4.5.4"
   },
   "dependencies": {

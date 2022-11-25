@@ -1,7 +1,6 @@
-import * as config from './config/index.js';
-import { TaskName } from '@ice/pkg';
-
-import type { PkgPlugin } from '@ice/pkg';
+import * as config from '../config/index.js';
+import { TaskName } from '../types.js';
+import type { PkgPlugin } from '../types.js';
 
 const plugin: PkgPlugin = (api) => {
   const {

@@ -74,6 +74,7 @@ async function create(dirPath: string, dirname: string): Promise<void> {
     },
     materialTemplateDir: tempDir,
     materialType: 'component',
+    // @ts-expect-error builder type is not existed
     builder: '@ali/builder-ice-pkg',
   });
 

@@ -6,7 +6,7 @@
   "type": "module",
   "exports": "./lib/index.js",
   "bin": {
-    "ice-pkg": "lib/cli.js"
+    "ice-pkg": "./lib/cli.js"
   },
   "files": [
     "lib"
@@ -25,7 +25,6 @@
   "dependencies": {
     "@babel/core": "^7.17.5",
     "@babel/parser": "^7.17.3",
-    "@ice/pkg-plugin-component": "^1.0.0",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^21.0.2",
     "@rollup/plugin-json": "^4.1.0",
