@@ -1,34 +1,46 @@
 {
-  "name": "package-basic",
-  "version": "1.0.0",
-  "description": "",
-  "private": true,
-  "module": "./es/index.js",
+  "name": "pkg-react-component-example",
+  "version": "0.0.0",
+  "files": [
+    "esm",
+    "cjs",
+    "es2017",
+    "dist",
+    "build"
+  ],
+  "module": "esm/index.js",
   "exports": {
-    "esnext": "./esnext/index.js",
-    "import": "./es/index.js",
-    "default": "./es/index.js"
+    ".": {
+      "import": "./esm/index.js",
+      "es2017": "./es2017/index.js"
+    },
+    "./*": "./*"
   },
+  "sideEffects": [
+    "dist/*",
+    "*.scss",
+    "*.less",
+    "*.css"
+  ],
   "scripts": {
+    "start": "ice-pkg start",
     "build": "ice-pkg build",
-    "start": "CONSOLA_LEVEL=4 ice-pkg start",
-    "help": "ice-pkg --help",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@ice/pkg": "workspace:*",
-    "@ice/pkg-plugin-docusaurus": "workspace:*",
-    "pkg-plugin-example": "workspace:*",
-    "babel-plugin-transform-remove-console": "^6.9.4",
-    "consola": "^2.15.3"
+    "@ice/pkg": "^1.0.0",
+    "@ice/pkg-plugin-docusaurus": "^1.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "style-unit": "^3.0.4"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@swc/helpers": "^0.3.8",
-    "core-js": "^3.21.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "regenerator-runtime": "^0.13.9"
-  }
+  "peerDependencies": {
+    "react": "^17 || ^18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
 }

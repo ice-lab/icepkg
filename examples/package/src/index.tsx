@@ -1,19 +1,15 @@
-import { useState } from 'react';
-import './index.scss';
+import * as React from 'react';
+import styles from './index.module.css';
 
-const App = () => {
-  const [count, setCount] = useState(0);
+interface ComponentProps {
+  /** Title for PkgReactComponentExample. */
+  title: string;
+}
 
-  const addCount = () => {
-    setCount((c: number) => c + 1);
-  };
+export default function PkgReactComponentExample(props: ComponentProps) {
+  const { title = 'Hello World!' } = props;
 
   return (
-    <div>
-      <button onClick={addCount}>Add Count</button>
-      <p>{count}</p>
-    </div>
+    <div className={styles.PkgReactComponentExample}>{title}</div>
   );
-};
-
-export default App;
+}
