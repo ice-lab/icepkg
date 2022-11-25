@@ -32,26 +32,29 @@ const getFilenamePrefix = (filename: string, format: string, isES2017: boolean):
   return `${filename}${formatPrefix}${isES2017 ? '.es2017' : ''}`;
 };
 
-const getRollupOutputs = ({
-  globals,
-  userConfig,
-  pkg,
-  outputDir,
-  isES2017,
-}: {
+type GetRollupOutputs = (options: {
+  taskConfig: TaskConfig;
   globals: Record<string, string>;
   userConfig: UserConfig;
   outputDir: string;
   pkg: PkgJson;
   isES2017: boolean;
-}): OutputOptions[] => {
+}) => OutputOptions[];
+const getRollupOutputs: GetRollupOutputs = ({
+  globals,
+  taskConfig,
+  userConfig,
+  pkg,
+  outputDir,
+  isES2017,
+}) => {
   const outputs: OutputOptions[] = [];
 
-  const uncompressedDevelopment = userConfig?.bundle?.development;
-  const outputFormats = (userConfig?.bundle?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
+  const uncompressedDevelopment = taskConfig?.bundle?.development;
+  const outputFormats = (taskConfig?.bundle?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
 
-  const filename = userConfig?.bundle?.filename ?? 'index';
-  const name = userConfig?.bundle?.name ?? pkg.name;
+  const filename = taskConfig?.bundle?.filename ?? 'index';
+  const name = taskConfig?.bundle?.name ?? pkg.name;
 
   const sourceMaps = userConfig?.sourceMaps ?? false;
 
@@ -81,7 +84,10 @@ const getRollupOutputs = ({
   return outputs;
 };
 
-const getExternalsAndGlobals = (userConfig: UserConfig, pkg: PkgJson): [(id?: string) => boolean, Record<string, string>] => {
+function getExternalsAndGlobals(
+  taskConfig: TaskConfig,
+  pkg: PkgJson,
+): [(id?: string) => boolean, Record<string, string>] {
   let externals: string[] = [];
   let globals: Record<string, string> = {};
 
@@ -91,9 +97,9 @@ const getExternalsAndGlobals = (userConfig: UserConfig, pkg: PkgJson): [(id?: st
     'regenerator-runtime',
   ];
 
-  const userExternals = userConfig?.bundle?.externals ?? false;
+  const externalsConfig = taskConfig?.bundle?.externals ?? false;
 
-  switch (userExternals) {
+  switch (externalsConfig) {
     case true:
       externals = [
         ...builtinNodeModules,
@@ -106,8 +112,8 @@ const getExternalsAndGlobals = (userConfig: UserConfig, pkg: PkgJson): [(id?: st
       externals = [];
       break;
     default:
-      externals = Object.keys(userExternals);
-      globals = userExternals;
+      externals = Object.keys(externalsConfig);
+      globals = externalsConfig;
       break;
   }
 
@@ -118,14 +124,14 @@ const getExternalsAndGlobals = (userConfig: UserConfig, pkg: PkgJson): [(id?: st
     : (id: string) => externalPredicate.test(id);
 
   return [externalFun, globals];
-};
+}
 
 export const normalizeRollupConfig = (
-  cfg: TaskConfig,
+  taskConfig: TaskConfig,
   ctx: PkgContext,
   taskName: TaskName,
 ): [RollupPlugin[], RollupOptions] => {
-  const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = cfg;
+  const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = taskConfig;
   const { rootDir, userConfig, pkg } = ctx;
   const commonPlugins = [
     userConfig?.babelPlugins?.length && babelPlugin(userConfig.babelPlugins),
@@ -140,11 +146,11 @@ export const normalizeRollupConfig = (
     resolvedPlugins = [
       // dts plugin should append ahead for including source code.
       // And dts plugin would never change the contents of file.
-      dtsPlugin(cfg.entry, userConfig?.generateTypesForJs),
+      dtsPlugin(taskConfig.entry, userConfig?.generateTypesForJs),
       ...resolvedPlugins,
       ...commonPlugins,
       aliasPlugin({
-        alias: cfg.alias || {},
+        alias: taskConfig.alias || {},
       }),
     ];
 
@@ -155,7 +161,7 @@ export const normalizeRollupConfig = (
     resolvedPlugins = [
       ...resolvedPlugins,
       alias({
-        entries: Object.entries(cfg.alias || {}).map(([key, value]) => ({
+        entries: Object.entries(taskConfig.alias || {}).map(([key, value]) => ({
           find: key,
           replacement: resolve(rootDir, value),
         })),
@@ -173,18 +179,20 @@ export const normalizeRollupConfig = (
         extensions: [
           '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
           '.ts', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
-          ...(cfg.extensions || []),
+          ...(taskConfig.extensions || []),
         ],
       }), // To locates modules using the node resolution algorithm,
       commonjs({
         extensions: [
           '.js', // plugin-commonjs default extensions
-          ...(cfg.extensions || []),
+          ...(taskConfig.extensions || []),
         ],
       }), // To convert commonjs to import, make it capabile for rollup to bundle
     ];
 
-    const entry = isFile(cfg.entry) ? cfg.entry : findDefaultEntryFile(cfg.entry);
+    const entry = isFile(taskConfig.entry) ?
+      taskConfig.entry :
+      findDefaultEntryFile(taskConfig.entry);
 
     if (!entry) {
       throw new Error(
@@ -194,7 +202,7 @@ export const normalizeRollupConfig = (
       );
     }
 
-    const [external, globals] = getExternalsAndGlobals(userConfig, pkg as PkgJson);
+    const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
 
     const resolvedRollupOptions = deepmerge.all([
       {
@@ -202,17 +210,18 @@ export const normalizeRollupConfig = (
         external,
         output: getRollupOutputs({
           globals,
+          taskConfig,
           userConfig,
           pkg: pkg as PkgJson,
-          outputDir: cfg.outputDir,
+          outputDir: taskConfig.outputDir,
           isES2017: taskName === TaskName.BUNDLE_ES2017,
         }),
       },
-      cfg.rollupOptions || {},
+      taskConfig.rollupOptions || {},
       {
         plugins: [
           // Custom plugins will add ahead
-          ...(cfg?.rollupOptions?.plugins || []),
+          ...(taskConfig?.rollupOptions?.plugins || []),
           ...resolvedPlugins,
         ],
       },

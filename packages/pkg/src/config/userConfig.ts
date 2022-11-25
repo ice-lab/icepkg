@@ -58,6 +58,9 @@ const userConfig = [
     defaultValue: {
       formats: ['esm', 'es2017'],
     },
+    setConfig: (config: TaskConfig, bundle: UserConfig['bundle']) => {
+      return mergeDefaultValue(config, 'bundle', bundle);
+    },
   },
 ];
 

@@ -13,6 +13,7 @@ const plugin: PkgPlugin = (api) => {
       '.html',
     ];
     config.alias = { ...config.alias };
+    config.bundle.externals = { react: 'React', 'react-dom': 'ReactDOM' };
     return config;
   };
   onGetConfig(TaskName.BUNDLE_ES2017, bundleTaskCallback);

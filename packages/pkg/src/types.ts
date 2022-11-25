@@ -6,6 +6,36 @@ export type PlainObject = Record<string, string | boolean | number | object>;
 
 export type RollupPluginFn<T = {}> = (args?: T) => Plugin;
 
+interface BundleOptions {
+  /**
+   * Export name
+   * @default package.name
+   */
+  name?: string;
+  /**
+   * As the name of the generated file.
+   * @default index
+   */
+  filename?: string;
+
+  development?: boolean;
+  /**
+   * Which type of contents would be generated
+   * "umd"
+   * "esm"
+   * "es2017"
+   * @default ['esm','es2017']
+   */
+  formats?: Array<'umd' | 'esm' | 'cjs' | 'es2017'>;
+  /**
+   * Specify external dependencies.
+   * "boolean" - whether to bundle all dependencies or not;
+   * "object" - specific external dependencies.
+   * @default true All of dependencies will be bundled by default.
+   */
+  externals?: boolean | Record<string, string>;
+}
+
 export interface TaskLoaderConfig extends TaskConfig {
   name: TaskName;
 }
@@ -53,6 +83,11 @@ export interface TaskConfig {
    *  Alias to file system paths
    */
   alias?: Record<string, string>;
+
+  /**
+   * "bundle mode" means bundle everything up by using Rollup
+   */
+  bundle?: BundleOptions;
 }
 
 export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;
@@ -146,35 +181,7 @@ export interface UserConfig {
   };
 
   /**
-   * "bundle mode" means bundle everything up by using of Rollup
+   * "bundle mode" means bundle everything up by using Rollup
    */
-  bundle?: {
-    /**
-     * Export name
-     * @default package.name
-     */
-    name?: string;
-    /**
-     * As the name of the generated file.
-     * @default index
-     */
-    filename?: string;
-
-    development?: boolean;
-    /**
-     * Which type of contents would be generated
-     * "umd"
-     * "esm"
-     * "es2017"
-     * @default ['esm','es2017']
-     */
-    formats?: Array<'umd' | 'esm' | 'cjs' | 'es2017'>;
-    /**
-     * Specify external dependencies.
-     * "boolean" - whether to bundle all dependencies or not;
-     * "object" - specific external dependencies.
-     * @default true nono of dependencies will be bundled by default
-     */
-    externals?: boolean | Record<string, string>;
-  };
+  bundle?: BundleOptions;
 }
