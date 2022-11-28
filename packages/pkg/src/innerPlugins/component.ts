@@ -5,6 +5,7 @@ import type { PkgPlugin } from '../types.js';
 const plugin: PkgPlugin = (api) => {
   const {
     registerUserConfig,
+    registerCliOption,
     registerTask,
     context,
   } = api;
@@ -12,6 +13,7 @@ const plugin: PkgPlugin = (api) => {
   const { userConfig } = context;
 
   registerUserConfig(config.userConfig);
+  registerCliOption(config.cliOptions);
 
   (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {
     registerTask(`transform-${format}`, {

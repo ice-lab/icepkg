@@ -91,7 +91,7 @@ export interface TaskConfig {
   /**
    * "bundle mode" means bundle everything up by using Rollup
    */
-  bundle: BundleOptions;
+  bundle?: BundleOptions;
 }
 
 export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;

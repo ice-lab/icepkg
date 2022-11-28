@@ -20,22 +20,23 @@ const cli = cac('ice-pkg');
   cli
     .command('build', 'Bundle files', {
       allowUnknownOptions: false,
-      ignoreOptionDefaultValue: true, // only display options in help message.
     })
-    .option('--config <config>', 'Use custom config')
-    .option('--root--dir <rootDir>', 'Determine root directory', {
-      default: 'pwd',
+    .option('--config <config>', 'specify custom config path')
+    .option('--analyzer', 'visualize size of output files(it\'s only valid in bundle mode)', {
+      default: false,
+    })
+    .option('--rootDir <rootDir>', 'specify root directory', {
+      default: process.cwd(),
     })
     .action(async (options) => {
       delete options['--'];
-
+      const { rootDir, ...commandArgs } = options;
       try {
         await componentService.run({
           command: 'build',
-          commandArgs: {
-            ...options,
-          },
+          commandArgs,
           getBuiltInPlugins,
+          rootDir: options.rootDir,
         });
       } catch (e) {
         consola.error('Compile Error', e);
@@ -45,24 +46,26 @@ const cli = cac('ice-pkg');
   cli
     .command('start', 'Watch files', {
       allowUnknownOptions: false,
-      ignoreOptionDefaultValue: true,
     })
-    .option('--config <config>', 'Use custom config')
-    .option('--root--dir <rootDir>', 'Determine root directory', {
-      default: 'pwd',
+    .option('--config <config>', 'specify custom config path')
+    .option('--analyzer', 'visualize size of output files(it\'s only valid in bundle mode)', {
+      default: false,
     })
-    .option('--dist', 'Watch dist files (especially with enabled-umd)', {
+    .option('--rootDir <rootDir>', 'specify root directory', {
+      default: process.cwd(),
+    })
+    .option('--dist', 'watch dist files (especially with enabled-umd)', {
       default: false,
     })
     .action(async (options) => {
       delete options['--'];
+      const { rootDir, ...commandArgs } = options;
       try {
         await componentService.run({
           command: 'start',
-          commandArgs: {
-            ...options,
-          },
+          commandArgs,
           getBuiltInPlugins,
+          rootDir: options.rootDir,
         });
       } catch (e) {
         consola.error(e);
@@ -80,4 +83,3 @@ const cli = cac('ice-pkg');
     consola.error(err);
     process.exit(1);
   });
-

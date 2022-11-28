@@ -7,7 +7,7 @@ import debug from 'debug';
 import { createRequire } from 'module';
 import { createFilter } from '@rollup/pluginutils';
 
-import type { PlainObject, OutputResult } from './types';
+import type { PlainObject, OutputResult, TaskConfig } from './types';
 
 import type {
   DecodedSourceMap,
@@ -256,11 +256,11 @@ export function debouncePromise<T extends unknown[]>(
       };
     } else {
       if (timeout != null) clearTimeout(timeout);
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         timeout = setTimeout(() => {
           timeout = undefined;
           promiseInFly = fn(...args)
-            .then(outputResults => {
+            .then((outputResults) => {
               resolve(outputResults);
             })
             .catch(onError)
@@ -269,7 +269,7 @@ export function debouncePromise<T extends unknown[]>(
               if (callbackPending) callbackPending();
             });
         }, delay);
-      })
+      });
     }
   };
 }
@@ -318,4 +318,22 @@ export const cwd = process.cwd();
 
 export function normalizeSlashes(file: string) {
   return file.split(path.win32.sep).join('/');
+}
+
+export function mergeValueToTaskConfig<T>(config: TaskConfig, key: string, value: T): TaskConfig {
+  if (value) {
+    if (typeof value === 'object') {
+      return {
+        ...config,
+        [key]: {
+          ...(config[key] || {}),
+          ...value,
+        },
+      };
+    } else {
+      config[key] = value;
+      return config;
+    }
+  }
+  return config;
 }

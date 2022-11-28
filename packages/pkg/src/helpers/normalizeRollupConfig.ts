@@ -16,9 +16,12 @@ import aliasPlugin from '../plugins/transform/alias.js';
 import { builtinNodeModules } from './builtinModules.js';
 import { TaskName } from '../types.js';
 import image from '@rollup/plugin-image';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 import type { Plugin as RollupPlugin, RollupOptions, OutputOptions } from 'rollup';
 import type { TaskConfig, PkgContext, UserConfig } from '../types.js';
+
+type ReverseMap<T> = T[keyof T];
 
 interface PkgJson {
   name: string;
@@ -130,10 +133,10 @@ function getExternalsAndGlobals(
 export const normalizeRollupConfig = (
   taskConfig: TaskConfig,
   ctx: PkgContext,
-  taskName: TaskName,
+  taskName: ReverseMap<typeof TaskName>,
 ): [RollupPlugin[], RollupOptions] => {
   const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = taskConfig;
-  const { rootDir, userConfig, pkg } = ctx;
+  const { rootDir, userConfig, pkg, commandArgs } = ctx;
   const commonPlugins = [
     userConfig?.babelPlugins?.length && babelPlugin(userConfig.babelPlugins),
     swcPlugin({
@@ -177,20 +180,25 @@ export const normalizeRollupConfig = (
       }),
       image(),
       json(),
-      nodeResolve({
+      nodeResolve({ // To locates modules using the node resolution algorithm.
         extensions: [
           '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
           '.ts', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
           ...(taskConfig.extensions || []),
         ],
-      }), // To locates modules using the node resolution algorithm,
-      commonjs({
+      }),
+      commonjs({ // To convert commonjs to import, make it capabile for rollup to bundle
         extensions: [
           '.js', // plugin-commonjs default extensions
           ...(taskConfig.extensions || []),
         ],
-      }), // To convert commonjs to import, make it capabile for rollup to bundle
-    ];
+      }),
+      commandArgs.analyzer && visualizer({
+        title: `Rollup Visualizer(${taskName})`,
+        open: true,
+        filename: `${taskName}-stats.html`,
+      }),
+    ].filter(Boolean);
 
     const entry = isFile(taskConfig.entry) ?
       taskConfig.entry :
