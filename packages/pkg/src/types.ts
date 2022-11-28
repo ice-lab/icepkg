@@ -38,7 +38,7 @@ interface BundleOptions {
   /**
    * Minify JS and CSS bundle.
    */
-  minify: boolean;
+  minify?: boolean;
 }
 export interface TaskLoaderConfig extends TaskConfig {
   name: TaskName;

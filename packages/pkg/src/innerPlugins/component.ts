@@ -10,10 +10,10 @@ const plugin: PkgPlugin = (api) => {
     context,
   } = api;
 
-  const { userConfig } = context;
+  const { userConfig, command } = context;
 
-  registerUserConfig(config.userConfig);
-  registerCliOption(config.cliOptions);
+  registerUserConfig(config.getUserConfig(command));
+  registerCliOption(config.getCliOptions());
 
   (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {
     registerTask(`transform-${format}`, {
