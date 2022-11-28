@@ -58,7 +58,6 @@ const getRollupOutputs: GetRollupOutputs = ({
   const outputFormats = (taskConfig?.bundle?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
   const minify = taskConfig?.bundle?.minify;
 
-  const filename = taskConfig?.bundle?.filename ?? 'index';
   const name = taskConfig?.bundle?.name ?? pkg.name;
 
   const sourceMaps = userConfig?.sourceMaps ?? false;
@@ -70,11 +69,15 @@ const getRollupOutputs: GetRollupOutputs = ({
       globals,
       sourcemap: sourceMaps,
     };
-
-    const filenamePrefix = getFilenamePrefix(filename, format, isES2017);
+    const defaultFilenamePrefix = getFilenamePrefix('index', format, isES2017);
     outputs.push({
       ...commonOption,
-      file: join(outputDir, `${filenamePrefix}.production.js`),
+      file: join(
+        outputDir,
+        taskConfig?.bundle?.filename ?
+          (typeof taskConfig.bundle.filename === 'string' ? taskConfig.bundle.filename : taskConfig.bundle.filename({ format, taskConfig, isES2017 })) :
+          `${defaultFilenamePrefix}.production.js`,
+      ),
       plugins: [
         minify && minifyPlugin({ sourceMaps }),
       ].filter(Boolean),
@@ -83,7 +86,16 @@ const getRollupOutputs: GetRollupOutputs = ({
     if (uncompressedDevelopment) {
       outputs.push({
         ...commonOption,
-        file: join(outputDir, `${filenamePrefix}.development.js`),
+        file: join(
+          outputDir,
+          taskConfig?.bundle?.filename ?
+            (
+              typeof taskConfig.bundle.filename === 'string' ?
+                taskConfig.bundle.filename :
+                taskConfig.bundle.filename({ format, taskConfig, development: uncompressedDevelopment, isES2017 })
+            ) :
+            `${defaultFilenamePrefix}.development.js`,
+        ),
       });
     }
   });

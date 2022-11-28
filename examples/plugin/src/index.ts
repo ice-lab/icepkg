@@ -14,6 +14,9 @@ const plugin: PkgPlugin = (api) => {
     ];
     config.alias = { ...config.alias };
     config.bundle.externals = { react: 'React', 'react-dom': 'ReactDOM' };
+    // config.bundle.filename = ({ format, development, isES2017 }) => {
+    //   return `index${(format === 'umd' || format === 'cjs') ? `.${format}` : ''}${isES2017 ? '-2017' : ''}${development ? 'development' : ''}.js`;
+    // };
     return config;
   };
   onGetConfig(TaskName.BUNDLE_ES2017, bundleTaskCallback);

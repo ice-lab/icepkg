@@ -16,7 +16,9 @@ interface BundleOptions {
    * As the name of the generated file.
    * @default index
    */
-  filename?: string;
+  filename?: |
+  string |
+  ((options: { isES2017: boolean; format: Omit<TaskConfig['bundle']['formats'][number], 'es2017'>; taskConfig: TaskConfig; development?: boolean }) => string);
 
   development?: boolean;
   /**

@@ -48,7 +48,11 @@ function getUserConfig(command: string) {
       validation: 'object',
       defaultValue: defaultBundleValue,
       setConfig: (config: TaskConfig, bundle: UserConfig['bundle']) => {
-        return mergeValueToTaskConfig(config, 'bundle', deepmerge(defaultBundleValue, bundle));
+        return mergeValueToTaskConfig(
+          config,
+          'bundle',
+          deepmerge(defaultBundleValue, bundle, { arrayMerge: (destinationArray, sourceArray) => sourceArray }),
+        );
       },
     },
   ];
