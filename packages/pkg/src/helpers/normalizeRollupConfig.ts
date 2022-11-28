@@ -10,7 +10,7 @@ import autoprefixer from 'autoprefixer';
 import json from '@rollup/plugin-json';
 import swcPlugin from '../plugins/swc.js';
 import dtsPlugin from '../plugins/dts.js';
-import minify from '../plugins/minify.js';
+import minifyPlugin from '../plugins/minify.js';
 import babelPlugin from '../plugins/babel.js';
 import aliasPlugin from '../plugins/transform/alias.js';
 import { builtinNodeModules } from './builtinModules.js';
@@ -56,6 +56,7 @@ const getRollupOutputs: GetRollupOutputs = ({
 
   const uncompressedDevelopment = taskConfig?.bundle?.development;
   const outputFormats = (taskConfig?.bundle?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
+  const minify = taskConfig?.bundle?.minify;
 
   const filename = taskConfig?.bundle?.filename ?? 'index';
   const name = taskConfig?.bundle?.name ?? pkg.name;
@@ -74,7 +75,9 @@ const getRollupOutputs: GetRollupOutputs = ({
     outputs.push({
       ...commonOption,
       file: join(outputDir, `${filenamePrefix}.production.js`),
-      plugins: [minify({ minifyOption: true, sourceMaps })],
+      plugins: [
+        minify && minifyPlugin({ sourceMaps }),
+      ].filter(Boolean),
     });
 
     if (uncompressedDevelopment) {

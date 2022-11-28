@@ -36,7 +36,7 @@ interface BundleOptions {
   externals?: boolean | Record<string, string>;
 
   /**
-   * Minify JS and CSS.
+   * Minify JS and CSS bundle.
    */
   minify: boolean;
 }

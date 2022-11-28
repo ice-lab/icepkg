@@ -4,7 +4,7 @@ import { TaskName } from '../types.js';
 import type { UserConfig } from '../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
 
-export const getBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
+export const getDefaultBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
   const define = stringifyObject(userConfig?.define ?? {});
 
   const target = taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5';
@@ -49,7 +49,7 @@ export const getBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): 
   };
 };
 
-export const getTransformSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
+export const getDefaultTransformSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
   const sourceMaps = userConfig?.sourceMaps;
   const define = stringifyObject(userConfig?.define ?? {});
 

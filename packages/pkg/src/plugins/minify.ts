@@ -4,15 +4,19 @@ import type { JsMinifyOptions } from '@swc/core';
 import type { RollupPluginFn } from '../types.js';
 
 export interface MinifyPluginOption {
-  minifyOption: true | JsMinifyOptions;
   sourceMaps: boolean | 'inline';
+  minifyOptions?: JsMinifyOptions;
 }
 
 /**
- * plugin-minify use minmize bundle ouputs using swc
+ * plugin-minify use minimize bundle outputs using swc
  */
 const minifyPlugin: RollupPluginFn<MinifyPluginOption> = ({
-  minifyOption,
+  minifyOptions = {
+    compress: {
+      unused: false,
+    },
+  },
   sourceMaps,
 }) => {
   return {
@@ -20,11 +24,7 @@ const minifyPlugin: RollupPluginFn<MinifyPluginOption> = ({
 
     renderChunk(_) {
       return swc.minifySync(_, {
-        ...(typeof minifyOption === 'boolean' ? {
-          compress: {
-            unused: false,
-          },
-        } : minifyOption),
+        ...minifyOptions,
         // Rollup will determine whether inlined sourcemap or not
         sourceMap: !!sourceMaps,
       });

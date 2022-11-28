@@ -38,16 +38,16 @@ export default async (context: PkgContext) => {
 
   const outputResults = await buildAll(normalizedConfigs, context);
 
-  const wather = createWatcher(normalizedConfigs);
+  const watcher = createWatcher(normalizedConfigs);
   await applyHook('after.start.compile', outputResults);
 
-  wather.on('change', async () => {
+  watcher.on('change', async () => {
     const newOutputResults = await debouncedBuildAll(normalizedConfigs, context);
 
     await applyHook('after.start.compile', newOutputResults);
   });
 
-  wather.on('error', (err) => {
+  watcher.on('error', (err) => {
     consola.error(err);
   });
 };

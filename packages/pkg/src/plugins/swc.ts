@@ -26,7 +26,7 @@ const normalizeSwcConfig = (
         legacyDecorator: true,
       },
       externalHelpers: false,
-      loose: false, // No recommand
+      loose: false, // Not recommend
     },
     minify: false,
   };
@@ -104,7 +104,7 @@ const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
       return {
         code,
         map,
-        // Addtional option to re-define extname
+        // Additional option to re-define extname
         meta: {
           // If file's name comes with .mjs、.mts、.cjs、.cts suffix
           ext: ['m', 'c'].includes(file.ext[1]) ? `.${file.ext[1]}js` : '.js',

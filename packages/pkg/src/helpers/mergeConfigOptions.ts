@@ -1,6 +1,6 @@
 import deepmerge from 'deepmerge';
 import { getEntryDir, getEntryFile, getOutputDir } from './getTaskIO.js';
-import { getBundleSwcConfig, getTransformSwcConfig } from './getSwcConfig.js';
+import { getDefaultBundleSwcConfig, getDefaultTransformSwcConfig } from './defaultSwcConfig.js';
 import { normalizeRollupConfig } from './normalizeRollupConfig.js';
 
 import type { PkgContext, TaskLoaderConfig, PkgTaskConfig } from '../types.js';
@@ -26,8 +26,8 @@ export const mergeConfigOptions = (
   // Configure swcOptions
   const swcOptionOverride = deepmerge(
     isBundleTask
-      ? getBundleSwcConfig(userConfig, taskName)
-      : getTransformSwcConfig(userConfig, taskName),
+      ? getDefaultBundleSwcConfig(userConfig, taskName)
+      : getDefaultTransformSwcConfig(userConfig, taskName),
     swcCompileOptions,
   );
 
