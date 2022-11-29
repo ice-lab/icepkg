@@ -2,10 +2,12 @@
  * This plugin is used to be as a supplement for swc.
  */
 import * as babel from '@babel/core';
+import type { ParserPlugin } from '@babel/parser';
+import { Plugin } from 'rollup';
 import { scriptsFilter } from '../utils.js';
 
-const getParserPlugins = (isTs?: boolean) => {
-  const commonPlugins = [
+const getParserPlugins = (isTs?: boolean): ParserPlugin[] => {
+  const commonPlugins: ParserPlugin[] = [
     'jsx',
     'importMeta',
     'topLevelAwait',
@@ -24,18 +26,18 @@ const getParserPlugins = (isTs?: boolean) => {
   return commonPlugins;
 };
 
-const babelPlugin = (babelPlugins) => {
+const babelPlugin = (babelPlugins: babel.PluginItem[]): Plugin => {
   return {
     name: 'ice-pkg:babel',
 
-    transform(code, id) {
+    transform(source, id) {
       if (!scriptsFilter(id)) {
         return null;
       }
 
       const parserPlugins = getParserPlugins(/\.tsx?$/.test(id));
 
-      return babel.transformSync(code, {
+      const { code, map } = babel.transformSync(source, {
         ast: false, // No need to return ast
         babelrc: false,
         configFile: false,
@@ -50,6 +52,10 @@ const babelPlugin = (babelPlugins) => {
         plugins: babelPlugins ?? [],
         sourceFileName: id,
       });
+      return {
+        code,
+        map,
+      };
     },
   };
 };

@@ -1,5 +1,4 @@
 import { extname, relative } from 'path';
-import { createFilter } from '@rollup/pluginutils';
 import { dtsCompile } from '../helpers/dts.js';
 import { isEcmascriptOnly, isTypescriptOnly } from '../helpers/suffix.js';
 import { dtsFilter } from '../utils.js';

@@ -7,6 +7,7 @@ import type { ImportSpecifier } from 'es-module-lexer';
 import consola from 'consola';
 import MagicString from 'magic-string';
 import { scriptsFilter, cwd, normalizeSlashes } from '../../utils.js';
+import { Plugin } from 'rollup';
 
 
 interface AliasPluginOptions {
@@ -45,7 +46,7 @@ async function redirectImport(
   return str;
 }
 
-const aliasPlugin = (options: AliasPluginOptions = { alias: {} }) => {
+const aliasPlugin = (options: AliasPluginOptions = { alias: {} }): Plugin => {
   return {
     name: 'ice-pkg:transform-alias',
 
