@@ -17,6 +17,9 @@ const plugin: PkgPlugin = (api) => {
     // config.bundle.filename = ({ format, development, isES2017 }) => {
     //   return `index${(format === 'umd' || format === 'cjs') ? `.${format}` : ''}${isES2017 ? '-2017' : ''}${development ? 'development' : ''}.js`;
     // };
+    config.postcssOptions = (options) => {
+      return options;
+    };
     return config;
   };
   onGetConfig(TaskName.BUNDLE_ES2017, bundleTaskCallback);

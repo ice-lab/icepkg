@@ -1,6 +1,7 @@
 import type { RollupOptions, Plugin, SourceMapInput, ModuleJSON } from 'rollup';
 import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
 import type { Config } from '@swc/core';
+import { PostCSSPluginConf } from 'rollup-plugin-postcss';
 
 export type PlainObject = Record<string, string | boolean | number | object>;
 
@@ -76,7 +77,10 @@ export interface TaskConfig {
   * @see https://rollupjs.org/guide/en/
   */
   rollupOptions?: RollupOptions;
-
+  /**
+   * Config postcss options.
+   */
+  postcssOptions?: (options: PostCSSPluginConf) => PostCSSPluginConf;
   /**
   * Extra swc compile options
   * @see https://swc.rs/docs/configuration/compilationv

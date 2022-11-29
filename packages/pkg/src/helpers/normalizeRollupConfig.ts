@@ -186,13 +186,13 @@ export const normalizeRollupConfig = (
         })),
       }),
       ...commonPlugins,
-      postcss({
+      postcss((taskConfig?.postcssOptions || ((options) => options))({
         plugins: [autoprefixer()],
         extract: resolve(rootDir, outputDir, 'index.css'),
         autoModules: true,
         minimize: taskConfig.bundle.minify,
         sourceMap: userConfig?.sourceMaps,
-      }),
+      })),
       image(),
       json(),
       nodeResolve({ // To locates modules using the node resolution algorithm.
