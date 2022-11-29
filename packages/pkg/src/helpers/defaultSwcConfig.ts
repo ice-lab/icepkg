@@ -40,7 +40,7 @@ export const getDefaultBundleSwcConfig = (userConfig: UserConfig, taskName: Task
     // Always generate map in bundle mode,
     // and leave minify-plugin to tackle with it.
     sourceMaps: true,
-    // 由 env 字段统一处理 synax & polyfills
+    // 由 env 字段统一处理 syntax & polyfills
     env: {
       targets: browserTargets,
       mode: 'usage',

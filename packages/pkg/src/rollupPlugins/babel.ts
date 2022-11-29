@@ -26,7 +26,7 @@ const getParserPlugins = (isTs?: boolean): ParserPlugin[] => {
   return commonPlugins;
 };
 
-const babelPlugin = (babelPlugins: babel.PluginItem[]): Plugin => {
+const babelPlugin = ({ plugins }: { plugins: babel.PluginItem[] }): Plugin => {
   return {
     name: 'ice-pkg:babel',
 
@@ -49,7 +49,7 @@ const babelPlugin = (babelPlugins: babel.PluginItem[]): Plugin => {
         generatorOpts: {
           decoratorsBeforeExport: true,
         },
-        plugins: babelPlugins ?? [],
+        plugins: plugins ?? [],
         sourceFileName: id,
       });
       return {

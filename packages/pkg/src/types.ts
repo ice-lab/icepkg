@@ -68,6 +68,10 @@ export interface TaskConfig {
   rollupPlugins?: Plugin[];
 
   /**
+   * Extra babel plugins
+   */
+  babelPlugins?: babel.PluginItem[];
+  /**
   * Extra rollup options
   * @see https://rollupjs.org/guide/en/
   */
@@ -161,9 +165,9 @@ export interface UserConfig {
 
   /**
    * Plugins of build scripts
-   * @default @ice/pkg-plugin-component
+   * @default ['@ice/pkg-plugin-component']
    */
-  plugins?: any;
+  plugins?: Array<string | [string, any?]>;
 
   /**
    * "transform mode" means transform files one by one

@@ -9,9 +9,10 @@ export default defineConfig({
   transform: {
     formats: [],
   },
+  sourceMaps: true,
   bundle: {
     formats: ['esm', 'es2017'],
-    minify: false,
+    // minify: false,
   },
   alias: {
     '@': './src',
