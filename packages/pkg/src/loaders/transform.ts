@@ -3,7 +3,7 @@ import { isAbsolute, resolve, extname, dirname, relative } from 'path';
 import fs from 'fs-extra';
 import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE, loadPkg } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
-import { isObject, isDirectory, timeFrom, cwd } from '../utils.js';
+import { isObject, isDirectory, timeFrom, cwd, getEntryItems } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
 import type { PkgContext, TaskLoaderConfig, OutputFile } from '../types.js';
@@ -18,29 +18,33 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
   const { outputDir, entry, rollupPlugins } = cfg;
 
   const logger = createLogger(cfg.name);
-  const entryDir = entry;
+
+  const entryItems = getEntryItems(entry);
 
   let files: OutputFile[];
+  entryItems.forEach((entryItem) => {
+    const entryDir = entryItem;
+    if (isDirectory(entryItem)) {
+      files =
+        loadEntryFiles(
+          resolve(rootDir, entryDir),
+          (userConfig?.transform?.excludes || []),
+        )
+          .map((filePath) => ({
+            filePath,
+            absolutePath: resolve(rootDir, entryDir, filePath),
+            ext: extname(filePath),
+          }));
+    } else {
+      const relativeFilePath = isAbsolute(entryItem) ? relative(entryItem, rootDir) : entryItem;
+      files = [{
+        filePath: relativeFilePath,
+        absolutePath: resolve(rootDir, relativeFilePath),
+        ext: extname(relativeFilePath),
+      }];
+    }
+  });
 
-  if (isDirectory(entry)) {
-    files =
-      loadEntryFiles(
-        resolve(rootDir, entryDir),
-        (userConfig?.transform?.excludes || []),
-      )
-        .map((filePath) => ({
-          filePath,
-          absolutePath: resolve(rootDir, entryDir, filePath),
-          ext: extname(filePath),
-        }));
-  } else {
-    const relativeFilePath = isAbsolute(entry) ? relative(entry, rootDir) : entry;
-    files = [{
-      filePath: relativeFilePath,
-      absolutePath: resolve(rootDir, relativeFilePath),
-      ext: extname(relativeFilePath),
-    }];
-  }
 
   const container = await createPluginContainer({
     plugins: rollupPlugins,

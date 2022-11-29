@@ -4,7 +4,7 @@ import { isEcmascriptOnly, isTypescriptOnly } from '../helpers/suffix.js';
 import { dtsFilter } from '../utils.js';
 
 import type { Plugin } from 'rollup';
-import type { UserConfig } from '../types.js';
+import type { TaskConfig, UserConfig } from '../types.js';
 import type { DtsInputFile, FileExt } from '../helpers/dts.js';
 
 
@@ -15,7 +15,7 @@ interface CachedContent extends DtsInputFile {
 const cachedContents: Record<string, CachedContent> = {};
 
 // dtsPlugin is used to generate declartion file when transforming
-function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
+function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
   const ids: string[] = [];
   return {
     name: 'ice-pkg:dts',
@@ -52,7 +52,7 @@ function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypes
       // should re-run typescript programs
       const shouldUpdateDts = compileIds.some((id) => cachedContents[id].updated);
 
-      let dtsFiles;
+      let dtsFiles: CachedContent[];
       if (shouldUpdateDts) {
         const compileFiles = compileIds.map((id) => ({
           ext: cachedContents[id].ext,
@@ -63,18 +63,20 @@ function dtsPlugin(entry: string, generateTypesForJs?: UserConfig['generateTypes
       } else {
         dtsFiles = ids.map((id) => cachedContents[id]);
       }
+      const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.keys(entry);
+      entries.forEach((entryItem) => {
+        dtsFiles.forEach((file) => {
+          this.emitFile({
+            type: 'asset',
+            fileName: relative(entryItem, file.dtsPath),
+            source: file.dtsContent,
+          });
 
-      dtsFiles.forEach((file) => {
-        this.emitFile({
-          type: 'asset',
-          fileName: relative(entry, file.dtsPath),
-          source: file.dtsContent,
+          cachedContents[file.filePath] = {
+            ...cachedContents[file.filePath],
+            ...file,
+          };
         });
-
-        cachedContents[file.filePath] = {
-          ...cachedContents[file.filePath],
-          ...file,
-        };
       });
     },
   };

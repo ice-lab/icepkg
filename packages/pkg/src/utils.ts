@@ -337,3 +337,8 @@ export function mergeValueToTaskConfig<T>(config: TaskConfig, key: string, value
   }
   return config;
 }
+
+export function getEntryItems(entry: TaskConfig['entry']) {
+  const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.keys(entry);
+  return entries;
+}

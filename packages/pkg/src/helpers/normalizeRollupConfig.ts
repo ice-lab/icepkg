@@ -1,7 +1,7 @@
 import { join, resolve } from 'path';
 import escapeStringRegexp from 'escape-string-regexp';
 import deepmerge from 'deepmerge';
-import { isFile, findDefaultEntryFile } from '../utils.js';
+import { isFile, findDefaultEntryFile, getEntryItems } from '../utils.js';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
@@ -215,23 +215,21 @@ export const normalizeRollupConfig = (
       }),
     ].filter(Boolean);
 
-    const entry = isFile(taskConfig.entry) ?
-      taskConfig.entry :
-      findDefaultEntryFile(taskConfig.entry);
-
-    if (!entry) {
-      throw new Error(
-        'Failed to resolve entry for current project.\n' +
-        'This is most likely that \'src/index\' is not exist.\n' +
-        'Whereas @ice/pkg treats it as the default option.',
-      );
-    }
+    getEntryItems(taskConfig.entry).forEach((entryItem) => {
+      if (!(isFile(entryItem) ? entryItem : findDefaultEntryFile(entryItem))) {
+        throw new Error(
+          'Failed to resolve entry for current project.\n' +
+          'This is most likely that \'src/index\' is not exist.\n' +
+          'Whereas @ice/pkg treats it as the default option.',
+        );
+      }
+    });
 
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
 
     const resolvedRollupOptions = deepmerge.all([
       {
-        input: entry,
+        input: taskConfig.entry,
         external,
         output: getRollupOutputs({
           globals,

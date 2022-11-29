@@ -58,7 +58,7 @@ export interface TaskConfig {
   * Entry for a specific task
   * @default `./src` for transforming task, and `./src/index[j|t]s` for bundling task
   */
-  entry?: string;
+  entry?: RollupOptions['input'];
   /**
   * Output directory
   */

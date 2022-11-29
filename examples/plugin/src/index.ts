@@ -12,6 +12,7 @@ const plugin: PkgPlugin = (api) => {
       '.tsx',
       '.html',
     ];
+    // config.entry = {};
     config.alias = { ...config.alias };
     config.bundle.externals = { react: 'React', 'react-dom': 'ReactDOM' };
     // config.bundle.filename = ({ format, development, isES2017 }) => {
