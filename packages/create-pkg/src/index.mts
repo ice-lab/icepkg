@@ -18,17 +18,25 @@ const cli = cac('@ice/create-pkg');
 
 (async () => {
   const info = await getInfo();
-  cli.command('[...args]', info.targetDir, {
-    allowUnknownOptions: false,
-    ignoreOptionDefaultValue: true,
-  })
-    .action(async (args) => {
-      const targetDirname = args[0] ?? '.';
-
+  // cli.command('[...args]', info.targetDir, {
+  //   allowUnknownOptions: false,
+  //   ignoreOptionDefaultValue: true,
+  // })
+  //   .action(async (args) => {
+  //     const targetDirname = args[0] ?? '.';
+  //     const dirPath = path.join(process.cwd(), targetDirname);
+  //     await create(dirPath, targetDirname);
+  //   });
+  cli
+    .command('[projectDir]', info.targetDir, {
+      allowUnknownOptions: false, ignoreOptionDefaultValue: true,
+    })
+    .option('--template <template>', 'use a template e.g.: @ice/template-pkg-react')
+    .action(async (projectDir, options) => {
+      const targetDirname = projectDir ?? '.';
       const dirPath = path.join(process.cwd(), targetDirname);
-      await create(dirPath, targetDirname);
+      await create(dirPath, targetDirname, options.template);
     });
-
   cli.help();
 
   const pkgPath = path.join(__dirname, '../package.json');
@@ -44,7 +52,7 @@ const cli = cac('@ice/create-pkg');
     process.exit(1);
   });
 
-async function create(dirPath: string, dirname: string): Promise<void> {
+async function create(dirPath: string, dirname: string, template?: string): Promise<void> {
   const info = await getInfo();
   await fs.ensureDir(dirPath);
   const empty = await checkEmpty(dirPath);
@@ -61,9 +69,13 @@ async function create(dirPath: string, dirname: string): Promise<void> {
 
   const tempDir = path.join(dirPath, '.tmp');
 
-  const projectType = await inquireProjectType();
+  let templateNpmName = template;
+  if (!templateNpmName) {
+    const projectType = await inquireProjectType();
+    templateNpmName = `@ice/template-pkg-${projectType}`;
+  }
 
-  await downloadMaterialTemplate(tempDir, `@ice/template-pkg-${projectType}`);
+  await downloadMaterialTemplate(tempDir, templateNpmName);
 
   const npmName = await inquirePackageName();
 
