@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.0
+
+- [feat] pass modules to `after.build.compile` callback
+- [feat] support cjs bundle task
+- [feat] support configure `alias` in plugin
+- [feat] support configure `extensions` in plugin
+- [feat] support configure `babelPlugins` in plugin
+- [feat] support bundle analyzer
+- [feat] support process assets in bundle mode
+- [feat] support configure `externals` in plugin
+- [feat] support bundle minify
+- [feat] support configure postcss options
+- [feat] add default value of `define` config
+ 
 ## 1.2.0
 
 - [feat] support json in bundle task

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+- [feat] support `--template` cli option
+- [chore] remove `@ice/pkg-cli` package
+
 ## 1.1.2
 
 - [feat] update builder

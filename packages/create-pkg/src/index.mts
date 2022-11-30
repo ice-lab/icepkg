@@ -18,15 +18,6 @@ const cli = cac('@ice/create-pkg');
 
 (async () => {
   const info = await getInfo();
-  // cli.command('[...args]', info.targetDir, {
-  //   allowUnknownOptions: false,
-  //   ignoreOptionDefaultValue: true,
-  // })
-  //   .action(async (args) => {
-  //     const targetDirname = args[0] ?? '.';
-  //     const dirPath = path.join(process.cwd(), targetDirname);
-  //     await create(dirPath, targetDirname);
-  //   });
   cli
     .command('[projectDir]', info.targetDir, {
       allowUnknownOptions: false, ignoreOptionDefaultValue: true,
