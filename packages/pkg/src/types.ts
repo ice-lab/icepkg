@@ -181,7 +181,7 @@ export interface UserConfig {
 
   /**
    * Plugins of build scripts
-   * @default ['@ice/pkg-plugin-component']
+   * @default []
    */
   plugins?: Array<string | [string, any?]>;
 
