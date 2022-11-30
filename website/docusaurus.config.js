@@ -43,34 +43,22 @@ const config = {
                   { type: 'doc', id: 'scenarios/web' },
                 ],
               },
-              {
-                type: 'category',
-                label: '参阅',
-                collapsed: false,
-                items: [
-                  { type: 'doc', id: 'reference/config-list' },
-                  { type: 'doc', id: 'reference/plugins-development' },
-                ],
-              },
+              { type: 'doc', id: 'plugins-development' },
             ];
           },
-          remarkPlugins: [
-            [extractCode, { mobilePreview: false }],
-          ],
+          remarkPlugins: [[extractCode, { mobilePreview: false }]],
           routeBasePath: '/',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/ice-lab/icepkg/tree/main/website/docs/',
+          editUrl: 'https://github.com/ice-lab/icepkg/tree/main/website/docs/',
         },
-        theme: {
-        },
+        theme: {},
       }),
     ],
   ],
 
   themeConfig:
-  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
         // title: 'ICE PKG',
@@ -184,6 +172,16 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
+  themes: [
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      ({
+        hashed: true,
+        language: ['en', 'zh'],
+      }),
+    ],
+  ],
 };
 
 module.exports = config;

@@ -117,7 +117,7 @@ import './b.css'
 
 在 [transform 模式](../#双模式) 下，样式文件会伴随 `index.ts` 一起编译到目标目录，会保持引入关系（见 [使用场景 - 单模块引入](../scenarios/react#单模块引入)）。
 
-在 [bundle 模式下](../#双模式) 下，样式会整体打包输出（见 [使用场景 - 分别引入 JS 和 CSS](../scenarios/component#分别引入 JS 和 CSS)）。
+在 [bundle 模式下](../#双模式) 下，样式会整体打包输出（见 [使用场景 - 分别引入 JS 和 CSS](../scenarios/component#分别引入-js-和-css) ）。
 
 ICE PKG 也支持 [CSS Modules](https://github.com/css-modules/css-modules)，样式文件需以 `.module.css`、`.module.less` 或 `.module.sass` 结尾。
 
