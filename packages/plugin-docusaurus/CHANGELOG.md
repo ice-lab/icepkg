@@ -7,6 +7,7 @@
 - [fix] can't generate demo pages in build command if mobilePreview is turned on
 - [fix] can't use short syntax (<></>) of fragment
 - [refactor] set default locales to zh-Hans
+- [refctor] remove browser only import
 
 
 ## 1.3.2
