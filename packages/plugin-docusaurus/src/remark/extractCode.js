@@ -65,10 +65,18 @@ const plugin = (options) => {
         // Remove original code block and insert components
         ast.children.splice(actualIdx, 1, {
           type: 'jsx',
-          value: `<Previewer code={\`${escapeCode(code)}\`} mobilePreview={${mobilePreview}} url="${url}"> <${demoFilename} /> </Previewer>`,
+          value: `
+<Previewer code={\`${escapeCode(code)}\`} mobilePreview={${mobilePreview}} url="${url}">
+  <BrowserOnly>
+    {() => {
+      const ${demoFilename} = require('${demoFilepath}').default;
+      return <${demoFilename} />;
+    }}
+  </BrowserOnly>
+</Previewer>`,
         }, {
           type: 'import',
-          value: `import ${demoFilename} from '${demoFilepath}';`,
+          value: 'import BrowserOnly from \'@docusaurus/BrowserOnly\';',
         });
       }
     }

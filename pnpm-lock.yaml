@@ -217,6 +217,7 @@ importers:
       '@ice/pkg': ^1.0.0
       '@mdx-js/react': ^1.6.22
       '@swc/helpers': ^0.4.3
+      address: ^1.2.1
       consola: ^2.15.3
       copy-text-to-clipboard: ^3.0.1
       detect-port: ^1.3.0
@@ -231,6 +232,7 @@ importers:
       less-loader: ^11.0.0
       postcss-plugin-rpx2vw: ^0.0.3
       prism-react-renderer: ^1.3.1
+      qrcode.react: ^3.1.0
       react-tooltip: ^4.2.21
       remark-parse: ^10.0.1
       remark-stringify: ^10.0.2
@@ -244,6 +246,7 @@ importers:
       '@docusaurus/preset-classic': 2.0.1
       '@mdx-js/react': 1.6.22
       '@swc/helpers': 0.4.3
+      address: 1.2.1
       consola: 2.15.3
       copy-text-to-clipboard: 3.0.1
       detect-port: 1.3.0
@@ -258,6 +261,7 @@ importers:
       less-loader: 11.0.0_less@4.1.3
       postcss-plugin-rpx2vw: 0.0.3
       prism-react-renderer: 1.3.5
+      qrcode.react: 3.1.0
       react-tooltip: 4.2.21
       remark-parse: 10.0.1
       remark-stringify: 10.0.2
@@ -4868,8 +4872,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  /address/1.2.0:
-    resolution: {integrity: sha512-tNEZYz5G/zYunxFm7sfhAxkXEuLj3K6BKwv6ZURlsF6yiUQ65z0Q2wZW9L5cPUl9ocofGvXOdFYbFHp0+6MOig==}
+  /address/1.2.1:
+    resolution: {integrity: sha512-B+6bi5D34+fDYENiH5qOlA0cV2rAGKuWZ9LeyUUehbXy8e0VS9e498yO0Jeeh+iM+6KbfudHTFjXw2MmJD4QRA==}
     engines: {node: '>= 10.0.0'}
     dev: false
 
@@ -5886,8 +5890,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -6348,7 +6352,7 @@ packages:
     engines: {node: '>= 4.2.1'}
     hasBin: true
     dependencies:
-      address: 1.2.0
+      address: 1.2.1
       debug: 2.6.9
     transitivePeerDependencies:
       - supports-color
@@ -6359,7 +6363,7 @@ packages:
     engines: {node: '>= 4.2.1'}
     hasBin: true
     dependencies:
-      address: 1.2.0
+      address: 1.2.1
       debug: 2.6.9
     transitivePeerDependencies:
       - supports-color
@@ -10861,6 +10865,12 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     dev: true
 
+  /qrcode.react/3.1.0:
+    resolution: {integrity: sha512-oyF+Urr3oAMUG/OiOuONL3HXM+53wvuH3mtIWQrYmsXoAq0DkvZp2RYUWFSMFtbdOpuS++9v+WAkzNVkMlNW6Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dev: false
+
   /qs/6.10.3:
     resolution: {integrity: sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==}
     engines: {node: '>=0.6'}
@@ -10942,9 +10952,15 @@ packages:
   /react-dev-utils/12.0.1_3o2jfq6vfqxns3sz6wn2nnc3ei:
     resolution: {integrity: sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ==}
     engines: {node: '>=14'}
+    peerDependencies:
+      typescript: '>=2.7'
+      webpack: '>=4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
-      address: 1.2.0
+      address: 1.2.1
       browserslist: 4.21.1
       chalk: 4.1.2
       cross-spawn: 7.0.3
@@ -10967,10 +10983,11 @@ packages:
       shell-quote: 1.7.3
       strip-ansi: 6.0.1
       text-table: 0.2.0
+      typescript: 4.7.4
+      webpack: 5.73.0
     transitivePeerDependencies:
       - eslint
       - supports-color
-      - typescript
       - vue-template-compiler
       - webpack
     dev: false
@@ -10978,9 +10995,15 @@ packages:
   /react-dev-utils/12.0.1_webpack@5.73.0:
     resolution: {integrity: sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ==}
     engines: {node: '>=14'}
+    peerDependencies:
+      typescript: '>=2.7'
+      webpack: '>=4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
-      address: 1.2.0
+      address: 1.2.1
       browserslist: 4.21.1
       chalk: 4.1.2
       cross-spawn: 7.0.3
@@ -11003,10 +11026,10 @@ packages:
       shell-quote: 1.7.3
       strip-ansi: 6.0.1
       text-table: 0.2.0
+      webpack: 5.73.0
     transitivePeerDependencies:
       - eslint
       - supports-color
-      - typescript
       - vue-template-compiler
       - webpack
     dev: false
@@ -12849,6 +12872,7 @@ packages:
   /unified/9.2.0:
     resolution: {integrity: sha512-vx2Z0vY+a3YoTj8+pttM3tiJHCwY5UFbYdiWrwBEbHmK8pvsPj2rtAX2BFfgXen8T39CJWblWRDT4L5WGXtDdg==}
     dependencies:
+      '@types/unist': 2.0.6
       bail: 1.0.5
       extend: 3.0.2
       is-buffer: 2.0.5
@@ -12860,6 +12884,7 @@ packages:
   /unified/9.2.2:
     resolution: {integrity: sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==}
     dependencies:
+      '@types/unist': 2.0.6
       bail: 1.0.5
       extend: 3.0.2
       is-buffer: 2.0.5
