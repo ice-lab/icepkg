@@ -13,6 +13,7 @@ const plugin: PkgPlugin = (api) => {
       '.html',
     ];
     // config.entry = {};
+    // config.sourcemap = true;
     config.alias = { ...config.alias };
     config.bundle.externals = { react: 'React', 'react-dom': 'ReactDOM' };
     // config.bundle.filename = ({ format, development, isES2017 }) => {

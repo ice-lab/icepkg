@@ -14,14 +14,12 @@ import minifyPlugin from '../rollupPlugins/minify.js';
 import babelPlugin from '../rollupPlugins/babel.js';
 import aliasPlugin from '../rollupPlugins/transform/alias.js';
 import { builtinNodeModules } from './builtinModules.js';
-import { TaskName } from '../types.js';
+import { ReverseMap, TaskName } from '../types.js';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 import type { Plugin as RollupPlugin, RollupOptions, OutputOptions } from 'rollup';
 import type { TaskConfig, PkgContext, UserConfig } from '../types.js';
-
-type ReverseMap<T> = T[keyof T];
 
 interface PkgJson {
   name: string;
@@ -39,7 +37,6 @@ const getFilenamePrefix = (filename: string, format: string, isES2017: boolean):
 type GetRollupOutputs = (options: {
   taskConfig: TaskConfig;
   globals: Record<string, string>;
-  userConfig: UserConfig;
   outputDir: string;
   pkg: PkgJson;
   isES2017: boolean;
@@ -47,7 +44,6 @@ type GetRollupOutputs = (options: {
 const getRollupOutputs: GetRollupOutputs = ({
   globals,
   taskConfig,
-  userConfig,
   pkg,
   outputDir,
   isES2017,
@@ -60,14 +56,14 @@ const getRollupOutputs: GetRollupOutputs = ({
 
   const name = taskConfig?.bundle?.name ?? pkg.name;
 
-  const sourceMaps = userConfig?.sourceMaps ?? false;
+  const sourcemap = taskConfig?.sourcemap ?? false;
 
   outputFormats.forEach((format) => {
     const commonOption = {
       name,
       format,
       globals,
-      sourcemap: sourceMaps,
+      sourcemap,
     };
     const defaultFilenamePrefix = getFilenamePrefix('index', format, isES2017);
     outputs.push({
@@ -79,7 +75,7 @@ const getRollupOutputs: GetRollupOutputs = ({
           `${defaultFilenamePrefix}.production.js`,
       ),
       plugins: [
-        minify && minifyPlugin({ sourceMaps }),
+        minify && minifyPlugin({ sourcemap }),
       ].filter(Boolean),
     });
 
@@ -191,7 +187,7 @@ export const normalizeRollupConfig = (
         extract: resolve(rootDir, outputDir, 'index.css'),
         autoModules: true,
         minimize: taskConfig.bundle.minify,
-        sourceMap: userConfig?.sourceMaps,
+        sourceMap: taskConfig?.sourcemap,
       })),
       image(),
       json(),
@@ -234,7 +230,6 @@ export const normalizeRollupConfig = (
         output: getRollupOutputs({
           globals,
           taskConfig,
-          userConfig,
           pkg: pkg as PkgJson,
           outputDir: taskConfig.outputDir,
           isES2017: taskName === TaskName.BUNDLE_ES2017,

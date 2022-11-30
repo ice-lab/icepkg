@@ -1,10 +1,10 @@
 import * as swc from '@swc/core';
 
 import type { JsMinifyOptions } from '@swc/core';
-import type { RollupPluginFn } from '../types.js';
+import type { RollupPluginFn, TaskConfig } from '../types.js';
 
 export interface MinifyPluginOption {
-  sourceMaps: boolean | 'inline';
+  sourcemap: TaskConfig['sourcemap'];
   minifyOptions?: JsMinifyOptions;
 }
 
@@ -17,7 +17,7 @@ const minifyPlugin: RollupPluginFn<MinifyPluginOption> = ({
       unused: false,
     },
   },
-  sourceMaps,
+  sourcemap,
 }) => {
   return {
     name: 'ice-pkg:minify',
@@ -26,7 +26,7 @@ const minifyPlugin: RollupPluginFn<MinifyPluginOption> = ({
       return swc.minifySync(_, {
         ...minifyOptions,
         // Rollup will determine whether inlined sourcemap or not
-        sourceMap: !!sourceMaps,
+        sourceMap: !!sourcemap,
       });
     },
   };

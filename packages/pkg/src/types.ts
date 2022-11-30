@@ -4,6 +4,7 @@ import type { Config } from '@swc/core';
 import { PostCSSPluginConf } from 'rollup-plugin-postcss';
 
 export type PlainObject = Record<string, string | boolean | number | object>;
+export type ReverseMap<T> = T[keyof T];
 
 export type RollupPluginFn<T = {}> = (args?: T) => Plugin;
 
@@ -99,6 +100,18 @@ export interface TaskConfig {
   alias?: Record<string, string>;
 
   /**
+   * Define global constant replacements
+   */
+  define?: Record<string, string>;
+
+  /**
+    * - true to generate a sourcemap for the code and include it in the result object.
+    * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
+    * but not include it in the result object.
+    */
+  sourcemap?: boolean | 'inline';
+
+  /**
    * "bundle mode" means bundle everything up by using Rollup
    */
   bundle?: BundleOptions;
@@ -152,9 +165,8 @@ export interface UserConfig {
   alias?: Record<string, string>;
   /**
    * Define global constant replacements
-   * @default empty
    */
-  define?: PlainObject;
+  define?: Record<string, string>;
   /**
   * - true to generate a sourcemap for the code and include it in the result object.
   * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,

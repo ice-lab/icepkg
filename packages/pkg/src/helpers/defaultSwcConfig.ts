@@ -1,12 +1,8 @@
-import { stringifyObject } from '../utils.js';
-import { TaskName } from '../types.js';
+import { ReverseMap, TaskConfig, TaskName } from '../types.js';
 
-import type { UserConfig } from '../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
 
-export const getDefaultBundleSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
-  const define = stringifyObject(userConfig?.define ?? {});
-
+export const getDefaultBundleSwcConfig = (taskConfig: TaskConfig, taskName: ReverseMap<typeof TaskName>): Config => {
   const target = taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5';
 
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? {
@@ -28,9 +24,9 @@ export const getDefaultBundleSwcConfig = (userConfig: UserConfig, taskName: Task
         optimizer: {
           globals: {
             vars: {
-              // Insert __DEV__ for users, can be overrided too.
+              // Insert __DEV__ for users, can be overridden too.
               __DEV__: "process.env.NODE_ENV === 'development'",
-              ...define,
+              ...taskConfig.define,
             },
           },
         },
@@ -49,10 +45,7 @@ export const getDefaultBundleSwcConfig = (userConfig: UserConfig, taskName: Task
   };
 };
 
-export const getDefaultTransformSwcConfig = (userConfig: UserConfig, taskName: TaskName): Config => {
-  const sourceMaps = userConfig?.sourceMaps;
-  const define = stringifyObject(userConfig?.define ?? {});
-
+export const getDefaultTransformSwcConfig = (taskConfig: TaskConfig, taskName: ReverseMap<typeof TaskName>): Config => {
   const module: ModuleConfig = taskName === TaskName.TRANSFORM_CJS
     ? { type: 'commonjs' }
     : undefined;
@@ -68,7 +61,7 @@ export const getDefaultTransformSwcConfig = (userConfig: UserConfig, taskName: T
             vars: {
               // Insert __DEV__ for users, can be overrided too.
               __DEV__: "process.env.NODE_ENV === 'development'",
-              ...define,
+              ...taskConfig.define,
             },
           },
         },
@@ -79,6 +72,6 @@ export const getDefaultTransformSwcConfig = (userConfig: UserConfig, taskName: T
     },
     minify: false,
     module,
-    sourceMaps,
+    sourceMaps: taskConfig.sourcemap,
   };
 };

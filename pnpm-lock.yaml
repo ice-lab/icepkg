@@ -71,20 +71,20 @@ importers:
     specifiers:
       '@ice/pkg': ^1.0.0
       '@ice/pkg-plugin-docusaurus': ^1.0.0
-      '@types/react': ^18.0.0
-      '@types/react-dom': ^18.0.0
+      '@types/react': ^17.0.0
+      '@types/react-dom': ^17.0.0
       pkg-plugin-example: ^0.0.0
-      react: ^18.0.0
-      react-dom: ^18.0.0
+      react: ^17.0.0
+      react-dom: ^17.0.0
       style-unit: ^3.0.4
     devDependencies:
       '@ice/pkg': link:../../packages/pkg
       '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
-      '@types/react': 18.0.15
-      '@types/react-dom': 18.0.9
+      '@types/react': 17.0.52
+      '@types/react-dom': 17.0.18
       pkg-plugin-example: link:../plugin
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
       style-unit: 3.0.5
 
   packages/create-pkg:
@@ -4368,10 +4368,10 @@ packages:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
     dev: false
 
-  /@types/react-dom/18.0.9:
-    resolution: {integrity: sha512-qnVvHxASt/H7i+XG1U1xMiY5t+IHcPGUK7TDMDzom08xa7e86eCeKOiLZezwCKVxJn6NEiiy2ekgX8aQssjIKg==}
+  /@types/react-dom/17.0.18:
+    resolution: {integrity: sha512-rLVtIfbwyur2iFKykP2w0pl/1unw26b5td16d5xMgp7/yjTHomkyxPYChFoCr/FtEX1lN9wY6lFj1qvKdS5kDw==}
     dependencies:
-      '@types/react': 18.0.15
+      '@types/react': 17.0.52
     dev: true
 
   /@types/react-router-config/5.0.6:

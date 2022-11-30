@@ -23,21 +23,27 @@ function getUserConfig(command: string) {
     {
       name: 'define',
       validation: 'object',
-      defaultValue: {},
+      setConfig: (config: TaskConfig, define: UserConfig['define']) => {
+        return mergeValueToTaskConfig(config, 'define', define);
+      },
     },
+    // TODO: Modify `sourcemaps` to `sourcemap` and make sure to be compatible with icepkg v1 version.
     {
       name: 'sourceMaps',
       validation: (val: boolean | 'inline') => {
         return typeof val === 'boolean' || val === 'inline';
       },
       defaultValue: false,
+      setConfig: (config: TaskConfig, sourcemap: UserConfig['sourceMaps']) => {
+        return mergeValueToTaskConfig(config, 'sourcemap', sourcemap);
+      },
     },
     {
       name: 'generateTypesForJs',
       validation: 'boolean',
       default: false,
     },
-    // FIXME: validate values recursivly
+    // FIXME: validate values recursively
     {
       name: 'transform',
       validation: 'object',
