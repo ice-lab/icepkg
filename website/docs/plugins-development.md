@@ -230,7 +230,7 @@ bundle 导出名称。
 
 生成的文件名。
 
-#### development
+### development
 
 > 仅对 Bundle 模式生效
 
@@ -239,7 +239,10 @@ bundle 导出名称。
 
 是否生成 development 的产物。
 
-#### format
+### format
+
++ 类型：`boolean`
++ 默认值：`false`
 
 生成产物的格式。
 
@@ -254,7 +257,7 @@ bundle 导出名称。
 + 默认值：`['esm', 'es2017']`
 
 
-#### minify
+### minify
 
 > 仅对 Bundle 模式生效
 
