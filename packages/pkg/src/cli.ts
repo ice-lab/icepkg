@@ -32,16 +32,12 @@ const cli = cac('ice-pkg');
       delete options['--'];
       process.env.NODE_ENV = 'production';
       const { rootDir, ...commandArgs } = options;
-      try {
-        await componentService.run({
-          command: 'build',
-          commandArgs,
-          getBuiltInPlugins,
-          rootDir: options.rootDir,
-        });
-      } catch (e) {
-        consola.error('Compile Error', e);
-      }
+      await componentService.run({
+        command: 'build',
+        commandArgs,
+        getBuiltInPlugins,
+        rootDir: options.rootDir,
+      });
     });
 
   cli
