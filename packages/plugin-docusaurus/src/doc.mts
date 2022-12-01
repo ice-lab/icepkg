@@ -4,11 +4,14 @@ import { fork } from 'child_process';
 import { createRequire } from 'module';
 import consola from 'consola';
 import detect from 'detect-port';
+import address from 'address';
+
 import { DOCUSAURUS_DIR, DOCUSAURUS_CONFIG_FILE, DOCUSAURUS_BABEL_CONFIG_FILE } from './constants.mjs';
 
 import type { PluginDocusaurusOptions } from './index.mjs';
 
 const require = createRequire(import.meta.url);
+const ip = address.ip();
 
 export const doc = async (api, options: PluginDocusaurusOptions) => {
   const { context } = api;
@@ -31,6 +34,7 @@ export const doc = async (api, options: PluginDocusaurusOptions) => {
       command,
       !docusaurusConfigFileExist && `--config=${rootDir}/${DOCUSAURUS_DIR}/${DOCUSAURUS_CONFIG_FILE}`,
       command === 'start' && `--port=${port}`,
+      command === 'start' && `--host=${ip}`,
     ].filter(Boolean),
     {
       cwd: rootDir,

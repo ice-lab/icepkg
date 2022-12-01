@@ -11,6 +11,9 @@
     "lib",
     "!lib/**/*.map"
   ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "watch": "tsc -w",
     "build": "rm -rf lib && tsc"

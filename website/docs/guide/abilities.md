@@ -43,7 +43,7 @@ if (__DEV__) {
 ```
 
 :::info 发生了什么？
-实际上，在编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV`。
+实际上，在编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV !== 'production'`。
 :::
 
 ## 生成类型文件
