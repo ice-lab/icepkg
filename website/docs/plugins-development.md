@@ -28,6 +28,19 @@ export default defineConfig({
 
 ## context
 
+`context` 包含构建时的上下文信息：
+
+- `command`：当前运行命令，start/build/test
+- `commandArgs`：script 命令执行时接受到的参数
+- `rootDir`：项目根目录
+- `userConfig`：用户在构建配置文件 build.config.mts 中配置的内容
+- `pkg`：项目 package.json 中的内容
+
+```ts
+const plugin = (api) => {
+  console.log(api.context);
+}
+```
 
 ## onGetConfig
 
@@ -78,36 +91,46 @@ const plugin = (api) => {
 
 有以下参数可以配置：
 
-### entry
+### type
 
-+ 类型 `RollupOptions['input']`
-+ 默认值 `./src | ./src/index.[j|t]sx?`
+- 类型：`bundle` | `transform`
 
-配置组件编译的入口，入口配置和 Rollup [input](https://rollupjs.org/guide/en/#input) 配置一致。
-
-| 任务            | 默认值                |
-| -------------- | -------------------  |
-| transform-esm  | `./src`              |
-| transform-es2017   | `./src`              |
-| transform-cjs  | `./src`              |
-| bundle-es5 | `./src/index[j|t]sx?`  |
-| bundle-es2017  | `./src/index[j|t]sx?`  |
-
+Task 类型。
 
 ### outputDir
 
-+ 类型 `string`
-+ 默认值 `es | lib | dist`
++ 类型：`string`
 
 配置组件编译的出口。
 
-| 任务            | 默认值              |
+| 任务            | 默认值：             |
 | -------------- | -------------------|
 | transform-esm   | `esm`               |
 | transform-es2017   | `es2017`               |
 | transform-cjs  | `cjs`              |
 | bundle-es5 | `dist`             |
 | bundle-es2017  | `dist`  |
+
+### define
+
++ 类型：`Record<string, string>`
++ 默认值：`{ 'process.env.NODE_ENV': '<NODE_ENV>' }`
+
+配置注入到运行时的变量。
+
+### sourcemap
+
++ 类型：`boolean | 'inline'`
++ 默认值：start 阶段为 `true`，build 阶段为 `false`
+
+配置是否生成源码调试映射。
+
+### alias
+
++ 类型：`Record<string, string>`
++ 默认值：`{}`
+
+配置模块引入的别名。
 
 ### rollupPlugins
 
@@ -135,14 +158,30 @@ const plugin = (api) => {
 ### swcCompileOptions
 
 + 类型：`swc.Config`
-+ 默认值 `{}`
++ 默认值：`{}`
 
 swc 编译选项。具体可参考 [swc 配置](https://swc.rs/docs/configuration/swcrc)。
 
+### entry
+
+配置组件编译的入口。
+
+#### Transform 模式
+
++ 类型：`string`
++ 默认值：`./src`
+
+#### Bundle 模式
+
++ 类型：`RollupOptions['input']`
++ 默认值：`./src/index.[j|t]sx?`
+
 ### postcssOptions
 
+> 仅对 Bundle 模式生效
+
 + 类型 `(options: PostCSSPluginConf) => PostCSSPluginConf`
-+ 默认值 `undefined`
++ 默认值：`undefined`
 
 修改 [rollup-plugin-postcss](https://github.com/egoist/rollup-plugin-postcss#options) 插件配置。
 
@@ -166,44 +205,25 @@ const plugin = (api) => {
 
 ### extensions
 
+> 仅对 Bundle 模式生效
+
 + 类型 `string[]`
-+ 默认值 `['.mjs', '.js', '.json', '.node', '.ts', '.tsx', '.mts', '.cjs', '.cts']`
++ 默认值：`['.mjs', '.js', '.json', '.node', '.ts', '.tsx', '.mts', '.cjs', '.cts']`
 
 配置解析的文件后缀名，这样在引入模块时不需要带后缀名。
 
-### alias
+### name
 
-+ 类型：`Record<string, string>`
-+ 默认值：`{}`
-
-配置模块引入的别名。
-
-### define
-
-+ 类型：`Record<string, string>`
-+ 默认值：`{ 'process.env.NODE_ENV': '<NODE_ENV>' }`
-
-配置注入到运行时的变量。
-
-### sourcemap
-
-+ 类型：`boolean | 'inline'`
-+ 默认值：start 阶段为 `true`，build 阶段为 `false`
-
-配置是否生成源码调试映射。
-
-### bundle
-
-仅在 [type] 为 `bundle` 的时候生效。
-
-#### name
+> 仅对 Bundle 模式生效
 
 + 类型：`string`
 + 默认值：`package.name`
 
 bundle 导出名称。
 
-#### filename
+### filename
+
+> 仅对 Bundle 模式生效
 
 + 类型：`string | ((options: { isES2017: boolean; format: Omit<TaskConfig['bundle']['formats'][number], 'es2017'>; taskConfig: TaskConfig; development?: boolean }) => string);`
 + 默认值：`index`
@@ -212,6 +232,8 @@ bundle 导出名称。
 
 #### development
 
+> 仅对 Bundle 模式生效
+
 + 类型：`boolean`
 + 默认值：`false`
 
@@ -219,12 +241,22 @@ bundle 导出名称。
 
 #### format
 
+生成产物的格式。
+
+#### Transform 模式
+
++ 类型：`Array<'esm' | 'cjs' | 'es2017'>`
++ 默认值：`['esm', 'es2017']`
+
+#### Bundle 模式
+
 + 类型：`Array<'umd' | 'esm' | 'cjs' | 'es2017'>`
 + 默认值：`['esm', 'es2017']`
 
-生成产物的格式。
 
 #### minify
+
+> 仅对 Bundle 模式生效
 
 + 类型：`boolean`
 + 默认值：start 阶段为 `false`，build 阶段为 `true`
