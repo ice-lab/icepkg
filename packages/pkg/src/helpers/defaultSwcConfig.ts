@@ -24,8 +24,6 @@ export const getDefaultBundleSwcConfig = (taskConfig: TaskConfig, taskName: Reve
         optimizer: {
           globals: {
             vars: {
-              // Insert __DEV__ for users, can be overridden too.
-              __DEV__: "process.env.NODE_ENV === 'development'",
               ...taskConfig.define,
             },
           },
@@ -59,8 +57,6 @@ export const getDefaultTransformSwcConfig = (taskConfig: TaskConfig, taskName: R
         optimizer: {
           globals: {
             vars: {
-              // Insert __DEV__ for users, can be overrided too.
-              __DEV__: "process.env.NODE_ENV === 'development'",
               ...taskConfig.define,
             },
           },

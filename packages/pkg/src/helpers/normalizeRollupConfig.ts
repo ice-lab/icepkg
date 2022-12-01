@@ -65,24 +65,33 @@ const getRollupOutputs: GetRollupOutputs = ({
       globals,
       sourcemap,
     };
-    const defaultFilenamePrefix = getFilenamePrefix('index', format, isES2017);
-    outputs.push({
+    const output: OutputOptions = {
       ...commonOption,
-      file: join(
+      plugins: [
+        minify && minifyPlugin({ sourcemap }),
+      ].filter(Boolean),
+    };
+    const defaultFilenamePrefix = getFilenamePrefix('index', format, isES2017);
+    // If entry is an array or and object, don't set output.file.
+    if (typeof taskConfig.entry === 'string') {
+      output.file = join(
         outputDir,
         taskConfig?.bundle?.filename ?
           (typeof taskConfig.bundle.filename === 'string' ? taskConfig.bundle.filename : taskConfig.bundle.filename({ format, taskConfig, isES2017 })) :
           `${defaultFilenamePrefix}.production.js`,
-      ),
-      plugins: [
-        minify && minifyPlugin({ sourcemap }),
-      ].filter(Boolean),
-    });
+      );
+    } else {
+      output.dir = 'dist';
+    }
+    outputs.push(output);
 
     if (uncompressedDevelopment) {
-      outputs.push({
+      const developmentOutput: OutputOptions = {
         ...commonOption,
-        file: join(
+      };
+      // If `entry` is an array or and object, don't set `output.file`.
+      if (typeof taskConfig.entry === 'string') {
+        output.file = join(
           outputDir,
           taskConfig?.bundle?.filename ?
             (
@@ -91,8 +100,11 @@ const getRollupOutputs: GetRollupOutputs = ({
                 taskConfig.bundle.filename({ format, taskConfig, development: uncompressedDevelopment, isES2017 })
             ) :
             `${defaultFilenamePrefix}.development.js`,
-        ),
-      });
+        );
+      } else {
+        output.dir = 'dist';
+      }
+      outputs.push(developmentOutput);
     }
   });
 
@@ -149,7 +161,7 @@ export const normalizeRollupConfig = (
   const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = taskConfig;
   const { rootDir, userConfig, pkg, commandArgs } = ctx;
   const commonPlugins = [
-    taskConfig?.babelPlugins && babelPlugin({ plugins: taskConfig.babelPlugins }),
+    taskConfig?.babelPlugins?.length && babelPlugin({ plugins: taskConfig.babelPlugins }),
     swcPlugin({
       type,
       extraSwcOptions: swcCompileOptions,

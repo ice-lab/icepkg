@@ -26,7 +26,11 @@ export const mergeConfigOptions = (
 
   // Configure define
   normalizedConfig.define = stringifyObject(deepmerge(
-    { 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) },
+    {
+      // Insert __DEV__ for users, can be overridden too.
+      __DEV__: "process.env.NODE_ENV === 'development'",
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    },
     define ?? {},
   ));
 

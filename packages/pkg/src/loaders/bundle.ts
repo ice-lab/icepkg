@@ -10,12 +10,12 @@ export default async (cfg: TaskLoaderConfig): Promise<OutputResult> => {
 
   const bundleStart = performance.now();
 
-  const rollupOption = cfg.rollupOptions;
+  const { rollupOptions } = cfg;
 
   logger.debug('Build start...');
-  const bundle = await rollup.rollup(rollupOption);
+  const bundle = await rollup.rollup(rollupOptions);
 
-  const outputs = toArray(rollupOption.output);
+  const outputs = toArray(rollupOptions.output);
   const outputFiles: OutputFile[] = [];
 
   for (let o = 0; o < outputs.length; ++o) {

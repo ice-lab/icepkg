@@ -20,7 +20,8 @@ const cli = cac('@ice/create-pkg');
   const info = await getInfo();
   cli
     .command('[projectDir]', info.targetDir, {
-      allowUnknownOptions: false, ignoreOptionDefaultValue: true,
+      allowUnknownOptions: false,
+      ignoreOptionDefaultValue: true,
     })
     .option('--template <template>', 'use a template e.g.: @ice/template-pkg-react')
     .action(async (projectDir, options) => {

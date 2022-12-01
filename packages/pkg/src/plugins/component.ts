@@ -14,7 +14,7 @@ const plugin: PkgPlugin = (api) => {
 
   registerUserConfig(config.getUserConfig(command));
   registerCliOption(config.getCliOptions());
-
+  // TODO: Move default value to userConfig defaultValue
   (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {
     registerTask(`transform-${format}`, {
       type: 'transform',

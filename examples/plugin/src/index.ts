@@ -12,7 +12,9 @@ const plugin: PkgPlugin = (api) => {
       '.tsx',
       '.html',
     ];
-    // config.entry = {};
+    config.entry = {
+      avatar: './src/Avatar/index.tsx',
+    };
     // config.sourcemap = true;
     config.alias = { ...config.alias };
     config.bundle.externals = { react: 'React', 'react-dom': 'ReactDOM' };

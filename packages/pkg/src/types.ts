@@ -35,7 +35,7 @@ interface BundleOptions {
    * Specify external dependencies.
    * "boolean" - whether to bundle all dependencies or not;
    * "object" - specific external dependencies.
-   * @default true All of dependencies will be bundled by default.
+   * @default false All of dependencies will be bundled by default.
    */
   externals?: boolean | Record<string, string>;
 
@@ -112,7 +112,7 @@ export interface TaskConfig {
   sourcemap?: boolean | 'inline';
 
   /**
-   * "bundle mode" means bundle everything up by using Rollup
+   * Modify bundle options. "bundle mode" means bundle everything up by using Rollup.
    */
   bundle?: BundleOptions;
 }
@@ -191,8 +191,8 @@ export interface UserConfig {
   transform?: {
     /**
      * Which type of contents would be generated
-     * "cjs" - Commonjs with ES5 synatx (targeting Node version under 12);
-     * "esm" - ES Module with ES5 synatx (lagacy outputs);
+     * "cjs" - Commonjs with ES5 syntax (targeting Node version under 12);
+     * "esm" - ES Module with ES5 syntax (legacy outputs);
      * "es2017" - ES Module with ES2017 (targeting modern browsers and Node version upon 12)
      * @default ['esm','es2017']
      */
