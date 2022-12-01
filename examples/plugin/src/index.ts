@@ -1,9 +1,13 @@
-import { TaskName } from '@ice/pkg';
+import { BundleTaskConfig, TaskName } from '@ice/pkg';
 import type { PkgPlugin } from '@ice/pkg';
 
 const plugin: PkgPlugin = (api) => {
   const { onGetConfig } = api;
-  const bundleTaskCallback: Parameters<typeof onGetConfig>[0] = async (config) => {
+
+  const bundleTaskCallback: Parameters<typeof onGetConfig>[0] = async (config: BundleTaskConfig) => {
+    // if (config.type === 'transform') {
+    //   return;
+    // }
     config.extensions = [
       '.js',
       '.json',
@@ -14,10 +18,11 @@ const plugin: PkgPlugin = (api) => {
     ];
     config.entry = {
       avatar: './src/Avatar/index.tsx',
+      button: './src/Button/index.tsx',
     };
     // config.sourcemap = true;
     config.alias = { ...config.alias };
-    config.bundle.externals = { react: 'React', 'react-dom': 'ReactDOM' };
+    config.externals = { react: 'React', 'react-dom': 'ReactDOM' };
     // config.bundle.filename = ({ format, development, isES2017 }) => {
     //   return `index${(format === 'umd' || format === 'cjs') ? `.${format}` : ''}${isES2017 ? '-2017' : ''}${development ? 'development' : ''}.js`;
     // };

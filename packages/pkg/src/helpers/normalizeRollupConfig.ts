@@ -14,12 +14,11 @@ import minifyPlugin from '../rollupPlugins/minify.js';
 import babelPlugin from '../rollupPlugins/babel.js';
 import aliasPlugin from '../rollupPlugins/transform/alias.js';
 import { builtinNodeModules } from './builtinModules.js';
-import { ReverseMap, TaskName } from '../types.js';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 import type { Plugin as RollupPlugin, RollupOptions, OutputOptions } from 'rollup';
-import type { TaskConfig, PkgContext, UserConfig } from '../types.js';
+import { BundleTaskConfig, ReverseMap, TaskName, TaskConfig, PkgContext } from '../types.js';
 
 interface PkgJson {
   name: string;
@@ -35,7 +34,8 @@ const getFilenamePrefix = (filename: string, format: string, isES2017: boolean):
 };
 
 type GetRollupOutputs = (options: {
-  taskConfig: TaskConfig;
+  taskConfig: BundleTaskConfig;
+  command: PkgContext['command'];
   globals: Record<string, string>;
   outputDir: string;
   pkg: PkgJson;
@@ -44,17 +44,18 @@ type GetRollupOutputs = (options: {
 const getRollupOutputs: GetRollupOutputs = ({
   globals,
   taskConfig,
+  command,
   pkg,
   outputDir,
   isES2017,
 }) => {
   const outputs: OutputOptions[] = [];
 
-  const uncompressedDevelopment = taskConfig?.bundle?.development;
-  const outputFormats = (taskConfig?.bundle?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
-  const minify = taskConfig?.bundle?.minify;
+  const uncompressedDevelopment = taskConfig?.development;
+  const outputFormats = (taskConfig?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
+  const minify = taskConfig?.minify ?? command === 'build';
 
-  const name = taskConfig?.bundle?.name ?? pkg.name;
+  const name = taskConfig?.name ?? pkg.name;
 
   const sourcemap = taskConfig?.sourcemap ?? false;
 
@@ -76,8 +77,8 @@ const getRollupOutputs: GetRollupOutputs = ({
     if (typeof taskConfig.entry === 'string') {
       output.file = join(
         outputDir,
-        taskConfig?.bundle?.filename ?
-          (typeof taskConfig.bundle.filename === 'string' ? taskConfig.bundle.filename : taskConfig.bundle.filename({ format, taskConfig, isES2017 })) :
+        taskConfig?.filename ?
+          (typeof taskConfig.filename === 'string' ? taskConfig.filename : taskConfig.filename({ format, taskConfig, isES2017 })) :
           `${defaultFilenamePrefix}.production.js`,
       );
     } else {
@@ -93,11 +94,11 @@ const getRollupOutputs: GetRollupOutputs = ({
       if (typeof taskConfig.entry === 'string') {
         output.file = join(
           outputDir,
-          taskConfig?.bundle?.filename ?
+          taskConfig?.filename ?
             (
-              typeof taskConfig.bundle.filename === 'string' ?
-                taskConfig.bundle.filename :
-                taskConfig.bundle.filename({ format, taskConfig, development: uncompressedDevelopment, isES2017 })
+              typeof taskConfig.filename === 'string' ?
+                taskConfig.filename :
+                taskConfig.filename({ format, taskConfig, development: uncompressedDevelopment, isES2017 })
             ) :
             `${defaultFilenamePrefix}.development.js`,
         );
@@ -112,7 +113,7 @@ const getRollupOutputs: GetRollupOutputs = ({
 };
 
 function getExternalsAndGlobals(
-  taskConfig: TaskConfig,
+  taskConfig: BundleTaskConfig,
   pkg: PkgJson,
 ): [(id?: string) => boolean, Record<string, string>] {
   let externals: string[] = [];
@@ -124,7 +125,7 @@ function getExternalsAndGlobals(
     'regenerator-runtime',
   ];
 
-  const externalsConfig = taskConfig?.bundle?.externals ?? false;
+  const externalsConfig = taskConfig?.externals ?? false;
 
   switch (externalsConfig) {
     case true:
@@ -159,7 +160,7 @@ export const normalizeRollupConfig = (
   taskName: ReverseMap<typeof TaskName>,
 ): [RollupPlugin[], RollupOptions] => {
   const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = taskConfig;
-  const { rootDir, userConfig, pkg, commandArgs } = ctx;
+  const { rootDir, userConfig, pkg, commandArgs, command } = ctx;
   const commonPlugins = [
     taskConfig?.babelPlugins?.length && babelPlugin({ plugins: taskConfig.babelPlugins }),
     swcPlugin({
@@ -198,7 +199,7 @@ export const normalizeRollupConfig = (
         plugins: [autoprefixer()],
         extract: resolve(rootDir, outputDir, 'index.css'),
         autoModules: true,
-        minimize: taskConfig.bundle.minify,
+        minimize: taskConfig.minify,
         sourceMap: taskConfig?.sourcemap,
       })),
       image(),
@@ -241,6 +242,7 @@ export const normalizeRollupConfig = (
         external,
         output: getRollupOutputs({
           globals,
+          command,
           taskConfig,
           pkg: pkg as PkgJson,
           outputDir: taskConfig.outputDir,

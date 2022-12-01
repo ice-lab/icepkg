@@ -8,6 +8,24 @@ export type ReverseMap<T> = T[keyof T];
 
 export type RollupPluginFn<T = {}> = (args?: T) => Plugin;
 
+interface TransformOptions {
+  /**
+   * Which type of contents would be generated
+   * "cjs" - Commonjs with ES5 syntax (targeting Node version under 12);
+   * "esm" - ES Module with ES5 syntax (legacy outputs);
+   * "es2017" - ES Module with ES2017 (targeting modern browsers and Node version upon 12)
+   * @default ['esm','es2017']
+   */
+  formats?: Array<'cjs' | 'esm' | 'es2017'>;
+  /**
+   * Exclude all files matching any of those conditions.
+   * - `string` to match any paths by `minimatch` glob patterns
+   * - An `array` to match at least one of the conditions
+   * @see https://github.com/isaacs/minimatch
+   */
+  excludes?: string | string[];
+}
+
 interface BundleOptions {
   /**
    * Export name
@@ -20,7 +38,7 @@ interface BundleOptions {
    */
   filename?: |
   string |
-  ((options: { isES2017: boolean; format: Omit<TaskConfig['bundle']['formats'][number], 'es2017'>; taskConfig: TaskConfig; development?: boolean }) => string);
+  ((options: { isES2017: boolean; format: Omit<TaskConfig['formats'][number], 'es2017'>; taskConfig: TaskConfig; development?: boolean }) => string);
 
   development?: boolean;
   /**
@@ -30,7 +48,7 @@ interface BundleOptions {
    * "es2017"
    * @default ['esm','es2017']
    */
-  formats: Array<'umd' | 'esm' | 'cjs' | 'es2017'>;
+  formats?: Array<'umd' | 'esm' | 'cjs' | 'es2017'>;
   /**
    * Specify external dependencies.
    * "boolean" - whether to bundle all dependencies or not;
@@ -44,78 +62,86 @@ interface BundleOptions {
    */
   minify?: boolean;
 }
-export interface TaskLoaderConfig extends TaskConfig {
+
+export type TaskLoaderConfig = BundleTaskLoaderConfig | TransformTaskLoaderConfig;
+
+export interface BundleTaskLoaderConfig extends BundleTaskConfig {
+  type: 'bundle';
   name: TaskName;
 }
 
-export interface TaskConfig {
-  /**
-   * There are two ways to handle source files
-   * - 'transform' to transform files one by one to support tree shaking
-   * - 'bundle' to bundle files into single file
-   */
-  type: 'bundle' | 'transform';
-  /**
-  * Entry for a specific task
-  * @default `./src` for transforming task, and `./src/index[j|t]s` for bundling task
-  */
-  entry?: RollupOptions['input'];
+export interface TransformTaskLoaderConfig extends TransformTaskConfig {
+  type: 'transform';
+  name: TaskName;
+}
+
+interface CommonTaskConfig {
   /**
   * Output directory
   */
   outputDir?: string;
   /**
-  * Extra rollup plugins
-  */
-  rollupPlugins?: Plugin[];
-
-  /**
-   * Extra babel plugins
-   */
-  babelPlugins?: babel.PluginItem[];
-  /**
-  * Extra rollup options
-  * @see https://rollupjs.org/guide/en/
-  */
-  rollupOptions?: RollupOptions;
-  /**
-   * Config postcss options.
-   */
-  postcssOptions?: (options: PostCSSPluginConf) => PostCSSPluginConf;
-  /**
-  * Extra swc compile options
-  * @see https://swc.rs/docs/configuration/compilationv
-  */
-  swcCompileOptions?: Config;
-
-  /**
-   * Files extensions
-   * @see https://www.npmjs.com/package/@rollup/plugin-node-resolve
-   */
-  extensions?: string[];
-
-  /**
-   *  Alias to file system paths
-   */
-  alias?: Record<string, string>;
-
-  /**
    * Define global constant replacements
    */
   define?: Record<string, string>;
-
   /**
     * - true to generate a sourcemap for the code and include it in the result object.
     * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
     * but not include it in the result object.
     */
   sourcemap?: boolean | 'inline';
-
   /**
-   * Modify bundle options. "bundle mode" means bundle everything up by using Rollup.
+   *  Alias to file system paths
    */
-  bundle?: BundleOptions;
+  alias?: Record<string, string>;
+  /**
+  * Extra rollup options
+  * @see https://rollupjs.org/guide/en/
+  */
+  rollupOptions?: RollupOptions;
+  /**
+  * Extra rollup plugins
+  */
+  rollupPlugins?: Plugin[];
+  /**
+  * Extra swc compile options
+  * @see https://swc.rs/docs/configuration/compilationv
+  */
+  swcCompileOptions?: Config;
+  /**
+   * Extra babel plugins
+   */
+  babelPlugins?: babel.PluginItem[];
 }
+
+export interface BundleTaskConfig extends CommonTaskConfig, BundleOptions {
+  type: 'bundle';
+  /**
+  * Entry for a specific task
+  * @default  `./src/index[j|t]sx` for bundling task
+  */
+  entry?: RollupOptions['input'];
+  /**
+  * Files extensions
+  * @see https://www.npmjs.com/package/@rollup/plugin-node-resolve
+  */
+  extensions?: string[];
+  /**
+   * Config postcss options.
+   */
+  postcssOptions?: (options: PostCSSPluginConf) => PostCSSPluginConf;
+}
+
+export interface TransformTaskConfig extends CommonTaskConfig, TransformOptions {
+  type: 'transform';
+  /**
+  * Entry for a specific task
+  * @default  `./src` for Transform task
+  */
+  entry?: string;
+}
+
+export type TaskConfig = BundleTaskConfig | TransformTaskConfig;
 
 export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;
 
@@ -188,23 +214,7 @@ export interface UserConfig {
   /**
    * "transform mode" means transform files one by one
    */
-  transform?: {
-    /**
-     * Which type of contents would be generated
-     * "cjs" - Commonjs with ES5 syntax (targeting Node version under 12);
-     * "esm" - ES Module with ES5 syntax (legacy outputs);
-     * "es2017" - ES Module with ES2017 (targeting modern browsers and Node version upon 12)
-     * @default ['esm','es2017']
-     */
-    formats?: Array<'cjs' | 'esm' | 'es2017'>;
-    /**
-     * Exclude all files matching any of those conditions.
-     * - `string` to match any paths by `minimatch` glob patterns
-     * - An `array` to match at least one of the conditions
-     * @see https://github.com/isaacs/minimatch
-     */
-    excludes?: string | string[];
-  };
+  transform?: TransformOptions;
 
   /**
    * "bundle mode" means bundle everything up by using Rollup

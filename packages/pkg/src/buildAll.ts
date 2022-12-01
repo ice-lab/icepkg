@@ -12,18 +12,18 @@ import type { PkgContext, TaskLoaderConfig, OutputFile, OutputResult } from './t
 export const buildAll = async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
   const outputResults: OutputResult[] = [];
   for (let c = 0; c < cfgArrs.length; ++c) {
-    const { type, name } = cfgArrs[c];
+    const taskLoaderConfig = cfgArrs[c];
 
     let outputFiles: OutputFile[] = [];
-    if (type === 'bundle') {
-      const bundleResult = await runBundle(cfgArrs[c]);
+    if (taskLoaderConfig.type === 'bundle') {
+      const bundleResult = await runBundle(taskLoaderConfig);
       outputResults.push(bundleResult);
       outputFiles = bundleResult.outputFiles;
     }
 
-    if (type === 'transform') {
-      outputFiles = await runTransform(cfgArrs[c], ctx);
-      outputResults.push({ outputFiles, taskName: name });
+    if (taskLoaderConfig.type === 'transform') {
+      outputFiles = await runTransform(taskLoaderConfig, ctx);
+      outputResults.push({ outputFiles, taskName: taskLoaderConfig.name });
     }
 
     const reportSizeStart = performance.now();

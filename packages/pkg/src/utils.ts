@@ -320,22 +320,24 @@ export function normalizeSlashes(file: string) {
   return file.split(path.win32.sep).join('/');
 }
 
-export function mergeValueToTaskConfig<T>(config: TaskConfig, key: string, value: T): TaskConfig {
-  if (value) {
-    if (typeof value === 'object') {
-      return {
-        ...config,
-        [key]: {
-          ...(config[key] || {}),
-          ...value,
-        },
-      };
-    } else {
-      config[key] = value;
-      return config;
-    }
+export function mergeValueToTaskConfig<C = TaskConfig, T = any>(config: C, key: string, value: T): C {
+  if (Array.isArray(value)) {
+    return {
+      ...config,
+      [key]: value,
+    };
+  } else if (typeof value === 'object') {
+    return {
+      ...config,
+      [key]: {
+        ...(config[key] || {}),
+        ...value,
+      },
+    };
+  } else {
+    config[key] = value;
+    return config;
   }
-  return config;
 }
 
 export function getEntryItems(entry: TaskConfig['entry']) {

@@ -1,11 +1,10 @@
 import { mergeValueToTaskConfig } from '../utils.js';
 import deepmerge from 'deepmerge';
-import type { TaskConfig, UserConfig } from '../types.js';
+import type { BundleTaskConfig, TaskConfig, UserConfig } from '../types.js';
 
-function getUserConfig(command: string) {
+function getUserConfig() {
   const defaultBundleValue = {
     formats: ['esm', 'es2017'],
-    minify: command === 'build',
   };
   const defaultTransformValue = {
     formats: ['esm', 'es2017'],
@@ -55,11 +54,20 @@ function getUserConfig(command: string) {
       defaultValue: defaultBundleValue,
       setConfig: (config: TaskConfig, bundle: UserConfig['bundle']) => {
         if (config.type === 'bundle') {
-          return mergeValueToTaskConfig(
-            config,
-            'bundle',
-            deepmerge(defaultBundleValue, bundle, { arrayMerge: (destinationArray, sourceArray) => sourceArray }),
+          let newConfig = config;
+          const mergedConfig = deepmerge(
+            defaultBundleValue,
+            bundle,
+            { arrayMerge: (destinationArray, sourceArray) => sourceArray },
           );
+          Object.keys(mergedConfig).forEach((key) => {
+            newConfig = mergeValueToTaskConfig<BundleTaskConfig>(
+              newConfig,
+              key,
+              mergedConfig[key],
+            );
+          });
+          return newConfig;
         }
       },
     },

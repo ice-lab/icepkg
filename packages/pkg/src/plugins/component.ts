@@ -12,7 +12,7 @@ const plugin: PkgPlugin = (api) => {
 
   const { userConfig, command } = context;
 
-  registerUserConfig(config.getUserConfig(command));
+  registerUserConfig(config.getUserConfig());
   registerCliOption(config.getCliOptions());
   // TODO: Move default value to userConfig defaultValue
   (userConfig?.transform?.formats || ['esm', 'es2017']).forEach((format) => {

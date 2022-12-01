@@ -30,6 +30,7 @@ const cli = cac('ice-pkg');
     })
     .action(async (options) => {
       delete options['--'];
+      process.env.NODE_ENV = 'production';
       const { rootDir, ...commandArgs } = options;
       try {
         await componentService.run({
@@ -59,6 +60,7 @@ const cli = cac('ice-pkg');
     })
     .action(async (options) => {
       delete options['--'];
+      process.env.NODE_ENV = 'development';
       const { rootDir, ...commandArgs } = options;
       try {
         await componentService.run({

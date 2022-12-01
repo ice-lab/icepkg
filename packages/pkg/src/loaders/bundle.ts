@@ -3,9 +3,9 @@ import { performance } from 'perf_hooks';
 import { toArray, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
-import type { TaskLoaderConfig, OutputFile, OutputResult } from '../types.js';
+import type { BundleTaskLoaderConfig, OutputFile, OutputResult } from '../types.js';
 
-export default async (cfg: TaskLoaderConfig): Promise<OutputResult> => {
+export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
   const logger = createLogger(cfg.name);
 
   const bundleStart = performance.now();
