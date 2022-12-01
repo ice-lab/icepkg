@@ -73,7 +73,7 @@ module.exports = function (context) {
       return {
         resolve: {
           alias: Object.assign({
-            'react': path.resolve(siteDir, 'node_modules/react'),
+            react: path.resolve(siteDir, 'node_modules/react'),
             'react-dom': path.resolve(siteDir, 'node_modules/react-dom'),
             'react/jsx-runtime': path.resolve(siteDir, 'node_modules/react/jsx-runtime'),
             '@mdx-js/react': mdxReactPath,
@@ -85,6 +85,7 @@ module.exports = function (context) {
         plugins: [
           new webpack.ProvidePlugin({
             createElement: [path.resolve(siteDir, '.docusaurus', 'hijackCreateElement.js'), 'default'],
+            Fragment: ['react', 'Fragment'],
           }),
         ],
       };
