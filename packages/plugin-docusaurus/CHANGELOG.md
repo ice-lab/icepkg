@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+- [feat] support configure docusaurus outputDir
+
 ## 1.4.0
 
 - [feat] support scan qrcode at mobile preview
