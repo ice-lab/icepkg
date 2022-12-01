@@ -93,7 +93,7 @@ const plugin = (api) => {
 
 ### type
 
-- 类型：`bundle` | `transform`
+- 类型：`'bundle' | 'transform'`
 
 Task 类型。
 
