@@ -218,21 +218,6 @@ export const isDirectory =
 
 export const isFile = (name: string) => fs.existsSync(name) && fs.statSync(name).isFile();
 
-const DEFAULT_ENTRY_FILE = [
-  'index.js',
-  'index.ts',
-  'index.mts',
-  'index.mjs',
-  'index.tsx',
-  'index.jsx',
-];
-
-export const findDefaultEntryFile = (dirPath: string): string => {
-  return DEFAULT_ENTRY_FILE
-    .map((value) => path.join(dirPath, value))
-    .find((file) => isFile(file));
-};
-
 export const isObject = (value: unknown): value is Record<string, any> => Object.prototype.toString.call(value) === '[object Object]';
 
 export const booleanToObject = (value: object | boolean): object => (isObject(value) ? value : {});

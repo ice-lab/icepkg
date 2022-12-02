@@ -4,14 +4,14 @@ import { createLogger } from './logger.js';
 
 import type { TaskConfig } from '../types';
 
-export const createWatcher = (cfgs: TaskConfig[]) => {
+export const createWatcher = (taskConfigs: TaskConfig[]) => {
   const logger = createLogger('watcher');
   let inputs: string[] = [];
-  cfgs.forEach((cfg) => {
+  taskConfigs.forEach((cfg) => {
     inputs.push(...getEntryItems(cfg.entry));
   });
   inputs = unique(inputs);
-  const outputs = unique(cfgs.map((cfg) => cfg.outputDir));
+  const outputs = unique(taskConfigs.map((cfg) => cfg.outputDir));
 
   const ignoredPaths = [
     '**/{.git,node_modules}/**',

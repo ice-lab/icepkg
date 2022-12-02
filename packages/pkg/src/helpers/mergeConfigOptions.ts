@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge';
-import { getEntryDir, getEntryFile, getOutputDir } from './getTaskIO.js';
+import { getDefaultEntryDir, getDefaultEntryFile, getOutputDir } from './getTaskIO.js';
 import { getDefaultBundleSwcConfig, getDefaultTransformSwcConfig } from './defaultSwcConfig.js';
 import { normalizeRollupConfig } from './normalizeRollupConfig.js';
 import { stringifyObject } from '../utils.js';
@@ -18,7 +18,8 @@ export const mergeConfigOptions = (
 
   // Configure task entry
   normalizedConfig.entry = entry || (
-    isBundleTask ? getEntryFile(rootDir) : getEntryDir(rootDir)
+    // default entry
+    isBundleTask ? getDefaultEntryFile(rootDir) : getDefaultEntryDir(rootDir)
   );
 
   // Configure task outputDir

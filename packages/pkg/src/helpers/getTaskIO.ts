@@ -12,31 +12,29 @@ const DEFAULT_ENTRY_FILE = [
   'index.jsx',
 ];
 
-export const findDefaultEntryFile = (path: string) => {
-  return DEFAULT_ENTRY_FILE
-    .map((value) => join(path, value))
+export const getDefaultEntryFile = (rootDir: string) => {
+  const defaultEntryFiles = DEFAULT_ENTRY_FILE.map(
+    (defaultEntryFile) => join(DEFAULT_ENTRY_DIR, defaultEntryFile),
+  );
+  const entryFile = defaultEntryFiles
+    .map((file) => join(rootDir, file))
     .find((file) => isFile(file));
-};
-
-export const getEntryFile = (rootDir: string) => {
-  const defaultEntryDir = getEntryDir(rootDir);
-  const entryFile = findDefaultEntryFile(defaultEntryDir);
 
   if (entryFile === undefined) {
-    throw new Error(`Could not find path ${entryFile}, which be regarded as entry`);
+    throw new Error(`Could not find the default entry file: ${defaultEntryFiles.join(', ')} please check if the entry file exists.`);
   }
 
   return entryFile;
 };
 
-export const getEntryDir = (rootDir: string) => {
+export const getDefaultEntryDir = (rootDir: string) => {
   const defaultEntryDir = join(rootDir, DEFAULT_ENTRY_DIR);
 
-  if (isDirectory(defaultEntryDir)) {
-    return defaultEntryDir;
+  if (!isDirectory(defaultEntryDir)) {
+    throw new Error(`Failed to resolve ${defaultEntryDir} as an entry directory.`);
   }
 
-  throw new Error(`Failed to resolve ${defaultEntryDir} as entry directory`);
+  return defaultEntryDir;
 };
 
 export const getOutputDir = (rootDir: string, taskName: TaskName) => {
