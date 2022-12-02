@@ -19,6 +19,6 @@
       "@/*": ["./src/*"],
     }
   },
-  "include": ["src/*.ts", "src/*.tsx", "src/Button/button.tsx"],
+  "include": ["src/*.ts", "src/*.tsx"],
   "exclude": ["node_modules", "build", "public"]
 }

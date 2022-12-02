@@ -4,7 +4,7 @@ import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
 import { scriptsFilter } from '../utils.js';
 
-import type { Options as swcCompileOptions, Config } from '@swc/core';
+import type { Options as swcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
 import type { TaskConfig, RollupPluginFn, OutputFile } from '../types.js';
 
 const normalizeSwcConfig = (
@@ -14,7 +14,17 @@ const normalizeSwcConfig = (
 ): swcCompileOptions => {
   const { filePath, ext } = file;
   const isTypeScript = isTypescriptOnly(ext, filePath);
-
+  const syntaxFeatures = {
+    decorators: true,
+  };
+  const tsSyntaxFeatures: TsParserConfig = {
+    syntax: 'typescript',
+    tsx: true,
+  };
+  const jsSyntaxFeatures: EsParserConfig = {
+    syntax: 'ecmascript',
+    jsx: true,
+  };
   const commonOptions: swcCompileOptions = {
     jsc: {
       transform: {
@@ -25,39 +35,18 @@ const normalizeSwcConfig = (
         },
         legacyDecorator: true,
       },
+      parser: {
+        ...syntaxFeatures,
+        ...(isTypeScript ? tsSyntaxFeatures : jsSyntaxFeatures),
+      },
       externalHelpers: false,
       loose: false, // Not recommend
     },
     minify: false,
   };
 
-  if (isTypeScript) {
-    return deepmerge.all([
-      commonOptions,
-      {
-        jsc: {
-          parser: {
-            syntax: 'typescript',
-            tsx: true,
-            decorators: true,
-          },
-        },
-      },
-      mergeOptions,
-    ]);
-  }
-
   return deepmerge.all([
     commonOptions,
-    {
-      jsc: {
-        parser: {
-          syntax: 'ecmascript',
-          tsx: true,
-          decorators: true,
-        },
-      },
-    },
     mergeOptions,
   ]);
 };
