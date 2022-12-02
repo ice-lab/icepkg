@@ -59,50 +59,39 @@ const getRollupOutputs: GetRollupOutputs = ({
   const sourcemap = taskConfig?.sourcemap ?? false;
 
   outputFormats.forEach((format) => {
-    const commonOption = {
+    const commonOptions = {
       name,
       format,
       globals,
       sourcemap,
     };
     const output: OutputOptions = {
-      ...commonOption,
+      ...commonOptions,
       plugins: [
         minify && minifyPlugin({ sourcemap }),
       ].filter(Boolean),
     };
-    const defaultFilenamePrefix = getFilenamePrefix('index', format, isES2017);
-    // If entry is an array or and object, don't set output.file.
+    // const defaultFilenamePrefix = getFilenamePrefix('[name]', format, isES2017);
+
     if (typeof taskConfig.entry === 'string') {
-      output.file = join(
-        outputDir,
-        taskConfig?.filename ?
-          (typeof taskConfig.filename === 'string' ? taskConfig.filename : taskConfig.filename({ format, taskConfig, isES2017 })) :
-          `${defaultFilenamePrefix}.production.js`,
-      );
+      output.file = join(outputDir, `${getFilenamePrefix(taskConfig?.filename || 'index', format, isES2017)}.production.js`);
     } else {
-      output.dir = 'dist';
+      // If entry is an array or and object, don't set output.file.
+      output.dir = outputDir;
+      output.entryFileNames = `${getFilenamePrefix('[name]', format, isES2017)}.production.js`;
     }
     outputs.push(output);
 
     if (uncompressedDevelopment) {
       const developmentOutput: OutputOptions = {
-        ...commonOption,
+        ...commonOptions,
       };
       // If `entry` is an array or and object, don't set `output.file`.
       if (typeof taskConfig.entry === 'string') {
-        output.file = join(
-          outputDir,
-          taskConfig?.filename ?
-            (
-              typeof taskConfig.filename === 'string' ?
-                taskConfig.filename :
-                taskConfig.filename({ format, taskConfig, development: uncompressedDevelopment, isES2017 })
-            ) :
-            `${defaultFilenamePrefix}.development.js`,
-        );
+        developmentOutput.file = join(outputDir, `${getFilenamePrefix(taskConfig?.filename || 'index', format, isES2017)}.development.js`);
       } else {
-        output.dir = 'dist';
+        developmentOutput.dir = outputDir;
+        developmentOutput.entryFileNames = `${getFilenamePrefix('[name]', format, isES2017)}.development.js`;
       }
       outputs.push(developmentOutput);
     }

@@ -36,10 +36,10 @@ interface BundleOptions {
    * As the name of the generated file.
    * @default index
    */
-  filename?: |
-  string |
-  ((options: { isES2017: boolean; format: Omit<TaskConfig['formats'][number], 'es2017'>; taskConfig: TaskConfig; development?: boolean }) => string);
-
+  filename?: string;
+  /**
+   * Generate uncompressed bundle for development debug.
+   */
   development?: boolean;
   /**
    * Which type of contents would be generated

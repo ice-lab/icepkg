@@ -17,8 +17,8 @@ const plugin: PkgPlugin = (api) => {
       '.html',
     ];
     config.entry = {
-      avatar: './src/Avatar/index.tsx',
-      button: './src/Button/index.tsx',
+      avatar: './src/Avatar/index',
+      button: './src/Button/index',
     };
     // config.sourcemap = true;
     config.alias = { ...config.alias };
