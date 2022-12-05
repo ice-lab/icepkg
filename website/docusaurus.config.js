@@ -178,7 +178,7 @@ const config = {
       /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
       ({
         hashed: true,
-        language: ['zh'],
+        language: ['zh', 'en'],
         docsRouteBasePath: '/',
       }),
     ],
