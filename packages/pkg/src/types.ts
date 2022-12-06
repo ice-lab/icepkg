@@ -1,7 +1,9 @@
 import type { RollupOptions, Plugin, SourceMapInput, ModuleJSON } from 'rollup';
 import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
 import type { Config } from '@swc/core';
-import { PostCSSPluginConf } from 'rollup-plugin-postcss';
+import type stylesPlugin from 'rollup-plugin-styles';
+
+type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
 export type PlainObject = Record<string, string | boolean | number | object>;
 export type ReverseMap<T> = T[keyof T];
@@ -127,9 +129,9 @@ export interface BundleTaskConfig extends CommonTaskConfig, BundleOptions {
   */
   extensions?: string[];
   /**
-   * Config postcss options.
+   * Config styles options. See https://www.npmjs.com/package/rollup-plugin-styles
    */
-  postcssOptions?: (options: PostCSSPluginConf) => PostCSSPluginConf;
+  stylesOptions?: (options: StylesRollupPluginOptions) => StylesRollupPluginOptions;
 }
 
 export interface TransformTaskConfig extends CommonTaskConfig, TransformOptions {

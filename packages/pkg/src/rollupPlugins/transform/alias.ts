@@ -1,7 +1,7 @@
 /**
  * This plugin is used to handle alias only in transform task
  */
-import { isAbsolute, resolve, relative, join, dirname, win32 } from 'path';
+import { isAbsolute, resolve, relative, join, dirname } from 'path';
 import { init, parse } from 'es-module-lexer';
 import type { ImportSpecifier } from 'es-module-lexer';
 import consola from 'consola';

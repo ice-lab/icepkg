@@ -3,7 +3,7 @@ import escapeStringRegexp from 'escape-string-regexp';
 import deepmerge from 'deepmerge';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import postcss from 'rollup-plugin-postcss';
+import styles from 'rollup-plugin-styles';
 import alias from '@rollup/plugin-alias';
 import autoprefixer from 'autoprefixer';
 import json from '@rollup/plugin-json';
@@ -62,6 +62,7 @@ const getRollupOutputs: GetRollupOutputs = ({
       globals,
       sourcemap: taskConfig.sourcemap,
       exports: 'auto',
+      assetFileNames: '[name][extname]',
     };
 
     const output: OutputOptions = {
@@ -145,7 +146,7 @@ export const normalizeRollupConfig = (
   ctx: PkgContext,
   taskName: ReverseMap<typeof TaskName>,
 ): [RollupPlugin[], RollupOptions] => {
-  const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = taskConfig;
+  const { swcCompileOptions, type, rollupPlugins, rollupOptions } = taskConfig;
   const { rootDir, userConfig, pkg, commandArgs, command } = ctx;
   const commonPlugins = [
     !!taskConfig.babelPlugins?.length && babelPlugin({ plugins: taskConfig.babelPlugins }),
@@ -182,9 +183,11 @@ export const normalizeRollupConfig = (
         })),
       }),
       ...commonPlugins,
-      postcss((taskConfig.postcssOptions || ((options) => options))({
-        plugins: [autoprefixer()],
-        extract: resolve(rootDir, outputDir, 'index.css'),
+      styles((taskConfig.stylesOptions || ((options) => options))({
+        plugins: [
+          autoprefixer(),
+        ],
+        mode: 'extract',
         autoModules: true,
         minimize: taskConfig.minify,
         sourceMap: taskConfig.sourcemap,
