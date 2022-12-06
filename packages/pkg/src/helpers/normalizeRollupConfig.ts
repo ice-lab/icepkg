@@ -56,12 +56,14 @@ const getRollupOutputs: GetRollupOutputs = ({
   const name = taskConfig.name ?? pkg.name;
 
   outputFormats.forEach((format) => {
-    const commonOptions = {
+    const commonOptions: OutputOptions = {
       name,
       format,
       globals,
       sourcemap: taskConfig.sourcemap,
+      exports: 'auto',
     };
+
     const output: OutputOptions = {
       ...commonOptions,
       plugins: [
