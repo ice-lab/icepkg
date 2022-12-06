@@ -1,14 +1,15 @@
 # 配置
 
 ## 配置文件
-若希望对 ICE PKG 的能力进行配置，可在项目根目录中添加名为 `build.config.mts` 的配置文件：
+
+若希望对 ICE PKG 的能力进行配置，推荐在项目根目录中添加名为 `build.config.mts` 的配置文件：
 
 ```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';
 
+// 使用 defineConfig 工具函数以获得更好的类型提示
 export default defineConfig({
-  // ...
-  minify: true,
+  // 配置选项
 });
 ```
 
