@@ -194,7 +194,7 @@ export const normalizeRollupConfig = (
       nodeResolve({ // To locates modules using the node resolution algorithm.
         extensions: [
           '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
-          '.ts', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
+          '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
           ...(taskConfig.extensions || []),
         ],
       }),

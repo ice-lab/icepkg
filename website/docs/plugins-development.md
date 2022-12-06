@@ -208,7 +208,7 @@ const plugin = (api) => {
 > 仅对 Bundle 模式生效
 
 + 类型 `string[]`
-+ 默认值：`['.mjs', '.js', '.json', '.node', '.ts', '.tsx', '.mts', '.cjs', '.cts']`
++ 默认值：`['.mjs', '.js', '.json', '.node', '.jsx', '.ts', '.tsx', '.mts', '.cjs', '.cts']`
 
 配置解析的文件后缀名，这样在引入模块时不需要带后缀名。
 
