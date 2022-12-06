@@ -32,7 +32,6 @@ function getUserConfig() {
       validation: (val: boolean | 'inline') => {
         return typeof val === 'boolean' || val === 'inline';
       },
-      defaultValue: false,
       setConfig: (config: TaskConfig, sourcemap: UserConfig['sourceMaps']) => {
         return mergeValueToTaskConfig(config, 'sourcemap', sourcemap);
       },

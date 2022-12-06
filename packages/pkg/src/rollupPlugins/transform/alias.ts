@@ -8,10 +8,11 @@ import consola from 'consola';
 import MagicString from 'magic-string';
 import { scriptsFilter, cwd, normalizeSlashes } from '../../utils.js';
 import { Plugin } from 'rollup';
-
+import { TaskConfig } from 'src/types.js';
 
 interface AliasPluginOptions {
-  alias: Record<string, string>;
+  alias: TaskConfig['alias'];
+  sourcemap: TaskConfig['sourcemap'];
 }
 
 async function redirectImport(
@@ -46,7 +47,7 @@ async function redirectImport(
   return str;
 }
 
-const aliasPlugin = (options: AliasPluginOptions = { alias: {} }): Plugin => {
+const aliasPlugin = (options: AliasPluginOptions): Plugin => {
   return {
     name: 'ice-pkg:transform-alias',
 
@@ -55,7 +56,7 @@ const aliasPlugin = (options: AliasPluginOptions = { alias: {} }): Plugin => {
       if (!code || !scriptsFilter(id)) {
         return null;
       }
-      const { alias: originalAlias } = options;
+      const { alias: originalAlias = {}, sourcemap } = options;
       await init;
       let imports: readonly ImportSpecifier[] = [];
       try {
@@ -91,10 +92,10 @@ const aliasPlugin = (options: AliasPluginOptions = { alias: {} }): Plugin => {
 
       return {
         code: str.toString(),
-        map: str.generateMap({
+        map: sourcemap ? str.generateMap({
           hires: true,
           includeContent: true,
-        }),
+        }) : null,
       };
     },
   };

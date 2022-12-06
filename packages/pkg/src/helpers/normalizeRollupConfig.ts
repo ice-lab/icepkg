@@ -50,31 +50,27 @@ const getRollupOutputs: GetRollupOutputs = ({
 }) => {
   const outputs: OutputOptions[] = [];
 
-  const uncompressedDevelopment = taskConfig?.development;
-  const outputFormats = (taskConfig?.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
-  const minify = taskConfig?.minify ?? command === 'build';
-
-  const name = taskConfig?.name ?? pkg.name;
-
-  const sourcemap = taskConfig?.sourcemap ?? false;
+  const uncompressedDevelopment = taskConfig.development;
+  const outputFormats = (taskConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
+  const minify = taskConfig.minify ?? command === 'build';
+  const name = taskConfig.name ?? pkg.name;
 
   outputFormats.forEach((format) => {
     const commonOptions = {
       name,
       format,
       globals,
-      sourcemap,
+      sourcemap: taskConfig.sourcemap,
     };
     const output: OutputOptions = {
       ...commonOptions,
       plugins: [
-        minify && minifyPlugin({ sourcemap }),
+        minify && minifyPlugin({ sourcemap: taskConfig.sourcemap }),
       ].filter(Boolean),
     };
-    // const defaultFilenamePrefix = getFilenamePrefix('[name]', format, isES2017);
 
     if (typeof taskConfig.entry === 'string') {
-      output.file = join(outputDir, `${getFilenamePrefix(taskConfig?.filename || 'index', format, isES2017)}.production.js`);
+      output.file = join(outputDir, `${getFilenamePrefix(taskConfig.filename || 'index', format, isES2017)}.production.js`);
     } else {
       // If entry is an array or and object, don't set output.file.
       output.dir = outputDir;
@@ -88,7 +84,7 @@ const getRollupOutputs: GetRollupOutputs = ({
       };
       // If `entry` is an array or and object, don't set `output.file`.
       if (typeof taskConfig.entry === 'string') {
-        developmentOutput.file = join(outputDir, `${getFilenamePrefix(taskConfig?.filename || 'index', format, isES2017)}.development.js`);
+        developmentOutput.file = join(outputDir, `${getFilenamePrefix(taskConfig.filename || 'index', format, isES2017)}.development.js`);
       } else {
         developmentOutput.dir = outputDir;
         developmentOutput.entryFileNames = `${getFilenamePrefix('[name]', format, isES2017)}.development.js`;
@@ -113,7 +109,7 @@ function getExternalsAndGlobals(
     'regenerator-runtime',
   ];
 
-  const externalsConfig = taskConfig?.externals ?? false;
+  const externalsConfig = taskConfig.externals ?? false;
 
   switch (externalsConfig) {
     case true:
@@ -150,7 +146,7 @@ export const normalizeRollupConfig = (
   const { swcCompileOptions, type, outputDir, rollupPlugins, rollupOptions } = taskConfig;
   const { rootDir, userConfig, pkg, commandArgs, command } = ctx;
   const commonPlugins = [
-    taskConfig?.babelPlugins?.length && babelPlugin({ plugins: taskConfig.babelPlugins }),
+    !!taskConfig.babelPlugins?.length && babelPlugin({ plugins: taskConfig.babelPlugins }),
     swcPlugin({
       type,
       extraSwcOptions: swcCompileOptions,
@@ -162,11 +158,12 @@ export const normalizeRollupConfig = (
     resolvedPlugins = [
       // dts plugin should append ahead for including source code.
       // And dts plugin would never change the contents of file.
-      dtsPlugin(taskConfig.entry, userConfig?.generateTypesForJs),
+      dtsPlugin(taskConfig.entry, userConfig.generateTypesForJs),
       ...resolvedPlugins,
       ...commonPlugins,
       aliasPlugin({
-        alias: taskConfig.alias || {},
+        alias: taskConfig.alias,
+        sourcemap: taskConfig.sourcemap,
       }),
     ];
 
@@ -183,12 +180,12 @@ export const normalizeRollupConfig = (
         })),
       }),
       ...commonPlugins,
-      postcss((taskConfig?.postcssOptions || ((options) => options))({
+      postcss((taskConfig.postcssOptions || ((options) => options))({
         plugins: [autoprefixer()],
         extract: resolve(rootDir, outputDir, 'index.css'),
         autoModules: true,
         minimize: taskConfig.minify,
-        sourceMap: taskConfig?.sourcemap,
+        sourceMap: taskConfig.sourcemap,
       })),
       image(),
       json(),
@@ -231,7 +228,7 @@ export const normalizeRollupConfig = (
       {
         plugins: [
           // Custom plugins will add ahead
-          ...(taskConfig?.rollupOptions?.plugins || []),
+          ...(taskConfig.rollupOptions?.plugins || []),
           ...resolvedPlugins,
         ],
       },

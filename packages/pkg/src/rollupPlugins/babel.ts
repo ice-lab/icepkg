@@ -49,7 +49,7 @@ const babelPlugin = ({ plugins }: { plugins: babel.PluginItem[] }): Plugin => {
         generatorOpts: {
           decoratorsBeforeExport: true,
         },
-        plugins: plugins ?? [],
+        plugins,
         sourceFileName: id,
       });
       return {

@@ -10,7 +10,7 @@ export const mergeConfigOptions = (
   cfg: PkgTaskConfig,
   ctx: PkgContext,
 ): TaskLoaderConfig => {
-  const { rootDir } = ctx;
+  const { rootDir, command } = ctx;
   const { config: taskConfig, name: taskName } = cfg;
   const normalizedConfig = { ...taskConfig };
   const { type, entry, outputDir, swcCompileOptions = {}, define } = normalizedConfig;
@@ -35,6 +35,8 @@ export const mergeConfigOptions = (
     define ?? {},
   ));
 
+  normalizedConfig.sourcemap = normalizedConfig.sourcemap ?? command === 'start';
+
   // Configure swcOptions
   const swcOptionOverride = deepmerge(
     isBundleTask
@@ -54,6 +56,7 @@ export const mergeConfigOptions = (
 
   normalizedConfig.rollupPlugins = resolvedPlugins;
   normalizedConfig.rollupOptions = resolvedRollupOptions;
+
   return {
     ...normalizedConfig,
     name: taskName,

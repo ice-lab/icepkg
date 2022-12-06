@@ -14,7 +14,7 @@ interface CachedContent extends DtsInputFile {
 
 const cachedContents: Record<string, CachedContent> = {};
 
-// dtsPlugin is used to generate declartion file when transforming
+// dtsPlugin is used to generate declaration file when transforming
 function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
   const ids: string[] = [];
   return {

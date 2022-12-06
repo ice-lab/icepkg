@@ -99,7 +99,7 @@ export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: 
     if (transformResult === null ||
       (isObject(transformResult) && transformResult.code === null)
     ) {
-      // 不存在 transfrom 逻辑，code 保持不变
+      // 不存在 transform 逻辑，code 保持不变
     } else {
       files[i].code = code = transformResult.code;
       files[i].map = map = transformResult.map;
