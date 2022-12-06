@@ -89,7 +89,7 @@ importers:
 
   packages/create-pkg:
     specifiers:
-      '@iceworks/generate-material': ^1.0.12
+      '@iceworks/generate-material': ^1.1.0
       cac: ^6.7.12
       consola: ^2.15.3
       fs-extra: ^10.0.0
@@ -99,7 +99,7 @@ importers:
       typescript: ^4.5.4
       validate-npm-package-name: ^3.0.0
     dependencies:
-      '@iceworks/generate-material': 1.0.13
+      '@iceworks/generate-material': 1.1.0
       cac: 6.7.12
       consola: 2.15.3
       fs-extra: 10.1.0
@@ -4110,8 +4110,8 @@ packages:
       - typescript
     dev: true
 
-  /@iceworks/generate-material/1.0.13:
-    resolution: {integrity: sha512-r/5LZT4BbCOr8bndklGNVOuO9Tq+MY0RkhkBcI8JwLTVXe7odNtzh7+GtdlmcoIgX8ISnORBOnlGkqvLEky/TQ==}
+  /@iceworks/generate-material/1.1.0:
+    resolution: {integrity: sha512-7wmX+SfGe4Ys9BTS9+GhhssKlH0bmDo9LFBcPPJRcH6qS48diH1etbwzW2/jKNSRAESnXHJEu12yQwXu8OwWAw==}
     engines: {node: '>=12'}
     dependencies:
       camelcase: 5.3.1

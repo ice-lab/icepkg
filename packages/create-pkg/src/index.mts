@@ -24,10 +24,11 @@ const cli = cac('@ice/create-pkg');
       ignoreOptionDefaultValue: true,
     })
     .option('--template <template>', 'use a template e.g.: @ice/template-pkg-react')
+    .option('--npmName <npmName>', 'use a template e.g.: @ice/react-component')
     .action(async (projectDir, options) => {
       const targetDirname = projectDir ?? '.';
       const dirPath = path.join(process.cwd(), targetDirname);
-      await create(dirPath, targetDirname, options.template);
+      await create(dirPath, targetDirname, options.template, options.npmName);
     });
   cli.help();
 
@@ -44,7 +45,7 @@ const cli = cac('@ice/create-pkg');
     process.exit(1);
   });
 
-async function create(dirPath: string, dirname: string, template?: string): Promise<void> {
+async function create(dirPath: string, dirname: string, template?: string, npmName?: string): Promise<void> {
   const info = await getInfo();
   await fs.ensureDir(dirPath);
   const empty = await checkEmpty(dirPath);
@@ -67,9 +68,9 @@ async function create(dirPath: string, dirname: string, template?: string): Prom
     templateNpmName = `@ice/template-pkg-${projectType}`;
   }
 
-  await downloadMaterialTemplate(tempDir, templateNpmName);
+  npmName = npmName ?? await inquirePackageName();
 
-  const npmName = await inquirePackageName();
+  await downloadMaterialTemplate(tempDir, templateNpmName);
 
   await generateMaterial({
     rootDir: dirPath,
@@ -78,7 +79,6 @@ async function create(dirPath: string, dirname: string, template?: string): Prom
     },
     materialTemplateDir: tempDir,
     materialType: 'component',
-    // @ts-expect-error builder type is not existed
     builder: '@ali/builder-ice-pkg',
   });
 
