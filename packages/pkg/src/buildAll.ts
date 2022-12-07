@@ -1,4 +1,3 @@
-
 import fs from 'fs-extra';
 import { performance } from 'perf_hooks';
 import { reportSize } from './helpers/reportSize.js';
@@ -10,6 +9,14 @@ import { timeFrom } from './utils.js';
 import type { PkgContext, TaskLoaderConfig, OutputFile, OutputResult } from './types.js';
 
 export const buildAll = async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
+  const { command } = ctx;
+
+  if (command === 'build') {
+    // Empty outputDir before run the task.
+    const outputDirs = cfgArrs.map((cfg) => cfg.outputDir).filter(Boolean);
+    outputDirs.forEach((outputDir) => fs.emptyDirSync(outputDir));
+  }
+
   const outputResults: OutputResult[] = [];
   for (let c = 0; c < cfgArrs.length; ++c) {
     const taskLoaderConfig = cfgArrs[c];

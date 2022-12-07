@@ -6,13 +6,14 @@ import { createLogger } from '../helpers/logger.js';
 import type { BundleTaskLoaderConfig, OutputFile, OutputResult } from '../types.js';
 
 export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
-  const logger = createLogger(cfg.name);
+  const { rollupOptions, name } = cfg;
+
+  const logger = createLogger(name);
 
   const bundleStart = performance.now();
 
-  const { rollupOptions } = cfg;
-
   logger.debug('Build start...');
+
   const bundle = await rollup.rollup(rollupOptions);
 
   const rollupOutputOptions = toArray(rollupOptions.output);

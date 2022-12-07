@@ -59,8 +59,6 @@ export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: 
   // @ts-ignore FIXME: ignore
   await container.buildStart(cfg);
 
-  fs.removeSync(outputDir);
-
   for (let i = 0; i < files.length; ++i) {
     const traverseFileStart = performance.now();
     const dest = resolve(outputDir, files[i].filePath);
