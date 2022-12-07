@@ -15,6 +15,7 @@ import aliasPlugin from '../rollupPlugins/transform/alias.js';
 import { builtinNodeModules } from './builtinModules.js';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
+import replace from '@rollup/plugin-replace';
 
 import type { Plugin as RollupPlugin, RollupOptions, OutputOptions } from 'rollup';
 import { BundleTaskConfig, ReverseMap, TaskName, TaskConfig, PkgContext } from '../types.js';
@@ -176,6 +177,12 @@ export const normalizeRollupConfig = (
   if (type === 'bundle') {
     resolvedPlugins = [
       ...resolvedPlugins,
+      replace({
+        values: {
+          ...taskConfig.define,
+        },
+        preventAssignment: true,
+      }),
       alias({
         entries: Object.entries(taskConfig.alias || {}).map(([key, value]) => ({
           find: key,

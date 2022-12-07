@@ -2,7 +2,7 @@ import { ReverseMap, TaskConfig, TaskName } from '../types.js';
 
 import type { Config, ModuleConfig } from '@swc/core';
 
-export const getDefaultBundleSwcConfig = (taskConfig: TaskConfig, taskName: ReverseMap<typeof TaskName>): Config => {
+export const getDefaultBundleSwcConfig = (taskName: ReverseMap<typeof TaskName>): Config => {
   const target = taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5';
 
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? {
@@ -20,15 +20,6 @@ export const getDefaultBundleSwcConfig = (taskConfig: TaskConfig, taskName: Reve
   return {
     jsc: {
       target,
-      transform: {
-        optimizer: {
-          globals: {
-            vars: {
-              ...taskConfig.define,
-            },
-          },
-        },
-      },
     },
     minify: false,
     // Always generate map in bundle mode,

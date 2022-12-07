@@ -30,7 +30,7 @@ export const mergeConfigOptions = (
     {
       // Insert __DEV__ for users, can be overridden too.
       __DEV__: "process.env.NODE_ENV === 'development'",
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.NODE_ENV': process.env.NODE_ENV,
     },
     define ?? {},
   ));
@@ -40,7 +40,7 @@ export const mergeConfigOptions = (
   // Configure swcOptions
   const swcOptionOverride = deepmerge(
     isBundleTask
-      ? getDefaultBundleSwcConfig(normalizedConfig, taskName)
+      ? getDefaultBundleSwcConfig(taskName)
       : getDefaultTransformSwcConfig(normalizedConfig, taskName),
     swcCompileOptions,
   );
