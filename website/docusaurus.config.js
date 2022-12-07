@@ -29,7 +29,6 @@ const config = {
             return [
               { type: 'doc', id: 'index' },
               { type: 'doc', id: 'quick-start' },
-              { type: 'doc', id: 'guide/config' },
               { type: 'doc', id: 'guide/abilities' },
               { type: 'doc', id: 'guide/preview' },
               {
@@ -43,6 +42,7 @@ const config = {
                   { type: 'doc', id: 'scenarios/web' },
                 ],
               },
+              { type: 'doc', id: 'guide/config' },
               { type: 'doc', id: 'plugins-development' },
             ];
           },
