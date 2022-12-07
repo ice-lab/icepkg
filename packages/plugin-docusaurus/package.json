@@ -16,8 +16,8 @@
     "!es2017/**/*.map"
   ],
   "scripts": {
-    "watch": "pnpm exec ../pkg/lib/cli.js start",
-    "build": "rm -rf es2017 esm && chmod 777 ../pkg/lib/cli.js && pnpm exec ../pkg/lib/cli.js build",
+    "watch": "ice-pkg start",
+    "build": "ice-pkg build",
     "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
     "prepublishOnly": "pnpm run-s lint build"
   },

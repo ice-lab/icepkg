@@ -5,8 +5,8 @@ import consola from 'consola';
 import { cac } from 'cac';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
-import { require } from './utils.js';
-import componentService from './index.js';
+import { require } from '../lib/utils.js';
+import componentService from '../lib/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

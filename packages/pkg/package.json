@@ -6,7 +6,7 @@
   "type": "module",
   "exports": "./lib/index.js",
   "bin": {
-    "ice-pkg": "./lib/cli.js"
+    "ice-pkg": "./bin/cli.mjs"
   },
   "files": [
     "lib",
