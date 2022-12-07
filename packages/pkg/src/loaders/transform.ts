@@ -138,7 +138,7 @@ export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: 
   logger.info(`⚡️ Build success in ${timeFrom(transformStart)}`);
 
   if (isTransformDistContainingSWCHelpers && !isSWCHelpersDeclaredInDependency) {
-    logger.error('⚠️ The transformed dist contains @swc/helpers, please make sure @swc/helpers is installed as a dependency.');
+    logger.error('⚠️ The transformed dist contains @swc/helpers, please run `npm i @swc/helpers -S` command to install it as dependency. See https://pkg.ice.work/guide/abilities for more detail.');
     process.exit(1);
   }
 
