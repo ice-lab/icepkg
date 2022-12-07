@@ -1,4 +1,4 @@
-import type { RollupOptions, Plugin, SourceMapInput, ModuleJSON } from 'rollup';
+import type { RollupOptions, Plugin, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
 import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
 import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styles';
@@ -183,6 +183,7 @@ export interface OutputResult {
   outputFiles: OutputFile[];
   // Only exist in rollup bundle task
   modules?: ModuleJSON[];
+  outputs?: Array<RollupOutput['output']>;
 }
 
 export interface UserConfig {

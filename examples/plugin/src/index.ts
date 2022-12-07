@@ -26,7 +26,7 @@ const plugin: PkgPlugin = (api) => {
     // config.bundle.filename = ({ format, development, isES2017 }) => {
     //   return `index${(format === 'umd' || format === 'cjs') ? `.${format}` : ''}${isES2017 ? '-2017' : ''}${development ? 'development' : ''}.js`;
     // };
-    config.postcssOptions = (options) => {
+    config.stylesOptions = (options) => {
       return options;
     };
     return config;

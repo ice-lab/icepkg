@@ -29,7 +29,7 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@ice/pkg": "^1.0.0",
+    "@ice/pkg": "workspace:*",
     "@ice/pkg-plugin-docusaurus": "^1.0.0",
     "pkg-plugin-example": "^0.0.0",
     "react": "^17.0.0",

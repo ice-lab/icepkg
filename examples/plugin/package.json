@@ -12,7 +12,7 @@
     "watch": "tsc -w"
   },
   "devDependencies": {
-    "@ice/pkg": "^1.0.0",
+    "@ice/pkg": "workspace:*",
     "typescript": "^4.5.4"
   },
   "peerDependencies": {

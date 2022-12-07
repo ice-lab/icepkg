@@ -15,12 +15,12 @@ export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
   logger.debug('Build start...');
   const bundle = await rollup.rollup(rollupOptions);
 
-  const outputs = toArray(rollupOptions.output);
+  const rollupOutputOptions = toArray(rollupOptions.output);
   const outputFiles: OutputFile[] = [];
-
-  for (let o = 0; o < outputs.length; ++o) {
+  const outputs: Array<rollup.RollupOutput['output']> = [];
+  for (let o = 0; o < rollupOutputOptions.length; ++o) {
     // eslint-disable-next-line no-await-in-loop
-    const writeResult = await bundle.write(outputs[o]);
+    const writeResult = await bundle.write(rollupOutputOptions[o]);
 
     writeResult.output.forEach((chunk) => {
       outputFiles.push({
@@ -28,6 +28,7 @@ export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
         code: chunk.type === 'chunk' ? chunk.code : chunk.source,
       });
     });
+    outputs.push(writeResult.output);
   }
 
   await bundle.close();
@@ -37,6 +38,7 @@ export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
   return {
     taskName: cfg.name,
     outputFiles,
+    outputs,
     modules: bundle.cache.modules,
   };
 };
