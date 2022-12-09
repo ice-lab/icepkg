@@ -79,6 +79,10 @@ export interface TransformTaskLoaderConfig extends TransformTaskConfig {
 
 interface CommonTaskConfig {
   /**
+   * Build mode.
+   */
+  mode?: NodeEnvMode;
+  /**
   * Output directory
   */
   outputDir?: string;
@@ -228,3 +232,6 @@ export interface UserConfig {
    */
   bundle?: BundleOptions;
 }
+
+// Set for `process.env.NODE_ENV`
+export type NodeEnvMode = 'development' | 'production' | string;

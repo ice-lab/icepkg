@@ -27,12 +27,25 @@ const plugin: PkgPlugin = (api) => {
       registerTask(TaskName.BUNDLE_ES5, {
         type: 'bundle',
       });
+      // if (userConfig.bundle.development) {
+      //   registerTask(TaskName.BUNDLE_ES5 + '-DEV', {
+      //     type: 'bundle',
+      //     mode: 'development',
+      //   });
+      // }
     }
 
     if (bundleTasks.includes('es2017')) {
       registerTask(TaskName.BUNDLE_ES2017, {
         type: 'bundle',
+        // mode: 'production',
       });
+      // if (userConfig.bundle.development) {
+      //   registerTask(TaskName.BUNDLE_ES2017 + '-DEV', {
+      //     type: 'bundle',
+      //     mode: 'development',
+      //   });
+      // }
     }
   }
 };

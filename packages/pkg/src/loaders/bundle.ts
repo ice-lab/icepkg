@@ -4,18 +4,55 @@ import { performance } from 'perf_hooks';
 import { toArray, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
-import type { BundleTaskLoaderConfig, OutputFile, OutputResult } from '../types.js';
+import type { BundleTaskLoaderConfig, OutputFile, OutputResult, PkgContext } from '../types.js';
 import type { OutputChunk as RollupOutputChunk, OutputAsset as RollupOutputAsset } from 'rollup';
 
-export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
-  const { rollupOptions, name } = cfg;
+interface RawBuildResult {
+  bundle: rollup.RollupBuild;
+  outputs: Array<rollup.RollupOutput['output']>;
+  outputFiles: OutputFile[];
+}
 
+async function runBundle(config: BundleTaskLoaderConfig, ctx: PkgContext): Promise<OutputResult> {
+  const { rollupOptions, name } = config;
   const logger = createLogger(name);
-
   const bundleStart = performance.now();
+  const outputs = [];
+  const outputFiles = [];
+  const modules = [];
 
   logger.debug('Build start...');
 
+  // Prod build.
+  // eslint-disable-next-line no-param-reassign
+  config.mode = 'production';
+  const buildResult = await rawBuild(rollupOptions);
+  buildResult.outputs.forEach((o) => outputs.push(o));
+  buildResult.outputFiles.forEach((o) => outputFiles.push(o));
+  buildResult.bundle.cache.modules.forEach((o) => modules.push(o));
+
+  // Apply dev build if bundle.development is true.
+  if (ctx.userConfig.bundle?.development) {
+    // eslint-disable-next-line no-param-reassign,require-atomic-updates
+    config.mode = 'development';
+    const devBuildResult = await rawBuild(rollupOptions);
+    devBuildResult.outputs.forEach((o) => outputs.push(o));
+    devBuildResult.outputFiles.forEach((o) => outputFiles.push(o));
+    devBuildResult.bundle.cache.modules.forEach((o) => modules.push(o));
+  }
+
+  logger.info(`✅ ${timeFrom(bundleStart)}`);
+
+  return {
+    taskName: config.name,
+    outputFiles,
+    outputs,
+    modules,
+  };
+}
+
+
+async function rawBuild(rollupOptions: rollup.RollupOptions): Promise<RawBuildResult> {
   const bundle = await rollup.rollup(rollupOptions);
 
   const rollupOutputOptions = toArray(rollupOptions.output);
@@ -37,13 +74,11 @@ export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
   }
 
   await bundle.close();
-
-  logger.info(`✅ ${timeFrom(bundleStart)}`);
-
   return {
-    taskName: cfg.name,
-    outputFiles,
+    bundle,
     outputs,
-    modules: bundle.cache.modules,
+    outputFiles,
   };
-};
+}
+
+export default runBundle;

@@ -2,11 +2,11 @@ import { test, expect } from 'vitest';
 import { formatEntry } from '../getTaskIO';
 
 test('formatEntry', () => {
-  expect(formatEntry('src/index')).toEqual({
+  expect(formatEntry('src/index.ts')).toEqual({
     index: 'src/index',
   });
 
-  expect(formatEntry(['src/index', 'src/client'])).toEqual({
+  expect(formatEntry(['src/index.ts', 'src/client.ts'])).toEqual({
     index: 'src/index',
     client: 'src/client',
   });

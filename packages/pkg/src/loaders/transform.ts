@@ -110,7 +110,6 @@ export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: 
       }
     }
 
-    // If soucemaps
     if (map) {
       const standardizedMap = typeof map === 'string' ? map : JSON.stringify(map);
 
@@ -125,7 +124,7 @@ export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: 
     }
 
     if (!isTransformDistContainingSWCHelpers) {
-      isTransformDistContainingSWCHelpers = code.includes('@swc/helpers');
+      isTransformDistContainingSWCHelpers = code?.includes('@swc/helpers');
     }
 
     logger.debug(`Transform file ${files[i].absolutePath}`, timeFrom(traverseFileStart));

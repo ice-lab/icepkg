@@ -9,22 +9,22 @@ import { timeFrom } from './utils.js';
 
 import type { PkgContext, TaskLoaderConfig, OutputFile, OutputResult } from './types.js';
 
-export const buildAll = async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
+export const buildAll = async (configs: TaskLoaderConfig[], ctx: PkgContext) => {
   const { command, rootDir } = ctx;
 
   if (command === 'build') {
     // Empty outputDir before run the task.
-    const outputDirs = cfgArrs.map((cfg) => cfg.outputDir).filter(Boolean);
+    const outputDirs = configs.map((cfg) => cfg.outputDir).filter(Boolean);
     outputDirs.forEach((outputDir) => fs.emptyDirSync(outputDir));
   }
 
   const outputResults: OutputResult[] = [];
-  for (let c = 0; c < cfgArrs.length; ++c) {
-    const taskLoaderConfig = cfgArrs[c];
+  for (let c = 0; c < configs.length; ++c) {
+    const taskLoaderConfig = configs[c];
 
     let outputFiles: OutputFile[] = [];
     if (taskLoaderConfig.type === 'bundle') {
-      const bundleResult = await runBundle(taskLoaderConfig);
+      const bundleResult = await runBundle(taskLoaderConfig, ctx);
       outputResults.push(bundleResult);
       outputFiles = bundleResult.outputFiles;
     }
