@@ -18,7 +18,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
 
 import type { Plugin as RollupPlugin, RollupOptions, OutputOptions } from 'rollup';
-import { BundleTaskConfig, ReverseMap, TaskName, TaskConfig, PkgContext } from '../types.js';
+import { BundleTaskConfig, ReverseMap, TaskName, TaskConfig, PkgContext, NodeEnvMode } from '../types.js';
 
 interface PkgJson {
   name: string;
@@ -39,6 +39,7 @@ type GetRollupOutputs = (options: {
   outputDir: string;
   pkg: PkgJson;
   esVersion: string;
+  mode: NodeEnvMode; // Any additional mode like profiling.
 }) => OutputOptions[];
 const getRollupOutputs: GetRollupOutputs = ({
   globals,
@@ -50,9 +51,8 @@ const getRollupOutputs: GetRollupOutputs = ({
 }) => {
   const outputs: OutputOptions[] = [];
 
-  const uncompressedDevelopment = taskConfig.development;
   const outputFormats = (taskConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
-  const minify = taskConfig.minify ?? command === 'build';
+  const minify = taskConfig.minify ?? taskConfig.mode === 'production';
   const name = taskConfig.name ?? pkg.name;
 
   outputFormats.forEach((format) => {
@@ -72,28 +72,10 @@ const getRollupOutputs: GetRollupOutputs = ({
       ].filter(Boolean),
     };
 
-    if (typeof taskConfig.entry === 'string') {
-      output.file = join(outputDir, `${getFilenamePrefix(taskConfig.filename || 'index', format, esVersion)}.production.js`);
-    } else {
-      // If entry is an array or and object, don't set output.file.
-      output.dir = outputDir;
-      output.entryFileNames = `${getFilenamePrefix('[name]', format, esVersion)}.production.js`;
-    }
+    output.dir = outputDir;
+    output.entryFileNames = () => `${getFilenamePrefix('[name]', format, esVersion)}.${taskConfig.mode}.js`;
+    output.chunkFileNames = () => `${getFilenamePrefix('[hash]', format, esVersion)}.${taskConfig.mode}.js`;
     outputs.push(output);
-
-    if (uncompressedDevelopment) {
-      const developmentOutput: OutputOptions = {
-        ...commonOptions,
-      };
-      // If `entry` is an array or and object, don't set `output.file`.
-      if (typeof taskConfig.entry === 'string') {
-        developmentOutput.file = join(outputDir, `${getFilenamePrefix(taskConfig.filename || 'index', format, esVersion)}.development.js`);
-      } else {
-        developmentOutput.dir = outputDir;
-        developmentOutput.entryFileNames = `${getFilenamePrefix('[name]', format, esVersion)}.development.js`;
-      }
-      outputs.push(developmentOutput);
-    }
   });
 
   return outputs;
@@ -146,7 +128,7 @@ export const normalizeRollupConfig = (
   ctx: PkgContext,
   taskName: ReverseMap<typeof TaskName>,
 ): [RollupPlugin[], RollupOptions] => {
-  const { swcCompileOptions, type, rollupPlugins, rollupOptions } = taskConfig;
+  const { swcCompileOptions, type, rollupPlugins, rollupOptions, mode } = taskConfig;
   const { rootDir, userConfig, pkg, commandArgs, command } = ctx;
   const commonPlugins = [
     !!taskConfig.babelPlugins?.length && babelPlugin({ plugins: taskConfig.babelPlugins }),
@@ -178,6 +160,12 @@ export const normalizeRollupConfig = (
       ...resolvedPlugins,
       replace({
         values: {
+          // Insert __DEV__ for users.
+          // Reference to taskConfig, see loaders/bundle.ts
+          // > config.mode = mode;
+          __DEV__: () => JSON.stringify(taskConfig.mode === 'development'),
+          'process.env.NODE_ENV': () => JSON.stringify(taskConfig.mode),
+          // User define can override above.
           ...taskConfig.define,
         },
         preventAssignment: true,
@@ -233,6 +221,7 @@ export const normalizeRollupConfig = (
           pkg: pkg as PkgJson,
           outputDir: taskConfig.outputDir,
           esVersion: taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5',
+          mode,
         }),
       },
       taskConfig.rollupOptions || {},

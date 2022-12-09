@@ -1,6 +1,12 @@
 import { UserConfig } from './types';
 
 /**
- * Helper function to provide intellisense of use config
+ * Provide intellisense of user config.
  */
-export const defineConfig = (options: UserConfig) => options;
+export const defineConfig = (options: UserConfig | (() => UserConfig)): UserConfig => {
+  if (typeof options === 'function') {
+    return options();
+  } else {
+    return options;
+  }
+};
