@@ -161,6 +161,8 @@ export const normalizeRollupConfig = (
       replace({
         values: {
           // Insert __DEV__ for users.
+          // Reference to taskConfig, see loaders/bundle.ts
+          // > config.mode = mode;
           __DEV__: () => JSON.stringify(taskConfig.mode === 'development'),
           'process.env.NODE_ENV': () => JSON.stringify(taskConfig.mode),
           // User define can override above.
