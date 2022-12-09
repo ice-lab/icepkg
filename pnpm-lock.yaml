@@ -73,6 +73,24 @@ importers:
       '@ice/pkg-plugin-docusaurus': ^1.0.0
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
+      react: ^17.0.0
+      react-dom: ^17.0.0
+      style-unit: ^3.0.4
+    devDependencies:
+      '@ice/pkg': link:../../packages/pkg
+      '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
+      '@types/react': 17.0.52
+      '@types/react-dom': 17.0.18
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      style-unit: 3.0.4
+
+  examples/react-multi-components:
+    specifiers:
+      '@ice/pkg': workspace:*
+      '@ice/pkg-plugin-docusaurus': ^1.0.0
+      '@types/react': ^17.0.0
+      '@types/react-dom': ^17.0.0
       pkg-plugin-example: ^0.0.0
       react: ^17.0.0
       react-dom: ^17.0.0
@@ -85,7 +103,7 @@ importers:
       pkg-plugin-example: link:../plugin
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
-      style-unit: 3.0.4
+      style-unit: 3.0.5
 
   packages/create-pkg:
     specifiers:
@@ -12648,7 +12666,6 @@ packages:
     dependencies:
       '@babel/runtime': 7.18.6
       universal-env: 3.3.3
-    dev: false
 
   /stylehacks/5.1.0_postcss@8.4.14:
     resolution: {integrity: sha512-SzLmvHQTrIWfSgljkQCw2++C9+Ne91d/6Sp92I8c5uHTcy/PgeHamwITIbBW9wnFTY/3ZfSXR9HIL6Ikqmcu6Q==}

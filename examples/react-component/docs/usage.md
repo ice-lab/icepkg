@@ -5,15 +5,11 @@ sidebar_label: 用法
 本 Demo 演示一行文字的用法。
 
 ```jsx preview
-import PkgReactComponentExample from 'pkg-react-component-example';
-import styles from './usage.module.css';
-import noop from './usage.js';
+import Component from 'pkg-react-component-example';
 
 export default function App () {
   return (
-    <div className={styles.usageContainer}>
-      <PkgReactComponentExample />
-    </div>
+    <Component />
   )
 }
 ```

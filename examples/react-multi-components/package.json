@@ -1,5 +1,5 @@
 {
-  "name": "pkg-react-component-example",
+  "name": "pkg-react-multi-components-example",
   "version": "0.0.0",
   "private": true,
   "files": [
@@ -9,11 +9,15 @@
     "dist",
     "build"
   ],
-  "module": "esm/index.js",
+  "module": "esm/Button/index.js",
   "exports": {
-    ".": {
-      "import": "./esm/index.js",
-      "es2017": "./es2017/index.js"
+    "./Button": {
+      "import": "./esm/Button/index.js",
+      "es2017": "./es2017/Button/index.js"
+    },
+    "./Avatar": {
+      "import": "./esm/Avatar/index.js",
+      "es2017": "./es2017/Avatar/index.js"
     },
     "./*": "./*"
   },
@@ -31,6 +35,7 @@
   "devDependencies": {
     "@ice/pkg": "workspace:*",
     "@ice/pkg-plugin-docusaurus": "^1.0.0",
+    "pkg-plugin-example": "^0.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "@types/react": "^17.0.0",
