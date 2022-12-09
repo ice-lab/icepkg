@@ -28,9 +28,8 @@ interface PkgJson {
   [k: string]: string | Record<string, string>;
 }
 
-const getFilenamePrefix = (filename: string, format: string, isES2017: boolean): string => {
-  const formatPrefix = (format === 'umd' || format === 'cjs') ? `.${format}` : '';
-  return `${filename}${formatPrefix}${isES2017 ? '.es2017' : ''}`;
+const getFilenamePrefix = (filename: string, format: string, esVersion: string): string => {
+  return `${filename}.${format}.${esVersion}`;
 };
 
 type GetRollupOutputs = (options: {
@@ -39,7 +38,7 @@ type GetRollupOutputs = (options: {
   globals: Record<string, string>;
   outputDir: string;
   pkg: PkgJson;
-  isES2017: boolean;
+  esVersion: string;
 }) => OutputOptions[];
 const getRollupOutputs: GetRollupOutputs = ({
   globals,
@@ -47,7 +46,7 @@ const getRollupOutputs: GetRollupOutputs = ({
   command,
   pkg,
   outputDir,
-  isES2017,
+  esVersion,
 }) => {
   const outputs: OutputOptions[] = [];
 
@@ -74,11 +73,11 @@ const getRollupOutputs: GetRollupOutputs = ({
     };
 
     if (typeof taskConfig.entry === 'string') {
-      output.file = join(outputDir, `${getFilenamePrefix(taskConfig.filename || 'index', format, isES2017)}.production.js`);
+      output.file = join(outputDir, `${getFilenamePrefix(taskConfig.filename || 'index', format, esVersion)}.production.js`);
     } else {
       // If entry is an array or and object, don't set output.file.
       output.dir = outputDir;
-      output.entryFileNames = `${getFilenamePrefix('[name]', format, isES2017)}.production.js`;
+      output.entryFileNames = `${getFilenamePrefix('[name]', format, esVersion)}.production.js`;
     }
     outputs.push(output);
 
@@ -88,10 +87,10 @@ const getRollupOutputs: GetRollupOutputs = ({
       };
       // If `entry` is an array or and object, don't set `output.file`.
       if (typeof taskConfig.entry === 'string') {
-        developmentOutput.file = join(outputDir, `${getFilenamePrefix(taskConfig.filename || 'index', format, isES2017)}.development.js`);
+        developmentOutput.file = join(outputDir, `${getFilenamePrefix(taskConfig.filename || 'index', format, esVersion)}.development.js`);
       } else {
         developmentOutput.dir = outputDir;
-        developmentOutput.entryFileNames = `${getFilenamePrefix('[name]', format, isES2017)}.development.js`;
+        developmentOutput.entryFileNames = `${getFilenamePrefix('[name]', format, esVersion)}.development.js`;
       }
       outputs.push(developmentOutput);
     }
@@ -233,7 +232,7 @@ export const normalizeRollupConfig = (
           taskConfig,
           pkg: pkg as PkgJson,
           outputDir: taskConfig.outputDir,
-          isES2017: taskName === TaskName.BUNDLE_ES2017,
+          esVersion: taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5',
         }),
       },
       taskConfig.rollupOptions || {},
