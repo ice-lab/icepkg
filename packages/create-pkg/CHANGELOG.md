@@ -2,7 +2,7 @@
 
 ## 1.2.0
 
-- [feat] support `--template` cli option
+- [feat] support `--template` and `--npmName` cli option
 - [chore] remove `@ice/pkg-cli` package
 
 ## 1.1.2

@@ -13,7 +13,10 @@
 - [feat] support bundle minify
 - [feat] support configure postcss options
 - [feat] add default value of `define` config
- 
+- [feat] support multi entry support for bundle mode
+- [feat] support development to both outputs
+- [feat] pretty console output and add dir info
+
 ## 1.2.1
 
 - [fix] update engines in package.json
