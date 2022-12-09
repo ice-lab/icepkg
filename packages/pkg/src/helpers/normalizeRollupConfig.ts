@@ -177,9 +177,7 @@ export const normalizeRollupConfig = (
     resolvedPlugins = [
       ...resolvedPlugins,
       replace({
-        values: {
-          ...taskConfig.define,
-        },
+        values: taskConfig.define,
         preventAssignment: true,
       }),
       alias({

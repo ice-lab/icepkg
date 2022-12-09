@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge';
-import { getDefaultEntryDir, getDefaultEntryFile, getOutputDir } from './getTaskIO.js';
+import { getDefaultEntryDir, formatEntry, getOutputDir } from './getTaskIO.js';
 import { getDefaultBundleSwcConfig, getDefaultTransformSwcConfig } from './defaultSwcConfig.js';
 import { normalizeRollupConfig } from './normalizeRollupConfig.js';
 import { stringifyObject } from '../utils.js';
@@ -15,12 +15,16 @@ export const mergeConfigOptions = (
   const normalizedConfig = { ...taskConfig };
   const { type, entry, outputDir, swcCompileOptions = {}, define } = normalizedConfig;
   const isBundleTask = type === 'bundle';
+  const isTransformTask = type === 'transform';
 
   // Configure task entry
-  normalizedConfig.entry = entry || (
-    // default entry
-    isBundleTask ? getDefaultEntryFile(rootDir) : getDefaultEntryDir(rootDir)
-  );
+  if (isBundleTask) {
+    normalizedConfig.entry = formatEntry(entry);
+  } else if (isTransformTask) {
+    normalizedConfig.entry = getDefaultEntryDir(rootDir);
+  } else {
+    throw new Error('Invalid task type.');
+  }
 
   // Configure task outputDir
   normalizedConfig.outputDir = outputDir || getOutputDir(rootDir, taskName);
@@ -29,8 +33,8 @@ export const mergeConfigOptions = (
   normalizedConfig.define = stringifyObject(deepmerge(
     {
       // Insert __DEV__ for users, can be overridden too.
-      __DEV__: "process.env.NODE_ENV === 'development'",
-      'process.env.NODE_ENV': process.env.NODE_ENV,
+      __DEV__: JSON.stringify(process.env.NODE_ENV === 'development'),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     },
     define ?? {},
   ));

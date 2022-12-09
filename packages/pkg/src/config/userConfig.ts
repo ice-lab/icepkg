@@ -9,8 +9,15 @@ function getUserConfig() {
   const defaultTransformValue = {
     formats: ['esm', 'es2017'],
   };
-
   const userConfig = [
+    {
+      name: 'entry',
+      validation: 'string|object|array',
+      defaultValue: 'src/index',
+      setConfig: (config: TaskConfig, entry: UserConfig['entry']) => {
+        return mergeValueToTaskConfig(config, 'entry', entry);
+      },
+    },
     {
       name: 'alias',
       validation: 'object',

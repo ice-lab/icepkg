@@ -1,9 +1,11 @@
+import { join } from 'path';
 import * as rollup from 'rollup';
 import { performance } from 'perf_hooks';
 import { toArray, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
 import type { BundleTaskLoaderConfig, OutputFile, OutputResult } from '../types.js';
+import type { OutputChunk as RollupOutputChunk, OutputAsset as RollupOutputAsset } from 'rollup';
 
 export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
   const { rollupOptions, name } = cfg;
@@ -22,9 +24,11 @@ export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
   for (let o = 0; o < rollupOutputOptions.length; ++o) {
     // eslint-disable-next-line no-await-in-loop
     const writeResult = await bundle.write(rollupOutputOptions[o]);
-
-    writeResult.output.forEach((chunk) => {
+    const distDir = rollupOutputOptions[o].dir;
+    writeResult.output.forEach((chunk: RollupOutputChunk | RollupOutputAsset) => {
       outputFiles.push({
+        absolutePath: chunk['facadeModuleId'],
+        dest: join(distDir, chunk.fileName),
         filename: chunk.fileName,
         code: chunk.type === 'chunk' ? chunk.code : chunk.source,
       });
@@ -34,7 +38,7 @@ export default async (cfg: BundleTaskLoaderConfig): Promise<OutputResult> => {
 
   await bundle.close();
 
-  logger.info(`⚡️ Build success in ${timeFrom(bundleStart)}`);
+  logger.info(`✅ ${timeFrom(bundleStart)}`);
 
   return {
     taskName: cfg.name,

@@ -188,6 +188,10 @@ export interface OutputResult {
 
 export interface UserConfig {
   /**
+   * Entry for build.
+   */
+  entry?: string | string[] | Record<string, string>;
+  /**
    * Alias to file system paths
    * @default {}
    */
