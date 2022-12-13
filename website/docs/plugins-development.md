@@ -287,7 +287,7 @@ ICE PKG 插件提供以下生命周期钩子：
 | ------------------- | ----------------------------------------------------- | --------------------- |
 | before.build.load   | { args: CommandArgs; config: PkgConfig[] } | 获取所有任务配置后|
 | before.build.run    | { args: CommandArgs; config: PkgConfig[]  } | 编译执行之前  |
-| after.build.compile | { taskName: string; outputFiles: OutputFile[]; modules?: rollup.ModuleJSON[] } | 编译结束              |
+| after.build.compile | { taskName: string; outputFiles: OutputFile[]; outputs?: Array<rollup.RollupOutput['output']>; modules?: rollup.RollupCache['modules'] } | 编译结束              |
 
 + start 命令
 
