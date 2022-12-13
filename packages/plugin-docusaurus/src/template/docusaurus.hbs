@@ -21,7 +21,14 @@ const config = {
 
   plugins: [
     '{{sassDocusaurusPluginPath}}',
-    '{{lessDocusaurusPluginPath}}',
+    [
+      '{{lessDocusaurusPluginPath}}', 
+      { 
+        lessOptions: {
+          javascriptEnabled: true,
+        }
+      }
+    ],
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
   ],
 

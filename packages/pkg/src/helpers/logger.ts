@@ -18,12 +18,12 @@ enum LogLevel {
 const colorize = (type: LogLevel) => (msg: string) => {
   const color =
     type === LogLevel.Info
-      ? 'blue'
+      ? 'green'
       : type === LogLevel.Error
         ? 'red'
         : type === LogLevel.Warn
           ? 'yellow'
-          : 'green';
+          : 'white';
   return picocolors[color](msg);
 };
 

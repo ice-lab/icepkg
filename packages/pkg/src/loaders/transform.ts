@@ -6,13 +6,13 @@ import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom, cwd } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
-import type { PkgContext, TaskLoaderConfig, OutputFile } from '../types.js';
+import type { PkgContext, TransformTaskLoaderConfig, OutputFile } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
 const pkg = loadPkg(cwd);
 const isSWCHelpersDeclaredInDependency = Boolean(pkg?.dependencies?.['@swc/helpers']);
 
-export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContext) {
+export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: PkgContext) {
   let isTransformDistContainingSWCHelpers = false;
   const { rootDir, userConfig } = ctx;
   const { outputDir, entry, rollupPlugins } = cfg;
@@ -59,8 +59,6 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
   // @ts-ignore FIXME: ignore
   await container.buildStart(cfg);
 
-  fs.removeSync(outputDir);
-
   for (let i = 0; i < files.length; ++i) {
     const traverseFileStart = performance.now();
     const dest = resolve(outputDir, files[i].filePath);
@@ -97,9 +95,9 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
     const transformResult = await container.transform(code, files[i].absolutePath);
 
     if (transformResult === null ||
-        (isObject(transformResult) && transformResult.code === null)
+      (isObject(transformResult) && transformResult.code === null)
     ) {
-      // 不存在 transfrom 逻辑，code 保持不变
+      // 不存在 transform 逻辑，code 保持不变
     } else {
       files[i].code = code = transformResult.code;
       files[i].map = map = transformResult.map;
@@ -112,7 +110,6 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
       }
     }
 
-    // If soucemaps
     if (map) {
       const standardizedMap = typeof map === 'string' ? map : JSON.stringify(map);
 
@@ -127,7 +124,7 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
     }
 
     if (!isTransformDistContainingSWCHelpers) {
-      isTransformDistContainingSWCHelpers = code.includes('@swc/helpers');
+      isTransformDistContainingSWCHelpers = code?.includes('@swc/helpers');
     }
 
     logger.debug(`Transform file ${files[i].absolutePath}`, timeFrom(traverseFileStart));
@@ -135,10 +132,10 @@ export default async function runTransform(cfg: TaskLoaderConfig, ctx: PkgContex
 
   await container.close();
 
-  logger.info(`⚡️ Build success in ${timeFrom(transformStart)}`);
+  logger.info(`✅ ${timeFrom(transformStart)}`);
 
   if (isTransformDistContainingSWCHelpers && !isSWCHelpersDeclaredInDependency) {
-    logger.error('⚠️ The transformed dist contains @swc/helpers, please make sure @swc/helpers is installed as a dependency.');
+    logger.error('⚠️ The transformed dist contains @swc/helpers, please run `npm i @swc/helpers -S` command to install it as dependency. See https://pkg.ice.work/guide/abilities for more detail.');
     process.exit(1);
   }
 

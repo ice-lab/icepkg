@@ -1,10 +1,15 @@
 {
-  "files": [],
-  "references": [
-    { "path": "packages/ice-npm-utils" },
-    { "path": "packages/pkg" },
-    { "path": "packages/plugin-component" },
-    { "path": "packages/plugin-docusaurus" },
-    { "path": "packages/plugin-rax-component" }
-  ]
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  }
 }

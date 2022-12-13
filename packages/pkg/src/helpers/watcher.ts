@@ -1,13 +1,17 @@
 import * as chokidar from 'chokidar';
-import { toArray, unique } from '../utils.js';
+import { getEntryItems, toArray, unique } from '../utils.js';
 import { createLogger } from './logger.js';
 
 import type { TaskConfig } from '../types';
 
-export const createWatcher = (cfgs: TaskConfig[]) => {
+export const createWatcher = (taskConfigs: TaskConfig[]) => {
   const logger = createLogger('watcher');
-  const inputs = unique(cfgs.map((cfg) => cfg.entry));
-  const outputs = unique(cfgs.map((cfg) => cfg.outputDir));
+  let inputs: string[] = [];
+  taskConfigs.forEach((cfg) => {
+    inputs.push(...getEntryItems(cfg.entry));
+  });
+  inputs = unique(inputs);
+  const outputs = unique(taskConfigs.map((cfg) => cfg.outputDir));
 
   const ignoredPaths = [
     '**/{.git,node_modules}/**',

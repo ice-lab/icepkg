@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1
+
+- [feat] support configure docusaurus outputDir
+- [feat] enable `lessOptions.javascriptEnabled = true` options to support antd component
+- [fix] can resolve `exports` in package.json
+
 ## 1.4.0
 
 - [feat] support scan qrcode at mobile preview

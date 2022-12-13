@@ -1,0 +1,22 @@
+{
+  "name": "pkg-plugin-example",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "type": "module",
+  "exports": "./lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "@ice/pkg": "workspace:*",
+    "typescript": "^4.5.4"
+  },
+  "peerDependencies": {
+    "@ice/pkg": "^1.0.0"
+  },
+  "private": true
+}

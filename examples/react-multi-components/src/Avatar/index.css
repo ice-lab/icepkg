@@ -1,0 +1,7 @@
+.pkg-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background-color: rgb(135, 208, 104);
+}

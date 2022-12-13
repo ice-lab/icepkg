@@ -63,6 +63,10 @@ export interface PluginDocusaurusOptions {
    * List of locales deployed on your site. Must contain defaultLocale.
    */
   locales?: string[];
+  /**
+   * Docusaurus output dir.
+   */
+  outputDir?: string;
 }
 
 export interface ConfigureDocusaurusOptions extends PluginDocusaurusOptions {
