@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0
+
+- [fix] bump version of build-scripts@2.0.0
+
+
 ## 1.3.0
 
 - [feat] pass modules to `after.build.compile` callback
