@@ -1,8 +1,42 @@
 # Changelog
 
+## 1.4.0
+
+- [fix] bump version of build-scripts@2.0.0
+
+
+## 1.3.0
+
+- [feat] pass modules to `after.build.compile` callback
+- [feat] support cjs bundle task
+- [feat] support configure `alias` in plugin
+- [feat] support configure `extensions` in plugin
+- [feat] support configure `babelPlugins` in plugin
+- [feat] support bundle analyzer
+- [feat] support process assets in bundle mode
+- [feat] support configure `externals` in plugin
+- [feat] support bundle minify
+- [feat] support configure postcss options
+- [feat] add default value of `define` config
+- [feat] support multi entry support for bundle mode
+- [feat] support development to both outputs
+- [feat] pretty console output and add dir info
+
+## 1.2.1
+
+- [fix] update engines in package.json
+
+## 1.2.0
+
+- [feat] support json in bundle task
+- [fix] can't transform d.ts file
+- [fix] error when generating types for js files
+- [refactor] exit process is @swc/helpers is not installed
+
 ## 1.1.2
 
-- [fix] bump version of build-scripts@2.0.0-24
+- [fix] alias not work in transform mode
+>>>>>>> release-next
 
 ## 1.1.1
 

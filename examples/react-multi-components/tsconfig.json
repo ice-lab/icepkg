@@ -1,0 +1,24 @@
+{
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "compilerOptions": {
+    "outDir": "build",
+    "module": "esnext",
+    "target": "esnext",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "allowJs": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"],
+    }
+  },
+  "include": ["src/*.ts", "src/*.tsx"],
+  "exclude": ["node_modules", "build", "public"]
+}

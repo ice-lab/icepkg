@@ -1,28 +1,17 @@
-const crypto = require('crypto');
-const path = require('path');
-const fse = require('fs-extra');
-const visit = require('unist-util-visit');
-const resolveImports = require('./resolveImports');
 
-const DEMO_PREFIX = 'IcePkgDemo';
+const path = require('path');
+const visit = require('unist-util-visit');
+const checkCodeLang = require('./checkCodeLang.js');
+const { getDemoFileInfo, getPageFileInfo } = require('./getFileInfo.js');
+const genDemoPages = require('./genDemoPages.js');
+
 const rootDir = process.cwd();
 const previewerComponentPath = path.join(__dirname, '../Previewer/index.js');
-const demoDir = path.join(rootDir, '.docusaurus/demos');
-const pagesDir = path.join(rootDir, '.docusaurus/pages');
 
 const escapeCode = (code) => {
   return (code || '')
     .replace(/`/g, '&#x60;')
     .replace(/\$/g, '&#36;');
-};
-
-/** Use the md5 value of docPath */
-const uniqueFilename = (originalDocPath, count) => {
-  const hash = crypto.createHash('md5');
-  hash.update(originalDocPath);
-  const hashValue = hash.digest('hex');
-
-  return `${DEMO_PREFIX}${hashValue}${count}`;
 };
 
 /**
@@ -35,39 +24,28 @@ const plugin = (options) => {
 
   const transformer = async (ast, vfile) => {
     const demosMeta = [];
-    let id = 0;
 
     await visit(ast, 'code', (node, index) => {
       if (node.meta === 'preview') {
         const { lang } = node;
-        if (!['tsx', 'jsx'].includes(lang)) {
-          throw new Error(`
-            Found code block with lang ${lang}.\n\
-            ${lang} is not supported in code preview.
-          `);
-        }
-
-        fse.ensureDirSync(demoDir);
-
-        const demoFilename = uniqueFilename(vfile.path, ++id);
-        const filePath = path.join(demoDir, `${demoFilename}.${lang}`);
-        const resolvedCode = resolveImports(node.value, vfile.path);
-
-        fse.writeFileSync(filePath, resolvedCode, 'utf-8');
-
-        fse.ensureDirSync(pagesDir);
-        const pageDemo = path.join(pagesDir, `${demoFilename}.jsx`);
-        const pageCode = `
-          import Demo from '${filePath}';
-          export default Demo;
-        `;
-        fse.writeFileSync(pageDemo, pageCode, 'utf-8');
+        checkCodeLang(lang);
+        const { demoFilename, demoFilepath } = getDemoFileInfo({
+          rootDir,
+          filepath: vfile.path,
+          lang,
+        });
+        const { pageFilename, pageFileCode } = getPageFileInfo({
+          rootDir,
+          demoFilepath,
+          demoFilename,
+        });
+        genDemoPages({ filepath: vfile.path, code: node.value, demoFilename, demoFilepath, pageFilename, pageFileCode });
 
         demosMeta.push({
           code: node.value,
           idx: index,
-          uniqueName: demoFilename,
-          filePath,
+          demoFilename,
+          demoFilepath,
           url: baseUrl.startsWith('/') ? path.join(baseUrl, 'pages', demoFilename) : `/${path.join(baseUrl, 'pages', demoFilename)}`,
         });
       }
@@ -81,16 +59,24 @@ const plugin = (options) => {
       });
 
       for (let m = 0; m < demosMeta.length; ++m) {
-        const { idx, code, filePath, uniqueName, url } = demosMeta[m];
+        const { idx, code, demoFilepath, demoFilename, url } = demosMeta[m];
         const actualIdx = m === 0 ? idx + 1 : idx + 2;
 
         // Remove original code block and insert components
         ast.children.splice(actualIdx, 1, {
           type: 'jsx',
-          value: `<Previewer code={\`${escapeCode(code)}\`} mobilePreview={${mobilePreview}} url="${url}"> <${uniqueName} /> </Previewer>`,
+          value: `
+<Previewer code={\`${escapeCode(code)}\`} mobilePreview={${mobilePreview}} url="${url}">
+  <BrowserOnly>
+    {() => {
+      const ${demoFilename} = require('${demoFilepath}').default;
+      return <${demoFilename} />;
+    }}
+  </BrowserOnly>
+</Previewer>`,
         }, {
           type: 'import',
-          value: `import ${uniqueName} from '${filePath}';`,
+          value: 'import BrowserOnly from \'@docusaurus/BrowserOnly\';',
         });
       }
     }

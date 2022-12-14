@@ -1,11 +1,12 @@
 import { doc } from './doc.mjs';
 import { configureDocusaurus } from './configureDocusaurus.mjs';
+import genDemoPages from './genDemoPages/index.mjs';
 
 import type { PkgPlugin } from '@ice/pkg';
 
 const DEFAULT_DEV_SERVER_PORT = 4000;
 
-type EnableConfig = {
+interface EnableConfig {
   start?: boolean;
   build?: boolean;
 }
@@ -52,6 +53,20 @@ export interface PluginDocusaurusOptions {
    * Whether preview components of mobile styles
    */
   mobilePreview?: boolean;
+
+  /**
+   * Default locale that does not have its name in the base URL
+   */
+  defaultLocale?: string;
+
+  /**
+   * List of locales deployed on your site. Must contain defaultLocale.
+   */
+  locales?: string[];
+  /**
+   * Docusaurus output dir.
+   */
+  outputDir?: string;
 }
 
 export interface ConfigureDocusaurusOptions extends PluginDocusaurusOptions {
@@ -66,6 +81,8 @@ const defaultOptions: PluginDocusaurusOptions = {
   navBarLogo: 'https://img.alicdn.com/imgextra/i1/O1CN01lZTSIX1j7xpjIQ3fJ_!!6000000004502-2-tps-160-160.png',
   navBarTitle: 'ICE PKG',
   port: undefined,
+  defaultLocale: 'zh-Hans',
+  locales: ['zh-Hans'],
 };
 
 // @ts-ignore
@@ -87,6 +104,11 @@ const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions = {}) => {
   configureDocusaurus(rootDir, pluginOptions);
 
   onHook(`before.${command}.run`, async () => {
+    if (command === 'build') {
+      // Pages must be generated before build
+      // because remark plugin of docusaurus-plugin-content-docs works after docusaurus-plugin-content-pages reads the pages dir
+      genDemoPages(rootDir);
+    }
     await doc(api, pluginOptions);
   });
 };
@@ -100,7 +122,7 @@ const checkPluginEnable = (enable: boolean | EnableConfig, command: string): boo
     return false;
   }
   return true;
-}
+};
 
 function configureDevServerPort(options) {
   // Port from environment variable is preferred.

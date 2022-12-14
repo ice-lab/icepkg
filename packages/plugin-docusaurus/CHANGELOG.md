@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.4.1
+
+- [feat] support configure docusaurus outputDir
+- [feat] enable `lessOptions.javascriptEnabled = true` options to support antd component
+- [fix] can resolve `exports` in package.json
+
+## 1.4.0
+
+- [feat] support scan qrcode at mobile preview
+- [feat] support external ip access at start stage
+- [fix] can't generate demo pages in build command if mobilePreview is turned on
+- [fix] can't use short syntax (<></>) of fragment
+- [refactor] set default locales to zh-Hans
+- [refctor] remove browser only import
+
+
+## 1.3.2
+
+- [fix] react resolve error in npm
+
+## 1.3.1
+
+- [fix] miss sass dependency
+- [refactor] exit preview sub process is @swc/helpers is not installed
+- [fix] error if rax-compat is not installed
+
+## 1.3.0
+
+- [feat] support using rpx in sass and less
+
 ## 1.2.0
 
 - [feat] Add enable config to control doc build

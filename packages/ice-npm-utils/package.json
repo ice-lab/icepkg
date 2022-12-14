@@ -4,12 +4,14 @@
   "description": "npm utils for ice",
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "!lib/**/*.map"
   ],
   "engines": {
     "node": ">=12"
   },
   "scripts": {
+    "watch": "tsc -w",
     "build": "rm -rf lib && tsc",
     "prepublishOnly": "npm run build"
   },
@@ -26,7 +28,6 @@
     "access": "public"
   },
   "license": "MIT",
-  "gitHead": "fc5b35f95ab4cc24898845916acf598c2f34d576",
   "devDependencies": {
     "typescript": "^4.5.4"
   }

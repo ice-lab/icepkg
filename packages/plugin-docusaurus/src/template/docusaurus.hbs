@@ -9,8 +9,8 @@ const config = {
   url: '{{url}}',
   baseUrl: '{{baseUrl}}',
   i18n: {
-    defaultLocale: 'zh-Hans',
-    locales: ['en', 'zh-Hans'],
+    defaultLocale: '{{defaultLocale}}',
+    locales: [{{#each locales}}'{{this}}',{{/each}}],
   },
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -20,9 +20,16 @@ const config = {
   {{/unless}}
 
   plugins: [
-    require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
     '{{sassDocusaurusPluginPath}}',
-    '{{lessDocusaurusPluginPath}}',
+    [
+      '{{lessDocusaurusPluginPath}}', 
+      { 
+        lessOptions: {
+          javascriptEnabled: true,
+        }
+      }
+    ],
+    require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
   ],
 
   presets: [

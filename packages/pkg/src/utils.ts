@@ -7,7 +7,7 @@ import debug from 'debug';
 import { createRequire } from 'module';
 import { createFilter } from '@rollup/pluginutils';
 
-import type { PlainObject } from './types';
+import type { PlainObject, OutputResult, TaskConfig } from './types';
 
 import type {
   DecodedSourceMap,
@@ -218,27 +218,12 @@ export const isDirectory =
 
 export const isFile = (name: string) => fs.existsSync(name) && fs.statSync(name).isFile();
 
-const DEFAULT_ENTRY_FILE = [
-  'index.js',
-  'index.ts',
-  'index.mts',
-  'index.mjs',
-  'index.tsx',
-  'index.jsx',
-];
-
-export const findDefaultEntryFile = (dirPath: string): string => {
-  return DEFAULT_ENTRY_FILE
-    .map((value) => path.join(dirPath, value))
-    .find((file) => isFile(file));
-};
-
 export const isObject = (value: unknown): value is Record<string, any> => Object.prototype.toString.call(value) === '[object Object]';
 
 export const booleanToObject = (value: object | boolean): object => (isObject(value) ? value : {});
 
 export function debouncePromise<T extends unknown[]>(
-  fn: (...args: T) => Promise<void>,
+  fn: (...args: T) => Promise<OutputResult[]>,
   delay: number,
   onError: (err: unknown) => void,
 ) {
@@ -256,26 +241,33 @@ export function debouncePromise<T extends unknown[]>(
       };
     } else {
       if (timeout != null) clearTimeout(timeout);
-
-      timeout = setTimeout(() => {
-        timeout = undefined;
-        promiseInFly = fn(...args)
-          .catch(onError)
-          .finally(() => {
-            promiseInFly = undefined;
-            if (callbackPending) callbackPending();
-          });
-      }, delay);
+      return new Promise((resolve) => {
+        timeout = setTimeout(() => {
+          timeout = undefined;
+          promiseInFly = fn(...args)
+            .then((outputResults) => {
+              resolve(outputResults);
+            })
+            .catch(onError)
+            .finally(() => {
+              promiseInFly = undefined;
+              if (callbackPending) callbackPending();
+            });
+        }, delay);
+      });
     }
   };
 }
 
+// Build time 0-500ms Green
+//            500-3000 Yellow
+//            3000-    Red
 export const timeFrom = (start: number, subtract = 0): string => {
   const time: number | string = performance.now() - start - subtract;
   const timeString = (`${time.toFixed(2)} ms`).padEnd(5, ' ');
-  if (time < 10) {
+  if (time < 500) {
     return picocolors.green(timeString);
-  } else if (time < 50) {
+  } else if (time < 3000) {
     return picocolors.yellow(timeString);
   } else {
     return picocolors.red(timeString);
@@ -297,10 +289,46 @@ export const stringifyObject = (obj: PlainObject) => {
 
 export const scriptsFilter = createFilter(
   /\.m?[jt]sx?$/, // include
-  /node_modules/, // exclude
+  [/node_modules/, /\.d\.ts$/], // exclude
+);
+
+export const dtsFilter = createFilter(
+  /\.m?tsx?$/, // include
+  [/node_modules/, /\.d\.ts$/], // exclude
 );
 
 export const stylesFilter = createFilter(
   /\.(?:css|sass|less|stylus)$/, // include
   /node_modules/, // exclude
 );
+
+export const cwd = process.cwd();
+
+export function normalizeSlashes(file: string) {
+  return file.split(path.win32.sep).join('/');
+}
+
+export function mergeValueToTaskConfig<C = TaskConfig, T = any>(config: C, key: string, value: T): C {
+  if (Array.isArray(value)) {
+    return {
+      ...config,
+      [key]: value,
+    };
+  } else if (typeof value === 'object') {
+    return {
+      ...config,
+      [key]: {
+        ...(config[key] || {}),
+        ...value,
+      },
+    };
+  } else {
+    config[key] = value;
+    return config;
+  }
+}
+
+export function getEntryItems(entry: TaskConfig['entry']) {
+  const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.values(entry);
+  return entries;
+}

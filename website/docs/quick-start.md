@@ -11,7 +11,7 @@
 安装 Node.js 后，默认会包含 npm。在国内使用 npm 安装依赖可能会比较慢。建议使用 [cnpm](https://www.npmjs.com/package/cnpm) 的国内镜像源进行加速：
 
 ```bash
-$ npm install -g cnpm --registry=https://registry.npm.taobao.org
+$ npm install -g cnpm --registry=https://registry.npmmirror.com
 # 验证 cnpm 安装是否成功
 $ cnpm -v
 ```
@@ -58,9 +58,9 @@ $ npm run build
 
 ## 发布产物
 
-修改包名
+1. 在 `package.json` 中修改包名
 
-执行发布命令：
+2. 执行发布命令：
 
 ```bash
 $ npm publish

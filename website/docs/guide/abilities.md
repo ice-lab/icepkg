@@ -1,7 +1,7 @@
 # 构建能力
 
 :::tip
-ICE PKG 的所有配置请参阅 [完整配置项](/reference/config-list)。
+ICE PKG 的所有配置请参阅 [完整配置项](./config)。
 :::
 
 ## 定义环境变量
@@ -43,7 +43,7 @@ if (__DEV__) {
 ```
 
 :::info 发生了什么？
-实际上，在编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV`。
+实际上，在编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV !== 'production'`。
 :::
 
 ## 生成类型文件
@@ -66,7 +66,7 @@ export function add(a, b) {
 }
 ```
 
-为 JavaScript 文件开启 [generateTypesForJs](/reference/config-list#generatetypesforjs) 配置：
+为 JavaScript 文件开启 [generateTypesForJs](./config#generatetypesforjs) 配置：
 
 ```ts
 import { defineConfig } from '@ice/pkg';
@@ -115,9 +115,9 @@ import './a.css';
 import './b.css'
 ```
 
-在 [transform 模式](/#双模式) 下，样式文件会伴随 `index.ts` 一起编译到目标目录，会保持引入关系（见 [使用场景 - 单模块引入](/scenarios/react#单模块引入)）。
+在 [transform 模式](../#双模式) 下，样式文件会伴随 `index.ts` 一起编译到目标目录，会保持引入关系（见 [使用场景 - 单模块引入](../scenarios/react#单模块引入)）。
 
-在 [bundle 模式下](/#双模式) 下，样式会整体打包输出（见 [使用场景 - 分别引入 JS 和 CSS](/scenarios/component#分别引入 JS 和 CSS)）。
+在 [bundle 模式下](../#双模式) 下，样式会整体打包输出（见 [使用场景 - 分别引入 JS 和 CSS](../scenarios/react#分别引入-js-和-css) ）。
 
 ICE PKG 也支持 [CSS Modules](https://github.com/css-modules/css-modules)，样式文件需以 `.module.css`、`.module.less` 或 `.module.sass` 结尾。
 
@@ -199,7 +199,7 @@ export default defineConfig({
 
 ## SWC 编译
 
-ICE PKG 采用 SWC 进行 JS 代码的 transform 及 minify。你可以通过自定义插件中的 [`swcCompileOptions`](/reference/plugins-development#swccompileoptions) 来配置 SWC 的编译选项。
+ICE PKG 采用 SWC 进行 JS 代码的 transform 及 minify。你可以通过自定义插件中的 [`swcCompileOptions`](../plugins-development#swccompileoptions) 来配置 SWC 的编译选项。
 
 :::tip
 transform 模式的产物代码中可能依赖一些 helper 函数用以支持目标环境。ICE PKG 默认将这些 helper 函数统一从 `@swc/helpers` 中导出使用，以减小产物代码体积。因此，当你的产物代码中使用了 `@swc/helpers` 时，请务必将 `@swc/helpers` 加到项目的 dependencies 中并安装之。
