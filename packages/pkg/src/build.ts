@@ -4,9 +4,9 @@ import { buildAll } from './buildAll.js';
 import type { PkgContext, PkgTaskConfig } from './types.js';
 
 export default async (context: PkgContext) => {
-  const { getConfig, applyHook, commandArgs } = context;
+  const { getTaskConfig, applyHook, commandArgs } = context;
 
-  const configs = getConfig();
+  const configs = getTaskConfig();
   await applyHook('before.build.load', { args: commandArgs, config: configs });
 
   if (!configs.length) {

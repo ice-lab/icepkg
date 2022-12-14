@@ -35,10 +35,5 @@
     "c8": "^7.11.3",
     "ts-node": "^10.8.2",
     "vitest": "^0.7.13"
-  },
-  "pnpm": {
-    "overrides": {
-      "build-scripts": "2.0.0-18"
-    }
   }
 }

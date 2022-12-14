@@ -1,5 +1,5 @@
-import type { RollupOptions, Plugin, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
-import type { Context, IPluginAPI, IPlugin, ITaskConfig } from 'build-scripts';
+import type { RollupOptions, Plugin as RollupPlugin, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
+import type { Context, PluginAPI, Plugin, TaskConfig as BuildTask } from 'build-scripts';
 import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styles';
 
@@ -8,7 +8,7 @@ type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 export type PlainObject = Record<string, string | boolean | number | object>;
 export type ReverseMap<T> = T[keyof T];
 
-export type RollupPluginFn<T = {}> = (args?: T) => Plugin;
+export type RollupPluginFn<T = {}> = (args?: T) => RollupPlugin;
 
 interface TransformOptions {
   /**
@@ -108,7 +108,7 @@ interface CommonTaskConfig {
   /**
   * Extra rollup plugins
   */
-  rollupPlugins?: Plugin[];
+  rollupPlugins?: RollupPlugin[];
   /**
   * Extra swc compile options
   * @see https://swc.rs/docs/configuration/compilationv
@@ -149,13 +149,13 @@ export interface TransformTaskConfig extends CommonTaskConfig, TransformOptions 
 
 export type TaskConfig = BundleTaskConfig | TransformTaskConfig;
 
-export type PkgTaskConfig = ITaskConfig<TaskConfig, TaskName>;
+export type PkgTaskConfig = BuildTask<TaskConfig, TaskName>;
 
 export type PkgContext = Context<TaskConfig, {}, UserConfig>;
 
-export type PkgPluginAPI = IPluginAPI<TaskConfig>;
+export type PkgPluginAPI = PluginAPI<TaskConfig>;
 
-export type PkgPlugin = IPlugin<TaskConfig>;
+export type PkgPlugin = Plugin<TaskConfig>;
 
 export enum TaskName {
   'TRANSFORM_CJS' = 'transform-cjs',
