@@ -36,7 +36,6 @@
 ## 1.1.2
 
 - [fix] alias not work in transform mode
->>>>>>> release-next
 
 ## 1.1.1
 
