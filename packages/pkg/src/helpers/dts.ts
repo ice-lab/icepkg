@@ -3,6 +3,7 @@ import consola from 'consola';
 import { performance } from 'perf_hooks';
 import { timeFrom } from '../utils.js';
 import { createLogger } from './logger.js';
+import { createFilter } from '@rollup/pluginutils';
 
 export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'mjs' | 'mts';
 
@@ -25,7 +26,7 @@ export interface DtsInputFile extends File {
   dtsPath?: string;
 }
 
-const nomalizeDtsInput = (file: File): DtsInputFile => {
+const normalizeDtsInput = (file: File): DtsInputFile => {
   const { filePath, ext } = file;
   const dtsPath = filePath.replace(ext, '.d.ts');
   return {
@@ -40,10 +41,10 @@ export function dtsCompile(files: File[]): DtsInputFile[] {
   }
 
   const logger = createLogger('dts');
-  logger.debug('Start Compiling typescript declations...');
+  logger.debug('Start Compiling typescript declarations...');
   const dtsCompileStart = performance.now();
 
-  const _files = files.map(nomalizeDtsInput);
+  const _files = files.map(normalizeDtsInput);
 
   const createdFiles = {};
 
@@ -90,3 +91,8 @@ export function dtsCompile(files: File[]): DtsInputFile[] {
     dtsContent: createdFiles[file.dtsPath],
   }));
 }
+
+export const dtsFilter = createFilter(
+  /\.m?tsx?$/, // include
+  [/node_modules/, /\.d\.ts$/], // exclude
+);

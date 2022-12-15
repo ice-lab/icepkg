@@ -1,17 +1,14 @@
-import { join, resolve } from 'path';
 import escapeStringRegexp from 'escape-string-regexp';
 import deepmerge from 'deepmerge';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import styles from 'rollup-plugin-styles';
-import alias from '@rollup/plugin-alias';
 import autoprefixer from 'autoprefixer';
 import json from '@rollup/plugin-json';
 import swcPlugin from '../rollupPlugins/swc.js';
 import dtsPlugin from '../rollupPlugins/dts.js';
 import minifyPlugin from '../rollupPlugins/minify.js';
 import babelPlugin from '../rollupPlugins/babel.js';
-import aliasPlugin from '../rollupPlugins/transform/alias.js';
 import { builtinNodeModules } from './builtinModules.js';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -34,7 +31,6 @@ const getFilenamePrefix = (filename: string, format: string, esVersion: string):
 
 type GetRollupOutputs = (options: {
   taskConfig: BundleTaskConfig;
-  command: PkgContext['command'];
   globals: Record<string, string>;
   outputDir: string;
   pkg: PkgJson;
@@ -44,7 +40,6 @@ type GetRollupOutputs = (options: {
 const getRollupOutputs: GetRollupOutputs = ({
   globals,
   taskConfig,
-  command,
   pkg,
   outputDir,
   esVersion,
@@ -129,8 +124,9 @@ export const normalizeRollupConfig = (
   taskName: ReverseMap<typeof TaskName>,
 ): [RollupPlugin[], RollupOptions] => {
   const { swcCompileOptions, type, rollupPlugins, rollupOptions, mode } = taskConfig;
-  const { rootDir, userConfig, pkg, commandArgs, command } = ctx;
-  const commonPlugins = [
+  const { userConfig, pkg, commandArgs } = ctx;
+
+  const compilerPlugins = [
     !!taskConfig.babelPlugins?.length && babelPlugin({ plugins: taskConfig.babelPlugins }),
     swcPlugin({
       type,
@@ -141,15 +137,9 @@ export const normalizeRollupConfig = (
 
   if (type === 'transform') {
     resolvedPlugins = [
-      // dts plugin should append ahead for including source code.
-      // And dts plugin would never change the contents of file.
-      dtsPlugin(taskConfig.entry, userConfig.generateTypesForJs),
       ...resolvedPlugins,
-      ...commonPlugins,
-      aliasPlugin({
-        alias: taskConfig.alias,
-        sourcemap: taskConfig.sourcemap,
-      }),
+      ...compilerPlugins,
+      dtsPlugin(taskConfig.entry, userConfig.generateTypesForJs),
     ];
 
     return [resolvedPlugins, rollupOptions];
@@ -158,6 +148,7 @@ export const normalizeRollupConfig = (
   if (type === 'bundle') {
     resolvedPlugins = [
       ...resolvedPlugins,
+      ...compilerPlugins,
       replace({
         values: {
           // Insert __DEV__ for users.
@@ -170,13 +161,6 @@ export const normalizeRollupConfig = (
         },
         preventAssignment: true,
       }),
-      alias({
-        entries: Object.entries(taskConfig.alias || {}).map(([key, value]) => ({
-          find: key,
-          replacement: resolve(rootDir, value),
-        })),
-      }),
-      ...commonPlugins,
       styles((taskConfig.stylesOptions || ((options) => options))({
         plugins: [
           autoprefixer(),
@@ -216,7 +200,6 @@ export const normalizeRollupConfig = (
         external,
         output: getRollupOutputs({
           globals,
-          command,
           taskConfig,
           pkg: pkg as PkgJson,
           outputDir: taskConfig.outputDir,
