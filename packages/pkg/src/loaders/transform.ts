@@ -6,13 +6,67 @@ import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom, cwd } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
-import type { PkgContext, TransformTaskLoaderConfig, OutputFile, OutputResult } from '../types.js';
+import type { PkgContext, TransformTaskLoaderConfig, OutputFile, OutputResult, HandleChange, HandleChanges, RunLoaderTasks } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
 const pkg = loadPkg(cwd);
 const isSWCHelpersDeclaredInDependency = Boolean(pkg?.dependencies?.['@swc/helpers']);
 
-export default async function runTransform(config: TransformTaskLoaderConfig, ctx: PkgContext): Promise<OutputResult> {
+export const runTransformWatchTasks: RunLoaderTasks<TransformTaskLoaderConfig> = async (
+  taskLoaderConfigs,
+  ctx,
+) => {
+  const handleChangeFunctions: HandleChange[] = [];
+  const outputResults: OutputResult[] = [];
+
+  for (const taskLoaderConfig of taskLoaderConfigs) {
+    const outputResult = await runTransform(taskLoaderConfig, ctx);
+    outputResults.push(outputResult);
+
+    handleChangeFunctions.push(async (id, event) => {
+      if (event === 'update') {
+        return await runTransform(taskLoaderConfig, ctx, id);
+      }
+    });
+  }
+
+  const handleChanges: HandleChanges = async (id, event) => {
+    const newOutputResults: OutputResult[] = [];
+    for (const handleChangeFunction of handleChangeFunctions) {
+      const newOutputResult = await handleChangeFunction(id, event);
+      newOutputResults.push(newOutputResult);
+    }
+
+    return newOutputResults;
+  };
+
+  return {
+    handleChanges,
+    outputResults,
+  };
+};
+
+export const runTransformBuildTasks: RunLoaderTasks<TransformTaskLoaderConfig> = async (
+  taskLoaderConfigs,
+  ctx,
+) => {
+  const outputResults: OutputResult[] = [];
+
+  for (const taskLoaderConfig of taskLoaderConfigs) {
+    const outputResult = await runTransform(taskLoaderConfig, ctx);
+    outputResults.push(outputResult);
+  }
+
+  return {
+    outputResults,
+  };
+};
+
+async function runTransform(
+  config: TransformTaskLoaderConfig,
+  ctx: PkgContext,
+  updatedFile?: string,
+): Promise<OutputResult> {
   let isTransformDistContainingSWCHelpers = false;
   const { rootDir, userConfig } = ctx;
   const { outputDir, entry, rollupPlugins } = config;
@@ -21,8 +75,9 @@ export default async function runTransform(config: TransformTaskLoaderConfig, ct
   const entryDir = entry;
 
   let files: OutputFile[];
-
-  if (isDirectory(entry)) {
+  if (updatedFile) {
+    files = [getFileInfo(updatedFile, rootDir)];
+  } else if (isDirectory(entry)) {
     files =
       loadEntryFiles(
         resolve(rootDir, entryDir),
@@ -34,12 +89,7 @@ export default async function runTransform(config: TransformTaskLoaderConfig, ct
           ext: extname(filePath),
         }));
   } else {
-    const relativeFilePath = isAbsolute(entry) ? relative(entry, rootDir) : entry;
-    files = [{
-      filePath: relativeFilePath,
-      absolutePath: resolve(rootDir, relativeFilePath),
-      ext: extname(relativeFilePath),
-    }];
+    files = [getFileInfo(entry, rootDir)];
   }
 
   const container = await createPluginContainer({
@@ -52,9 +102,9 @@ export default async function runTransform(config: TransformTaskLoaderConfig, ct
     },
   });
 
-  const transformStart = performance.now();
+  const start = performance.now();
 
-  logger.debug('Build start...');
+  logger.debug('Transform start...');
 
   // @ts-ignore FIXME: ignore
   await container.buildStart(config);
@@ -132,7 +182,7 @@ export default async function runTransform(config: TransformTaskLoaderConfig, ct
 
   await container.close();
 
-  logger.info(`✅ ${timeFrom(transformStart)}`);
+  logger.info(`✅ ${timeFrom(start)}`);
 
   if (isTransformDistContainingSWCHelpers && !isSWCHelpersDeclaredInDependency) {
     logger.error('⚠️ The transformed dist contains @swc/helpers, please run `npm i @swc/helpers -S` command to install it as dependency. See https://pkg.ice.work/guide/abilities for more detail.');
@@ -142,5 +192,14 @@ export default async function runTransform(config: TransformTaskLoaderConfig, ct
   return {
     outputFiles: files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) })),
     taskName: config.name,
+  };
+}
+
+function getFileInfo(filePath: string, rootDir: string) {
+  const relativeFilePath = isAbsolute(filePath) ? relative(filePath, rootDir) : filePath;
+  return {
+    filePath: relativeFilePath,
+    absolutePath: resolve(rootDir, relativeFilePath),
+    ext: extname(relativeFilePath),
   };
 }

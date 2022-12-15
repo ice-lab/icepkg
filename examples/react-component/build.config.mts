@@ -6,8 +6,8 @@ export default defineConfig({
     // ['@ice/pkg-plugin-docusaurus'],
   ],
   transform: {
-    // formats: ['esm', 'es2017'],
-    formats: [],
+    formats: ['esm', 'es2017'],
+    // formats: [],
   },
   sourceMaps: false,
   bundle: {

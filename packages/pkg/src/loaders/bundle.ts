@@ -4,15 +4,15 @@ import { Watcher } from 'rollup/dist/shared/watch.js';
 import { performance } from 'perf_hooks';
 import { toArray, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
-
-import type { BundleTaskLoaderConfig, HandleChange, HandleChanges, OutputFile, OutputResult, PkgContext } from '../types.js';
-import type { OutputChunk as RollupOutputChunk, OutputAsset as RollupOutputAsset, RollupWatcherEvent, RollupBuild, RollupOutput, RollupOptions, OutputOptions } from 'rollup';
 import EventEmitter from 'events';
 
-export async function watchBundleTasks(
+import type { BundleTaskLoaderConfig, HandleChange, HandleChanges, OutputFile, OutputResult, PkgContext, RunLoaderTasks } from '../types.js';
+import type { OutputChunk as RollupOutputChunk, OutputAsset as RollupOutputAsset, RollupWatcherEvent, RollupBuild, RollupOutput, RollupOptions, OutputOptions } from 'rollup';
+
+export const runBundleWatchTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
   taskLoaderConfigs: BundleTaskLoaderConfig[],
   ctx: PkgContext,
-) {
+) => {
   const handleChangeFunctions: HandleChange[] = [];
   const outputResults = [];
 
@@ -43,12 +43,12 @@ export async function watchBundleTasks(
     handleChanges,
     outputResults,
   };
-}
+};
 
-export async function buildBundleTasks(
+export const buildBundleTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
   taskLoaderConfigs: BundleTaskLoaderConfig[],
   ctx: PkgContext,
-) {
+) => {
   const outputResults = [];
 
   for (const taskLoaderConfig of taskLoaderConfigs) {
@@ -65,7 +65,7 @@ export async function buildBundleTasks(
   return {
     outputResults,
   };
-}
+};
 
 class WatchEmitter extends EventEmitter {
   private awaitedHandlers: any;
@@ -112,6 +112,12 @@ async function rawWatch(
   const { rollupOptions, name: taskName } = taskLoaderConfig;
   const rollupOutputOptions = toArray(rollupOptions.output);
 
+  const logger = createLogger(`${taskName}-${mode}`);
+
+  const start = performance.now();
+
+  logger.debug('Bundle start...');
+
   const emitter = new WatchEmitter();
   const watcher = new Watcher(
     [{ ...rollupOptions, watch: { skipWrite: false } }],
@@ -152,7 +158,13 @@ async function rawWatch(
   };
 
   const handleChange: HandleChange = async (id: string, event: string) => {
+    // Each HMR should reset the mode otherwise it will always be the same value.
     taskLoaderConfig.mode = mode;
+
+    const changeStart = performance.now();
+
+    logger.debug('Bundle start...');
+
     for (const task of watcher.tasks) {
       task.invalidate(id, {
         event,
@@ -160,11 +172,18 @@ async function rawWatch(
       });
     }
 
-    return getOutputResult();
+    const outputResult = await getOutputResult();
+
+    logger.debug('Bundle end...');
+    logger.info(`✅ ${timeFrom(changeStart)}`);
+
+    return outputResult;
   };
 
   const outputResult = await getOutputResult();
 
+  logger.debug('Bundle end...');
+  logger.info(`✅ ${timeFrom(start)}`);
   return {
     handleChange,
     outputResult,
@@ -176,12 +195,20 @@ async function rawBuild(taskLoaderConfig: BundleTaskLoaderConfig, mode: 'develop
 
   const { rollupOptions, name: taskName } = taskLoaderConfig;
   const rollupOutputOptions = toArray(rollupOptions.output);
+  const logger = createLogger(`${taskName}-${mode}`);
+
+  const start = performance.now();
+
+  logger.debug('Bundle start...');
 
   const bundle = await rollup.rollup(rollupOptions);
 
   const buildResult = await writeFile(rollupOutputOptions, bundle.write);
 
   await bundle.close();
+
+  logger.debug('Bundle end...');
+  logger.info(`✅ ${timeFrom(start)}`);
 
   return {
     outputResult: {

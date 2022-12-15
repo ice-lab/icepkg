@@ -1,11 +1,10 @@
 import consola from 'consola';
 import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
 import { createWatcher } from './helpers/watcher.js';
-import { watchBundleTasks } from './loaders/bundle.js';
+import { runBundleWatchTasks } from './loaders/bundle.js';
+import { runTransformWatchTasks } from './loaders/transform.js';
 
-import type { BundleTaskLoaderConfig, OutputResult, PkgContext } from './types.js';
-
-type WatchEvent = 'create' | 'update' | 'delete';
+import type { BundleTaskLoaderConfig, OutputResult, PkgContext, TransformTaskLoaderConfig, WatchEvent } from './types.js';
 
 export default async function start(context: PkgContext) {
   const { getTaskConfig, applyHook, commandArgs } = context;
@@ -31,16 +30,19 @@ export default async function start(context: PkgContext) {
   const {
     handleChanges: handleBundleChanges,
     outputResults: bundleOutputResults,
-  } = await watchBundleTasks(
+  } = await runBundleWatchTasks(
     normalizedConfigs.filter((config) => config.type === 'bundle') as BundleTaskLoaderConfig[],
     context,
   );
-  // const {
-  //   handleChange: handleTransformChange,
-  //   outputResults: transformOutputResults,
-  // } = watchTransform(normalizedConfigs.filter((config) => config.type === 'transform') as TransformTaskLoaderConfig[]);
+  const {
+    handleChanges: handleTransformChange,
+    outputResults: transformOutputResults,
+  } = await runTransformWatchTasks(
+    normalizedConfigs.filter((config) => config.type === 'transform') as TransformTaskLoaderConfig[],
+    context,
+  );
 
-  outputResults.push(...bundleOutputResults);
+  outputResults.push(...bundleOutputResults, ...transformOutputResults);
 
   await applyHook('after.start.compile', outputResults);
 
@@ -48,10 +50,13 @@ export default async function start(context: PkgContext) {
 
   async function handleChange(id: string, event: WatchEvent) {
     const newOutputResults = [];
-    // debounce
     const newBundleOutputResults = await handleBundleChanges(id, event);
+    const newTransformOutputResults = await handleTransformChange(id, event);
 
-    newOutputResults.push(...newBundleOutputResults);
+    newOutputResults.push(
+      ...newBundleOutputResults,
+      newTransformOutputResults,
+    );
 
     await applyHook('after.start.compile', newOutputResults);
   }

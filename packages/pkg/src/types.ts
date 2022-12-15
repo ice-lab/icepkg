@@ -236,5 +236,11 @@ export interface UserConfig {
 // Set for `process.env.NODE_ENV`
 export type NodeEnvMode = 'development' | 'production' | string;
 
-export type HandleChange = (id: string, event: string) => Promise<OutputResult>;
-export type HandleChanges = (id: string, event: string) => Promise<OutputResult[]>;
+export type WatchEvent = 'create' | 'update' | 'delete';
+export type HandleChange = (id: string, event: WatchEvent) => Promise<OutputResult>;
+export type HandleChanges = (id: string, event: WatchEvent) => Promise<OutputResult[]>;
+
+export type RunLoaderTasks<C> = (
+  taskLoaderConfigs: C[],
+  context: PkgContext
+) => Promise<{ handleChanges?: HandleChanges; outputResults: OutputResult[] }>;
