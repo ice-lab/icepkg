@@ -6,18 +6,18 @@ import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom, cwd } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
-import type { PkgContext, TransformTaskLoaderConfig, OutputFile } from '../types.js';
+import type { PkgContext, TransformTaskLoaderConfig, OutputFile, OutputResult } from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
 const pkg = loadPkg(cwd);
 const isSWCHelpersDeclaredInDependency = Boolean(pkg?.dependencies?.['@swc/helpers']);
 
-export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: PkgContext) {
+export default async function runTransform(config: TransformTaskLoaderConfig, ctx: PkgContext): Promise<OutputResult> {
   let isTransformDistContainingSWCHelpers = false;
   const { rootDir, userConfig } = ctx;
-  const { outputDir, entry, rollupPlugins } = cfg;
+  const { outputDir, entry, rollupPlugins } = config;
 
-  const logger = createLogger(cfg.name);
+  const logger = createLogger(config.name);
   const entryDir = entry;
 
   let files: OutputFile[];
@@ -48,7 +48,7 @@ export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: 
     output: outputDir,
     logger,
     build: {
-      rollupOptions: cfg,
+      rollupOptions: config,
     },
   });
 
@@ -57,7 +57,7 @@ export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: 
   logger.debug('Build start...');
 
   // @ts-ignore FIXME: ignore
-  await container.buildStart(cfg);
+  await container.buildStart(config);
 
   for (let i = 0; i < files.length; ++i) {
     const traverseFileStart = performance.now();
@@ -139,5 +139,8 @@ export default async function runTransform(cfg: TransformTaskLoaderConfig, ctx: 
     process.exit(1);
   }
 
-  return files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) }));
+  return {
+    outputFiles: files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) })),
+    taskName: config.name,
+  };
 }

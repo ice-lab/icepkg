@@ -9,29 +9,25 @@ import { timeFrom } from './utils.js';
 
 import type { PkgContext, TaskLoaderConfig, OutputFile, OutputResult } from './types.js';
 
-export const buildAll = async (configs: TaskLoaderConfig[], ctx: PkgContext) => {
-  const { command, rootDir } = ctx;
-
-  if (command === 'build') {
-    // Empty outputDir before run the task.
-    const outputDirs = configs.map((cfg) => cfg.outputDir).filter(Boolean);
-    outputDirs.forEach((outputDir) => fs.emptyDirSync(outputDir));
-  }
+export const buildAll = async (taskLoaderConfigs: TaskLoaderConfig[], ctx: PkgContext) => {
+  const { rootDir } = ctx;
 
   const outputResults: OutputResult[] = [];
-  for (let c = 0; c < configs.length; ++c) {
-    const taskLoaderConfig = configs[c];
+
+  for (let c = 0; c < taskLoaderConfigs.length; ++c) {
+    const taskLoaderConfig = taskLoaderConfigs[c];
 
     let outputFiles: OutputFile[] = [];
     if (taskLoaderConfig.type === 'bundle') {
       const bundleResult = await runBundle(taskLoaderConfig, ctx);
       outputResults.push(bundleResult);
       outputFiles = bundleResult.outputFiles;
-    }
-
-    if (taskLoaderConfig.type === 'transform') {
-      outputFiles = await runTransform(taskLoaderConfig, ctx);
-      outputResults.push({ outputFiles, taskName: taskLoaderConfig.name });
+    } else if (taskLoaderConfig.type === 'transform') {
+      const transformResult = await runTransform(taskLoaderConfig, ctx);
+      outputResults.push(transformResult);
+      outputFiles = transformResult.outputFiles;
+    } else {
+      // TODO: should throw error type is not defined
     }
 
     const reportSizeStart = performance.now();
@@ -47,6 +43,7 @@ export const buildAll = async (configs: TaskLoaderConfig[], ctx: PkgContext) => 
     const logger = createLogger('report-size');
     logger.debug(`ReportSize consume ${timeFrom(reportSizeStart)}`);
   }
+
   return outputResults;
 };
 

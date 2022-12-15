@@ -235,3 +235,5 @@ export interface UserConfig {
 
 // Set for `process.env.NODE_ENV`
 export type NodeEnvMode = 'development' | 'production' | string;
+
+export type HandleChange = (id: string, event: string) => Promise<OutputResult>;
