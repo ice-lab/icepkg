@@ -1,8 +1,8 @@
 import fse from 'fs-extra';
 import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
-import { buildAll } from './buildAll.js';
+import { buildBundleTasks } from './loaders/bundle.js';
 
-import type { PkgContext, PkgTaskConfig } from './types.js';
+import type { BundleTaskLoaderConfig, OutputResult, PkgContext, PkgTaskConfig } from './types.js';
 
 export default async (context: PkgContext) => {
   const { getTaskConfig, applyHook, commandArgs, command } = context;
@@ -28,7 +28,14 @@ export default async (context: PkgContext) => {
   }
 
   try {
-    const outputResults = await buildAll(normalizedConfigs, context);
+    const outputResults: OutputResult[] = [];
+
+    const { outputResults: bundleOutputResults } = await buildBundleTasks(
+      normalizedConfigs.filter((config) => config.type === 'bundle') as BundleTaskLoaderConfig[],
+      context,
+    );
+
+    outputResults.push(...bundleOutputResults);
 
     await applyHook('after.build.compile', outputResults);
   } catch (err) {

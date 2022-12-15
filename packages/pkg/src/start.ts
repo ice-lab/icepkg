@@ -1,21 +1,11 @@
 import consola from 'consola';
 import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
 import { createWatcher } from './helpers/watcher.js';
-import { debouncePromise } from './utils.js';
-import { buildAll } from './buildAll.js';
-
-import type { BundleTaskLoaderConfig, PkgContext, TaskLoaderConfig, TransformTaskLoaderConfig } from './types.js';
 import { watchBundleTasks } from './loaders/bundle.js';
 
-const debouncedBuildAll = debouncePromise(
-  async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
-    return await buildAll(cfgArrs, ctx);
-  },
-  100,
-  (err) => {
-    consola.error(err);
-  },
-);
+import type { BundleTaskLoaderConfig, OutputResult, PkgContext } from './types.js';
+
+type WatchEvent = 'create' | 'update' | 'delete';
 
 export default async function start(context: PkgContext) {
   const { getTaskConfig, applyHook, commandArgs } = context;
@@ -37,10 +27,9 @@ export default async function start(context: PkgContext) {
   // @ts-ignore fixme
   const normalizedConfigs = configs.map((config) => mergeConfigOptions(config, context));
 
-  // const outputResults = await buildAll(normalizedConfigs, context);
-  const outputResults = [];
+  const outputResults: OutputResult[] = [];
   const {
-    handleChange: handleBundleChange,
+    handleChanges: handleBundleChanges,
     outputResults: bundleOutputResults,
   } = await watchBundleTasks(
     normalizedConfigs.filter((config) => config.type === 'bundle') as BundleTaskLoaderConfig[],
@@ -52,16 +41,15 @@ export default async function start(context: PkgContext) {
   // } = watchTransform(normalizedConfigs.filter((config) => config.type === 'transform') as TransformTaskLoaderConfig[]);
 
   outputResults.push(...bundleOutputResults);
-  console.log('outputResults====>', outputResults);
+
   await applyHook('after.start.compile', outputResults);
 
   const watcher = createWatcher(context);
 
-  async function handleChange(id: string, event: 'create' | 'update' | 'delete') {
-    // const newOutputResults = await debouncedBuildAll(normalizedConfigs, context);
+  async function handleChange(id: string, event: WatchEvent) {
     const newOutputResults = [];
-
-    const newBundleOutputResults = await handleBundleChange(id, event);
+    // debounce
+    const newBundleOutputResults = await handleBundleChanges(id, event);
 
     newOutputResults.push(...newBundleOutputResults);
 

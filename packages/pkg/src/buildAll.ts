@@ -3,7 +3,7 @@ import { relative } from 'path';
 import { performance } from 'perf_hooks';
 import { reportSize } from './helpers/reportSize.js';
 import runTransform from './loaders/transform.js';
-import runBundle from './loaders/bundle.js';
+import { buildBundleTasks } from './loaders/bundle.js';
 import { createLogger } from './helpers/logger.js';
 import { timeFrom } from './utils.js';
 
@@ -19,9 +19,9 @@ export const buildAll = async (taskLoaderConfigs: TaskLoaderConfig[], ctx: PkgCo
 
     let outputFiles: OutputFile[] = [];
     if (taskLoaderConfig.type === 'bundle') {
-      const bundleResult = await runBundle(taskLoaderConfig, ctx);
-      outputResults.push(bundleResult);
-      outputFiles = bundleResult.outputFiles;
+      // const bundleResult = await runBundle(taskLoaderConfig, ctx);
+      // outputResults.push(bundleResult);
+      // outputFiles = bundleResult.outputFiles;
     } else if (taskLoaderConfig.type === 'transform') {
       const transformResult = await runTransform(taskLoaderConfig, ctx);
       outputResults.push(transformResult);

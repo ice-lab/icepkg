@@ -237,3 +237,4 @@ export interface UserConfig {
 export type NodeEnvMode = 'development' | 'production' | string;
 
 export type HandleChange = (id: string, event: string) => Promise<OutputResult>;
+export type HandleChanges = (id: string, event: string) => Promise<OutputResult[]>;
