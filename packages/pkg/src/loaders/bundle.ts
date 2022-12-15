@@ -130,7 +130,9 @@ async function rawWatch(
   let result;
   const resolves = [];
   emitter.on('event', async (event: RollupWatcherEvent) => {
-    if (event.code === 'BUNDLE_END' || event.code === 'ERROR') {
+    if (event.code === 'ERROR') {
+      throw event.error;
+    } else if (event.code === 'BUNDLE_END') {
       const { result: { write, cache } } = event;
       const buildResult = await writeFile(rollupOutputOptions, write);
       result = {
