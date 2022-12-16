@@ -292,11 +292,6 @@ export const scriptsFilter = createFilter(
   [/node_modules/, /\.d\.ts$/], // exclude
 );
 
-export const dtsFilter = createFilter(
-  /\.m?tsx?$/, // include
-  [/node_modules/, /\.d\.ts$/], // exclude
-);
-
 export const stylesFilter = createFilter(
   /\.(?:css|sass|less|stylus)$/, // include
   /node_modules/, // exclude

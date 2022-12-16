@@ -43,8 +43,8 @@ export const mergeConfigOptions = (
   // Configure swcOptions
   normalizedConfig.swcCompileOptions = deepmerge(
     isBundleTask
-      ? getDefaultBundleSwcConfig(taskName)
-      : getDefaultTransformSwcConfig(normalizedConfig, taskName),
+      ? getDefaultBundleSwcConfig(normalizedConfig, ctx, taskName)
+      : getDefaultTransformSwcConfig(normalizedConfig, ctx, taskName),
     swcCompileOptions,
   );
 

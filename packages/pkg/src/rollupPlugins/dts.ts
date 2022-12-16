@@ -1,7 +1,6 @@
 import { extname, relative } from 'path';
-import { dtsCompile } from '../helpers/dts.js';
+import { dtsCompile, dtsFilter } from '../helpers/dts.js';
 import { isEcmascriptOnly, isTypescriptOnly } from '../helpers/suffix.js';
-import { dtsFilter } from '../utils.js';
 
 import type { Plugin } from 'rollup';
 import type { TaskConfig, UserConfig } from '../types.js';
@@ -19,19 +18,19 @@ function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['
   const ids: string[] = [];
   return {
     name: 'ice-pkg:dts',
-    transform(_, id) {
+    transform(code, id) {
       if (dtsFilter(id)) {
         if (!cachedContents[id]) {
           cachedContents[id] = {
-            srcCode: _,
+            srcCode: code,
             updated: true,
             ext: extname(id) as FileExt,
             filePath: id,
           };
-        } else if (cachedContents[id].srcCode === _) {
+        } else if (cachedContents[id].srcCode === code) {
           cachedContents[id].updated = false;
         } else {
-          cachedContents[id].srcCode = _;
+          cachedContents[id].srcCode = code;
           cachedContents[id].updated = true;
         }
 
@@ -43,11 +42,8 @@ function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['
 
     buildEnd() {
       const compileIds = ids
-        .filter(
-          (id) =>
-            isTypescriptOnly(cachedContents[id].ext, id)
-          || (generateTypesForJs && isEcmascriptOnly(cachedContents[id].ext, id)),
-        );
+        .filter((id) => isTypescriptOnly(cachedContents[id].ext, id) ||
+          (generateTypesForJs && isEcmascriptOnly(cachedContents[id].ext, id)));
 
       // should re-run typescript programs
       const shouldUpdateDts = compileIds.some((id) => cachedContents[id].updated);
