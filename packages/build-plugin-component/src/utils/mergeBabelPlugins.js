@@ -1,17 +1,25 @@
-module.exports = (defaultPlugins, babelPlugins) => {
-  const pluginsMap = {};
-  // 把插件名作为 key，pluginsMap 不存在 key 则新增插件，存在则覆盖插件
-  const appendNewPluginsToMap = item => {
-    if (typeof item === 'string') {
-      pluginsMap[item] = item;
+function mergeBabelPlugins(defaultPlugins = [], customPlugins = []) {
+  const plugins = {};
+  // Use the plugin name as the key. If the pluginsMap does not exist, 
+  // the plugin will be added, and if it exists, the plugin will be 
+  // overwritten.
+  const addPlugin = (plugin) => {
+    if (typeof plugin === 'string') {
+      plugins[plugin] = plugin;
+    } else if (Array.isArray(plugin) {
+      const key = plugin[0];
+      plugins[key] = plugin;
     } else {
-      const key = item[0];
-      pluginsMap[key] = item;
+      console.warn('Unknown plugin description:', plugin);
     }
   }
-  // 默认插件存入 pluginsMap
-  defaultPlugins.map(appendNewPluginsToMap);
-  // 业务自定义插件存入pluginsMap
-  babelPlugins.map(appendNewPluginsToMap);
-  return Object.values(pluginsMap);
+
+  // Default plugins.
+  defaultPlugins.forEach(addPlugin);
+  // Custom plugins.
+  customPlugins.forEach(addPlugin);
+
+  return Object.values(plugins);
 }
+
+module.exports = mergeBabelPlugins;
