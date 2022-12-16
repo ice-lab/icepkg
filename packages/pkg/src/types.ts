@@ -240,7 +240,11 @@ export type WatchEvent = 'create' | 'update' | 'delete';
 export type HandleChange = (id: string, event: WatchEvent) => Promise<OutputResult>;
 export type HandleChanges = (id: string, event: WatchEvent) => Promise<OutputResult[]>;
 
+export interface LoaderTaskResult {
+  handleChanges?: HandleChanges;
+  outputResults: OutputResult[];
+}
 export type RunLoaderTasks<C> = (
   taskLoaderConfigs: C[],
   context: PkgContext
-) => Promise<{ handleChanges?: HandleChanges; outputResults: OutputResult[] }>;
+) => Promise<LoaderTaskResult>;

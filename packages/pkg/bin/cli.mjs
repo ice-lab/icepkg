@@ -22,7 +22,7 @@ const cli = cac('ice-pkg');
       allowUnknownOptions: false,
     })
     .option('--config <config>', 'specify custom config path')
-    .option('--analyzer', 'visualize size of output files(it\'s only valid in bundle mode)', {
+    .option('--analyzer', "visualize size of output files(it's only valid in bundle mode)", {
       default: false,
     })
     .option('--rootDir <rootDir>', 'specify root directory', {
@@ -31,6 +31,7 @@ const cli = cac('ice-pkg');
     .action(async (options) => {
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
+
       await componentService.run({
         command: 'build',
         commandArgs,
@@ -44,7 +45,7 @@ const cli = cac('ice-pkg');
       allowUnknownOptions: false,
     })
     .option('--config <config>', 'specify custom config path')
-    .option('--analyzer', 'visualize size of output files(it\'s only valid in bundle mode)', {
+    .option('--analyzer', "visualize size of output files(it's only valid in bundle mode)", {
       default: false,
     })
     .option('--rootDir <rootDir>', 'specify root directory', {
@@ -56,16 +57,13 @@ const cli = cac('ice-pkg');
     .action(async (options) => {
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
-      try {
-        await componentService.run({
-          command: 'start',
-          commandArgs,
-          getBuiltInPlugins,
-          rootDir: options.rootDir,
-        });
-      } catch (e) {
-        consola.error(e);
-      }
+
+      await componentService.run({
+        command: 'start',
+        commandArgs,
+        getBuiltInPlugins,
+        rootDir: options.rootDir,
+      });
     });
 
   cli.help();

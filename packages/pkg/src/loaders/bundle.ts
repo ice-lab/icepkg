@@ -1,13 +1,28 @@
 import { join } from 'path';
+import consola from 'consola';
 import * as rollup from 'rollup';
 import { Watcher } from 'rollup/dist/shared/watch.js';
 import { performance } from 'perf_hooks';
 import { toArray, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 import EventEmitter from 'events';
-
-import type { BundleTaskLoaderConfig, HandleChange, HandleChanges, OutputFile, OutputResult, PkgContext, RunLoaderTasks } from '../types.js';
-import type { OutputChunk as RollupOutputChunk, OutputAsset as RollupOutputAsset, RollupWatcherEvent, RollupBuild, RollupOutput, RollupOptions, OutputOptions } from 'rollup';
+import type {
+  BundleTaskLoaderConfig,
+  HandleChange,
+  HandleChanges,
+  OutputFile,
+  OutputResult,
+  PkgContext,
+  RunLoaderTasks,
+} from '../types.js';
+import type {
+  OutputChunk as RollupOutputChunk,
+  OutputAsset as RollupOutputAsset,
+  RollupWatcherEvent,
+  RollupBuild,
+  RollupOutput,
+  OutputOptions,
+} from 'rollup';
 
 export const runBundleWatchTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
   taskLoaderConfigs: BundleTaskLoaderConfig[],
@@ -67,6 +82,7 @@ export const buildBundleTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
   };
 };
 
+// Fork from https://github.com/rollup/rollup/blob/v2.79.1/src/watch/WatchEmitter.ts
 class WatchEmitter extends EventEmitter {
   private awaitedHandlers: any;
   constructor() {
@@ -127,14 +143,22 @@ async function rawWatch(
     // Disable rollup chokidar watch service.
     await task.fileWatcher.watcher.close();
   }
-  let result;
+  let result: Error | OutputResult | null;
   const resolves = [];
+  const rejects = [];
   emitter.on('event', async (event: RollupWatcherEvent) => {
     if (event.code === 'ERROR') {
-      throw event.error;
+      result = new Error(event.error.stack);
+      let reject;
+      // eslint-disable-next-line no-cond-assign
+      while (reject = rejects.shift()) {
+        resolves.shift();
+        reject(result);
+      }
+      result = null;
     } else if (event.code === 'BUNDLE_END') {
       const { result: { write, cache } } = event;
-      const buildResult = await writeFile(rollupOutputOptions, write);
+      const buildResult = await writeFiles(rollupOutputOptions, write);
       result = {
         taskName,
         modules: cache.modules,
@@ -143,6 +167,7 @@ async function rawWatch(
       let resolve;
       // eslint-disable-next-line no-cond-assign
       while (resolve = resolves.shift()) {
+        rejects.shift();
         resolve(result);
       }
       result = null;
@@ -150,11 +175,14 @@ async function rawWatch(
   });
 
   const getOutputResult = (): Promise<OutputResult> => {
-    if (result) {
+    if (result instanceof Error) {
+      return Promise.reject(result);
+    } else if (result) {
       return Promise.resolve(result);
     } else {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         resolves.push(resolve);
+        rejects.push(reject);
       });
     }
   };
@@ -182,10 +210,17 @@ async function rawWatch(
     return outputResult;
   };
 
-  const outputResult = await getOutputResult();
+  let outputResult: OutputResult;
+
+  try {
+    outputResult = await getOutputResult();
+    logger.info(`✅ ${timeFrom(start)}`);
+  } catch (error) {
+    consola.error(error.stack);
+  }
 
   logger.debug('Bundle end...');
-  logger.info(`✅ ${timeFrom(start)}`);
+
   return {
     handleChange,
     outputResult,
@@ -205,7 +240,7 @@ async function rawBuild(taskLoaderConfig: BundleTaskLoaderConfig, mode: 'develop
 
   const bundle = await rollup.rollup(rollupOptions);
 
-  const buildResult = await writeFile(rollupOutputOptions, bundle.write);
+  const buildResult = await writeFiles(rollupOutputOptions, bundle.write);
 
   await bundle.close();
 
@@ -221,7 +256,7 @@ async function rawBuild(taskLoaderConfig: BundleTaskLoaderConfig, mode: 'develop
   };
 }
 
-async function writeFile(rollupOutputOptions: OutputOptions[], write: RollupBuild['write']): Promise<Omit<OutputResult, 'taskName' | 'modules'>> {
+async function writeFiles(rollupOutputOptions: OutputOptions[], write: RollupBuild['write']): Promise<Omit<OutputResult, 'taskName' | 'modules'>> {
   const outputFiles: OutputFile[] = [];
   const outputs: Array<RollupOutput['output']> = [];
 
