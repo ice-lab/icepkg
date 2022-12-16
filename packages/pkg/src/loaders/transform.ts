@@ -1,6 +1,7 @@
 import { performance } from 'perf_hooks';
 import { isAbsolute, resolve, extname, dirname, relative } from 'path';
 import fs from 'fs-extra';
+import consola from 'consola';
 import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE, loadPkg } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom, cwd } from '../utils.js';
@@ -20,7 +21,12 @@ export const runTransformWatchTasks: RunLoaderTasks<TransformTaskLoaderConfig> =
   const outputResults: OutputResult[] = [];
 
   for (const taskLoaderConfig of taskLoaderConfigs) {
-    const outputResult = await runTransform(taskLoaderConfig, ctx);
+    let outputResult: OutputResult;
+    try {
+      outputResult = await runTransform(taskLoaderConfig, ctx);
+    } catch (error) {
+      consola.error(error.stack);
+    }
     outputResults.push(outputResult);
 
     handleChangeFunctions.push(async (id, event) => {
