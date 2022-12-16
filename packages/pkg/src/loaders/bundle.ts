@@ -60,7 +60,7 @@ export const runBundleWatchTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async
   };
 };
 
-export const buildBundleTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
+export const runBundleBuildTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
   taskLoaderConfigs: BundleTaskLoaderConfig[],
   ctx: PkgContext,
 ) => {

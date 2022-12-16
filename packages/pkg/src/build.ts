@@ -1,8 +1,9 @@
 import fse from 'fs-extra';
 import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
-import { buildBundleTasks } from './loaders/bundle.js';
+import { runBundleBuildTasks } from './loaders/bundle.js';
+import { runTransformBuildTasks } from './loaders/transform.js';
 
-import type { BundleTaskLoaderConfig, OutputResult, PkgContext, PkgTaskConfig } from './types.js';
+import type { BundleTaskLoaderConfig, OutputResult, PkgContext, PkgTaskConfig, TransformTaskLoaderConfig } from './types.js';
 
 export default async (context: PkgContext) => {
   const { getTaskConfig, applyHook, commandArgs, command } = context;
@@ -30,12 +31,19 @@ export default async (context: PkgContext) => {
   try {
     const outputResults: OutputResult[] = [];
 
-    const { outputResults: bundleOutputResults } = await buildBundleTasks(
+    const { outputResults: bundleOutputResults } = await runBundleBuildTasks(
       normalizedConfigs.filter((config) => config.type === 'bundle') as BundleTaskLoaderConfig[],
       context,
     );
+    const { outputResults: transformOutputResults } = await runTransformBuildTasks(
+      normalizedConfigs.filter((config) => config.type === 'transform') as TransformTaskLoaderConfig[],
+      context,
+    );
 
-    outputResults.push(...bundleOutputResults);
+    outputResults.push(
+      ...transformOutputResults,
+      ...bundleOutputResults,
+    );
 
     await applyHook('after.build.compile', outputResults);
   } catch (err) {
