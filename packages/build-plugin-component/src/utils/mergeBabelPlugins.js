@@ -6,7 +6,7 @@ function mergeBabelPlugins(defaultPlugins = [], customPlugins = []) {
   const addPlugin = (plugin) => {
     if (typeof plugin === 'string') {
       plugins[plugin] = plugin;
-    } else if (Array.isArray(plugin) {
+    } else if (Array.isArray(plugin)) {
       const key = plugin[0];
       plugins[key] = plugin;
     } else {
