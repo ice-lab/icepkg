@@ -1,8 +1,12 @@
-import { ReverseMap, TaskConfig, TaskName } from '../types.js';
+import { PkgContext, ReverseMap, TaskConfig, TaskName } from '../types.js';
 
-import type { Config, ModuleConfig } from '@swc/core';
+import type { Config, JscConfig, ModuleConfig } from '@swc/core';
 
-export const getDefaultBundleSwcConfig = (taskName: ReverseMap<typeof TaskName>): Config => {
+export const getDefaultBundleSwcConfig = (
+  taskConfig: TaskConfig,
+  ctx: PkgContext,
+  taskName: ReverseMap<typeof TaskName>,
+): Config => {
   const target = taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5';
 
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? {
@@ -20,6 +24,8 @@ export const getDefaultBundleSwcConfig = (taskName: ReverseMap<typeof TaskName>)
   return {
     jsc: {
       target,
+      baseUrl: ctx.rootDir,
+      paths: formatAliasPaths(taskConfig.alias),
     },
     minify: false,
     // Always generate map in bundle mode,
@@ -34,7 +40,11 @@ export const getDefaultBundleSwcConfig = (taskName: ReverseMap<typeof TaskName>)
   };
 };
 
-export const getDefaultTransformSwcConfig = (taskConfig: TaskConfig, taskName: ReverseMap<typeof TaskName>): Config => {
+export const getDefaultTransformSwcConfig = (
+  taskConfig: TaskConfig,
+  ctx: PkgContext,
+  taskName: ReverseMap<typeof TaskName>,
+): Config => {
   const module: ModuleConfig = taskName === TaskName.TRANSFORM_CJS
     ? { type: 'commonjs' }
     : undefined;
@@ -44,6 +54,8 @@ export const getDefaultTransformSwcConfig = (taskConfig: TaskConfig, taskName: R
   return {
     jsc: {
       target,
+      baseUrl: ctx.rootDir,
+      paths: formatAliasPaths(taskConfig.alias),
       transform: {
         optimizer: {
           globals: {
@@ -62,3 +74,27 @@ export const getDefaultTransformSwcConfig = (taskConfig: TaskConfig, taskName: R
     sourceMaps: taskConfig.sourcemap,
   };
 };
+
+function formatAliasPaths(alias: TaskConfig['alias']) {
+  const paths: JscConfig['paths'] = {};
+
+  Object.entries(alias || {}).forEach(([key, value]) => {
+    const [pathKey, pathValue] = formatPath(key, value);
+    paths[pathKey] = [pathValue];
+  });
+
+  return paths;
+}
+
+function formatPath(key: string, value: string) {
+  if (key.endsWith('$')) {
+    return [key.replace(/\$$/, ''), value];
+  }
+  // abc -> abc/*
+  // abc/ -> abc/*
+  return [addWildcard(key), addWildcard(value)];
+}
+
+function addWildcard(str: string) {
+  return `${str.endsWith('/') ? str : `${str}/`}*`;
+}
