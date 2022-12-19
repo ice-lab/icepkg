@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.1
+
+- [fix] can't merge babel plugin
+
 ## 1.12.0
 - [feat] Add bytedance microapp support 
 
