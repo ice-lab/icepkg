@@ -38,7 +38,7 @@ export const runTransformWatchTasks: RunLoaderTasks<TransformTaskLoaderConfig> =
     outputResults.push(outputResult);
 
     handleChangeFunctions.push(async (id, event) => {
-      if (event === 'update') {
+      if (event === 'update' || event === 'create') {
         return await runTransform(taskLoaderConfig, ctx, id);
       }
     });
