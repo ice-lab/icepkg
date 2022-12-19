@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.1
+
+- [fix] can't merge babel plugin
+
 ## 1.11.0
 
 - [feat] Support docGenIncludes for all *.md files in demo([#285](https://github.com/ice-lab/iceworks-cli/issues/250)))
