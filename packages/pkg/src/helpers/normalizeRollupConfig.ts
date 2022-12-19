@@ -45,7 +45,8 @@ type GetRollupOutputs = (options: {
   globals: Record<string, string>;
   pkg: PkgJson;
   esVersion: string;
-  mode: NodeEnvMode; // Any additional mode like profiling.
+  mode: NodeEnvMode;
+  command: PkgContext['command'];
 }) => OutputOptions[];
 const getRollupOutputs: GetRollupOutputs = ({
   globals,
@@ -53,12 +54,13 @@ const getRollupOutputs: GetRollupOutputs = ({
   pkg,
   mode,
   esVersion,
+  command,
 }) => {
   const { outputDir } = taskLoaderConfig;
   const outputs: OutputOptions[] = [];
 
   const outputFormats = (taskLoaderConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
-  const minify = taskLoaderConfig.minify ?? mode === 'production';
+  const minify = taskLoaderConfig.minify ?? (command === 'build' && mode === 'production');
   const name = taskLoaderConfig.name ?? pkg.name;
 
   outputFormats.forEach((format) => {
@@ -137,7 +139,7 @@ export const normalizeRollupConfig = (
   rollupOptions: RollupOptions,
 ): [RollupPlugin[], RollupOptions] | [RollupPlugin[][], RollupOptions[]] => {
   const { swcCompileOptions } = taskLoaderConfig;
-  const { userConfig, pkg, commandArgs } = ctx;
+  const { userConfig, pkg, commandArgs, command } = ctx;
 
   const compilerPlugins = [
     !!taskLoaderConfig.babelPlugins?.length && babelPlugin({ plugins: taskLoaderConfig.babelPlugins }),
@@ -218,6 +220,7 @@ export const normalizeRollupConfig = (
             pkg: pkg as PkgJson,
             esVersion: taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5',
             mode,
+            command,
           }),
         },
         rollupOptions || {},
