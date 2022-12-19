@@ -10,7 +10,7 @@ export type ReverseMap<T> = T[keyof T];
 
 export type RollupPluginFn<T = {}> = (args?: T) => RollupPlugin;
 
-interface TransformOptions {
+export interface TransformOptions {
   /**
    * Which type of contents would be generated
    * "cjs" - Commonjs with ES5 syntax (targeting Node version under 12);
@@ -28,7 +28,7 @@ interface TransformOptions {
   excludes?: string | string[];
 }
 
-interface BundleOptions {
+export interface BundleOptions {
   /**
    * Export name
    * @default package.name
@@ -40,9 +40,15 @@ interface BundleOptions {
    */
   filename?: string;
   /**
+   * @deprecated Please use `bundle.modes` config.
    * Generate uncompressed bundle for development debug.
    */
   development?: boolean;
+  /**
+   * Node env modes. For example: 'production', 'development'
+   * @default ['production','development']
+   */
+  modes?: NodeEnvMode[];
   /**
    * Which type of contents would be generated
    * "umd"
@@ -120,7 +126,9 @@ interface CommonTaskConfig {
   babelPlugins?: babel.PluginItem[];
 }
 
-export interface BundleTaskConfig extends CommonTaskConfig, BundleOptions {
+export interface BundleTaskConfig extends
+  CommonTaskConfig,
+  Omit<BundleOptions, 'development'> {
   type: 'bundle';
   /**
   * Entry for a specific task
