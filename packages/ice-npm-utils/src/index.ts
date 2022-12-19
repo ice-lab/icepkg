@@ -83,7 +83,7 @@ function getAndExtractTarball(
 
         allFiles.push(destPath);
         allWriteStream.push(
-          new Promise((streamResolve) => {
+          new Promise<void>((streamResolve) => {
             entry
               .pipe(fs.createWriteStream(destPath))
               .on('finish', () => streamResolve())

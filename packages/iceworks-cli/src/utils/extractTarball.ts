@@ -69,7 +69,7 @@ export default function extractTarball({
         }
 
         allFiles.push(destPath);
-        const writeStream = new Promise((streamResolve) => {
+        const writeStream = new Promise<void>((streamResolve) => {
           entry
             .pipe(fs.createWriteStream(destPath))
             .on('finish', () => streamResolve());
