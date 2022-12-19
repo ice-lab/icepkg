@@ -23,9 +23,7 @@ const plugin: PkgPlugin = (api) => {
     // config.sourcemap = true;
     config.alias = { ...config.alias };
     config.externals = { react: 'React', 'react-dom': 'ReactDOM' };
-    // config.bundle.filename = ({ format, development, isES2017 }) => {
-    //   return `index${(format === 'umd' || format === 'cjs') ? `.${format}` : ''}${isES2017 ? '-2017' : ''}${development ? 'development' : ''}.js`;
-    // };
+
     config.stylesOptions = (options) => {
       return options;
     };

@@ -151,13 +151,6 @@ export default defineConfig({
 
 library 导出的名称，可以通过 `window[name]` 访问。默认为 `package.json` 配置的 `name` 字段。
 
-#### filename
-
-+ 类型：`string | (options: {isES2017: boolean; format: 'umd' | 'esm' | 'cjs'; development?: boolean; }) => string`
-+ 默认值：`'index.js'`
-
-生成的文件名前缀，默认为 `index.js`。
-
 #### formats
 
 + 类型：`['esm', 'umd', 'cjs', 'es2017']`

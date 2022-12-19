@@ -1,9 +1,15 @@
-import { PkgContext, ReverseMap, TaskConfig, TaskName } from '../types.js';
-
+import {
+  BundleTaskLoaderConfig,
+  PkgContext,
+  ReverseMap,
+  TaskConfig,
+  TaskName,
+  TransformTaskLoaderConfig,
+} from '../types.js';
 import type { Config, JscConfig, ModuleConfig } from '@swc/core';
 
 export const getDefaultBundleSwcConfig = (
-  taskConfig: TaskConfig,
+  taskLoaderConfig: BundleTaskLoaderConfig,
   ctx: PkgContext,
   taskName: ReverseMap<typeof TaskName>,
 ): Config => {
@@ -25,7 +31,7 @@ export const getDefaultBundleSwcConfig = (
     jsc: {
       target,
       baseUrl: ctx.rootDir,
-      paths: formatAliasPaths(taskConfig.alias),
+      paths: formatAliasPaths(taskLoaderConfig.alias),
     },
     minify: false,
     // Always generate map in bundle mode,
@@ -41,7 +47,7 @@ export const getDefaultBundleSwcConfig = (
 };
 
 export const getDefaultTransformSwcConfig = (
-  taskConfig: TaskConfig,
+  taskLoaderConfig: TransformTaskLoaderConfig,
   ctx: PkgContext,
   taskName: ReverseMap<typeof TaskName>,
 ): Config => {
@@ -55,12 +61,12 @@ export const getDefaultTransformSwcConfig = (
     jsc: {
       target,
       baseUrl: ctx.rootDir,
-      paths: formatAliasPaths(taskConfig.alias),
+      paths: formatAliasPaths(taskLoaderConfig.alias),
       transform: {
         optimizer: {
           globals: {
             vars: {
-              ...taskConfig.define,
+              ...taskLoaderConfig.define,
             },
           },
         },
@@ -71,7 +77,7 @@ export const getDefaultTransformSwcConfig = (
     },
     minify: false,
     module,
-    sourceMaps: taskConfig.sourcemap,
+    sourceMaps: taskLoaderConfig.sourcemap,
   };
 };
 

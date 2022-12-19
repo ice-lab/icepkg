@@ -10,10 +10,13 @@ import type {
   BundleTaskLoaderConfig,
   HandleChange,
   HandleChanges,
+  NodeEnvMode,
   OutputFile,
   OutputResult,
   PkgContext,
+  ReverseMap,
   RunLoaderTasks,
+  TaskName,
 } from '../types.js';
 import type {
   OutputChunk as RollupOutputChunk,
@@ -22,25 +25,20 @@ import type {
   RollupBuild,
   RollupOutput,
   OutputOptions,
+  RollupOptions,
 } from 'rollup';
 
 export const runBundleWatchTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
   taskLoaderConfigs: BundleTaskLoaderConfig[],
-  ctx: PkgContext,
 ) => {
   const handleChangeFunctions: HandleChange[] = [];
   const outputResults = [];
 
   for (const taskLoaderConfig of taskLoaderConfigs) {
-    const { outputResult, handleChange } = await rawWatch(taskLoaderConfig, 'production');
-    handleChangeFunctions.push(handleChange);
-    outputResults.push(outputResult);
-
-    // Apply dev build if bundle.development is true.
-    if (ctx.userConfig.bundle?.development) {
-      const { outputResult: devOutputResult, handleChange: devHandleChange } = await rawWatch(taskLoaderConfig, 'development');
-      handleChangeFunctions.push(devHandleChange);
-      outputResults.push(devOutputResult);
+    for (const rollupOptions of taskLoaderConfig.rollupOptions) {
+      const { outputResult, handleChange } = await rawWatch(rollupOptions, taskLoaderConfig.taskName);
+      handleChangeFunctions.push(handleChange);
+      outputResults.push(outputResult);
     }
   }
 
@@ -62,18 +60,13 @@ export const runBundleWatchTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async
 
 export const runBundleBuildTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
   taskLoaderConfigs: BundleTaskLoaderConfig[],
-  ctx: PkgContext,
 ) => {
   const outputResults = [];
 
   for (const taskLoaderConfig of taskLoaderConfigs) {
-    const { outputResult } = await rawBuild(taskLoaderConfig, 'production');
-    outputResults.push(outputResult);
-
-    // Apply dev build if bundle.development is true.
-    if (ctx.userConfig.bundle?.development) {
-      const { outputResult: devOutputResult } = await rawBuild(taskLoaderConfig, 'development');
-      outputResults.push(devOutputResult);
+    for (const rollupOptions of taskLoaderConfig.rollupOptions) {
+      const outputResult = await rawBuild(rollupOptions, taskLoaderConfig.taskName);
+      outputResults.push(outputResult);
     }
   }
 
@@ -121,14 +114,12 @@ class WatchEmitter extends EventEmitter {
 }
 
 async function rawWatch(
-  taskLoaderConfig: BundleTaskLoaderConfig,
-  mode: 'development' | 'production',
+  rollupOptions: RollupOptions,
+  taskName: ReverseMap<typeof TaskName>,
 ): Promise<{ handleChange: HandleChange; outputResult: OutputResult }> {
-  taskLoaderConfig.mode = mode;
-  const { rollupOptions, name: taskName } = taskLoaderConfig;
   const rollupOutputOptions = toArray(rollupOptions.output);
 
-  const logger = createLogger(`${taskName}-${mode}`);
+  const logger = createLogger(`${taskName}`); // TODO: add mode to the logger name
 
   const start = performance.now();
 
@@ -188,9 +179,6 @@ async function rawWatch(
   };
 
   const handleChange: HandleChange = async (id: string, event: string) => {
-    // Each HMR should reset the mode otherwise it will always be the same value.
-    taskLoaderConfig.mode = mode;
-
     const changeStart = performance.now();
 
     logger.debug('Bundle start...');
@@ -227,12 +215,12 @@ async function rawWatch(
   };
 }
 
-async function rawBuild(taskLoaderConfig: BundleTaskLoaderConfig, mode: 'development' | 'production'): Promise<{ outputResult: OutputResult }> {
-  taskLoaderConfig.mode = mode;
-
-  const { rollupOptions, name: taskName } = taskLoaderConfig;
+async function rawBuild(
+  rollupOptions: RollupOptions,
+  taskName: ReverseMap<typeof TaskName>,
+): Promise<{ outputResult: OutputResult }> {
   const rollupOutputOptions = toArray(rollupOptions.output);
-  const logger = createLogger(`${taskName}-${mode}`);
+  const logger = createLogger(`${taskName}`);
 
   const start = performance.now();
 

@@ -4,12 +4,20 @@ import { createWatcher } from './helpers/watcher.js';
 import { runBundleWatchTasks } from './loaders/bundle.js';
 import { runTransformWatchTasks } from './loaders/transform.js';
 
-import type { BundleTaskLoaderConfig, LoaderTaskResult, OutputResult, PkgContext, TransformTaskLoaderConfig, WatchEvent } from './types.js';
+import type {
+  BundleTaskLoaderConfig,
+  LoaderTaskResult,
+  OutputResult,
+  PkgContext,
+  PkgTaskConfig,
+  TransformTaskLoaderConfig,
+  WatchEvent,
+} from './types.js';
 
 export default async function start(context: PkgContext) {
   const { getTaskConfig, applyHook, commandArgs } = context;
 
-  const configs = getTaskConfig();
+  const configs = getTaskConfig() as PkgTaskConfig[];
   await applyHook('before.start.load', { args: commandArgs, config: configs });
 
   if (!configs.length) {
@@ -23,7 +31,6 @@ export default async function start(context: PkgContext) {
     config: configs,
   });
 
-  // @ts-ignore fixme
   const normalizedConfigs = configs.map((config) => mergeConfigOptions(config, context));
 
   const watcher = createWatcher(context);
@@ -35,8 +42,8 @@ export default async function start(context: PkgContext) {
   const bundleTaskLoaderConfigs = normalizedConfigs.filter((config) => config.type === 'bundle') as BundleTaskLoaderConfig[];
   const transformTaskLoaderConfigs = normalizedConfigs.filter((config) => config.type === 'transform') as TransformTaskLoaderConfig[];
 
-  let bundleWatchResult: LoaderTaskResult = { outputResults: [] };
   let transformWatchResult: LoaderTaskResult = { outputResults: [] };
+  let bundleWatchResult: LoaderTaskResult = { outputResults: [] };
 
   const outputResults: OutputResult[] = [];
 

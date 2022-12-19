@@ -7,26 +7,23 @@ import { stringifyObject } from '../utils.js';
 import type { PkgContext, PkgTaskConfig, TaskLoaderConfig } from '../types.js';
 
 export const mergeConfigOptions = (
-  cfg: PkgTaskConfig,
+  taskConfig: PkgTaskConfig,
   ctx: PkgContext,
 ): TaskLoaderConfig => {
   const { rootDir, command } = ctx;
-  const { config: taskConfig, name: taskName } = cfg;
-  const normalizedConfig = { ...taskConfig, name: taskName };
-  const { type, entry, outputDir, swcCompileOptions = {}, define } = normalizedConfig;
-  const isBundleTask = type === 'bundle';
-  const isTransformTask = type === 'transform';
+  const { config, name: taskName } = taskConfig;
+  const { rollupOptions, rollupPlugins, ...restConfig } = config;
+  const normalizedConfig: TaskLoaderConfig = { ...restConfig, taskName };
+  const { entry, outputDir, swcCompileOptions = {}, define } = normalizedConfig;
 
-  if (isBundleTask) {
-    normalizedConfig.mode = taskConfig.mode;
-  } else if (isTransformTask) {
+  if (normalizedConfig.type === 'transform') {
     normalizedConfig.mode = command === 'build' ? 'production' : 'development';
   }
 
   // Configure task entry
-  if (isBundleTask) {
+  if (normalizedConfig.type === 'bundle') {
     normalizedConfig.entry = formatEntry(entry);
-  } else if (isTransformTask) {
+  } else if (normalizedConfig.type === 'transform') {
     normalizedConfig.entry = getDefaultEntryDir(rootDir);
   } else {
     throw new Error('Invalid task type.');
@@ -42,7 +39,7 @@ export const mergeConfigOptions = (
 
   // Configure swcOptions
   normalizedConfig.swcCompileOptions = deepmerge(
-    isBundleTask
+    normalizedConfig.type === 'bundle'
       ? getDefaultBundleSwcConfig(normalizedConfig, ctx, taskName)
       : getDefaultTransformSwcConfig(normalizedConfig, ctx, taskName),
     swcCompileOptions,
@@ -53,6 +50,8 @@ export const mergeConfigOptions = (
     normalizedConfig,
     ctx,
     taskName,
+    rollupPlugins,
+    rollupOptions,
   );
 
   normalizedConfig.rollupPlugins = resolvedPlugins;

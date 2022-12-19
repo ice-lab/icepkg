@@ -5,7 +5,7 @@ import { runTransformBuildTasks } from './loaders/transform.js';
 
 import type { BundleTaskLoaderConfig, OutputResult, PkgContext, PkgTaskConfig, TransformTaskLoaderConfig } from './types.js';
 
-export default async (context: PkgContext) => {
+export default async function build(context: PkgContext) {
   const { getTaskConfig, applyHook, commandArgs, command } = context;
 
   const configs = getTaskConfig();
@@ -54,4 +54,4 @@ export default async (context: PkgContext) => {
 
     throw err;
   }
-};
+}

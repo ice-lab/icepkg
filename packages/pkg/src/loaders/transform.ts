@@ -7,7 +7,15 @@ import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { isObject, isDirectory, timeFrom, cwd } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
-import type { PkgContext, TransformTaskLoaderConfig, OutputFile, OutputResult, HandleChange, HandleChanges, RunLoaderTasks } from '../types.js';
+import type {
+  PkgContext,
+  TransformTaskLoaderConfig,
+  OutputFile,
+  OutputResult,
+  HandleChange,
+  HandleChanges,
+  RunLoaderTasks,
+} from '../types.js';
 import type { SourceMapInput } from 'rollup';
 
 const pkg = loadPkg(cwd);
@@ -77,7 +85,7 @@ async function runTransform(
   const { rootDir, userConfig } = ctx;
   const { outputDir, entry, rollupPlugins } = config;
 
-  const logger = createLogger(config.name);
+  const logger = createLogger(config.taskName);
   const entryDir = entry;
 
   let files: OutputFile[];
@@ -197,7 +205,7 @@ async function runTransform(
 
   return {
     outputFiles: files.map((file) => ({ ...file, filename: relative(outputDir, file.dest) })),
-    taskName: config.name,
+    taskName: config.taskName,
   };
 }
 

@@ -35,18 +35,13 @@ export interface BundleOptions {
    */
   name?: string;
   /**
-   * As the name of the generated file.
-   * @default index
-   */
-  filename?: string;
-  /**
    * @deprecated Please use `bundle.modes` config.
    * Generate uncompressed bundle for development debug.
    */
   development?: boolean;
   /**
    * Node env modes. For example: 'production', 'development'
-   * @default ['production','development']
+   * @default ['production']
    */
   modes?: NodeEnvMode[];
   /**
@@ -73,21 +68,36 @@ export interface BundleOptions {
 
 export type TaskLoaderConfig = BundleTaskLoaderConfig | TransformTaskLoaderConfig;
 
-export interface BundleTaskLoaderConfig extends BundleTaskConfig {
+export interface BundleTaskLoaderConfig extends Omit<BundleTaskConfig, 'rollupOptions' | 'rollupPlugins'> {
   type: 'bundle';
-  name: TaskName;
+
+  taskName: TaskName;
+  /**
+   * Extra rollup options
+   * @see https://rollupjs.org/guide/en/
+   */
+  rollupOptions?: RollupOptions[];
+  /**
+    * Extra rollup plugins
+    */
+  rollupPlugins?: RollupPlugin[][];
 }
 
 export interface TransformTaskLoaderConfig extends TransformTaskConfig {
   type: 'transform';
-  name: TaskName;
+  taskName: TaskName;
+  /**
+   * Extra rollup options
+   * @see https://rollupjs.org/guide/en/
+   */
+  rollupOptions?: RollupOptions;
+  /**
+    * Extra rollup plugins
+    */
+  rollupPlugins?: RollupPlugin[];
 }
 
 interface CommonTaskConfig {
-  /**
-   * Build mode.
-   */
-  mode?: NodeEnvMode;
   /**
   * Output directory
   */
@@ -153,6 +163,10 @@ export interface TransformTaskConfig extends CommonTaskConfig, TransformOptions 
   * @default  `./src` for Transform task
   */
   entry?: string;
+  /**
+ * Build mode.
+ */
+  mode?: NodeEnvMode;
 }
 
 export type TaskConfig = BundleTaskConfig | TransformTaskConfig;
