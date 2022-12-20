@@ -135,15 +135,14 @@ async function rawWatch(
     await task.fileWatcher.watcher.close();
   }
   let result: Error | OutputResult | null;
-  const resolves = [];
-  const rejects = [];
+  const executors = [];
   emitter.on('event', async (event: RollupWatcherEvent) => {
     if (event.code === 'ERROR') {
       result = new Error(event.error.stack);
-      let reject;
+      let executor;
       // eslint-disable-next-line no-cond-assign
-      while (reject = rejects.shift()) {
-        resolves.shift();
+      while (executor = executors.shift()) {
+        const [, reject] = executor;
         reject(result);
       }
       result = null;
@@ -155,10 +154,10 @@ async function rawWatch(
         modules: cache.modules,
         ...buildResult,
       };
-      let resolve;
+      let executor;
       // eslint-disable-next-line no-cond-assign
-      while (resolve = resolves.shift()) {
-        rejects.shift();
+      while (executor = executors.shift()) {
+        const [resolve] = executor;
         resolve(result);
       }
       result = null;
@@ -172,8 +171,7 @@ async function rawWatch(
       return Promise.resolve(result);
     } else {
       return new Promise((resolve, reject) => {
-        resolves.push(resolve);
-        rejects.push(reject);
+        executors.push([resolve, reject]);
       });
     }
   };
