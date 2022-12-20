@@ -65,7 +65,7 @@ export const runBundleBuildTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async
 
   for (const taskLoaderConfig of taskLoaderConfigs) {
     for (const rollupOptions of taskLoaderConfig.rollupOptions) {
-      const outputResult = await rawBuild(rollupOptions, taskLoaderConfig.taskName);
+      const { outputResult } = await rawBuild(rollupOptions, taskLoaderConfig.taskName);
       outputResults.push(outputResult);
     }
   }

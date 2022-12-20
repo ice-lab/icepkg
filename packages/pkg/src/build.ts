@@ -30,19 +30,18 @@ export default async function build(context: PkgContext) {
 
   try {
     const outputResults: OutputResult[] = [];
-
-    const { outputResults: bundleOutputResults } = await runBundleBuildTasks(
-      normalizedConfigs.filter((config) => config.type === 'bundle') as BundleTaskLoaderConfig[],
-      context,
-    );
     const { outputResults: transformOutputResults } = await runTransformBuildTasks(
       normalizedConfigs.filter((config) => config.type === 'transform') as TransformTaskLoaderConfig[],
       context,
     );
+    const { outputResults: bundleOutputResults } = await runBundleBuildTasks(
+      normalizedConfigs.filter((config) => config.type === 'bundle') as BundleTaskLoaderConfig[],
+      context,
+    );
 
     outputResults.push(
-      ...transformOutputResults,
       ...bundleOutputResults,
+      ...transformOutputResults,
     );
 
     await applyHook('after.build.compile', outputResults);
