@@ -100,11 +100,10 @@ interface _TaskConfig {
    */
   alias?: Record<string, string>;
   /**
-   * Extra rollup options
-   * @returns
+   * Modify default rollup options
    * @see https://rollupjs.org/guide/en/
    */
-  modifyRollupOptions?: (rollupOptions: RollupOptions) => RollupOptions;
+  modifyRollupOptions?: Array<(rollupOptions: RollupOptions) => RollupOptions>;
   /**
   * Extra swc compile options
   * @see https://swc.rs/docs/configuration/compilationv

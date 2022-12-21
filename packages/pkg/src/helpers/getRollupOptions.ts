@@ -113,7 +113,10 @@ export function getRollupOptions(
     }
   }
 
-  return (config.modifyRollupOptions ?? ((options) => options))(rollupOptions);
+  return (config.modifyRollupOptions ?? [((options) => options)]).reduce(
+    (prevRollupOptions, modifyRollupOptions) => modifyRollupOptions(prevRollupOptions),
+    rollupOptions,
+  );
 }
 
 interface GetRollupOutputsOptions {

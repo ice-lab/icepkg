@@ -1,7 +1,7 @@
 import { BundleTaskConfig, TaskName } from '@ice/pkg';
-import type { PkgPlugin } from '@ice/pkg';
+import type { Plugin } from '@ice/pkg';
 
-const plugin: PkgPlugin = (api) => {
+const plugin: Plugin = (api) => {
   const { onGetConfig } = api;
 
   const bundleTaskCallback: Parameters<typeof onGetConfig>[0] = async (config: BundleTaskConfig) => {
