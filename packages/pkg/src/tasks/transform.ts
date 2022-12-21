@@ -21,7 +21,7 @@ import type { RollupOptions, SourceMapInput } from 'rollup';
 const pkg = loadPkg(cwd);
 const isSWCHelpersDeclaredInDependency = Boolean(pkg?.dependencies?.['@swc/helpers']);
 
-export const runTransformWatchTasks: RunTasks = async (taskOptions, context) => {
+export const watchTransformTasks: RunTasks = async (taskOptions, context) => {
   const handleChangeFunctions: HandleChange[] = [];
   const outputResults: OutputResult[] = [];
 
@@ -58,7 +58,7 @@ export const runTransformWatchTasks: RunTasks = async (taskOptions, context) => 
   };
 };
 
-export const runTransformBuildTasks: RunTasks = async (taskOptions, context) => {
+export const buildTransformTasks: RunTasks = async (taskOptions, context) => {
   const outputResults: OutputResult[] = [];
 
   for (const taskOption of taskOptions) {

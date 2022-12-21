@@ -23,7 +23,7 @@ import type {
   RollupOptions,
 } from 'rollup';
 
-export const runBundleWatchTasks: RunTasks = async (taskOptions) => {
+export const watchBundleTasks: RunTasks = async (taskOptions) => {
   const handleChangeFunctions: HandleChange[] = [];
   const outputResults = [];
 
@@ -50,7 +50,7 @@ export const runBundleWatchTasks: RunTasks = async (taskOptions) => {
   };
 };
 
-export const runBundleBuildTasks: RunTasks = async (taskOptions) => {
+export const buildBundleTasks: RunTasks = async (taskOptions) => {
   const outputResults: OutputResult[] = [];
 
   for (const taskOption of taskOptions) {

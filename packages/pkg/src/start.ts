@@ -3,8 +3,8 @@ import { RollupOptions } from 'rollup';
 import { getBuildTasks } from './helpers/getBuildTasks.js';
 import { getRollupOptions } from './helpers/getRollupOptions.js';
 import { createWatcher } from './helpers/watcher.js';
-import { runBundleWatchTasks } from './tasks/bundle.js';
-import { runTransformWatchTasks } from './tasks/transform.js';
+import { watchBundleTasks } from './tasks/bundle.js';
+import { watchTransformTasks } from './tasks/transform.js';
 
 import type {
   OutputResult,
@@ -65,11 +65,11 @@ export default async function start(context: Context) {
 
   const outputResults: OutputResult[] = [];
 
-  const transformWatchResult = await runTransformWatchTasks(
+  const transformWatchResult = await watchTransformTasks(
     transformOptions,
     context,
   );
-  const bundleWatchResult = await runBundleWatchTasks(
+  const bundleWatchResult = await watchBundleTasks(
     bundleOptions,
     context,
   );

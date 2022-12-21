@@ -2,8 +2,8 @@ import fse from 'fs-extra';
 import { RollupOptions } from 'rollup';
 import { getBuildTasks } from './helpers/getBuildTasks.js';
 import { getRollupOptions } from './helpers/getRollupOptions.js';
-import { runBundleBuildTasks } from './tasks/bundle.js';
-import { runTransformBuildTasks } from './tasks/transform.js';
+import { buildBundleTasks } from './tasks/bundle.js';
+import { buildTransformTasks } from './tasks/transform.js';
 
 import type { Context, OutputResult, TaskRunnerContext } from './types.js';
 
@@ -57,11 +57,11 @@ export default async function build(context: Context) {
 
   try {
     const outputResults: OutputResult[] = [];
-    const { outputResults: transformOutputResults } = await runTransformBuildTasks(
+    const { outputResults: transformOutputResults } = await buildTransformTasks(
       transformOptions,
       context,
     );
-    const { outputResults: bundleOutputResults } = await runBundleBuildTasks(
+    const { outputResults: bundleOutputResults } = await buildBundleTasks(
       bundleOptions,
       context,
     );

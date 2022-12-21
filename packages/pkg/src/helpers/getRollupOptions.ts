@@ -72,7 +72,7 @@ export function getRollupOptions(
       replace({
         values: {
           // Insert __DEV__ for users.
-          __DEV__: () => JSON.stringify(taskRunnerContext.mode),
+          __DEV__: () => JSON.stringify(taskRunnerContext.mode === 'development'),
           'process.env.NODE_ENV': () => JSON.stringify(taskRunnerContext.mode),
           // User define can override above.
           ...config.define,
@@ -116,10 +116,6 @@ export function getRollupOptions(
   return (config.modifyRollupOptions ?? ((options) => options))(rollupOptions);
 }
 
-function getFilenamePrefix(filename: string, format: string, esVersion: string): string {
-  return `${filename}.${format}.${esVersion}`;
-}
-
 interface GetRollupOutputsOptions {
   bundleTaskConfig: BundleTaskConfig;
   globals: Record<string, string>;
@@ -161,8 +157,8 @@ function getRollupOutputs({
     };
 
     output.dir = outputDir;
-    output.entryFileNames = () => `${getFilenamePrefix('[name]', format, esVersion)}.${mode}.js`;
-    output.chunkFileNames = () => `${getFilenamePrefix('[hash]', format, esVersion)}.${mode}.js`;
+    output.entryFileNames = () => getFilename('[name]', format, esVersion, mode, 'js');
+    output.chunkFileNames = () => getFilename('[hash]', format, esVersion, mode, 'js');
     outputs.push(output);
   });
 
@@ -209,4 +205,8 @@ function getExternalsAndGlobals(
     : (id: string) => externalPredicate.test(id);
 
   return [externalFun, globals];
+}
+
+function getFilename(...args: string[]): string {
+  return args.join('.');
 }
