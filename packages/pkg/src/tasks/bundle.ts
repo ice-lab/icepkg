@@ -7,16 +7,11 @@ import { toArray, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 import EventEmitter from 'events';
 import type {
-  BundleTaskLoaderConfig,
   HandleChange,
-  HandleChanges,
-  NodeEnvMode,
   OutputFile,
   OutputResult,
-  PkgContext,
-  ReverseMap,
-  RunLoaderTasks,
-  TaskName,
+  RunTasks,
+  TaskRunnerContext,
 } from '../types.js';
 import type {
   OutputChunk as RollupOutputChunk,
@@ -28,21 +23,18 @@ import type {
   RollupOptions,
 } from 'rollup';
 
-export const runBundleWatchTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
-  taskLoaderConfigs: BundleTaskLoaderConfig[],
-) => {
+export const runBundleWatchTasks: RunTasks = async (taskOptions) => {
   const handleChangeFunctions: HandleChange[] = [];
   const outputResults = [];
 
-  for (const taskLoaderConfig of taskLoaderConfigs) {
-    for (const rollupOptions of taskLoaderConfig.rollupOptions) {
-      const { outputResult, handleChange } = await rawWatch(rollupOptions, taskLoaderConfig.taskName);
-      handleChangeFunctions.push(handleChange);
-      outputResults.push(outputResult);
-    }
+  for (const taskOption of taskOptions) {
+    const [rollupOptions, taskRunnerContext] = taskOption;
+    const { outputResult, handleChange } = await rawWatch(rollupOptions, taskRunnerContext);
+    outputResults.push(outputResult);
+    handleChangeFunctions.push(handleChange);
   }
 
-  const handleChanges: HandleChanges = async (id, event) => {
+  const handleChange: HandleChange<OutputResult[]> = async (id, event) => {
     const newOutputResults: OutputResult[] = [];
     for (const handleChangeFunction of handleChangeFunctions) {
       const newOutputResult = await handleChangeFunction(id, event);
@@ -53,26 +45,20 @@ export const runBundleWatchTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async
   };
 
   return {
-    handleChanges,
+    handleChange,
     outputResults,
   };
 };
 
-export const runBundleBuildTasks: RunLoaderTasks<BundleTaskLoaderConfig> = async (
-  taskLoaderConfigs: BundleTaskLoaderConfig[],
-) => {
-  const outputResults = [];
+export const runBundleBuildTasks: RunTasks = async (taskOptions) => {
+  const outputResults: OutputResult[] = [];
 
-  for (const taskLoaderConfig of taskLoaderConfigs) {
-    for (const rollupOptions of taskLoaderConfig.rollupOptions) {
-      const { outputResult } = await rawBuild(rollupOptions, taskLoaderConfig.taskName);
-      outputResults.push(outputResult);
-    }
+  for (const taskOption of taskOptions) {
+    const [rollupOptions, taskRunnerContext] = taskOption;
+    const { outputResult } = await rawBuild(rollupOptions, taskRunnerContext);
+    outputResults.push(outputResult);
   }
-
-  return {
-    outputResults,
-  };
+  return { outputResults };
 };
 
 // Fork from https://github.com/rollup/rollup/blob/v2.79.1/src/watch/WatchEmitter.ts
@@ -115,11 +101,12 @@ class WatchEmitter extends EventEmitter {
 
 async function rawWatch(
   rollupOptions: RollupOptions,
-  taskName: ReverseMap<typeof TaskName>,
+  taskRunnerContext: TaskRunnerContext,
 ): Promise<{ handleChange: HandleChange; outputResult: OutputResult }> {
   const rollupOutputOptions = toArray(rollupOptions.output);
-
-  const logger = createLogger(`${taskName}`); // TODO: add mode to the logger name
+  const { mode, buildTask } = taskRunnerContext;
+  const { name: taskName } = buildTask;
+  const logger = createLogger(`${taskName}-${mode}`);
 
   const start = performance.now();
 
@@ -215,10 +202,12 @@ async function rawWatch(
 
 async function rawBuild(
   rollupOptions: RollupOptions,
-  taskName: ReverseMap<typeof TaskName>,
+  taskRunnerContext: TaskRunnerContext,
 ): Promise<{ outputResult: OutputResult }> {
   const rollupOutputOptions = toArray(rollupOptions.output);
-  const logger = createLogger(`${taskName}`);
+  const { mode, buildTask } = taskRunnerContext;
+  const { name: taskName } = buildTask;
+  const logger = createLogger(`${taskName}-${mode}`);
 
   const start = performance.now();
 

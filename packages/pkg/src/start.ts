@@ -1,37 +1,61 @@
 import consola from 'consola';
-import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
+import { RollupOptions } from 'rollup';
+import { getBuildTasks } from './helpers/getBuildTasks.js';
+import { getRollupOptions } from './helpers/getRollupOptions.js';
 import { createWatcher } from './helpers/watcher.js';
-import { runBundleWatchTasks } from './loaders/bundle.js';
-import { runTransformWatchTasks } from './loaders/transform.js';
+import { runBundleWatchTasks } from './tasks/bundle.js';
+import { runTransformWatchTasks } from './tasks/transform.js';
 
 import type {
-  BundleTaskLoaderConfig,
-  LoaderTaskResult,
   OutputResult,
-  PkgContext,
-  PkgTaskConfig,
-  TransformTaskLoaderConfig,
+  Context,
   WatchEvent,
+  TaskRunnerContext,
 } from './types.js';
 
-export default async function start(context: PkgContext) {
-  const { getTaskConfig, applyHook, commandArgs } = context;
+export default async function start(context: Context) {
+  const { applyHook, commandArgs } = context;
 
-  const configs = getTaskConfig() as PkgTaskConfig[];
-  await applyHook('before.start.load', { args: commandArgs, config: configs });
+  const buildTasks = getBuildTasks(context);
+  const taskConfigs = buildTasks.map(({ config }) => config);
 
-  if (!configs.length) {
-    const err = new Error('Could not Find any pending tasks when excuting \'start\' command.');
+  await applyHook('before.start.load', {
+    args: commandArgs,
+    config: taskConfigs,
+  });
 
-    throw err;
+  if (!taskConfigs.length) {
+    throw new Error('Could not Find any pending tasks when excuting \'start\' command.');
   }
 
   await applyHook('before.start.run', {
     args: commandArgs,
-    config: configs,
+    config: taskConfigs,
   });
 
-  const normalizedConfigs = configs.map((config) => mergeConfigOptions(config, context));
+  const transformOptions = buildTasks
+    .filter(({ config }) => config.type === 'transform')
+    .map((buildTask) => {
+      const { config: { modes } } = buildTask;
+      return modes.map((mode) => {
+        const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
+        const rollupOptions = getRollupOptions(context, taskRunnerContext);
+        return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
+      });
+    })
+    .flat(1);
+
+  const bundleOptions = buildTasks
+    .filter(({ config }) => config.type === 'bundle')
+    .map((buildTask) => {
+      const { config: { modes } } = buildTask;
+      return modes.map((mode) => {
+        const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
+        const rollupOptions = getRollupOptions(context, taskRunnerContext);
+        return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
+      });
+    })
+    .flat(1);
 
   const watcher = createWatcher(context);
   watcher.on('add', async (id) => await handleChange(id, 'create'));
@@ -39,24 +63,20 @@ export default async function start(context: PkgContext) {
   watcher.on('unlink', async (id) => await handleChange(id, 'delete'));
   watcher.on('error', (error) => consola.error(error));
 
-  const bundleTaskLoaderConfigs = normalizedConfigs.filter((config) => config.type === 'bundle') as BundleTaskLoaderConfig[];
-  const transformTaskLoaderConfigs = normalizedConfigs.filter((config) => config.type === 'transform') as TransformTaskLoaderConfig[];
-
-  let transformWatchResult: LoaderTaskResult = { outputResults: [] };
-  let bundleWatchResult: LoaderTaskResult = { outputResults: [] };
-
   const outputResults: OutputResult[] = [];
 
-  if (transformTaskLoaderConfigs.length) {
-    transformWatchResult = await runTransformWatchTasks(transformTaskLoaderConfigs, context);
-  }
-  if (bundleTaskLoaderConfigs.length) {
-    bundleWatchResult = await runBundleWatchTasks(bundleTaskLoaderConfigs, context);
-  }
+  const transformWatchResult = await runTransformWatchTasks(
+    transformOptions,
+    context,
+  );
+  const bundleWatchResult = await runBundleWatchTasks(
+    bundleOptions,
+    context,
+  );
 
   outputResults.push(
-    ...(transformWatchResult.outputResults || []),
-    ...(bundleWatchResult.outputResults || []),
+    ...(transformWatchResult.outputResults),
+    ...(bundleWatchResult.outputResults),
   );
 
   await applyHook('after.start.compile', outputResults);
@@ -64,11 +84,11 @@ export default async function start(context: PkgContext) {
   async function handleChange(id: string, event: WatchEvent) {
     const newOutputResults = [];
     try {
-      const newTransformOutputResults = transformWatchResult.handleChanges ?
-        await transformWatchResult.handleChanges(id, event) :
+      const newTransformOutputResults = transformWatchResult.handleChange ?
+        await transformWatchResult.handleChange(id, event) :
         [];
-      const newBundleOutputResults = bundleWatchResult.handleChanges ?
-        await bundleWatchResult.handleChanges(id, event) :
+      const newBundleOutputResults = bundleWatchResult.handleChange ?
+        await bundleWatchResult.handleChange(id, event) :
         [];
       newOutputResults.push(
         ...newTransformOutputResults,

@@ -1,5 +1,5 @@
 import type { RollupOptions, Plugin as RollupPlugin, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
-import type { Context, PluginAPI, Plugin, TaskConfig as BuildTask } from 'build-scripts';
+import type { Context as _Context, PluginAPI as _PluginAPI, Plugin as _Plugin, TaskConfig as _BuildTask } from 'build-scripts';
 import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styles';
 
@@ -10,7 +10,7 @@ export type ReverseMap<T> = T[keyof T];
 
 export type RollupPluginFn<T = {}> = (args?: T) => RollupPlugin;
 
-export interface TransformOptions {
+export interface TransformUserConfig {
   /**
    * Which type of contents would be generated
    * "cjs" - Commonjs with ES5 syntax (targeting Node version under 12);
@@ -28,7 +28,7 @@ export interface TransformOptions {
   excludes?: string | string[];
 }
 
-export interface BundleOptions {
+export interface BundleUserConfig {
   /**
    * Export name
    * @default package.name
@@ -68,36 +68,19 @@ export interface BundleOptions {
 
 export type TaskLoaderConfig = BundleTaskLoaderConfig | TransformTaskLoaderConfig;
 
-export interface BundleTaskLoaderConfig extends Omit<BundleTaskConfig, 'rollupOptions' | 'rollupPlugins'> {
+export interface BundleTaskLoaderConfig extends BundleTaskConfig {
   type: 'bundle';
 
   taskName: TaskName;
-  /**
-   * Extra rollup options
-   * @see https://rollupjs.org/guide/en/
-   */
-  rollupOptions?: RollupOptions[];
-  /**
-    * Extra rollup plugins
-    */
-  rollupPlugins?: RollupPlugin[][];
 }
 
 export interface TransformTaskLoaderConfig extends TransformTaskConfig {
   type: 'transform';
+
   taskName: TaskName;
-  /**
-   * Extra rollup options
-   * @see https://rollupjs.org/guide/en/
-   */
-  rollupOptions?: RollupOptions;
-  /**
-    * Extra rollup plugins
-    */
-  rollupPlugins?: RollupPlugin[];
 }
 
-interface CommonTaskConfig {
+interface _TaskConfig {
   /**
   * Output directory
   */
@@ -117,14 +100,11 @@ interface CommonTaskConfig {
    */
   alias?: Record<string, string>;
   /**
-  * Extra rollup options
-  * @see https://rollupjs.org/guide/en/
-  */
-  rollupOptions?: RollupOptions;
-  /**
-  * Extra rollup plugins
-  */
-  rollupPlugins?: RollupPlugin[];
+   * Extra rollup options
+   * @returns
+   * @see https://rollupjs.org/guide/en/
+   */
+  modifyRollupOptions?: (rollupOptions: RollupOptions) => RollupOptions;
   /**
   * Extra swc compile options
   * @see https://swc.rs/docs/configuration/compilationv
@@ -137,8 +117,8 @@ interface CommonTaskConfig {
 }
 
 export interface BundleTaskConfig extends
-  CommonTaskConfig,
-  Omit<BundleOptions, 'development'> {
+  _TaskConfig,
+  Omit<BundleUserConfig, 'development'> {
   type: 'bundle';
   /**
   * Entry for a specific task
@@ -156,7 +136,7 @@ export interface BundleTaskConfig extends
   stylesOptions?: (options: StylesRollupPluginOptions) => StylesRollupPluginOptions;
 }
 
-export interface TransformTaskConfig extends CommonTaskConfig, TransformOptions {
+export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {
   type: 'transform';
   /**
   * Entry for a specific task
@@ -164,20 +144,29 @@ export interface TransformTaskConfig extends CommonTaskConfig, TransformOptions 
   */
   entry?: string;
   /**
- * Build mode.
- */
-  mode?: NodeEnvMode;
+   * Node env modes. For example: 'production', 'development'
+   * @default `['development']` on start, `['production']` on build.
+   */
+  modes?: NodeEnvMode[];
 }
 
 export type TaskConfig = BundleTaskConfig | TransformTaskConfig;
 
-export type PkgTaskConfig = BuildTask<TaskConfig, TaskName>;
+export type BuildTask = _BuildTask<TaskConfig, TaskName>;
 
-export type PkgContext = Context<TaskConfig, {}, UserConfig>;
+export type Context = _Context<TaskConfig, {}, UserConfig>;
 
-export type PkgPluginAPI = PluginAPI<TaskConfig>;
+export type PluginAPI = _PluginAPI<TaskConfig>;
+/**
+ * @deprecated Please use PluginAPI instead.
+ */
+export type PkgPluginAPI = PluginAPI;
 
-export type PkgPlugin = Plugin<TaskConfig>;
+export type Plugin = _Plugin<TaskConfig>;
+/**
+ * @deprecated Please use Plugin instead.
+ */
+export type PkgPlugin = Plugin;
 
 export enum TaskName {
   'TRANSFORM_CJS' = 'transform-cjs',
@@ -247,26 +236,30 @@ export interface UserConfig {
   /**
    * "transform mode" means transform files one by one
    */
-  transform?: TransformOptions;
+  transform?: TransformUserConfig;
 
   /**
    * "bundle mode" means bundle everything up by using Rollup
    */
-  bundle?: BundleOptions;
+  bundle?: BundleUserConfig;
 }
 
 // Set for `process.env.NODE_ENV`
 export type NodeEnvMode = 'development' | 'production' | string;
 
 export type WatchEvent = 'create' | 'update' | 'delete';
-export type HandleChange = (id: string, event: WatchEvent) => Promise<OutputResult>;
-export type HandleChanges = (id: string, event: WatchEvent) => Promise<OutputResult[]>;
+export type HandleChange<R = OutputResult> = (id: string, event: WatchEvent) => Promise<R>;
 
-export interface LoaderTaskResult {
-  handleChanges?: HandleChanges;
+export interface TaskResult {
+  handleChange?: HandleChange<OutputResult[]>;
   outputResults: OutputResult[];
 }
-export type RunLoaderTasks<C> = (
-  taskLoaderConfigs: C[],
-  context: PkgContext
-) => Promise<LoaderTaskResult>;
+export interface TaskRunnerContext {
+  mode: NodeEnvMode;
+  buildTask: BuildTask;
+}
+
+export type RunTasks = (
+  taskOptions: Array<[RollupOptions, TaskRunnerContext]>,
+  context: Context,
+) => Promise<TaskResult>;

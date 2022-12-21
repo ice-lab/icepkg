@@ -1,16 +1,16 @@
 import {
-  BundleTaskLoaderConfig,
-  PkgContext,
+  BundleTaskConfig,
+  Context,
   ReverseMap,
   TaskConfig,
   TaskName,
-  TransformTaskLoaderConfig,
+  TransformTaskConfig,
 } from '../types.js';
 import type { Config, JscConfig, ModuleConfig } from '@swc/core';
 
 export const getDefaultBundleSwcConfig = (
-  taskLoaderConfig: BundleTaskLoaderConfig,
-  ctx: PkgContext,
+  bundleTaskConfig: BundleTaskConfig,
+  ctx: Context,
   taskName: ReverseMap<typeof TaskName>,
 ): Config => {
   const target = taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5';
@@ -31,7 +31,7 @@ export const getDefaultBundleSwcConfig = (
     jsc: {
       target,
       baseUrl: ctx.rootDir,
-      paths: formatAliasPaths(taskLoaderConfig.alias),
+      paths: formatAliasPaths(bundleTaskConfig.alias),
     },
     minify: false,
     // Always generate map in bundle mode,
@@ -47,8 +47,8 @@ export const getDefaultBundleSwcConfig = (
 };
 
 export const getDefaultTransformSwcConfig = (
-  taskLoaderConfig: TransformTaskLoaderConfig,
-  ctx: PkgContext,
+  transformTaskConfig: TransformTaskConfig,
+  ctx: Context,
   taskName: ReverseMap<typeof TaskName>,
 ): Config => {
   const module: ModuleConfig = taskName === TaskName.TRANSFORM_CJS
@@ -61,12 +61,12 @@ export const getDefaultTransformSwcConfig = (
     jsc: {
       target,
       baseUrl: ctx.rootDir,
-      paths: formatAliasPaths(taskLoaderConfig.alias),
+      paths: formatAliasPaths(transformTaskConfig.alias),
       transform: {
         optimizer: {
           globals: {
             vars: {
-              ...taskLoaderConfig.define,
+              ...transformTaskConfig.define,
             },
           },
         },
@@ -77,7 +77,7 @@ export const getDefaultTransformSwcConfig = (
     },
     minify: false,
     module,
-    sourceMaps: taskLoaderConfig.sourcemap,
+    sourceMaps: transformTaskConfig.sourcemap,
   };
 };
 

@@ -1,13 +1,13 @@
 import { mergeValueToTaskConfig } from '../utils.js';
 import deepmerge from 'deepmerge';
-import type { BundleTaskConfig, TaskConfig, UserConfig, BundleOptions } from '../types.js';
+import type { BundleTaskConfig, TaskConfig, UserConfig, BundleUserConfig, TransformUserConfig } from '../types.js';
 
 function getUserConfig() {
-  const defaultBundleUserConfig: BundleOptions = {
+  const defaultBundleUserConfig: BundleUserConfig = {
     formats: ['esm', 'es2017'],
     modes: ['production'],
   };
-  const defaultTransformUserConfig = {
+  const defaultTransformUserConfig: TransformUserConfig = {
     formats: ['esm', 'es2017'],
   };
   const userConfig = [

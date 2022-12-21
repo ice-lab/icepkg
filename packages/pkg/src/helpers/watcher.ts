@@ -1,7 +1,7 @@
 import * as chokidar from 'chokidar';
-import type { PkgContext } from '../types';
+import type { Context } from '../types';
 
-export const createWatcher = (ctx: PkgContext) => {
+export const createWatcher = (ctx: Context) => {
   const { rootDir } = ctx;
   const watcher = chokidar.watch(['src'], {
     cwd: rootDir,
