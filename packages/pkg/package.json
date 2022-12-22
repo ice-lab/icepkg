@@ -2,15 +2,16 @@
   "name": "@ice/pkg",
   "version": "1.4.0",
   "description": "Core service of ice component",
-  "main": "./lib/index.js",
   "type": "module",
+  "main": "./lib/index.js",
   "exports": "./lib/index.js",
   "bin": {
     "ice-pkg": "./bin/cli.mjs"
   },
   "files": [
     "lib",
-    "!lib/**/*.map"
+    "!lib/**/*.map",
+    "types.d.ts"
   ],
   "scripts": {
     "build": "rm -rf lib && tsc",
