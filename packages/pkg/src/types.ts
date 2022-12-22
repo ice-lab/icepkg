@@ -63,20 +63,6 @@ export interface BundleUserConfig {
   minify?: boolean;
 }
 
-export type TaskLoaderConfig = BundleTaskLoaderConfig | TransformTaskLoaderConfig;
-
-export interface BundleTaskLoaderConfig extends BundleTaskConfig {
-  type: 'bundle';
-
-  taskName: TaskValue;
-}
-
-export interface TransformTaskLoaderConfig extends TransformTaskConfig {
-  type: 'transform';
-
-  taskName: TaskValue;
-}
-
 interface _TaskConfig {
   /**
   * Output directory
@@ -222,7 +208,7 @@ export interface UserConfig {
    */
   sourceMaps?: boolean | 'inline';
   /**
-  * Whether or not to generate declation files for Ecmascript
+  * Whether or not to generate declaration files for Ecmascript
   * @default false
   */
   generateTypesForJs?: boolean;
