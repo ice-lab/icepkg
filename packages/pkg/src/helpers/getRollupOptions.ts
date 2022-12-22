@@ -133,36 +133,25 @@ function getRollupOutputs({
   command,
 }: GetRollupOutputsOptions): OutputOptions[] {
   const { outputDir } = bundleTaskConfig;
-  const outputs: OutputOptions[] = [];
 
   const outputFormats = (bundleTaskConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
   const minify = bundleTaskConfig.minify ?? (command === 'build' && mode === 'production');
   const name = bundleTaskConfig.name ?? pkg.name;
 
-  outputFormats.forEach((format) => {
-    const commonOptions: OutputOptions = {
-      name,
-      format,
-      globals,
-      sourcemap: bundleTaskConfig.sourcemap,
-      exports: 'auto',
-      assetFileNames: '[name][extname]',
-    };
-
-    const output: OutputOptions = {
-      ...commonOptions,
-      plugins: [
-        minify && minifyPlugin(bundleTaskConfig.sourcemap),
-      ].filter(Boolean),
-    };
-
-    output.dir = outputDir;
-    output.entryFileNames = () => getFilename('[name]', format, esVersion, mode, 'js');
-    output.chunkFileNames = () => getFilename('[hash]', format, esVersion, mode, 'js');
-    outputs.push(output);
-  });
-
-  return outputs;
+  return outputFormats.map((format) => ({
+    name,
+    format,
+    globals,
+    sourcemap: bundleTaskConfig.sourcemap,
+    exports: 'auto',
+    dir: outputDir,
+    assetFileNames: getFilename('[name]', format, esVersion, mode, '[ext]'),
+    entryFileNames: getFilename('[name]', format, esVersion, mode, 'js'),
+    chunkFileNames: getFilename('[hash]', format, esVersion, mode, 'js'),
+    plugins: [
+      minify && minifyPlugin(bundleTaskConfig.sourcemap),
+    ].filter(Boolean),
+  }));
 }
 
 function getExternalsAndGlobals(
