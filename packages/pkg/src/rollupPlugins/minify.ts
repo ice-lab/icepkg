@@ -15,7 +15,7 @@ const minifyPlugin = (sourcemap: TaskConfig['sourcemap']): Plugin => {
           unused: false,
         },
         // Minify amd module will cause an error(`module` reserved Words will be declared in the top level).
-        mangle: false,
+        module: true,
         sourceMap: !!sourcemap,
       });
     },
