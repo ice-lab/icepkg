@@ -1,4 +1,4 @@
-import type { RollupOptions, Plugin as RollupPlugin, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
+import type { RollupOptions, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
 import type { Context as _Context, PluginAPI as _PluginAPI, Plugin as _Plugin, TaskConfig as _BuildTask } from 'build-scripts';
 import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styles';
@@ -6,9 +6,6 @@ import type stylesPlugin from 'rollup-plugin-styles';
 type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
 export type PlainObject = Record<string, string | boolean | number | object>;
-export type ReverseMap<T> = T[keyof T];
-
-export type RollupPluginFn<T = {}> = (args?: T) => RollupPlugin;
 
 export interface TransformUserConfig {
   /**
@@ -71,13 +68,13 @@ export type TaskLoaderConfig = BundleTaskLoaderConfig | TransformTaskLoaderConfi
 export interface BundleTaskLoaderConfig extends BundleTaskConfig {
   type: 'bundle';
 
-  taskName: TaskName;
+  taskName: TaskValue;
 }
 
 export interface TransformTaskLoaderConfig extends TransformTaskConfig {
   type: 'transform';
 
-  taskName: TaskName;
+  taskName: TaskValue;
 }
 
 interface _TaskConfig {
@@ -167,6 +164,7 @@ export type Plugin = _Plugin<TaskConfig>;
  */
 export type PkgPlugin = Plugin;
 
+// TODO: The enum name should be renamed to Task.
 export enum TaskName {
   'TRANSFORM_CJS' = 'transform-cjs',
   'TRANSFORM_ESM' = 'transform-esm',
@@ -174,6 +172,9 @@ export enum TaskName {
   'BUNDLE_ES5' = 'bundle-es5',
   'BUNDLE_ES2017' = 'bundle-es2017',
 }
+type TaskKey = keyof typeof TaskName;
+// TODO: The type name should be renamed to TaskName.
+export type TaskValue = typeof TaskName[TaskKey];
 
 export interface OutputFile {
   // globby parsed path, which is relative

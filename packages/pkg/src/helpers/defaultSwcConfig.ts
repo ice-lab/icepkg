@@ -1,9 +1,9 @@
 import {
   BundleTaskConfig,
   Context,
-  ReverseMap,
-  TaskConfig,
   TaskName,
+  TaskValue,
+  TaskConfig,
   TransformTaskConfig,
 } from '../types.js';
 import type { Config, JscConfig, ModuleConfig } from '@swc/core';
@@ -11,10 +11,9 @@ import type { Config, JscConfig, ModuleConfig } from '@swc/core';
 export const getDefaultBundleSwcConfig = (
   bundleTaskConfig: BundleTaskConfig,
   ctx: Context,
-  taskName: ReverseMap<typeof TaskName>,
+  taskName: TaskValue,
 ): Config => {
   const target = taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5';
-
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? {
     // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
     chrome: 61,
@@ -49,7 +48,7 @@ export const getDefaultBundleSwcConfig = (
 export const getDefaultTransformSwcConfig = (
   transformTaskConfig: TransformTaskConfig,
   ctx: Context,
-  taskName: ReverseMap<typeof TaskName>,
+  taskName: TaskValue,
 ): Config => {
   const module: ModuleConfig = taskName === TaskName.TRANSFORM_CJS
     ? { type: 'commonjs' }

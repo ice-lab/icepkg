@@ -26,7 +26,7 @@ const getParserPlugins = (isTs?: boolean): ParserPlugin[] => {
   return commonPlugins;
 };
 
-const babelPlugin = ({ plugins }: { plugins: babel.PluginItem[] }): Plugin => {
+const babelPlugin = (plugins: babel.PluginItem[]): Plugin => {
   return {
     name: 'ice-pkg:babel',
 

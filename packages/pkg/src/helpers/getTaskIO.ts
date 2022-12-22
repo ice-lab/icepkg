@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { isDirectory } from '../utils.js';
-import { TaskName } from '../types.js';
+import type { TaskValue } from '../types.js';
 
 export function formatEntry(inputEntry: string | string[] | Record<string, string>): Record<string, string> {
   const entry = {};
@@ -35,7 +35,7 @@ export const getDefaultEntryDir = (rootDir: string, entryDir = DEFAULT_ENTRY_DIR
   return entryDir;
 };
 
-export const getOutputDir = (rootDir: string, taskName: TaskName) => {
+export const getOutputDir = (rootDir: string, taskName: TaskValue) => {
   if (taskName.includes('transform')) {
     return resolve(rootDir, taskName.split('-')[1]);
   }

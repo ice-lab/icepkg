@@ -43,12 +43,9 @@ export function getRollupOptions(
   rollupOptions.plugins ??= [];
 
   if (config.babelPlugins?.length) {
-    rollupOptions.plugins.push(babelPlugin({ plugins: config.babelPlugins }));
+    rollupOptions.plugins.push(babelPlugin(config.babelPlugins));
   }
-  rollupOptions.plugins.push(swcPlugin({
-    type: config.type,
-    extraSwcOptions: config.swcCompileOptions,
-  }));
+  rollupOptions.plugins.push(swcPlugin(config.type, config.swcCompileOptions));
 
   if (config.type === 'transform') {
     rollupOptions.plugins.push(
@@ -155,7 +152,7 @@ function getRollupOutputs({
     const output: OutputOptions = {
       ...commonOptions,
       plugins: [
-        minify && minifyPlugin({ sourcemap: bundleTaskConfig.sourcemap }),
+        minify && minifyPlugin(bundleTaskConfig.sourcemap),
       ].filter(Boolean),
     };
 

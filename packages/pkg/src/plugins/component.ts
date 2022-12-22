@@ -1,8 +1,8 @@
 import * as config from '../config/index.js';
 import { TaskName, UserConfig } from '../types.js';
-import type { PkgPlugin } from '../types.js';
+import type { Plugin } from '../types.js';
 
-const plugin: PkgPlugin = (api) => {
+const plugin: Plugin = (api) => {
   const {
     registerUserConfig,
     registerCliOption,
