@@ -5,8 +5,10 @@ import {
   TaskValue,
   TaskConfig,
   TransformTaskConfig,
+  NodeEnvMode,
 } from '../types.js';
 import type { Config, JscConfig, ModuleConfig } from '@swc/core';
+import getDefaultDefineValues from './getDefaultDefineValues.js';
 
 export const getDefaultBundleSwcConfig = (
   bundleTaskConfig: BundleTaskConfig,
@@ -49,6 +51,7 @@ export const getDefaultTransformSwcConfig = (
   transformTaskConfig: TransformTaskConfig,
   ctx: Context,
   taskName: TaskValue,
+  mode: NodeEnvMode,
 ): Config => {
   const module: ModuleConfig = taskName === TaskName.TRANSFORM_CJS
     ? { type: 'commonjs' }
@@ -65,6 +68,7 @@ export const getDefaultTransformSwcConfig = (
         optimizer: {
           globals: {
             vars: {
+              ...getDefaultDefineValues(mode),
               ...transformTaskConfig.define,
             },
           },

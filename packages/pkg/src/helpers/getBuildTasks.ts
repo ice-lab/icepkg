@@ -31,11 +31,12 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
     );
   } else if (config.type === 'transform') {
     config.entry = getDefaultEntryDir(rootDir);
+    const mode = command === 'build' ? 'production' : 'development';
+    config.modes = [mode];
     config.swcCompileOptions = deepmerge(
-      getDefaultTransformSwcConfig(config, context, taskName),
+      getDefaultTransformSwcConfig(config, context, taskName, mode),
       config.swcCompileOptions || {},
     );
-    config.modes = [command === 'build' ? 'production' : 'development'];
   } else {
     throw new Error('Invalid task type.');
   }

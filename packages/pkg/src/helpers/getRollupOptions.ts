@@ -12,6 +12,7 @@ import { builtinNodeModules } from './builtinModules.js';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
+import getDefaultDefineValues from './getDefaultDefineValues.js';
 
 import {
   Context,
@@ -38,27 +39,27 @@ export function getRollupOptions(
   taskRunnerContext: TaskRunnerContext,
 ) {
   const { pkg, commandArgs, command, userConfig } = context;
-  const { name: taskName, config } = taskRunnerContext.buildTask;
+  const { name: taskName, config: taskConfig } = taskRunnerContext.buildTask;
   const rollupOptions: RollupOptions = {};
   rollupOptions.plugins ??= [];
 
-  if (config.babelPlugins?.length) {
-    rollupOptions.plugins.push(babelPlugin(config.babelPlugins));
+  if (taskConfig.babelPlugins?.length) {
+    rollupOptions.plugins.push(babelPlugin(taskConfig.babelPlugins));
   }
-  rollupOptions.plugins.push(swcPlugin(config.type, config.swcCompileOptions));
+  rollupOptions.plugins.push(swcPlugin(taskConfig.type, taskConfig.swcCompileOptions));
 
-  if (config.type === 'transform') {
+  if (taskConfig.type === 'transform') {
     rollupOptions.plugins.push(
-      dtsPlugin(config.entry, userConfig.generateTypesForJs),
+      dtsPlugin(taskConfig.entry, userConfig.generateTypesForJs),
     );
-  } else if (config.type === 'bundle') {
-    const [external, globals] = getExternalsAndGlobals(config, pkg as PkgJson);
+  } else if (taskConfig.type === 'bundle') {
+    const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
 
-    rollupOptions.input = config.entry;
+    rollupOptions.input = taskConfig.entry;
     rollupOptions.external = external;
     rollupOptions.output = getRollupOutputs({
       globals,
-      bundleTaskConfig: config,
+      bundleTaskConfig: taskConfig,
       pkg: pkg as PkgJson,
       esVersion: taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5',
       mode: taskRunnerContext.mode,
@@ -68,22 +69,20 @@ export function getRollupOptions(
     rollupOptions.plugins.push(
       replace({
         values: {
-          // Insert __DEV__ for users.
-          __DEV__: () => JSON.stringify(taskRunnerContext.mode === 'development'),
-          'process.env.NODE_ENV': () => JSON.stringify(taskRunnerContext.mode),
+          ...getDefaultDefineValues(taskRunnerContext.mode),
           // User define can override above.
-          ...config.define,
+          ...taskConfig.define,
         },
         preventAssignment: true,
       }),
-      styles((config.stylesOptions || ((options) => options))({
+      styles((taskConfig.stylesOptions || ((options) => options))({
         plugins: [
           autoprefixer(),
         ],
         mode: 'extract',
         autoModules: true,
-        minimize: config.minify,
-        sourceMap: config.sourcemap,
+        minimize: taskConfig.minify,
+        sourceMap: taskConfig.sourcemap,
       })),
       image(),
       json(),
@@ -91,13 +90,13 @@ export function getRollupOptions(
         extensions: [
           '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
           '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
-          ...(config.extensions || []),
+          ...(taskConfig.extensions || []),
         ],
       }),
       commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
         extensions: [
           '.js', // plugin-commonjs default extensions
-          ...(config.extensions || []),
+          ...(taskConfig.extensions || []),
         ],
       }),
     );
@@ -110,7 +109,7 @@ export function getRollupOptions(
     }
   }
 
-  return (config.modifyRollupOptions ?? [((options) => options)]).reduce(
+  return (taskConfig.modifyRollupOptions ?? [((options) => options)]).reduce(
     (prevRollupOptions, modifyRollupOptions) => modifyRollupOptions(prevRollupOptions),
     rollupOptions,
   );
