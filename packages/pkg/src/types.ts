@@ -2,6 +2,7 @@ import type { RollupOptions, SourceMapInput, ModuleJSON, RollupOutput } from 'ro
 import type { Context as _Context, PluginAPI as _PluginAPI, Plugin as _Plugin, TaskConfig as _BuildTask } from 'build-scripts';
 import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styles';
+import type { FSWatcher } from 'chokidar';
 
 type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
@@ -9,11 +10,16 @@ export type PlainObject = Record<string, string | boolean | number | object>;
 
 export interface TransformUserConfig {
   /**
+  * Entry for task
+  * @default  `./src`
+  */
+  entry?: string;
+  /**
    * Which type of contents would be generated
    * "cjs" - Commonjs with ES5 syntax (targeting Node version under 12);
    * "esm" - ES Module with ES5 syntax (legacy outputs);
    * "es2017" - ES Module with ES2017 (targeting modern browsers and Node version upon 12)
-   * @default ['esm','es2017']
+   * @default ['esm', 'es2017']
    */
   formats?: Array<'cjs' | 'esm' | 'es2017'>;
   /**
@@ -26,6 +32,11 @@ export interface TransformUserConfig {
 }
 
 export interface BundleUserConfig {
+  /**
+  * Entry for a task
+  * @default  `./src/index`
+  */
+  entry?: RollupOptions['input'];
   /**
    * Export name
    * @default package.name
@@ -103,11 +114,6 @@ export interface BundleTaskConfig extends
   Omit<BundleUserConfig, 'development'> {
   type: 'bundle';
   /**
-  * Entry for a specific task
-  * @default  `./src/index[j|t]sx` for bundling task
-  */
-  entry?: RollupOptions['input'];
-  /**
   * Files extensions
   * @see https://www.npmjs.com/package/@rollup/plugin-node-resolve
   */
@@ -120,11 +126,6 @@ export interface BundleTaskConfig extends
 
 export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {
   type: 'transform';
-  /**
-  * Entry for a specific task
-  * @default  `./src` for Transform task
-  */
-  entry?: string;
   /**
    * Node env modes. For example: 'production', 'development'
    * @default `['development']` on start, `['production']` on build.
@@ -189,10 +190,6 @@ export interface OutputResult {
 
 export interface UserConfig {
   /**
-   * Entry for build.
-   */
-  entry?: string | string[] | Record<string, string>;
-  /**
    * Alias to file system paths
    * @default {}
    */
@@ -246,6 +243,7 @@ export interface TaskRunnerContext {
 }
 
 export type RunTasks = (
-  taskOptions: Array<[RollupOptions, TaskRunnerContext]>,
+  taskOptionsList: Array<[RollupOptions, TaskRunnerContext]>,
   context: Context,
+  watcher?: FSWatcher,
 ) => Promise<TaskResult>;

@@ -1,4 +1,4 @@
-import { join } from 'path';
+import * as path from 'path';
 import consola from 'consola';
 import * as rollup from 'rollup';
 import { Watcher } from 'rollup/dist/shared/watch.js';
@@ -22,14 +22,15 @@ import type {
   OutputOptions,
   RollupOptions,
 } from 'rollup';
+import type { FSWatcher } from 'chokidar';
 
-export const watchBundleTasks: RunTasks = async (taskOptions) => {
+export const watchBundleTasks: RunTasks = async (taskOptionsList, context, watcher) => {
   const handleChangeFunctions: HandleChange[] = [];
   const outputResults = [];
 
-  for (const taskOption of taskOptions) {
-    const [rollupOptions, taskRunnerContext] = taskOption;
-    const { outputResult, handleChange } = await rawWatch(rollupOptions, taskRunnerContext);
+  for (const taskOptions of taskOptionsList) {
+    const [rollupOptions, taskRunnerContext] = taskOptions;
+    const { outputResult, handleChange } = await rawWatch(rollupOptions, taskRunnerContext, watcher);
     outputResults.push(outputResult);
     handleChangeFunctions.push(handleChange);
   }
@@ -50,11 +51,11 @@ export const watchBundleTasks: RunTasks = async (taskOptions) => {
   };
 };
 
-export const buildBundleTasks: RunTasks = async (taskOptions) => {
+export const buildBundleTasks: RunTasks = async (taskOptionsList) => {
   const outputResults: OutputResult[] = [];
 
-  for (const taskOption of taskOptions) {
-    const [rollupOptions, taskRunnerContext] = taskOption;
+  for (const taskOptions of taskOptionsList) {
+    const [rollupOptions, taskRunnerContext] = taskOptions;
     const { outputResult } = await rawBuild(rollupOptions, taskRunnerContext);
     outputResults.push(outputResult);
   }
@@ -99,9 +100,58 @@ class WatchEmitter extends EventEmitter {
   }
 }
 
+class FileWatcher {
+  private watched = new Set<string>();
+  private watcher: FSWatcher;
+  private outputFiles: string[];
+  constructor(watcher: FSWatcher, rollupOutputs: OutputOptions[]) {
+    this.watcher = watcher;
+    this.outputFiles = rollupOutputs.map((output) => {
+      if (output.file || output.dir) return path.resolve(output.file || output.dir!);
+      return undefined as never;
+    });
+  }
+  updateWatchedFiles(result: RollupBuild) {
+    const previouslyWatched = this.watched;
+    this.watched = new Set<string>();
+    const { watchFiles, cache: { modules } } = result;
+
+    for (const id of watchFiles) {
+      this.watchFile(id);
+    }
+
+    for (const module of modules) {
+      // TODO: support create TransformDependency watcher
+      for (const depId of module.transformDependencies) {
+        this.watchFile(depId);
+      }
+    }
+
+    for (const id of previouslyWatched) {
+      if (!this.watched.has(id)) {
+        this.unwatchFile(id);
+      }
+    }
+  }
+  private watchFile(id: string) {
+    if (/node_modules/.test(id) || /\0/.test(id)) return;
+    this.watched.add(id);
+
+    if (this.outputFiles.includes(id)) {
+      throw new Error('Cannot import the generated bundle');
+    }
+
+    this.watcher.add(id);
+  }
+  private unwatchFile(id: string): void {
+    this.watcher.unwatch(id);
+  }
+}
+
 async function rawWatch(
   rollupOptions: RollupOptions,
   taskRunnerContext: TaskRunnerContext,
+  fsWatcher: FSWatcher,
 ): Promise<{ handleChange: HandleChange; outputResult: OutputResult }> {
   const rollupOutputOptions = toArray(rollupOptions.output);
   const { mode, buildTask } = taskRunnerContext;
@@ -111,7 +161,7 @@ async function rawWatch(
   const start = performance.now();
 
   logger.debug('Bundle start...');
-
+  const fileWatcher = new FileWatcher(fsWatcher, rollupOutputOptions);
   const emitter = new WatchEmitter();
   const watcher = new Watcher(
     [{ ...rollupOptions, watch: { skipWrite: false } }],
@@ -134,7 +184,9 @@ async function rawWatch(
       }
       result = null;
     } else if (event.code === 'BUNDLE_END') {
-      const { result: { write, cache } } = event;
+      const { result: bundleResult } = event;
+      const { write, cache } = bundleResult;
+      fileWatcher.updateWatchedFiles(bundleResult);
       const buildResult = await writeFiles(rollupOutputOptions, write);
       result = {
         taskName,
@@ -242,7 +294,7 @@ async function writeFiles(rollupOutputOptions: OutputOptions[], write: RollupBui
     writeResult.output.forEach((chunk: RollupOutputChunk | RollupOutputAsset) => {
       outputFiles.push({
         absolutePath: chunk['facadeModuleId'],
-        dest: join(distDir, chunk.fileName),
+        dest: path.join(distDir, chunk.fileName),
         filename: chunk.fileName,
         code: chunk.type === 'chunk' ? chunk.code : chunk.source,
       });

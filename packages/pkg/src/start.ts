@@ -33,6 +33,12 @@ export default async function start(context: Context) {
     config: taskConfigs,
   });
 
+  const watcher = createWatcher(taskConfigs);
+  watcher.on('add', async (id) => await handleChange(id, 'create'));
+  watcher.on('change', async (id) => await handleChange(id, 'update'));
+  watcher.on('unlink', async (id) => await handleChange(id, 'delete'));
+  watcher.on('error', (error) => consola.error(error));
+
   const transformOptions = buildTasks
     .filter(({ config }) => config.type === 'transform')
     .map((buildTask) => {
@@ -57,21 +63,17 @@ export default async function start(context: Context) {
     })
     .flat(1);
 
-  const watcher = createWatcher(context);
-  watcher.on('add', async (id) => await handleChange(id, 'create'));
-  watcher.on('change', async (id) => await handleChange(id, 'update'));
-  watcher.on('unlink', async (id) => await handleChange(id, 'delete'));
-  watcher.on('error', (error) => consola.error(error));
-
   const outputResults: OutputResult[] = [];
 
   const transformWatchResult = await watchTransformTasks(
     transformOptions,
     context,
+    watcher,
   );
   const bundleWatchResult = await watchBundleTasks(
     bundleOptions,
     context,
+    watcher,
   );
 
   outputResults.push(

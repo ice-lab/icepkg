@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import consola from 'consola';
 import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE, loadPkg } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
-import { isObject, isDirectory, timeFrom, cwd } from '../utils.js';
+import { isObject, timeFrom, cwd } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
 import type {
@@ -21,12 +21,15 @@ import type { RollupOptions, SourceMapInput } from 'rollup';
 const pkg = loadPkg(cwd);
 const isSWCHelpersDeclaredInDependency = Boolean(pkg?.dependencies?.['@swc/helpers']);
 
-export const watchTransformTasks: RunTasks = async (taskOptions, context) => {
+export const watchTransformTasks: RunTasks = async (taskOptionsList, context, watcher) => {
   const handleChangeFunctions: HandleChange[] = [];
   const outputResults: OutputResult[] = [];
 
-  for (const taskOption of taskOptions) {
-    const [rollupOptions, taskRunnerContext] = taskOption;
+  for (const taskOptions of taskOptionsList) {
+    const [rollupOptions, taskRunnerContext] = taskOptions;
+
+    watcher.add((taskRunnerContext.buildTask.config as TransformTaskConfig).entry);
+
     let outputResult: OutputResult;
     try {
       outputResult = await runTransform(rollupOptions, taskRunnerContext, context);
@@ -58,11 +61,11 @@ export const watchTransformTasks: RunTasks = async (taskOptions, context) => {
   };
 };
 
-export const buildTransformTasks: RunTasks = async (taskOptions, context) => {
+export const buildTransformTasks: RunTasks = async (taskOptionsList, context) => {
   const outputResults: OutputResult[] = [];
 
-  for (const taskOption of taskOptions) {
-    const [rollupOptions, taskRunnerContext] = taskOption;
+  for (const taskOptions of taskOptionsList) {
+    const [rollupOptions, taskRunnerContext] = taskOptions;
     const outputResult = await runTransform(rollupOptions, taskRunnerContext, context);
     outputResults.push(outputResult);
   }
@@ -89,20 +92,18 @@ async function runTransform(
 
   let files: OutputFile[];
   if (updatedFile) {
-    files = [getFileInfo(updatedFile, rootDir)];
-  } else if (isDirectory(config.entry)) {
+    files = [getFileInfo(updatedFile, entryDir)];
+  } else {
     files =
       loadEntryFiles(
-        resolve(rootDir, entryDir),
+        entryDir,
         (userConfig?.transform?.excludes || []),
       )
         .map((filePath) => ({
           filePath,
-          absolutePath: resolve(rootDir, entryDir, filePath),
+          absolutePath: resolve(entryDir, filePath),
           ext: extname(filePath),
         }));
-  } else {
-    files = [getFileInfo(config.entry, rootDir)];
   }
 
   const container = await createPluginContainer({
@@ -209,7 +210,7 @@ async function runTransform(
 }
 
 function getFileInfo(filePath: string, rootDir: string) {
-  const relativeFilePath = isAbsolute(filePath) ? relative(filePath, rootDir) : filePath;
+  const relativeFilePath = isAbsolute(filePath) ? relative(rootDir, filePath) : filePath;
   return {
     filePath: relativeFilePath,
     absolutePath: resolve(rootDir, relativeFilePath),

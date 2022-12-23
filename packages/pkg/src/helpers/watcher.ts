@@ -1,10 +1,16 @@
 import * as chokidar from 'chokidar';
-import type { Context } from '../types';
+import { unique } from '../utils.js';
+import type { TaskConfig } from '../types.js';
 
-export const createWatcher = (ctx: Context) => {
-  const { rootDir } = ctx;
-  const watcher = chokidar.watch(['src'], {
-    cwd: rootDir,
+export const createWatcher = (taskConfigs: TaskConfig[]) => {
+  const outputs = unique(taskConfigs.map((taskConfig) => taskConfig.outputDir));
+
+  const watcher = chokidar.watch([], {
+    ignored: [
+      '**/node_modules/**',
+      '**/.git/**',
+      ...outputs,
+    ],
     ignoreInitial: true,
     ignorePermissionErrors: true, // Prevent permission errors
   });

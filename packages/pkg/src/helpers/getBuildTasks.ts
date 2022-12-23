@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge';
-import { formatEntry, getDefaultEntryDir, getOutputDir } from './getTaskIO.js';
+import { getTransformEntry, getOutputDir } from './getTaskIO.js';
 import { getDefaultBundleSwcConfig, getDefaultTransformSwcConfig } from './defaultSwcConfig.js';
 import { stringifyObject } from '../utils.js';
 
@@ -24,13 +24,12 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
   config.sourcemap = config.sourcemap ?? command === 'start';
 
   if (config.type === 'bundle') {
-    config.entry = formatEntry(config.entry);
     config.swcCompileOptions = deepmerge(
       getDefaultBundleSwcConfig(config, context, taskName),
       config.swcCompileOptions || {},
     );
   } else if (config.type === 'transform') {
-    config.entry = getDefaultEntryDir(rootDir);
+    config.entry = getTransformEntry(rootDir, config.entry);
     const mode = command === 'build' ? 'production' : 'development';
     config.modes = [mode];
     config.swcCompileOptions = deepmerge(
