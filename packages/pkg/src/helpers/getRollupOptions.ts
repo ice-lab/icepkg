@@ -152,11 +152,11 @@ function getRollupOutputs({
     assetFileNames: getFilename('[name]', format, esVersion, mode, '[ext]'),
     entryFileNames: getFilename('[name]', format, esVersion, mode, 'js'),
     chunkFileNames: getFilename('[hash]', format, esVersion, mode, 'js'),
-    manualChunks: (id) => {
+    manualChunks: format !== 'umd' ? ((id) => {
       if (id.includes('node_modules')) {
         return getFilename('vendor', format, esVersion, mode);
       }
-    },
+    }) : undefined,
     plugins: [
       minify && minifyPlugin(bundleTaskConfig.sourcemap),
     ].filter(Boolean),
