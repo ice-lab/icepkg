@@ -4,7 +4,7 @@ import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styles';
 import type { FSWatcher } from 'chokidar';
 
-type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
+export type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
 export type PlainObject = Record<string, string | boolean | number | object>;
 
@@ -121,7 +121,7 @@ export interface BundleTaskConfig extends
   /**
    * Config styles options. See https://www.npmjs.com/package/rollup-plugin-styles
    */
-  stylesOptions?: (options: StylesRollupPluginOptions) => StylesRollupPluginOptions;
+  modifyStylesOptions?: Array<(options: StylesRollupPluginOptions) => StylesRollupPluginOptions>;
 }
 
 export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {

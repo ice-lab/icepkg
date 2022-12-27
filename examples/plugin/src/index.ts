@@ -24,11 +24,12 @@ const plugin: Plugin = (api) => {
     config.alias = { ...config.alias };
     config.externals = { react: 'React', 'react-dom': 'ReactDOM' };
 
-    config.stylesOptions = (options) => {
+    config.modifyStylesOptions ??= [];
+    config.modifyRollupOptions.push((options) => {
       return options;
-    };
-    return config;
+    });
   };
+
   onGetConfig(TaskName.BUNDLE_ES2017, bundleTaskCallback);
   onGetConfig(TaskName.BUNDLE_ES5, bundleTaskCallback);
 };

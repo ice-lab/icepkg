@@ -20,6 +20,7 @@ import {
   NodeEnvMode,
   BundleTaskConfig,
   TaskRunnerContext,
+  StylesRollupPluginOptions,
 } from '../types.js';
 import type {
   RollupOptions,
@@ -66,6 +67,15 @@ export function getRollupOptions(
       command,
     });
 
+    const defaultStylesOptions: StylesRollupPluginOptions = {
+      plugins: [
+        autoprefixer(),
+      ],
+      mode: 'extract',
+      autoModules: true,
+      minimize: taskConfig.minify,
+      sourceMap: taskConfig.sourcemap,
+    };
     rollupOptions.plugins.push(
       replace({
         values: {
@@ -75,15 +85,10 @@ export function getRollupOptions(
         },
         preventAssignment: true,
       }),
-      styles((taskConfig.stylesOptions || ((options) => options))({
-        plugins: [
-          autoprefixer(),
-        ],
-        mode: 'extract',
-        autoModules: true,
-        minimize: taskConfig.minify,
-        sourceMap: taskConfig.sourcemap,
-      })),
+      styles((taskConfig.modifyStylesOptions ?? [((options) => options)]).reduce(
+        (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
+        defaultStylesOptions,
+      )),
       image(),
       json(),
       nodeResolve({ // To locates modules using the node resolution algorithm.
