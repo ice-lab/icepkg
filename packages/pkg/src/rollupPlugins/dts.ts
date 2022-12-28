@@ -17,6 +17,7 @@ const cachedContents: Record<string, CachedContent> = {};
 // dtsPlugin is used to generate declaration file when transforming
 function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
   const ids: string[] = [];
+
   const includeFileRegexps = [/\.m?tsx?$/];
   if (generateTypesForJs) {
     includeFileRegexps.push(/\.m?jsx?$/);
@@ -25,6 +26,7 @@ function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['
     includeFileRegexps, // include
     [/node_modules/, /\.d\.[cm]?ts$/], // exclude
   );
+
   return {
     name: 'ice-pkg:dts',
     transform(code, id) {
