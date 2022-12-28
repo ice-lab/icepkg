@@ -6,7 +6,7 @@ import type { FSWatcher } from 'chokidar';
 
 export type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
-export type PlainObject = Record<string, string | boolean | number | object>;
+export type PlainObject = Record<string, string | boolean | number | object | null>;
 
 export interface TransformUserConfig {
   /**
@@ -74,6 +74,45 @@ export interface BundleUserConfig {
   minify?: boolean;
 }
 
+export interface UserConfig {
+  /**
+   * Alias to file system paths
+   * @default {}
+   */
+  alias?: Record<string, string>;
+  /**
+   * Define global constant replacements
+   */
+  define?: PlainObject;
+  /**
+  * - true to generate a sourcemap for the code and include it in the result object.
+  * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
+  * but not include it in the result object.
+   */
+  sourceMaps?: boolean | 'inline';
+  /**
+  * Whether or not to generate declaration files for Ecmascript
+  * @default false
+  */
+  generateTypesForJs?: boolean;
+
+  /**
+   * Plugins of build scripts
+   * @default []
+   */
+  plugins?: Array<string | [string, any?]>;
+
+  /**
+   * "transform mode" means transform files one by one
+   */
+  transform?: TransformUserConfig;
+
+  /**
+   * "bundle mode" means bundle everything up by using Rollup
+   */
+  bundle?: BundleUserConfig;
+}
+
 interface _TaskConfig {
   /**
   * Output directory
@@ -82,7 +121,7 @@ interface _TaskConfig {
   /**
    * Define global constant replacements
    */
-  define?: Record<string, string>;
+  define?: PlainObject;
   /**
     * - true to generate a sourcemap for the code and include it in the result object.
     * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
@@ -186,45 +225,6 @@ export interface OutputResult {
   // Only exist in rollup bundle task
   modules?: ModuleJSON[];
   outputs?: Array<RollupOutput['output']>;
-}
-
-export interface UserConfig {
-  /**
-   * Alias to file system paths
-   * @default {}
-   */
-  alias?: Record<string, string>;
-  /**
-   * Define global constant replacements
-   */
-  define?: Record<string, string>;
-  /**
-  * - true to generate a sourcemap for the code and include it in the result object.
-  * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
-  * but not include it in the result object.
-   */
-  sourceMaps?: boolean | 'inline';
-  /**
-  * Whether or not to generate declaration files for Ecmascript
-  * @default false
-  */
-  generateTypesForJs?: boolean;
-
-  /**
-   * Plugins of build scripts
-   * @default []
-   */
-  plugins?: Array<string | [string, any?]>;
-
-  /**
-   * "transform mode" means transform files one by one
-   */
-  transform?: TransformUserConfig;
-
-  /**
-   * "bundle mode" means bundle everything up by using Rollup
-   */
-  bundle?: BundleUserConfig;
 }
 
 // Set for `process.env.NODE_ENV`
