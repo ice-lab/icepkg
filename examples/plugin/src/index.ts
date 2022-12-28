@@ -25,7 +25,7 @@ const plugin: Plugin = (api) => {
     config.externals = { react: 'React', 'react-dom': 'ReactDOM' };
 
     config.modifyStylesOptions ??= [];
-    config.modifyRollupOptions.push((options) => {
+    config.modifyStylesOptions.push((options) => {
       return options;
     });
   };
