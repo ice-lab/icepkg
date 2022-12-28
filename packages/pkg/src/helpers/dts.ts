@@ -40,7 +40,7 @@ const normalizeDtsInput = (file: File): DtsInputFile => {
     dtsPath,
   };
 };
-// ['.ts', '.cts', '.mts', '.js', '.cjs', '.mjs']
+
 export function dtsCompile(files: File[]): DtsInputFile[] {
   if (!files.length) {
     return;
