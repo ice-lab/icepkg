@@ -2,11 +2,23 @@
   "name": "@ice/pkg-plugin-docusaurus",
   "version": "1.4.1",
   "description": "Plugin for component previewing",
-  "main": "es2017/index.js",
+  "main": "es2017/index.mjs",
   "exports": {
-    ".": "./es2017/index.mjs",
-    "./remark/extractCode": "./es2017/remark/extractCode.js",
-    "./plugin.js": "./es2017/plugin.js",
+    ".": {
+      "type": "./es2017/index.d.mts",
+      "import": "./es2017/index.mjs",
+      "default": "./es2017/index.mjs"
+    },
+    "./remark/extractCode": {
+      "type": "./es2017/extractCode.d.ts",
+      "import": "./es2017/remark/extractCode.js",
+      "default": "./es2017/remark/extractCode.js"
+    },
+    "./plugin.js": {
+      "type": "./es2017/plugin.d.ts",
+      "import": "./es2017/plugin.js",
+      "default": "./es2017/plugin.js"
+    },
     "./css/custom.css": "./es2017/css/custom.css"
   },
   "files": [

@@ -3,7 +3,6 @@ import consola from 'consola';
 import { performance } from 'perf_hooks';
 import { timeFrom } from '../utils.js';
 import { createLogger } from './logger.js';
-import { createFilter } from '@rollup/pluginutils';
 
 export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'mjs' | 'mts';
 
@@ -28,7 +27,14 @@ export interface DtsInputFile extends File {
 
 const normalizeDtsInput = (file: File): DtsInputFile => {
   const { filePath, ext } = file;
-  const dtsPath = filePath.replace(ext, '.d.ts');
+  // https://www.typescriptlang.org/docs/handbook/esm-node.html#new-file-extensions
+  // a.js -> a.d.ts
+  // a.cjs -> a.d.cts
+  // a.mjs -> a.d.mts
+  // a.ts -> a.d.ts
+  // a.cts -> a.d.cts
+  // a.mts -> a.d.mts
+  const dtsPath = filePath.replace(ext, `.d.${/^\.[jt]/.test(ext) ? '' : ext[1]}ts`);
   return {
     ...file,
     dtsPath,
@@ -91,8 +97,3 @@ export function dtsCompile(files: File[]): DtsInputFile[] {
     dtsContent: createdFiles[file.dtsPath],
   }));
 }
-
-export const dtsFilter = createFilter(
-  /\.m?tsx?$/, // include
-  [/node_modules/, /\.d\.ts$/], // exclude
-);
