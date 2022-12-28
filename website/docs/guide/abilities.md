@@ -4,48 +4,6 @@
 ICE PKG 的所有配置请参阅 [完整配置项](./config)。
 :::
 
-## 定义环境变量
-
-类似 Webpack 的 DefinePlugin，ICE PKG 也可以定义编译时的环境变量。
-
-例如，希望在代码中注入版本号，用全局变量 `__VERSION__` 来替代：
-
-```ts title="build.config.mts"
-import fs from 'fs';
-import { defineConfig } from '@ice/pkg';
-
-const packageJSONContent = fs.readFileSync('./package.json', 'utf-8');
-const version = JSON.parse(packageJSONContent).version;
-
-export default defineConfig({
-  define: {
-    '__VERSION__': version,
-  },
-});
-```
-
-在编译时，所有 `__VERSION__` 都会被替换为项目的版本号。`define` 目前支持 `boolean`、`string`、`null`、`undefined`、`object` 等类型的值。
-
-:::info
-对于 TypeScript 用户，需要在 `env.d.ts` 或其他类型声明文件中，声明 `define` 所设置的属性，以便通过类型检查，并获得类型提示。比如：
-
-```ts title=env.d.ts
-declare const __VERSION__: string
-```
-:::
-
-ICE PKG 默认注入了 `__DEV__` 全局变量，用于标识开发态环境。这个变量在输出一些仅在 development 环境的信息时非常有用。比如，输出在用户开发态才显示的警告信息。
-
-```ts title=index.ts
-if (__DEV__) {
-  console.warn('请注意，这可能会产生错误！');
-}
-```
-
-:::info 发生了什么？
-实际上，在编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV !== 'production'`。
-:::
-
 ## 生成类型文件
 
 ICE PKG 默认为 TypeScript 生成类型文件，**无需主动开启**。
@@ -85,26 +43,6 @@ export function add(a: number, b: number): number;
 :::warning 谨慎使用该配置
 若贸然为没有使用 JSDoc 注解的 JavaScript 代码开启该配置，可能会出现自动类型推断错误的情况。
 :::
-
-## SourceMap
-
-```ts
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  sourceMaps: true,
-});
-```
-
-这会为所有产物额外输出 `.js.map` 文件。如果你想要 `inline` sourcemap，可将选项配置为 `inline`。
-
-```ts
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  sourceMaps: 'inline',
-});
-```
 
 ## 支持样式和预处理器
 
