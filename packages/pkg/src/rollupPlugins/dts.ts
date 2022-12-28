@@ -1,5 +1,6 @@
 import { extname, relative } from 'path';
-import { dtsCompile, dtsFilter } from '../helpers/dts.js';
+import { createFilter } from '@rollup/pluginutils';
+import { dtsCompile } from '../helpers/dts.js';
 import { isEcmascriptOnly, isTypescriptOnly } from '../helpers/suffix.js';
 
 import type { Plugin } from 'rollup';
@@ -16,6 +17,14 @@ const cachedContents: Record<string, CachedContent> = {};
 // dtsPlugin is used to generate declaration file when transforming
 function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
   const ids: string[] = [];
+  const includeFileRegexps = [/\.m?tsx?$/];
+  if (generateTypesForJs) {
+    includeFileRegexps.push(/\.m?jsx?$/);
+  }
+  const dtsFilter = createFilter(
+    includeFileRegexps, // include
+    [/node_modules/, /\.d\.[cm]?ts$/], // exclude
+  );
   return {
     name: 'ice-pkg:dts',
     transform(code, id) {
