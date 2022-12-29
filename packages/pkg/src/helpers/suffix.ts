@@ -1,14 +1,14 @@
 export const jsx = ['.jsx', '.tsx'];
-export const typescript = ['.ts', '.mts', '.tsx'];
-export const declation = ['.d.ts', '.d.js'];
-export const ecmascript = ['.mjs', '.js', '.jsx'];
+export const typescript = ['.ts', '.mts', '.cts', '.tsx'];
+export const declaration = ['.d.ts', '.d.mts', '.d.cjs'];
+export const ecmascript = ['.js', '.mjs', '.cjs', '.jsx'];
 
 /**
- * Wether is declartion file, checked by filepath
+ * Wether is declaration file, checked by filepath
  * @param filePath
  * @returns
  */
-export const isDeclaration = (filePath: string) => declation.some((dec) => filePath.includes(dec));
+export const isDeclaration = (filePath: string) => declaration.some((dec) => filePath.endsWith(dec));
 
 /**
  * Wether is typescript only file, checked by filepath and suffix
