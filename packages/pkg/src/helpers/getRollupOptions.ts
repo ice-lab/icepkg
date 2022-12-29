@@ -39,7 +39,7 @@ export function getRollupOptions(
   context: Context,
   taskRunnerContext: TaskRunnerContext,
 ) {
-  const { pkg, commandArgs, command, userConfig } = context;
+  const { pkg, commandArgs, command, userConfig, rootDir } = context;
   const { name: taskName, config: taskConfig } = taskRunnerContext.buildTask;
   const rollupOptions: RollupOptions = {};
   rollupOptions.plugins ??= [];
@@ -51,7 +51,7 @@ export function getRollupOptions(
 
   if (taskConfig.type === 'transform') {
     rollupOptions.plugins.push(
-      dtsPlugin(taskConfig.entry, userConfig.generateTypesForJs),
+      dtsPlugin(rootDir, taskConfig.entry as Record<string, string>, userConfig.generateTypesForJs),
     );
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
