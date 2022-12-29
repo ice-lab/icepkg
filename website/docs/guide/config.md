@@ -28,7 +28,7 @@ export default defineConfig({
 + 类型：`rollup.InputOption`
 + 默认值：`'./src/index'`
 
-指定 bundle 模式下的构建入口。支持配置单入口或者多个入口。
+指定构建入口。支持配置单入口或者多个入口。
 
 指定单个入口：
 
@@ -36,10 +36,7 @@ export default defineConfig({
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  bundle: {
-    // 指定
-    entry: './src/index',
-  },
+  entry: './src/index',
 });
 ```
 
@@ -49,15 +46,13 @@ export default defineConfig({
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  bundle: {
-    // 数组形式
-    entry: ['./src/foo', './src/bar'],
-    // 对象形式，key 值作为 chunk name
-    entry: {
-      foo: './src/foo',
-      bar2: './src/bar'
-    }
-  },
+  // 数组形式
+  entry: ['./src/foo', './src/bar'],
+  // 对象形式，key 值作为 chunk name
+  entry: {
+    foo: './src/foo',
+    bar2: './src/bar'
+  }
 });
 ```
 
@@ -85,7 +80,7 @@ export default defineConfig({
 + 类型：`Record<string, string | boolean | number | object | null>`
 + 默认值：`{ __DEV__: 'true' | 'false', 'process.env.NODE_ENV': '"development"' | '"production"' }`
 
-定义编译时环境变量，会在编译时被替换。注意：属性值会经过一次 `JSON.stringify` 转换。
+定义编译时环境变量，会在编译时被替换。注意：属性值会经过一次 `JSON.stringify()` 转换。
 
 例如，希望在代码中注入版本号，用全局变量 `__VERSION__` 来替代：
 
