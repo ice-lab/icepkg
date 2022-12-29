@@ -22,7 +22,7 @@ function getUserConfig() {
     {
       name: 'entry',
       validation: 'string|object',
-      defaultValue: './src/index',
+      defaultValue: 'src/index',
       setConfig: (config: TaskConfig, entry: UserConfig['entry']) => {
         return mergeValueToTaskConfig(config, 'entry', entry);
       },
