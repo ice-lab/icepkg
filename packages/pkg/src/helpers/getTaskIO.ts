@@ -37,9 +37,6 @@ export const getTransformEntryDirs = (rootDir: string, entry: Record<string, str
   return transformEntryDirs;
 };
 
-export const getOutputDir = (rootDir: string, taskName: TaskValue) => {
-  if (taskName.includes('transform')) {
-    return resolve(rootDir, taskName.split('-')[1]);
-  }
-  return resolve(rootDir, 'dist');
+export const getTransformDefaultOutputDir = (rootDir: string, taskName: TaskValue) => {
+  return resolve(rootDir, taskName.split('-')[1]);
 };

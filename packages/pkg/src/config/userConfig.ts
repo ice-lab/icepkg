@@ -14,6 +14,7 @@ function getUserConfig() {
   const defaultBundleUserConfig: BundleUserConfig = {
     formats: ['esm', 'es2017'],
     modes: ['production'],
+    outputDir: 'dist',
   };
   const defaultTransformUserConfig: TransformUserConfig = {
     formats: ['esm', 'es2017'],

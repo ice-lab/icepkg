@@ -33,6 +33,11 @@ export interface BundleUserConfig {
    */
   name?: string;
   /**
+   * Output directory
+   * @default dist
+   */
+  outputDir?: string;
+  /**
    * @deprecated Please use `bundle.modes` config.
    * Generate uncompressed bundle for development debug.
    */
@@ -46,6 +51,7 @@ export interface BundleUserConfig {
    * Which type of contents would be generated
    * "umd"
    * "esm"
+   * "cjs"
    * "es2017"
    * @default ['esm','es2017']
    */
@@ -134,7 +140,7 @@ interface _TaskConfig {
   alias?: Record<string, string>;
   /**
    * Modify default rollup options
-   * @see https://rollupjs.org/guide/en/
+   * @see https://rollupjs.org/guide/en/#rolluprollup
    */
   modifyRollupOptions?: Array<(rollupOptions: RollupOptions) => RollupOptions>;
   /**

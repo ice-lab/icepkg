@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge';
-import { getOutputDir, formatEntry } from './getTaskIO.js';
+import { formatEntry, getTransformDefaultOutputDir } from './getTaskIO.js';
 import { getDefaultBundleSwcConfig, getDefaultTransformSwcConfig } from './defaultSwcConfig.js';
 import { stringifyObject } from '../utils.js';
 
@@ -16,8 +16,6 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
   const { config, name: taskName } = buildTask;
 
   config.entry = formatEntry(config.entry);
-  // Configure task outputDir
-  config.outputDir = config.outputDir || getOutputDir(rootDir, taskName);
   // Configure define
   config.define = stringifyObject(config.define || {});
 
@@ -28,6 +26,7 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
       config.swcCompileOptions || {},
     );
   } else if (config.type === 'transform') {
+    config.outputDir = getTransformDefaultOutputDir(rootDir, taskName);
     const mode = command === 'build' ? 'production' : 'development';
     config.modes = [mode];
     config.swcCompileOptions = deepmerge(
