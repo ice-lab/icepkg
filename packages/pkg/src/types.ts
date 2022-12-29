@@ -10,11 +10,6 @@ export type PlainObject = Record<string, string | boolean | number | object | nu
 
 export interface TransformUserConfig {
   /**
-  * Entry for task
-  * @default  `./src`
-  */
-  entry?: string;
-  /**
    * Which type of contents would be generated
    * "cjs" - Commonjs with ES5 syntax (targeting Node version under 12);
    * "esm" - ES Module with ES5 syntax (legacy outputs);
@@ -32,11 +27,6 @@ export interface TransformUserConfig {
 }
 
 export interface BundleUserConfig {
-  /**
-  * Entry for a task
-  * @default  `./src/index`
-  */
-  entry?: RollupOptions['input'];
   /**
    * Export name
    * @default package.name
@@ -76,6 +66,11 @@ export interface BundleUserConfig {
 
 export interface UserConfig {
   /**
+  * Entry for a task
+  * @default  `./src/index`
+  */
+  entry?: RollupOptions['input'];
+  /**
    * Alias to file system paths
    * @default {}
    */
@@ -114,6 +109,11 @@ export interface UserConfig {
 }
 
 interface _TaskConfig {
+  /**
+  * Entry for a task
+  * @default  `./src/index`
+  */
+  entry?: RollupOptions['input'];
   /**
   * Output directory
   */

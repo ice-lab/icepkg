@@ -14,13 +14,19 @@ function getUserConfig() {
   const defaultBundleUserConfig: BundleUserConfig = {
     formats: ['esm', 'es2017'],
     modes: ['production'],
-    entry: './src/index',
   };
   const defaultTransformUserConfig: TransformUserConfig = {
     formats: ['esm', 'es2017'],
-    entry: './src',
   };
   const userConfig = [
+    {
+      name: 'entry',
+      validation: 'string|object',
+      defaultValue: './src/index',
+      setConfig: (config: TaskConfig, entry: UserConfig['entry']) => {
+        return mergeValueToTaskConfig(config, 'entry', entry);
+      },
+    },
     {
       name: 'alias',
       validation: 'object',

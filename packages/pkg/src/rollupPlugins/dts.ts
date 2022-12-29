@@ -3,15 +3,16 @@ import { createFilter } from '@rollup/pluginutils';
 import { dtsCompile, File } from '../helpers/dts.js';
 
 import type { Plugin } from 'rollup';
-import type { TaskConfig, UserConfig } from '../types.js';
+import type { UserConfig } from '../types.js';
 import type { DtsInputFile, FileExt } from '../helpers/dts.js';
+import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
 
 interface CachedContent extends DtsInputFile {
   updated: boolean;
 }
 
 // dtsPlugin is used to generate declaration file when transforming
-function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
+function dtsPlugin(rootDir: string, entry: Record<string, string>, generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
   const includeFileRegexps = [/\.m?tsx?$/];
   if (generateTypesForJs) {
     includeFileRegexps.push(/\.m?jsx?$/);
@@ -61,8 +62,7 @@ function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['
           return { ...rest };
         });
       }
-
-      const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.keys(entry);
+      const entries = getTransformEntryDirs(rootDir, entry);
       entries.forEach((entryItem) => {
         dtsFiles.forEach((file) => {
           this.emitFile({

@@ -17,6 +17,7 @@ import type {
   TransformTaskConfig,
 } from '../types.js';
 import type { RollupOptions, SourceMapInput } from 'rollup';
+import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
 
 const pkg = loadPkg(cwd);
 const isSWCHelpersDeclaredInDependency = Boolean(pkg?.dependencies?.['@swc/helpers']);
@@ -27,8 +28,11 @@ export const watchTransformTasks: RunTasks = async (taskOptionsList, context, wa
 
   for (const taskOptions of taskOptionsList) {
     const [rollupOptions, taskRunnerContext] = taskOptions;
-
-    watcher.add((taskRunnerContext.buildTask.config as TransformTaskConfig).entry);
+    const entryDirs = getTransformEntryDirs(
+      context.rootDir,
+      taskRunnerContext.buildTask.config.entry as Record<string, string>,
+    );
+    watcher.add(entryDirs);
 
     let outputResult: OutputResult;
     try {
@@ -88,22 +92,26 @@ async function runTransform(
   const config = buildTask.config as TransformTaskConfig;
 
   const logger = createLogger(`${taskName}-${mode}`);
-  const entryDir = config.entry;
+  const entryDirs = getTransformEntryDirs(rootDir, config.entry as Record<string, string>);
 
-  let files: OutputFile[];
+  const files: OutputFile[] = [];
+
   if (updatedFile) {
-    files = [getFileInfo(updatedFile, entryDir)];
+    for (const entryDir of entryDirs) {
+      if (updatedFile.startsWith(entryDir)) {
+        files.push(getFileInfo(updatedFile, entryDir));
+        break;
+      }
+    }
   } else {
-    files =
-      loadEntryFiles(
-        entryDir,
-        (userConfig?.transform?.excludes || []),
-      )
+    for (const entryDir of entryDirs) {
+      files.push(...loadEntryFiles(entryDir, (userConfig?.transform?.excludes || []))
         .map((filePath) => ({
           filePath,
           absolutePath: resolve(entryDir, filePath),
           ext: extname(filePath),
-        }));
+        })));
+    }
   }
 
   const container = await createPluginContainer({
