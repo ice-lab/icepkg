@@ -23,6 +23,44 @@ export default defineConfig({
 
 ## 完整配置项
 
+### entry
+
++ 类型：`rollup.InputOption`
++ 默认值：`'./src/index'`
+
+指定 bundle 模式下的构建入口。支持配置单入口或者多个入口。
+
+指定单个入口：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  bundle: {
+    // 指定
+    entry: './src/index',
+  },
+});
+```
+
+指定多个入口：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  bundle: {
+    // 数组形式
+    entry: ['./src/foo', './src/bar'],
+    // 对象形式，key 值作为 chunk name
+    entry: {
+      foo: './src/foo',
+      bar2: './src/bar'
+    }
+  },
+});
+```
+
 ### alias
 
 + 类型：`Record<string, string>`
@@ -154,23 +192,6 @@ ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件�
 transform 模式是 ICE PKG 默认的编译模式。
 :::
 
-#### entry
-
-+ 类型：`string`
-+ 默认值：`./src`
-
-指定源代码目录。该目录下的文件会逐一被编译到输出目录。
-
-```ts title="build.config.mts"
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  transfrom: {
-    entry: './components',
-  },
-});
-```
-
 #### formats
 
 + 类型：`Array<'cjs' | 'esm' | 'es2017'>`
@@ -225,44 +246,6 @@ export default defineConfig({
 ### bundle
 
 该字段定义 [bundle 模式](../#双模式) 下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
-
-#### entry
-
-+ 类型：`rollup.InputOption`
-+ 默认值：`'./src/index'`
-
-指定 bundle 模式下的构建入口。支持配置单入口或者多个入口。
-
-指定单个入口：
-
-```ts title="build.config.mts"
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  bundle: {
-    // 指定
-    entry: './src/index',
-  },
-});
-```
-
-指定多个入口：
-
-```ts title="build.config.mts"
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  bundle: {
-    // 数组形式
-    entry: ['./src/foo', './src/bar'],
-    // 对象形式，key 值作为 chunk name
-    entry: {
-      foo: './src/foo',
-      bar2: './src/bar'
-    }
-  },
-});
-```
 
 #### formats
 
