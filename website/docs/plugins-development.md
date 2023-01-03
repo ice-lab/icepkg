@@ -47,7 +47,7 @@ const plugin = (api) => {
 
 ### onGetConfig
 
-ICE PKG 会根据用户配置 transform 和 bundle 模式的输出产物格式，分别注册以下任务：
+ICE PKG 会根据用户配置 transform 和 bundle 模式的输出产物格式，分别会注册以下任务：
 
 + `transform-esm`：默认启动
 + `transform-es2017`：默认启动
@@ -91,7 +91,7 @@ const plugin = (api) => {
 
 #### entry
 
-+ 类型：`rollup.InputOption`
++ 类型：`string | string[] | { [entryAlias: string]: string }`
 + 默认值：`'./src/index'`
 
 指定构建入口。支持配置单入口或者多个入口。

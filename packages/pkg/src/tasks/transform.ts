@@ -145,9 +145,8 @@ async function runTransform(
     let code: string = null;
     let map: SourceMapInput = null;
 
-    // 除特定类型外，需要用户提供额外的插件的 load 来处理这些文件
+    // User should use plugins to transform other types of files.
     if (loadResult === null && !INCLUDES_UTF8_FILE_TYPE.test(files[i].ext)) {
-      // 直接拷贝这些文件
       fs.copyFileSync(files[i].absolutePath, dest);
 
       logger.debug(`Transform file ${files[i].absolutePath}`, timeFrom(traverseFileStart));
@@ -169,7 +168,7 @@ async function runTransform(
     if (transformResult === null ||
       (isObject(transformResult) && transformResult.code === null)
     ) {
-      // 不存在 transform 逻辑，code 保持不变
+      // Do not need to transform the code.
     } else {
       files[i].code = code = transformResult.code;
       files[i].map = map = transformResult.map;

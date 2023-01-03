@@ -25,7 +25,7 @@ export default defineConfig({
 
 ### entry
 
-+ 类型：`rollup.InputOption`
++ 类型：`string | string[] | { [entryAlias: string]: string }`
 + 默认值：`'./src/index'`
 
 指定构建入口。支持配置单入口或者多个入口。
