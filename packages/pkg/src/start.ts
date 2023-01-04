@@ -1,53 +1,105 @@
 import consola from 'consola';
-import { mergeConfigOptions } from './helpers/mergeConfigOptions.js';
+import { RollupOptions } from 'rollup';
+import { getBuildTasks } from './helpers/getBuildTasks.js';
+import { getRollupOptions } from './helpers/getRollupOptions.js';
 import { createWatcher } from './helpers/watcher.js';
-import { debouncePromise } from './utils.js';
-import { buildAll } from './buildAll.js';
+import { watchBundleTasks } from './tasks/bundle.js';
+import { watchTransformTasks } from './tasks/transform.js';
 
-import type { PkgContext, TaskLoaderConfig } from './types.js';
+import type {
+  OutputResult,
+  Context,
+  WatchEvent,
+  TaskRunnerContext,
+} from './types.js';
 
-const debouncedBuildAll = debouncePromise(
-  async (cfgArrs: TaskLoaderConfig[], ctx: PkgContext) => {
-    return await buildAll(cfgArrs, ctx);
-  },
-  100,
-  (err) => {
-    consola.error(err);
-  },
-);
+export default async function start(context: Context) {
+  const { applyHook, commandArgs } = context;
 
-export default async (context: PkgContext) => {
-  const { getTaskConfig, applyHook, commandArgs } = context;
+  const buildTasks = getBuildTasks(context);
+  const taskConfigs = buildTasks.map(({ config }) => config);
 
-  const configs = getTaskConfig();
-  await applyHook('before.start.load', { args: commandArgs, config: configs });
+  await applyHook('before.start.load', {
+    args: commandArgs,
+    config: taskConfigs,
+  });
 
-  if (!configs.length) {
-    const err = new Error('Could not Find any pending tasks when excuting \'start\' command.');
-
-    throw err;
+  if (!taskConfigs.length) {
+    throw new Error('Could not Find any pending tasks when excuting \'start\' command.');
   }
 
   await applyHook('before.start.run', {
     args: commandArgs,
-    config: configs,
+    config: taskConfigs,
   });
 
-  // @ts-ignore fixme
-  const normalizedConfigs = configs.map((config) => mergeConfigOptions(config, context));
+  const watcher = createWatcher(taskConfigs);
+  watcher.on('add', async (id) => await handleChange(id, 'create'));
+  watcher.on('change', async (id) => await handleChange(id, 'update'));
+  watcher.on('unlink', async (id) => await handleChange(id, 'delete'));
+  watcher.on('error', (error) => consola.error(error));
 
-  const outputResults = await buildAll(normalizedConfigs, context);
+  const transformOptions = buildTasks
+    .filter(({ config }) => config.type === 'transform')
+    .map((buildTask) => {
+      const { config: { modes } } = buildTask;
+      return modes.map((mode) => {
+        const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
+        const rollupOptions = getRollupOptions(context, taskRunnerContext);
+        return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
+      });
+    })
+    .flat(1);
 
-  const watcher = createWatcher(normalizedConfigs);
+  const bundleOptions = buildTasks
+    .filter(({ config }) => config.type === 'bundle')
+    .map((buildTask) => {
+      const { config: { modes } } = buildTask;
+      return modes.map((mode) => {
+        const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
+        const rollupOptions = getRollupOptions(context, taskRunnerContext);
+        return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
+      });
+    })
+    .flat(1);
+
+  const outputResults: OutputResult[] = [];
+
+  const transformWatchResult = await watchTransformTasks(
+    transformOptions,
+    context,
+    watcher,
+  );
+  const bundleWatchResult = await watchBundleTasks(
+    bundleOptions,
+    context,
+    watcher,
+  );
+
+  outputResults.push(
+    ...(transformWatchResult.outputResults),
+    ...(bundleWatchResult.outputResults),
+  );
+
   await applyHook('after.start.compile', outputResults);
 
-  watcher.on('change', async () => {
-    const newOutputResults = await debouncedBuildAll(normalizedConfigs, context);
+  async function handleChange(id: string, event: WatchEvent) {
+    const newOutputResults = [];
+    try {
+      const newTransformOutputResults = transformWatchResult.handleChange ?
+        await transformWatchResult.handleChange(id, event) :
+        [];
+      const newBundleOutputResults = bundleWatchResult.handleChange ?
+        await bundleWatchResult.handleChange(id, event) :
+        [];
+      newOutputResults.push(
+        ...newTransformOutputResults,
+        ...newBundleOutputResults,
+      );
 
-    await applyHook('after.start.compile', newOutputResults);
-  });
-
-  watcher.on('error', (err) => {
-    consola.error(err);
-  });
-};
+      await applyHook('after.start.compile', newOutputResults);
+    } catch (error) {
+      consola.error(error);
+    }
+  }
+}

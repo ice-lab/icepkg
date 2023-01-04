@@ -3,7 +3,8 @@
 ## 1.4.0
 
 - [fix] bump version of build-scripts@2.0.0
-
+- [refactor] bundle and transform task
+- [feat] support incremental build in development
 
 ## 1.3.0
 

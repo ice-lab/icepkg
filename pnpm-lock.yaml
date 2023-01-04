@@ -68,11 +68,14 @@ importers:
     specifiers:
       '@ice/pkg': workspace:*
       '@ice/pkg-plugin-docusaurus': ^1.0.0
+      '@swc/helpers': ^0.4.14
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
       react: ^17.0.0
       react-dom: ^17.0.0
       style-unit: ^3.0.4
+    dependencies:
+      '@swc/helpers': 0.4.14
     devDependencies:
       '@ice/pkg': link:../../packages/pkg
       '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
@@ -88,7 +91,7 @@ importers:
       '@ice/pkg-plugin-docusaurus': ^1.0.0
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
-      pkg-plugin-example: ^0.0.0
+      pkg-plugin-example: workspace:*
       react: ^17.0.0
       react-dom: ^17.0.0
       style-unit: ^3.0.4
@@ -4855,6 +4858,12 @@ packages:
       '@swc/core-win32-arm64-msvc': 1.2.211
       '@swc/core-win32-ia32-msvc': 1.2.211
       '@swc/core-win32-x64-msvc': 1.2.211
+    dev: false
+
+  /@swc/helpers/0.4.14:
+    resolution: {integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==}
+    dependencies:
+      tslib: 2.4.0
     dev: false
 
   /@swc/helpers/0.4.3:
@@ -11342,7 +11351,7 @@ packages:
       react-dom: ^18
     dependencies:
       '@ice/appear': 0.1.3_biqbaboplfbrettd7655fr4n2y
-      '@swc/helpers': 0.4.3
+      '@swc/helpers': 0.4.14
       create-react-class: 15.7.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0

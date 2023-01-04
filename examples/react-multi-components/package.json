@@ -35,7 +35,7 @@
   "devDependencies": {
     "@ice/pkg": "workspace:*",
     "@ice/pkg-plugin-docusaurus": "^1.0.0",
-    "pkg-plugin-example": "^0.0.0",
+    "pkg-plugin-example": "workspace:*",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "@types/react": "^17.0.0",

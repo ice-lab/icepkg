@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './index.css';
+import '../styles/common.css';
 
 interface ButtonProps {
   type?: 'primary' | 'default';

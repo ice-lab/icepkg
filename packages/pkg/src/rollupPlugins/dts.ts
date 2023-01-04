@@ -1,23 +1,18 @@
 import { extname, relative } from 'path';
 import { createFilter } from '@rollup/pluginutils';
-import { dtsCompile } from '../helpers/dts.js';
-import { isEcmascriptOnly, isTypescriptOnly } from '../helpers/suffix.js';
+import { dtsCompile, File } from '../helpers/dts.js';
 
 import type { Plugin } from 'rollup';
-import type { TaskConfig, UserConfig } from '../types.js';
+import type { UserConfig } from '../types.js';
 import type { DtsInputFile, FileExt } from '../helpers/dts.js';
-
+import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
 
 interface CachedContent extends DtsInputFile {
-  updated?: boolean;
+  updated: boolean;
 }
 
-const cachedContents: Record<string, CachedContent> = {};
-
 // dtsPlugin is used to generate declaration file when transforming
-function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
-  const ids: string[] = [];
-
+function dtsPlugin(rootDir: string, entry: Record<string, string>, generateTypesForJs?: UserConfig['generateTypesForJs']): Plugin {
   const includeFileRegexps = [/\.m?tsx?$/];
   if (generateTypesForJs) {
     includeFileRegexps.push(/\.m?jsx?$/);
@@ -26,6 +21,8 @@ function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['
     includeFileRegexps, // include
     [/node_modules/, /\.d\.[cm]?ts$/], // exclude
   );
+  // Actually, it's useful in dev.
+  const cachedContents: Record<string, CachedContent> = {};
 
   return {
     name: 'ice-pkg:dts',
@@ -38,39 +35,34 @@ function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['
             ext: extname(id) as FileExt,
             filePath: id,
           };
-        } else if (cachedContents[id].srcCode === code) {
-          cachedContents[id].updated = false;
-        } else {
+        } else if (cachedContents[id].srcCode !== code) {
           cachedContents[id].srcCode = code;
           cachedContents[id].updated = true;
         }
-
-        ids.push(id);
       }
       // Always return null to escape transforming
       return null;
     },
 
     buildEnd() {
-      const compileIds = ids
-        .filter((id) => isTypescriptOnly(cachedContents[id].ext, id) ||
-          (generateTypesForJs && isEcmascriptOnly(cachedContents[id].ext, id)));
-
       // should re-run typescript programs
-      const shouldUpdateDts = compileIds.some((id) => cachedContents[id].updated);
+      const updatedIds = Object.keys(cachedContents).filter((id) => cachedContents[id].updated);
 
-      let dtsFiles: CachedContent[];
-      if (shouldUpdateDts) {
-        const compileFiles = compileIds.map((id) => ({
+      let dtsFiles: DtsInputFile[];
+      if (updatedIds.length) {
+        const compileFiles: File[] = updatedIds.map((id) => ({
           ext: cachedContents[id].ext,
           filePath: id,
           srcCode: cachedContents[id].srcCode,
         }));
         dtsFiles = dtsCompile(compileFiles);
       } else {
-        dtsFiles = ids.map((id) => cachedContents[id]);
+        dtsFiles = Object.keys(cachedContents).map((id) => {
+          const { updated, ...rest } = cachedContents[id];
+          return { ...rest };
+        });
       }
-      const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.keys(entry);
+      const entries = getTransformEntryDirs(rootDir, entry);
       entries.forEach((entryItem) => {
         dtsFiles.forEach((file) => {
           this.emitFile({
@@ -85,6 +77,8 @@ function dtsPlugin(entry: TaskConfig['entry'], generateTypesForJs?: UserConfig['
           };
         });
       });
+
+      updatedIds.forEach((updateId) => { cachedContents[updateId].updated = false; });
     },
   };
 }

@@ -36,9 +36,6 @@ import {
 import MagicString from 'magic-string';
 import type { FSWatcher } from 'chokidar';
 import colors from 'picocolors';
-// import type { ResolvedConfig } from '../config';
-// import { buildErrorMessage } from './middlewares/error';
-// import type { ModuleGraph } from './moduleGraph';
 import { performance } from 'perf_hooks';
 import { SourceMapConsumer } from 'source-map';
 import type * as postcss from 'postcss';

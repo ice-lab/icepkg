@@ -1,14 +1,21 @@
-import { PkgContext, ReverseMap, TaskConfig, TaskName } from '../types.js';
-
+import {
+  BundleTaskConfig,
+  Context,
+  TaskName,
+  TaskValue,
+  TaskConfig,
+  TransformTaskConfig,
+  NodeEnvMode,
+} from '../types.js';
 import type { Config, JscConfig, ModuleConfig } from '@swc/core';
+import getDefaultDefineValues from './getDefaultDefineValues.js';
 
 export const getDefaultBundleSwcConfig = (
-  taskConfig: TaskConfig,
-  ctx: PkgContext,
-  taskName: ReverseMap<typeof TaskName>,
+  bundleTaskConfig: BundleTaskConfig,
+  ctx: Context,
+  taskName: TaskValue,
 ): Config => {
   const target = taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5';
-
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? {
     // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
     chrome: 61,
@@ -25,7 +32,7 @@ export const getDefaultBundleSwcConfig = (
     jsc: {
       target,
       baseUrl: ctx.rootDir,
-      paths: formatAliasPaths(taskConfig.alias),
+      paths: formatAliasPaths(bundleTaskConfig.alias),
     },
     minify: false,
     // Always generate map in bundle mode,
@@ -41,9 +48,10 @@ export const getDefaultBundleSwcConfig = (
 };
 
 export const getDefaultTransformSwcConfig = (
-  taskConfig: TaskConfig,
-  ctx: PkgContext,
-  taskName: ReverseMap<typeof TaskName>,
+  transformTaskConfig: TransformTaskConfig,
+  ctx: Context,
+  taskName: TaskValue,
+  mode: NodeEnvMode,
 ): Config => {
   const module: ModuleConfig = taskName === TaskName.TRANSFORM_CJS
     ? { type: 'commonjs' }
@@ -55,12 +63,13 @@ export const getDefaultTransformSwcConfig = (
     jsc: {
       target,
       baseUrl: ctx.rootDir,
-      paths: formatAliasPaths(taskConfig.alias),
+      paths: formatAliasPaths(transformTaskConfig.alias),
       transform: {
         optimizer: {
           globals: {
             vars: {
-              ...taskConfig.define,
+              ...getDefaultDefineValues(mode),
+              ...transformTaskConfig.define,
             },
           },
         },
@@ -71,7 +80,7 @@ export const getDefaultTransformSwcConfig = (
     },
     minify: false,
     module,
-    sourceMaps: taskConfig.sourcemap,
+    sourceMaps: transformTaskConfig.sourcemap,
   };
 };
 
