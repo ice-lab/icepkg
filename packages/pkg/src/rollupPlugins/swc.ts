@@ -5,7 +5,8 @@ import { isTypescriptOnly } from '../helpers/suffix.js';
 import { scriptsFilter } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
-import type { TaskConfig, RollupPluginFn, OutputFile } from '../types.js';
+import type { TaskConfig, OutputFile } from '../types.js';
+import type { Plugin } from 'rollup';
 
 const normalizeSwcConfig = (
   file: OutputFile,
@@ -51,20 +52,10 @@ const normalizeSwcConfig = (
   ]);
 };
 
-export interface SwcPluginArgs {
-  type: TaskConfig['type'];
-  extraSwcOptions?: Config;
-}
-
 /**
  * plugin-swc works as substitute of plugin-typescript, babel, babel-preset-env and plugin-minify.
- * @param ctx
- * @returns
  */
-const swcPlugin: RollupPluginFn<SwcPluginArgs> = ({
-  type,
-  extraSwcOptions,
-}) => {
+const swcPlugin = (type: TaskConfig['type'], extraSwcOptions?: Config): Plugin => {
   return {
     name: 'ice-pkg:swc',
 

@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { formatEntry } from '../getTaskIO';
+import { formatEntry } from '../getTaskIO.js';
 
 test('formatEntry', () => {
   expect(formatEntry('src/index')).toEqual({

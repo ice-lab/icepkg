@@ -1,6 +1,8 @@
-import { resolve } from 'path';
+import { isAbsolute, resolve, join } from 'path';
 import { isDirectory } from '../utils.js';
-import { TaskName } from '../types.js';
+import type { TaskValue } from '../types.js';
+
+const DEFAULT_ENTRY_DIR = 'src';
 
 export function formatEntry(inputEntry: string | string[] | Record<string, string>): Record<string, string> {
   const entry = {};
@@ -23,21 +25,18 @@ function getEntryId(entry: string): string {
   return entry.split('/').pop().split('.').shift();
 }
 
-const DEFAULT_ENTRY_DIR = 'src';
+export const getTransformEntryDirs = (rootDir: string, entry: Record<string, string>) => {
+  const entries = Object.values(entry);
+  const transformEntryDirs: string[] = [];
 
-export const getDefaultEntryDir = (rootDir: string, entryDir = DEFAULT_ENTRY_DIR) => {
-  entryDir = resolve(rootDir, entryDir);
+  entries.forEach((entryItem) => {
+    const absoluteEntry = isAbsolute(entryItem) ? entryItem : resolve(rootDir, entryItem);
+    transformEntryDirs.push(join(absoluteEntry, '..'));
+  });
 
-  if (!isDirectory(entryDir)) {
-    throw new Error(`Failed to resolve ${entryDir} as an entry directory.`);
-  }
-
-  return entryDir;
+  return transformEntryDirs;
 };
 
-export const getOutputDir = (rootDir: string, taskName: TaskName) => {
-  if (taskName.includes('transform')) {
-    return resolve(rootDir, taskName.split('-')[1]);
-  }
-  return resolve(rootDir, 'dist');
+export const getTransformDefaultOutputDir = (rootDir: string, taskName: TaskValue) => {
+  return resolve(rootDir, taskName.split('-')[1]);
 };

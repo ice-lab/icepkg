@@ -37,6 +37,9 @@
     "@types/react-dom": "^17.0.0",
     "style-unit": "^3.0.4"
   },
+  "dependencies": {
+    "@swc/helpers": "^0.4.14"
+  },
   "peerDependencies": {
     "react": "^17 || ^18"
   },

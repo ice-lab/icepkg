@@ -1,6 +1,7 @@
 import * as React from 'react';
 import defaultAvatar from './default.png';
 import './index.css';
+import '../styles/common.css';
 
 interface AvatarProps {
 

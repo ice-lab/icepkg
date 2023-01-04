@@ -1,18 +1,28 @@
 import { mergeValueToTaskConfig } from '../utils.js';
 import deepmerge from 'deepmerge';
-import type { BundleTaskConfig, TaskConfig, UserConfig } from '../types.js';
+
+import type {
+  BundleTaskConfig,
+  TaskConfig,
+  UserConfig,
+  BundleUserConfig,
+  TransformUserConfig,
+  TransformTaskConfig,
+} from '../types.js';
 
 function getUserConfig() {
-  const defaultBundleValue = {
+  const defaultBundleUserConfig: BundleUserConfig = {
     formats: ['esm', 'es2017'],
+    modes: ['production'],
+    outputDir: 'dist',
   };
-  const defaultTransformValue = {
+  const defaultTransformUserConfig: TransformUserConfig = {
     formats: ['esm', 'es2017'],
   };
   const userConfig = [
     {
       name: 'entry',
-      validation: 'string|object|array',
+      validation: 'string|object',
       defaultValue: 'src/index',
       setConfig: (config: TaskConfig, entry: UserConfig['entry']) => {
         return mergeValueToTaskConfig(config, 'entry', entry);
@@ -48,24 +58,48 @@ function getUserConfig() {
       validation: 'boolean',
       default: false,
     },
-    // FIXME: validate values recursively
+    // TODO: validate values recursively
     {
       name: 'transform',
       validation: 'object',
-      defaultValue: defaultTransformValue,
+      defaultValue: defaultTransformUserConfig,
+      setConfig: (config: TaskConfig, transformConfig: UserConfig['transform']) => {
+        if (config.type === 'transform') {
+          let newConfig = config;
+          const mergedConfig = deepmerge(
+            defaultTransformUserConfig,
+            transformConfig,
+            { arrayMerge: (destinationArray, sourceArray) => sourceArray },
+          );
+          Object.keys(mergedConfig).forEach((key) => {
+            newConfig = mergeValueToTaskConfig<TransformTaskConfig>(
+              newConfig,
+              key,
+              mergedConfig[key],
+            );
+          });
+          return newConfig;
+        }
+      },
     },
     {
       name: 'bundle',
       validation: 'object',
-      defaultValue: defaultBundleValue,
-      setConfig: (config: TaskConfig, bundle: UserConfig['bundle']) => {
+      defaultValue: defaultBundleUserConfig,
+      setConfig: (config: TaskConfig, bundleConfig: UserConfig['bundle']) => {
         if (config.type === 'bundle') {
           let newConfig = config;
           const mergedConfig = deepmerge(
-            defaultBundleValue,
-            bundle,
+            defaultBundleUserConfig,
+            bundleConfig,
             { arrayMerge: (destinationArray, sourceArray) => sourceArray },
           );
+          // Compatible with `bundle.development` config
+          if (mergedConfig.development && !mergedConfig.modes.includes('development')) {
+            delete mergedConfig.development;
+            mergedConfig.modes.push('development');
+          }
+
           Object.keys(mergedConfig).forEach((key) => {
             newConfig = mergeValueToTaskConfig<BundleTaskConfig>(
               newConfig,
