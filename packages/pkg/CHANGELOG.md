@@ -5,6 +5,8 @@
 - [fix] bump version of build-scripts@2.0.0
 - [refactor] bundle and transform task
 - [feat] support incremental build in development
+- [fix] not generate d.mts type file
+- [fix] alias path is not transform in d.ts file
 
 ## 1.3.0
 
