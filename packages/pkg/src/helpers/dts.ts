@@ -3,6 +3,9 @@ import consola from 'consola';
 import { performance } from 'perf_hooks';
 import { timeFrom } from '../utils.js';
 import { createLogger } from './logger.js';
+import formatAliasToTSPathsConfig from './formatAliasToTSPathsConfig.js';
+import type { TaskConfig } from '../types.js';
+import tsTransformPaths from '@zerollup/ts-transform-paths';
 
 export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'mjs' | 'mts';
 
@@ -11,14 +14,6 @@ export interface File {
   ext: FileExt;
   srcCode?: string;
 }
-
-const defaultTypescriptOptions = {
-  allowJs: true,
-  declaration: true,
-  incremental: true,
-  emitDeclarationOnly: true,
-  skipLibCheck: true,
-};
 
 export interface DtsInputFile extends File {
   dtsContent?: string | null;
@@ -41,24 +36,40 @@ const normalizeDtsInput = (file: File): DtsInputFile => {
   };
 };
 
-export function dtsCompile(files: File[]): DtsInputFile[] {
+export function dtsCompile(files: File[], alias: TaskConfig['alias'], rootDir: string): DtsInputFile[] {
   if (!files.length) {
     return;
   }
 
+  const tsCompilerOptions: ts.CompilerOptions = {
+    allowJs: true,
+    declaration: true,
+    incremental: true,
+    emitDeclarationOnly: true,
+    skipLibCheck: true,
+    baseUrl: rootDir,
+    // jsx: 3,
+    lib: ['ES2017', 'DOM'],
+    paths: formatAliasToTSPathsConfig(alias),
+  };
+
   const logger = createLogger('dts');
+
   logger.debug('Start Compiling typescript declarations...');
+
   const dtsCompileStart = performance.now();
 
   const _files = files.map(normalizeDtsInput);
 
   const createdFiles = {};
 
-  const host = ts.createCompilerHost(defaultTypescriptOptions);
-  host.writeFile = (fileName, contents) => { createdFiles[fileName] = contents; };
+  // Create ts host and custom the writeFile and readFile.
+  const host = ts.createCompilerHost(tsCompilerOptions);
+  host.writeFile = (fileName, contents) => {
+    createdFiles[fileName] = contents;
+  };
 
   const _readFile = host.readFile;
-
   // Hijack `readFile` to prevent reading file twice
   host.readFile = (fileName) => {
     const foundItem = files.find((file) => file.filePath === fileName);
@@ -68,15 +79,18 @@ export function dtsCompile(files: File[]): DtsInputFile[] {
     return _readFile(fileName);
   };
 
+  // Create ts program.
   const program = ts.createProgram(
     _files.map(({ filePath }) => filePath),
-    defaultTypescriptOptions,
+    tsCompilerOptions,
     host,
   );
 
   logger.debug(`Initializing program takes ${timeFrom(dtsCompileStart)}`);
 
-  const emitResult = program.emit();
+  const emitResult = program.emit(undefined, undefined, undefined, true, {
+    afterDeclarations: [tsTransformPaths(program).afterDeclarations],
+  });
 
   if (emitResult.diagnostics && emitResult.diagnostics.length > 0) {
     emitResult.diagnostics.forEach((diagnostic) => {
