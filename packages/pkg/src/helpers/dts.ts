@@ -36,7 +36,7 @@ const normalizeDtsInput = (file: File): DtsInputFile => {
   };
 };
 
-export function dtsCompile(files: File[], alias: TaskConfig['alias'], rootDir: string): DtsInputFile[] {
+export function dtsCompile(files: File[], alias: TaskConfig['alias']): DtsInputFile[] {
   if (!files.length) {
     return;
   }
@@ -47,7 +47,6 @@ export function dtsCompile(files: File[], alias: TaskConfig['alias'], rootDir: s
     incremental: true,
     emitDeclarationOnly: true,
     skipLibCheck: true,
-    baseUrl: rootDir,
     // jsx: 3,
     lib: ['ES2017', 'DOM'],
     paths: formatAliasToTSPathsConfig(alias),

@@ -67,7 +67,7 @@ function dtsPlugin({
           filePath: id,
           srcCode: cachedContents[id].srcCode,
         }));
-        dtsFiles = dtsCompile(files, alias, rootDir);
+        dtsFiles = dtsCompile(files, alias);
       } else {
         dtsFiles = Object.keys(cachedContents).map((id) => {
           const { updated, ...rest } = cachedContents[id];
