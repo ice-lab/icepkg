@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2
+
+- [chore] update ts types
+
 ## 1.4.1
 
 - [feat] support configure docusaurus outputDir
