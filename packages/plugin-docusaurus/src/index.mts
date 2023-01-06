@@ -1,77 +1,10 @@
 import { doc } from './doc.mjs';
 import { configureDocusaurus } from './configureDocusaurus.mjs';
 import genDemoPages from './genDemoPages/index.mjs';
-
-import type { PkgPlugin } from '@ice/pkg';
+import type { EnableConfig, PluginDocusaurusOptions } from './types.mjs';
+import type { Plugin } from '@ice/pkg';
 
 const DEFAULT_DEV_SERVER_PORT = 4000;
-
-interface EnableConfig {
-  start?: boolean;
-  build?: boolean;
-}
-
-export interface PluginDocusaurusOptions {
-  /**
-   * Enable doc build
-   */
-  enable?: boolean | EnableConfig;
-  /**
-   * Title for your doc.
-   */
-  title?: string;
-  /**
-   * URL for your website. This can also be considered the top-level hostname.
-   */
-  url?: string;
-  /**
-   * Base URL for your site.
-   */
-  baseUrl?: string;
-  /**
-   * Path to your site favicon.
-   */
-  favicon?: string;
-  /**
-   * Path to your sidebar logo.
-   */
-  navBarLogo?: string;
-  /**
-   * Path to your sidebar title.
-   */
-  navBarTitle?: string;
-  /**
-   * DevServer port for your dev server.
-   */
-  port?: number;
-
-  /**
-   * Function used to replace the sidebar items.
-   */
-  sidebarItemsGenerator?: Function;
-  /**
-   * Whether preview components of mobile styles
-   */
-  mobilePreview?: boolean;
-
-  /**
-   * Default locale that does not have its name in the base URL
-   */
-  defaultLocale?: string;
-
-  /**
-   * List of locales deployed on your site. Must contain defaultLocale.
-   */
-  locales?: string[];
-  /**
-   * Docusaurus output dir.
-   */
-  outputDir?: string;
-}
-
-export interface ConfigureDocusaurusOptions extends PluginDocusaurusOptions {
-  configuredPlugins: ReturnType<Parameters<PkgPlugin>[0]['getAllPlugin']>;
-}
 
 const defaultOptions: PluginDocusaurusOptions = {
   title: 'ICE PKG',
@@ -85,8 +18,7 @@ const defaultOptions: PluginDocusaurusOptions = {
   locales: ['zh-Hans'],
 };
 
-// @ts-ignore
-const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions = {}) => {
+const plugin: Plugin = (api, options: PluginDocusaurusOptions = {}) => {
   const { onHook, context, getAllPlugin } = api;
   const { command, rootDir } = context;
   const { enable = true } = options;
@@ -100,7 +32,9 @@ const plugin: PkgPlugin = (api, options: PluginDocusaurusOptions = {}) => {
     ...options,
     configuredPlugins,
   };
+
   configureDevServerPort(pluginOptions);
+
   configureDocusaurus(rootDir, pluginOptions);
 
   onHook(`before.${command}.run`, async () => {
@@ -124,7 +58,7 @@ const checkPluginEnable = (enable: boolean | EnableConfig, command: string): boo
   return true;
 };
 
-function configureDevServerPort(options) {
+function configureDevServerPort(options: PluginDocusaurusOptions) {
   // Port from environment variable is preferred.
   if (process.env.PORT) {
     const envPort = parseInt(process.env.PORT, 10);
