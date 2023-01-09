@@ -38,12 +38,12 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          {{#if path}}
+        {{#if path}}
           path: '{{{path}}}',
-          {{/if}}
-          {{#if sidebarItemsGenerator}}
+        {{/if}}
+        {{#if sidebarItemsGenerator}}
           sidebarItemsGenerator: {{{sidebarItemsGenerator}}},
-          {{/if}}
+        {{/if}}
           remarkPlugins: [
             [extractCode, { mobilePreview: {{mobilePreview}}, baseUrl: '{{baseUrl}}' }],
           ],
