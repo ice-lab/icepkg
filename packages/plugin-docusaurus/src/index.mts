@@ -10,6 +10,7 @@ const defaultOptions: PluginDocusaurusOptions = {
   title: 'ICE PKG',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
+  path: 'docs',
   favicon: 'https://img.alicdn.com/imgextra/i2/O1CN01jUf9ZP1aKwVvEc58W_!!6000000003312-73-tps-160-160.ico',
   navBarLogo: 'https://img.alicdn.com/imgextra/i1/O1CN01lZTSIX1j7xpjIQ3fJ_!!6000000004502-2-tps-160-160.png',
   navBarTitle: 'ICE PKG',

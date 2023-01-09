@@ -38,14 +38,29 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          {{#if path}}
+          path: '{{{path}}}',
+          {{/if}}
           {{#if sidebarItemsGenerator}}
           sidebarItemsGenerator: {{{sidebarItemsGenerator}}},
           {{/if}}
           remarkPlugins: [
             [extractCode, { mobilePreview: {{mobilePreview}}, baseUrl: '{{baseUrl}}' }],
           ],
+          exclude: [
+            '**/_*.{js,jsx,ts,tsx,md,mdx}',
+            '**/_*/**',
+            '**/*.test.{js,jsx,ts,tsx}',
+            '**/__tests__/**',
+        {{#if exclude}}
+          {{#each exclude}}
+            '{{this}}'
+          {{/each}}
+        {{/if}}
+          ],
           routeBasePath: '/',
         },
+
         theme: {
           customCss: require.resolve('@ice/pkg-plugin-docusaurus/css/custom.css'),
         },

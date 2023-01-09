@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.3
+
+- [feat] support configure the `path` and `exclude` config to @docusaurus/plugin-content-docs
+
 ## 1.4.2
 
 - [chore] update ts types

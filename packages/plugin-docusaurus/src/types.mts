@@ -9,6 +9,14 @@ export interface PluginDocusaurusOptions {
    */
   enable?: boolean | EnableConfig;
   /**
+   * Docs path.
+   */
+  path?: string;
+  /**
+   * Exclude the md file with glob patterns. For example: ['node_modules/**']
+   */
+  exclude?: string[];
+  /**
    * Title for your doc.
    */
   title?: string;
