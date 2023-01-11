@@ -9,6 +9,19 @@ export interface PluginDocusaurusOptions {
    */
   enable?: boolean | EnableConfig;
   /**
+   * Docs path.
+   */
+  path?: string;
+  /**
+   * Exclude the md file with glob patterns. For example: ['node_modules/**']
+   */
+  exclude?: string[];
+  /**
+   * The behavior of Docusaurus when it detects any broken link.
+   * @default 'throw'
+   */
+  onBrokenLinks?: 'ignore' | 'log' | 'warn' | 'throw';
+  /**
    * Title for your doc.
    */
   title?: string;
