@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg-plugin-docusaurus",
-  "version": "1.4.3",
+  "version": "1.4.2",
   "description": "Plugin for component previewing",
   "main": "es2017/index.mjs",
   "exports": {
