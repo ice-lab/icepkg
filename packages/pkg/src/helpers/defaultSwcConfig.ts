@@ -3,12 +3,12 @@ import {
   Context,
   TaskName,
   TaskValue,
-  TaskConfig,
   TransformTaskConfig,
   NodeEnvMode,
 } from '../types.js';
-import type { Config, JscConfig, ModuleConfig } from '@swc/core';
+import type { Config, ModuleConfig } from '@swc/core';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
+import formatAliasToTSPathsConfig from './formatAliasToTSPathsConfig.js';
 
 export const getDefaultBundleSwcConfig = (
   bundleTaskConfig: BundleTaskConfig,
@@ -32,7 +32,7 @@ export const getDefaultBundleSwcConfig = (
     jsc: {
       target,
       baseUrl: ctx.rootDir,
-      paths: formatAliasPaths(bundleTaskConfig.alias),
+      paths: formatAliasToTSPathsConfig(bundleTaskConfig.alias),
     },
     minify: false,
     // Always generate map in bundle mode,
@@ -63,7 +63,7 @@ export const getDefaultTransformSwcConfig = (
     jsc: {
       target,
       baseUrl: ctx.rootDir,
-      paths: formatAliasPaths(transformTaskConfig.alias),
+      paths: formatAliasToTSPathsConfig(transformTaskConfig.alias),
       transform: {
         optimizer: {
           globals: {
@@ -83,27 +83,3 @@ export const getDefaultTransformSwcConfig = (
     sourceMaps: transformTaskConfig.sourcemap,
   };
 };
-
-function formatAliasPaths(alias: TaskConfig['alias']) {
-  const paths: JscConfig['paths'] = {};
-
-  Object.entries(alias || {}).forEach(([key, value]) => {
-    const [pathKey, pathValue] = formatPath(key, value);
-    paths[pathKey] = [pathValue];
-  });
-
-  return paths;
-}
-
-function formatPath(key: string, value: string) {
-  if (key.endsWith('$')) {
-    return [key.replace(/\$$/, ''), value];
-  }
-  // abc -> abc/*
-  // abc/ -> abc/*
-  return [addWildcard(key), addWildcard(value)];
-}
-
-function addWildcard(str: string) {
-  return `${str.endsWith('/') ? str : `${str}/`}*`;
-}

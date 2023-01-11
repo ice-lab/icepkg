@@ -50,8 +50,13 @@ export function getRollupOptions(
   rollupOptions.plugins.push(swcPlugin(taskConfig.type, taskConfig.swcCompileOptions));
 
   if (taskConfig.type === 'transform') {
-    rollupOptions.plugins.push(
-      dtsPlugin(rootDir, taskConfig.entry as Record<string, string>, userConfig.generateTypesForJs),
+    rollupOptions.plugins.unshift(
+      dtsPlugin({
+        rootDir,
+        entry: taskConfig.entry as Record<string, string>,
+        generateTypesForJs: userConfig.generateTypesForJs,
+        alias: taskConfig.alias,
+      }),
     );
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
