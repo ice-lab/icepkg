@@ -12,12 +12,14 @@ const config = {
     defaultLocale: '{{defaultLocale}}',
     locales: [{{#each locales}}'{{this}}',{{/each}}],
   },
-  onBrokenLinks: 'throw',
+{{#if onBrokenLinks}}
+  onBrokenLinks: '{{{onBrokenLinks}}}',
+{{/if}}
   onBrokenMarkdownLinks: 'warn',
   favicon: '{{favicon}}',
-  {{#unless haveStaticFiles}}
+{{#unless haveStaticFiles}}
   staticDirectories: [],
-  {{/unless}}
+{{/unless}}
 
   plugins: [
     '{{sassDocusaurusPluginPath}}',

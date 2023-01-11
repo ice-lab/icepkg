@@ -17,6 +17,11 @@ export interface PluginDocusaurusOptions {
    */
   exclude?: string[];
   /**
+   * The behavior of Docusaurus when it detects any broken link.
+   * @default 'throw'
+   */
+  onBrokenLinks?: 'ignore' | 'log' | 'warn' | 'throw';
+  /**
    * Title for your doc.
    */
   title?: string;
