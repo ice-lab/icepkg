@@ -6,8 +6,8 @@ on:
       - release-next
 
 jobs:
-  release:
-    name: Release
+  version:
+    name: Version
     runs-on: ubuntu-latest
 
     strategy:
