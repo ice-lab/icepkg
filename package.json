@@ -13,8 +13,10 @@
     "coverage": "vitest run --coverage",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
     "lint:fix": "pnpm run lint --fix",
-    "publish:packages": "ts-node ./scripts/publish.ts",
-    "build:doc": "cd website && pnpm run build"
+    "build:doc": "cd website && pnpm run build",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
   },
   "author": "ICE Team",
   "devDependencies": {

@@ -1,9 +1,9 @@
-name: Release
+name: Version
 
 on:
   push:
     branches:
-      - main
+      - release-next
 
 jobs:
   release:
@@ -32,14 +32,7 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Build Packages
-        run: pnpm run build
-
-      - name: Publish to npm
-        id: changesets
+      - name: Create Release Pull Request
         uses: changesets/action@v1
-        with:
-          publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.LUHC228_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

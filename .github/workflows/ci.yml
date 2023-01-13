@@ -3,32 +3,32 @@ name: ci
 on: [push]
 
 jobs:
-  build:
-
+  ci:
+    name: CI
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [16]
 
     steps:
-      - uses: actions/checkout@v2
       - name: Set branch name
+        uses: actions/checkout@v3
         run: echo >>$GITHUB_ENV BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
       - name: Echo branch name
         run: echo ${BRANCH_NAME}
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-          registry-url: https://registry.npmjs.org/
-
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 7
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - run: pnpm run setup
       - run: pnpm run lint
@@ -42,12 +42,3 @@ jobs:
         with:
           BRANCH: gh-pages
           FOLDER: website/build
-
-      # 暂时不发布 package
-      # - run: npm run publish:packages
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      #     DING_WEBHOOK: ${{secrets.DING_WEBHOOK}}
-
-      # - name: Upload coverage to Codecov
-      #   uses: codecov/codecov-action@v1
