@@ -287,9 +287,9 @@ const plugin = (api) => {
   onGetConfig('bundle-es5', (config) => {
     config.modifyStylesOptions ??= [];
     config.modifyStylesOptions.push((stylesOptions) => {
-      options.plugins ||= [];
-      (options.plugins).push(PostcssPluginRpxToVw());
-      return options;
+      stylesOptions.plugins ||= [];
+      (stylesOptions.plugins).push(PostcssPluginRpxToVw());
+      return stylesOptions;
     })
     return config;
   });
