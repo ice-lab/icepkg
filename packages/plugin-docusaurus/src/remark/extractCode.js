@@ -1,4 +1,3 @@
-
 const path = require('path');
 const visit = require('unist-util-visit');
 const checkCodeLang = require('./checkCodeLang.js');
@@ -9,23 +8,22 @@ const rootDir = process.cwd();
 const previewerComponentPath = path.join(__dirname, '../Previewer/index.js');
 
 const escapeCode = (code) => {
-  return (code || '')
-    .replace(/`/g, '&#x60;')
-    .replace(/\$/g, '&#36;');
+  return (code || '').replace(/`/g, '&#x60;').replace(/\$/g, '&#36;');
 };
 
 /**
  * Remark Plugin to extract codeBlock & rendered as component
- * @param {*} options
+ * @type {import('unified').Plugin}
+ * @param {options: { mobilePreview: boolean; baseUrl: string; }}
  * @returns
  */
-const plugin = (options) => {
+const extractCodePlugin = (options) => {
   const { mobilePreview = false, baseUrl = '/' } = options;
 
-  const transformer = async (ast, vfile) => {
+  const transformer = (ast, vfile) => {
     const demosMeta = [];
 
-    await visit(ast, 'code', (node, index) => {
+    visit(ast, 'code', (node, index) => {
       if (node.meta === 'preview') {
         const { lang } = node;
         checkCodeLang(lang);
@@ -39,31 +37,30 @@ const plugin = (options) => {
           demoFilepath,
           demoFilename,
         });
-        genDemoPages({ filepath: vfile.path, code: node.value, demoFilename, demoFilepath, pageFilename, pageFileCode });
+        genDemoPages({
+          filepath: vfile.path,
+          code: node.value,
+          demoFilename,
+          demoFilepath,
+          pageFilename,
+          pageFileCode,
+        });
 
         demosMeta.push({
           code: node.value,
           idx: index,
           demoFilename,
           demoFilepath,
-          url: baseUrl.startsWith('/') ? path.join(baseUrl, 'pages', demoFilename) : `/${path.join(baseUrl, 'pages', demoFilename)}`,
+          url: path.join(baseUrl.startsWith('/') ? '' : '/', baseUrl, 'pages', demoFilename),
         });
       }
     });
 
     if (demosMeta.length) {
-      // Import Previewer ahead
-      ast.children.unshift({
-        type: 'import',
-        value: `import Previewer from '${previewerComponentPath}';`,
-      });
-
+      // Remove original <CodeBlock> component and insert custom <Previewer> component
       for (let m = 0; m < demosMeta.length; ++m) {
         const { idx, code, demoFilepath, demoFilename, url } = demosMeta[m];
-        const actualIdx = m === 0 ? idx + 1 : idx + 2;
-
-        // Remove original code block and insert components
-        ast.children.splice(actualIdx, 1, {
+        ast.children.splice(idx, 1, {
           type: 'jsx',
           value: `
 <Previewer code={\`${escapeCode(code)}\`} mobilePreview={${mobilePreview}} url="${url}">
@@ -74,14 +71,24 @@ const plugin = (options) => {
     }}
   </BrowserOnly>
 </Previewer>`,
-        }, {
-          type: 'import',
-          value: 'import BrowserOnly from \'@docusaurus/BrowserOnly\';',
         });
       }
+
+      // Import <Previewer /> ahead.
+      ast.children.unshift({
+        type: 'import',
+        value: `import Previewer from '${previewerComponentPath}';`,
+      });
+
+      // Import <Browser /> ahead.
+      ast.children.unshift({
+        type: 'import',
+        value: "import BrowserOnly from '@docusaurus/BrowserOnly';",
+      });
     }
   };
+
   return transformer;
 };
 
-module.exports = plugin;
+module.exports = extractCodePlugin;
