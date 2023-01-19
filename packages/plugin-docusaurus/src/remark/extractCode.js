@@ -15,7 +15,6 @@ const escapeCode = (code) => {
  * Remark Plugin to extract codeBlock & rendered as component
  * @type {import('unified').Plugin}
  * @param {options: { mobilePreview: boolean; baseUrl: string; }}
- * @returns
  */
 const extractCodePlugin = (options) => {
   const { mobilePreview = false, baseUrl = '/' } = options;
