@@ -22,7 +22,7 @@ const Previewer: React.FunctionComponent<React.PropsWithChildren<PreviewerProps>
     return <MobilePreview code={deserializedCode} url={url} />;
   } else {
     return (
-      <PcPreview code={deserializedCode} url={url}>
+      <PcPreview code={deserializedCode}>
         {children}
       </PcPreview>
     );
