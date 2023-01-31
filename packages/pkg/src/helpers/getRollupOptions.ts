@@ -56,6 +56,7 @@ export function getRollupOptions(
         entry: taskConfig.entry as Record<string, string>,
         generateTypesForJs: userConfig.generateTypesForJs,
         alias: taskConfig.alias,
+        outputDir: taskConfig.outputDir,
       }),
     );
   } else if (taskConfig.type === 'bundle') {
