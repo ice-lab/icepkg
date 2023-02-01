@@ -15,6 +15,7 @@ interface DtsPluginOptions {
   rootDir: string;
   entry: Record<string, string>;
   alias: TaskConfig['alias'];
+  outputDir: string;
   generateTypesForJs?: UserConfig['generateTypesForJs'];
 }
 
@@ -24,6 +25,7 @@ function dtsPlugin({
   entry,
   alias,
   generateTypesForJs,
+  outputDir,
 }: DtsPluginOptions): Plugin {
   const includeFileRegexps = [/\.m?tsx?$/];
   if (generateTypesForJs) {
@@ -56,7 +58,7 @@ function dtsPlugin({
       return null;
     },
 
-    buildEnd() {
+    async buildEnd() {
       // should re-run typescript programs
       const updatedIds = Object.keys(cachedContents).filter((id) => cachedContents[id].updated);
 
@@ -67,7 +69,7 @@ function dtsPlugin({
           filePath: id,
           srcCode: cachedContents[id].srcCode,
         }));
-        dtsFiles = dtsCompile(files, alias);
+        dtsFiles = await dtsCompile({ files, alias, rootDir, outputDir });
       } else {
         dtsFiles = Object.keys(cachedContents).map((id) => {
           const { updated, ...rest } = cachedContents[id];
