@@ -8,7 +8,7 @@ const uniqueFilename = (originalDocPath) => {
   hash.update(originalDocPath);
   const hashValue = hash.digest('hex');
 
-  return `${DEMO_PREFIX}${hashValue}`;
+  return `${DEMO_PREFIX}_${hashValue.slice(0, 6)}`;
 };
 
 module.exports = uniqueFilename;

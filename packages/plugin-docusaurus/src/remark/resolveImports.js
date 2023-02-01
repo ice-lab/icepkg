@@ -4,17 +4,19 @@ const importRegex = /import\s+?(?:(?:(?:[\w*\s{},]*)\s+from\s+?)|)(?:(?:"(.*?)")
 
 const resolveImports = (code, filePath) => {
   let _code = code;
-  const matches = (code.replace(/\n$/, '')).match(new RegExp(importRegex, 'g'));
+  const matches = code.replace(/\n$/, '').match(new RegExp(importRegex, 'g'));
   let importedBrowserOnly = false;
 
   if (matches) {
-    const imports = matches.map((matchStr) => {
-      const [, singleQuoteImporter, doubleQuoteImporter] = matchStr.match(importRegex);
-      const importer = singleQuoteImporter || doubleQuoteImporter;
+    const imports = matches
+      .map((matchStr) => {
+        const [, singleQuoteImporter, doubleQuoteImporter] = matchStr.match(importRegex);
+        const importer = singleQuoteImporter || doubleQuoteImporter;
 
-      // If `import xx from '.'`
-      return importer === '.' ? './src' : importer;
-    }).filter(Boolean);
+        // If `import xx from '.'`
+        return importer === '.' ? './src' : importer;
+      })
+      .filter(Boolean);
 
     const fileDirname = path.dirname(filePath);
 
@@ -32,7 +34,6 @@ const resolveImports = (code, filePath) => {
         importedBrowserOnly = true;
       }
     });
-
 
     // If import React already
     if (!importedReact) {
