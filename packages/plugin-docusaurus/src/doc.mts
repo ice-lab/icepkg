@@ -5,15 +5,15 @@ import { createRequire } from 'module';
 import consola from 'consola';
 import detect from 'detect-port';
 import address from 'address';
-
 import { DOCUSAURUS_DIR, DOCUSAURUS_CONFIG_FILE, DOCUSAURUS_BABEL_CONFIG_FILE } from './constants.mjs';
 
-import type { PluginDocusaurusOptions } from './index.mjs';
+import type { PluginDocusaurusOptions } from './types.mjs';
+import type { PluginAPI } from '@ice/pkg';
 
 const require = createRequire(import.meta.url);
 const ip = address.ip();
 
-export const doc = async (api, options: PluginDocusaurusOptions) => {
+export const doc = async (api: PluginAPI, options: PluginDocusaurusOptions) => {
   const { context } = api;
   const { rootDir, command } = context;
 
@@ -52,7 +52,7 @@ export const doc = async (api, options: PluginDocusaurusOptions) => {
     }
   });
 
-  // If transofrm task failed and main process exit,
+  // If transform task failed and main process exit,
   // then doc process should be killed too
   process.on('exit', () => {
     child.kill();

@@ -17,17 +17,17 @@ const getPageFileInfo = ({ rootDir, demoFilepath, demoFilename }) => {
   fse.ensureDirSync(pagesDir);
   const pageFilename = path.join(pagesDir, `${demoFilename}.jsx`);
   const pageFileCode = `
-  import BrowserOnly from '@docusaurus/BrowserOnly';
-  export default () => {
-    return (
-      <BrowserOnly>
-        {() => {
-          const Demo = require('${demoFilepath}').default;
-          return <Demo />
-        }}
-      </BrowserOnly>
-    )
-  }
+import BrowserOnly from '@docusaurus/BrowserOnly';
+export default () => {
+  return (
+    <BrowserOnly>
+      {() => {
+        const Demo = require('${demoFilepath}').default;
+        return <Demo />
+      }}
+    </BrowserOnly>
+  )
+}
 `;
   return { pageFilename, pageFileCode };
 };

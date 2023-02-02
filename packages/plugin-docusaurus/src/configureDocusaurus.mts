@@ -5,8 +5,12 @@ import fs from 'fs-extra';
 import hbs from 'handlebars';
 import { createRequire } from 'module';
 import { DOCUSAURUS_DIR, DOCUSAURUS_CONFIG_FILE, DOCUSAURUS_BABEL_CONFIG_FILE } from './constants.mjs';
+import type { PluginDocusaurusOptions } from './types.mjs';
+import type { PluginAPI } from '@ice/pkg';
 
-import type { ConfigureDocusaurusOptions } from './index.mjs';
+export interface ConfigureDocusaurusOptions extends PluginDocusaurusOptions {
+  configuredPlugins: ReturnType<PluginAPI['getAllPlugin']>;
+}
 
 const require = createRequire(import.meta.url);
 

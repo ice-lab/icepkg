@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1
+
+### Patch Changes
+
+- 9a81116: fix: some export types were removed in d.ts
+
 ## 1.4.0
 
 - [fix] bump version of build-scripts@2.0.0

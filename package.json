@@ -13,11 +13,16 @@
     "coverage": "vitest run --coverage",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
     "lint:fix": "pnpm run lint --fix",
-    "publish:packages": "ts-node ./scripts/publish.ts",
-    "build:doc": "cd website && pnpm run build"
+    "build:doc": "cd website && pnpm run build",
+    "changeset": "changeset",
+    "version": "changeset version && pnpm install --frozen-lockfile false",
+    "release": "changeset publish",
+    "release:beta": "changeset pre enter beta",
+    "release:exit": "changeset pre exit"
   },
   "author": "ICE Team",
   "devDependencies": {
+    "@changesets/cli": "^2.26.0",
     "@commitlint/cli": "^15.0.0",
     "@iceworks/spec": "^1.6.0",
     "eslint": "^8.19.0",
