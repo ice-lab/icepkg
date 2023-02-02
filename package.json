@@ -15,8 +15,10 @@
     "lint:fix": "pnpm run lint --fix",
     "build:doc": "cd website && pnpm run build",
     "changeset": "changeset",
-    "version": "changeset version",
-    "release": "changeset publish"
+    "version": "changeset version && pnpm install --frozen-lockfile false",
+    "release": "changeset publish",
+    "release:beta": "changeset pre enter beta",
+    "release:exit": "changeset pre exit"
   },
   "author": "ICE Team",
   "devDependencies": {
