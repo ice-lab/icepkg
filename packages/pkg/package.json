@@ -64,8 +64,7 @@
     "source-map": "0.6.1"
   },
   "publishConfig": {
-    "executableFiles": [
-      "./lib/cli.js"
-    ]
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
