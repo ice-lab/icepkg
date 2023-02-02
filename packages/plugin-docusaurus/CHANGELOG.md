@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.2
+
+### Patch Changes
+
+- a6b7a26: fix: fail to render two previewer
+- 9a81116: - chore update ts types
+  - feat support configure the `path` and `exclude` config to @docusaurus/plugin-content-docs
+  - feat support configure the `onBrokenLinks` of docusaurus config
+
 ## 1.4.1
 
 - [feat] support configure docusaurus outputDir
@@ -14,7 +23,6 @@
 - [fix] can't use short syntax (<></>) of fragment
 - [refactor] set default locales to zh-Hans
 - [refctor] remove browser only import
-
 
 ## 1.3.2
 
@@ -45,7 +53,6 @@
 
 - [feat] support rpx use in demo preview
 - [feat] resolve project rax-compat dependency
-
 
 ## 1.0.0
 
