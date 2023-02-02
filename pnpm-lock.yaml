@@ -69,7 +69,7 @@ importers:
   examples/react-component:
     specifiers:
       '@ice/pkg': workspace:*
-      '@ice/pkg-plugin-docusaurus': ^1.0.0
+      '@ice/pkg-plugin-docusaurus': ^1.4.2
       '@swc/helpers': ^0.4.14
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
@@ -90,7 +90,7 @@ importers:
   examples/react-multi-components:
     specifiers:
       '@ice/pkg': workspace:*
-      '@ice/pkg-plugin-docusaurus': ^1.0.0
+      '@ice/pkg-plugin-docusaurus': ^1.4.2
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
       pkg-plugin-example: workspace:*
@@ -231,7 +231,7 @@ importers:
       '@algolia/client-search': ^4.9.1
       '@docusaurus/core': ^2.2.0
       '@docusaurus/preset-classic': ^2.2.0
-      '@ice/pkg': ^1.0.0
+      '@ice/pkg': ^1.4.1
       '@mdx-js/react': ^1.6.22
       '@swc/helpers': ^0.4.3
       '@types/react': ^17.0.0
