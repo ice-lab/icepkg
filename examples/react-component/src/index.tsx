@@ -6,7 +6,7 @@ export default function Component() {
   console.log(process.env.NODE_ENV);
   return (
     <>
-      <h1>Hello World</h1>
+      <h1 style={{ fontSize: '100rpx' }}>Hello World</h1>
       <Button>Hello</Button>
     </>
   );

@@ -32,6 +32,10 @@
     "build": "ice-pkg build",
     "prepublishOnly": "npm run build"
   },
+  "dependencies": {
+    "@ice/jsx-runtime": "^0.1.1-beta.1",
+    "@swc/helpers": "^0.4.14"
+  },
   "devDependencies": {
     "@ice/pkg": "workspace:*",
     "@ice/pkg-plugin-docusaurus": "^1.4.2",

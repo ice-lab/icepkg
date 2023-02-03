@@ -30,9 +30,8 @@ const normalizeSwcConfig = (
     jsc: {
       transform: {
         react: {
-          // In bundle task use classic runtime because of convenience for external react
-          // In transform task use automatic runtime so it isn't necessary to import react
-          runtime: type === 'transform' ? 'automatic' : 'classic',
+          runtime: 'automatic',
+          importSource: '@ice/jsx-runtime',
         },
         legacyDecorator: true,
       },

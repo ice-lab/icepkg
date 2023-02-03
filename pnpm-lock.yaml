@@ -68,6 +68,7 @@ importers:
 
   examples/react-component:
     specifiers:
+      '@ice/jsx-runtime': ^0.1.1-beta.1
       '@ice/pkg': workspace:*
       '@ice/pkg-plugin-docusaurus': ^1.4.2
       '@swc/helpers': ^0.4.14
@@ -77,6 +78,7 @@ importers:
       react-dom: ^17.0.0
       style-unit: ^3.0.4
     dependencies:
+      '@ice/jsx-runtime': 0.1.1-beta.1_react@17.0.2
       '@swc/helpers': 0.4.14
     devDependencies:
       '@ice/pkg': link:../../packages/pkg
@@ -89,14 +91,19 @@ importers:
 
   examples/react-multi-components:
     specifiers:
+      '@ice/jsx-runtime': ^0.1.1-beta.1
       '@ice/pkg': workspace:*
       '@ice/pkg-plugin-docusaurus': ^1.4.2
+      '@swc/helpers': ^0.4.14
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
       pkg-plugin-example: workspace:*
       react: ^17.0.0
       react-dom: ^17.0.0
       style-unit: ^3.0.4
+    dependencies:
+      '@ice/jsx-runtime': 0.1.1-beta.1_react@17.0.2
+      '@swc/helpers': 0.4.14
     devDependencies:
       '@ice/pkg': link:../../packages/pkg
       '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
@@ -4337,6 +4344,15 @@ packages:
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@ice/jsx-runtime/0.1.1-beta.1_react@17.0.2:
+    resolution: {integrity: sha512-AIa7/M5Q0dYU+5Gp3Jsgp3uwFpH7cvMz8P5KxJBIkTZz1t6mDMWK3ASaSZyP6HhreehpCGEpALZ0vSx0CMUj4w==}
+    peerDependencies:
+      react: ^16 || ^17 || ^18
+    dependencies:
+      react: 17.0.2
+      style-unit: 3.0.5
     dev: false
 
   /@iceworks/eslint-plugin-best-practices/0.2.11_boy655tvqsm6op45de6ax7jimi:
