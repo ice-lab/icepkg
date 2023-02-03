@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0-beta.0
+
+### Minor Changes
+
+- 6f8ed24: feat: specify @ice/jsx-runtime as jsx importSource
+
 ## 1.4.1
 
 ### Patch Changes
