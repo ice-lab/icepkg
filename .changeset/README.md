@@ -43,14 +43,7 @@ For more detail, please see [this documentation](https://github.com/changesets/c
 Run the following commands to publish the beta version
 
 ```bash
-# Enter the prerelese mode and generate the pre.json.
-$ npm run release:beta
-# Update to the beta version.
-$ npm run changeset:version
-# Publish the beta version to the npm.
-$ npm run changeset:publish
-# Exit the prerelese mode.
-$ npm run release:exit
+$ pnpm release:beta
 ```
 
 Then, we need to commit changes to the remote repository.
