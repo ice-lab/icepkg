@@ -70,7 +70,7 @@ importers:
     specifiers:
       '@ice/jsx-runtime': ^0.1.1-beta.1
       '@ice/pkg': workspace:*
-      '@ice/pkg-plugin-docusaurus': ^1.4.2
+      '@ice/pkg-plugin-docusaurus': workspace:*
       '@swc/helpers': ^0.4.14
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
@@ -93,7 +93,7 @@ importers:
     specifiers:
       '@ice/jsx-runtime': ^0.1.1-beta.1
       '@ice/pkg': workspace:*
-      '@ice/pkg-plugin-docusaurus': ^1.4.2
+      '@ice/pkg-plugin-docusaurus': workspace:*
       '@swc/helpers': ^0.4.14
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
