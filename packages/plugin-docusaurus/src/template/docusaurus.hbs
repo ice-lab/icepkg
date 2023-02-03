@@ -32,6 +32,13 @@ const config = {
       }
     ],
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
+    [
+      require.resolve('@docusaurus/plugin-content-pages'),
+      {
+        path: '{{pagePath}}',
+        routeBasePath: '{{pageRouteBasePath}}',
+      }
+    ]
   ],
 
   presets: [
@@ -60,15 +67,18 @@ const config = {
           {{/each}}
         {{/if}}
           ],
-          routeBasePath: '/',
+          routeBasePath: '{{docsRouteBasePath}}',
         },
 
         theme: {
           customCss: require.resolve('@ice/pkg-plugin-docusaurus/css/custom.css'),
         },
+
+        // For demo preview in mobile mode.
         pages: {
-          path: '.docusaurus/pages',
-          routeBasePath: '/pages'
+          path: '.docusaurus/demo-pages',
+          routeBasePath: '/demos',
+          id: 'demo-pages'
         }
       }),
     ],

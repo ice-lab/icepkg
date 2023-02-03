@@ -72,4 +72,19 @@ export interface PluginDocusaurusOptions {
    * Docusaurus output dir.
    */
   outputDir?: string;
+  /**
+   * Docusaurus docs page base route path.
+   * @default '/'
+   */
+  docsRouteBasePath?: string;
+  /**
+   * Docusaurus page local path.
+   * @default ''
+   */
+  pagePath?: string;
+  /**
+   * Docusaurus page base route path.
+   * @default ''
+   */
+  pageRouteBasePath?: string;
 }

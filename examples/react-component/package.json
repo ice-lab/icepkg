@@ -31,10 +31,10 @@
   "devDependencies": {
     "@ice/pkg": "workspace:*",
     "@ice/pkg-plugin-docusaurus": "^1.4.2",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "style-unit": "^3.0.4"
   },
   "dependencies": {
