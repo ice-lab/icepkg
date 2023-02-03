@@ -1,5 +1,6 @@
 {
   "name": "pkg-plugin-example",
+  "private": true,
   "version": "0.0.0",
   "main": "lib/index.js",
   "type": "module",
@@ -14,9 +15,5 @@
   "devDependencies": {
     "@ice/pkg": "workspace:*",
     "typescript": "^4.5.4"
-  },
-  "peerDependencies": {
-    "@ice/pkg": "^1.4.1"
-  },
-  "private": true
+  }
 }
