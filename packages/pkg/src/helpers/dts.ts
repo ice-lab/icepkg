@@ -55,11 +55,11 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
   const tsCompilerOptions: ts.CompilerOptions = {
     allowJs: true,
     declaration: true,
-    incremental: true,
     emitDeclarationOnly: true,
+    incremental: true,
     skipLibCheck: true,
-    lib: ['ES2017', 'DOM'],
     outDir: outputDir,
+    rootDir: path.join(rootDir, 'src'),
     paths: formatAliasToTSPathsConfig(alias),
   };
 
