@@ -1,7 +1,7 @@
 import ts from 'typescript';
 import consola from 'consola';
 import { performance } from 'perf_hooks';
-import { timeFrom } from '../utils.js';
+import { timeFrom, normalizePath } from '../utils.js';
 import { createLogger } from './logger.js';
 import formatAliasToTSPathsConfig from './formatAliasToTSPathsConfig.js';
 import type { TaskConfig } from '../types.js';
@@ -69,7 +69,14 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
 
   const dtsCompileStart = performance.now();
 
-  const _files = files.map((file) => normalizeDtsInput(file, rootDir, outputDir));
+  const _files = files
+    .map((file) => normalizeDtsInput(file, rootDir, outputDir))
+    .map(({ filePath, dtsPath, ...rest }) => ({
+      ...rest,
+      // Be compatible with Windows env.
+      filePath: normalizePath(filePath),
+      dtsPath: normalizePath(dtsPath),
+    }));
 
   const dtsFiles = {};
 
