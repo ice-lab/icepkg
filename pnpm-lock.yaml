@@ -1698,7 +1698,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.11
-    dev: true
 
   /@babel/template/7.18.6:
     resolution: {integrity: sha512-JoDWzPe+wgBsTTgdnIma3iHNFC7YVJoPssVBDjiHfNlyt4YcunDtcDOUmfVDfCK5MfdsaIoX9PkijPhjH3nYUw==}
@@ -12172,7 +12171,6 @@ packages:
 
   /regenerator-runtime/0.13.11:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
-    dev: true
 
   /regenerator-runtime/0.13.9:
     resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
@@ -13155,7 +13153,7 @@ packages:
   /style-unit/3.0.5:
     resolution: {integrity: sha512-xL+kev1W1dPthdhpQqZs9Qk1zenQiHKyy9oy2/VasW4z6wi7m7qQvMe67foPsr99JSs0115X0TCN1ch1n0XqSw==}
     dependencies:
-      '@babel/runtime': 7.18.6
+      '@babel/runtime': 7.20.7
       universal-env: 3.3.3
 
   /stylehacks/5.1.0_postcss@8.4.14:

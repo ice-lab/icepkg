@@ -6,16 +6,15 @@ import os from 'os';
 import debug from 'debug';
 import { createRequire } from 'module';
 import { createFilter } from '@rollup/pluginutils';
+import remapping from '@ampproject/remapping';
+import { loadPkg } from './helpers/load.js';
+import consola from 'consola';
 
 import type { PlainObject, OutputResult, TaskConfig } from './types';
-
 import type {
   DecodedSourceMap,
   RawSourceMap,
 } from '@ampproject/remapping';
-
-import remapping from '@ampproject/remapping';
-
 import type { FSWatcher } from 'chokidar';
 
 export function toArray<T>(any: T | T[]): T[] {
@@ -326,4 +325,13 @@ export function mergeValueToTaskConfig<C = TaskConfig, T = any>(config: C, key: 
 export function getEntryItems(entry: TaskConfig['entry']) {
   const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.values(entry);
   return entries;
+}
+
+const pkg = loadPkg(cwd);
+
+export function checkDependencyExists(dependency: string, link: string) {
+  if (!pkg?.dependencies?.[dependency]) {
+    consola.error(`当前组件/库依赖 \`${dependency}\`, 请运行命令 \`npm i ${dependency} --save\` 安装此依赖。更多详情请看 \`${link}\``);
+    process.exit(1);
+  }
 }

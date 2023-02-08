@@ -2,11 +2,13 @@ import { extname } from 'path';
 import * as swc from '@swc/core';
 import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
-import { scriptsFilter } from '../utils.js';
+import { checkDependencyExists, scriptsFilter } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
 import type { TaskConfig, OutputFile } from '../types.js';
 import type { Plugin } from 'rollup';
+
+const JSX_RUNTIME_SOURCE = '@ice/jsx-runtime';
 
 const normalizeSwcConfig = (
   file: OutputFile,
@@ -31,7 +33,7 @@ const normalizeSwcConfig = (
       transform: {
         react: {
           runtime: 'automatic',
-          importSource: '@ice/jsx-runtime',
+          importSource: JSX_RUNTIME_SOURCE,
         },
         legacyDecorator: true,
       },
@@ -88,6 +90,14 @@ const swcPlugin = (type: TaskConfig['type'], extraSwcOptions?: Config): Plugin =
           // If file's name comes with .mjs、.mts、.cjs、.cts suffix
           ext: ['m', 'c'].includes(file.ext[1]) ? `.${file.ext[1]}js` : '.js',
         },
+      };
+    },
+    options(options) {
+      options.onwarn = (warning, warn) => {
+        if (warning.code === 'UNRESOLVED_IMPORT' && warning.source.includes(JSX_RUNTIME_SOURCE)) {
+          checkDependencyExists(JSX_RUNTIME_SOURCE, 'https://pkg.ice.work/guide/abilities');
+        }
+        warn(warning);
       };
     },
   };
