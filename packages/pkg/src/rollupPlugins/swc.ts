@@ -95,7 +95,7 @@ const swcPlugin = (type: TaskConfig['type'], extraSwcOptions?: Config): Plugin =
     options(options) {
       options.onwarn = (warning, warn) => {
         if (warning.code === 'UNRESOLVED_IMPORT' && warning.source.includes(JSX_RUNTIME_SOURCE)) {
-          checkDependencyExists(JSX_RUNTIME_SOURCE, 'https://pkg.ice.work/guide/abilities');
+          checkDependencyExists(JSX_RUNTIME_SOURCE, 'https://pkg.ice.work/faq');
         }
         warn(warning);
       };

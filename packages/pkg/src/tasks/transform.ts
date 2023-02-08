@@ -208,10 +208,10 @@ async function runTransform(
   logger.info(`✅ ${timeFrom(start)}`);
 
   if (isDistContainingSWCHelpers) {
-    checkDependencyExists('@swc/helpers', 'https://pkg.ice.work/guide/abilities');
+    checkDependencyExists('@swc/helpers', 'https://pkg.ice.work/faq');
   }
   if (isDistContainingJSXRuntime) {
-    checkDependencyExists('@ice/jsx-runtime', 'https://pkg.ice.work/guide/abilities');
+    checkDependencyExists('@ice/jsx-runtime', 'https://pkg.ice.work/faq');
   }
 
   return {
