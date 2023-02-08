@@ -32,6 +32,7 @@ const config = {
       }
     ],
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
+    {{#each plugins}}require.resolve('{{this}}'),{{/each}}
   ],
 
   presets: [
