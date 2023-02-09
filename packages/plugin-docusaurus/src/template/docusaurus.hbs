@@ -38,7 +38,8 @@ const config = {
         path: '{{pagePath}}',
         routeBasePath: '{{pageRouteBasePath}}',
       }
-    ]
+    ],
+    {{#each plugins}}require.resolve('{{this}}'),{{/each}}
   ],
 
   presets: [
