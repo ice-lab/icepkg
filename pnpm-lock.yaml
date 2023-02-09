@@ -70,17 +70,21 @@ importers:
     specifiers:
       '@ice/pkg': workspace:*
       '@ice/pkg-plugin-docusaurus': ^1.4.2
+      '@ice/pkg-plugin-jsx-plus': ^1.0.0
       '@swc/helpers': ^0.4.14
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
+      babel-runtime-jsx-plus: ^0.1.5
       react: ^17.0.0
       react-dom: ^17.0.0
       style-unit: ^3.0.4
     dependencies:
       '@swc/helpers': 0.4.14
+      babel-runtime-jsx-plus: 0.1.5
     devDependencies:
       '@ice/pkg': link:../../packages/pkg
       '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
+      '@ice/pkg-plugin-jsx-plus': link:../../packages/plugin-jsx-plus
       '@types/react': 17.0.52
       '@types/react-dom': 17.0.18
       react: 17.0.2
@@ -300,6 +304,25 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       typescript: 4.9.3
       webpack: 5.75.0
+
+  packages/plugin-jsx-plus:
+    specifiers:
+      '@ice/pkg': ^1.4.1
+      babel-plugin-transform-jsx-class: ^0.1.3
+      babel-plugin-transform-jsx-condition: ^0.1.2
+      babel-plugin-transform-jsx-fragment: ^0.1.4
+      babel-plugin-transform-jsx-list: ^0.1.2
+      babel-plugin-transform-jsx-memo: ^0.1.4
+      babel-plugin-transform-jsx-slot: ^0.1.2
+    dependencies:
+      babel-plugin-transform-jsx-class: 0.1.3
+      babel-plugin-transform-jsx-condition: 0.1.2
+      babel-plugin-transform-jsx-fragment: 0.1.5
+      babel-plugin-transform-jsx-list: 0.1.2
+      babel-plugin-transform-jsx-memo: 0.1.4
+      babel-plugin-transform-jsx-slot: 0.1.2
+    devDependencies:
+      '@ice/pkg': link:../pkg
 
   packages/plugin-rax-component:
     specifiers:
@@ -6084,6 +6107,36 @@ packages:
       '@babel/helper-define-polyfill-provider': 0.3.1_@babel+core@7.18.6
     transitivePeerDependencies:
       - supports-color
+
+  /babel-plugin-transform-jsx-class/0.1.3:
+    resolution: {integrity: sha512-Udi3d5qzwEyteqchxKoV/JfgktZZ8O3SLlADO936Os8LXolkuhl3joq71KiU0yMip8wz7+3zBKU+7otK1iZCLw==}
+    dev: false
+
+  /babel-plugin-transform-jsx-condition/0.1.2:
+    resolution: {integrity: sha512-2JEcwfz8cqIaq42f5d2Ye8QKCesNCUVPx5SZHELiEcIMMNUOchh1jHNDbn61p8wouGGIPXdlFKSIPq16ADgDaw==}
+    dev: false
+
+  /babel-plugin-transform-jsx-fragment/0.1.5:
+    resolution: {integrity: sha512-s12RL9XMM4Z3xgwaq3dSSyJhBmv2MZmFVlhdIc9L5qEcS/on4LkLgIcVU8S8dZB44wpBLoqU0k8LkvDvvIZVuA==}
+    dev: false
+
+  /babel-plugin-transform-jsx-list/0.1.2:
+    resolution: {integrity: sha512-6ajrUOorIkdKwHWAeN8ZUp67yaFl0PYyHKUGY31Pw/ZtF0EIygfD8oxjcbFp0rZpTcVEYTMmh+s1xc6cnKy79g==}
+    dev: false
+
+  /babel-plugin-transform-jsx-memo/0.1.4:
+    resolution: {integrity: sha512-v9L9oFFbPjaVytLhxsmuFLm3USIoTeZQHz4xid2qnT87/C5cCbE8GtE26xbPXTc2LBj1roSDIO3hgR+2JAv1vA==}
+    dev: false
+
+  /babel-plugin-transform-jsx-slot/0.1.2:
+    resolution: {integrity: sha512-ske7KaYo4w4p2w1q7C3653pNje765P24vLF59qmXlgvlPYuFVCTaGS+PYEyb5xIDRDhgiSO2KtDdYK6f6ONxkQ==}
+    dependencies:
+      '@babel/types': 7.18.8
+    dev: false
+
+  /babel-runtime-jsx-plus/0.1.5:
+    resolution: {integrity: sha512-5qjZDfUzZGxHgX8o0tkS9o0HbyBvnUuaAtqHC9IN5CgjWFGJBg6a0Xp31wiG7btiHV0dP5t1t8cthlTCYwtnig==}
+    dev: false
 
   /bail/1.0.5:
     resolution: {integrity: sha512-xFbRxM1tahm08yHBP16MMjVUAvDaBMD38zsM9EMAUN61omwLmKlOpB/Zku5QkjZ8TZ4vn53pj+t518cH0S03RQ==}
