@@ -79,12 +79,12 @@ export interface PluginDocusaurusOptions {
   docsRouteBasePath?: string;
   /**
    * Docusaurus page local path.
-   * @default ''
+   * @default 'pages'
    */
   pagePath?: string;
   /**
    * Docusaurus page base route path.
-   * @default ''
+   * @default '/pages'
    */
   pageRouteBasePath?: string;
 }
