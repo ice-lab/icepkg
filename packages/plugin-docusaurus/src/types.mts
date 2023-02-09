@@ -72,4 +72,9 @@ export interface PluginDocusaurusOptions {
    * Docusaurus output dir.
    */
   outputDir?: string;
+
+  /**
+   * Plugins of Docusaurus.
+   */
+  plugins?: Array<string | [string, any?]>;
 }

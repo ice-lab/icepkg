@@ -1,8 +1,5 @@
 import { isAbsolute, resolve, join } from 'path';
-import { isDirectory } from '../utils.js';
 import type { TaskValue } from '../types.js';
-
-const DEFAULT_ENTRY_DIR = 'src';
 
 export function formatEntry(inputEntry: string | string[] | Record<string, string>): Record<string, string> {
   const entry = {};
