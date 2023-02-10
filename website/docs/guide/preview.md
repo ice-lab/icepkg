@@ -76,8 +76,6 @@ export default defineConfig({
 });
 ```
 
-
-
 ## 如何书写文档
 
 文档以 `.md` 或 `.mdx` 为后缀，采用 [yaml](https://yaml.org/) 和 [markdown](https://daringfireball.net/projects/markdown/) 语法。
@@ -105,8 +103,8 @@ const App = () => {
 export default MyComponent;
 ```
 ````
-
-## 扁平结构
+### 文档结构
+#### 扁平结构
 
 扁平结构的意思是可以将文档平铺在 `docs` 文件夹下：
 
@@ -116,7 +114,7 @@ export default MyComponent;
 └── intro.md
 ```
 
-## 嵌套结构
+#### 嵌套结构
 
 此外还支持嵌套结构，如：
 
@@ -129,7 +127,7 @@ export default MyComponent;
 └── intro.md
 ```
 
-## 文档排序
+### 文档排序
 
 文档默认按照文件（或文件夹）的字母顺序进行排列。若要修改排列顺序，可通过下面两种方式。
 
@@ -158,7 +156,7 @@ sidebar_position: 0
 └── index.md
 ```
 
-## 文档标题
+### 文档标题
 
 文档会默认使用第一个 markdown 标题，作为文档的 title。此外，可以通过 yaml 语法来修改文档标题：
 
@@ -172,9 +170,9 @@ sidebar_label: 这是标题
 在此处描述文档内容...
 ```
 
-## 代码块
+### 代码块
 
-### 将代码渲染成组件
+#### 将代码渲染成组件
 
 若想要预览组件，需要给代码块添加 `preview` 属性。
 
@@ -212,7 +210,7 @@ export default App;
 目前只支持为 `jsx`、`tsx` 代码块添加 `preview` 属性。
 :::
 
-### 将代码块渲染成移动端预览的样式
+#### 将代码块渲染成移动端预览的样式
 
 通过配置 `mobilePreview: true` 开启将预览方式设置成移动端预览的样式：
 
@@ -236,7 +234,7 @@ export default defineConfig({
 ![](https://gw.alicdn.com/imgextra/i2/O1CN01UVaMo71q7gujCYGSc_!!6000000005449-2-tps-1338-761.png)
 
 
-### 引入当前包的包名
+#### 引入当前包的包名
 
 直接引入正在开发的包名 (package.json 中的 name 字段值)，像真实的用户一样在文档中导入你这在开发的包。比如你正在开发一个包名为 `my-component` 的组件：
 
@@ -251,7 +249,7 @@ export default function App() {
 }
 ```
 
-### 给代码块定制自定义标题
+#### 给代码块定制自定义标题
 
 若想要给代码块定制自定义标题，可以使用 `title` 属性：
 
@@ -318,6 +316,36 @@ export default defineConfig({
 });
 ```
 
+更多关于 sidebarItemsGenerator 的用法请见 [Docusaurus 文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#sidebarItemsGenerator)。
+
+## 自定义文档首页
+
+默认情况下，根路由显示的是 `README.md` 的内容。比如：
+
+![](https://img.alicdn.com/imgextra/i4/O1CN01rNo50g1hotnPKjSGi_!!6000000004325-2-tps-2250-1440.png)
+
+如果想定制首页，比如不带左侧侧边栏，可以加入以下的配置：
+
+```js title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    [
+      '@ice/pkg-plugin-docusaurus',
+      {
+         pageRouteBasePath: '/',
+         docsRouteBasePath: '/docs',
+      }
+    ],
+  ],
+});
+```
+
+然后在项目根目录下增加 pages 目录，新增 `index.tsx` 或者 `index.md` 文件，此文件将会被渲染到根路由。
+
+路由渲染规则请参考 [Docusaurus 文档](https://docusaurus.io/docs/creating-pages)。
+
 ## 隐藏文档右侧导航
 
 在 [Mobile 组件预览](#将代码块渲染成移动端预览的样式) 下，若感觉整体内容区比较窄。或因为其他原因，想要隐藏右侧导航栏。可在文档顶部添加 `hide_table_of_contents` 这一配置。
@@ -335,59 +363,127 @@ hide_table_of_contents: true
 
 `@ice/pkg-plugin-docusaurus` 插件接受以下配置：
 
-```typescript
-export interface PluginDocusaurusOptions {
-  /**
-   * 是否启用文档预览构建，默认为 true
-   */
-  enable?: boolean | { start: boolean; build: boolean };
-  /**
-   * 文档的 title，默认为 "飞冰组件"
-   */
-  title?: string;
-  /**
-   * 文档部署的顶层 url。比如部署在 github，则是 https://你的项目.github.io
-   */
-  url?: string;
-  /**
-   * 文档路由的 baseUrl。
-   */
-  baseUrl?: string;
-  /**
-   * 文档站点的 favicon 文件位置，默认为 static/img/favicon.ico
-   */
-  favicon?: string;
-  /**
-   * 侧边栏 logo，默认为 static/img/logo.png
-   */
-  navBarLogo?: string;
-  /**
-   * 侧边栏 title，默认为 "ICE PKG"
-   */
-  navBarTitle?: string;
-  /**
-   * 文档启动的端口，默认为 4000
-   */
-  port?: number;
+#### enable
 
-  /**
-   * 自定义 sidebar
-   */
-  sidebarItemsGenerator?: Function;
+- 类型：`boolean | { start: boolean; build: boolean }`
+- 默认值：`true`
 
-  /**
-   * 开启移动端组件预览
-   */
-  mobilePreview?: boolean;
+是否启用文档预览构建。
 
-  /**
-   * 文档默认语言，默认值为 zh-Hans，即中文
-   */
-  defaultLocale?: string;
+#### title
 
-  /**
-   * 文档需要构建的多语言版本，必须包含 defaultLocale，默认值为 ['zh-Hans']，即中文
-   */ 
-  locales?: string[];
-};
+- 类型：`string`
+- 默认值：`ICE PKG`
+
+配置文档标题。
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    [
+      '@ice/pkg-plugin-docusaurus', 
+      {
+        title: 'My Docs'
+      },
+    ],
+  ],
+});
 ```
+
+#### url
+
+- 类型：`string`
+- 默认值：`/`
+
+文档部署域名。比如部署在 github，则是 `https://your-repo.github.io`。
+
+#### baseUrl
+
+- 类型：`string`
+- 默认值：`/`
+
+文档路由的基准路由。比如如果配置了 `/metro`，则文档的基准地址是 `https://your-repo.github.io/metro`
+
+#### favicon
+
+- 类型：`string`
+- 默认值：`https://img.alicdn.com/imgextra/i2/O1CN01jUf9ZP1aKwVvEc58W_!!6000000003312-73-tps-160-160.ico`
+
+文档站点的 favicon 的地址。可以是相对部署根目录的路径，比如 `static/img/favicon.ico`。
+
+#### navBarLogo
+
+- 类型：`string`
+- 默认值：`https://img.alicdn.com/imgextra/i1/O1CN01lZTSIX1j7xpjIQ3fJ_!!6000000004502-2-tps-160-160.png`
+
+侧边栏的 logo。可以是相对部署根目录的路径，比如 `static/img/logo.png`。
+
+#### navBarTitle
+
+- 类型：`string`
+- 默认值：`ICE PKG`
+
+侧边栏标题。
+
+#### port
+
+- 类型：`number`
+- 默认值：`4000`
+
+文档本地预览服务启动的端口号。
+
+#### sidebarItemsGenerator
+
+- 类型：`SidebarGenerator`
+
+自定义 sidebar。
+
+#### mobilePreview
+
+- 类型：`boolean`
+- 默认值：`false`
+
+开启移动端组件预览模式。
+#### defaultLocale
+
+- 类型：`string`
+- 默认值：`'zh-Hans'`
+
+文档默认语言。
+
+#### locales
+
+- 类型：`string[]`
+- 默认值：`['zh-Hans']`
+
+文档需要构建的多语言版本。必须包含 defaultLocale。
+
+#### outputDir
+
+- 类型：`string`
+- 默认值：`build`
+
+配置 Docusaurus 构建产物输出地址。
+
+#### docsRouteBasePath
+
+- 类型：`string`
+- 默认值：`/`
+
+文档基准路由。
+
+#### pagePath
+
+- 类型：`string`
+- 默认值：`pages`
+
+存放页面的本地路径。默认是项目根目录的 `pages` 目录。页面路由规则详见[文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-pages#path)。
+
+#### pageRouteBasePath
+
+- 类型：`string`
+- 默认值：`/pages`
+
+页面基准路由。
