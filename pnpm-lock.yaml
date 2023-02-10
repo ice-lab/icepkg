@@ -42,14 +42,14 @@ importers:
   examples/application:
     specifiers:
       css-loader: ^6.6.0
-      pkg-react-component-example: workspace:*
+      example-pkg-react-component: workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
       style-loader: ^3.3.1
       webpack: ^5.69.1
       webpack-cli: ^4.9.2
     dependencies:
-      pkg-react-component-example: link:../react-component
+      example-pkg-react-component: link:../react-component
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
     devDependencies:
@@ -101,7 +101,7 @@ importers:
       '@swc/helpers': ^0.4.14
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
-      pkg-plugin-example: workspace:*
+      example-pkg-plugin: workspace:*
       react: ^17.0.0
       react-dom: ^17.0.0
       style-unit: ^3.0.4
@@ -113,7 +113,7 @@ importers:
       '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
       '@types/react': 17.0.52
       '@types/react-dom': 17.0.18
-      pkg-plugin-example: link:../plugin
+      example-pkg-plugin: link:../plugin
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       style-unit: 3.0.5
