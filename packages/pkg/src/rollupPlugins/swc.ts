@@ -93,11 +93,16 @@ const swcPlugin = (type: TaskConfig['type'], extraSwcOptions?: Config): Plugin =
       };
     },
     options(options) {
+      const { onwarn } = options;
       options.onwarn = (warning, warn) => {
         if (warning.code === 'UNRESOLVED_IMPORT' && warning.source.includes(JSX_RUNTIME_SOURCE)) {
           checkDependencyExists(JSX_RUNTIME_SOURCE, 'https://pkg.ice.work/faq');
         }
-        warn(warning);
+        if (onwarn) {
+          onwarn(warning, warn);
+        } else {
+          warn(warning);
+        }
       };
     },
   };
