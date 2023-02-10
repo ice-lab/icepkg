@@ -42,6 +42,7 @@ const config = {
                   { type: 'doc', id: 'scenarios/web' },
                 ],
               },
+              { type: 'doc', id: 'guide/jsx-plus' },
               { type: 'doc', id: 'guide/config' },
               { type: 'doc', id: 'plugins-development' },
               { type: 'doc', id: 'faq' },

@@ -15,8 +15,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.1",
-    "@docusaurus/preset-classic": "^2.0.1",
+    "@docusaurus/core": "^2.3.0",
+    "@docusaurus/preset-classic": "^2.3.0",
     "@easyops-cn/docusaurus-search-local": "^0.33.6",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.1.1",
@@ -26,8 +26,8 @@
   },
   "devDependencies": {
     "@algolia/client-search": "^4.9.1",
-    "@docusaurus/module-type-aliases": "2.0.1",
-    "@docusaurus/theme-common": "^2.2.0",
+    "@docusaurus/module-type-aliases": "2.3.0",
+    "@docusaurus/theme-common": "^2.3.0",
     "@ice/pkg-plugin-docusaurus": "^1.4.2",
     "@tsconfig/docusaurus": "^1.0.5",
     "@types/react": "^17.0.0",

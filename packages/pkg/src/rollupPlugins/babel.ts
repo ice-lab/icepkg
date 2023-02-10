@@ -38,7 +38,6 @@ const babelPlugin = (plugins: babel.PluginItem[]): Plugin => {
       const parserPlugins = getParserPlugins(/\.tsx?$/.test(id));
 
       const { code, map } = babel.transformSync(source, {
-        ast: false, // No need to return ast
         babelrc: false,
         configFile: false,
         filename: id,
@@ -50,6 +49,10 @@ const babelPlugin = (plugins: babel.PluginItem[]): Plugin => {
           decoratorsBeforeExport: true,
         },
         plugins,
+        presets: [
+          ['@babel/preset-typescript'],
+          ['@babel/preset-react'],
+        ],
         sourceFileName: id,
       });
       return {

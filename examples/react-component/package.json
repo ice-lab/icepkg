@@ -30,11 +30,13 @@
   },
   "dependencies": {
     "@ice/jsx-runtime": "^0.1.1-beta.1",
-    "@swc/helpers": "^0.4.14"
+    "@swc/helpers": "^0.4.14",
+    "babel-runtime-jsx-plus": "^0.1.5"
   },
   "devDependencies": {
     "@ice/pkg": "workspace:*",
     "@ice/pkg-plugin-docusaurus": "workspace:*",
+    "@ice/pkg-plugin-jsx-plus": "^1.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "react": "^17.0.0",

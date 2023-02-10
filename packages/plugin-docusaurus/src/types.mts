@@ -68,10 +68,28 @@ export interface PluginDocusaurusOptions {
    * List of locales deployed on your site. Must contain defaultLocale.
    */
   locales?: string[];
+
   /**
    * Docusaurus output dir.
    */
   outputDir?: string;
+  /**
+   * Docusaurus docs page base route path.
+   * @default '/'
+   */
+  docsRouteBasePath?: string;
+
+  /**
+   * Docusaurus page local path.
+   * @default 'pages'
+   */
+  pagePath?: string;
+
+  /**
+   * Docusaurus page base route path.
+   * @default '/pages'
+   */
+  pageRouteBasePath?: string;
 
   /**
    * Plugins of Docusaurus.
