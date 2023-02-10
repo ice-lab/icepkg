@@ -13,7 +13,7 @@ const getDemoFileInfo = ({ rootDir, filepath, lang }) => {
 };
 
 const getPageFileInfo = ({ rootDir, demoFilepath, demoFilename }) => {
-  const pagesDir = path.join(rootDir, DOCUSAURUS_DIR, 'pages');
+  const pagesDir = path.join(rootDir, DOCUSAURUS_DIR, 'demo-pages');
   fse.ensureDirSync(pagesDir);
   const pageFilename = path.join(pagesDir, `${demoFilename}.jsx`);
   const pageFileCode = `

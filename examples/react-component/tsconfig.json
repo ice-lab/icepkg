@@ -1,6 +1,4 @@
 {
-  "compileOnSave": false,
-  "buildOnSave": false,
   "compilerOptions": {
     "outDir": "build",
     "module": "esnext",

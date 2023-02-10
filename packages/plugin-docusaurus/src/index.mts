@@ -17,6 +17,9 @@ const defaultOptions: PluginDocusaurusOptions = {
   port: undefined,
   defaultLocale: 'zh-Hans',
   locales: ['zh-Hans'],
+  docsRouteBasePath: '/',
+  pagePath: 'pages',
+  pageRouteBasePath: '/pages',
 };
 
 const plugin: Plugin = (api, options: PluginDocusaurusOptions = {}) => {
