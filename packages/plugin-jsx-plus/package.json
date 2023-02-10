@@ -1,0 +1,38 @@
+{
+  "name": "@ice/pkg-plugin-jsx-plus",
+  "version": "0.0.0",
+  "description": "ICE PKG plugin for jsx-plus",
+  "main": "es2017/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "type": "./es2017/index.d.ts",
+      "import": "./es2017/index.js",
+      "default": "./es2017/index.js"
+    }
+  },
+  "files": [
+    "es2017",
+    "!es2017/**/*.map"
+  ],
+  "scripts": {
+    "watch": "ice-pkg start",
+    "build": "ice-pkg build",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "babel-plugin-transform-jsx-class": "^0.1.3",
+    "babel-plugin-transform-jsx-condition": "^0.1.2",
+    "babel-plugin-transform-jsx-fragment": "^0.1.4",
+    "babel-plugin-transform-jsx-list": "^0.1.2",
+    "babel-plugin-transform-jsx-memo": "^0.1.4",
+    "babel-plugin-transform-jsx-slot": "^0.1.2"
+  },
+  "devDependencies": {
+    "@ice/pkg": "^1.4.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
