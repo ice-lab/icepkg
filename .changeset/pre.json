@@ -2,19 +2,26 @@
   "mode": "exit",
   "tag": "beta",
   "initialVersions": {
-    "application": "1.0.0",
-    "pkg-plugin-example": "0.0.0",
-    "pkg-react-component-example": "0.0.0",
-    "pkg-react-multi-components-example": "0.0.0",
+    "example-application": "1.0.0",
+    "example-pkg-plugin": "0.0.0",
+    "example-pkg-react-component": "0.0.0",
+    "example-pkg-react-multi-components": "0.0.0",
     "@ice/create-pkg": "1.2.0",
     "ice-npm-utils": "3.0.2",
     "@ice/pkg": "1.5.0-beta.0",
-    "@ice/pkg-plugin-docusaurus": "1.4.3-beta.1",
+    "@ice/pkg-plugin-docusaurus": "1.4.3-beta.2",
+    "@ice/pkg-plugin-jsx-plus": "0.0.0",
     "@ice/pkg-plugin-rax-component": "1.1.0",
     "icepkg-site": "0.0.0"
   },
   "changesets": [
+    "big-donkeys-sit",
+    "happy-crabs-attend",
+    "loud-meals-attack",
+    "perfect-jars-learn",
     "pretty-lions-cry",
-    "shaggy-wasps-occur"
+    "shaggy-wasps-occur",
+    "sixty-poets-fetch",
+    "strange-planes-push"
   ]
 }
