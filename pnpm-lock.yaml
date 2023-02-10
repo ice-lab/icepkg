@@ -68,10 +68,10 @@ importers:
 
   examples/react-component:
     specifiers:
-      '@ice/jsx-runtime': ^0.1.1-beta.1
+      '@ice/jsx-runtime': ^0.2.0
       '@ice/pkg': workspace:*
-      '@ice/pkg-plugin-docusaurus': ^1.4.2
-      '@ice/pkg-plugin-jsx-plus': ^1.0.0
+      '@ice/pkg-plugin-docusaurus': workspace:*
+      '@ice/pkg-plugin-jsx-plus': workspace:*
       '@swc/helpers': ^0.4.14
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
@@ -80,7 +80,7 @@ importers:
       react-dom: ^17.0.0
       style-unit: ^3.0.4
     dependencies:
-      '@ice/jsx-runtime': 0.1.1-beta.1_react@17.0.2
+      '@ice/jsx-runtime': 0.2.0_react@17.0.2
       '@swc/helpers': 0.4.14
       babel-runtime-jsx-plus: 0.1.5
     devDependencies:
@@ -95,7 +95,7 @@ importers:
 
   examples/react-multi-components:
     specifiers:
-      '@ice/jsx-runtime': ^0.1.1-beta.1
+      '@ice/jsx-runtime': ^0.2.0
       '@ice/pkg': workspace:*
       '@ice/pkg-plugin-docusaurus': workspace:*
       '@swc/helpers': ^0.4.14
@@ -106,7 +106,7 @@ importers:
       react-dom: ^17.0.0
       style-unit: ^3.0.4
     dependencies:
-      '@ice/jsx-runtime': 0.1.1-beta.1_react@17.0.2
+      '@ice/jsx-runtime': 0.2.0_react@17.0.2
       '@swc/helpers': 0.4.14
     devDependencies:
       '@ice/pkg': link:../../packages/pkg
@@ -247,7 +247,8 @@ importers:
       '@docusaurus/core': ^2.3.0
       '@docusaurus/plugin-content-pages': ^2.3.0
       '@docusaurus/preset-classic': ^2.3.0
-      '@ice/pkg': ^1.4.1
+      '@ice/jsx-runtime': ^0.2.0
+      '@ice/pkg': ^1.5.0-beta.0
       '@mdx-js/react': ^1.6.22
       '@swc/helpers': ^0.4.3
       '@types/react': ^17.0.0
@@ -283,6 +284,7 @@ importers:
       '@docusaurus/core': 2.3.0_wfh3mw2ke2bdr53qfq544ltemu
       '@docusaurus/plugin-content-pages': 2.3.0_wfh3mw2ke2bdr53qfq544ltemu
       '@docusaurus/preset-classic': 2.3.0_zj3epevdq6d4ikykdk7jwyp4wa
+      '@ice/jsx-runtime': 0.2.0_react@17.0.2
       '@mdx-js/react': 1.6.22_react@17.0.2
       '@swc/helpers': 0.4.3
       address: 1.2.1
@@ -335,7 +337,7 @@ importers:
       babel-plugin-transform-jsx-memo: 0.1.4
       babel-plugin-transform-jsx-slot: 0.1.2
     devDependencies:
-      '@ice/pkg': link:../pkg
+      '@ice/pkg': 1.4.1
 
   packages/plugin-rax-component:
     specifiers:
@@ -382,7 +384,7 @@ importers:
       '@algolia/client-search': 4.13.1
       '@docusaurus/module-type-aliases': 2.3.0_sfoxds7t5ydpegc3knd667wn6m
       '@docusaurus/theme-common': 2.3.0_3tgeifm2vmwrlpqlopppsnjtcu
-      '@ice/pkg-plugin-docusaurus': link:../packages/plugin-docusaurus
+      '@ice/pkg-plugin-docusaurus': 1.4.2_tamhlxc7qrywbuihnmn3loh2be
       '@tsconfig/docusaurus': 1.0.6
       '@types/react': 17.0.52
       typescript: 4.7.4
@@ -2300,7 +2302,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/core/2.3.0_lfww5efxwgoqmcte7kpjyja7bi:
     resolution: {integrity: sha512-2AU5HfKyExO+/mi41SBnx5uY0aGZFXr3D93wntBY4lN1gsDKUpi7EE4lPBAXm9CoH4Pw6N24yDHy9CPR3sh/uA==}
@@ -3116,7 +3117,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/plugin-google-analytics/2.3.0_3tgeifm2vmwrlpqlopppsnjtcu:
     resolution: {integrity: sha512-Z9FqTQzeOC1R6i/x07VgkrTKpQ4OtMe3WBOKZKzgldWXJr6CDUWPSR8pfDEjA+RRAj8ajUh0E+BliKBmFILQvQ==}
@@ -3145,7 +3145,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/plugin-google-analytics/2.3.0_wfh3mw2ke2bdr53qfq544ltemu:
     resolution: {integrity: sha512-Z9FqTQzeOC1R6i/x07VgkrTKpQ4OtMe3WBOKZKzgldWXJr6CDUWPSR8pfDEjA+RRAj8ajUh0E+BliKBmFILQvQ==}
@@ -3203,7 +3202,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/plugin-google-gtag/2.3.0_wfh3mw2ke2bdr53qfq544ltemu:
     resolution: {integrity: sha512-oZavqtfwQAGjz+Dyhsb45mVssTevCW1PJgLcmr3WKiID15GTolbBrrp/fueTrEh60DzOd81HbiCLs56JWBwDhQ==}
@@ -3261,7 +3259,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/plugin-google-tag-manager/2.3.0_wfh3mw2ke2bdr53qfq544ltemu:
     resolution: {integrity: sha512-toAhuMX1h+P2CfavwoDlz9s2/Zm7caiEznW/inxq3izywG2l9ujWI/o6u2g70O3ACQ19eHMGHDsyEUcRDPrxBw==}
@@ -3324,7 +3321,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/plugin-sitemap/2.3.0_wfh3mw2ke2bdr53qfq544ltemu:
     resolution: {integrity: sha512-kwIHLP6lyubWOnNO0ejwjqdxB9C6ySnATN61etd6iwxHri5+PBZCEOv1sVm5U1gfQiDR1sVsXnJq2zNwLwgEtQ==}
@@ -3399,7 +3395,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/preset-classic/2.3.0_zj3epevdq6d4ikykdk7jwyp4wa:
     resolution: {integrity: sha512-mI37ieJe7cs5dHuvWz415U7hO209Q19Fp4iSHeFFgtQoK1PiRg7HJHkVbEsLZII2MivdzGFB5Hxoq2wUPWdNEA==}
@@ -3499,7 +3494,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/theme-classic/2.3.0_wfh3mw2ke2bdr53qfq544ltemu:
     resolution: {integrity: sha512-x2h9KZ4feo22b1aArsfqvK05aDCgTkLZGRgAPY/9TevFV5/Yy19cZtBOCbzaKa2dKq1ofBRK9Hm1DdLJdLB14A==}
@@ -3671,7 +3665,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/theme-search-algolia/2.3.0_4ph6vqy3g2yu3qbwe7syyderlq:
     resolution: {integrity: sha512-/i5k1NAlbYvgnw69vJQA174+ipwdtTCCUvxRp7bVZ+8KmviEybAC/kuKe7WmiUbIGVYbAbwYaEsPuVnsd65DrA==}
@@ -3715,7 +3708,6 @@ packages:
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
-    dev: false
 
   /@docusaurus/theme-search-algolia/2.3.0_ulcwq6qru5twdzgeh5fpmyljqa:
     resolution: {integrity: sha512-/i5k1NAlbYvgnw69vJQA174+ipwdtTCCUvxRp7bVZ+8KmviEybAC/kuKe7WmiUbIGVYbAbwYaEsPuVnsd65DrA==}
@@ -3760,50 +3752,6 @@ packages:
       - vue-template-compiler
       - webpack-cli
     dev: false
-
-  /@docusaurus/theme-search-algolia/2.2.0_qjmc7u5hculwzstel6kzrdwhia:
-    resolution: {integrity: sha512-2h38B0tqlxgR2FZ9LpAkGrpDWVdXZ7vltfmTdX+4RsDs3A7khiNsmZB+x/x6sA4+G2V2CvrsPMlsYBy5X+cY1w==}
-    engines: {node: '>=16.14'}
-    peerDependencies:
-      react: ^16.8.4 || ^17.0.0
-      react-dom: ^16.8.4 || ^17.0.0
-    dependencies:
-      '@docsearch/react': 3.1.1_c6kcmqf4p25qrgl2rpjskujhsi
-      '@docusaurus/core': 2.2.0_e4pyalr7znoa3t23syhqu25gga
-      '@docusaurus/logger': 2.2.0
-      '@docusaurus/plugin-content-docs': 2.2.0_3tgeifm2vmwrlpqlopppsnjtcu
-      '@docusaurus/theme-common': 2.2.0_e4pyalr7znoa3t23syhqu25gga
-      '@docusaurus/theme-translations': 2.2.0
-      '@docusaurus/utils': 2.2.0_@docusaurus+types@2.2.0
-      '@docusaurus/utils-validation': 2.2.0_@docusaurus+types@2.2.0
-      algoliasearch: 4.13.1
-      algoliasearch-helper: 3.10.0_algoliasearch@4.13.1
-      clsx: 1.2.1
-      eta: 1.12.3
-      fs-extra: 10.1.0
-      lodash: 4.17.21
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      tslib: 2.4.0
-      utility-types: 3.10.0
-    transitivePeerDependencies:
-      - '@algolia/client-search'
-      - '@docusaurus/types'
-      - '@parcel/css'
-      - '@swc/core'
-      - '@types/react'
-      - bufferutil
-      - csso
-      - debug
-      - esbuild
-      - eslint
-      - supports-color
-      - typescript
-      - uglify-js
-      - utf-8-validate
-      - vue-template-compiler
-      - webpack-cli
-    dev: true
 
   /@docusaurus/theme-translations/2.0.1:
     resolution: {integrity: sha512-v1MYYlbsdX+rtKnXFcIAn9ar0Z6K0yjqnCYS0p/KLCLrfJwfJ8A3oRJw2HiaIb8jQfk1WMY2h5Qi1p4vHOekQw==}
@@ -4260,8 +4208,8 @@ packages:
       react-dom: 17.0.2_react@17.0.2
     dev: false
 
-  /@ice/jsx-runtime/0.1.1-beta.1_react@17.0.2:
-    resolution: {integrity: sha512-AIa7/M5Q0dYU+5Gp3Jsgp3uwFpH7cvMz8P5KxJBIkTZz1t6mDMWK3ASaSZyP6HhreehpCGEpALZ0vSx0CMUj4w==}
+  /@ice/jsx-runtime/0.2.0_react@17.0.2:
+    resolution: {integrity: sha512-yUfoWloQq2mdyCTsTTWwxtx0dmiwC4Xe2QEaQCg/yFqQKz7hOFBOrju6RodMl7K0fdpj6k1UBfjLd9gPyUBAbw==}
     peerDependencies:
       react: ^16 || ^17 || ^18
     dependencies:
@@ -4272,8 +4220,8 @@ packages:
   /@ice/pkg-plugin-docusaurus/1.4.2_tamhlxc7qrywbuihnmn3loh2be:
     resolution: {integrity: sha512-hxMB82ewnzk5Zj/1/o12bKl7TCGGUuoBirYrwadWQeNm5wVKHy4GyZipgw8qvWkY4Z0ar+eFF+F5sQFEmmUQog==}
     dependencies:
-      '@docusaurus/core': 2.2.0_3tgeifm2vmwrlpqlopppsnjtcu
-      '@docusaurus/preset-classic': 2.2.0_tamhlxc7qrywbuihnmn3loh2be
+      '@docusaurus/core': 2.3.0_3tgeifm2vmwrlpqlopppsnjtcu
+      '@docusaurus/preset-classic': 2.3.0_tamhlxc7qrywbuihnmn3loh2be
       '@mdx-js/react': 1.6.22_react@17.0.2
       '@swc/helpers': 0.4.14
       address: 1.2.1
@@ -4281,8 +4229,8 @@ packages:
       copy-text-to-clipboard: 3.0.1
       detect-port: 1.3.0
       directory-tree: 3.3.1
-      docusaurus-plugin-less: 2.0.2_h7k4fbmhvh7tyycryrahgmkyge
-      docusaurus-plugin-sass: 0.2.2_6wqf4cuv72z6apsq26qakw4k4e
+      docusaurus-plugin-less: 2.0.2_ufmo642ts42rvy7eqlquam4g74
+      docusaurus-plugin-sass: 0.2.2_wqqmeqipvoyuqg6bhtexqkgus4
       es-module-lexer: 0.10.5
       fs-extra: 10.1.0
       handlebars: 4.7.7
@@ -5017,6 +4965,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optional: true
 
@@ -5025,6 +4974,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optional: true
 
@@ -5033,6 +4983,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optional: true
 
@@ -5041,6 +4992,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optional: true
 
@@ -7293,13 +7245,13 @@ packages:
       less: 4.1.3
       less-loader: 11.0.0_less@4.1.3+webpack@5.75.0
 
-  /docusaurus-plugin-sass/0.2.2_6wqf4cuv72z6apsq26qakw4k4e:
+  /docusaurus-plugin-sass/0.2.2_wqqmeqipvoyuqg6bhtexqkgus4:
     resolution: {integrity: sha512-ZZBpj3PrhGpYE2kAnkZB9NRwy/CDi4rGun1oec6PYR8YvGzqxYGtXvLgHi6FFbu8/N483klk8udqyYMh6Ted+A==}
     peerDependencies:
       '@docusaurus/core': ^2.0.0-beta
       sass: ^1.30.0
     dependencies:
-      '@docusaurus/core': 2.2.0_3tgeifm2vmwrlpqlopppsnjtcu
+      '@docusaurus/core': 2.3.0_3tgeifm2vmwrlpqlopppsnjtcu
       sass: 1.53.0
       sass-loader: 10.3.1_sass@1.53.0
     transitivePeerDependencies:
