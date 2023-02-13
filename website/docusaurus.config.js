@@ -45,6 +45,7 @@ const config = {
               { type: 'doc', id: 'guide/jsx-plus' },
               { type: 'doc', id: 'guide/config' },
               { type: 'doc', id: 'plugins-development' },
+              { type: 'doc', id: 'faq' },
             ];
           },
           remarkPlugins: [[extractCode, { mobilePreview: false }]],
