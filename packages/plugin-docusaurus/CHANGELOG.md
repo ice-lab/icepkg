@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.4.3-beta.3
+
+### Patch Changes
+
+- 6f9404d: feat: support configure docusaurus plugin 9f1100c2
+- 6f8ed24: feat: add @ice/jsx-runtime as dependency
+
+## 1.4.3-beta.2
+
+### Patch Changes
+
+- 6f8ed24: feat: add @ice/jsx-runtime as dependency
+
 ## 1.4.2
 
 ### Patch Changes

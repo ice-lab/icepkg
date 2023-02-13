@@ -2,9 +2,9 @@ import { performance } from 'perf_hooks';
 import { isAbsolute, resolve, extname, dirname, relative } from 'path';
 import fs from 'fs-extra';
 import consola from 'consola';
-import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE, loadPkg } from '../helpers/load.js';
+import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
-import { isObject, timeFrom, cwd } from '../utils.js';
+import { checkDependencyExists, isObject, timeFrom } from '../utils.js';
 import { createLogger } from '../helpers/logger.js';
 
 import type {
@@ -18,9 +18,6 @@ import type {
 } from '../types.js';
 import type { RollupOptions, SourceMapInput } from 'rollup';
 import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
-
-const pkg = loadPkg(cwd);
-const isSWCHelpersDeclaredInDependency = Boolean(pkg?.dependencies?.['@swc/helpers']);
 
 export const watchTransformTasks: RunTasks = async (taskOptionsList, context, watcher) => {
   const handleChangeFunctions: HandleChange[] = [];
@@ -85,7 +82,9 @@ async function runTransform(
   context: Context,
   updatedFile?: string,
 ): Promise<OutputResult> {
-  let isTransformDistContainingSWCHelpers = false;
+  let isDistContainingSWCHelpers = false;
+  let isDistContainingJSXRuntime = false;
+
   const { rootDir, userConfig } = context;
   const { buildTask, mode } = taskRunnerContext;
   const { name: taskName } = buildTask;
@@ -128,7 +127,7 @@ async function runTransform(
 
   logger.debug('Transform start...');
 
-  // @ts-ignore FIXME: ignore
+  // @ts-expect-error FIXME: config type.
   await container.buildStart(config);
 
   for (let i = 0; i < files.length; ++i) {
@@ -194,8 +193,11 @@ async function runTransform(
       fs.writeFileSync(files[i].dest, code, 'utf-8');
     }
 
-    if (!isTransformDistContainingSWCHelpers) {
-      isTransformDistContainingSWCHelpers = code?.includes('@swc/helpers');
+    if (!isDistContainingSWCHelpers) {
+      isDistContainingSWCHelpers = code?.includes('@swc/helpers');
+    }
+    if (!isDistContainingJSXRuntime) {
+      isDistContainingJSXRuntime = code?.includes('@ice/jsx-runtime');
     }
 
     logger.debug(`Transform file ${files[i].absolutePath}`, timeFrom(traverseFileStart));
@@ -205,9 +207,11 @@ async function runTransform(
 
   logger.info(`✅ ${timeFrom(start)}`);
 
-  if (isTransformDistContainingSWCHelpers && !isSWCHelpersDeclaredInDependency) {
-    logger.warn('⚠️ The transformed dist contains @swc/helpers, please run `npm i @swc/helpers -S` command to install it as dependency. See https://pkg.ice.work/guide/abilities for more detail.');
-    process.exit(1);
+  if (isDistContainingSWCHelpers) {
+    checkDependencyExists('@swc/helpers', 'https://pkg.ice.work/faq');
+  }
+  if (isDistContainingJSXRuntime) {
+    checkDependencyExists('@ice/jsx-runtime', 'https://pkg.ice.work/faq');
   }
 
   return {

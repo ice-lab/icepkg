@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.5.0-beta.1
+
+### Minor Changes
+
+- 6f8ed24: feat: specify @ice/jsx-runtime as jsx importSource
+
+### Patch Changes
+
+- 171c1dd: chore: lock @swc/core version
+- 6981cde: fix: transform code error with babel plugin
+- 390fe97: fix: can't generate dts on Windows system
+  fix: can't generate dts when save code in dev
+- 606608f: fix: dependency will not be installed
+
+## 1.5.0-beta.0
+
+### Minor Changes
+
+- 6f8ed24: feat: specify @ice/jsx-runtime as jsx importSource
+
 ## 1.4.1
 
 ### Patch Changes
