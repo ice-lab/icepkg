@@ -29,8 +29,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-      - name: Install Dependencies
-        run: pnpm install
+      - name: Setup
+        run: pnpm run setup
 
       - name: Create Release Pull Request
         uses: changesets/action@v1
