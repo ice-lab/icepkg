@@ -37,10 +37,10 @@
     "@ice/pkg": "workspace:*",
     "@ice/pkg-plugin-docusaurus": "workspace:*",
     "@ice/pkg-plugin-jsx-plus": "workspace:*",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "style-unit": "^3.0.4"
   },
   "peerDependencies": {
