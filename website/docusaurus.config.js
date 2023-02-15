@@ -29,12 +29,24 @@ const config = {
             return [
               { type: 'doc', id: 'index' },
               { type: 'doc', id: 'quick-start' },
-              { type: 'doc', id: 'guide/abilities' },
-              { type: 'doc', id: 'guide/scenarios' },
-              { type: 'doc', id: 'guide/build' },
-              { type: 'doc', id: 'guide/publish' },
-              { type: 'doc', id: 'guide/preview' },
-              { type: 'doc', id: 'guide/jsx-plus' },
+              {
+                type: 'category',
+                label: '基础指南',
+                items: [
+                  { type: 'doc', id: 'guide/abilities' },
+                  { type: 'doc', id: 'guide/scenarios' },
+                  { type: 'doc', id: 'guide/build' },
+                  { type: 'doc', id: 'guide/publish' },
+                ],
+              },
+              {
+                type: 'category',
+                label: '进阶指南',
+                items: [
+                  { type: 'doc', id: 'guide/preview' },
+                  { type: 'doc', id: 'guide/jsx-plus' },
+                ],
+              },
               {
                 type: 'category',
                 label: '参考',
