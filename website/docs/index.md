@@ -34,12 +34,12 @@ ICE PKG 除支持 bundle 模式外，也默认支持了 transform 模式（将�
 
 ### 多场景
 
-依赖 ICE PKG 强大的 [双模式](#双模式) 能力，支持多类场景的额开发需求。
+依赖 ICE PKG 强大的[双模式](#双模式)能力，支持多类场景的开发需求。包括但不限定于以下场景：
 
-+ [React 组件](./scenarios/react)
-+ [Rax 组件](./scenarios/rax)
-+ [Node 模块](./scenarios/node)
-+ [前端类库](./scenarios/web)
++ React 组件
++ Rax 组件
++ Node 模块
++ 前端类库
 
 ### 文档预览
 

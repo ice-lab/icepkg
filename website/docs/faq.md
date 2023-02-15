@@ -1,4 +1,4 @@
-# FAQ
+# 常见问题
 
 ## 为什么需要依赖 `@ice/jsx-runtime`
 
