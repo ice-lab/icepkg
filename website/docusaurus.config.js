@@ -29,9 +29,8 @@ const config = {
             return [
               { type: 'doc', id: 'index' },
               { type: 'doc', id: 'quick-start' },
-              { type: 'doc', id: 'guide/pattern' },
-              { type: 'doc', id: 'guide/scenarios' },
               { type: 'doc', id: 'guide/abilities' },
+              { type: 'doc', id: 'guide/scenarios' },
               { type: 'doc', id: 'guide/build' },
               { type: 'doc', id: 'guide/publish' },
               { type: 'doc', id: 'guide/preview' },
