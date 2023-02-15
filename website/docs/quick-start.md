@@ -35,6 +35,12 @@ $ npm init @ice/pkg react-component
   Rax 组件
 ```
 
+你还可以通过附加的命令行选项的方式指定你想要的模板和 npm 包名，比如：
+
+```bash
+$ npm init @ice/pkg react-component --template @ice/template-pkg-react --npmName my-react-component
+```
+
 ## 启动项目
 
 ```bash
