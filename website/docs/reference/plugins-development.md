@@ -47,13 +47,13 @@ const plugin = (api) => {
 
 ### onGetConfig
 
-ICE PKG 会根据用户配置 transform 和 bundle 模式的输出产物格式，分别会注册以下任务：
+ICE PKG 会根据用户配置 Transform 和 Bundle 模式的输出产物格式，分别会注册以下任务：
 
 + `transform-esm`：默认启动
 + `transform-es2017`：默认启动
-+ `transform-cjs`：当 transform 配置了 `formats: ['cjs']` 启动
-+ `bundle-es5`：当 bundle 配置了 `formats: ['esm']` 或者 `formats: ['cjs']` 或者 `formats: ['umd']` 时启动
-+ `bundle-es2017`：当 bundle 配置了 `formats: ['es2017']` 时启动
++ `transform-cjs`：当 Transform 配置了 `formats: ['cjs']` 启动
++ `bundle-es5`：当 Bundle 配置了 `formats: ['esm']` 或者 `formats: ['cjs']` 或者 `formats: ['umd']` 时启动
++ `bundle-es2017`：当 Bundle 配置了 `formats: ['es2017']` 时启动
 
 通过 `onGetConfig` API，可以修改每个 Task 任务的配置项。
 
@@ -251,12 +251,12 @@ const plugin = (api) => {
 
 #### outputDir
 
-> 仅对 bundle 模式生效。transform 模式按照配置的 format 值分别输出到对应目录，比如 esm、cjs、es2017
+> 仅对 Bundle 模式生效。Transform 模式按照配置的 format 值分别输出到对应目录，比如 esm、cjs、es2017
 
 + 类型：`string`
 + 默认值：`dist`
 
-配置 bundle 模式下组件编译产物的输出目录。
+配置 Bundle 模式下组件编译产物的输出目录。
 
 ```js
 const plugin = (api) => {
@@ -322,7 +322,7 @@ const plugin = (api) => {
 + 类型：`string`
 + 默认值：`package.name`
 
-bundle 导出名称。一般用于 umd 产物中通过 `window[name]` 拿到产物模块内容。
+Bundle 导出名称。一般用于 umd 产物中通过 `window[name]` 拿到产物模块内容。
 
 ```js
 const plugin = (api) => {
