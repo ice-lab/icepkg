@@ -3,10 +3,20 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-ICE PKG 默认支持 React 组件、Rax 组件、Node 模块、前端类库研发场景。你根据实际的开发需求，通过命令行创建对应场景的模板：
+ICE PKG 默认支持 React 组件、Rax 组件、Node 模块、前端类库研发场景。你可以执行下面的命令：
 
 ```bash
 $ npm init @ice/pkg my-lib
+```
+
+根据实际研发需求，选择对应的脚手架：
+
+```bash
+? 请选择项目类型 (Use arrow keys)
+❯ React 组件
+  Rax 组件
+  Node 模块
+  前端类库
 ```
 
 ## React 组件
@@ -17,7 +27,7 @@ $ npm init @ice/pkg my-lib
 
 ```md
 src
-├── Header
+├── Header        # 子组件 Header
 |  ├── index.css
 |  └── index.tsx
 └── index.tsx
@@ -29,7 +39,7 @@ src
 ```tsx
 import Header from './Header';
 
-//  通过 export default 方式导入
+//  通过 export default 方式导出
 export default function Component() {
   return (
     <div>
@@ -55,8 +65,7 @@ export default function Header() {
 </TabItem>
 </Tabs>
 
-这样在消费处可以通过 `import Component from 'your-component-name';` 的方式导入组件了。
-
+这样在消费处可以通过 `import Component from 'your-component-name'` 的方式导入组件了。
 
 假如一个 npm 包要导出多个不同的组件，也就是类似我们常说的组件库，推荐使用以下的目录组织结构和写法：
 
@@ -94,6 +103,10 @@ export function Button() {
 
 </TabItem>
 </Tabs>
+
+:::tip
+有关样式的说明和写法请参考[构建能力 - CSS](./abilities#css) 文档。
+:::
 
 `src/index.ts` 作为组件库的入口文件，然后统一导出不同的 React 组件，这样就可以通过 `import { Button, Input } from 'your-component-name';` 导入组件了。
 

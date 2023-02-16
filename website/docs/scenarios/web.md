@@ -25,7 +25,7 @@ $ npm init @ice/pkg web-project
 └── tsconfig.json
 ```
 
-推荐使用 ICE PKG 的 [transform 模式](../#双模式) 和 [bundle 模式](../#双模式) 进行开发。使用以下配置：
+推荐使用 ICE PKG 的 [Transform 模式](../#双模式) 和 [Bundle 模式](../#双模式) 进行开发。使用以下配置：
 
 ```ts title=build.config.mts
 import { defineConfig } from '@ice/pkg';
@@ -42,7 +42,7 @@ export default defineConfig({
 ```
 
 :::tip
-对于前端类库的 bundle 产物而言，externals 配置为 `false`（即打入所有依赖，也是 ICE PKG 的默认表现） 是 ICE PKG 推荐的方式。
+对于前端类库的 Bundle 产物而言，externals 配置为 `false`（即打入所有依赖，也是 ICE PKG 的默认表现） 是 ICE PKG 推荐的方式。
 :::
 
 此配置下输出以下产物：

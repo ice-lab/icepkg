@@ -107,7 +107,7 @@ export default defineConfig({
 ```
 
 :::tip
-对于 Rax 组件的 bundle 产物而言，externals 配置 `rax` 是 ICE PKG 推荐的方式。
+对于 Rax 组件的 Bundle 产物而言，externals 配置 `rax` 是 ICE PKG 推荐的方式。
 :::
 
 该配置会在 `dist` 目录下输出以下文件：

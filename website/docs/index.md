@@ -5,7 +5,7 @@ ICE PKG 是飞冰开源的 NPM 包开发解决方案，默认支持 React 组件
 ## 特性
 
 - **📈 更快**：使用 [SWC](https://swc.rs/docs/configuration/swcrc) 编译和压缩，提升数十倍编译速度
-- **🎊 双模式**：同时提供 transform + bundle 两种构建模式
+- **🎊 双模式**：同时提供 Transform + Bundle 两种构建模式
 - **🅾️ 零配置**：无需任何配置，提供内建的 TypeScript、JSX 等构建支持
 - **☄️ 面向未来**：提供 ES2017 产物，打包出面向现代浏览器支持的产物
 - **☘️ 文档预览**：基于 [Docusaurus](https://docusaurus.io/) 提供预览文档、生成静态文档能力
@@ -26,9 +26,9 @@ ICE PKG 是飞冰开源的 NPM 包开发解决方案，默认支持 React 组件
 
 ### 双模式
 
-社区的众多方案如 [Microbundle](https://github.com/developit/microbundle)、[tsup](https://github.com/egoist/tsup) 均只支持打包模式 (将所有依赖文件打包成一个文件输出，下称 bundle 模式)。但 bundle 模式[并非总是最佳选择](https://github.com/ice-lab/icepkg/issues/301)。其中最为**显著的问题**在于：**对 Tree-Shaking 不友好**，无用的依赖总是会被打包到最终的输出产物中，继而影响应用的体积。
+社区的众多方案如 [Microbundle](https://github.com/developit/microbundle)、[tsup](https://github.com/egoist/tsup) 均只支持打包模式 (将所有依赖文件打包成一个文件输出，下称 Bundle 模式)。但 Bundle 模式[并非总是最佳选择](https://github.com/ice-lab/icepkg/issues/301)。其中最为**显著的问题**在于：**对 Tree-Shaking 不友好**，无用的依赖总是会被打包到最终的输出产物中，继而影响应用的体积。
 
-ICE PKG 除支持 bundle 模式外，也默认支持了 transform 模式（将文件挨个编译到输出目录）。更多内容请参考[构建能力 — 双模式构建](./guide/abilities#双模式构建)。
+ICE PKG 除支持 Bundle 模式外，也默认支持了 Transform 模式（将文件挨个编译到输出目录）。更多内容请参考[构建能力 — 双模式构建](./guide/abilities#双模式构建)。
 
 ### ES2017 产物
 

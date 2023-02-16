@@ -84,20 +84,40 @@ ICE PKG 原生支持引入和使用 `.ts` 文件。使用 [SWC](https://swc.rs/d
 
 ICE PKG 对于 `.jsx` 和 `.tsx` 同样也是原生支持的。JSX 的编译同样也是使用 [SWC](https://swc.rs/docs/configuration/swcrc)。
 
-## CSS 样式
+## CSS
 
-ICE PKG 默认支持 css、sass、less 等语法。若 `src` 文件夹下存在 `index.tsx` 和 `a.css` 和 `b.css` 文件，可以直接在 `index.tsx` 引入样式文件。如：
+### 基本用法
+
+比如 `src` 文件夹下存在 `index.tsx` 和 `index.css`，可以直接在 `index.tsx` 引入样式文件。如：
+<Tabs>
+
+<TabItem value="index.tsx" label="src/index.tsx">
 
 ```tsx
+import * as React from 'react';
 import './a.css';
-import './b.css';
+
+export default function Home() {
+  return (
+    <div className="container"></div>
+  )
+}
+```
+</TabItem>
+<TabItem value="index.css" label="src/index.css">
+
+```css
+.container {
+  color: red;
+}
 ```
 
-在 [transform 模式](./#transform-模式)下，样式文件会被拷贝到输出目录；在 [bundle 模式](./#bundle-模式)下，样式会整体打包输出。
+</TabItem>
+</Tabs>
 
 ### 预处理器
 
-ICE PKG 内置支持 `.scss`、`.less`、`.sass` 文件支持，处理方式与 `.css` 保持一致。
+ICE PKG 内置支持 `.scss`、`.less`、`.sass` 文件，使用方式与 `.css` 文件保持一致。
 
 ### CSS Modules
 
@@ -188,11 +208,11 @@ ICE PKG **默认**输出 ES2017 产物。也可通过以下配置输出：
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  // transform 模式输出 es2017 产物
+  // Transform 模式输出 es2017 产物
   transform: {
     formats: ['es2017'],
   },
-  // bundle 模式输出 es2017 产物
+  // Bundle 模式输出 es2017 产物
   bundle: {
     formats: ['es2017'],
   },

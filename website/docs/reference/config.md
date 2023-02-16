@@ -181,10 +181,10 @@ ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件�
 
 ### transform
 
-该字段定义 [transform 模式](../#双模式) 下额外的配置。包含以下配置：
+该字段定义 [Transform 模式](../#双模式) 下额外的配置。包含以下配置：
 
 :::tip
-transform 模式是 ICE PKG 默认的编译模式。
+Transform 模式是 ICE PKG 默认的编译模式。
 :::
 
 #### formats
@@ -240,7 +240,7 @@ export default defineConfig({
 
 ### bundle
 
-该字段定义 [bundle 模式](../#双模式) 下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
+该字段定义 [Bundle 模式](../#双模式) 下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
 
 #### formats
 
@@ -278,7 +278,7 @@ export default defineConfig({
 cjs 规范产物同理将 `formats` 配置为 `['cjs', 'es2017']` 即可。
 
 :::tip
-bundle 模式的 formats 如果单独配置 `['es2017']` 将不会生效，因为其仅决定产物语法层面规范，而无法决定产物的模块规范。因此其必须与 `'esm'`、`'umd'` 和 `'cjs'` 中的至少一项搭配配置才能正常生成对应模块规范的 ES2017 产物。
+Bundle 模式的 formats 如果单独配置 `['es2017']` 将不会生效，因为其仅决定产物语法层面规范，而无法决定产物的模块规范。因此其必须与 `'esm'`、`'umd'` 和 `'cjs'` 中的至少一项搭配配置才能正常生成对应模块规范的 ES2017 产物。
 :::
 
 #### modes
@@ -334,7 +334,7 @@ export default defineConfig({
 + 类型：`boolean | Record<string, string>`
 + 默认值：`true`
 
-默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。若想要 bundle 不包含依赖产物，可如下配置：
+默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。若想要 Bundle 不包含依赖产物，可如下配置：
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';

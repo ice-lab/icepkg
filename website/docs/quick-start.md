@@ -29,10 +29,10 @@ $ npm init @ice/pkg react-component
 选择 React 组件项目类型：
 ```bash
 ? 请选择项目类型 (Use arrow keys)
-  前端类库
-  Node 模块
 ❯ React 组件
   Rax 组件
+  Node 模块
+  前端类库
 ```
 
 你还可以通过附加的命令行选项的方式指定你想要的模板和 npm 包名，比如：
