@@ -5,7 +5,7 @@ import TabItem from '@theme/TabItem';
 
 ## 双模式构建
 
-ICE PKG 原生提供 Transform 和 Bundle 两种构建模式，你可以根据实际的开发需求使用对应的构建模式。
+ICE PKG 原生提供 Transform 构建模式和 Bundle 构建模式，你可以根据实际的开发需求使用对应的构建模式。
 
 ### Transform 模式
 
@@ -44,7 +44,7 @@ esm
 - 对于 JavaScript 文件，将会进行语法编译
 - 其他类型的文件（比如 `.css`、`.scss` 等等），不做任何编译操作，将会被直接拷贝到输出目录
 
-Transform 模式下输出的产物具有较好的调试性，并且对 Tree-Shaking 友好。适用于大部分开发 React 组件或者 Node 模块场景。
+Transform 模式下输出的产物具有较好的调试性，并且对 Tree-Shaking 友好。适用于大部分开发 React/Rax 组件或者 Node 模块场景。
 
 ### Bundle 模式
 
@@ -68,7 +68,7 @@ dist
 └── index.esm.es2017.production.css
 ```
 
-Bundle 模式下输出的产物不需要额外依赖其他模块（不开启 `externals`），一般适用于前端类库要打包成 UMD 格式产物或在浏览器中直接导入构建产物等场景。
+Bundle 模式下输出的产物不需要额外依赖其他模块（不开启 `external` 情况下），一般适用于前端类库要打包成 UMD 格式产物或在浏览器中直接导入构建产物等场景。
 
 ## TypeScript
 
