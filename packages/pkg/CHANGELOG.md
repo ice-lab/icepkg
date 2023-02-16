@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.1
+
+### Patch Changes
+
+- 58ea9c9: fix: minified code can not run in safari
+
 ## 1.5.0
 
 ### Minor Changes
