@@ -11,9 +11,6 @@ const minifyPlugin = (sourcemap: TaskConfig['sourcemap']): Plugin => {
     name: 'ice-pkg:minify',
     renderChunk(code) {
       return swc.minify(code, {
-        compress: {
-          unused: false,
-        },
         // Minify amd module will cause an error(`module` reserved Words will be declared in the top level).
         module: true,
         sourceMap: !!sourcemap,
