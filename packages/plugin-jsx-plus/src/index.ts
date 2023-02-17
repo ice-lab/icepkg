@@ -10,7 +10,7 @@ const defaultPluginOptions: PluginOptions = {
 
 const plugin: Plugin = (api, rawOptions: PluginOptions) => {
   const { onGetConfig } = api;
-  const pluginOptions = { ...defaultPluginOptions, ...rawOptions };
+  const pluginOptions = Object.assign(rawOptions, defaultPluginOptions);
   const babelPlugins = [
     'babel-plugin-transform-jsx-list',
     'babel-plugin-transform-jsx-condition',
