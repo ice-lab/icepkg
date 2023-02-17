@@ -74,12 +74,12 @@ import feature from 'your-package-name/feature';
 举个例子，比如现在的一个组件库在 `src/index.ts` 中导出两个模块：
 
 <Tabs>
-<TabItem  value="src/index.ts" label="src/index.ts">
+<TabItem value="src/index.ts" label="src/index.ts">
 
-  ```tsx
-  export { default as Button } from './Button';
-  export { default as Input } from './Input';
-  ```
+```tsx
+export { default as Button } from './Button';
+export { default as Input } from './Input';
+```
 
 </TabItem>
 <TabItem value="src/Button/index.tsx" label="src/Button/index.tsx">
@@ -102,6 +102,7 @@ export default function Input() {
   return (<input />)
 }
 ```
+
 </TabItem>
 </Tabs>
 

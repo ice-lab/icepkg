@@ -153,7 +153,7 @@ export default defineConfig({
 
 为 JavaScript 代码生成类型文件。ICE PKG 默认为文件后缀为 `.ts` 生成类型文件。
 
-如果使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。详细介绍 [工程能力 - 生成类型文件](./abilities#生成类型文件)。
+如果使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。详细介绍 [工程能力 - 生成类型文件](../guide/abilities#生成类型文件)。
 
 ### plugins
 
@@ -177,7 +177,7 @@ export default defineConfig({
 });
 ```
 
-ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](../plugins-development)。
+ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](./plugins-development)。
 
 ### transform
 

@@ -103,6 +103,7 @@ export default function Home() {
   )
 }
 ```
+
 </TabItem>
 <TabItem value="index.css" label="src/index.css">
 
@@ -251,7 +252,7 @@ export function add(a, b) {
 }
 ```
 
-为 JavaScript 文件开启 [generateTypesForJs](./config#generatetypesforjs) 配置：
+为 JavaScript 文件开启 [generateTypesForJs](../reference/config#generatetypesforjs) 配置：
 
 ```ts
 import { defineConfig } from '@ice/pkg';

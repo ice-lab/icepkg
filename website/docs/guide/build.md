@@ -167,7 +167,7 @@ dist
 └── index.umd.es5.production.js
 ```
 
-如果需要额外输出一份未压缩的 UMD 产物以方便调试构建，可以新增 [bundle.modes 配置项](config#modes)：
+如果需要额外输出一份未压缩的 UMD 产物以方便调试构建，可以新增 [bundle.modes 配置项](../reference/config#modes)：
 
 ```diff title="ice.config.mts"
 import { defineConfig } from '@ice/pkg';
