@@ -175,6 +175,7 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   bundle: {
     formats: ['umd'],
+    name: 'my-library',
 +   modes: ['production', 'development'],
   }
 })

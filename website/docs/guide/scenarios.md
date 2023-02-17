@@ -136,6 +136,13 @@ export default function Component() {
 
 如果现在有相同的工具函数在多个 Node 应用被消费，可以把这些公共的函数抽成一个 npm 包，供多个 Node 应用使用。支持经过 Transform 模式生成 CommonJS 产物和 ES Module 产物。
 
+```ts title="src/index.ts"
+export function writeLicenseToFileHeader(absFilePath: string) {
+  const newFileContent = '/* LICENSE */' + fs.readFileSync(absFilePath, 'utf-8');
+  fs.writeFileSync(absFilePath, newFileContent);
+}
+```
+
 ## 前端类库
 
 前端类库指的是运行在浏览器环境中的 JavaScript 模块，并且所有的依赖都会打包到这个模块里面。使用的场景有：
@@ -151,16 +158,6 @@ export default function Component() {
     console.log(window.YourLibName);
   </script>
 </body>
-</html>
-```
-
-同时提供未压缩的版本，满足开发态调试的需求：
-
-```html
-<html>
-<head>
-  <script src="https://unpkg.com/your-lib-name/dist/index.umd.es5.development.js"></script>
-</head>
 </html>
 ```
 

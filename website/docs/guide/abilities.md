@@ -152,6 +152,18 @@ export default () => (
 </TabItem>
 </Tabs>
 
+:::tip
+如果你在组件里直接通过 `import './index.css'` 的方式引入样式，样式将会对全局样式造成影响。最好给该组件内所有的 CSS 选择器增加前缀，比如：
+
+```diff
+- .container {
++ .rc-container { 
+  color: red;  
+}
+```
+
+或者你可以直接使用 CSS Modules 直接引入样式。
+:::
 
 ## ES2017 产物
 
