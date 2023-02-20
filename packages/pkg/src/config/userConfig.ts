@@ -94,6 +94,8 @@ function getUserConfig() {
             bundleConfig,
             { arrayMerge: (destinationArray, sourceArray) => sourceArray },
           );
+          // Set outputDir to process.env for CI
+          process.env.ICE_PKG_BUNDLE_OUTPUT_DIR = mergedConfig.outputDir;
           // Compatible with `bundle.development` config
           if (mergedConfig.development && !mergedConfig.modes.includes('development')) {
             delete mergedConfig.development;
