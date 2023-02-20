@@ -387,7 +387,7 @@ importers:
       '@docusaurus/preset-classic': ^2.3.0
       '@docusaurus/theme-common': ^2.3.0
       '@easyops-cn/docusaurus-search-local': ^0.33.6
-      '@ice/pkg-plugin-docusaurus': ^1.4.4-beta.0
+      '@ice/pkg-plugin-docusaurus': ^1.4.2
       '@mdx-js/react': ^1.6.22
       '@tsconfig/docusaurus': ^1.0.5
       '@types/react': ^18.0.0
