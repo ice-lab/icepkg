@@ -10,11 +10,6 @@ function getCliOptions() {
         return mergeValueToTaskConfig(config, 'analyzer', analyzer);
       },
     },
-    {
-      name: 'dist',
-      commands: ['start'],
-      // TODO: should set it to taskConfig
-    },
   ];
   return cliOptions;
 }
