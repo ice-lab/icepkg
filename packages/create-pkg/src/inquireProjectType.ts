@@ -8,20 +8,25 @@ export async function inquireProjectType() {
       type: 'list',
       message: info.selectProjectType,
       name: 'projectType',
-      default: 'web',
-      choices: [{
-        name: info.webLibrary,
-        value: 'web',
-      }, {
-        name: info.nodeModule,
-        value: 'node',
-      }, {
-        name: info.reactComponent,
-        value: 'react',
-      }, {
-        name: info.raxComponent,
-        value: 'rax',
-      }],
+      default: 'react',
+      choices: [
+        {
+          name: info.reactComponent,
+          value: 'react',
+        },
+        {
+          name: info.nodeModule,
+          value: 'node',
+        },
+        {
+          name: info.webLibrary,
+          value: 'web',
+        },
+        {
+          name: info.raxComponent,
+          value: 'rax',
+        },
+      ],
     },
   ]);
   return projectType;
