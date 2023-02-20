@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
+### Patch Changes
+
+- 081fb8d: chore: optimize project type list items order
+
 ## 1.2.1-beta.1
 
 ### Patch Changes
