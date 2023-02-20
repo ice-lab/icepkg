@@ -152,3 +152,22 @@ function ExampleComponent(props) {
 `classnames` 方法能力参考[同名 npm 包](https://npmjs.com/classnames)。
 
 > 更多请参考 [jsx-plus](https://github.com/jsx-plus/jsx-plus)
+
+## 插件选项
+
+### moduleName
+
+- 类型：`'react' | 'rax'`
+- 默认值：`'react'`
+
+指定当前从哪个模块中导入 `jsx.Fragment` 组件，以在转换 JSX+ 语法的时候从对应的模块中引入组件。比如如果使用 `rax`：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    ['@ice/pkg-plugin-jsx-plus', { moduleName: 'rax' }],
+  ],
+})
+```

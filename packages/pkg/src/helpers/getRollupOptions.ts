@@ -45,7 +45,15 @@ export function getRollupOptions(
   rollupOptions.plugins ??= [];
 
   if (taskConfig.babelPlugins?.length) {
-    rollupOptions.plugins.push(babelPlugin(taskConfig.babelPlugins));
+    rollupOptions.plugins.push(
+      babelPlugin(
+        taskConfig.babelPlugins,
+        {
+          pragma: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragma,
+          pragmaFrag: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
+        },
+      ),
+    );
   }
   rollupOptions.plugins.push(swcPlugin(taskConfig.type, taskConfig.swcCompileOptions));
 

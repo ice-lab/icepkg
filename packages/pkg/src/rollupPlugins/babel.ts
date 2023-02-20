@@ -25,8 +25,17 @@ const getParserPlugins = (isTs?: boolean): ParserPlugin[] => {
 
   return commonPlugins;
 };
+interface BabelPluginOptions {
+  pragma?: string;
+  pragmaFrag?: string;
+}
 
-const babelPlugin = (plugins: babel.PluginItem[]): Plugin => {
+const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): Plugin => {
+  // https://babeljs.io/docs/en/babel-preset-react#usage
+  const {
+    pragma = 'React.createElement',
+    pragmaFrag = 'React.Fragment',
+  } = options;
   return {
     name: 'ice-pkg:babel',
 
@@ -51,7 +60,11 @@ const babelPlugin = (plugins: babel.PluginItem[]): Plugin => {
         plugins,
         presets: [
           ['@babel/preset-typescript'],
-          ['@babel/preset-react'],
+          ['@babel/preset-react', {
+            pragma,
+            pragmaFrag,
+            throwIfNamespace: false,
+          }],
         ],
         sourceFileName: id,
       });
