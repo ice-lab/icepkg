@@ -14,9 +14,9 @@ $ npm init @ice/pkg my-lib
 ```bash
 ? 请选择项目类型 (Use arrow keys)
 ❯ React 组件
-  Rax 组件
   Node 模块
-  前端类库
+  前端类库  
+  Rax 组件
 ```
 
 ## React 组件
