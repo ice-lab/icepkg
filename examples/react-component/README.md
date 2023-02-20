@@ -1,15 +1,15 @@
-# pkg-react-component-example
+# example-pkg-react-component
 
 组件功能描述
 
 ## Install
 
 ```bash
-$ npm i pkg-react-component-example --save
+$ npm i example-pkg-react-component --save
 ```
 
 ## Usage
 
 ```jsx
-import PkgReactComponentExample from 'pkg-react-component-example';
+import PkgReactComponentExample from 'example-pkg-react-component';
 ```

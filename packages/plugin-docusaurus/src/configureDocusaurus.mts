@@ -29,6 +29,10 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     paths: [__dirname, rootDir],
   });
 
+  const docusaurusPluginContentPagesPath = require.resolve('@docusaurus/plugin-content-pages', {
+    paths: [__dirname, rootDir],
+  });
+
   const sidebarItemsGenerator = params?.sidebarItemsGenerator
     ? params?.sidebarItemsGenerator.toString()
     : false;
@@ -52,6 +56,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     prismReactRendererPath,
     sassDocusaurusPluginPath,
     lessDocusaurusPluginPath,
+    docusaurusPluginContentPagesPath,
   });
 
   const configuredPlugins = params?.configuredPlugins;
