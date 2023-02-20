@@ -33,7 +33,7 @@ const config = {
     ],
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
     [
-      require.resolve('@docusaurus/plugin-content-pages'),
+      '{{docusaurusPluginContentPagesPath}}',
       {
         path: '{{pagePath}}',
         routeBasePath: '{{pageRouteBasePath}}',
