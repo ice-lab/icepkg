@@ -8,9 +8,9 @@ const defaultPluginOptions: PluginOptions = {
   moduleName: 'react',
 };
 
-const plugin: Plugin = (api, rawOptions: PluginOptions) => {
+const plugin: Plugin = (api, rawOptions?: PluginOptions) => {
   const { onGetConfig } = api;
-  const pluginOptions = Object.assign(rawOptions, defaultPluginOptions);
+  const pluginOptions = Object.assign({}, defaultPluginOptions, rawOptions);
   const babelPlugins = [
     'babel-plugin-transform-jsx-list',
     'babel-plugin-transform-jsx-condition',
