@@ -8,7 +8,7 @@ const defaultPluginOptions: PluginOptions = {
   moduleName: 'react',
 };
 
-const plugin: Plugin = (api, rawOptions: PluginOptions) => {
+const plugin: Plugin = (api, rawOptions: PluginOptions = {}) => {
   const { onGetConfig } = api;
   const pluginOptions = Object.assign(rawOptions, defaultPluginOptions);
   const babelPlugins = [
