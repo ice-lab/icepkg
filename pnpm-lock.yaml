@@ -366,7 +366,7 @@ importers:
 
   packages/plugin-rax-component:
     specifiers:
-      '@ice/pkg': ^1.5.2-beta.0
+      '@ice/pkg': ^1.0.0
       rax-compat: ^0.1.5
       react: ^18.2.0
       react-dom: ^18.2.0
