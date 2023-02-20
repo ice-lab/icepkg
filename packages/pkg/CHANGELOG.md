@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.2
+
+### Patch Changes
+
+- 5ccb429: chore: add ICE_PKG_BUNDLE_OUTPUT_DIR to process.env for CI
+- 061db4f: fix: jsx-plus syntax can't be used in rax components
+- 4f6a4fd: chore: release beta version
+- 5d43ab0: chore: remove dist cli option
+
 ## 1.5.2-beta.1
 
 ### Patch Changes
