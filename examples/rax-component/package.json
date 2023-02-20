@@ -1,0 +1,68 @@
+{
+  "name": "example-rax-component",
+  "version": "0.1.0",
+  "description": "组件功能描述",
+  "files": [
+    "esm",
+    "es2017",
+    "cjs",
+    "dist"
+  ],
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "exports": {
+    ".": {
+      "es2017": {
+        "types": "./es2017/index.d.ts",
+        "default": "./es2017/index.js"
+      },
+      "default": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      }
+    },
+    "./*": "./*"
+  },
+  "sideEffects": [
+    "dist/*",
+    "*.scss",
+    "*.less",
+    "*.css"
+  ],
+  "scripts": {
+    "start": "ice-pkg start",
+    "build": "ice-pkg build",
+    "prepublishOnly": "npm run build",
+    "eslint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./",
+    "eslint:fix": "npm run eslint -- --fix",
+    "stylelint": "stylelint \"**/*.{css,scss,less}\"",
+    "lint": "npm run eslint && npm run stylelint"
+  },
+  "keywords": [
+    "ice",
+    "react",
+    "component"
+  ],
+  "dependencies": {
+    "@swc/helpers": "^0.4.14",
+    "babel-runtime-jsx-plus": "^0.1.5"
+  },
+  "devDependencies": {
+    "@ice/pkg": "workspace:*",
+    "@ice/pkg-plugin-docusaurus": "workspace:*",
+    "@ice/pkg-plugin-jsx-plus": "workspace:*",
+    "@ice/pkg-plugin-rax-component": "workspace:*",
+    "@types/rax": "^1.0.0",
+    "rax": "^1.2.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "peerDependencies": {
+    "rax": "^1.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}
