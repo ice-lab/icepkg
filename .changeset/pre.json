@@ -1,0 +1,25 @@
+{
+  "mode": "exit",
+  "tag": "beta",
+  "initialVersions": {
+    "example-application": "1.0.0",
+    "example-pkg-plugin": "0.0.0",
+    "example-rax-component": "0.1.0",
+    "example-pkg-react-component": "0.0.0",
+    "example-pkg-react-multi-components": "0.0.0",
+    "@ice/create-pkg": "1.2.0",
+    "ice-npm-utils": "3.0.2",
+    "@ice/pkg": "1.5.1",
+    "@ice/pkg-plugin-docusaurus": "1.4.3",
+    "@ice/pkg-plugin-jsx-plus": "1.0.0",
+    "@ice/pkg-plugin-rax-component": "1.1.0",
+    "icepkg-site": "0.0.0"
+  },
+  "changesets": [
+    "mean-feet-melt",
+    "plenty-crews-rescue",
+    "rich-rice-drum",
+    "wise-flowers-learn",
+    "yellow-eels-jog"
+  ]
+}

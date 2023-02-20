@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1-beta.0
+
+### Patch Changes
+
+- 061db4f: fix: jsx-plus syntax can't be used in rax components
+
 ## 1.0.0
 
 ### Major Changes

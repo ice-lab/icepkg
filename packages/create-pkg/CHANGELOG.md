@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1-beta.0
+
+### Patch Changes
+
+- 081fb8d: chore: optimize project type list items order
+
 ## 1.2.0
 
 - [feat] support `--template` and `--npmName` cli option
