@@ -5,7 +5,6 @@
 ### Patch Changes
 
 - cf3af78: fix: can not resolve docusaurus/plugin-contents-page
-- 4f6a4fd: chore: release beta version
 
 ## 1.4.4-beta.1
 
