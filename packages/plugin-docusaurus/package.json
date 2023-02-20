@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg-plugin-docusaurus",
-  "version": "1.4.3",
+  "version": "1.4.4-beta.1",
   "description": "Plugin for component previewing",
   "main": "es2017/index.mjs",
   "exports": {
@@ -68,7 +68,7 @@
   "devDependencies": {
     "@algolia/client-search": "^4.9.1",
     "@types/react": "^17.0.0",
-    "@ice/pkg": "^1.5.0",
+    "@ice/pkg": "^1.5.2-beta.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.9.3",
