@@ -12,7 +12,7 @@ const JSX_RUNTIME_SOURCE = '@ice/jsx-runtime';
 
 const normalizeSwcConfig = (
   file: OutputFile,
-  type: TaskConfig['type'],
+  jsxRuntime: TaskConfig['jsxRuntime'],
   mergeOptions?: swcCompileOptions,
 ): swcCompileOptions => {
   const { filePath, ext } = file;
@@ -32,7 +32,7 @@ const normalizeSwcConfig = (
     jsc: {
       transform: {
         react: {
-          runtime: 'automatic',
+          runtime: jsxRuntime,
           importSource: JSX_RUNTIME_SOURCE,
         },
         legacyDecorator: true,
@@ -56,7 +56,7 @@ const normalizeSwcConfig = (
 /**
  * plugin-swc works as substitute of plugin-typescript, babel, babel-preset-env and plugin-minify.
  */
-const swcPlugin = (type: TaskConfig['type'], extraSwcOptions?: Config): Plugin => {
+const swcPlugin = (jsxRuntime: TaskConfig['jsxRuntime'], extraSwcOptions?: Config): Plugin => {
   return {
     name: 'ice-pkg:swc',
 
@@ -73,7 +73,7 @@ const swcPlugin = (type: TaskConfig['type'], extraSwcOptions?: Config): Plugin =
 
       const { code, map } = swc.transformSync(
         _,
-        normalizeSwcConfig(file, type, {
+        normalizeSwcConfig(file, jsxRuntime, {
           ...extraSwcOptions,
           // Disable minimize on every file transform when bundling
           minify: false,

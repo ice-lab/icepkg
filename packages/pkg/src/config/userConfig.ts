@@ -54,6 +54,16 @@ function getUserConfig() {
       },
     },
     {
+      name: 'jsxRuntime',
+      validation: (val: string) => {
+        return val === 'classic' || val === 'automatic';
+      },
+      defaultValue: 'automatic',
+      setConfig: (config: TaskConfig, jsxRuntime: UserConfig['jsxRuntime']) => {
+        return mergeValueToTaskConfig(config, 'jsxRuntime', jsxRuntime);
+      },
+    },
+    {
       name: 'generateTypesForJs',
       validation: 'boolean',
       default: false,
