@@ -110,28 +110,6 @@ export function Button() {
 
 `src/index.ts` 作为组件库的入口文件，然后统一导出不同的 React 组件，这样就可以通过 `import { Button, Input } from 'your-component-name';` 导入组件了。
 
-## Rax 组件
-
-与 React 组件场景类似，你可以把公共的 Rax 组件抽成一个 npm 包，然后在其他项目中使用。
-
-```tsx title="src/index.tsx"
-import { createElement } from 'rax';
-import styles from './index.module.css';
-
-export default function Component() {
-
-  return (
-    <div className={styles.Component}>Hello</div>
-  );
-}
-```
-
-:::caution
-注意：Rax 组件必须要显式引入 `createElement` 函数，否则无法正常渲染。
-:::
-
-组件的目录结构组织和源码写法可参考[React 组件章节](#react-组件)。
-
 ## Node 模块
 
 如果现在有相同的工具函数在多个 Node 应用被消费，可以把这些公共的函数抽成一个 npm 包，供多个 Node 应用使用。支持经过 Transform 模式生成 CommonJS 产物和 ES Module 产物。
@@ -167,8 +145,30 @@ export function writeLicenseToFileHeader(absFilePath: string) {
 <html>
   <body>
     <script type="module">
-      import lib from './index.es2017.production.js';
+      import lib from './index.esm.es2017.production.js';
     </script>
   </body>
 </html>
 ```
+
+## Rax 组件
+
+与 React 组件场景类似，你可以把公共的 Rax 组件抽成一个 npm 包，然后在其他项目中使用。
+
+```tsx title="src/index.tsx"
+import { createElement } from 'rax';
+import styles from './index.module.css';
+
+export default function Component() {
+
+  return (
+    <div className={styles.Component}>Hello</div>
+  );
+}
+```
+
+:::caution
+注意：Rax 组件必须要显式引入 `createElement` 和 `Fragment`（如果使用了 `<></>` 语法），否则在运行时会报错。
+:::
+
+组件的目录结构组织和源码写法可参考[React 组件](#react-组件)。

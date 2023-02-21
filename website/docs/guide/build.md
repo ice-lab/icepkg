@@ -1,29 +1,27 @@
 # 构建产物
 
-本文讲述不同[构建模式](./abilities#双模式构建)下的产物说明以及适用的场景。在 `ice.config.mts` 文件中配置对应构建产物类型，然后执行 `npm run build` 即生成得到构建产物。
-
-完整的产物构建配置可查看文档 [Transform 模式构建配置](../reference/config#transform)和 [Bundle 模式构建配置](../reference/config#bundle)。
+本文讲述不同[构建模式](./abilities#双模式构建)下的产物说明以及适用的场景。完整的产物构建配置可查看文档 [Transform 模式构建配置](../reference/config#transform)和 [Bundle 模式构建配置](../reference/config#bundle)。
 
 
 ## 构建产物说明
 
-ICE PKG 默认支持 `esm`、`es2017`、`cjs`、`umd` 四种构建产物类型。每种构建产物在不同构建模式下支持程度、模块规范、语法规范说明如下表：
+ICE PKG 默认支持 `esm`、`es2017`、`cjs`、`umd` 四种构建产物类型。每种产物类型在不同构建模式下支持情况、模块规范、语法规范说明如下表：
 
 | 产物类型 | Transform 模式 | Bundle 模式 | 模块规范  | 语法规范 |
 | :------: | :------------: | :---------: | :-------: | :------: |
-|   esm    |     ✅支持      |    ✅支持    | ES Module |   ES5    |
-|  es2017  |     ✅支持      |    ✅支持    | ES Module |  ES2017  |
-|   cjs    |     ✅支持      |    ✅支持    | CommonJS  |   ES5    |
-|   umd    |    ❌不支持     |    ✅支持    |    UMD    |   ES5    |
+|   `esm`    |     ✅支持      |    ✅支持    | ES Module |   ES5    |
+|  `es2017`  |     ✅支持      |    ✅支持    | ES Module |  ES2017  |
+|   `cjs`    |     ✅支持      |    ✅支持    | CommonJS  |   ES5    |
+|   `umd`    |    ❌不支持     |    ✅支持    |    UMD    |   ES5    |
 
 每种构建产物的优缺点和适用场景如下表所示：
 
 | 产物类型 | 优点 | 缺点 | 适用场景 |
 | :-------: | ---- | ---- | --------- |
-|   esm    | 兼容性较好 | 体积大 | 消费产物的应用打包时不编译 `node_modules`；或者运行环境支持的 ECMAScript 版本较低 |
-| es2017 | 保留大部分 JavaScript 语法，体积小 | 兼容性差 | 消费产物的应用打包时编译 `node_modules`；或者运行环境支持的 ES2017 语法。更多说明可参考[文档](./abilities#es2017-产物) |
-| cjs | 兼容各版本的 Node.js | 体积大 | 仅支持 CommonJS 的 Node.js 运行环境 |
-| umd | 兼容运行在浏览器和 Node.js 中 | 体积大 | 用户的项目中某个依赖 external，需要在 HTML 中通过 `<script />` 引入 UMD 产物；或者在浏览器中直接使用产物 |
+|   `esm`    | 兼容性较好 | 体积大 | 消费产物的应用打包时不编译 `node_modules`；或者运行环境支持的 ECMAScript 版本较低 |
+| `es2017` | 保留大部分 JavaScript 语法，体积小 | 兼容性差 | 消费产物的应用打包时编译 `node_modules`；或者运行环境支持的 ES2017 语法。更多说明可参考[文档](./abilities#es2017-产物) |
+| `cjs` | 兼容各版本的 Node.js | 体积大 | 在 Node.js 环境下运行 |
+| `umd` | 兼容运行在浏览器和 Node.js 中 | 体积大 | 用户的项目中某个依赖 external，需要在 HTML 中通过 `<script />` 引入 UMD 产物；或者在浏览器中直接使用产物 |
 
 ## 默认构建产物
 
@@ -67,7 +65,7 @@ export default defineConfig({
     formats: ['es2017'],
   },
   bundle: {
-    formats: ['es2017'],
+    formats: ['esm', 'es2017'],
   },
 })
 ```
@@ -85,13 +83,13 @@ export default defineConfig({
 
 ## ES Module 和 CommonJS 产物
 
-这种场景下是针对要生成运行在 Node.js 环境下的产物。如果需要兼容低版本 Node.js (v12.20.0 以下)，则还是需要生成 CommonJS 产物，否则可以直接使用 ES Module 的产物。
+这种场景下是针对要生成运行在 Node.js 环境下的产物。如果你的产物需要兼容低版本 Node.js (v12.20.0 以下)，则还是需要生成 CommonJS 产物，否则可以直接使用 ES Module 的产物。
 
 :::tip
 不同版本的 Node.js 支持的 ECMAScript 语法可参考 [Node Green 网站](https://node.green/)。
 :::
 
-由于 Node 12.20.0 支持 ES Module，而 Node 12.20.0 已支持所有的 ES2017 的语法。因此推荐以下的配置：
+由于 Node 12.20.0 支持 ES Module 和所有的 ES2017 的语法。因此推荐以下的配置：
 
 ```ts title="ice.config.mts"
 import { defineConfig } from '@ice/pkg';
@@ -101,7 +99,7 @@ export default defineConfig({
     formats: ['cjs', 'es2017'],
   },
   bundle: {
-    formats: ['cjs', 'es2017'],
+    formats: ['cjs', 'esm', 'es2017'],
   },
 })
 ```

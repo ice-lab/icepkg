@@ -4,6 +4,10 @@ ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件�
 
 ## 插件示例
 
+### 本地插件
+
+假设在项目根目录下有一个自定义插件 my-plugin：
+
 ```js title="plugin.mjs"
 /**
  * @type {import('@ice/pkg').Plugin}
@@ -25,6 +29,51 @@ export default defineConfig({
 +   './plugin.mjs',
 + ],
 });
+```
+
+### 发布插件到 npm
+
+推荐插件目录是：
+
+```md
+my-plugin
+├── package.json
+├── tsconfig.json
+├── src
+|  └── index.ts       // 插件入口
+```
+
+```ts src/index.ts
+import type { Plugin } from '@ice/pkg';
+
+const plugin: Plugin = (api) => {
+
+}
+
+export default plugin;
+```
+
+对插件代码进行编译后，在 package.json 中指定插件的入口：
+
+```json
+{
+  "name": "my-plugin",
+  "main": "./esm/index.js",
+  "exports": {
+    // ...
+  }
+}
+```
+把插件发布到 npm 后，需要把插件添加到 `build.config.mts` 构建配置中：
+
+```diff
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig(() => ({
+  plugins: [
++   'my-plugin',
+  ],
+}));
 ```
 
 ## 插件 API

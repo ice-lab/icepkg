@@ -16,7 +16,7 @@ Transform 模式即把源文件逐个编译到输出目录，不对依赖做任�
 ```md
 src
 ├── components
-   ├── About.jsx
+|  ├── About.jsx
 |  └── Button.tsx
 ├── index.ts
 ├── util.js
@@ -215,9 +215,9 @@ export default App;
 传统的 NPM 包 开发中，大量的代码仍被编译到 ES5 语法。若你想计算你的网站在使用 es2017 产物后可实现的产物大小和性能的改进，可以试试 [estimator.dev](https://estimator.dev/) 这个工具。
 :::
 
-ICE PKG **默认**输出 ES2017 产物。也可通过以下配置输出：
+在 ICE PKG 仅配置输出 ES2017 产物：
 
-```ts
+```ts title="ice.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
@@ -227,7 +227,7 @@ export default defineConfig({
   },
   // Bundle 模式输出 es2017 产物
   bundle: {
-    formats: ['es2017'],
+    formats: ['esm', 'es2017'],
   },
 });
 ```

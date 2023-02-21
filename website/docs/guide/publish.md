@@ -3,7 +3,7 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## 配置产物的导出
+## 配置产物信息
 
 ### files
 
@@ -23,7 +23,7 @@ import TabItem from '@theme/TabItem';
 
 ### main & exports
 
-推荐在 `package.json` 中配置 `exports` 字段来声明这个包的入口：
+推荐在 `package.json` 中配置 `exports` 字段来声明 npm 包的入口：
 
 ```json
 {
