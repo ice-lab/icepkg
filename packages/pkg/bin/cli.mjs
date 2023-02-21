@@ -51,9 +51,6 @@ const cli = cac('ice-pkg');
     .option('--rootDir <rootDir>', 'specify root directory', {
       default: process.cwd(),
     })
-    .option('--dist', 'watch dist files (especially with enabled-umd)', {
-      default: false,
-    })
     .action(async (options) => {
       delete options['--'];
       const { rootDir, ...commandArgs } = options;

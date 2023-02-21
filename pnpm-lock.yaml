@@ -66,6 +66,31 @@ importers:
       '@ice/pkg': link:../../packages/pkg
       typescript: 4.7.4
 
+  examples/rax-component:
+    specifiers:
+      '@ice/pkg': workspace:*
+      '@ice/pkg-plugin-docusaurus': workspace:*
+      '@ice/pkg-plugin-jsx-plus': workspace:*
+      '@ice/pkg-plugin-rax-component': workspace:*
+      '@swc/helpers': ^0.4.14
+      '@types/rax': ^1.0.0
+      babel-runtime-jsx-plus: ^0.1.5
+      rax: ^1.2.2
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      '@swc/helpers': 0.4.14
+      babel-runtime-jsx-plus: 0.1.5
+    devDependencies:
+      '@ice/pkg': link:../../packages/pkg
+      '@ice/pkg-plugin-docusaurus': link:../../packages/plugin-docusaurus
+      '@ice/pkg-plugin-jsx-plus': link:../../packages/plugin-jsx-plus
+      '@ice/pkg-plugin-rax-component': link:../../packages/plugin-rax-component
+      '@types/rax': 1.0.10
+      rax: 1.2.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+
   examples/react-component:
     specifiers:
       '@ice/jsx-runtime': ^0.2.0
@@ -248,7 +273,7 @@ importers:
       '@docusaurus/plugin-content-pages': ^2.3.0
       '@docusaurus/preset-classic': ^2.3.0
       '@ice/jsx-runtime': ^0.2.0
-      '@ice/pkg': ^1.5.0
+      '@ice/pkg': ^1.5.2
       '@mdx-js/react': ^1.6.22
       '@swc/helpers': ^0.4.3
       '@types/react': ^17.0.0
@@ -322,7 +347,7 @@ importers:
 
   packages/plugin-jsx-plus:
     specifiers:
-      '@ice/pkg': ^1.5.0
+      '@ice/pkg': ^1.5.2
       babel-plugin-transform-jsx-class: ^0.1.3
       babel-plugin-transform-jsx-condition: ^0.1.2
       babel-plugin-transform-jsx-fragment: ^0.1.4
@@ -5523,6 +5548,13 @@ packages:
 
   /@types/range-parser/1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
+
+  /@types/rax/1.0.10:
+    resolution: {integrity: sha512-+okXhH2l6gqZJycBfwiXuMcN92A18yROgGtZRzP2pPSxI75gSZeWNCJa3B5Arp+dp5h1Egjf/5gxpr5Un63JaQ==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      csstype: 3.1.0
+    dev: true
 
   /@types/react-dom/18.0.10:
     resolution: {integrity: sha512-E42GW/JA4Qv15wQdqJq8DL4JhNpB3prJgjgapN3qJT9K2zO5IIAQh4VXvCEDupoqAwnz0cY4RlXeC/ajX5SFHg==}
@@ -12026,6 +12058,25 @@ packages:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
+  /rax-children/1.0.0_rax@1.2.3:
+    resolution: {integrity: sha512-sBKEXAMj9ik6SsPfPGgcQnqggmbWFyBdvAV/Cz/0f04bRA86BtWgbMri/9Dce0k8nkEC/BGWiiTdyA8Q49zIiw==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      rax: ^1.0.0
+    dependencies:
+      rax: 1.2.3
+    dev: true
+
+  /rax-clone-element/1.0.0_rax@1.2.3:
+    resolution: {integrity: sha512-TaQMVuzoglvCTjbWATlvvwARmeWnG8kpENWNXrNDv0++x29GHNND/TBbx7sdtVs/QmYwYc8YmwRUhaBwKQi5eQ==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      rax: ^1.0.0
+    dependencies:
+      rax: 1.2.3
+      rax-is-valid-element: 1.0.1
+    dev: true
+
   /rax-compat/0.1.5_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-qjFc8/XvTkr2NMnHzG98ZctbYzyF46iMIudhbVNF8rjKYYy3W7fyqapRqELOGVFqUOt0I0CSPu288cTgCaq/aQ==}
     peerDependencies:
@@ -12039,6 +12090,32 @@ packages:
       react-dom: 18.2.0_react@18.2.0
       style-unit: 3.0.5
     dev: false
+
+  /rax-create-factory/1.0.0_rax@1.2.3:
+    resolution: {integrity: sha512-blBaVrurj/BOWelJhQWiuc0Kk8Ons1jsNsX78omaPBLkSOL7OkyJ3NC/0iKXHu425yWrGB6e5vho/qabROC7VQ==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      rax: ^1.0.0
+    dependencies:
+      rax: 1.2.3
+    dev: true
+
+  /rax-is-valid-element/1.0.1:
+    resolution: {integrity: sha512-ajvQlLr7sr7UK4T9lyJyn1gcdu7NIrF3NUAj+SWWNwG2GZ5ygKdSCRFzuu7evuAwLxqrCCk2tQLV6uxw0zYUXQ==}
+    engines: {npm: '>=3.0.0'}
+    dev: true
+
+  /rax/1.2.3:
+    resolution: {integrity: sha512-/lkZ7Yb3be06e68y4wn5WIyudzvrnHiTEjeAznJ7nPrfmjoCan2hcKPXmTYXdHU+IqkvGbzDlLZRWbVtmRTAcw==}
+    engines: {npm: '>=3.0.0'}
+    dependencies:
+      '@babel/runtime': 7.20.7
+      prop-types: 15.8.1
+      rax-children: 1.0.0_rax@1.2.3
+      rax-clone-element: 1.0.0_rax@1.2.3
+      rax-create-factory: 1.0.0_rax@1.2.3
+      rax-is-valid-element: 1.0.1
+    dev: true
 
   /rc/1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
