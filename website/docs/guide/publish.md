@@ -55,7 +55,7 @@ import feature from 'your-package-name/feature';
 关于更多 `package.exports` 导出规则，可以查看 [Node.js 文档](https://nodejs.org/dist/latest-v18.x/docs/api/packages.html#package-entry-points)。
 :::
 
-如果需要兼容 v12.20.0 或者 v14.13.0 的 Node.js，那就需要在 `package.json` 里的 `main` 字段指定主入口：
+如果需要兼容 v12.20.0 或者 v14.13.0 以下的 Node.js，那就需要在 `package.json` 里的 `main` 字段指定主入口：
 
 ```json
 {
