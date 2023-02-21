@@ -4,6 +4,10 @@ ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件�
 
 ## 插件示例
 
+### 本地插件
+
+假设在项目根目录下有一个自定义插件 my-plugin：
+
 ```js title="plugin.mjs"
 /**
  * @type {import('@ice/pkg').Plugin}
@@ -27,6 +31,51 @@ export default defineConfig({
 });
 ```
 
+### 发布插件到 npm
+
+推荐插件目录是：
+
+```md
+my-plugin
+├── package.json
+├── tsconfig.json
+├── src
+|  └── index.ts       // 插件入口
+```
+
+```ts src/index.ts
+import type { Plugin } from '@ice/pkg';
+
+const plugin: Plugin = (api) => {
+
+}
+
+export default plugin;
+```
+
+对插件代码进行编译后，在 package.json 中指定插件的入口：
+
+```json
+{
+  "name": "my-plugin",
+  "main": "./esm/index.js",
+  "exports": {
+    // ...
+  }
+}
+```
+把插件发布到 npm 后，需要把插件添加到 `build.config.mts` 构建配置中：
+
+```diff
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig(() => ({
+  plugins: [
++   'my-plugin',
+  ],
+}));
+```
+
 ## 插件 API
 
 ### context
@@ -47,13 +96,13 @@ const plugin = (api) => {
 
 ### onGetConfig
 
-ICE PKG 会根据用户配置 transform 和 bundle 模式的输出产物格式，分别会注册以下任务：
+ICE PKG 会根据用户配置 Transform 和 Bundle 模式的输出产物格式，分别会注册以下任务：
 
 + `transform-esm`：默认启动
 + `transform-es2017`：默认启动
-+ `transform-cjs`：当 transform 配置了 `formats: ['cjs']` 启动
-+ `bundle-es5`：当 bundle 配置了 `formats: ['esm']` 或者 `formats: ['cjs']` 或者 `formats: ['umd']` 时启动
-+ `bundle-es2017`：当 bundle 配置了 `formats: ['es2017']` 时启动
++ `transform-cjs`：当 Transform 配置了 `formats: ['cjs']` 启动
++ `bundle-es5`：当 Bundle 配置了 `formats: ['esm']` 或者 `formats: ['cjs']` 或者 `formats: ['umd']` 时启动
++ `bundle-es2017`：当 Bundle 配置了 `formats: ['es2017']` 时启动
 
 通过 `onGetConfig` API，可以修改每个 Task 任务的配置项。
 
@@ -251,12 +300,12 @@ const plugin = (api) => {
 
 #### outputDir
 
-> 仅对 bundle 模式生效。transform 模式按照配置的 format 值分别输出到对应目录，比如 esm、cjs、es2017
+> 仅对 Bundle 模式生效。Transform 模式按照配置的 format 值分别输出到对应目录，比如 esm、cjs、es2017
 
 + 类型：`string`
 + 默认值：`dist`
 
-配置 bundle 模式下组件编译产物的输出目录。
+配置 Bundle 模式下组件编译产物的输出目录。
 
 ```js
 const plugin = (api) => {
@@ -322,7 +371,7 @@ const plugin = (api) => {
 + 类型：`string`
 + 默认值：`package.name`
 
-bundle 导出名称。一般用于 umd 产物中通过 `window[name]` 拿到产物模块内容。
+Bundle 导出名称。一般用于 umd 产物中通过 `window[name]` 拿到产物模块内容。
 
 ```js
 const plugin = (api) => {
