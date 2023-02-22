@@ -12,6 +12,7 @@ import { builtinNodeModules } from './builtinModules.js';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
+import cssnano from 'cssnano';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
 
 import {
@@ -84,12 +85,16 @@ export function getRollupOptions(
     const defaultStylesOptions: StylesRollupPluginOptions = {
       plugins: [
         autoprefixer(),
+        cssnano(),
       ],
       mode: 'extract',
       autoModules: true,
       minimize: taskConfig.minify,
       sourceMap: taskConfig.sourcemap,
     };
+    if (taskConfig.minify) {
+      (defaultStylesOptions.plugins as any[]).push(cssnano());
+    }
     rollupOptions.plugins.push(
       replace({
         values: {
