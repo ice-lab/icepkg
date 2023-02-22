@@ -8,7 +8,7 @@ ICE PKG 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tr
 npm install @ice/pkg-plugin-docusaurus --save-dev
 ```
 
-并通过 [配置文件](./config) 进行加载：
+并在配置文件中配置插件：
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';

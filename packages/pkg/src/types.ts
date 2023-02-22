@@ -98,6 +98,11 @@ export interface UserConfig {
   generateTypesForJs?: boolean;
 
   /**
+   * Configure JSX transform type.
+   * @default 'automatic'
+   */
+  jsxRuntime?: 'automatic' | 'classic';
+  /**
    * Plugins of build scripts
    * @default []
    */
@@ -138,6 +143,10 @@ interface _TaskConfig {
    *  Alias to file system paths
    */
   alias?: Record<string, string>;
+  /**
+   * JSX transform type.
+   */
+  jsxRuntime?: 'automatic' | 'classic';
   /**
    * Modify default rollup options
    * @see https://rollupjs.org/guide/en/#rolluprollup
