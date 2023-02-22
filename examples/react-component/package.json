@@ -26,7 +26,9 @@
   "scripts": {
     "start": "ice-pkg start",
     "build": "ice-pkg build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "vitest": "vitest",
+    "jest": "jest"
   },
   "dependencies": {
     "@ice/jsx-runtime": "^0.2.0",
@@ -37,11 +39,15 @@
     "@ice/pkg": "workspace:*",
     "@ice/pkg-plugin-docusaurus": "workspace:*",
     "@ice/pkg-plugin-jsx-plus": "workspace:*",
+    "@testing-library/jest-dom": "^5.16.5",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/testing-library__jest-dom": "^5.14.5",
+    "jsdom": "^21.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "style-unit": "^3.0.4"
+    "style-unit": "^3.0.4",
+    "vitest": "^0.28.5"
   },
   "peerDependencies": {
     "react": "^17 || ^18"
