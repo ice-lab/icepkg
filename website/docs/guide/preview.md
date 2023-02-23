@@ -8,7 +8,7 @@ ICE PKG 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tr
 npm install @ice/pkg-plugin-docusaurus --save-dev
 ```
 
-并通过 [配置文件](./config) 进行加载：
+并在配置文件中配置插件：
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
@@ -373,7 +373,7 @@ hide_table_of_contents: true
 #### title
 
 - 类型：`string`
-- 默认值：`ICE PKG`
+- 默认值：`'ICE PKG'`
 
 配置文档标题。
 
@@ -395,35 +395,35 @@ export default defineConfig({
 #### url
 
 - 类型：`string`
-- 默认值：`/`
+- 默认值：`'/'`
 
 文档部署域名。比如部署在 github，则是 `https://your-repo.github.io`。
 
 #### baseUrl
 
 - 类型：`string`
-- 默认值：`/`
+- 默认值：`'/'`
 
 文档路由的基准路由。比如如果配置了 `/metro`，则文档的基准地址是 `https://your-repo.github.io/metro`
 
 #### favicon
 
 - 类型：`string`
-- 默认值：`https://img.alicdn.com/imgextra/i2/O1CN01jUf9ZP1aKwVvEc58W_!!6000000003312-73-tps-160-160.ico`
+- 默认值：`'https://img.alicdn.com/imgextra/i2/O1CN01jUf9ZP1aKwVvEc58W_!!6000000003312-73-tps-160-160.ico'`
 
 文档站点的 favicon 的地址。可以是相对部署根目录的路径，比如 `static/img/favicon.ico`。
 
 #### navBarLogo
 
 - 类型：`string`
-- 默认值：`https://img.alicdn.com/imgextra/i1/O1CN01lZTSIX1j7xpjIQ3fJ_!!6000000004502-2-tps-160-160.png`
+- 默认值：`'https://img.alicdn.com/imgextra/i1/O1CN01lZTSIX1j7xpjIQ3fJ_!!6000000004502-2-tps-160-160.png'`
 
 侧边栏的 logo。可以是相对部署根目录的路径，比如 `static/img/logo.png`。
 
 #### navBarTitle
 
 - 类型：`string`
-- 默认值：`ICE PKG`
+- 默认值：`'ICE PKG'`
 
 侧边栏标题。
 
@@ -463,27 +463,58 @@ export default defineConfig({
 #### outputDir
 
 - 类型：`string`
-- 默认值：`build`
+- 默认值：`'build'`
 
 配置 Docusaurus 构建产物输出地址。
 
 #### docsRouteBasePath
 
 - 类型：`string`
-- 默认值：`/`
+- 默认值：`'/'`
 
-文档基准路由。
+文档基准路由，类似于 React Router 中的 `basename`。比如以下的目录结构默认的页面路由如下：
+
+| 页面路径           | 路由          |
+| ------------------ | ------------- |
+| `/docs/index.md` | `/`      |
+| `/docs/usage.md`  | `/usage` |
 
 #### pagePath
 
 - 类型：`string`
-- 默认值：`pages`
+- 默认值：`'pages'`
 
 存放页面的本地路径。默认是项目根目录的 `pages` 目录。页面路由规则详见[文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-pages#path)。
 
 #### pageRouteBasePath
 
 - 类型：`string`
-- 默认值：`/pages`
+- 默认值：`'/pages'`
 
-页面基准路由。
+页面基准路由，类似于 React Router 中的 `basename`。比如以下的目录结构默认的页面路由如下：
+
+| 页面路径           | 路由          |
+| ------------------ | ------------- |
+| `/pages/index.tsx` | `/pages`      |
+| `/pages/home.tsx`  | `/pages/home` |
+
+#### plugins
+
+添加额外的 [Docusaurus 插件](https://docusaurus.io/docs/api/plugin-methods)。
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    [
+      '@ice/pkg-plugin-docusaurus', 
+      {
+        plugins: [
+          // ...
+        ]
+      },
+    ],
+  ],
+});
+```
