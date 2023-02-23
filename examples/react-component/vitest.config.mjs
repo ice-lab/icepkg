@@ -1,7 +1,7 @@
-import { defineVitestConfig } from '@ice/pkg';
+import pkgService, { defineVitestConfig } from '@ice/pkg';
 // import react from '@vitejs/plugin-react';
 
-export default defineVitestConfig(() => ({
+export default defineVitestConfig(pkgService, () => ({
   // plugins: [react()],
   test: {
     environment: 'jsdom',

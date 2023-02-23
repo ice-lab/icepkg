@@ -8,7 +8,7 @@ export default function Component() {
   const [visible, setVisible] = React.useState(false);
   return (
     <>
-      <h1 style={{ fontSize: '100rpx' }}>Hello World</h1>
+      <h1 style={{ fontSize: '100rpx' }} data-testid="title">Hello World</h1>
       <Button onClick={() => setVisible(!visible)}>Click Me to Set Visible</Button>
 
       <div>

@@ -2,7 +2,6 @@ import { Service } from 'build-scripts';
 import build from './commands/build.js';
 import start from './commands/start.js';
 import test from './commands/test.js';
-import { getDefineJestConfigFunc, getDefineVitestConfigFunc } from './test/index.js';
 
 import type { TaskConfig, UserConfig } from './types.js';
 
@@ -15,15 +14,9 @@ const pkgService = new Service<TaskConfig, {}, UserConfig>({
   },
 });
 
-const defineJestConfig = getDefineJestConfigFunc(pkgService);
-const defineVitestConfig = getDefineVitestConfigFunc(pkgService);
-
-// export {
-//   defineJestConfig,
-//   defineVitestConfig,
-// };
-
 export default pkgService;
+
+export * from './test/index.js';
 
 export * from './types.js';
 
