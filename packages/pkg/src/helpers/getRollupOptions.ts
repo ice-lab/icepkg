@@ -146,7 +146,7 @@ interface GetRollupOutputsOptions {
   pkg: PkgJson;
   esVersion: string;
   mode: NodeEnvMode;
-  command: string;
+  command: Context['command'];
 }
 function getRollupOutputs({
   globals,
