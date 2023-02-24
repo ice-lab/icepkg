@@ -13,7 +13,6 @@ export default defineConfig({
   sourceMaps: false,
   bundle: {
     formats: ['esm', 'es2017'],
-    minify: false,
     development: true,
   },
   alias: {

@@ -408,8 +408,8 @@ export default defineConfig({
 
 #### minify
 
-+ 类型：`boolean`
-+ 默认值：start 阶段为 `false`，build 阶段为 `true`
++ 类型：`boolean | { js?: boolean | ((mode: string, command: string) => boolean | { options?: swc.JsMinifyOptions }); css?: boolean | ((mode: string, command: string) => boolean | { options?: cssnano.Options });}`
++ 默认值：build 阶段且 mode 是 `production` 时为 `true`，否则为 `false`
 
 是否压缩 JS 和 CSS 资源。
 
@@ -418,7 +418,13 @@ import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   bundle: {
+    // production 产物和 development 产物不压缩
     minify: false,
+    // 修改 JS 和 CSS 压缩参数
+    minify: {
+      js: (mode, command) => { options: { /* */ } },
+      css: (mode, command) => { options: { /* */ } },
+    }
   },
 });
 ```

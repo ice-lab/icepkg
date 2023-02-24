@@ -49,6 +49,8 @@
     "jsdom": "^21.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sass": "^1.58.3",
+    "sass-loader": "^13.2.0",
     "style-unit": "^3.0.4",
     "ts-jest": "^28.0.0",
     "vitest": "^0.28.5"

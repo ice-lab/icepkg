@@ -15,6 +15,10 @@ function getUserConfig() {
     formats: ['esm', 'es2017'],
     modes: ['production'],
     outputDir: 'dist',
+    minify: {
+      js: (mode: string, command: string) => { return mode === 'production' && command === 'build'; },
+      css: (mode: string, command: string) => { return mode === 'production' && command === 'build'; },
+    },
   };
   const defaultTransformUserConfig: TransformUserConfig = {
     formats: ['esm', 'es2017'],
@@ -112,6 +116,9 @@ function getUserConfig() {
             mergedConfig.modes.push('development');
           }
 
+          const originMinifyConfig = mergedConfig.minify;
+          delete mergedConfig.minify;
+
           Object.keys(mergedConfig).forEach((key) => {
             newConfig = mergeValueToTaskConfig<BundleTaskConfig>(
               newConfig,
@@ -119,6 +126,34 @@ function getUserConfig() {
               mergedConfig[key],
             );
           });
+
+          if (typeof originMinifyConfig === 'boolean') {
+            newConfig.jsMinify = () => originMinifyConfig;
+            newConfig.cssMinify = () => originMinifyConfig;
+          } else if (typeof originMinifyConfig === 'object') {
+            switch (typeof originMinifyConfig.js) {
+              case 'boolean':
+                newConfig.jsMinify = () => (originMinifyConfig.js) as boolean;
+                break;
+              case 'function':
+                newConfig.jsMinify = originMinifyConfig.js;
+                break;
+              default:
+                break;
+            }
+
+            switch (typeof originMinifyConfig.css) {
+              case 'boolean':
+                newConfig.cssMinify = () => (originMinifyConfig.css) as boolean;
+                break;
+              case 'function':
+                newConfig.cssMinify = originMinifyConfig.css;
+                break;
+              default:
+                break;
+            }
+          }
+
           return newConfig;
         }
       },
