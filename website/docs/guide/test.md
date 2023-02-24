@@ -28,7 +28,7 @@ $ npm i jest ts-jest -D
 
 ### 配置
 
-首先需要在项目的根目录下新建 `jest.config.mts` 文件，并加入以下内容：
+首先需要在项目的根目录下新建 `jest.config.mjs` 文件，并加入以下内容：
 
 ```js
 import pkgService, { defineJestConfig } from '@ice/pkg';
@@ -47,7 +47,7 @@ type UserJestConfig = jest.Config | () => Promise<jest.Config>
 
 以添加 `@swc/jest` 为例：
 
-```js title="jest.config.mts"
+```js title="jest.config.mjs"
 import pkgService, { defineJestConfig } from '@ice/pkg';
 
 export default defineJestConfig(pkgService, {
@@ -115,7 +115,7 @@ import '@testing-library/jest-dom';
 ```
 最后在 `jest.config.mjs` 中加入以下内容：
 
-```diff title="jest.config.mts"
+```diff title="jest.config.mjs"
 import pkgService, { defineJestConfig } from '@ice/pkg';
 
 export default defineJestConfig(pkgService, {

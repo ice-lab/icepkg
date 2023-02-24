@@ -15,8 +15,7 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"],
-    },
-    "types": ["vitest/globals"]
+    }
   },
   "include": ["src/*.ts", "src/*.tsx"],
   "exclude": ["node_modules", "build", "public"]
