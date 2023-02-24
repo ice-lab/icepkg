@@ -26,23 +26,25 @@ export default function defineJestConfig(
   };
 }
 
-async function getDefaultConfig(service: Service<TaskConfig, {}, UserConfig>) {
-  const taskConfig = await getTaskConfig(service);
-  const { alias = {} } = taskConfig;
+async function getDefaultConfig(service: Service<TaskConfig, {}, UserConfig>): Promise<JestConfig> {
+  const { taskConfig, context: { rootDir } } = await getTaskConfig(service);
+  const { alias = {}, define = {} } = taskConfig;
 
-  const moduleNameMapper = generateModuleNameMapper(alias);
+  const moduleNameMapper = generateModuleNameMapper(rootDir, alias);
 
   return {
     moduleNameMapper,
+    globals: define,
   };
 }
 
-function generateModuleNameMapper(alias: TaskConfig['alias']) {
+function generateModuleNameMapper(rootDir: string, alias: TaskConfig['alias']) {
   const moduleNameMapper = {};
   for (const key in alias) {
     const aliasPath = alias[key];
-    const isDir = path.isAbsolute(aliasPath) && fse.lstatSync(aliasPath).isDirectory();
-    moduleNameMapper[`^${key}${isDir ? '/(.*)' : ''}`] = `${aliasPath}${isDir ? '/$1' : ''}`;
+    const absoluteAliasPath = path.isAbsolute(aliasPath) ? aliasPath : path.join(rootDir, aliasPath);
+    const isDir = fse.lstatSync(absoluteAliasPath).isDirectory();
+    moduleNameMapper[`^${key}${isDir ? '/(.*)' : ''}`] = `${absoluteAliasPath}${isDir ? '/$1' : ''}`;
   }
 
   return moduleNameMapper;

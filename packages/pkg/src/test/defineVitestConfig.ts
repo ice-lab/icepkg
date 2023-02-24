@@ -25,7 +25,7 @@ export default function defineVitestConfig(
 }
 
 async function getDefaultConfig(service: Service<TaskConfig, {}, UserConfig>): Promise<VitestUserConfig> {
-  const taskConfig = await getTaskConfig(service);
+  const { taskConfig } = await getTaskConfig(service);
   const { alias = {}, define = {} } = taskConfig;
   return {
     resolve: {

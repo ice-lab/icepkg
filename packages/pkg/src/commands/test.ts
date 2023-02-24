@@ -8,5 +8,6 @@ export default async function test(context: Context) {
 
   return {
     taskConfigs,
+    context,
   };
 }
