@@ -10,12 +10,13 @@ interface ComponentProps {
 export default function ExampleRaxComponent(props: ComponentProps) {
   const { title = 'Hello World!' } = props;
   console.log(__DEV__);
+  const role = 'admin';
   return (
     <div className={styles.ExampleRaxComponent}>
       <Header />
       {title}
       <>xxxxxxxx</>
-      <div x-if={true}>admin</div>
+      <div x-if={role === 'admin'}>admin</div>
       <div x-else>guest</div>
     </div>
   );

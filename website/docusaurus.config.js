@@ -83,7 +83,7 @@ const config = {
               },
               {
                 label: '微前端 ICESTARK',
-                to: 'http://micro-frontends.ice.work/',
+                to: 'https://micro-frontends.ice.work/',
               },
               {
                 label: '可视化工具 AppWorks',
