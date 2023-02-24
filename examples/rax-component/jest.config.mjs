@@ -5,4 +5,5 @@ export default defineJestConfig(pkgService, {
   moduleNameMapper: {
     '\\.(css|less|scss)$': '<rootDir>/__mocks__/styleMock.js',
   },
+  transformIgnorePatterns: ['<rootDir>/node_modules/rax-*'],
 });

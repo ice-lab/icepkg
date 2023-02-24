@@ -89,11 +89,13 @@ importers:
       jest: ^28.0.0
       rax: ^1.2.2
       rax-test-renderer: ^1.1.0
+      rax-view: ^2.3.0
       react: ^18.0.0
       react-dom: ^18.0.0
     dependencies:
       '@swc/helpers': 0.4.14
       babel-runtime-jsx-plus: 0.1.5
+      rax-view: 2.3.0_rax@1.2.3
     devDependencies:
       '@babel/core': 7.18.6
       '@babel/preset-env': 7.20.2_@babel+core@7.18.6
@@ -8070,6 +8072,10 @@ packages:
     resolution: {integrity: sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==}
     dev: true
 
+  /classnames/2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
+
   /clean-css/5.3.0:
     resolution: {integrity: sha512-YYuuxv4H/iNb1Z/5IbMRoxgrzjWGhOEFfd+groZ5dMCVkpENiMZmwspdrzBo9286JjM1gZJPAyL7ZIdzuvu2AQ==}
     engines: {node: '>= 10.0'}
@@ -15552,7 +15558,6 @@ packages:
       rax: ^1.0.0
     dependencies:
       rax: 1.2.3
-    dev: true
 
   /rax-clone-element/1.0.0_rax@1.2.3:
     resolution: {integrity: sha512-TaQMVuzoglvCTjbWATlvvwARmeWnG8kpENWNXrNDv0++x29GHNND/TBbx7sdtVs/QmYwYc8YmwRUhaBwKQi5eQ==}
@@ -15562,7 +15567,6 @@ packages:
     dependencies:
       rax: 1.2.3
       rax-is-valid-element: 1.0.1
-    dev: true
 
   /rax-compat/0.1.5_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-qjFc8/XvTkr2NMnHzG98ZctbYzyF46iMIudhbVNF8rjKYYy3W7fyqapRqELOGVFqUOt0I0CSPu288cTgCaq/aQ==}
@@ -15585,7 +15589,6 @@ packages:
       rax: ^1.0.0
     dependencies:
       rax: 1.2.3
-    dev: true
 
   /rax-find-dom-node/1.0.1:
     resolution: {integrity: sha512-etHRCwkRmmMobHDqlBg7iiA/sjDWTHCkW9ekopI6vpcVjzr7ytbe09va5kAoQi3kk3fDgAfZ3Fkp5lhOKf2YOQ==}
@@ -15605,7 +15608,6 @@ packages:
   /rax-is-valid-element/1.0.1:
     resolution: {integrity: sha512-ajvQlLr7sr7UK4T9lyJyn1gcdu7NIrF3NUAj+SWWNwG2GZ5ygKdSCRFzuu7evuAwLxqrCCk2tQLV6uxw0zYUXQ==}
     engines: {npm: '>=3.0.0'}
-    dev: true
 
   /rax-server-renderer/1.4.1_rax@1.2.3:
     resolution: {integrity: sha512-kxqBUaocSlB7LUxnJqPd1cQqSDdUqDL2hcwpu+YMo30cqTJrG/KqvTMhbUfHavqjrnWPwAiHxOS1RPnXkVZPiw==}
@@ -15634,6 +15636,16 @@ packages:
       rax: 1.2.3
     dev: true
 
+  /rax-view/2.3.0_rax@1.2.3:
+    resolution: {integrity: sha512-8mzCiNvGu4RtcvWkZoFuWZNSTFac9peWwS+p+UtEsr8fLjhlgVmEFDTo+DbuQLDFtMIj8qfBdBJ9h6IRHCFXdg==}
+    peerDependencies:
+      rax: ^1.0.0
+    dependencies:
+      classnames: 2.3.2
+      rax: 1.2.3
+      universal-env: 3.3.3
+    dev: false
+
   /rax/1.2.3:
     resolution: {integrity: sha512-/lkZ7Yb3be06e68y4wn5WIyudzvrnHiTEjeAznJ7nPrfmjoCan2hcKPXmTYXdHU+IqkvGbzDlLZRWbVtmRTAcw==}
     engines: {npm: '>=3.0.0'}
@@ -15644,7 +15656,6 @@ packages:
       rax-clone-element: 1.0.0_rax@1.2.3
       rax-create-factory: 1.0.0_rax@1.2.3
       rax-is-valid-element: 1.0.1
-    dev: true
 
   /rc/1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}

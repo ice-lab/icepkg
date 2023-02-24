@@ -48,7 +48,8 @@
   ],
   "dependencies": {
     "@swc/helpers": "^0.4.14",
-    "babel-runtime-jsx-plus": "^0.1.5"
+    "babel-runtime-jsx-plus": "^0.1.5",
+    "rax-view": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
