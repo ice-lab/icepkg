@@ -1,5 +1,6 @@
 import { createElement, Fragment } from 'rax';
 import styles from './index.module.css';
+import Header from './components/Header';
 
 interface ComponentProps {
   /** Title for ExampleRaxComponent. */
@@ -11,6 +12,7 @@ export default function ExampleRaxComponent(props: ComponentProps) {
 
   return (
     <div className={styles.ExampleRaxComponent}>
+      <Header />
       {title}
       <>xxxxxxxx</>
       <div x-if={true}>admin</div>

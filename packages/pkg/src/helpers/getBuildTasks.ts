@@ -1,4 +1,3 @@
-import * as path from 'node:path';
 import deepmerge from 'deepmerge';
 import { formatEntry, getTransformDefaultOutputDir } from './getTaskIO.js';
 import { getDefaultBundleSwcConfig, getDefaultTransformSwcConfig } from './defaultSwcConfig.js';

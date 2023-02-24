@@ -59,7 +59,6 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
     incremental: true,
     skipLibCheck: true,
     outDir: outputDir,
-    baseUrl: '.',
     rootDir: path.join(rootDir, 'src'),
     paths: formatAliasToTSPathsConfig(alias),
   };
