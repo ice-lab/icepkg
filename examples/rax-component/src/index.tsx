@@ -9,7 +9,7 @@ interface ComponentProps {
 
 export default function ExampleRaxComponent(props: ComponentProps) {
   const { title = 'Hello World!' } = props;
-
+  console.log(__DEV__);
   return (
     <div className={styles.ExampleRaxComponent}>
       <Header />

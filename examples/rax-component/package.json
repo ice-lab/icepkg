@@ -38,7 +38,8 @@
     "eslint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./",
     "eslint:fix": "npm run eslint -- --fix",
     "stylelint": "stylelint \"**/*.{css,scss,less}\"",
-    "lint": "npm run eslint && npm run stylelint"
+    "lint": "npm run eslint && npm run stylelint",
+    "test": "jest"
   },
   "keywords": [
     "ice",
