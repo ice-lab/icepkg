@@ -120,6 +120,16 @@ export default function Home() {
 
 ICE PKG 内置支持 `.scss`、`.less`、`.sass` 文件，使用方式与 `.css` 文件保持一致。
 
+在开启 Bundle 模式后，需要安装对应的预处理器依赖：
+
+```bash
+# .scss and .sass
+npm add -D sass
+
+# .less
+npm add -D less
+```
+
 ### CSS Modules
 
 ICE PKG 也支持 [CSS Modules](https://github.com/css-modules/css-modules)，样式文件需以 `.module.css`、`.module.less` 或 `.module.scss` 结尾。
