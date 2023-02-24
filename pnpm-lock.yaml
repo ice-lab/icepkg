@@ -250,7 +250,6 @@ importers:
       cac: 6.7.12
       chokidar: 3.5.3
       consola: 2.15.3
-      cssnano: 5.1.15_postcss@8.4.14
       debug: 4.3.4
       deepmerge: 4.2.2
       escape-string-regexp: 5.0.0
@@ -269,6 +268,7 @@ importers:
       '@types/babel__core': 7.1.20
       '@types/fs-extra': 9.0.13
       '@types/node': 17.0.45
+      cssnano: 5.1.15_postcss@8.4.14
       sass: 1.53.0
       source-map: 0.6.1
 
