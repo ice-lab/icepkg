@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Button from '@/components/Button';
+import './index.css';
 
 export default function Component() {
   console.log(__DEV__);
