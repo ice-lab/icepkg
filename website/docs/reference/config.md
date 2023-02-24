@@ -136,7 +136,7 @@ export default defineConfig({
 });
 ```
 
-这会为所有产物额外输出 `.js.map` 文件。如果你想要 `inline` sourcemap，可将选项配置为 `inline`。
+这会为所有产物额外输出 `.js.map` 文件。如果你想要 sourcemap 是内联在源码中的，可将选项配置为 `inline`：
 
 ```ts
 import { defineConfig } from '@ice/pkg';
@@ -146,6 +146,43 @@ export default defineConfig({
 });
 ```
 
+### jsxRuntime
+
++ 类型：`'automatic' | 'classic'`
++ 默认值：`'automatic'`
+
+设置 [JSX 转换](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)的方式，并交给编译工具（SWC）编译处理 JSX 语法。
+
+假设有这样一段 JSX 代码：
+
+```jsx
+import React from 'react';
+
+function App() {
+  return <h1>Hello World</h1>;
+}
+```
+
+当 `jsxRuntime` 的值是 `automatic`，编译结果是：
+
+```js
+import {jsx as _jsx} from 'react/jsx-runtime';
+
+function App() {
+  return _jsx('h1', { children: 'Hello world' });
+}
+```
+
+当 `jsxRuntime` 的值是 `classic`，编译结果是：
+
+```js
+import React from 'react';
+
+function App() {
+  return React.createElement('h1', null, 'Hello world');
+}
+```
+
 ### generateTypesForJs
 
 + 类型：`boolean`
@@ -153,14 +190,14 @@ export default defineConfig({
 
 为 JavaScript 代码生成类型文件。ICE PKG 默认为文件后缀为 `.ts` 生成类型文件。
 
-如果使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。详细介绍 [工程能力 - 生成类型文件](./abilities#生成类型文件)。
+如果使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成了类型注解，该配置会非常有效。详细介绍 [工程能力 - 生成类型文件](../guide/abilities#生成类型文件)。
 
 ### plugins
 
 + 类型：`Array<string | [string, any?]>`
 + 默认值：`[]`
 
-配置额外的 ICE PKG 插件。
+ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统，配置额外的 ICE PKG 插件，以进行更深度的工程定制。更多内容请参考[插件开发](./plugins-development)。
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
@@ -177,15 +214,23 @@ export default defineConfig({
 });
 ```
 
-ICE PKG 基于 [build-scripts](https://github.com/ice-lab/build-scripts) 插件系统。更多内容请参考 [插件开发](../plugins-development)。
-
 ### transform
 
-该字段定义 [transform 模式](../#双模式) 下额外的配置。包含以下配置：
-
 :::tip
-transform 模式是 ICE PKG 默认的编译模式。
+Transform 模式是 ICE PKG 默认的编译模式。
 :::
+
+该字段定义 [Transform 模式](../guide/abilities#双模式构建) 下额外的配置。默认配置是：
+
+```ts
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  transform: {
+    formats: ['esm', 'es2017']
+  }
+});
+```
 
 #### formats
 
@@ -240,7 +285,7 @@ export default defineConfig({
 
 ### bundle
 
-该字段定义 [bundle 模式](../#双模式) 下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
+该字段定义 [Bundle 模式](../guide/abilities#双模式构建) 下额外的配置，若开启，默认生成 `dist` 文件目录。`bundle` 包含以下配置：
 
 #### formats
 
@@ -250,8 +295,8 @@ export default defineConfig({
 输出的类型，默认是输出 `esm` 和 `es2017` 产物。
 
 ```shell title=root/dist
-- index.production.js        # 输出 ES module + es5 产物
-- index.es2017.production.js # 输出 ES module + es2017 产物
+- index.esm.es5.production.js        # 输出 ES module + es5 产物
+- index.esm.es2017.production.js     # 输出 ES module + es2017 产物
 ```
 
 若只需要产出 umd 规范产物，可配置为：
@@ -269,7 +314,7 @@ export default defineConfig({
 则输出以下产物：
 
 ```shell title=root/dist
-- index.umd.production.js        # 输出 umd + es5 产物
+- index.umd.es5.production.js        # 输出 umd + es5 产物
 - index.umd.es2017.production.js # 输出 umd + es2017 产物
 ```
 
@@ -278,7 +323,7 @@ export default defineConfig({
 cjs 规范产物同理将 `formats` 配置为 `['cjs', 'es2017']` 即可。
 
 :::tip
-bundle 模式的 formats 如果单独配置 `['es2017']` 将不会生效，因为其仅决定产物语法层面规范，而无法决定产物的模块规范。因此其必须与 `'esm'`、`'umd'` 和 `'cjs'` 中的至少一项搭配配置才能正常生成对应模块规范的 ES2017 产物。
+Bundle 模式的 formats 如果单独配置 `['es2017']` 将不会生效，因为其仅决定产物语法层面规范，而无法决定产物的模块规范。因此其必须与 `'esm'`、`'umd'` 和 `'cjs'` 中的至少一项搭配配置才能正常生成对应模块规范的 ES2017 产物。
 :::
 
 #### modes
@@ -289,8 +334,8 @@ bundle 模式的 formats 如果单独配置 `['es2017']` 将不会生效，因�
 指定输出的产物是否经过压缩。默认情况下输出的产物是压缩过的。
 
 ```shell title="root/dist"
-- index.production.js        # 输出 ES module + es5 产物
-- index.es2017.production.js # 输出 ES module + es2017 产物
+- index.esm.es5.production.js        # 输出 ES module + es5 产物
+- index.esm.es2017.production.js     # 输出 ES module + es2017 产物
 ```
 
 增加 `'development'` 时，会额外输出一份**未压缩的**的产物，这也意味着用户可以在开发态使用该产物获得更多的开发时信息。在开发 Library 时，这将会非常有作用。
@@ -306,10 +351,10 @@ export default defineConfig({
 ```
 
 ```shell title="root/dist"
-- index.development.js        # 输出未压缩产物（ES module + es5）
-- index.production.js         # 输出压缩产物 (ES module + es5)
-- index.es2017.development.js # 输出未压缩产物 （ES module + es2017）
-- index.es2017.production.js  # 输出未压缩产物 (ES module + es2017)
+- index.esm.es5.development.js        # 输出未压缩产物（ES module + es5）
+- index.esm.es5.production.js         # 输出压缩产物 (ES module + es5)
+- index.esm.es2017.development.js     # 输出未压缩产物 （ES module + es2017）
+- index.esm.es2017.production.js      # 输出未压缩产物 (ES module + es2017)
 ```
 
 #### name
@@ -334,7 +379,7 @@ export default defineConfig({
 + 类型：`boolean | Record<string, string>`
 + 默认值：`true`
 
-默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。若想要 bundle 不包含依赖产物，可如下配置：
+默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。若想要 Bundle 不包含依赖产物，可如下配置：
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
@@ -397,8 +442,8 @@ export default defineConfig({
 上述配置会输出如下产物：
 
 ```shell title=root/dist
-- index.development.js        # 输出未压缩产物（ES module + es5）
-- index.production.js         # 输出压缩产物 (ES module + es5)
-- index.es2017.development.js # 输出未压缩产物 （ES module + es2017）
-- index.es2017.production.js  # 输出未压缩产物 (ES module + es2017)
+- index.esm.es5.development.js        # 输出未压缩产物（ES module + es5）
+- index.esm.es5.production.js         # 输出压缩产物 (ES module + es5)
+- index.esm.es2017.development.js # 输出未压缩产物 （ES module + es2017）
+- index.esm.es2017.production.js  # 输出未压缩产物 (ES module + es2017)
 ```

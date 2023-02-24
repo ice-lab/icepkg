@@ -55,7 +55,12 @@ export function getRollupOptions(
       ),
     );
   }
-  rollupOptions.plugins.push(swcPlugin(taskConfig.type, taskConfig.swcCompileOptions));
+  rollupOptions.plugins.push(
+    swcPlugin(
+      taskConfig.jsxRuntime,
+      taskConfig.swcCompileOptions,
+    ),
+  );
 
   if (taskConfig.type === 'transform') {
     rollupOptions.plugins.unshift(
