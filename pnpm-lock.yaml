@@ -9,6 +9,7 @@ importers:
       '@iceworks/spec': ^1.6.0
       '@types/fs-extra': ^9.0.13
       '@types/node': ^17.0.45
+      '@vitest/coverage-c8': ^0.28.5
       axios: ^0.23.0
       c8: ^7.11.3
       eslint: ^8.19.0
@@ -31,6 +32,7 @@ importers:
       '@changesets/cli': 2.26.0
       '@commitlint/cli': 15.0.0
       '@iceworks/spec': 1.6.0_boy655tvqsm6op45de6ax7jimi
+      '@vitest/coverage-c8': 0.28.5
       eslint: 8.19.0
       fs-extra: 10.1.0
       ice-npm-utils: link:packages/ice-npm-utils
@@ -6816,6 +6818,27 @@ packages:
   /@uni/env/1.1.0:
     resolution: {integrity: sha512-2GVgUzxIaO2vGElXEuc45+I7L6Jbw8inLDDFuC0K4htjKtPmYywKSE6oDhvmdAXb4GCOH8hmxECYtAh1rjsgoQ==}
 
+  /@vitest/coverage-c8/0.28.5:
+    resolution: {integrity: sha512-zCNyurjudoG0BAqAgknvlBhkV2V9ZwyYLWOAGtHSDhL/St49MJT+V2p1G0yPaoqBbKOTATVnP5H2p1XL15H75g==}
+    dependencies:
+      c8: 7.13.0
+      picocolors: 1.0.0
+      std-env: 3.3.2
+      vitest: 0.28.5
+    transitivePeerDependencies:
+      - '@edge-runtime/vm'
+      - '@vitest/browser'
+      - '@vitest/ui'
+      - happy-dom
+      - jsdom
+      - less
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: true
+
   /@vitest/expect/0.28.5:
     resolution: {integrity: sha512-gqTZwoUTwepwGIatnw4UKpQfnoyV0Z9Czn9+Lo2/jLIt4/AXLTn+oVZxlQ7Ng8bzcNkR+3DqLJ08kNr8jRmdNQ==}
     dependencies:
@@ -7853,6 +7876,25 @@ packages:
       yargs: 16.2.0
       yargs-parser: 20.2.9
     dev: false
+
+  /c8/7.13.0:
+    resolution: {integrity: sha512-/NL4hQTv1gBL6J6ei80zu3IiTrmePDKXKXOTLpHvcIWZTVYQlDhVWjjWvkhICylE8EwwnMVzDZugCvdx0/DIIA==}
+    engines: {node: '>=10.12.0'}
+    hasBin: true
+    dependencies:
+      '@bcoe/v8-coverage': 0.2.3
+      '@istanbuljs/schema': 0.1.3
+      find-up: 5.0.0
+      foreground-child: 2.0.0
+      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-report: 3.0.0
+      istanbul-reports: 3.1.4
+      rimraf: 3.0.2
+      test-exclude: 6.0.0
+      v8-to-istanbul: 9.0.1
+      yargs: 16.2.0
+      yargs-parser: 20.2.9
+    dev: true
 
   /cac/6.7.12:
     resolution: {integrity: sha512-rM7E2ygtMkJqD9c7WnFU6fruFcN3xe4FM5yUmgxhZzIKJk4uHl9U/fhwdajGFQbQuv43FAUo1Fe8gX/oIKDeSA==}
@@ -10385,7 +10427,6 @@ packages:
     dependencies:
       cross-spawn: 7.0.3
       signal-exit: 3.0.7
-    dev: false
 
   /fork-ts-checker-webpack-plugin/6.5.2_l2co7ao223gzrfox7yaiyzd7wu:
     resolution: {integrity: sha512-m5cUmF30xkZ7h4tWUgTAcEaKmUW7tfyUyTqNNOz7OxWJ0v1VWKTcOvH8FWHUwSjlW/356Ijc9vi3XfcPstpQKA==}
@@ -18327,7 +18368,6 @@ packages:
       - sugarss
       - supports-color
       - terser
-    dev: false
 
   /vitest/0.28.5_jsdom@21.1.0:
     resolution: {integrity: sha512-pyCQ+wcAOX7mKMcBNkzDwEHRGqQvHUl0XnoHR+3Pb1hytAHISgSxv9h0gUiSiYtISXUU3rMrKiKzFYDrI6ZIHA==}
@@ -19115,7 +19155,6 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
-    dev: false
 
   /yargs/17.5.1:
     resolution: {integrity: sha512-t6YAJcxDkNX7NFYiVtKvWUz8l+PaKTLiL63mJYWR2GnHq2gjEWISzsLp9wg3aY36dY1j+gfIEL3pIF+XlJJfbA==}

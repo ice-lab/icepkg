@@ -24,6 +24,7 @@
     "@changesets/cli": "^2.26.0",
     "@commitlint/cli": "^15.0.0",
     "@iceworks/spec": "^1.6.0",
+    "@vitest/coverage-c8": "^0.28.5",
     "eslint": "^8.19.0",
     "fs-extra": "^10.1.0",
     "ice-npm-utils": "workspace:^3.0.2",
