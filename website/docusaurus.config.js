@@ -33,6 +33,7 @@ const config = {
               { type: 'doc', id: 'guide/scenarios' },
               { type: 'doc', id: 'guide/build' },
               { type: 'doc', id: 'guide/publish' },
+              { type: 'doc', id: 'guide/test' },
               { type: 'doc', id: 'guide/preview' },
               { type: 'doc', id: 'guide/jsx-plus' },
               {
