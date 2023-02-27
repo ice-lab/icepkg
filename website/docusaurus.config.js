@@ -33,6 +33,7 @@ const config = {
               { type: 'doc', id: 'guide/scenarios' },
               { type: 'doc', id: 'guide/build' },
               { type: 'doc', id: 'guide/publish' },
+              { type: 'doc', id: 'guide/test' },
               { type: 'doc', id: 'guide/preview' },
               { type: 'doc', id: 'guide/jsx-plus' },
               {
@@ -82,7 +83,7 @@ const config = {
               },
               {
                 label: '微前端 ICESTARK',
-                to: 'http://micro-frontends.ice.work/',
+                to: 'https://micro-frontends.ice.work/',
               },
               {
                 label: '可视化工具 AppWorks',

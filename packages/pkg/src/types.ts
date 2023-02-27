@@ -203,6 +203,10 @@ export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {
    * @default `['development']` on start, `['production']` on build.
    */
   modes?: NodeEnvMode[];
+  /**
+   * Same as https://swc.rs/docs/configuration/compilation#jsctransformoptimizerglobals
+   */
+  define?: Record<string, string>;
 }
 
 export type TaskConfig = BundleTaskConfig | TransformTaskConfig;

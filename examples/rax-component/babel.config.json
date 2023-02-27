@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "@babel/preset-typescript",
+      {
+        "onlyRemoveTypeImports": true
+      }
+    ],
+    ["@babel/preset-env", {
+      "loose": true
+    }],
+    ["@babel/preset-react", {
+      "pragma": "createElement"
+    }]
+  ]
+}

@@ -1,17 +1,17 @@
 import consola from 'consola';
 import { RollupOptions } from 'rollup';
-import { getBuildTasks } from './helpers/getBuildTasks.js';
-import { getRollupOptions } from './helpers/getRollupOptions.js';
-import { createWatcher } from './helpers/watcher.js';
-import { watchBundleTasks } from './tasks/bundle.js';
-import { watchTransformTasks } from './tasks/transform.js';
+import { getBuildTasks } from '../helpers/getBuildTasks.js';
+import { getRollupOptions } from '../helpers/getRollupOptions.js';
+import { createWatcher } from '../helpers/watcher.js';
+import { watchBundleTasks } from '../tasks/bundle.js';
+import { watchTransformTasks } from '../tasks/transform.js';
 
 import type {
   OutputResult,
   Context,
   WatchEvent,
   TaskRunnerContext,
-} from './types.js';
+} from '../types.js';
 
 export default async function start(context: Context) {
   const { applyHook, commandArgs } = context;

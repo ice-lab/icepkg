@@ -7,7 +7,7 @@ interface ButtonProps {
 
 const Button: React.FunctionComponent<React.PropsWithChildren<ButtonProps>> = (props) => {
   return (
-    <button className={styles.button} onClick={props.onClick}>{props.children}</button>
+    <button className={styles.button} onClick={props.onClick} data-testid="normal-button">{props.children}</button>
   );
 };
 
