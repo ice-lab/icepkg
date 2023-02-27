@@ -102,6 +102,7 @@ export default function Home() {
     <div className="container"></div>
   )
 }
+<<<<<<< HEAD
 ```
 
 </TabItem>
@@ -129,6 +130,25 @@ npm add -D sass
 # .less
 npm add -D less
 ```
+=======
+```
+
+</TabItem>
+<TabItem value="index.css" label="src/index.css">
+
+```css
+.container {
+  color: red;
+}
+```
+
+</TabItem>
+</Tabs>
+
+### 预处理器
+
+ICE PKG 内置支持 `.scss`、`.less`、`.sass` 文件，使用方式与 `.css` 文件保持一致。
+>>>>>>> main
 
 ### CSS Modules
 
@@ -247,9 +267,15 @@ export default defineConfig({
 ICE PKG 默认为 TypeScript 生成类型文件，**无需主动开启**。
 
 对于一些用户可能使用 [JSDoc](https://jsdoc.app/) 为 JavaScript 生成注解，你可以主动开启为 JavaScript 代码生成类型文件的能力。
+<<<<<<< HEAD
 
 比如，函数 `add` 通过 **JSDoc** 进行类型注解：
 
+=======
+
+比如，函数 `add` 通过 **JSDoc** 进行类型注解：
+
+>>>>>>> main
 ```js
 /**
  *
