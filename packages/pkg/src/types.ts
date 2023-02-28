@@ -1,12 +1,23 @@
+import * as swc from '@swc/core';
+
 import type { RollupOptions, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
 import type { Context as _Context, PluginAPI as _PluginAPI, Plugin as _Plugin, TaskConfig as _BuildTask } from 'build-scripts';
 import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styles';
 import type { FSWatcher } from 'chokidar';
+import cssnano from 'cssnano';
 
 export type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
 export type PlainObject = Record<string, string | boolean | number | object | null>;
+
+type JSMinify = boolean | {
+  options?: swc.JsMinifyOptions;
+};
+
+type CSSMinify = boolean | {
+  options?: Parameters<typeof cssnano>[0];
+};
 
 export interface TransformUserConfig {
   /**
@@ -67,7 +78,10 @@ export interface BundleUserConfig {
   /**
    * Minify JS and CSS bundle.
    */
-  minify?: boolean;
+  minify?: boolean | {
+    js?: boolean | ((mode: string, command: string) => JSMinify);
+    css?: boolean | ((mode: string, command: string) => CSSMinify);
+  };
 }
 
 export interface UserConfig {
@@ -97,6 +111,11 @@ export interface UserConfig {
   */
   generateTypesForJs?: boolean;
 
+  /**
+   * Configure JSX transform type.
+   * @default 'automatic'
+   */
+  jsxRuntime?: 'automatic' | 'classic';
   /**
    * Plugins of build scripts
    * @default []
@@ -139,6 +158,10 @@ interface _TaskConfig {
    */
   alias?: Record<string, string>;
   /**
+   * JSX transform type.
+   */
+  jsxRuntime?: 'automatic' | 'classic';
+  /**
    * Modify default rollup options
    * @see https://rollupjs.org/guide/en/#rolluprollup
    */
@@ -156,7 +179,7 @@ interface _TaskConfig {
 
 export interface BundleTaskConfig extends
   _TaskConfig,
-  Omit<BundleUserConfig, 'development'> {
+  Omit<BundleUserConfig, 'development' | 'minify'> {
   type: 'bundle';
   /**
   * Files extensions
@@ -167,6 +190,10 @@ export interface BundleTaskConfig extends
    * Config styles options. See https://www.npmjs.com/package/rollup-plugin-styles
    */
   modifyStylesOptions?: Array<(options: StylesRollupPluginOptions) => StylesRollupPluginOptions>;
+
+  jsMinify?: (mode: string, command: string) => JSMinify;
+
+  cssMinify?: (mode: string, command: string) => CSSMinify;
 }
 
 export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {
@@ -176,6 +203,10 @@ export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {
    * @default `['development']` on start, `['production']` on build.
    */
   modes?: NodeEnvMode[];
+  /**
+   * Same as https://swc.rs/docs/configuration/compilation#jsctransformoptimizerglobals
+   */
+  define?: Record<string, string>;
 }
 
 export type TaskConfig = BundleTaskConfig | TransformTaskConfig;

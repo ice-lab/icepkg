@@ -1,11 +1,11 @@
 import fse from 'fs-extra';
 import { RollupOptions } from 'rollup';
-import { getBuildTasks } from './helpers/getBuildTasks.js';
-import { getRollupOptions } from './helpers/getRollupOptions.js';
-import { buildBundleTasks } from './tasks/bundle.js';
-import { buildTransformTasks } from './tasks/transform.js';
+import { getBuildTasks } from '../helpers/getBuildTasks.js';
+import { getRollupOptions } from '../helpers/getRollupOptions.js';
+import { buildBundleTasks } from '../tasks/bundle.js';
+import { buildTransformTasks } from '../tasks/transform.js';
 
-import type { Context, OutputResult, TaskRunnerContext } from './types.js';
+import type { Context, OutputResult, TaskRunnerContext } from '../types.js';
 
 export default async function build(context: Context) {
   const { applyHook, commandArgs } = context;

@@ -5,14 +5,9 @@ import consola from 'consola';
 import { cac } from 'cac';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
-import { require } from '../lib/utils.js';
-import componentService from '../lib/index.js';
+import pkgService, { getBuiltInPlugins } from '../lib/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const getBuiltInPlugins = () => [
-  require.resolve('./plugins/component'),
-];
 
 const cli = cac('ice-pkg');
 
@@ -32,7 +27,7 @@ const cli = cac('ice-pkg');
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
 
-      await componentService.run({
+      await pkgService.run({
         command: 'build',
         commandArgs,
         getBuiltInPlugins,
@@ -55,7 +50,7 @@ const cli = cac('ice-pkg');
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
 
-      await componentService.run({
+      await pkgService.run({
         command: 'start',
         commandArgs,
         getBuiltInPlugins,

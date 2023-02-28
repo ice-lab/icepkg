@@ -2,6 +2,7 @@ import deepmerge from 'deepmerge';
 import { formatEntry, getTransformDefaultOutputDir } from './getTaskIO.js';
 import { getDefaultBundleSwcConfig, getDefaultTransformSwcConfig } from './defaultSwcConfig.js';
 import { stringifyObject } from '../utils.js';
+import getDefaultDefineValues from './getDefaultDefineValues.js';
 
 import type { Context, BuildTask } from '../types.js';
 
@@ -17,9 +18,16 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
 
   config.entry = formatEntry(config.entry);
   // Configure define
-  config.define = stringifyObject(config.define || {});
+  config.define = Object.assign(
+    // Note: The define values in bundle mode will be defined (according to the `modes` value)
+    // in generating rollup options. But when the command is test, we don't need to get the rollup options.
+    // So in test, we assume the mode is 'development'.
+    command === 'test' ? getDefaultDefineValues('development') : {},
+    stringifyObject(config.define || {}),
+  );
 
   config.sourcemap = config.sourcemap ?? command === 'start';
+
   if (config.type === 'bundle') {
     config.swcCompileOptions = deepmerge(
       getDefaultBundleSwcConfig(config, context, taskName),

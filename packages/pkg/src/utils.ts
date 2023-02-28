@@ -335,3 +335,7 @@ export function checkDependencyExists(dependency: string, link: string) {
     process.exit(1);
   }
 }
+
+export const getBuiltInPlugins = () => [
+  require.resolve('./plugins/component'),
+];

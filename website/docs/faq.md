@@ -28,3 +28,15 @@ Transform 模式的产物代码中可能依赖一些 helper 函数用以支持�
 ```bash
 $ npm i @swc/helpers --save
 ```
+
+## `Error: Can't resolve 'sass-loader' in ...`
+
+出现这个报错的原因是在使用 docusaurus 插件时，docusaurus 无法正常 resolve 到 `sass-loader` 依赖。解决方案是暂时先安装一下依赖：
+
+```bash
+# 使用 scss
+$ npm i sass-loader -D
+
+# 使用 less
+$ npm i less-loader -D
+```

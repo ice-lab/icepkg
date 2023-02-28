@@ -146,6 +146,43 @@ export default defineConfig({
 });
 ```
 
+### jsxRuntime
+
++ 类型：`'automatic' | 'classic'`
++ 默认值：`'automatic'`
+
+设置 [JSX 转换](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)的方式，并交给编译工具（SWC）编译处理 JSX 语法。
+
+假设有这样一段 JSX 代码：
+
+```jsx
+import React from 'react';
+
+function App() {
+  return <h1>Hello World</h1>;
+}
+```
+
+当 `jsxRuntime` 的值是 `automatic`，编译结果是：
+
+```js
+import {jsx as _jsx} from 'react/jsx-runtime';
+
+function App() {
+  return _jsx('h1', { children: 'Hello world' });
+}
+```
+
+当 `jsxRuntime` 的值是 `classic`，编译结果是：
+
+```js
+import React from 'react';
+
+function App() {
+  return React.createElement('h1', null, 'Hello world');
+}
+```
+
 ### generateTypesForJs
 
 + 类型：`boolean`
@@ -371,8 +408,8 @@ export default defineConfig({
 
 #### minify
 
-+ 类型：`boolean`
-+ 默认值：start 阶段为 `false`，build 阶段为 `true`
++ 类型：`boolean | { js?: boolean | ((mode: string, command: string) => boolean | { options?: swc.JsMinifyOptions }); css?: boolean | ((mode: string, command: string) => boolean | { options?: cssnano.Options });}`
++ 默认值：build 阶段且 mode 是 `production` 时为 `true`，否则为 `false`
 
 是否压缩 JS 和 CSS 资源。
 
@@ -381,7 +418,13 @@ import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   bundle: {
+    // production 产物和 development 产物不压缩
     minify: false,
+    // 修改 JS 和 CSS 压缩参数
+    minify: {
+      js: (mode, command) => { options: { /* */ } },
+      css: (mode, command) => { options: { /* */ } },
+    }
   },
 });
 ```

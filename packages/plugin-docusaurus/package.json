@@ -30,7 +30,7 @@
   "scripts": {
     "watch": "ice-pkg start",
     "build": "ice-pkg build",
-    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
+    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./src",
     "prepublishOnly": "pnpm run-s lint build"
   },
   "dependencies": {
@@ -68,7 +68,7 @@
   "devDependencies": {
     "@algolia/client-search": "^4.9.1",
     "@types/react": "^17.0.0",
-    "@ice/pkg": "^1.5.2",
+    "@ice/pkg": "^1.5.3-beta.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.9.3",

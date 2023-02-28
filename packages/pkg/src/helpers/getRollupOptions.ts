@@ -55,7 +55,12 @@ export function getRollupOptions(
       ),
     );
   }
-  rollupOptions.plugins.push(swcPlugin(taskConfig.type, taskConfig.swcCompileOptions));
+  rollupOptions.plugins.push(
+    swcPlugin(
+      taskConfig.jsxRuntime,
+      taskConfig.swcCompileOptions,
+    ),
+  );
 
   if (taskConfig.type === 'transform') {
     rollupOptions.plugins.unshift(
@@ -69,7 +74,6 @@ export function getRollupOptions(
     );
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
-
     rollupOptions.input = taskConfig.entry;
     rollupOptions.external = external;
     rollupOptions.output = getRollupOutputs({
@@ -81,15 +85,17 @@ export function getRollupOptions(
       command,
     });
 
+    const cssMinify = taskConfig.cssMinify(taskRunnerContext.mode, command);
     const defaultStylesOptions: StylesRollupPluginOptions = {
       plugins: [
         autoprefixer(),
       ],
       mode: 'extract',
       autoModules: true,
-      minimize: taskConfig.minify,
+      minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
       sourceMap: taskConfig.sourcemap,
     };
+
     rollupOptions.plugins.push(
       replace({
         values: {
@@ -153,9 +159,9 @@ function getRollupOutputs({
   const { outputDir } = bundleTaskConfig;
 
   const outputFormats = (bundleTaskConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
-  const minify = bundleTaskConfig.minify ?? (command === 'build' && mode === 'production');
-  const name = bundleTaskConfig.name ?? pkg.name;
 
+  const name = bundleTaskConfig.name ?? pkg.name;
+  const minify = bundleTaskConfig.jsMinify(mode, command);
   return outputFormats.map((format) => ({
     name,
     format,
@@ -172,7 +178,7 @@ function getRollupOutputs({
       }
     }) : undefined,
     plugins: [
-      minify && minifyPlugin(bundleTaskConfig.sourcemap),
+      minify && minifyPlugin(bundleTaskConfig.sourcemap, typeof minify === 'boolean' ? {} : minify.options),
     ].filter(Boolean),
   }));
 }
