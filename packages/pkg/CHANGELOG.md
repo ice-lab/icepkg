@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.3
+
+### Patch Changes
+
+- f2f17ed: feat: minify css bundle
+- 35bf1ca: feat: support configure jsxRuntime
+- 52ccdf5: feat: support UI or unit test
+
 ## 1.5.3-beta.0
 
 ### Patch Changes

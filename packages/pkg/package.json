@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg",
-  "version": "1.5.3-beta.0",
+  "version": "1.5.3",
   "description": "Core service of ice component",
   "type": "module",
   "main": "./lib/index.js",
