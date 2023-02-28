@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "watch": "tsc -w",
-    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
+    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./src",
     "prepublishOnly": "pnpm run-s lint build"
   },
   "author": "",
