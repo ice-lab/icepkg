@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg",
-  "version": "1.5.2",
+  "version": "1.5.3-beta.0",
   "description": "Core service of ice component",
   "type": "module",
   "main": "./lib/index.js",
@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "watch": "tsc -w",
-    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./",
+    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./src",
     "prepublishOnly": "pnpm run-s lint build"
   },
   "author": "",
