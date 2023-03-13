@@ -50,7 +50,7 @@ const extractCodePlugin = (options) => {
           idx: index,
           demoFilename,
           demoFilepath,
-          url: path.join(baseUrl.startsWith('/') ? '' : '/', baseUrl, 'demos', demoFilename),
+          url: path.join(baseUrl.startsWith('/') ? '' : '/', baseUrl, 'demos', demoFilename, '/'),
         });
       }
     });
