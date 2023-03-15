@@ -6,7 +6,7 @@ import type { ParserPlugin } from '@babel/parser';
 import { Plugin } from 'rollup';
 import { scriptsFilter } from '../utils.js';
 
-const getParserPlugins = (isTs?: boolean): ParserPlugin[] => {
+const getParserPlugins = (isTS?: boolean): ParserPlugin[] => {
   const commonPlugins: ParserPlugin[] = [
     'jsx',
     'importMeta',
@@ -15,7 +15,7 @@ const getParserPlugins = (isTs?: boolean): ParserPlugin[] => {
     'classPrivateMethods',
   ];
 
-  if (isTs) {
+  if (isTS) {
     return [
       ...commonPlugins,
       'typescript',
@@ -59,12 +59,23 @@ const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): 
         },
         plugins,
         presets: [
-          ['@babel/preset-typescript'],
-          ['@babel/preset-react', {
-            pragma,
-            pragmaFrag,
-            throwIfNamespace: false,
-          }],
+          [
+            '@babel/preset-typescript',
+            {
+              isTSX: /\.tsx?$/.test(id),
+              allExtensions: true,
+              jsxPragma: pragma,
+              jsxPragmaFrag: pragmaFrag,
+            },
+          ],
+          [
+            '@babel/preset-react',
+            {
+              pragma,
+              pragmaFrag,
+              throwIfNamespace: false,
+            },
+          ],
         ],
         sourceFileName: id,
       });
