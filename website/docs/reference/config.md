@@ -374,6 +374,30 @@ export default defineConfig({
 });
 ```
 
+#### filename
+
++ 类型：`string`
++ 默认值：`[entryName]`
+
+设置打包产物的文件名。
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  bundle: {
+    filename: 'test'
+  },
+});
+```
+
+则会打包生成以下的产物：
+
+```md
+./dist
+└── test.esm.es5.production.js
+```
+
 #### externals
 
 + 类型：`boolean | Record<string, string>`
