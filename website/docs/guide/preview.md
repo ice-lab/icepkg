@@ -5,7 +5,7 @@ ICE PKG 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tr
 在使用文档预览功能前，你需要先手动安装 `@ice/pkg-plugin-docusaurus` 插件：
 
 ```shell
-npm install @ice/pkg-plugin-docusaurus --save-dev
+$ npm install @ice/pkg-plugin-docusaurus --save-dev
 ```
 
 并在配置文件中配置插件：
