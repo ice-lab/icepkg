@@ -1,6 +1,6 @@
 # @ice/pkg
 
-A fast builder for React components、Node modules and web libraries.
+A fast builder for React components, Node modules and web libraries.
 
 <figure style={{
   fontSize:'13px',
