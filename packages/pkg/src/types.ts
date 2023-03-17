@@ -44,6 +44,12 @@ export interface BundleUserConfig {
    */
   name?: string;
   /**
+   * The filename of the output file.
+   * For example: set `test` to the filename config, the output filename is test.umd.es5.production.js
+   * @default the entry name
+   */
+  filename?: string;
+  /**
    * Output directory
    * @default dist
    */

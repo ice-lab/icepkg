@@ -169,8 +169,8 @@ function getRollupOutputs({
     sourcemap: bundleTaskConfig.sourcemap,
     exports: 'auto',
     dir: outputDir,
-    assetFileNames: getFilename('[name]', format, esVersion, mode, '[ext]'),
-    entryFileNames: getFilename('[name]', format, esVersion, mode, 'js'),
+    assetFileNames: getFilename(bundleTaskConfig.filename || '[name]', format, esVersion, mode, '[ext]'),
+    entryFileNames: getFilename(bundleTaskConfig.filename || '[name]', format, esVersion, mode, 'js'),
     chunkFileNames: getFilename('[hash]', format, esVersion, mode, 'js'),
     manualChunks: format !== 'umd' ? ((id) => {
       if (id.includes('node_modules')) {
