@@ -28,7 +28,7 @@ export default defineConfig({
 大功告成。你可以通过以下命令启动预览：
 
 ```shell
-# 若存在 docs 文件夹，则默认启动文档预览；并启动 es/lib 编译
+# 若存在 docs 文件夹，则默认启动本地文档预览服务
 $ npm start
 
 # 若存在 docs 文件夹，则默认构建预览产物

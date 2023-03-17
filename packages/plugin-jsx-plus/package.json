@@ -42,7 +42,7 @@
     "babel-plugin-transform-jsx-slot": "^0.1.2"
   },
   "devDependencies": {
-    "@ice/pkg": "^1.5.3-beta.0"
+    "@ice/pkg": "^1.5.3"
   },
   "publishConfig": {
     "access": "public",
