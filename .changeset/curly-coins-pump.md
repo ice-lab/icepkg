@@ -2,4 +2,4 @@
 '@ice/create-pkg': minor
 ---
 
-feat: support generate sub package in workspace
+feat: support `-w` option to generate sub package in workspace
