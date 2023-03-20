@@ -12,8 +12,18 @@
     "!lib/**/*.map"
   ],
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.14.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ice-lab/icepkg.git",
+    "directory": "packages/create-pkg"
+  },
+  "bugs": {
+    "url": "https://github.com/ice-lab/icepkg/issues"
+  },
+  "homepage": "https://pkg.ice.work",
+  "license": "MIT",
   "scripts": {
     "watch": "tsc -w",
     "build": "rm -rf lib && tsc"

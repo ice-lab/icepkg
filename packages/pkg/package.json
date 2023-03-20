@@ -1,7 +1,7 @@
 {
   "name": "@ice/pkg",
   "version": "1.5.3",
-  "description": "Core service of ice component",
+  "description": "A fast builder for React components, Node modules and web libraries.",
   "type": "module",
   "main": "./lib/index.js",
   "exports": "./lib/index.js",
@@ -19,11 +19,19 @@
     "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./src",
     "prepublishOnly": "pnpm run-s lint build"
   },
-  "author": "",
   "license": "MIT",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.14.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ice-lab/icepkg.git",
+    "directory": "packages/pkg"
+  },
+  "bugs": {
+    "url": "https://github.com/ice-lab/icepkg/issues"
+  },
+  "homepage": "https://pkg.ice.work",
   "dependencies": {
     "@ampproject/remapping": "^2.0.3",
     "@babel/core": "^7.17.5",
