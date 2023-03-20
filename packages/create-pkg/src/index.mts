@@ -9,7 +9,7 @@ import inquirer from 'inquirer';
 import { downloadMaterialTemplate, generateMaterial } from '@iceworks/generate-material';
 import getInfo from './langs/index.js';
 import { checkEmpty } from './checkEmpty.js';
-import { inquireProjectType } from './inquireProjectType.js';
+import inquireTemplateNpmName from './inquireTemplateNpmName.js';
 import { inquirePackageName } from './inquirePackageName.js';
 import removeFilesAndContent from './removeFilesAndContent.js';
 
@@ -35,7 +35,7 @@ interface CliOptions {
     .option('-w, --workspace', 'Create a package to your workspaces. For example: npm init @ice/pkg -w packages/a')
     .action(async (projectDir, options) => {
       const targetDirname = projectDir ?? '.';
-      const dirPath = path.join(process.cwd(), targetDirname);
+      const dirPath = path.isAbsolute(targetDirname) ? targetDirname : path.join(process.cwd(), targetDirname);
       await create(dirPath, targetDirname, options);
     });
   cli.help();
@@ -72,11 +72,10 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
 
   let templateNpmName = options.template;
   if (!templateNpmName) {
-    const projectType = await inquireProjectType();
-    templateNpmName = `@ice/template-pkg-${projectType}`;
+    templateNpmName = await inquireTemplateNpmName();
   }
 
-  const npmName = options.npmName ?? await inquirePackageName();
+  const npmName = options.npmName ?? templateNpmName.startsWith('@ice/template-pkg-monorepo') ? '' : await inquirePackageName();
 
   await downloadMaterialTemplate(tempDir, templateNpmName);
 
