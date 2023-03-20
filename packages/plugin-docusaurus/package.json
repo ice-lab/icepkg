@@ -1,7 +1,7 @@
 {
   "name": "@ice/pkg-plugin-docusaurus",
   "version": "1.4.4",
-  "description": "Plugin for component previewing",
+  "description": "@ice/pkg plugin for component and docs preview.",
   "main": "es2017/index.mjs",
   "exports": {
     ".": {
@@ -22,11 +22,23 @@
     "./css/custom.css": "./es2017/css/custom.css"
   },
   "files": [
-    "esm",
     "es2017",
     "!esm/**/*.map",
     "!es2017/**/*.map"
   ],
+  "engines": {
+    "node": ">=16.14.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ice-lab/icepkg.git",
+    "directory": "packages/plugin-docusaurus"
+  },
+  "bugs": {
+    "url": "https://github.com/ice-lab/icepkg/issues"
+  },
+  "homepage": "https://pkg.ice.work",
   "scripts": {
     "watch": "ice-pkg start",
     "build": "ice-pkg build",
@@ -68,7 +80,7 @@
   "devDependencies": {
     "@algolia/client-search": "^4.9.1",
     "@types/react": "^17.0.0",
-    "@ice/pkg": "^1.5.3-beta.0",
+    "@ice/pkg": "^1.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.9.3",
