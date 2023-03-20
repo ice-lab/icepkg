@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.4
+
+### Patch Changes
+
+- e9a8a4b: chore: update fields in package.json
+- b83a6da: feat: support create monorepo project
+- 96a6400: fix: lose createElement module in rax component
+
 ## 1.5.3
 
 ### Patch Changes
