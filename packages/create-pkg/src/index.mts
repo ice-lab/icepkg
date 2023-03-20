@@ -9,7 +9,7 @@ import inquirer from 'inquirer';
 import { downloadMaterialTemplate, generateMaterial } from '@iceworks/generate-material';
 import getInfo from './langs/index.js';
 import { checkEmpty } from './checkEmpty.js';
-import { inquireProjectType } from './inquireProjectType.js';
+import inquireTemplateNpmName from './inquireTemplateNpmName.js';
 import { inquirePackageName } from './inquirePackageName.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -27,7 +27,7 @@ const cli = cac('@ice/create-pkg');
     .option('--npmName <npmName>', 'use a template e.g.: @ice/react-component')
     .action(async (projectDir, options) => {
       const targetDirname = projectDir ?? '.';
-      const dirPath = path.join(process.cwd(), targetDirname);
+      const dirPath = path.isAbsolute(targetDirname) ? targetDirname : path.join(process.cwd(), targetDirname);
       await create(dirPath, targetDirname, options.template, options.npmName);
     });
   cli.help();
@@ -64,11 +64,10 @@ async function create(dirPath: string, dirname: string, template?: string, npmNa
 
   let templateNpmName = template;
   if (!templateNpmName) {
-    const projectType = await inquireProjectType();
-    templateNpmName = `@ice/template-pkg-${projectType}`;
+    templateNpmName = await inquireTemplateNpmName();
   }
 
-  npmName = npmName ?? await inquirePackageName();
+  npmName = npmName ?? templateNpmName.startsWith('@ice/template-pkg-monorepo') ? '' : await inquirePackageName();
 
   await downloadMaterialTemplate(tempDir, templateNpmName);
 
