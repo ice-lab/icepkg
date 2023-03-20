@@ -1,7 +1,8 @@
 import * as React from 'react';
+import './index.less';
 
 export default function () {
   return (
-    <div>Index</div>
+    <div className="container">Index</div>
   );
 }
