@@ -67,7 +67,7 @@ async function create(dirPath: string, dirname: string, template?: string, npmNa
     templateNpmName = await inquireTemplateNpmName();
   }
 
-  npmName = npmName ?? !templateNpmName.startsWith('@ice/template-pkg-monorepo') ? await inquirePackageName() : '';
+  npmName = npmName ?? templateNpmName.startsWith('@ice/template-pkg-monorepo') ? '' : await inquirePackageName();
 
   await downloadMaterialTemplate(tempDir, templateNpmName);
 
