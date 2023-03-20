@@ -27,7 +27,7 @@ const cli = cac('@ice/create-pkg');
     .option('--npmName <npmName>', 'use a template e.g.: @ice/react-component')
     .action(async (projectDir, options) => {
       const targetDirname = projectDir ?? '.';
-      const dirPath = path.join(process.cwd(), targetDirname);
+      const dirPath = path.isAbsolute(targetDirname) ? targetDirname : path.join(process.cwd(), targetDirname);
       await create(dirPath, targetDirname, options.template, options.npmName);
     });
   cli.help();
