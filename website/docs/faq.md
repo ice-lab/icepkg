@@ -31,12 +31,4 @@ $ npm i @swc/helpers --save
 
 ## `Error: Can't resolve 'sass-loader' in ...`
 
-出现这个报错的原因是在使用 docusaurus 插件时，docusaurus 无法正常 resolve 到 `sass-loader` 依赖。解决方案是暂时先安装一下依赖：
-
-```bash
-# 使用 scss
-$ npm i sass-loader -D
-
-# 使用 less
-$ npm i less-loader -D
-```
+出现这个报错的原因是在使用 docusaurus 插件时，docusaurus 无法正常 resolve 到 `sass-loader` 依赖。请更新 `@ice/pkg-plugin-docusaurus` 到最新版本。

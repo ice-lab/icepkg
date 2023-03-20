@@ -21,14 +21,6 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     paths: [__dirname, rootDir],
   });
 
-  const sassDocusaurusPluginPath = require.resolve('docusaurus-plugin-sass', {
-    paths: [__dirname, rootDir],
-  });
-
-  const lessDocusaurusPluginPath = require.resolve('docusaurus-plugin-less', {
-    paths: [__dirname, rootDir],
-  });
-
   const docusaurusPluginContentPagesPath = require.resolve('@docusaurus/plugin-content-pages', {
     paths: [__dirname, rootDir],
   });
@@ -54,8 +46,6 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     haveStaticFiles,
     mobilePreview,
     prismReactRendererPath,
-    sassDocusaurusPluginPath,
-    lessDocusaurusPluginPath,
     docusaurusPluginContentPagesPath,
   });
 
@@ -125,4 +115,3 @@ module.exports = {
     path.join(output, 'hijackCreateElement.js'), hijackCreateElementModuleContent, 'utf-8',
   );
 }
-
