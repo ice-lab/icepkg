@@ -36,6 +36,7 @@ const config = {
               { type: 'doc', id: 'guide/test' },
               { type: 'doc', id: 'guide/preview' },
               { type: 'doc', id: 'guide/jsx-plus' },
+              { type: 'doc', id: 'guide/monorepo' },
               {
                 type: 'category',
                 label: '参考',
