@@ -11,10 +11,17 @@ import getInfo from './langs/index.js';
 import { checkEmpty } from './checkEmpty.js';
 import inquireTemplateNpmName from './inquireTemplateNpmName.js';
 import { inquirePackageName } from './inquirePackageName.js';
+import removeFilesAndContent from './removeFilesAndContent.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const cli = cac('@ice/create-pkg');
+
+interface CliOptions {
+  template?: string;
+  npmName?: string;
+  workspace?: boolean;
+}
 
 (async () => {
   const info = await getInfo();
@@ -23,12 +30,13 @@ const cli = cac('@ice/create-pkg');
       allowUnknownOptions: false,
       ignoreOptionDefaultValue: true,
     })
-    .option('--template <template>', 'use a template e.g.: @ice/template-pkg-react')
-    .option('--npmName <npmName>', 'use a template e.g.: @ice/react-component')
+    .option('--template <template>', 'Create a package with the template. For example: --template=@ice/template-pkg-react')
+    .option('--npmName <npmName>', 'Specify the package name. For example: --npmName=my-lib')
+    .option('-w, --workspace', 'Create a package to your workspaces. For example: npm init @ice/pkg -w packages/a')
     .action(async (projectDir, options) => {
       const targetDirname = projectDir ?? '.';
       const dirPath = path.isAbsolute(targetDirname) ? targetDirname : path.join(process.cwd(), targetDirname);
-      await create(dirPath, targetDirname, options.template, options.npmName);
+      await create(dirPath, targetDirname, options);
     });
   cli.help();
 
@@ -45,7 +53,7 @@ const cli = cac('@ice/create-pkg');
     process.exit(1);
   });
 
-async function create(dirPath: string, dirname: string, template?: string, npmName?: string): Promise<void> {
+async function create(dirPath: string, dirname: string, options: CliOptions): Promise<void> {
   const info = await getInfo();
   await fs.ensureDir(dirPath);
   const empty = await checkEmpty(dirPath);
@@ -62,12 +70,12 @@ async function create(dirPath: string, dirname: string, template?: string, npmNa
 
   const tempDir = path.join(dirPath, '.tmp');
 
-  let templateNpmName = template;
+  let templateNpmName = options.template;
   if (!templateNpmName) {
     templateNpmName = await inquireTemplateNpmName();
   }
 
-  npmName = npmName ?? templateNpmName.startsWith('@ice/template-pkg-monorepo') ? '' : await inquirePackageName();
+  const npmName = options.npmName ?? templateNpmName.startsWith('@ice/template-pkg-monorepo') ? '' : await inquirePackageName();
 
   await downloadMaterialTemplate(tempDir, templateNpmName);
 
@@ -83,6 +91,10 @@ async function create(dirPath: string, dirname: string, template?: string, npmNa
 
   await fs.remove(tempDir);
 
+  if (options.workspace) {
+    await removeFilesAndContent(dirPath);
+  }
+
   console.log();
   console.log(info.initSuccess);
   console.log();
@@ -91,4 +103,3 @@ async function create(dirPath: string, dirname: string, template?: string, npmNa
   console.log('    npm start');
   console.log();
 }
-
