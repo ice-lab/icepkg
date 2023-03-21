@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.5
+
+### Patch Changes
+
+- 73898e0: fix: sass-loader and less-loader can't be resolved
+- e9a8a4b: chore: update fields in package.json
+- 6ac1c8c: feat: add slash after url to avoid redirect
+
 ## 1.4.4
 
 ### Patch Changes

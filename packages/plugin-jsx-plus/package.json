@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg-plugin-jsx-plus",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ICE PKG plugin for jsx-plus",
   "main": "es2017/index.js",
   "type": "module",
@@ -42,7 +42,7 @@
     "babel-plugin-transform-jsx-slot": "^0.1.2"
   },
   "devDependencies": {
-    "@ice/pkg": "^1.5.3"
+    "@ice/pkg": "^1.5.4"
   },
   "publishConfig": {
     "access": "public",
