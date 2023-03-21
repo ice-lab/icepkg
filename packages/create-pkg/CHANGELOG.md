@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0
+
+### Minor Changes
+
+- b48cb6c: feat: support `-w` option to generate sub package in workspace
+
+### Patch Changes
+
+- e9a8a4b: chore: update fields in package.json
+
 ## 1.2.1
 
 ### Patch Changes

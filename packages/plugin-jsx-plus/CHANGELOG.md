@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- e9a8a4b: chore: update fields in package.json
+
 ## 1.0.1
 
 ### Patch Changes
