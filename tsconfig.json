@@ -1,15 +1,7 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "esnext",
-    "moduleResolution": "Node",
-    "jsx": "react",
-    "experimentalDecorators": true,
-    "declaration": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    // For package self-referencing https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/#package-json-exports-imports-and-self-referencing
+    "moduleResolution": "nodenext",
   }
 }
