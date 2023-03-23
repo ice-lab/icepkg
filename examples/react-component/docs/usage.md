@@ -13,3 +13,16 @@ export default function App () {
   )
 }
 ```
+
+```jsx preview
+import Component from 'example-pkg-react-component';
+
+export default function App () {
+  return (
+    <>
+      <h1>I am Component</h1>
+      <Component />
+    </>
+  )
+}
+```

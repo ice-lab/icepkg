@@ -4,10 +4,10 @@ const uniqueFilename = require('./uniqueFilename.js');
 
 const DOCUSAURUS_DIR = '.docusaurus';
 
-const getDemoFileInfo = ({ rootDir, filepath, lang }) => {
+const getDemoFileInfo = ({ rootDir, code, lang }) => {
   const demoDir = path.join(rootDir, DOCUSAURUS_DIR, 'demos');
   fse.ensureDirSync(demoDir);
-  const demoFilename = uniqueFilename(filepath);
+  const demoFilename = uniqueFilename(code);
   const demoFilepath = path.join(demoDir, `${demoFilename}.${lang}`);
   return { demoFilename, demoFilepath };
 };
