@@ -12,7 +12,7 @@ import styles from './usage.module.css';
 export default function App () {
   return (
     <div className={styles.usageContainer}>
-      <ExampleRaxComponent />
+      <ExampleRaxComponent title="XYZ" />
     </div>
   )
 }

@@ -219,7 +219,16 @@ export default App;
 
 推荐使用 VSCode 插件 [TS in Markdown](https://marketplace.visualstudio.com/items?itemName=amour1688.ts-in-markdown) 以获得类型提示。
 
-推荐使用 `tsx` 代码块以获得类型校验，并需要确保在 `tsconfig.json` 中指定 `"moduleResolution": "nodenext"` 以及在 `package.json` 中导出类型声明文件([参考示例](https://github.com/ice-lab/material-templates/blob/73458ebfef629eaed55e16ead0c3594ddf9f35e5/packages/template-pkg-react/template/component/package.json.ejs#L17))。
+推荐使用 `tsx` 代码块以获得类型校验，并需要确保在 `tsconfig.json` 中指定以下内容：
+```json
+{
+  "paths": {
+    // 假设 my-component 是你的组件名称
+    "my-component": ["./src"],
+    "my-component/*": ["./src/*"]
+  }
+}
+```
 :::
 
 #### 将代码块渲染成移动端预览的样式

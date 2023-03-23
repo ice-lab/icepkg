@@ -3,17 +3,14 @@
     "module": "ESNext",
     "target": "ESNext",
     "jsx": "react",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "sourceMap": true,
-    "allowJs": true,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
+    "strict": true,
     "skipLibCheck": true,
-     "paths": {
+    "paths": {
       "@/*": ["./src/*"],
+      "example-pkg-react-component": ["./src"],
+      "example-pkg-react-component/*": ["./src/*"]
     }
   },
   "include": ["src"],
