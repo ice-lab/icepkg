@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.6
+
+### Patch Changes
+
+- af07864: fix: rpx2vw is invalid in less and scss
+
 ## 1.4.5
 
 ### Patch Changes
