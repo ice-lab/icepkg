@@ -30,6 +30,7 @@ const extractCodePlugin = (options) => {
           rootDir,
           filepath: vfile.path,
           lang,
+          code: node.value,
         });
         const { pageFilename, pageFileCode } = getPageFileInfo({
           rootDir,
@@ -79,7 +80,7 @@ const extractCodePlugin = (options) => {
         value: `import Previewer from '${previewerComponentPath}';`,
       });
 
-      // Import <Browser /> ahead.
+      // Import <BrowserOnly /> ahead.
       ast.children.unshift({
         type: 'import',
         value: "import BrowserOnly from '@docusaurus/BrowserOnly';",
