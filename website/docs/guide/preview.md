@@ -88,19 +88,21 @@ sidebar_position: 1
 
 ## 本 Demo 演示一行文字的用法
 
-```jsx
-import MyComponent from 'my-component';
-import './my-component.css';
+```tsx
+import * as React from 'react';
+import MyButton from 'my-button';
+import './my-button.css';
 
 const App = () => {
   return (
-    <div>
-      <MyComponent />
-    </div>
+    <main>
+      <div>Hello World</div>
+      <MyButton />
+    </main>
   )
 }
 
-export default MyComponent;
+export default App;
 ```
 ````
 ### 文档结构
@@ -178,7 +180,8 @@ sidebar_label: 这是标题
 
 ````
 ```tsx preview
-import AddCount from './Button.tsx';
+import * as React from 'react';
+import AddCount from './Button';
 
 const App = () => {
   return (
@@ -192,8 +195,9 @@ export default App;
 
 下面展示的就是给上述代码块添加 preview 的效果。
 
-```jsx preview
-import AddCount from './Button.tsx';
+```tsx preview
+import * as React from 'react';
+import AddCount from './Button';
 
 const App = () => {
   return (
@@ -208,6 +212,23 @@ export default App;
 
 :::info 仅支持 React 组件和 Rax 组件
 目前只支持为 `jsx`、`tsx` 代码块添加 `preview` 属性。
+:::
+
+:::tip
+在 Markdown 代码块中编写代码会失去类型提示和类型校验。
+
+推荐使用 VSCode 插件 [TS in Markdown](https://marketplace.visualstudio.com/items?itemName=amour1688.ts-in-markdown) 以获得类型提示。
+
+推荐使用 `tsx` 代码块以获得类型校验，并需要确保在 `tsconfig.json` 中指定以下内容：
+```json
+{
+  "paths": {
+    // 假设 my-component 是你的组件名称
+    "my-component": ["./src"],
+    "my-component/*": ["./src/*"]
+  }
+}
+```
 :::
 
 #### 将代码块渲染成移动端预览的样式
@@ -236,15 +257,16 @@ export default defineConfig({
 
 #### 引入当前包的包名
 
-直接引入正在开发的包名 (package.json 中的 name 字段值)，像真实的用户一样在文档中导入你这在开发的包。比如你正在开发一个包名为 `my-component` 的组件：
+直接引入正在开发的包名 (package.json 中的 name 字段值)，像真实的用户一样在文档中导入你这在开发的包。比如你正在开发一个包名为 `my-button` 的组件：
 
-```js
-// 'my-component' 是你正在开发的包名
-import MyComponent from 'my-component';
+```tsx
+import * as React from 'react';
+// 假设 'my-button' 是你正在开发的包名
+import MyButton from 'my-button';
 
 export default function App() {
   return (
-    <MyComponent />
+    <MyButton />
   );
 }
 ```
@@ -254,12 +276,13 @@ export default function App() {
 若想要给代码块定制自定义标题，可以使用 `title` 属性：
 
 ````
-```jsx title=/src/components/index.js
-import MyComponent from 'my-component';
+```tsx title=/src/components/index.jsx
+import * as React from 'react';
+import MyButton from 'my-button';
 
 export default function Index() {
   return (
-    <MyComponent />
+    <MyButton />
   );
 }
 ```
@@ -267,12 +290,14 @@ export default function Index() {
 
 文档渲染效果如下：
 
-```jsx title=/src/components/index.js
-import MyComponent from 'my-component';
+```tsx preview
+import * as React from 'react';
+import MyButton from 'my-button';
 
 export default function Index() {
   return (
-    <MyComponent />
+    // <MyButton>Hello</MyButton>
+    <div>xxx</div>
   );
 }
 ```
