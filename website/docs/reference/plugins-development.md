@@ -303,7 +303,11 @@ const plugin = (api) => {
 + 类型：`swc.Config`
 + 默认值：`{}`
 
-设置 SWC 编译选项，会与默认的选项合并。优先级低于 `modifySwcCompileOptions`。具体编译选项可参考 [SWC 配置](https://swc.rs/docs/configuration/swcrc)。
+:::tip
+推荐使用 [modifySwcCompileOptions](#modifyswccompileoptions) 来修改 SWC 编译选项。
+:::
+
+设置 SWC 编译选项，会与内置的选项合并。优先级低于 `modifySwcCompileOptions`。具体编译选项可参考 [SWC 配置](https://swc.rs/docs/configuration/swcrc)。
 
 ```js
 const plugin = (api) => {
