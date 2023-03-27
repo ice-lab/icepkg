@@ -1,6 +1,6 @@
-import type { PkgPlugin } from '@ice/pkg';
+import type { Plugin } from '@ice/pkg';
 
-const plugin: PkgPlugin = (api) => {
+const plugin: Plugin = (api) => {
   const { onGetConfig } = api;
 
   onGetConfig((config) => {
@@ -18,7 +18,7 @@ const plugin: PkgPlugin = (api) => {
             legacyDecorator: true,
           },
           externalHelpers: true,
-          loose: false, // No recommand
+          loose: false, // No recommend
         },
       },
     };

@@ -168,9 +168,13 @@ interface _TaskConfig {
   modifyRollupOptions?: Array<(rollupOptions: RollupOptions) => RollupOptions>;
   /**
   * Extra swc compile options
-  * @see https://swc.rs/docs/configuration/compilationv
+  * @see https://swc.rs/docs/configuration/compilation
   */
   swcCompileOptions?: Config;
+  /**
+   * Modify swc compile options
+   */
+  modifySwcCompileOptions?: (swcCompileOptions: Config) => Config;
   /**
    * Extra babel plugins
    */

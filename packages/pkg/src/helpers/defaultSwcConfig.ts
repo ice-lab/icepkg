@@ -33,6 +33,7 @@ export const getDefaultBundleSwcConfig = (
       target,
       baseUrl: ctx.rootDir,
       paths: formatAliasToTSPathsConfig(bundleTaskConfig.alias),
+      externalHelpers: true,
     },
     minify: false,
     // Always generate map in bundle mode,
@@ -42,7 +43,7 @@ export const getDefaultBundleSwcConfig = (
     env: {
       targets: browserTargets,
       mode: 'usage',
-      coreJs: '3',
+      coreJs: '3.29',
     },
   };
 };

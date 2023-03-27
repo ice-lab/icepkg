@@ -5,6 +5,7 @@
     "jsx": "react",
     "moduleResolution": "node",
     "lib": ["ESNext"],
+    "outDir": "lib",
     "skipLibCheck": true
   },
   "include": ["src"],
