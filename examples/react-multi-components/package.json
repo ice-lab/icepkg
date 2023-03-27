@@ -9,17 +9,27 @@
     "dist",
     "build"
   ],
-  "module": "esm/Button/index.js",
   "exports": {
     "./Button": {
-      "import": "./esm/Button/index.js",
-      "es2017": "./es2017/Button/index.js"
+      "es2017": {
+        "types": "./es2017/Button/index.d.ts",
+        "default": "./es2017/Button/index.js"
+      },
+      "import": {
+        "types": "./esm/Button/index.d.ts",
+        "default": "./esm/Button/index.js"
+      }
     },
     "./Avatar": {
-      "import": "./esm/Avatar/index.js",
-      "es2017": "./es2017/Avatar/index.js"
-    },
-    "./*": "./*"
+      "es2017": {
+        "types": "./es2017/Avatar/index.d.ts",
+        "default": "./es2017/Avatar/index.js"
+      },
+      "import": {
+        "types": "./esm/Avatar/index.d.ts",
+        "default": "./esm/Avatar/index.js"
+      }
+    }
   },
   "sideEffects": [
     "dist/*",
