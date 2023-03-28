@@ -4,7 +4,7 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   plugins: [
     ['@ice/pkg-plugin-docusaurus', { /* outputDir: './docusaurus-build', */ }],
-    'pkg-plugin-example',
+    'example-pkg-plugin',
   ],
   transform: {
     formats: ['esm', 'es2017'],
