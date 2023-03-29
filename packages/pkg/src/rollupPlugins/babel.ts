@@ -36,6 +36,7 @@ const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): 
     pragma = 'React.createElement',
     pragmaFrag = 'React.Fragment',
   } = options;
+  debugger;
   return {
     name: 'ice-pkg:babel',
 
@@ -60,20 +61,18 @@ const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): 
         plugins,
         presets: [
           [
-            '@babel/preset-typescript',
-            {
-              isTSX: /\.tsx?$/.test(id),
-              allExtensions: true,
-              jsxPragma: pragma,
-              jsxPragmaFrag: pragmaFrag,
-            },
-          ],
-          [
             '@babel/preset-react',
             {
               pragma,
               pragmaFrag,
               throwIfNamespace: false,
+            },
+          ],
+          [
+            '@babel/preset-typescript',
+            {
+              jsxPragma: pragma,
+              jsxPragmaFrag: pragmaFrag,
             },
           ],
         ],
