@@ -4,7 +4,7 @@ module.exports = {
     minimize: false,
   },
   resolve: {
-    conditionNames: ['esnext'],
+    conditionNames: ['es2017'],
   },
   entry: './index.js',
   module: {
