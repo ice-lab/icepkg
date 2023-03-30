@@ -45,7 +45,7 @@ export const getDefaultBundleSwcConfig = (
     // 由 env 字段统一处理 syntax & polyfills
     env: {
       targets: browserTargets,
-      mode: 'entry',
+      mode: 'usage',
       coreJs: require('core-js/package.json').version,
     },
   };
