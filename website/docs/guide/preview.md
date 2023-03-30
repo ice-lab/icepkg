@@ -1,6 +1,9 @@
 # 文档预览
 
-ICE PKG 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+使用依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件，依托 [Docusaurus](https://docusaurus.io/) 提供的能力，支持编写组件/库文档和预览组件。所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
 
 在使用文档预览功能前，你需要先手动安装 `@ice/pkg-plugin-docusaurus` 插件：
 
@@ -341,7 +344,7 @@ export default defineConfig({
 });
 ```
 
-更多关于 sidebarItemsGenerator 的用法请见 [Docusaurus 文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#sidebarItemsGenerator)。
+更多关于 `sidebarItemsGenerator` 的用法请见 [Docusaurus 文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#sidebarItemsGenerator)。
 
 ## 自定义文档首页
 
@@ -463,7 +466,7 @@ export default defineConfig({
 
 - 类型：`SidebarGenerator`
 
-自定义 sidebar。
+自定义 sidebar 内容，详细说明见 [Docusaurus 文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#sidebarItemsGenerator)。
 
 #### mobilePreview
 
@@ -497,7 +500,7 @@ export default defineConfig({
 - 类型：`string`
 - 默认值：`'/'`
 
-文档基准路由，类似于 React Router 中的 `basename`。比如以下的目录结构默认的页面路由如下：
+文档基准路由，类似于 React Router 中的 `basename`，配置时需要注意的是首个字符不能是 `/`。比如以下的目录结构对应的页面路由如下：
 
 | 页面路径           | 路由          |
 | ------------------ | ------------- |
@@ -516,7 +519,7 @@ export default defineConfig({
 - 类型：`string`
 - 默认值：`'/pages'`
 
-页面基准路由，类似于 React Router 中的 `basename`。比如以下的目录结构默认的页面路由如下：
+页面基准路由，类似于 React Router 中的 `basename`。比如以下的目录结构对应的页面路由如下：
 
 | 页面路径           | 路由          |
 | ------------------ | ------------- |
@@ -525,10 +528,17 @@ export default defineConfig({
 
 #### plugins
 
-添加额外的 [Docusaurus 插件](https://docusaurus.io/docs/api/plugin-methods)。
+添加额外的 [Docusaurus 插件](https://docusaurus.io/docs/api/plugin-methods)，以扩展更多 Docusaurus 的能力。
+
+<Tabs>
+
+<TabItem value="build.config.mts" label="build.config.mts">
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 export default defineConfig({
   plugins: [
@@ -536,10 +546,31 @@ export default defineConfig({
       '@ice/pkg-plugin-docusaurus', 
       {
         plugins: [
-          // ...
+          // 添加本地的 docusaurus 插件
+          require.resolve('./docusaurus-plugin.js'),
+          // 你也可以添加插件包
+          '@docusaurus/plugin-pwa',
         ]
       },
     ],
   ],
 });
 ```
+
+</TabItem>
+
+<TabItem value="docusaurus-plugin.js" label="docusaurus-plugin.js">
+
+```js
+module.exports = function (context, options) {
+  return {
+    name: 'docusaurus-plugin',
+    async contentLoaded({ content, actions }) {
+      console.log(content);
+    },
+  };
+};
+```
+
+</TabItem>
+</Tabs>
