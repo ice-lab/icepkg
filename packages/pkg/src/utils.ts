@@ -17,6 +17,8 @@ import type {
 } from '@ampproject/remapping';
 import type { FSWatcher } from 'chokidar';
 
+const require = createRequire(import.meta.url);
+
 export function toArray<T>(any: T | T[]): T[] {
   return Array.isArray(any) ? any : [any];
 }
@@ -194,8 +196,6 @@ export function combineSourcemaps(
 
   return map as RawSourceMap;
 }
-
-export const require = createRequire(import.meta.url);
 
 export const safeRequire = (filePath: string) => {
   try {

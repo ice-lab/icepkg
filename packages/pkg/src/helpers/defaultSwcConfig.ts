@@ -9,6 +9,9 @@ import {
 import type { Config, ModuleConfig } from '@swc/core';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
 import formatAliasToTSPathsConfig from './formatAliasToTSPathsConfig.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 export const getDefaultBundleSwcConfig = (
   bundleTaskConfig: BundleTaskConfig,
@@ -42,8 +45,8 @@ export const getDefaultBundleSwcConfig = (
     // 由 env 字段统一处理 syntax & polyfills
     env: {
       targets: browserTargets,
-      mode: 'usage',
-      coreJs: '3.29',
+      mode: 'entry',
+      coreJs: require('core-js/package.json').version,
     },
   };
 };

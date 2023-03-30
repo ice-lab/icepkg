@@ -31,7 +31,6 @@ import {
   timeFrom,
   createDebugger,
   safeRequire,
-  require,
 } from '../utils.js';
 import MagicString from 'magic-string';
 import type { FSWatcher } from 'chokidar';
@@ -40,9 +39,11 @@ import { performance } from 'perf_hooks';
 import { SourceMapConsumer } from 'source-map';
 import type * as postcss from 'postcss';
 import { createLogger } from './logger.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 export const FS_PREFIX = '/@fs/';
-
 interface SourceMapV3 {
   file?: string | null;
   names: string[];

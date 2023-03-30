@@ -60,7 +60,13 @@ const swcPlugin = (jsxRuntime: TaskConfig['jsxRuntime'], extraSwcOptions?: Confi
   return {
     name: 'ice-pkg:swc',
 
-    transform(_, id) {
+    async transform(source, id) {
+      // Automatic add `core-js` module to the entry
+      const moduleInfo = this.getModuleInfo(id);
+      if (moduleInfo && moduleInfo.isEntry && extraSwcOptions.env?.mode === 'entry') {
+        source += "import 'core-js';\n";
+      }
+
       if (!scriptsFilter(id)) {
         return null;
       }
@@ -72,7 +78,7 @@ const swcPlugin = (jsxRuntime: TaskConfig['jsxRuntime'], extraSwcOptions?: Confi
       };
 
       const { code, map } = swc.transformSync(
-        _,
+        source,
         normalizeSwcConfig(file, jsxRuntime, {
           ...extraSwcOptions,
           // Disable minimize on every file transform when bundling

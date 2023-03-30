@@ -51,6 +51,7 @@
     "cac": "^6.7.12",
     "chokidar": "^3.5.3",
     "consola": "^2.15.3",
+    "core-js": "3.29.1",
     "debug": "^4.3.3",
     "deepmerge": "^4.2.2",
     "escape-string-regexp": "^5.0.0",
