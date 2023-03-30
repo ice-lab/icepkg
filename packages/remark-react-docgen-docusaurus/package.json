@@ -1,6 +1,6 @@
 {
   "name": "@ice/remark-react-docgen-docusaurus",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "A remark plugin to generate react components doc with docusaurus.",
   "files": [
     "cjs"
