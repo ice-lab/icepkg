@@ -19,7 +19,7 @@ export const getDefaultBundleSwcConfig = (
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? {
     // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
     chrome: 61,
-    safari: 10.1,
+    safari: 11,
     firefox: 60,
     edge: 16,
     ios: 11,
@@ -33,6 +33,7 @@ export const getDefaultBundleSwcConfig = (
       target,
       baseUrl: ctx.rootDir,
       paths: formatAliasToTSPathsConfig(bundleTaskConfig.alias),
+      externalHelpers: true,
     },
     minify: false,
     // Always generate map in bundle mode,
@@ -42,7 +43,7 @@ export const getDefaultBundleSwcConfig = (
     env: {
       targets: browserTargets,
       mode: 'usage',
-      coreJs: '3',
+      coreJs: '3.29',
     },
   };
 };

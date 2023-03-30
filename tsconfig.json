@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "module": "esnext",
-    "moduleResolution": "Node",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "jsx": "react",
     "experimentalDecorators": true,
     "declaration": true,
@@ -10,6 +10,14 @@
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "paths": {
+      "example-pkg-react-component": ["./examples/react-component/src"],
+      "example-pkg-react-component/*": ["./examples/react-component/src/*"],
+      "example-pkg-react-multi-components": ["./examples/react-multi-components/src"],
+      "example-pkg-react-multi-components/*": ["./examples/react-multi-components/src/*"],
+      "example-rax-component": ["./examples/rax-component/src"],
+      "example-rax-component/*": ["./examples/rax-component/src/*"]
+    }
+  },
 }

@@ -29,18 +29,24 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
   config.sourcemap = config.sourcemap ?? command === 'start';
 
   if (config.type === 'bundle') {
-    config.swcCompileOptions = deepmerge(
-      getDefaultBundleSwcConfig(config, context, taskName),
-      config.swcCompileOptions || {},
-    );
+    const defaultBundleSwcConfig = getDefaultBundleSwcConfig(config, context, taskName);
+    config.swcCompileOptions = typeof config.modifySwcCompileOptions === 'function' ?
+      config.modifySwcCompileOptions(defaultBundleSwcConfig) :
+      deepmerge(
+        defaultBundleSwcConfig,
+        config.swcCompileOptions || {},
+      );
   } else if (config.type === 'transform') {
     config.outputDir = getTransformDefaultOutputDir(rootDir, taskName);
     const mode = command === 'build' ? 'production' : 'development';
     config.modes = [mode];
-    config.swcCompileOptions = deepmerge(
-      getDefaultTransformSwcConfig(config, context, taskName, mode),
-      config.swcCompileOptions || {},
-    );
+    const defaultTransformSwcConfig = getDefaultTransformSwcConfig(config, context, taskName, mode);
+    config.swcCompileOptions = typeof config.modifySwcCompileOptions === 'function' ?
+      config.modifySwcCompileOptions(defaultTransformSwcConfig) :
+      deepmerge(
+        defaultTransformSwcConfig,
+        config.swcCompileOptions || {},
+      );
   } else {
     throw new Error('Invalid task type.');
   }

@@ -28,6 +28,9 @@ const plugin: Plugin = (api) => {
     config.modifyStylesOptions.push((options) => {
       return options;
     });
+    config.modifySwcCompileOptions = (originOptions) => {
+      return originOptions;
+    };
   };
 
   onGetConfig(TaskName.BUNDLE_ES2017, bundleTaskCallback);

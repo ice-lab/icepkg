@@ -279,13 +279,35 @@ const plugin = (api) => {
   });
 };
 ```
+#### modifySwcCompileOptions
+
++ 类型：`(config: swc.Config) => swc.Config`
++ 默认值：`undefined`
+
+用于修改 SWC 编译选项，函数入参是内置的 SWC 配置。具体编译选项可参考 [SWC 配置](https://swc.rs/docs/configuration/swcrc)。
+
+```js
+const plugin = (api) => {
+  const { onGetConfig } = api;
+  onGetConfig(config => {
+    config.modifySwcCompileOptions = (originOptions) => {
+      const newOptions = { ...originOptions, env: { } };
+      return newOptions;
+    }
+  });
+};
+```
 
 #### swcCompileOptions
 
 + 类型：`swc.Config`
 + 默认值：`{}`
 
-swc 编译选项，会与默认的选项合并。具体编译选项可参考 [swc 配置](https://swc.rs/docs/configuration/swcrc)。
+:::tip
+推荐使用 [modifySwcCompileOptions](#modifyswccompileoptions) 来修改 SWC 编译选项。
+:::
+
+设置 SWC 编译选项，会与内置的选项合并。优先级低于 `modifySwcCompileOptions`。具体编译选项可参考 [SWC 配置](https://swc.rs/docs/configuration/swcrc)。
 
 ```js
 const plugin = (api) => {

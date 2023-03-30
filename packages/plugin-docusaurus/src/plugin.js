@@ -15,7 +15,6 @@ const raxAliasMap = {
 
 module.exports = function (context) {
   const { siteDir } = context;
-  const pkgMeta = require(path.resolve(siteDir, 'package.json'));
 
   const requireOptions = { paths: [siteDir, __dirname] };
 
@@ -40,8 +39,89 @@ module.exports = function (context) {
   };
 
   return {
-    name: 'docusaurus-plugin',
-    configureWebpack(config) {
+    name: 'icepkg:docusaurus-plugin',
+    configureWebpack(config, isServer, utils) {
+      const { getStyleLoaders } = utils;
+      const isProd = process.env.NODE_ENV === 'production';
+      config.module.rules.push(
+        // Fork from https://github.com/rlamana/docusaurus-plugin-sass/blob/master/docusaurus-plugin-sass.js
+        // Use `require.resolve()` to resolve the sass-loader because it can not be resolved in ICE PKG project.
+        {
+          test: /\.s[ca]ss$/,
+          oneOf: [
+            {
+              test: /\.module\.s[ca]ss$/,
+              use: [
+                ...getStyleLoaders(isServer, {
+                  modules: {
+                    localIdentName: isProd
+                      ? '[local]_[hash:base64:4]'
+                      : '[local]_[path][name]',
+                    exportOnlyLocals: isServer,
+                  },
+                  importLoaders: 2,
+                  sourceMap: !isProd,
+                }), {
+                  loader: require.resolve('sass-loader'),
+                },
+              ],
+            },
+            {
+              use: [
+                ...getStyleLoaders(isServer), {
+                  loader: require.resolve('sass-loader'),
+                },
+              ],
+            },
+          ],
+        },
+        // Fork from https://github.com/nonoroazoro/docusaurus-plugin-less/blob/master/index.js
+        // Use `require.resolve()` to resolve the less-loader because it can not be resolved in ICE PKG project.
+        {
+          test: /\.less$/,
+          oneOf: [
+            {
+              test: /\.module\.less$/,
+              use: [
+                ...getStyleLoaders(
+                  isServer,
+                  {
+                    modules: {
+                      localIdentName: isProd
+                        ? '[sha1:hash:hex:5]'
+                        : '[name]_[local]',
+                      exportOnlyLocals: isServer,
+                    },
+                    importLoaders: 1,
+                    sourceMap: !isProd,
+                  },
+                ),
+                {
+                  loader: require.resolve('less-loader'),
+                  options: {
+                    lessOptions: {
+                      javascriptEnabled: true,
+                    },
+                  },
+                },
+              ],
+            },
+            {
+              use: [
+                ...getStyleLoaders(isServer),
+                {
+                  loader: require.resolve('less-loader'),
+                  options: {
+                    lessOptions: {
+                      javascriptEnabled: true,
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      );
       const cssRules = config.module.rules.filter((rule) => {
         const testRegExpStr = rule.test.toString();
         // eslint-disable-no-useless-escape

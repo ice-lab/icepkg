@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PcPreview from './PC';
+import PCPreview from './PC';
 import MobilePreview from './Mobile';
 
 interface PreviewerProps {
@@ -22,9 +22,9 @@ const Previewer: React.FunctionComponent<React.PropsWithChildren<PreviewerProps>
     return <MobilePreview code={deserializedCode} url={url} />;
   } else {
     return (
-      <PcPreview code={deserializedCode}>
+      <PCPreview code={deserializedCode}>
         {children}
-      </PcPreview>
+      </PCPreview>
     );
   }
 };

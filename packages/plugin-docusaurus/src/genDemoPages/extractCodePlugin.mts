@@ -17,9 +17,16 @@ export default function getExtractCodePlugin(filepath: string, rootDir: string) 
         if (node.meta === 'preview') {
           const { lang } = node;
           checkCodeLang(lang);
-          const { demoFilename, demoFilepath } = getDemoFileInfo({ rootDir, filepath, lang });
+          const { demoFilename, demoFilepath } = getDemoFileInfo({ rootDir, code: node.value, lang });
           const { pageFilename, pageFileCode } = getPageFileInfo({ rootDir, demoFilepath, demoFilename });
-          genDemoPages({ filepath, code: node.value, demoFilename, demoFilepath, pageFilename, pageFileCode });
+          genDemoPages({
+            filepath,
+            code: node.value,
+            demoFilename,
+            demoFilepath,
+            pageFilename,
+            pageFileCode,
+          });
         }
       });
     };

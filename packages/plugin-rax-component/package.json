@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg-plugin-rax-component",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Rax component plugin for @ice/pkg",
   "main": "lib/index.js",
   "type": "module",
@@ -9,6 +9,19 @@
     "lib",
     "!lib/**/*.map"
   ],
+  "engines": {
+    "node": ">=16.14.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ice-lab/icepkg.git",
+    "directory": "packages/plugin-rax-component"
+  },
+  "bugs": {
+    "url": "https://github.com/ice-lab/icepkg/issues"
+  },
+  "homepage": "https://pkg.ice.work",
+  "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && tsc",
     "watch": "tsc -w",
@@ -19,7 +32,7 @@
     "rax-compat": "^0.1.5"
   },
   "devDependencies": {
-    "@ice/pkg": "^1.5.3-beta.0",
+    "@ice/pkg": "^1.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.9.4"

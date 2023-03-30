@@ -11,4 +11,6 @@ export default {
   nodeModule: 'Node 模块',
   reactComponent: 'React 组件',
   raxComponent: 'Rax 组件',
+  reactMonorepo: 'Monorepo React 组件',
+  nodeMonorepo: 'Monorepo Node 模块',
 };

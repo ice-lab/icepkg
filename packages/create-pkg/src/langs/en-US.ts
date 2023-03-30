@@ -11,4 +11,6 @@ export default {
   nodeModule: 'Node Module',
   reactComponent: 'React Component',
   raxComponent: 'Rax Component',
+  reactMonorepo: 'Monorepo React Components',
+  nodeMonorepo: 'Monorepo Node Libs',
 };

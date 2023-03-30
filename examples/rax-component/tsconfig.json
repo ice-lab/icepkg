@@ -5,14 +5,13 @@
     "jsx": "preserve",
     "jsxFactory": "createElement",
     "moduleResolution": "node",
-    "lib": ["ES2017", "DOM"],
-    "sourceMap": true,
-    "allowJs": true,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
+    "lib": ["ES2017", "DOM", "DOM.Iterable"],
+    "strict": true,
     "skipLibCheck": true,
+    "paths": {
+      "example-rax-component": ["./src"],
+      "example-rax-component/*": ["./src/*"]
+    },
     "types": ["vitest/globals"]
   },
   "include": ["src", "tests"],
