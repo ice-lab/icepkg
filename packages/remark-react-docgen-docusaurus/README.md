@@ -1,6 +1,6 @@
 # @ice/remark-react-docgen-docusaurus
 
-组件功能描述
+A remark plugin(based on [react-docgen](https://github.com/reactjs/react-docgen/tree/5.x)) to automatic generate react component docs in [Docusaurus](https://docusaurus.io/) or [ICE PKG](http://pkg.ice.work/)
 
 ## Install
 
@@ -10,7 +10,7 @@ $ npm i @ice/remark-react-docgen-docusaurus --save-dev
 
 ## Usage
 
-First,we need to add the plugin to the config:
+First, we need to add the plugin to the config:
 
 If you use it in Docusaurus, add the plugin to the `docusaurus.config.js`:
 
@@ -64,4 +64,4 @@ Add the `<ReactDocgenProps />` component to the markdown:
 
 Finally, you can run the command `npm run start`, you can see the following:
 
-<img width="553" alt="image" src="https://user-images.githubusercontent.com/44047106/228724542-fa03a49d-da5b-481c-97ea-b0b06e53cb2a.png">
+<img width="771" alt="image" src="https://user-images.githubusercontent.com/44047106/228744573-e52c7a0f-4327-4b46-8c03-bcd4cb1a4934.png">
