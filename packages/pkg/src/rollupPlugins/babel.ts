@@ -60,18 +60,18 @@ const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): 
         plugins,
         presets: [
           [
+            '@babel/preset-typescript',
+            {
+              jsxPragma: pragma,
+              jsxPragmaFrag: pragmaFrag,
+            },
+          ],
+          [
             '@babel/preset-react',
             {
               pragma,
               pragmaFrag,
               throwIfNamespace: false,
-            },
-          ],
-          [
-            '@babel/preset-typescript',
-            {
-              jsxPragma: pragma,
-              jsxPragmaFrag: pragmaFrag,
             },
           ],
         ],
