@@ -17,8 +17,8 @@ import { Button } from 'example-pkg-react-component';
 export default function App () {
   return (
     <div>
-      <Button>Normal</Button>
-      <Button type="primary">Primary</Button>
+      <Button loading={false}>Normal</Button>
+      <Button type="primary" loading={false}>Primary</Button>
     </div>
   )
 }

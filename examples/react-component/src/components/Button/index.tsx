@@ -13,7 +13,7 @@ interface ButtonProps {
   /**
    * 显式加载状态
    */
-  loading?: boolean;
+  loading: boolean;
   /**
    * 点击按钮时的回调
    */
@@ -43,7 +43,6 @@ Button.defaultProps = {
   type: 'default',
   onClick: () => { },
   href: undefined,
-  loading: false,
 };
 
 export default Button;
