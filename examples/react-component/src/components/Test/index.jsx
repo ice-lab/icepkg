@@ -6,6 +6,7 @@ import './index.css';
  * Test component
  */
 const Test = ({ title }) => {
+  // eslint-disable-next-line
   console.log(__DEV__);
   console.log(process.env.NODE_ENV);
 

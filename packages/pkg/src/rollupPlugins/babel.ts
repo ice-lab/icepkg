@@ -36,7 +36,6 @@ const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): 
     pragma = 'React.createElement',
     pragmaFrag = 'React.Fragment',
   } = options;
-  debugger;
   return {
     name: 'ice-pkg:babel',
 
