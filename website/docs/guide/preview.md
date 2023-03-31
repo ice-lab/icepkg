@@ -3,7 +3,7 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-使用依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件，依托 [Docusaurus](https://docusaurus.io/) 提供的能力，支持编写组件/库文档和预览组件。所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
+使用 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件，依托 [Docusaurus](https://docusaurus.io/) 提供的能力，支持编写组件/库文档和预览组件。所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
 
 在使用文档预览功能前，你需要先手动安装 `@ice/pkg-plugin-docusaurus` 插件：
 
