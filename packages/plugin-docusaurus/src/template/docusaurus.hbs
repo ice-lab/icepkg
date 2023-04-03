@@ -47,6 +47,11 @@ const config = {
         {{/if}}
           remarkPlugins: [
             [extractCode, { mobilePreview: {{mobilePreview}}, baseUrl: '{{baseUrl}}' }],
+        {{#if remarkPlugins}}
+          {{#each remarkPlugins}}
+            {{{this}}},
+          {{/each}}
+        {{/if}}
           ],
           exclude: [
             '**/_*.{js,jsx,ts,tsx,md,mdx}',

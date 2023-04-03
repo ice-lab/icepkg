@@ -14,6 +14,7 @@ packages/**/es/
 packages/**/esnext/
 packages/**/esm/
 packages/**/es2017/
+packages/**/cjs/
 packages/**/build/
 packages/build-plugin-component/*/template
 app/main_dist/
