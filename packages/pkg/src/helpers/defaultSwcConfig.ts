@@ -10,27 +10,31 @@ import type { Config, ModuleConfig } from '@swc/core';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
 import formatAliasToTSPathsConfig from './formatAliasToTSPathsConfig.js';
 
+// https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
+const LEGACY_BROWSER_TARGETS = {
+  chrome: 49,
+  ie: 11,
+};
+const MODERN_BROWSER_TARGETS = {
+  chrome: 61,
+  safari: 11,
+  firefox: 60,
+  edge: 16,
+  ios: 11,
+};
+
 export const getDefaultBundleSwcConfig = (
   bundleTaskConfig: BundleTaskConfig,
   ctx: Context,
   taskName: TaskValue,
 ): Config => {
-  const target = taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5';
-  const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? {
-    // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
-    chrome: 61,
-    safari: 11,
-    firefox: 60,
-    edge: 16,
-    ios: 11,
-  } : {
-    chrome: 49,
-    ie: 11,
+  const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? MODERN_BROWSER_TARGETS : LEGACY_BROWSER_TARGETS;
+  const polyfillConfig = bundleTaskConfig.polyfill === false ? {} : {
+    mode: bundleTaskConfig.polyfill,
+    coreJs: '3.29',
   };
-
   return {
     jsc: {
-      target,
       baseUrl: ctx.rootDir,
       paths: formatAliasToTSPathsConfig(bundleTaskConfig.alias),
       externalHelpers: true,
@@ -42,8 +46,7 @@ export const getDefaultBundleSwcConfig = (
     // 由 env 字段统一处理 syntax & polyfills
     env: {
       targets: browserTargets,
-      mode: 'usage',
-      coreJs: '3.29',
+      ...polyfillConfig,
     },
   };
 };
