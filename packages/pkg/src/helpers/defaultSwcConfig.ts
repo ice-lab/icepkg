@@ -29,10 +29,6 @@ export const getDefaultBundleSwcConfig = (
   taskName: TaskValue,
 ): Config => {
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? MODERN_BROWSER_TARGETS : LEGACY_BROWSER_TARGETS;
-  const polyfillConfig = bundleTaskConfig.polyfill === false ? {} : {
-    mode: bundleTaskConfig.polyfill,
-    coreJs: '3.29',
-  };
   return {
     jsc: {
       baseUrl: ctx.rootDir,
@@ -46,7 +42,8 @@ export const getDefaultBundleSwcConfig = (
     // 由 env 字段统一处理 syntax & polyfills
     env: {
       targets: browserTargets,
-      ...polyfillConfig,
+      coreJs: '3.29',
+      mode: bundleTaskConfig.polyfill === false ? undefined : bundleTaskConfig.polyfill,
     },
   };
 };
