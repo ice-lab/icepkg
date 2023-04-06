@@ -428,7 +428,29 @@ export default defineConfig({
   },
 });
 ```
-#### development（已废弃，请使用 modes）
+
+#### polyfill
+
++ 类型：`false | 'entry' | 'usage'`
++ 默认值：`'usage'`
+
+配置处理 polyfill 的逻辑。不同值的含义：
+
+- `false`: 不引入任何 polyfill
+- `'entry'`: 根据配置的 format 值在每个文件开头都引入对应的 polyfill
+- `'usage'`: 根据源码中使用到的代码按需引入 polyfill
+
+:::caution
+`polyfill` 默认值将会在下个 BK 版本改成 `false`。推荐组件的 bundle 产物不引入任何 polyfill（也就是设置成 `false`），而是使用 CDN 的方式引入 polyfill。
+:::
+
+#### development
+
+:::caution
+
+此选项已废弃，请使用 [modes](#modes)
+
+:::
 
 + 类型：`boolean`
 + 默认值：`false`
