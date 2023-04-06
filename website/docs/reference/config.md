@@ -441,7 +441,7 @@ export default defineConfig({
 - `'usage'`: 根据源码中使用到的代码按需引入 polyfill
 
 :::caution
-`polyfill` 默认值将会在下个大版本改成 `false`。推荐组件的 bundle 产物不引入任何 polyfill（也就是设置成 `false`），而是使用 CDN 的方式引入 polyfill。
+`polyfill` 默认值将会在下个 BK 版本改成 `false`。推荐组件的 bundle 产物不引入任何 polyfill（也就是设置成 `false`），而是使用 CDN 的方式引入 polyfill。
 :::
 
 #### development
