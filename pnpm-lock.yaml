@@ -335,7 +335,7 @@ importers:
       '@docusaurus/plugin-content-pages': ^2.4.0
       '@docusaurus/preset-classic': ^2.4.0
       '@ice/jsx-runtime': ^0.2.0
-      '@ice/pkg': ^1.5.4
+      '@ice/pkg': ^1.5.5
       '@mdx-js/react': ^1.6.22
       '@swc/helpers': ^0.4.3
       '@types/react': ^17.0.0
@@ -424,7 +424,7 @@ importers:
 
   packages/plugin-rax-component:
     specifiers:
-      '@ice/pkg': ^1.5.4
+      '@ice/pkg': ^1.5.5
       rax-compat: ^0.1.5
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -439,7 +439,7 @@ importers:
 
   packages/remark-react-docgen-docusaurus:
     specifiers:
-      '@ice/pkg': ^1.0.0
+      '@ice/pkg': ^1.5.5
       '@swc/helpers': ^0.4.14
       '@types/unist': ^2.0.6
       fs-extra: ^10.1.0
