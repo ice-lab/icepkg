@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.5
+
+### Patch Changes
+
+- 8cd4c98: feat: support modify swc compile options
+  feat: enable `externalHelpers` config by default
+- 2b01e99: fix: can not parse jsx/js file
+- d37267d: feat: add bundle.polyfill config
+- c9c4d46: fix: some es2017 syntax is not compatible with safari 10.1
+
 ## 1.5.4
 
 ### Patch Changes

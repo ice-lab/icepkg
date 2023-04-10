@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2
+
+### Patch Changes
+
+- 8cd4c98: chore: use Plugin type instead of deprecated PkgPlugin type
+
 ## 1.1.1
 
 ### Patch Changes
