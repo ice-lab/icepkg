@@ -85,15 +85,12 @@ export default defineConfig({
 例如，希望在代码中注入版本号，用全局变量 `__VERSION__` 来替代：
 
 ```ts title="build.config.mts"
-import fs from 'fs';
+import pkg from './package.json' assert { type: 'json' };
 import { defineConfig } from '@ice/pkg';
-
-const packageJSONContent = fs.readFileSync('./package.json', 'utf-8');
-const version = JSON.parse(packageJSONContent).version;
 
 export default defineConfig({
   define: {
-    '__VERSION__': version,
+    '__VERSION__': pkg.version,
   },
 });
 ```
