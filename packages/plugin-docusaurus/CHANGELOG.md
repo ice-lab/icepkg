@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.8
+
+### Patch Changes
+
+- e600d33: fix: mobile preview style
+
 ## 1.4.7
 
 ### Patch Changes
