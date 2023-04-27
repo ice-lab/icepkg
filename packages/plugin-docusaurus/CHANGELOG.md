@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.7
+
+### Patch Changes
+
+- 58a7b87: fix: can not render two components in one mdx file
+- 7f63497: feat: support add remark plugins
+
 ## 1.4.6
 
 ### Patch Changes

@@ -51,7 +51,7 @@ export interface BundleUserConfig {
   filename?: string;
   /**
    * Output directory
-   * @default dist
+   * @default 'dist'
    */
   outputDir?: string;
   /**
@@ -88,6 +88,14 @@ export interface BundleUserConfig {
     js?: boolean | ((mode: string, command: string) => JSMinify);
     css?: boolean | ((mode: string, command: string) => CSSMinify);
   };
+
+  /**
+   * Weather or not add the polyfill to the code.
+   * @default ['usage']
+   *
+   * In the next version(v2), the value of polyfill will be `false`.
+   */
+  polyfill?: false | 'entry' | 'usage';
 }
 
 export interface UserConfig {

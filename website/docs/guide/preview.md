@@ -1,6 +1,9 @@
 # 文档预览
 
-ICE PKG 依赖 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件支持编写文档和预览组件，所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+使用 [@ice/pkg-plugin-docusaurus](https://github.com/ice-lab/icepkg/tree/master/packages/plugin-docusaurus) 插件，依托 [Docusaurus](https://docusaurus.io/) 提供的能力，支持编写组件/库文档和预览组件。所有文档默认存放至 `docs` 文件夹下。支持以 `.md` 及 `.mdx` 为后缀的文档。
 
 在使用文档预览功能前，你需要先手动安装 `@ice/pkg-plugin-docusaurus` 插件：
 
@@ -296,11 +299,141 @@ import MyButton from 'my-button';
 
 export default function Index() {
   return (
-    // <MyButton>Hello</MyButton>
-    <div>xxx</div>
+    <>
+      <MyButton>Hello</MyButton>
+    </>
   );
 }
 ```
+
+## 自动生成组件文档
+
+使用 `@ice/remark-react-docgen-docusaurus` 插件(基于 [react-docgen](https://github.com/reactjs/react-docgen/tree/5.x))可自动生成组件 Props 文档。
+
+首先我们需要先安装插件依赖：
+
+```bash
+$ npm i @ice/remark-react-docgen-docusaurus --save-dev
+```
+
+然后我们把插件增加到配置中：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  plugins: [
+    [
+      '@ice/pkg-plugin-docusaurus',
+      {
+        remarkPlugins: [
+          "require('@ice/remark-react-docgen-docusaurus')",
+        ],
+      },
+    ],
+  ],
+});
+```
+
+假设我们有这样的一个 Button 组件：
+<Tabs>
+
+<TabItem value="src/Button/index.tsx" label="src/Button/index.tsx">
+
+```tsx
+import * as React from 'react';
+import './index.scss';
+
+interface ButtonProps {
+  /**
+   * 设置按钮类型
+   */
+  type?: 'primary' | 'default';
+  /**
+   * 点击按钮时的回调
+   */
+  onClick: React.MouseEventHandler;
+}
+
+const Button: React.FunctionComponent<React.PropsWithChildren<ButtonProps>> = (props: ButtonProps) => {
+  const {
+    type = 'default',
+  } = props;
+  const typeCssSelector = {
+    primary: 'pkg-btn-primary',
+    default: 'pkg-btn-default',
+  };
+  return (
+    <button
+      className={`pkg-btn ${typeCssSelector[type] || ''}`}
+      onClick={props.onClick}
+      data-testid="normal-button"
+    >
+      {props.children}
+    </button>
+  );
+};
+
+Button.defaultProps = {
+  type: 'default',
+};
+
+export default Button;
+```
+</TabItem>
+
+<TabItem value="src/Button/index.scss" label="src/Button/index.scss">
+
+```scss
+.pkg-btn {
+  border-radius: 6px;
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 400;
+
+}
+
+.pkg-btn-primary {
+  color: #fff;
+  background-color: #1677ff;
+  box-shadow: 0 2px 0 rgb(5 145 255 / 10%);
+}
+
+.pkg-btn-default {
+  background-color: #fff;
+  border-color: #d9d9d9;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+}
+```
+
+</TabItem>
+</Tabs>
+
+然后我们在文档中加入以下内容：
+
+```mdx title="docs/button.md"
+## API
+
+<ReactDocgenProps path="../src/Button/index.tsx"></ReactDocgenProps>
+```
+
+`@ice/remark-react-docgen-docusaurus` 插件会识别到 `<ReactDocgenProps />` 组件来快速生成组件 Props 文档。效果图如下：
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01xBo8CB1x4DI1PaSrF_!!6000000006389-0-tps-1196-428.jpg)
+
+:::caution
+目前有几点限制需要注意：
+
+1. 约定一个文件只能导出一个组件
+2. 无法解析从其他模块中导入的类型声明，因此只能在当前文件模块中声明组件的 Props 类型（[详见](https://github.com/reactjs/react-docgen/tree/5.x#flow-and-typescript-support)）
+3. 函数组件需要在函数入参中指定 props 类型，比如 `const Component = (props: ComponentProps) => {}`，否则无法解析
+4. 必须以 TSDoc 的形式书写注释（`// ` 形式的单行注释无法被提取）
+5. 默认值必须以 `Component.defaultProps = {}` 的形式书写，才能被工具提取
+:::
 
 ## 自定义侧边栏
 
@@ -341,7 +474,7 @@ export default defineConfig({
 });
 ```
 
-更多关于 sidebarItemsGenerator 的用法请见 [Docusaurus 文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#sidebarItemsGenerator)。
+更多关于 `sidebarItemsGenerator` 的用法请见 [Docusaurus 文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#sidebarItemsGenerator)。
 
 ## 自定义文档首页
 
@@ -463,7 +596,7 @@ export default defineConfig({
 
 - 类型：`SidebarGenerator`
 
-自定义 sidebar。
+自定义 sidebar 内容，详细说明见 [Docusaurus 文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#sidebarItemsGenerator)。
 
 #### mobilePreview
 
@@ -497,7 +630,7 @@ export default defineConfig({
 - 类型：`string`
 - 默认值：`'/'`
 
-文档基准路由，类似于 React Router 中的 `basename`。比如以下的目录结构默认的页面路由如下：
+文档基准路由，类似于 React Router 中的 `basename`，配置时需要注意的是首个字符不能是 `/`。比如以下的目录结构对应的页面路由如下：
 
 | 页面路径           | 路由          |
 | ------------------ | ------------- |
@@ -516,7 +649,7 @@ export default defineConfig({
 - 类型：`string`
 - 默认值：`'/pages'`
 
-页面基准路由，类似于 React Router 中的 `basename`。比如以下的目录结构默认的页面路由如下：
+页面基准路由，类似于 React Router 中的 `basename`。比如以下的目录结构对应的页面路由如下：
 
 | 页面路径           | 路由          |
 | ------------------ | ------------- |
@@ -525,10 +658,17 @@ export default defineConfig({
 
 #### plugins
 
-添加额外的 [Docusaurus 插件](https://docusaurus.io/docs/api/plugin-methods)。
+添加额外的 [Docusaurus 插件](https://docusaurus.io/docs/api/plugin-methods)，以扩展更多 Docusaurus 的能力。
+
+<Tabs>
+
+<TabItem value="build.config.mts" label="build.config.mts">
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 export default defineConfig({
   plugins: [
@@ -536,10 +676,31 @@ export default defineConfig({
       '@ice/pkg-plugin-docusaurus', 
       {
         plugins: [
-          // ...
+          // 添加本地的 docusaurus 插件
+          require.resolve('./docusaurus-plugin.js'),
+          // 你也可以添加插件包
+          '@docusaurus/plugin-pwa',
         ]
       },
     ],
   ],
 });
 ```
+
+</TabItem>
+
+<TabItem value="docusaurus-plugin.js" label="docusaurus-plugin.js">
+
+```js
+module.exports = function (context, options) {
+  return {
+    name: 'docusaurus-plugin',
+    async contentLoaded({ content, actions }) {
+      console.log(content);
+    },
+  };
+};
+```
+
+</TabItem>
+</Tabs>

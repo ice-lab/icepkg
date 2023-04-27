@@ -62,8 +62,6 @@ const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): 
           [
             '@babel/preset-typescript',
             {
-              isTSX: /\.tsx?$/.test(id),
-              allExtensions: true,
               jsxPragma: pragma,
               jsxPragmaFrag: pragmaFrag,
             },
