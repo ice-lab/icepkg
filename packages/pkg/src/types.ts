@@ -1,5 +1,5 @@
 import * as swc from '@swc/core';
-
+import * as babel from '@babel/core';
 import type { RollupOptions, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
 import type { Context as _Context, PluginAPI as _PluginAPI, Plugin as _Plugin, TaskConfig as _BuildTask } from 'build-scripts';
 import type { Config } from '@swc/core';
@@ -187,7 +187,11 @@ interface _TaskConfig {
   /**
    * Extra babel plugins
    */
-  babelPlugins?: babel.PluginItem[];
+  babelPlugins?: babel.TransformOptions['plugins'];
+  /**
+   * Extra babel presets
+   */
+  babelPresets?: babel.TransformOptions['presets'];
 }
 
 export interface BundleTaskConfig extends

@@ -44,10 +44,12 @@ export function getRollupOptions(
   const rollupOptions: RollupOptions = {};
   rollupOptions.plugins ??= [];
 
-  if (taskConfig.babelPlugins?.length) {
+  if (taskConfig.babelPlugins?.length || taskConfig.babelPresets?.length) {
+    const { babelPlugins = [], babelPresets = [] } = taskConfig;
     rollupOptions.plugins.push(
       babelPlugin(
-        taskConfig.babelPlugins,
+        babelPlugins,
+        babelPresets,
         {
           pragma: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragma,
           pragmaFrag: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,

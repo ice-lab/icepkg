@@ -30,7 +30,11 @@ interface BabelPluginOptions {
   pragmaFrag?: string;
 }
 
-const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): Plugin => {
+const babelPlugin = (
+  plugins: babel.PluginItem[],
+  presets: babel.PluginItem[],
+  options: BabelPluginOptions,
+): Plugin => {
   // https://babeljs.io/docs/en/babel-preset-react#usage
   const {
     pragma = 'React.createElement',
@@ -74,6 +78,7 @@ const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): 
               throwIfNamespace: false,
             },
           ],
+          ...presets,
         ],
         sourceFileName: id,
       });
