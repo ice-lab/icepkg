@@ -1,6 +1,7 @@
 import { performance } from 'perf_hooks';
 import { isAbsolute, resolve, extname, dirname, relative } from 'path';
 import fs from 'fs-extra';
+import semver from 'semver';
 import consola from 'consola';
 import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
@@ -208,7 +209,13 @@ async function runTransform(
   logger.info(`✅ ${timeFrom(start)}`);
 
   if (isDistContainingSWCHelpers) {
-    checkDependencyExists('@swc/helpers', 'https://pkg.ice.work/faq');
+    // take the semver in package.json for now, the actual used version may not be the same
+    const curUsedRange = checkDependencyExists('@swc/helpers', 'https://pkg.ice.work/faq');
+
+    if (curUsedRange && semver.gtr('0.5.0', curUsedRange)) {
+      consola.error('`@swc/helpers` 需更新到`0.5.0`及以上版本');
+      process.exit(1);
+    }
   }
   if (isDistContainingJSXRuntime) {
     checkDependencyExists('@ice/jsx-runtime', 'https://pkg.ice.work/faq');
