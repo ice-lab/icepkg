@@ -209,11 +209,11 @@ async function runTransform(
   logger.info(`✅ ${timeFrom(start)}`);
 
   if (isDistContainingSWCHelpers) {
-    // 先以package.json为主，实际当前使用版本不一定是这个版本
+    // take the semver in package.json for now, the actual used version may not be the same
     const curUsedRange = checkDependencyExists('@swc/helpers', 'https://pkg.ice.work/faq');
 
     if (curUsedRange && semver.gtr('0.5.0', curUsedRange)) {
-      consola.error('`@swc/helpers`需更新到`0.5.0`及以上版本');
+      consola.error('`@swc/helpers` 需更新到`0.5.0`及以上版本');
       process.exit(1);
     }
   }
