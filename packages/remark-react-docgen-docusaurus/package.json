@@ -18,7 +18,7 @@
     "react-docgen"
   ],
   "dependencies": {
-    "@swc/helpers": "^0.4.14",
+    "@swc/helpers": "^0.5.1",
     "fs-extra": "^10.1.0",
     "react-docgen": "^5.2.3",
     "mdast-builder": "^1.1.1",
