@@ -1,4 +1,4 @@
-import { extname, basename } from 'path';
+import { extname, basename, relative, sep } from 'path';
 import * as swc from '@swc/core';
 import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
@@ -58,6 +58,7 @@ const normalizeSwcConfig = (
  */
 const swcPlugin = (
   jsxRuntime: TaskConfig['jsxRuntime'],
+  rootDir: string,
   extraSwcOptions?: Config,
 ): Plugin => {
   return {
@@ -82,8 +83,9 @@ const swcPlugin = (
           ...extraSwcOptions,
           // Disable minimize on every file transform when bundling
           minify: false,
-          // If filename is omitted, will lose filename info in sourcemap
-          sourceFileName: id,
+          // If filename is omitted, will lose filename info in sourcemap.
+          // e.g: ./src/index.mts
+          sourceFileName: `.${sep}${relative(rootDir, id)}`,
         }),
       );
 
