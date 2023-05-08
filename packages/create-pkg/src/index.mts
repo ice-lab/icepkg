@@ -83,6 +83,8 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
     rootDir: dirPath,
     templateOptions: {
       npmName,
+      // @ts-expect-error generateMaterial should support index signature.
+      workspace: options.workspace,
     },
     materialTemplateDir: tempDir,
     materialType: 'component',
