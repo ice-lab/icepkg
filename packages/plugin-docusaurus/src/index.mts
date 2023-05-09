@@ -1,10 +1,10 @@
+import fse from 'fs-extra';
 import { doc } from './doc.mjs';
 import { configureDocusaurus } from './configureDocusaurus.mjs';
 import genDemoPages from './genDemoPages/index.mjs';
+import { DEFAULT_DEV_SERVER_PORT, DOCUSAURUS_DIR } from './constants.mjs';
 import type { EnableConfig, PluginDocusaurusOptions } from './types.mjs';
 import type { Plugin } from '@ice/pkg';
-
-const DEFAULT_DEV_SERVER_PORT = 4000;
 
 const defaultOptions: PluginDocusaurusOptions = {
   title: 'ICE PKG',
@@ -30,6 +30,8 @@ const plugin: Plugin = (api, options: PluginDocusaurusOptions = {}) => {
     return;
   }
 
+  fse.removeSync(DOCUSAURUS_DIR);
+
   const configuredPlugins = getAllPlugin();
   const pluginOptions = {
     ...defaultOptions,
@@ -45,7 +47,7 @@ const plugin: Plugin = (api, options: PluginDocusaurusOptions = {}) => {
     if (command === 'build') {
       // Pages must be generated before build
       // because remark plugin of docusaurus-plugin-content-docs works after docusaurus-plugin-content-pages reads the pages dir
-      genDemoPages(rootDir);
+      genDemoPages(rootDir, pluginOptions.path);
     }
     await doc(api, pluginOptions);
   });
