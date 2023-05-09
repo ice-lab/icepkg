@@ -44,7 +44,10 @@ const normalizeSwcConfig = (
       externalHelpers: false,
       loose: false, // Not recommend
     },
+    // Disable minimize on every file transform when bundling
     minify: false,
+    swcrc: false,
+    configFile: false,
   };
 
   return deepmerge.all([
@@ -81,11 +84,10 @@ const swcPlugin = (
         source,
         normalizeSwcConfig(file, jsxRuntime, {
           ...extraSwcOptions,
-          // Disable minimize on every file transform when bundling
-          minify: false,
           // If filename is omitted, will lose filename info in sourcemap.
           // e.g: ./src/index.mts
           sourceFileName: `.${sep}${relative(rootDir, id)}`,
+          filename: id,
         }),
       );
 
