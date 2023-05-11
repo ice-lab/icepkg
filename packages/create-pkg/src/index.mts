@@ -72,7 +72,7 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
 
   let templateNpmName = options.template;
   if (!templateNpmName) {
-    templateNpmName = await inquireTemplateNpmName();
+    templateNpmName = await inquireTemplateNpmName(options.workspace);
   }
 
   const npmName = options.npmName ?? (templateNpmName.startsWith('@ice/template-pkg-monorepo') ? '' : await inquirePackageName());
@@ -83,6 +83,8 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
     rootDir: dirPath,
     templateOptions: {
       npmName,
+      // @ts-expect-error generateMaterial should support index signature.
+      workspace: options.workspace,
     },
     materialTemplateDir: tempDir,
     materialType: 'component',

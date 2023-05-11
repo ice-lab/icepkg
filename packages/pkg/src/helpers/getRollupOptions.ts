@@ -58,6 +58,7 @@ export function getRollupOptions(
   rollupOptions.plugins.push(
     swcPlugin(
       taskConfig.jsxRuntime,
+      rootDir,
       taskConfig.swcCompileOptions,
     ),
   );

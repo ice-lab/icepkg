@@ -31,7 +31,6 @@ export const getDefaultBundleSwcConfig = (
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? MODERN_BROWSER_TARGETS : LEGACY_BROWSER_TARGETS;
   return {
     jsc: {
-      baseUrl: ctx.rootDir,
       paths: formatAliasToTSPathsConfig(bundleTaskConfig.alias),
       externalHelpers: true,
     },
@@ -63,7 +62,6 @@ export const getDefaultTransformSwcConfig = (
   return {
     jsc: {
       target,
-      baseUrl: ctx.rootDir,
       paths: formatAliasToTSPathsConfig(transformTaskConfig.alias),
       transform: {
         optimizer: {
