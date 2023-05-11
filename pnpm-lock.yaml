@@ -554,7 +554,7 @@ importers:
         specifier: ^4.9.1
         version: 4.13.1
       '@ice/pkg':
-        specifier: ^1.5.5
+        specifier: ^1.5.6
         version: link:../pkg
       '@types/react':
         specifier: ^17.0.0
@@ -653,7 +653,7 @@ importers:
         version: 2.0.3
     devDependencies:
       '@ice/pkg':
-        specifier: ^1.5.5
+        specifier: ^1.5.6
         version: link:../pkg
       '@types/unist':
         specifier: ^2.0.6
@@ -12134,7 +12134,7 @@ packages:
       url-parse-lax: 3.0.0
 
   /graceful-fs@4.2.10:
-    resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==, tarball: graceful-fs/download/graceful-fs-4.2.10.tgz}
+    resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
 
   /grapheme-splitter@1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
