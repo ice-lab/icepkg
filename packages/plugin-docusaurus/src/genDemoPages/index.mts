@@ -7,9 +7,9 @@ import getExtractCodePlugin from './extractCodePlugin.mjs';
 import parse from 'remark-parse';
 import stringify from 'remark-stringify';
 
-function scanDocsDirectory(rootDir: string): DirectoryTree | null {
-  const docsDir = path.join(rootDir, 'docs');
-  const tree = directoryTree.default(docsDir, { extensions: /\.md$/ });
+function scanDocsDirectory(rootDir: string, docsPath: string): DirectoryTree | null {
+  const docsDir = path.join(rootDir, docsPath);
+  const tree = directoryTree.default(docsDir, { extensions: /\.mdx?$/ });
   return tree;
 }
 
@@ -28,8 +28,8 @@ function extractCodeFromDocs(docsTree: DirectoryTree, rootDir: string): void {
   });
 }
 
-export default function genDemoPages(rootDir: string): void {
-  const docsTree = scanDocsDirectory(rootDir);
+export default function genDemoPages(rootDir: string, docsPath: string): void {
+  const docsTree = scanDocsDirectory(rootDir, docsPath);
   if (docsTree) {
     extractCodeFromDocs(docsTree, rootDir);
   }
