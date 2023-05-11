@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.9
+
+### Patch Changes
+
+- be0bfdf: fix: not generate demo pages in monorepo
+- 7f37d7f: chore: upgrade @swc/helpers version to ^0.5.1
+
 ## 1.4.8
 
 ### Patch Changes

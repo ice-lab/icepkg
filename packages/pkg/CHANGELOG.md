@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.6
+
+### Patch Changes
+
+- 975b29d: upgrade @swc/core to 1.3.55 and expect use @swc/helpers@^0.5.0
+
 ## 1.5.5
 
 ### Patch Changes
