@@ -625,6 +625,13 @@ export default defineConfig({
 
 配置 Docusaurus 构建产物输出地址。
 
+#### path
+
+- 类型：`string`
+- 默认值：`'docs'`
+
+存放文档的目录，将会扫描该目录下所有的 `.md` 和 `.mdx` 文件并生成文档页面。相关规则说明详见[文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#path)。
+
 #### docsRouteBasePath
 
 - 类型：`string`
@@ -642,7 +649,7 @@ export default defineConfig({
 - 类型：`string`
 - 默认值：`'pages'`
 
-存放页面的本地路径。默认是项目根目录的 `pages` 目录。页面路由规则详见[文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-pages#path)。
+存放页面的目录，该目录下的组件将会自动生成为页面，一个组件的文件路径会被映射生成对应的路由。页面路由规则详见[文档](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-pages#path)。
 
 #### pageRouteBasePath
 
