@@ -5,7 +5,7 @@
 ### Patch Changes
 
 - e8e0c08: fix: show monorepo templates when creating a sub package
-- 1b0cad7: feat: add workspace tempalte option
+- 1b0cad7: feat: add workspace template option
 
 ## 1.3.1
 
