@@ -1,5 +1,5 @@
 import { performance } from 'perf_hooks';
-import { isAbsolute, resolve, extname, dirname, relative } from 'path';
+import { isAbsolute, resolve, extname, dirname, relative, basename } from 'path';
 import fs from 'fs-extra';
 import semver from 'semver';
 import consola from 'consola';
@@ -173,11 +173,10 @@ async function runTransform(
       files[i].code = code = transformResult.code;
       files[i].map = map = transformResult.map;
 
-      const finalExtname = transformResult?.meta?.ext;
+      const destFilename = transformResult?.meta?.filename;
 
-      // If extname changed
-      if (finalExtname) {
-        files[i].dest = (files[i].dest).replace(files[i].ext, finalExtname);
+      if (destFilename) {
+        files[i].dest = (files[i].dest).replace(basename(files[i].dest), destFilename);
       }
     }
 
@@ -186,7 +185,7 @@ async function runTransform(
 
       fs.writeFileSync(
         files[i].dest,
-        `${code}\n //# sourceMappingURL=${files[i].dest}.map`,
+        `${code}\n //# sourceMappingURL=${transformResult?.meta?.filename}.map`,
         'utf-8',
       );
       fs.writeFileSync(`${files[i].dest}.map`, standardizedMap, 'utf-8');

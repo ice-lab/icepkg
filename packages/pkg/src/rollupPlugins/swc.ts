@@ -1,4 +1,4 @@
-import { extname } from 'path';
+import { extname, basename, relative, sep } from 'path';
 import * as swc from '@swc/core';
 import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
@@ -44,7 +44,10 @@ const normalizeSwcConfig = (
       externalHelpers: false,
       loose: false, // Not recommend
     },
+    // Disable minimize on every file transform when bundling
     minify: false,
+    swcrc: false,
+    configFile: false,
   };
 
   return deepmerge.all([
@@ -56,11 +59,15 @@ const normalizeSwcConfig = (
 /**
  * plugin-swc works as substitute of plugin-typescript, babel, babel-preset-env and plugin-minify.
  */
-const swcPlugin = (jsxRuntime: TaskConfig['jsxRuntime'], extraSwcOptions?: Config): Plugin => {
+const swcPlugin = (
+  jsxRuntime: TaskConfig['jsxRuntime'],
+  rootDir: string,
+  extraSwcOptions?: Config,
+): Plugin => {
   return {
     name: 'ice-pkg:swc',
 
-    transform(_, id) {
+    async transform(source, id) {
       if (!scriptsFilter(id)) {
         return null;
       }
@@ -70,14 +77,16 @@ const swcPlugin = (jsxRuntime: TaskConfig['jsxRuntime'], extraSwcOptions?: Confi
         absolutePath: id,
         ext: extname(id),
       };
-
-      const { code, map } = swc.transformSync(
-        _,
+      // If file's name comes with .mjs、.mts、.cjs、.cts suffix
+      const destExtname = ['m', 'c'].includes(file.ext[1]) ? `.${file.ext[1]}js` : '.js';
+      const destFilename = basename(id).replace(RegExp(`${extname(id)}$`), destExtname);
+      const { code, map } = await swc.transform(
+        source,
         normalizeSwcConfig(file, jsxRuntime, {
           ...extraSwcOptions,
-          // Disable minimize on every file transform when bundling
-          minify: false,
-          // If filename is omitted, will lose filename info in sourcemap
+          // If filename is omitted, will lose filename info in sourcemap.
+          // e.g: ./src/index.mts
+          sourceFileName: `.${sep}${relative(rootDir, id)}`,
           filename: id,
         }),
       );
@@ -85,10 +94,8 @@ const swcPlugin = (jsxRuntime: TaskConfig['jsxRuntime'], extraSwcOptions?: Confi
       return {
         code,
         map,
-        // Additional option to re-define extname
         meta: {
-          // If file's name comes with .mjs、.mts、.cjs、.cts suffix
-          ext: ['m', 'c'].includes(file.ext[1]) ? `.${file.ext[1]}js` : '.js',
+          filename: destFilename,
         },
       };
     },
