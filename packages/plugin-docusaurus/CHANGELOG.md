@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.9-beta.1
+
+### Patch Changes
+
+- be0bfdf: fix: not generate demo pages in monorepo
+
 ## 1.4.9-beta.0
 
 ### Patch Changes
