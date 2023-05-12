@@ -41,9 +41,7 @@
   "homepage": "https://pkg.ice.work",
   "scripts": {
     "watch": "ice-pkg start",
-    "build": "ice-pkg build",
-    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./src",
-    "prepublishOnly": "pnpm run-s lint build"
+    "build": "ice-pkg build"
   },
   "dependencies": {
     "@docusaurus/core": "^2.4.0",

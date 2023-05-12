@@ -24,9 +24,7 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "watch": "tsc -w",
-    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./src",
-    "prepublishOnly": "pnpm run-s lint build"
+    "watch": "tsc -w"
   },
   "dependencies": {
     "rax-compat": "^0.1.5"

@@ -10,8 +10,7 @@
   "sideEffects": false,
   "scripts": {
     "watch": "ice-pkg start",
-    "build": "ice-pkg build",
-    "prepublishOnly": "npm run build"
+    "build": "ice-pkg build"
   },
   "keywords": [
     "remark",

@@ -15,9 +15,7 @@
   ],
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "watch": "tsc -w",
-    "lint": "pnpm eslint --ext .js,.jsx,.ts,.tsx,.mts,.mjs ./src",
-    "prepublishOnly": "pnpm run-s lint build"
+    "watch": "tsc -w"
   },
   "license": "MIT",
   "engines": {
