@@ -30,8 +30,7 @@
   "license": "MIT",
   "scripts": {
     "watch": "ice-pkg start",
-    "build": "ice-pkg build",
-    "prepublishOnly": "pnpm run build"
+    "build": "ice-pkg build"
   },
   "dependencies": {
     "babel-plugin-transform-jsx-class": "^0.1.3",
