@@ -96,7 +96,7 @@ function getAndExtractTarball(
             new Promise((streamResolve) => {
               entry
                 .pipe(fse.createWriteStream(destPath, {
-                  mode: entry.mode
+                  mode: entry.mode,
                 }))
                 .on('finish', () => streamResolve(true))
                 .on('close', () => streamResolve(true)); // resolve when file is empty in node v8
