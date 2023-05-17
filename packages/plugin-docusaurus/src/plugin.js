@@ -167,12 +167,12 @@ module.exports = function (context) {
           }),
         ],
         snapshot: {
-          // tnpm / cnpm 安装时，webpack 5 的持久缓存无法生成，长时间将导致 OOM
-          // 原因：[managedPaths](https://webpack.js.org/configuration/other-options/#managedpaths) 在 tnpm / cnpm 安装的情况下失效，导致持久缓存在处理 node_modules
-          // 通过指定 [immutablePaths](https://webpack.js.org/configuration/other-options/#immutablepaths) 进行兼容
-          // 依赖路径中同时包含包名和版本号即可满足 immutablePaths 的使用
+          // When tnpm/cnpm is installed, the persistent cache of webpack 5 cannot be generated.
+          // Reason：[managedPaths](https://webpack.js.org/configuration/other-options/#managedpaths) Failed in the case of tnpm/cnpm installation, causing persistent cache to handle node_modules.
+          // Specify [immutablePaths](https://webpack.js.org/configuration/other-options/#immutablepaths) to compat it.
+          // immutablePaths can be used with both the package name and version number in the dependent paths
 
-          // 通过安装后的 package.json 中是否包含 __npminstall_done 字段来判断是否为 tnpm / cnpm 安装模式
+          // tnpm/cnpm installation mode is determined by whether the installed package.json contains the __npminstall_done field
           immutablePaths: require('../package.json').__npminstall_done ?
             [path.join(siteDir, 'node_modules')] :
             [],
