@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.3
+
+- [fix] Using `fs.createWriteStream` will change all file permissions to `0o666`. However, there are cases where files need to be executable, such as files within the `.husky` directory. Therefore, `fs.createWriteStream` should maintain the original file permissions instead of overwriting them.
+
 ## 3.0.2
 
 - [fix] compareFunction of Array.sort should not returns boolean value. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#description
