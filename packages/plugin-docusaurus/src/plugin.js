@@ -166,6 +166,17 @@ module.exports = function (context) {
             Fragment: ['react', 'Fragment'],
           }),
         ],
+        snapshot: {
+          // When tnpm/cnpm is installed, the persistent cache of webpack 5 cannot be generated.
+          // Reason：[managedPaths](https://webpack.js.org/configuration/other-options/#managedpaths) Failed in the case of tnpm/cnpm installation, causing persistent cache to handle node_modules.
+          // Specify [immutablePaths](https://webpack.js.org/configuration/other-options/#immutablepaths) to compat it.
+          // immutablePaths can be used with both the package name and version number in the dependent paths
+
+          // tnpm/cnpm installation mode is determined by whether the installed package.json contains the __npminstall_done field
+          immutablePaths: require('../package.json').__npminstall_done ?
+            [path.join(siteDir, 'node_modules')] :
+            [],
+        },
       };
     },
   };
