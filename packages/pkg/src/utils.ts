@@ -288,12 +288,7 @@ export const stringifyObject = (obj: PlainObject) => {
 
 export const scriptsFilter = createFilter(
   /\.m?[jt]sx?$/, // include
-  [/node_modules/, /\.d\.ts$/], // exclude
-);
-
-export const stylesFilter = createFilter(
-  /\.(?:css|sass|less|stylus)$/, // include
-  /node_modules/, // exclude
+  [/\.d\.ts$/], // exclude
 );
 
 export const cwd = process.cwd();
