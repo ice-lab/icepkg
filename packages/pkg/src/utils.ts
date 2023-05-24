@@ -290,7 +290,7 @@ export const createScriptsFilter = (compileDependencies?: boolean | RegExp[]) =>
   const exclude = [/\.d\.ts$/];
   if (Array.isArray(compileDependencies)) {
     exclude.push(...compileDependencies);
-  } else if (compileDependencies) {
+  } else if (!compileDependencies) {
     exclude.push(/node_modules/);
   }
   return createFilter(
