@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.7
+
+### Patch Changes
+
+- b90b394: fix: not transform node_modules packages
+
 ## 1.5.6
 
 ### Patch Changes
