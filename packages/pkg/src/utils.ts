@@ -286,11 +286,18 @@ export const stringifyObject = (obj: PlainObject) => {
   }, {});
 };
 
-export const scriptsFilter = createFilter(
-  /\.m?[jt]sx?$/, // include
-  [/\.d\.ts$/], // exclude
-);
-
+export const createScriptsFilter = (compileDependencies?: boolean | RegExp[]) => {
+  const exclude = [/\.d\.ts$/];
+  if (Array.isArray(compileDependencies)) {
+    exclude.push(...compileDependencies);
+  } else if (compileDependencies) {
+    exclude.push(/node_modules/);
+  }
+  return createFilter(
+    /\.m?[jt]sx?$/, // include
+    exclude,
+  );
+};
 export const cwd = process.cwd();
 
 export function normalizeSlashes(file: string) {
