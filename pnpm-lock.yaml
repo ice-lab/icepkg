@@ -554,7 +554,7 @@ importers:
         specifier: ^4.9.1
         version: 4.13.1
       '@ice/pkg':
-        specifier: ^1.5.6
+        specifier: ^1.5.7
         version: link:../pkg
       '@types/react':
         specifier: ^17.0.0
