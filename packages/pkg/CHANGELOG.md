@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.8
+
+### Patch Changes
+
+- b90b394: fix: not transform node_modules packages
+- e210bba: chore: test ci action
+
 ## 1.5.7
 
 ### Patch Changes

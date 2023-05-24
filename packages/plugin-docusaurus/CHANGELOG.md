@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.11
+
+### Patch Changes
+
+- 4b81cc1: fix: OOM when use tnpm/cnpm to install dependencies
+
 ## 1.4.10
 
 ### Patch Changes
