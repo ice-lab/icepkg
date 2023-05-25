@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.8
+
+### Patch Changes
+
+- 47df29c: feat: support configure compile deps
+
 ## 1.5.7
 
 ### Patch Changes
