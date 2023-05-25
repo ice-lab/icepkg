@@ -20,6 +20,7 @@ function getUserConfig() {
       css: (mode: string, command: string) => { return mode === 'production' && command === 'build'; },
     },
     polyfill: 'usage',
+    compileDependencies: false,
   };
   const defaultTransformUserConfig: TransformUserConfig = {
     formats: ['esm', 'es2017'],

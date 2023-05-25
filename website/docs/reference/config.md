@@ -441,6 +441,23 @@ export default defineConfig({
 `polyfill` 默认值将会在下个 BK 版本改成 `false`。推荐组件的 bundle 产物不引入任何 polyfill（也就是设置成 `false`），而是使用 CDN 的方式引入 polyfill。
 :::
 
+#### compileDependencies
+
++ 类型：`boolean | RegExp[]`
++ 默认值：`false`
+
+配置是否编译 node_modules 中的依赖。如果值为 `true`，则 node_modules 中的依赖都会编译；如果值为 false 则都不编译；如果值为数组，则只会编译对应的依赖。
+
+```js title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  bundle: {
+    compileDependencies: [/antd/],
+  },
+});
+```
+
 #### development
 
 :::caution
