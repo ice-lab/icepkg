@@ -90,6 +90,11 @@ export interface BundleUserConfig {
    * In the next version(v2), the value of polyfill will be `false`.
    */
   polyfill?: false | 'entry' | 'usage';
+
+  /**
+   * Weather or not compile the dependencies in node_modules.
+   */
+  compileDependencies?: boolean | RegExp[];
 }
 
 export interface UserConfig {

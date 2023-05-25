@@ -4,7 +4,8 @@
 import * as babel from '@babel/core';
 import type { ParserPlugin } from '@babel/parser';
 import { Plugin } from 'rollup';
-import { scriptsFilter } from '../utils.js';
+import { createScriptsFilter } from '../utils.js';
+import type { BundleTaskConfig } from '../types.js';
 
 const getParserPlugins = (isTS?: boolean): ParserPlugin[] => {
   const commonPlugins: ParserPlugin[] = [
@@ -30,12 +31,17 @@ interface BabelPluginOptions {
   pragmaFrag?: string;
 }
 
-const babelPlugin = (plugins: babel.PluginItem[], options: BabelPluginOptions): Plugin => {
+const babelPlugin = (
+  plugins: babel.PluginItem[],
+  options: BabelPluginOptions,
+  compileDependencies?: BundleTaskConfig['compileDependencies'],
+): Plugin => {
   // https://babeljs.io/docs/en/babel-preset-react#usage
   const {
     pragma = 'React.createElement',
     pragmaFrag = 'React.Fragment',
   } = options;
+  const scriptsFilter = createScriptsFilter(compileDependencies);
   return {
     name: 'ice-pkg:babel',
 

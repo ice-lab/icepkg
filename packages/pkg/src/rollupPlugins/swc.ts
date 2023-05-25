@@ -2,10 +2,10 @@ import { extname, basename, relative, sep } from 'path';
 import * as swc from '@swc/core';
 import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
-import { checkDependencyExists, scriptsFilter } from '../utils.js';
+import { checkDependencyExists, createScriptsFilter } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
-import type { TaskConfig, OutputFile } from '../types.js';
+import type { TaskConfig, OutputFile, BundleTaskConfig } from '../types.js';
 import type { Plugin } from 'rollup';
 
 const JSX_RUNTIME_SOURCE = '@ice/jsx-runtime';
@@ -63,7 +63,9 @@ const swcPlugin = (
   jsxRuntime: TaskConfig['jsxRuntime'],
   rootDir: string,
   extraSwcOptions?: Config,
+  compileDependencies?: BundleTaskConfig['compileDependencies'],
 ): Plugin => {
+  const scriptsFilter = createScriptsFilter(compileDependencies);
   return {
     name: 'ice-pkg:swc',
 
