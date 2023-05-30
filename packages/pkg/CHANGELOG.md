@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.9
+
+### Patch Changes
+
+- 78c3bba: fix: bump @rollup/plugin-commonjs version to 25.0.0 to fix the module which is dynimically required will be transformed to IIFE
+
 ## 1.5.8
 
 ### Patch Changes
