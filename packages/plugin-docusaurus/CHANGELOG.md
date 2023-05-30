@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.11
+
+### Patch Changes
+
+- a02a27d: fix: react package.json in root dir
+
 ## 1.4.10
 
 ### Patch Changes
