@@ -46,6 +46,10 @@ export interface PluginDocusaurusOptions {
    */
   navBarTitle?: string;
   /**
+   * Specify a host to use.
+   */
+  host?: string;
+  /**
    * DevServer port for your dev server.
    */
   port?: number;
