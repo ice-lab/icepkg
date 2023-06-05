@@ -120,4 +120,16 @@ module.exports = {
   fse.writeFileSync(
     path.join(output, 'hijackCreateElement.js'), hijackCreateElementModuleContent, 'utf-8',
   );
+
+  createSymbolicLink(
+    rootDir,
+    path.join(rootDir, 'node_modules', require(path.join(rootDir, 'package.json')).name),
+  );
+}
+
+function createSymbolicLink(src: string, dest: string) {
+  if (fse.pathExistsSync(dest) && fse.lstatSync(dest)) {
+    fse.unlinkSync(dest);
+  }
+  fse.symlinkSync(src, dest);
 }
