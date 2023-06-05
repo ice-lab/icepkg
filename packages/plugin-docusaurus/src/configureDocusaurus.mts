@@ -121,6 +121,7 @@ module.exports = {
     path.join(output, 'hijackCreateElement.js'), hijackCreateElementModuleContent, 'utf-8',
   );
 
+  // A package.json exists in the .docusaurus file, to fix the package can not be required in md file(docs)
   createSymbolicLink(
     rootDir,
     path.join(rootDir, 'node_modules', require(path.join(rootDir, 'package.json')).name),
