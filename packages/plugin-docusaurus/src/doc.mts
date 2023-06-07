@@ -11,7 +11,6 @@ import type { PluginDocusaurusOptions } from './types.mjs';
 import type { PluginAPI } from '@ice/pkg';
 
 const require = createRequire(import.meta.url);
-const ip = address.ip();
 
 export const doc = async (api: PluginAPI, options: PluginDocusaurusOptions) => {
   const { context } = api;
@@ -24,6 +23,7 @@ export const doc = async (api: PluginAPI, options: PluginDocusaurusOptions) => {
     consola.warn('PLUGIN-DOCUSAURUS', 'Found docusaurus.config.js in current project. And you should configure docusaurus by yourself.');
   }
 
+  const ip = options.host || address.ip();
   const port = await detect(options.port);
 
   const binPath = require.resolve('@docusaurus/core/bin/docusaurus.mjs');
