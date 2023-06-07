@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.12
+
+### Patch Changes
+
+- 26acc19: fix: not resolve package in docs
+- eca090d: feat: add specified host for development server
+
 ## 1.4.11
 
 ### Patch Changes
