@@ -1,4 +1,4 @@
-import { createElement, Fragment } from 'rax';
+import { createElement } from 'rax';
 import styles from './index.module.css';
 import Header from './components/Header';
 

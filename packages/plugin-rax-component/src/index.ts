@@ -12,6 +12,7 @@ const plugin: Plugin = (api) => {
             react: {
               // Use classic jsx transform, see https://swc.rs/docs/configuration/compilation#jsctransformreactruntime
               runtime: 'classic',
+              importSource: 'rax',
               pragma: 'createElement',
               pragmaFrag: 'Fragment',
             },
