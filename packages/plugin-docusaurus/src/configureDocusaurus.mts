@@ -132,5 +132,6 @@ function createSymbolicLink(src: string, dest: string) {
   if (fse.pathExistsSync(dest) && fse.lstatSync(dest)) {
     fse.unlinkSync(dest);
   }
-  fse.symlinkSync(src, dest);
+
+  fse.ensureSymlinkSync(src, dest);
 }
