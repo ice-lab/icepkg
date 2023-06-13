@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.13
+
+### Patch Changes
+
+- fix: symlink error when dir doesn't exist
+
 ## 1.4.12
 
 ### Patch Changes
