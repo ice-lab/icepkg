@@ -47,7 +47,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     mobilePreview,
     prismReactRendererPath,
     docusaurusPluginContentPagesPath,
-  });
+  }).replace(/\\/g, '\\\\');
 
   const configuredPlugins = params?.configuredPlugins;
   const isUsingRax = configuredPlugins.some((plugin) => plugin.name === '@ice/pkg-plugin-rax-component');
@@ -89,7 +89,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
   const babelConfigContents = `
 module.exports = {
   presets: [
-    require.resolve('${require.resolve('@docusaurus/core/lib/babel/preset')}'),
+    require.resolve('${require.resolve('@docusaurus/core/lib/babel/preset').replace(/\\/g, '\\\\')}'),
     [
       require.resolve('@babel/preset-react'),
       {

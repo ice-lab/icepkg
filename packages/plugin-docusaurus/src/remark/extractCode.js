@@ -5,7 +5,7 @@ const { getDemoFileInfo, getPageFileInfo } = require('./getFileInfo.js');
 const genDemoPages = require('./genDemoPages.js');
 
 const rootDir = process.cwd();
-const previewerComponentPath = path.join(__dirname, '../Previewer/index.js');
+const previewerComponentPath = path.join(__dirname, '../Previewer/index.js').replace(/\\/g, '\\\\');
 
 const escapeCode = (code) => {
   return (code || '').replace(/`/g, '&#x60;').replace(/\$/g, '&#36;');
@@ -70,7 +70,7 @@ const extractCodePlugin = (options) => {
       return <${demoFilename} />;
     }}
   </BrowserOnly>
-</Previewer>`,
+</Previewer>`.replace(/\\/g, '\\\\'),
         });
       }
 
