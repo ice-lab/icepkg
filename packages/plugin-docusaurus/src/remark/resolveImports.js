@@ -45,7 +45,7 @@ const resolveImports = (code, filePath) => {
     _code = `import BrowserOnly from '@docusaurus/BrowserOnly'; \n${_code}`;
   }
 
-  return _code;
+  return _code.replace(/\\/g, '\\\\');
 };
 
 module.exports = resolveImports;
