@@ -17,7 +17,7 @@ ICE PKG 的 Monorepo 方案是基于 [pnpm workspace](https://pnpm.io/workspaces
 通过以下命令，可以快速初始化一个 Monorepo 项目：
 
 ```bash
-$ npm init @ice/pkg my-monorepo
+$ pnpm create @ice/pkg my-monorepo
 ```
 
 选择 React 组件项目类型：
@@ -56,7 +56,7 @@ $ npm init @ice/pkg my-monorepo
 
 ```shell
 # 假设 packages 目录是用于存放子项目
-$ npm init @ice/pkg -w packages/your-lib
+$ pnpm create @ice/pkg packages/your-lib --workspace
 ```
 
 执行成功后，你将会看到以下内容：
