@@ -23,7 +23,7 @@ $ cnpm -v
 以 React 组件类型为例，通过以下命令，可以快速初始化一个项目：
 
 ```bash
-$ npm init @ice/pkg react-component
+$ npm init @ice/pkg@latest react-component
 ```
 
 选择 React 组件项目类型：
@@ -38,7 +38,7 @@ $ npm init @ice/pkg react-component
 你还可以通过附加的命令行选项的方式指定你想要的模板和 npm 包名，比如：
 
 ```bash
-$ npm init @ice/pkg react-component --template @ice/template-pkg-react --npmName my-react-component
+$ npm init @ice/pkg@latest react-component --template @ice/template-pkg-react --npmName my-react-component
 ```
 
 ## 启动项目
