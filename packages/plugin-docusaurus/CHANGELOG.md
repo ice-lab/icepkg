@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.14
+
+### Patch Changes
+
+- 3c99945: fix: Doc build failed in windows
+
 ## 1.4.13
 
 ### Patch Changes
