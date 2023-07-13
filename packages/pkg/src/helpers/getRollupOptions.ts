@@ -196,7 +196,7 @@ function getRollupOutputs({
           idsToHandle.add(importerId);
         }
       }
-
+      // For multiple entries, we put it into a "shared code" bundle
       if (entryPoints.length > 1) {
         return 'vendor';
       }
