@@ -59,6 +59,7 @@
     "magic-string": "^0.25.7",
     "picocolors": "^1.0.0",
     "postcss": "^8.4.6",
+    "postcss-plugin-rpx2vw": "^1.0.0",
     "rollup": "^2.79.1",
     "rollup-plugin-styles": "^4.0.0",
     "rollup-plugin-visualizer": "^5.8.3",

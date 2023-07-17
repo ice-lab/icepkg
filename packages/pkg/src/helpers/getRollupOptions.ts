@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import styles from 'rollup-plugin-styles';
 import autoprefixer from 'autoprefixer';
+import PostcssPluginRpxToVw from 'postcss-plugin-rpx2vw';
 import json from '@rollup/plugin-json';
 import swcPlugin from '../rollupPlugins/swc.js';
 import dtsPlugin from '../rollupPlugins/dts.js';
@@ -92,6 +93,7 @@ export function getRollupOptions(
     const defaultStylesOptions: StylesRollupPluginOptions = {
       plugins: [
         autoprefixer(),
+        PostcssPluginRpxToVw,
       ],
       mode: 'extract',
       autoModules: true,
