@@ -13,7 +13,7 @@ const Test = ({ title }) => {
   return (
     <div>
       <h1 style={{ fontSize: '100rpx' }} data-testid="title">{title}</h1>
-      <button onClick={() => setVisible(!visible)}>Click Me to Set Visible</button>
+      <button onClick={() => setVisible(!visible)} className="btn">Click Me to Set Visible</button>
 
       <div>
         <div x-if={visible}>Hello</div>
