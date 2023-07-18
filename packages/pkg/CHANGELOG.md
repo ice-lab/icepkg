@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.10
+
+### Patch Changes
+
+- 971e96d: feat: support transform rpx to vw in bundle mode
+- 3ff3957: feat: vendor chunk
+
 ## 1.5.9
 
 ### Patch Changes
