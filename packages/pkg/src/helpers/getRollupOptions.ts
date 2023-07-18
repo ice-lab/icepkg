@@ -176,12 +176,33 @@ function getRollupOutputs({
     dir: outputDir,
     assetFileNames: getFilename('[name]', format, esVersion, mode, '[ext]'),
     entryFileNames: getFilename('[name]', format, esVersion, mode, 'js'),
-    chunkFileNames: getFilename('[hash]', format, esVersion, mode, 'js'),
-    manualChunks: format !== 'umd' ? ((id) => {
-      if (id.includes('node_modules')) {
-        return getFilename('vendor', format, esVersion, mode);
+    chunkFileNames: getFilename('[name]', format, esVersion, mode, 'js'),
+    manualChunks: format !== 'umd' ? (id, { getModuleInfo }) => {
+      if (/node_modules/.test(id)) {
+        return 'vendor';
       }
-    }) : undefined,
+
+      const entryPoints = [];
+
+      const idsToHandle = new Set(getModuleInfo(id).importers);
+
+      for (const moduleId of idsToHandle) {
+        const { isEntry, importers } = getModuleInfo(
+          moduleId,
+        );
+        if (isEntry) {
+          entryPoints.push(moduleId);
+        }
+
+        for (const importerId of importers) {
+          idsToHandle.add(importerId);
+        }
+      }
+      // For multiple entries, we put it into a "shared code" bundle
+      if (entryPoints.length > 1) {
+        return 'vendor';
+      }
+    } : undefined,
     plugins: [
       minify && minifyPlugin(bundleTaskConfig.sourcemap, typeof minify === 'boolean' ? {} : minify.options),
     ].filter(Boolean),
