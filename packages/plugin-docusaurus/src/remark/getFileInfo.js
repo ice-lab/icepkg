@@ -5,7 +5,7 @@ const fixedFilename = require('./fixedFilename.js');
 
 const DOCUSAURUS_DIR = '.docusaurus';
 
-const getDemoFileInfo = ({ rootDir, code, lang }) => {
+const getDemoFileInfo = ({ rootDir, code, lang, filepath }) => {
   const demoDir = path.join(rootDir, DOCUSAURUS_DIR, 'demos');
   fse.ensureDirSync(demoDir);
   // const demoFilename = uniqueFilename(code);
