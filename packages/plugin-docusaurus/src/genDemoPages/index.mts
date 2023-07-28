@@ -9,7 +9,7 @@ import stringify from 'remark-stringify';
 
 function scanDocsDirectory(rootDir: string, docsPath: string): DirectoryTree | null {
   const docsDir = path.join(rootDir, docsPath);
-  const tree = directoryTree.default(docsDir, { extensions: /\.mdx?$/, exclude: /\/node_modules\// });
+  const tree = directoryTree.default(docsDir, { extensions: /\.mdx?$/, exclude: /node_modules/ });
   return tree;
 }
 
