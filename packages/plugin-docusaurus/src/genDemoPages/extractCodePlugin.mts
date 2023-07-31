@@ -13,11 +13,18 @@ interface MdNode {
 export default function getExtractCodePlugin(filepath: string, rootDir: string) {
   return function extractCodePlugin() {
     return async (ast) => {
+      let demoIndex = 0;
       await visit<MdNode>(ast, 'code', (node) => {
         if (node.meta === 'preview') {
           const { lang } = node;
           checkCodeLang(lang);
-          const { demoFilename, demoFilepath } = getDemoFileInfo({ rootDir, code: node.value, lang, filepath });
+          const { demoFilename, demoFilepath } = getDemoFileInfo({
+            rootDir,
+            code: node.value,
+            lang,
+            filepath,
+            index: demoIndex,
+          });
           const { pageFilename, pageFileCode } = getPageFileInfo({ rootDir, demoFilepath, demoFilename });
           genDemoPages({
             filepath,
@@ -27,6 +34,7 @@ export default function getExtractCodePlugin(filepath: string, rootDir: string) 
             pageFilename,
             pageFileCode,
           });
+          demoIndex += 1;
         }
       });
     };
