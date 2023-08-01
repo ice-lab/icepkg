@@ -126,8 +126,10 @@ export function getRollupOptions(
       commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
         extensions: [
           '.js', // plugin-commonjs default extensions
+          '.jsx', '.ts', '.tsx',
           ...(taskConfig.extensions || []),
         ],
+        transformMixedEsModules: true,
       }),
     );
     if (commandArgs.analyzer) {
