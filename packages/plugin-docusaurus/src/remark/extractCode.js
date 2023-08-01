@@ -21,7 +21,7 @@ const extractCodePlugin = (options) => {
 
   const transformer = (ast, vfile) => {
     const demosMeta = [];
-
+    let demoIndex = 0;
     visit(ast, 'code', (node, index) => {
       if (node.meta === 'preview') {
         const { lang } = node;
@@ -31,6 +31,7 @@ const extractCodePlugin = (options) => {
           filepath: vfile.path,
           lang,
           code: node.value,
+          index: demoIndex,
         });
         const { pageFilename, pageFileCode } = getPageFileInfo({
           rootDir,
@@ -53,6 +54,7 @@ const extractCodePlugin = (options) => {
           demoFilepath,
           url: path.join(baseUrl.startsWith('/') ? '' : '/', baseUrl, 'demos', demoFilename, '/'),
         });
+        demoIndex += 1;
       }
     });
 
