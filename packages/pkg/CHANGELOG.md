@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.11
+
+### Patch Changes
+
+- 0f56102: fix: not bundle cjs module
+
 ## 1.5.10
 
 ### Patch Changes

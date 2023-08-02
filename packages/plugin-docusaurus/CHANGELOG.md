@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.15
+
+### Patch Changes
+
+- 24879fe: feat: use real local path instead of hash to generate demo path
+
 ## 1.4.14
 
 ### Patch Changes
