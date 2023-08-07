@@ -90,6 +90,8 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
 
   // In order to only include the update files instead of all the files in the watch mode.
   function getProgramRootNames(originalFilenames: string[]) {
+    // Should include all the resolved .d.ts file to avoid dts generate error:
+    // TS4025: Exported variable '<name>' has or is using private name '<name>'.
     const dtsFilenames = originalFilenames.filter((filename) => filename.endsWith('.d.ts'));
     const needCompileFileNames = _files.map(({ filePath }) => filePath);
     return [...needCompileFileNames, ...dtsFilenames];
