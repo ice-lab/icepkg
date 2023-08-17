@@ -54,6 +54,7 @@ export function getRollupOptions(
           pragmaFrag: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
         },
         taskConfig.type === 'bundle' && taskConfig.compileDependencies,
+        taskConfig.modifyBabelOptions,
       ),
     );
   }
