@@ -1,5 +1,5 @@
 const path = require('path');
-const formatWinPath = require('./formatWinPath');
+const formatWinPath = require('../formatWinPath.cjs');
 
 const importRegex = /import\s+?(?:(?:(?:[\w*\s{},]*)\s+from\s+?)|)(?:(?:"(.*?)")|(?:'(.*?)'))[\s]*?(?:;|$|)/;
 
