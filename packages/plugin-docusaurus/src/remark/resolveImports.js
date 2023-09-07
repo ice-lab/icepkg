@@ -1,4 +1,5 @@
 const path = require('path');
+const formatWinPath = require('./formatWinPath');
 
 const importRegex = /import\s+?(?:(?:(?:[\w*\s{},]*)\s+from\s+?)|)(?:(?:"(.*?)")|(?:'(.*?)'))[\s]*?(?:;|$|)/;
 
@@ -45,7 +46,7 @@ const resolveImports = (code, filePath) => {
     _code = `import BrowserOnly from '@docusaurus/BrowserOnly'; \n${_code}`;
   }
 
-  return _code.replace(/\\/g, '\\\\');
+  return formatWinPath(_code);
 };
 
 module.exports = resolveImports;

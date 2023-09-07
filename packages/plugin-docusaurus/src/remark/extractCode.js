@@ -3,9 +3,10 @@ const visit = require('unist-util-visit');
 const checkCodeLang = require('./checkCodeLang.js');
 const { getDemoFileInfo, getPageFileInfo } = require('./getFileInfo.js');
 const genDemoPages = require('./genDemoPages.js');
+const formatWinPath = require('../formatWinPath.cjs');
 
 const rootDir = process.cwd();
-const previewerComponentPath = path.join(__dirname, '../Previewer/index.js').replace(/\\/g, '\\\\');
+const previewerComponentPath = formatWinPath(path.join(__dirname, '../Previewer/index.js'));
 
 const escapeCode = (code) => {
   return (code || '').replace(/`/g, '&#x60;').replace(/\$/g, '&#36;');
@@ -68,11 +69,11 @@ const extractCodePlugin = (options) => {
 <Previewer code={\`${escapeCode(code)}\`} mobilePreview={${mobilePreview}} url="${url}">
   <BrowserOnly>
     {() => {
-      const ${demoFilename} = require('${demoFilepath}').default;
+      const ${demoFilename} = require('${formatWinPath(demoFilepath)}').default;
       return <${demoFilename} />;
     }}
   </BrowserOnly>
-</Previewer>`.replace(/\\/g, '\\\\'),
+</Previewer>`,
         });
       }
 

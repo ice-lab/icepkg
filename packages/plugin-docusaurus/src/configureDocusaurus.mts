@@ -7,6 +7,8 @@ import { createRequire } from 'module';
 import { DOCUSAURUS_DIR, DOCUSAURUS_CONFIG_FILE, DOCUSAURUS_BABEL_CONFIG_FILE } from './constants.mjs';
 import type { PluginDocusaurusOptions } from './types.mjs';
 import type { PluginAPI } from '@ice/pkg';
+// @ts-expect-error export default error
+import formatWinPath from './formatWinPath.cjs';
 
 export interface ConfigureDocusaurusOptions extends PluginDocusaurusOptions {
   configuredPlugins: ReturnType<PluginAPI['getAllPlugin']>;
@@ -41,13 +43,13 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
 
   const targetContents = hbs.compile(templateContents)({
     ...params,
-    docusaurusClassPresetPath,
+    docusaurusClassPresetPath: formatWinPath(docusaurusClassPresetPath),
     sidebarItemsGenerator,
     haveStaticFiles,
     mobilePreview,
-    prismReactRendererPath,
-    docusaurusPluginContentPagesPath,
-  }).replace(/\\/g, '\\\\');
+    prismReactRendererPath: formatWinPath(prismReactRendererPath),
+    docusaurusPluginContentPagesPath: formatWinPath(docusaurusPluginContentPagesPath),
+  });
 
   const configuredPlugins = params?.configuredPlugins;
   const isUsingRax = configuredPlugins.some((plugin) => plugin.name === '@ice/pkg-plugin-rax-component');
@@ -89,7 +91,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
   const babelConfigContents = `
 module.exports = {
   presets: [
-    require.resolve('${require.resolve('@docusaurus/core/lib/babel/preset').replace(/\\/g, '\\\\')}'),
+    require.resolve('${formatWinPath(require.resolve('@docusaurus/core/lib/babel/preset'))}'),
     [
       require.resolve('@babel/preset-react'),
       {
