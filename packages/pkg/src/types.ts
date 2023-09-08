@@ -6,6 +6,7 @@ import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styles';
 import type { FSWatcher } from 'chokidar';
 import cssnano from 'cssnano';
+import { TransformOptions } from '@babel/core';
 
 export type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
@@ -193,6 +194,11 @@ interface _TaskConfig {
    * Extra babel plugins
    */
   babelPlugins?: babel.PluginItem[];
+  /**
+   * Modify default babel options
+   * @see https://babeljs.io/docs/options
+   */
+  modifyBabelOptions?: (babelCompileOptions: TransformOptions) => TransformOptions;
 }
 
 export interface BundleTaskConfig extends
