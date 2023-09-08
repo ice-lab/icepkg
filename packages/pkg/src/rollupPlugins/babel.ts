@@ -6,6 +6,8 @@ import type { ParserPlugin } from '@babel/parser';
 import { Plugin } from 'rollup';
 import { createScriptsFilter } from '../utils.js';
 import type { BundleTaskConfig } from '../types.js';
+import { TransformOptions } from '@babel/core';
+import getBabelOptions from '../helpers/getBabelOptions.js';
 
 const getParserPlugins = (isTS?: boolean): ParserPlugin[] => {
   const commonPlugins: ParserPlugin[] = [
@@ -26,7 +28,7 @@ const getParserPlugins = (isTS?: boolean): ParserPlugin[] => {
 
   return commonPlugins;
 };
-interface BabelPluginOptions {
+export interface BabelPluginOptions {
   pragma?: string;
   pragmaFrag?: string;
 }
@@ -35,12 +37,10 @@ const babelPlugin = (
   plugins: babel.PluginItem[],
   options: BabelPluginOptions,
   compileDependencies?: BundleTaskConfig['compileDependencies'],
+  modifyBabelOptions?: (babelCompileOptions: TransformOptions) => TransformOptions,
 ): Plugin => {
   // https://babeljs.io/docs/en/babel-preset-react#usage
-  const {
-    pragma = 'React.createElement',
-    pragmaFrag = 'React.Fragment',
-  } = options;
+  const babelOptions = getBabelOptions(plugins, options, modifyBabelOptions);
   const scriptsFilter = createScriptsFilter(compileDependencies);
   return {
     name: 'ice-pkg:babel',
@@ -53,6 +53,7 @@ const babelPlugin = (
       const parserPlugins = getParserPlugins(/\.tsx?$/.test(id));
 
       const { code, map } = babel.transformSync(source, {
+        ...babelOptions,
         babelrc: false,
         configFile: false,
         filename: id,
@@ -60,27 +61,6 @@ const babelPlugin = (
           sourceType: 'module',
           plugins: parserPlugins,
         },
-        generatorOpts: {
-          decoratorsBeforeExport: true,
-        },
-        plugins,
-        presets: [
-          [
-            '@babel/preset-typescript',
-            {
-              jsxPragma: pragma,
-              jsxPragmaFrag: pragmaFrag,
-            },
-          ],
-          [
-            '@babel/preset-react',
-            {
-              pragma,
-              pragmaFrag,
-              throwIfNamespace: false,
-            },
-          ],
-        ],
         sourceFileName: id,
       });
       return {
