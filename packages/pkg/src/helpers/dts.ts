@@ -8,6 +8,7 @@ import type { TaskConfig } from '../types.js';
 import { prepareSingleFileReplaceTscAliasPaths } from 'tsc-alias';
 import fse from 'fs-extra';
 import * as path from 'path';
+import merge from 'lodash.merge';
 
 export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'mjs' | 'mts';
 
@@ -39,7 +40,7 @@ const normalizeDtsInput = (file: File, rootDir: string, outputDir: string): DtsI
 };
 
 interface DtsCompileOptions {
-
+  // In watch mode, it only contains the updated file names. In build mode, it contains all file names.
   files: File[];
   alias: TaskConfig['alias'];
   rootDir: string;
@@ -52,16 +53,7 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
     return;
   }
 
-  const tsCompilerOptions: ts.CompilerOptions = {
-    allowJs: true,
-    declaration: true,
-    emitDeclarationOnly: true,
-    incremental: true,
-    skipLibCheck: true,
-    outDir: outputDir,
-    rootDir: path.join(rootDir, 'src'),
-    paths: formatAliasToTSPathsConfig(alias),
-  };
+  const tsConfig = await getTSConfig(rootDir, outputDir, alias);
 
   const logger = createLogger('dts');
 
@@ -81,7 +73,7 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
   const dtsFiles = {};
 
   // Create ts host and custom the writeFile and readFile.
-  const host = ts.createCompilerHost(tsCompilerOptions);
+  const host = ts.createCompilerHost(tsConfig.options);
   host.writeFile = (fileName, contents) => {
     dtsFiles[fileName] = contents;
   };
@@ -96,12 +88,24 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
     return _readFile(fileName);
   };
 
+  // In order to only include the update files instead of all the files in the watch mode.
+  function getProgramRootNames(originalFilenames: string[]) {
+    // Should include all the resolved .d.ts file to avoid dts generate error:
+    // TS4025: Exported variable '<name>' has or is using private name '<name>'.
+    const dtsFilenames = originalFilenames.filter((filename) => filename.endsWith('.d.ts'));
+    const needCompileFileNames = _files.map(({ filePath }) => filePath);
+    return [...needCompileFileNames, ...dtsFilenames];
+  }
+
   // Create ts program.
-  const program = ts.createProgram(
-    _files.map(({ filePath }) => filePath),
-    tsCompilerOptions,
+  const programOptions: ts.CreateProgramOptions = {
+    rootNames: getProgramRootNames(tsConfig.fileNames),
+    options: tsConfig.options,
     host,
-  );
+    projectReferences: tsConfig.projectReferences,
+    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(tsConfig),
+  };
+  const program = ts.createProgram(programOptions);
 
   logger.debug(`Initializing program takes ${timeFrom(dtsCompileStart)}`);
 
@@ -123,10 +127,8 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
   // Reason: https://github.com/microsoft/TypeScript/issues/30952#issuecomment-1114225407
   const tsConfigLocalPath = path.join(rootDir, 'node_modules/pkg/tsconfig.json');
   await fse.ensureFile(tsConfigLocalPath);
-  await fse.writeJSON(
-    tsConfigLocalPath,
-    { compilerOptions: tsCompilerOptions },
-  );
+  await fse.writeJSON(tsConfigLocalPath, tsConfig, { spaces: 2 });
+
   const runFile = await prepareSingleFileReplaceTscAliasPaths({
     configFile: tsConfigLocalPath,
     outDir: outputDir,
@@ -140,4 +142,50 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
   logger.debug(`Generating declaration files take ${timeFrom(dtsCompileStart)}`);
 
   return result;
+}
+
+async function getTSConfig(
+  rootDir: string,
+  outputDir: string,
+  alias: TaskConfig['alias'],
+) {
+  const defaultTSCompilerOptions: ts.CompilerOptions = {
+    allowJs: true,
+    declaration: true,
+    emitDeclarationOnly: true,
+    incremental: true,
+    skipLibCheck: true,
+    paths: formatAliasToTSPathsConfig(alias), // default add alias to paths
+  };
+  const projectTSConfig = await getProjectTSConfig(rootDir);
+  const tsConfig: ts.ParsedCommandLine = merge(
+    { options: defaultTSCompilerOptions },
+    projectTSConfig,
+    {
+      options: {
+        outDir: outputDir,
+        rootDir: path.join(rootDir, 'src'),
+      },
+    },
+  );
+
+  return tsConfig;
+}
+
+async function getProjectTSConfig(rootDir: string): Promise<ts.ParsedCommandLine> {
+  const tsconfigPath = ts.findConfigFile(rootDir, ts.sys.fileExists);
+  if (tsconfigPath) {
+    const tsconfigFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+    return ts.parseJsonConfigFileContent(
+      tsconfigFile.config,
+      ts.sys,
+      path.dirname(tsconfigPath),
+    );
+  }
+
+  return {
+    options: {},
+    fileNames: [],
+    errors: [],
+  };
 }

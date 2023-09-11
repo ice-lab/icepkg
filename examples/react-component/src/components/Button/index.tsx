@@ -20,6 +20,8 @@ interface ButtonProps {
   onClick?: React.MouseEventHandler;
 }
 
+export const app: Application = { add: () => Promise.resolve(1) };
+
 const Button: React.FunctionComponent<React.PropsWithChildren<ButtonProps>> = (props: ButtonProps) => {
   const {
     type = 'default',
