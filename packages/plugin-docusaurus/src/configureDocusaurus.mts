@@ -135,5 +135,12 @@ function createSymbolicLink(src: string, dest: string) {
     fse.unlinkSync(dest);
   }
 
-  fse.ensureSymlinkSync(src, dest);
+  try {
+    fse.ensureSymlinkSync(src, dest, 'junction');
+  } catch (error) {
+    if (error.code === 'EEXIST') {
+      return;
+    }
+    throw error;
+  }
 }
