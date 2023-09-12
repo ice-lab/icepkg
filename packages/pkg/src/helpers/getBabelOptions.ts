@@ -6,7 +6,7 @@ function getBabelOptions(
   options: BabelPluginOptions,
   modifyBabelOptions?: (babelCompileOptions: TransformOptions) => TransformOptions,
 ) {
-  const { pragma = 'React.createElement', pragmaFrag = 'React.Fragment' } = options;
+  const { pragma = 'React.createElement', pragmaFrag = 'React.Fragment', jsxRuntime = 'automatic' } = options;
   const baseBabelOptions: TransformOptions = {
     babelrc: false,
     configFile: false,
@@ -24,11 +24,15 @@ function getBabelOptions(
       ],
       [
         '@babel/preset-react',
-        {
-          pragma,
-          pragmaFrag,
-          throwIfNamespace: false,
-        },
+        jsxRuntime === 'automatic'
+          ? {
+            runtime: jsxRuntime,
+          }
+          : {
+            pragma,
+            pragmaFrag,
+            throwIfNamespace: false,
+          },
       ],
     ],
   };
