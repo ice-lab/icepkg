@@ -30,6 +30,8 @@ const getParserPlugins = (isTS?: boolean): ParserPlugin[] => {
 };
 export interface BabelPluginOptions {
   pragma?: string;
+  /** @default automatic */
+  jsxRuntime?: 'classic' | 'automatic';
   pragmaFrag?: string;
 }
 

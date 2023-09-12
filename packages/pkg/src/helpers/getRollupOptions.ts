@@ -50,6 +50,7 @@ export function getRollupOptions(
       babelPlugin(
         taskConfig.babelPlugins,
         {
+          jsxRuntime: taskConfig.jsxRuntime,
           pragma: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragma,
           pragmaFrag: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
         },
