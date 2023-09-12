@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.12
+
+### Patch Changes
+
+- 4aee24c: fix: generate types with private type error
+- 0309863: filter the failed dts file
+- 0874dc8: support config babel jsx runtime
+- 8097a2c: feat: support modify babel options
+
 ## 1.5.11
 
 ### Patch Changes
