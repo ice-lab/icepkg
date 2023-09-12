@@ -1,4 +1,5 @@
 const path = require('path');
+const formatWinPath = require('../formatWinPath.cjs');
 
 const importRegex = /import\s+?(?:(?:(?:[\w*\s{},]*)\s+from\s+?)|)(?:(?:"(.*?)")|(?:'(.*?)'))[\s]*?(?:;|$|)/;
 
@@ -23,7 +24,7 @@ const resolveImports = (code, filePath) => {
     let importedReact = false;
     imports.forEach((i) => {
       if (i[0] === '.') {
-        _code = _code.replace(i, path.resolve(fileDirname, i));
+        _code = _code.replace(i, formatWinPath(path.resolve(fileDirname, i)));
       }
 
       if (i === 'react') {
@@ -45,7 +46,7 @@ const resolveImports = (code, filePath) => {
     _code = `import BrowserOnly from '@docusaurus/BrowserOnly'; \n${_code}`;
   }
 
-  return _code.replace(/\\/g, '\\\\');
+  return _code;
 };
 
 module.exports = resolveImports;
