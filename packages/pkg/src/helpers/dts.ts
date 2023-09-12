@@ -136,7 +136,7 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
 
   const result = _files.map((file) => ({
     ...file,
-    dtsContent: runFile({ fileContents: dtsFiles[file.dtsPath], filePath: file.dtsPath }),
+    dtsContent: dtsFiles[file.dtsPath] ? runFile({ fileContents: dtsFiles[file.dtsPath], filePath: file.dtsPath }) : '',
   }));
 
   logger.debug(`Generating declaration files take ${timeFrom(dtsCompileStart)}`);
