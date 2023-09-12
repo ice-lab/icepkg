@@ -1,7 +1,6 @@
 import { expect, it, describe } from 'vitest';
 import { TaskConfig } from '../src';
 import { default as makeBabelPlugin } from '../src/rollupPlugins/babel';
-import { buildTransformTasks } from '../src/tasks/transform';
 
 const babelPlugins = [
   'babel-plugin-transform-jsx-list',
@@ -17,7 +16,7 @@ const babelPlugins = [
   'babel-plugin-transform-jsx-class',
 ];
 
-function cleanCode(str:string){
+function cleanCode(str: string) {
   return str.replace(/\s+/g, '');
 }
 
@@ -28,7 +27,7 @@ describe('transform', () => {
       jsxRuntime: 'automatic',
       type: 'transform',
     };
-    const babelPlugin = makeBabelPlugin(transformTaskConfig.babelPlugins, {
+    const babelPlugin = makeBabelPlugin(transformTaskConfig.babelPlugins!, {
       jsxRuntime: transformTaskConfig.jsxRuntime,
       pragma: transformTaskConfig.swcCompileOptions?.jsc?.transform?.react?.pragma,
       pragmaFrag: transformTaskConfig.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
@@ -36,9 +35,11 @@ describe('transform', () => {
     expect(babelPlugin.name).toBe('ice-pkg:babel');
     // @ts-ignore it's callable
     const ret = babelPlugin.transform('<div x-if={false}></div>', 'test.tsx');
-    expect(cleanCode(ret.code)).toBe(cleanCode(`import { createCondition as __create_condition__ } from "babel-runtime-jsx-plus";
+    expect(cleanCode(ret.code)).toBe(
+      cleanCode(`import { createCondition as __create_condition__ } from "babel-runtime-jsx-plus";
     import { jsx as _jsx } from "react/jsx-runtime";
-    __create_condition__([[() => false, () => /*#__PURE__*/_jsx("div", {})]]);`));
+    __create_condition__([[() => false, () => /*#__PURE__*/_jsx("div", {})]]);`),
+    );
   });
 
   it('w/ classic jsx runtime', () => {
@@ -47,7 +48,7 @@ describe('transform', () => {
       jsxRuntime: 'classic',
       type: 'transform',
     };
-    const babelPlugin = makeBabelPlugin(transformTaskConfig.babelPlugins, {
+    const babelPlugin = makeBabelPlugin(transformTaskConfig.babelPlugins!, {
       jsxRuntime: transformTaskConfig.jsxRuntime,
       pragma: transformTaskConfig.swcCompileOptions?.jsc?.transform?.react?.pragma,
       pragmaFrag: transformTaskConfig.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
@@ -55,7 +56,9 @@ describe('transform', () => {
     expect(babelPlugin.name).toBe('ice-pkg:babel');
     // @ts-ignore it's callable
     const ret = babelPlugin.transform('<div x-if={false}></div>', 'test.tsx');
-    expect(cleanCode(ret.code)).toBe(cleanCode(`import { createCondition as __create_condition__ } from "babel-runtime-jsx-plus";
-    __create_condition__([[() => false, () => /*#__PURE__*/React.createElement("div", null)]]);`));
+    expect(cleanCode(ret.code)).toBe(
+      cleanCode(`import { createCondition as __create_condition__ } from "babel-runtime-jsx-plus";
+    __create_condition__([[() => false, () => /*#__PURE__*/React.createElement("div", null)]]);`),
+    );
   });
 });
