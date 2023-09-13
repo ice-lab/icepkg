@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.16
+
+### Patch Changes
+
+- f049608: fix: unicode is transformed
+  fix: can not work on windows
+
 ## 1.4.15
 
 ### Patch Changes
