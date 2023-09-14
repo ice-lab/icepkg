@@ -165,7 +165,7 @@ function getRollupOutputs({
   esVersion,
   command,
 }: GetRollupOutputsOptions): OutputOptions[] {
-  const defaultVendorsName = 'vendors';
+  const defaultVendorsName = 'vendor';
   const { outputDir, modifyVendorsName = (vendorsName: string) => vendorsName } = bundleTaskConfig;
 
   const outputFormats = (bundleTaskConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
