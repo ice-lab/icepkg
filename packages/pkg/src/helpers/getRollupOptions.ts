@@ -165,12 +165,16 @@ function getRollupOutputs({
   esVersion,
   command,
 }: GetRollupOutputsOptions): OutputOptions[] {
-  const { outputDir } = bundleTaskConfig;
+  const defaultVendorsName = 'vendors';
+  const { outputDir, modifyVendorsName = (vendorsName: string) => vendorsName } = bundleTaskConfig;
 
   const outputFormats = (bundleTaskConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
 
   const name = bundleTaskConfig.name ?? pkg.name;
   const minify = bundleTaskConfig.jsMinify(mode, command);
+
+  const vendorsName = modifyVendorsName(defaultVendorsName);
+
   return outputFormats.map((format) => ({
     name,
     format,
@@ -183,7 +187,7 @@ function getRollupOutputs({
     chunkFileNames: getFilename('[name]', format, esVersion, mode, 'js'),
     manualChunks: format !== 'umd' ? (id, { getModuleInfo }) => {
       if (/node_modules/.test(id)) {
-        return 'vendor';
+        return vendorsName;
       }
 
       const entryPoints = [];
@@ -204,7 +208,7 @@ function getRollupOutputs({
       }
       // For multiple entries, we put it into a "shared code" bundle
       if (entryPoints.length > 1) {
-        return 'vendor';
+        return vendorsName;
       }
     } : undefined,
     plugins: [
