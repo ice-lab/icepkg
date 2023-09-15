@@ -2,4 +2,4 @@
 '@ice/pkg': patch
 ---
 
-feat: support modify vendors name
+feat: support modify vendor name
