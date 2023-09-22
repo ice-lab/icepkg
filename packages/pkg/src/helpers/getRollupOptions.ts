@@ -165,15 +165,12 @@ function getRollupOutputs({
   esVersion,
   command,
 }: GetRollupOutputsOptions): OutputOptions[] {
-  const defaultVendorName = 'vendor';
-  const { outputDir, modifyVendorName = (vendorName: string) => vendorName } = bundleTaskConfig;
+  const { outputDir, vendorName = 'vendor' } = bundleTaskConfig;
 
   const outputFormats = (bundleTaskConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
 
   const name = bundleTaskConfig.name ?? pkg.name;
   const minify = bundleTaskConfig.jsMinify(mode, command);
-
-  const vendorName = modifyVendorName(defaultVendorName);
 
   return outputFormats.map((format) => ({
     name,

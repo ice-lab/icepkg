@@ -219,7 +219,7 @@ export interface BundleTaskConfig extends
 
   cssMinify?: (mode: string, command: string) => CSSMinify;
 
-  modifyVendorName?: (defaultVendorName: string) => string;
+  vendorName?: string;
 }
 
 export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {
