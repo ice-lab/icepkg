@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.13
+
+### Patch Changes
+
+- 1de94aa: feat: support modify vendor name
+
 ## 1.5.12
 
 ### Patch Changes
