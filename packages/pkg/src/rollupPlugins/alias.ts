@@ -1,6 +1,3 @@
-/**
- * This plugin is used to handle alias only in transform task
- */
 import * as path from 'path';
 import { init, parse } from 'es-module-lexer';
 import type { ImportSpecifier } from 'es-module-lexer';
