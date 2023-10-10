@@ -8,7 +8,6 @@ import {
 } from '../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
-import formatAliasToTSPathsConfig from './formatAliasToTSPathsConfig.js';
 
 // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
 const LEGACY_BROWSER_TARGETS = {
@@ -31,7 +30,6 @@ export const getDefaultBundleSwcConfig = (
   const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? MODERN_BROWSER_TARGETS : LEGACY_BROWSER_TARGETS;
   return {
     jsc: {
-      paths: formatAliasToTSPathsConfig(bundleTaskConfig.alias),
       externalHelpers: true,
     },
     minify: false,
@@ -62,7 +60,6 @@ export const getDefaultTransformSwcConfig = (
   return {
     jsc: {
       target,
-      paths: formatAliasToTSPathsConfig(transformTaskConfig.alias),
       transform: {
         optimizer: {
           globals: {

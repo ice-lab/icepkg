@@ -65,7 +65,8 @@
     "rollup-plugin-visualizer": "^5.8.3",
     "semver": "^7.0.0",
     "tsc-alias": "^1.8.2",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "es-module-lexer": "^0.10.5"
   },
   "devDependencies": {
     "@types/babel__core": "^7.1.20",

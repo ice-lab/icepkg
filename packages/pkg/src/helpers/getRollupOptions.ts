@@ -14,6 +14,7 @@ import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
+import aliasPlugin from '../rollupPlugins/alias.js';
 
 import {
   Context,
@@ -66,6 +67,7 @@ export function getRollupOptions(
       taskConfig.swcCompileOptions,
       taskConfig.type === 'bundle' && taskConfig.compileDependencies,
     ),
+    aliasPlugin({ alias: taskConfig.alias, rootDir }),
   );
 
   if (taskConfig.type === 'transform') {

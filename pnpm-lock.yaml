@@ -396,6 +396,9 @@ importers:
       deepmerge:
         specifier: ^4.2.2
         version: 4.2.2
+      es-module-lexer:
+        specifier: ^0.10.5
+        version: 0.10.5
       escape-string-regexp:
         specifier: ^5.0.0
         version: 5.0.0
