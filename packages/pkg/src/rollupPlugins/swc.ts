@@ -2,7 +2,7 @@ import { extname, basename, relative, sep } from 'path';
 import * as swc from '@swc/core';
 import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
-import { checkDependencyExists, createScriptsFilter } from '../utils.js';
+import { checkDependencyExists, createScriptsFilter, formatCnpmDepFilepath, getExcludeNodeModules } from '../utils.js';
 
 import type { Options as swcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
 import type { TaskConfig, OutputFile, BundleTaskConfig } from '../types.js';
@@ -65,12 +65,12 @@ const swcPlugin = (
   extraSwcOptions?: Config,
   compileDependencies?: BundleTaskConfig['compileDependencies'],
 ): Plugin => {
-  const scriptsFilter = createScriptsFilter(compileDependencies);
+  const scriptsFilter = createScriptsFilter([], getExcludeNodeModules(compileDependencies));
   return {
     name: 'ice-pkg:swc',
 
     async transform(source, id) {
-      if (!scriptsFilter(id)) {
+      if (!scriptsFilter(formatCnpmDepFilepath(id))) {
         return null;
       }
 

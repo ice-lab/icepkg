@@ -443,7 +443,7 @@ export default defineConfig({
 
 #### compileDependencies
 
-+ 类型：`boolean | RegExp[]`
++ 类型：`boolean | RegExp[] | string[]`
 + 默认值：`false`
 
 配置是否编译 node_modules 中的依赖。如果值为 `true`，则 node_modules 中的依赖都会编译；如果值为 false 则都不编译；如果值为数组，则只会编译对应的依赖。
@@ -453,7 +453,7 @@ import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   bundle: {
-    compileDependencies: [/antd/],
+    compileDependencies: ['antd'],
   },
 });
 ```

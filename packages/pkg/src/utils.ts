@@ -286,24 +286,63 @@ export const stringifyObject = (obj: PlainObject) => {
   }, {});
 };
 
-export const createScriptsFilter = (compileDependencies?: boolean | RegExp[]) => {
-  const exclude = [/\.d\.ts$/];
-  const include = [/\.m?[jt]sx?$/];
+// @ref: It will pass to createScriptFilter function
+export function getExcludeNodeModules(compileDependencies: boolean | RegExp[] | string[]): RegExp[] {
+  if (!compileDependencies) {
+    // not compile deps in node_modules
+    return [/node_modules/];
+  }
+  if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
+    // compile all deps in node_modules except compileDependencies
+
+    return [new RegExp(`node_modules/(?!(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')}))`)];
+  }
+  // compile all deps in node_modules
+  return [];
+}
+
+/**
+ * @example react/node_modules/_idb@7.1.1@idb/build/index.js -> react/node_modules/idb/build/index.js
+ */
+export function formatCnpmDepFilepath(filepath: string) {
+  const reg = /(.*(?:\/|\\\\))(?:_.*@(?:\d+)\.(?:\d+)\.(?:\d+)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?@)(.*)/;
+  const matchedResult = filepath.match(reg);
+  if (!matchedResult) {
+    return filepath;
+  }
+  const [, p1, p2] = matchedResult;
+  return p1 + p2;
+}
+
+/**
+ *
+ * @param extraInclude include other file types
+ * @param extraExclude exclude other file types
+ *
+ * @example exclude node_modules createScriptsFilter([], [/node_modules/])
+ */
+export const createScriptsFilter = (
+  extraInclude: RegExp[] = [],
+  extraExclude: RegExp[] = [],
+) => {
+  const exclude = [/\.d\.ts$/].concat(extraExclude);
+  const include = [/\.m?[jt]sx?$/].concat(extraInclude);
 
   // compileDependencies 默认值为 false
 
-  // compileDependencies 为 true 或空数组时，编译所有依赖，这里不需要做任何处理
 
-  if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
-    // compileDependencies 为 array 并且数组长度不为空时，编译指定依赖
-    // 例子：匹配除 @ice/abc 或者 abc 以外所有在 node_modules 下的依赖： node_modules(\/|\\\\)(?!(.*@ice\/abc|.*abc)).*(\/|\\\\).*
-    exclude.push(new RegExp(`node_modules(/|\\\\)(?!(${compileDependencies.map((dep) => (`.*${dep.source}`)).join('|')})).*(/|\\\\).*`));
-  } else if (!compileDependencies) {
-    // compileDependencies 为 false 时，不编译任何依赖
-    exclude.push(/node_modules/);
-  }
+  // if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
+  //   // compileDependencies 为 array 并且数组长度不为空时，编译指定依赖
+  //   // 例子：匹配除 @ice/abc 或者 abc 以外所有在 node_modules 下的依赖： node_modules(\/|\\\\)(?!(.*@ice\/abc|.*abc)).*(\/|\\\\).*
+  //   exclude.push(new RegExp(`node_modules(/|\\\\)(?!(${compileDependencies.map((dep) => (`.*${dep.source}`)).join('|')})).*(/|\\\\).*`));
+  // } else if (!compileDependencies) {
+  //   // compileDependencies 为 false 时，不编译任何依赖
+  //   exclude.push(/node_modules/);
+  // }
+
   return createFilter(include, exclude);
 };
+
 export const cwd = process.cwd();
 
 export function normalizeSlashes(file: string) {

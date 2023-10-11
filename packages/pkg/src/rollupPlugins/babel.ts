@@ -4,7 +4,7 @@
 import * as babel from '@babel/core';
 import type { ParserPlugin } from '@babel/parser';
 import { Plugin } from 'rollup';
-import { createScriptsFilter } from '../utils.js';
+import { createScriptsFilter, formatCnpmDepFilepath, getExcludeNodeModules } from '../utils.js';
 import type { BundleTaskConfig } from '../types.js';
 import { TransformOptions } from '@babel/core';
 import getBabelOptions from '../helpers/getBabelOptions.js';
@@ -43,12 +43,12 @@ const babelPlugin = (
 ): Plugin => {
   // https://babeljs.io/docs/en/babel-preset-react#usage
   const babelOptions = getBabelOptions(plugins, options, modifyBabelOptions);
-  const scriptsFilter = createScriptsFilter(compileDependencies);
+  const scriptsFilter = createScriptsFilter([], getExcludeNodeModules(compileDependencies));
   return {
     name: 'ice-pkg:babel',
 
     transform(source, id) {
-      if (!scriptsFilter(id)) {
+      if (!scriptsFilter(formatCnpmDepFilepath(id))) {
         return null;
       }
 
