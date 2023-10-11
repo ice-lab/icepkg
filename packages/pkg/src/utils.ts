@@ -288,15 +288,21 @@ export const stringifyObject = (obj: PlainObject) => {
 
 export const createScriptsFilter = (compileDependencies?: boolean | RegExp[]) => {
   const exclude = [/\.d\.ts$/];
-  if (Array.isArray(compileDependencies)) {
-    exclude.push(...compileDependencies);
+  const include = [/\.m?[jt]sx?$/];
+
+  // compileDependencies 默认值为 false
+
+  // compileDependencies 为 true 或空数组时，编译所有依赖，这里不需要做任何处理
+
+  if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
+    // compileDependencies 为 array 并且数组长度不为空时，编译指定依赖
+    // 例子：匹配除 @ice/abc 或者 abc 以外所有在 node_modules 下的依赖： node_modules(\/|\\\\)(?!(.*@ice\/abc|.*abc)).*(\/|\\\\).*
+    exclude.push(new RegExp(`node_modules(/|\\\\)(?!(${compileDependencies.map((dep) => (`.*${dep.source}`)).join('|')})).*(/|\\\\).*`));
   } else if (!compileDependencies) {
+    // compileDependencies 为 false 时，不编译任何依赖
     exclude.push(/node_modules/);
   }
-  return createFilter(
-    /\.m?[jt]sx?$/, // include
-    exclude,
-  );
+  return createFilter(include, exclude);
 };
 export const cwd = process.cwd();
 
