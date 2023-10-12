@@ -287,17 +287,15 @@ export const stringifyObject = (obj: PlainObject) => {
 };
 
 // @ref: It will pass to createScriptFilter function
-export function getExcludeNodeModules(compileDependencies: boolean | RegExp[] | string[]): RegExp[] {
-  if (!compileDependencies) {
-    // not compile deps in node_modules
+export function getIncludeNodeModules(compileDependencies: boolean | RegExp[] | string[]): RegExp[] {
+  if (compileDependencies === true || (Array.isArray(compileDependencies) && compileDependencies.length === 0)) {
     return [/node_modules/];
   }
   if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
     // compile all deps in node_modules except compileDependencies
-
-    return [new RegExp(`node_modules/(?!(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')}))`)];
+    return [new RegExp(`node_modules/(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')})/(?!node_modules).*`)];
   }
-  // compile all deps in node_modules
+  // default
   return [];
 }
 
@@ -315,6 +313,7 @@ export function formatCnpmDepFilepath(filepath: string) {
 }
 
 /**
+ * default include src/**.m?[jt]sx? but exclude .d.ts file
  *
  * @param extraInclude include other file types
  * @param extraExclude exclude other file types
@@ -322,13 +321,13 @@ export function formatCnpmDepFilepath(filepath: string) {
  * @example exclude node_modules createScriptsFilter([], [/node_modules/])
  */
 export const createScriptsFilter = (
-  extraInclude: RegExp[] = [],
-  extraExclude: RegExp[] = [],
+  extraIncludes: RegExp[] = [],
+  extraExcludes: RegExp[] = [],
 ) => {
-  const exclude = [/\.d\.ts$/].concat(extraExclude);
-  const include = [/\.m?[jt]sx?$/].concat(extraInclude);
+  const includes = [/src\/.*\.m?[jt]sx?$/].concat(extraIncludes);
+  const excludes = [/\.d\.ts$/].concat(extraExcludes);
 
-  return createFilter(include, exclude);
+  return createFilter(includes, excludes);
 };
 
 export const cwd = process.cwd();
