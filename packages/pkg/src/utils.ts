@@ -328,18 +328,6 @@ export const createScriptsFilter = (
   const exclude = [/\.d\.ts$/].concat(extraExclude);
   const include = [/\.m?[jt]sx?$/].concat(extraInclude);
 
-  // compileDependencies 默认值为 false
-
-
-  // if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
-  //   // compileDependencies 为 array 并且数组长度不为空时，编译指定依赖
-  //   // 例子：匹配除 @ice/abc 或者 abc 以外所有在 node_modules 下的依赖： node_modules(\/|\\\\)(?!(.*@ice\/abc|.*abc)).*(\/|\\\\).*
-  //   exclude.push(new RegExp(`node_modules(/|\\\\)(?!(${compileDependencies.map((dep) => (`.*${dep.source}`)).join('|')})).*(/|\\\\).*`));
-  // } else if (!compileDependencies) {
-  //   // compileDependencies 为 false 时，不编译任何依赖
-  //   exclude.push(/node_modules/);
-  // }
-
   return createFilter(include, exclude);
 };
 
