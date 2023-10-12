@@ -38,7 +38,8 @@
     "babel-plugin-transform-jsx-fragment": "^0.1.4",
     "babel-plugin-transform-jsx-list": "^0.1.2",
     "babel-plugin-transform-jsx-memo": "^0.1.4",
-    "babel-plugin-transform-jsx-slot": "^0.1.2"
+    "babel-plugin-transform-jsx-slot": "^0.1.2",
+    "babel-runtime-jsx-plus": "^0.1.5"
   },
   "devDependencies": {
     "@ice/pkg": "^1.5.4"
