@@ -293,6 +293,16 @@ export function getIncludeNodeModules(compileDependencies: boolean | RegExp[] | 
   }
   if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
     // compile all deps in node_modules except compileDependencies
+    // for example: now only want to compile abc and @ice/abc deps.
+    // will generate the regular expression: /node_modules(?:\/|\\\\)(abc|@ice\/abc)(?:\/|\\\\)(?!node_modules).*/
+    // will match:
+    // 1. node_modules/abc/index.js
+    // 2. node_modules/def/node_modules/abc/index.js
+    // 3. node_modules/@ice/abc/index.js
+    // 4. node_modules/def/node_modules/@ice/abc/index.js
+    // will not match:
+    // node_modules/abc/node_modules/def/index.js
+    // node_modules/def/index.js
     return [new RegExp(`node_modules/(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')})/(?!node_modules).*`)];
   }
   // default
@@ -300,7 +310,9 @@ export function getIncludeNodeModules(compileDependencies: boolean | RegExp[] | 
 }
 
 /**
- * @example react/node_modules/_idb@7.1.1@idb/build/index.js -> react/node_modules/idb/build/index.js
+ * @reason cnpm node_modules path is different from npm/pnpm, it will not match the compileDependencies
+ *
+ * @example transform react/node_modules/_idb@7.1.1@idb/build/index.js to react/node_modules/idb/build/index.js
  */
 export function formatCnpmDepFilepath(filepath: string) {
   const reg = /(.*(?:\/|\\\\))(?:_.*@(?:\d+)\.(?:\d+)\.(?:\d+)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?@)(.*)/;
