@@ -65,7 +65,10 @@ const swcPlugin = (
   extraSwcOptions?: Config,
   compileDependencies?: BundleTaskConfig['compileDependencies'],
 ): Plugin => {
-  const scriptsFilter = createScriptsFilter(getIncludeNodeModules(compileDependencies));
+  const scriptsFilter = createScriptsFilter(
+    getIncludeNodeModules(compileDependencies),
+    [/@swc\/helpers/],
+  );
   return {
     name: 'ice-pkg:swc',
 

@@ -337,7 +337,7 @@ export const createScriptsFilter = (
   extraExcludes: RegExp[] = [],
 ) => {
   const includes = [/src\/.*\.m?[jt]sx?$/].concat(extraIncludes);
-  const excludes = [/\.d\.ts$/].concat(extraExcludes);
+  const excludes = [/\.d\.ts$/, /core-js/, /core-js-pure/, /tslib/].concat(extraExcludes);
 
   return createFilter(includes, excludes);
 };
