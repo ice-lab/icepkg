@@ -1,16 +1,12 @@
 import * as path from 'path';
 import { init, parse } from 'es-module-lexer';
-import type { ImportSpecifier } from 'es-module-lexer';
 import consola from 'consola';
 import MagicString from 'magic-string';
 import { createScriptsFilter } from '../utils.js';
+import type { ImportSpecifier } from 'es-module-lexer';
+import type { Plugin } from 'rollup';
 
-interface AliasPluginOptions {
-  alias: Record<string, string>;
-  rootDir: string;
-}
-
-const aliasPlugin = (options: AliasPluginOptions) => {
+const aliasPlugin = (rootDir: string, originalAlias: Record<string, string>): Plugin => {
   const scriptFilter = createScriptsFilter();
   return {
     name: 'ice-pkg:transform-alias',
@@ -20,7 +16,6 @@ const aliasPlugin = (options: AliasPluginOptions) => {
       if (!code || !scriptFilter(id)) {
         return null;
       }
-      const { alias: originalAlias } = options;
       await init;
       let imports: readonly ImportSpecifier[] = [];
       try {
@@ -35,7 +30,7 @@ const aliasPlugin = (options: AliasPluginOptions) => {
         };
       }
 
-      const alias = resolveAliasConfig(originalAlias, options.rootDir, id);
+      const alias = resolveAliasConfig(originalAlias, rootDir, id);
       const str: MagicString = new MagicString(code);
       imports.forEach(({ n, s, e }) => {
         const matchedEntry = Object.keys(alias).find((pattern) => matches(pattern, n));
