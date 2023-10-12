@@ -287,7 +287,7 @@ export const stringifyObject = (obj: PlainObject) => {
 };
 
 // @ref: It will pass to createScriptFilter function
-export function getIncludeNodeModules(compileDependencies: boolean | RegExp[] | string[]): RegExp[] {
+export function getIncludeNodeModules(compileDependencies: boolean | Array<RegExp | string>): RegExp[] {
   if (compileDependencies === true || (Array.isArray(compileDependencies) && compileDependencies.length === 0)) {
     return [/node_modules/];
   }
