@@ -34,7 +34,7 @@ describe('transform', () => {
     });
     expect(babelPlugin.name).toBe('ice-pkg:babel');
     // @ts-ignore it's callable
-    const ret = babelPlugin.transform('<div x-if={false}></div>', 'test.tsx');
+    const ret = babelPlugin.transform('<div x-if={false}></div>', 'src/test.tsx');
     expect(cleanCode(ret.code)).toBe(
       cleanCode(`import { createCondition as __create_condition__ } from "babel-runtime-jsx-plus";
     import { jsx as _jsx } from "react/jsx-runtime";
@@ -55,7 +55,7 @@ describe('transform', () => {
     });
     expect(babelPlugin.name).toBe('ice-pkg:babel');
     // @ts-ignore it's callable
-    const ret = babelPlugin.transform('<div x-if={false}></div>', 'test.tsx');
+    const ret = babelPlugin.transform('<div x-if={false}></div>', 'src/test.tsx');
     expect(cleanCode(ret.code)).toBe(
       cleanCode(`import { createCondition as __create_condition__ } from "babel-runtime-jsx-plus";
     __create_condition__([[() => false, () => /*#__PURE__*/React.createElement("div", null)]]);`),
