@@ -6,6 +6,7 @@ import { createScriptsFilter } from '../utils.js';
 import type { ImportSpecifier } from 'es-module-lexer';
 import type { Plugin } from 'rollup';
 
+// aliasPlugin only available for transform task and ES Module
 const aliasPlugin = (rootDir: string, originalAlias: Record<string, string>): Plugin => {
   const scriptFilter = createScriptsFilter();
   return {
@@ -51,10 +52,7 @@ const aliasPlugin = (rootDir: string, originalAlias: Record<string, string>): Pl
   };
 };
 
-function matches(pattern: string | RegExp, importee: string) {
-  if (pattern instanceof RegExp) {
-    return pattern.test(importee);
-  }
+export function matches(pattern: string, importee: string) {
   if (importee.length < pattern.length) {
     return false;
   }
@@ -65,7 +63,7 @@ function matches(pattern: string | RegExp, importee: string) {
   return importee.startsWith(pattern + '/');
 }
 
-function resolveAliasConfig(alias: Record<string, string>, rootDir: string, filePath: string) {
+export function resolveAliasConfig(alias: Record<string, string>, rootDir: string, filePath: string) {
   const newAlias = {};
   Object.keys(alias).forEach((pattern) => {
     const target = alias[pattern];
