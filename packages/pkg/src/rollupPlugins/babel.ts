@@ -43,7 +43,7 @@ const babelPlugin = (
 ): Plugin => {
   // https://babeljs.io/docs/en/babel-preset-react#usage
   const babelOptions = getBabelOptions(plugins, options, modifyBabelOptions);
-  const scriptsFilter = createScriptsFilter(getIncludeNodeModules(compileDependencies), [/@babel\/runtime/, /babel-runtime/]);
+  const scriptsFilter = createScriptsFilter(getIncludeNodeModules(compileDependencies));
   return {
     name: 'ice-pkg:babel',
 
