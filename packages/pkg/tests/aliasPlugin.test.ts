@@ -1,5 +1,5 @@
 import { expect, it, describe } from 'vitest';
-import { matches, resolveAliasConfig } from '../src/rollupPlugins/alias';
+import aliasPlugin, { matches, resolveAliasConfig } from '../src/rollupPlugins/alias';
 
 describe('aliasPlugin', () => {
   it('matches alias id', () => {
@@ -41,5 +41,38 @@ describe('aliasPlugin', () => {
     }, '/workspace', '/workspace/src/components/Button/index.tsx')).toEqual({
       '@': '../..',
     })
+  })
+
+  it('alias plugin transform', async () => {
+    const plugin = aliasPlugin(
+      '/workspace',
+      {
+        '@': './src',
+        'react': 'react-dom',
+      }
+    );
+    const result1 = await (plugin as any).transform(
+      'console.log()',
+      '/workspace/src/index.tsx',
+    )
+    expect(result1.code).toBe('console.log()');
+
+    const result2 = await (plugin as any).transform(
+      'import react from "react";',
+      '/workspace/src/index.tsx',
+    )
+    expect(result2.code).toBe('import react from "react-dom";');
+
+    const result3 = await (plugin as any).transform(
+      'import Button from "@/components/Button";',
+      '/workspace/src/index.tsx',
+    )
+    expect(result3.code).toBe('import Button from "./components/Button";');
+
+    const result4 = await (plugin as any).transform(
+      'import Button from "@/components/Button";',
+      '/workspace/src/pages/index.tsx',
+    )
+    expect(result4.code).toBe('import Button from "../components/Button";');
   })
 })
