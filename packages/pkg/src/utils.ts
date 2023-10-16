@@ -286,18 +286,62 @@ export const stringifyObject = (obj: PlainObject) => {
   }, {});
 };
 
-export const createScriptsFilter = (compileDependencies?: boolean | RegExp[]) => {
-  const exclude = [/\.d\.ts$/];
-  if (Array.isArray(compileDependencies)) {
-    exclude.push(...compileDependencies);
-  } else if (!compileDependencies) {
-    exclude.push(/node_modules/);
+// @ref: It will pass to createScriptFilter function
+export function getIncludeNodeModuleScripts(compileDependencies: boolean | Array<RegExp | string>): RegExp[] {
+  if (compileDependencies === true || (Array.isArray(compileDependencies) && compileDependencies.length === 0)) {
+    return [/node_modules/];
   }
-  return createFilter(
-    /\.m?[jt]sx?$/, // include
-    exclude,
-  );
+  if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
+    // compile all deps in node_modules except compileDependencies
+    // for example: now only want to compile abc and @ice/abc deps.
+    // will generate the regular expression: /node_modules(?:\/|\\\\)(abc|@ice\/abc)(?:\/|\\\\)(?!node_modules).*/
+    // will match:
+    // 1. node_modules/abc/index.js
+    // 2. node_modules/def/node_modules/abc/index.js
+    // 3. node_modules/@ice/abc/index.js
+    // 4. node_modules/def/node_modules/@ice/abc/index.js
+    // will not match:
+    // node_modules/abc/node_modules/def/index.js
+    // node_modules/def/index.js
+    return [new RegExp(`node_modules/(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')})/(?!node_modules).*.m?[jt]sx?$`)];
+  }
+  // default
+  return [];
+}
+
+/**
+ * @reason cnpm node_modules path is different from npm/pnpm, it will not match the compileDependencies
+ *
+ * @example transform react/node_modules/_idb@7.1.1@idb/build/index.js to react/node_modules/idb/build/index.js
+ */
+export function formatCnpmDepFilepath(filepath: string) {
+  const reg = /(.*(?:\/|\\\\))(?:_.*@(?:\d+)\.(?:\d+)\.(?:\d+)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?@)(.*)/;
+  const matchedResult = filepath.match(reg);
+  if (!matchedResult) {
+    return filepath;
+  }
+  const [, p1, p2] = matchedResult;
+  return p1 + p2;
+}
+
+/**
+ * default include src/**.m?[jt]sx? but exclude .d.ts file
+ *
+ * @param extraInclude include other file types
+ * @param extraExclude exclude other file types
+ *
+ * @example exclude node_modules createScriptsFilter([], [/node_modules/])
+ */
+export const createScriptsFilter = (
+  extraIncludes: RegExp[] = [],
+  extraExcludes: RegExp[] = [],
+) => {
+  const includes = [/src\/.*\.m?[jt]sx?$/].concat(extraIncludes);
+  const excludes = [/\.d\.ts$/, /core-js/, /core-js-pure/, /tslib/, /@swc\/helpers/, /@babel\/runtime/, /babel-runtime/].concat(extraExcludes);
+
+  return createFilter(includes, excludes);
 };
+
 export const cwd = process.cwd();
 
 export function normalizeSlashes(file: string) {
