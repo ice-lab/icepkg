@@ -27,9 +27,9 @@ function dtsPlugin({
   generateTypesForJs,
   outputDir,
 }: DtsPluginOptions): Plugin {
-  const includeFileRegexps = [/\.[cm]?tsx?$/];
+  const includeFileRegexps = [/\.(?:[cm]?ts|tsx)$/];
   if (generateTypesForJs) {
-    includeFileRegexps.push(/\.[cm]?jsx?$/);
+    includeFileRegexps.push(/\.(?:[cm]?js|jsx)$/);
   }
   const dtsFilter = createFilter(
     includeFileRegexps, // include

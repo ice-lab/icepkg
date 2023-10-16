@@ -303,7 +303,7 @@ export function getIncludeNodeModuleScripts(compileDependencies: boolean | Array
     // will not match:
     // node_modules/abc/node_modules/def/index.js
     // node_modules/def/index.js
-    return [new RegExp(`node_modules/(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')})/(?!node_modules).*.[cm]?[jt]sx?$`)];
+    return [new RegExp(`node_modules/(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')})/(?!node_modules).*.(?:[cm]?[jt]s|[jt]sx)$`)];
   }
   // default
   return [];
@@ -336,7 +336,7 @@ export const createScriptsFilter = (
   extraIncludes: RegExp[] = [],
   extraExcludes: RegExp[] = [],
 ) => {
-  const includes = [/src\/.*\.[cm]?[jt]sx?$/].concat(extraIncludes);
+  const includes = [/src\/.*\.(?:[cm]?[jt]s|[jt]sx)$/].concat(extraIncludes);
   const excludes = [/\.d\.ts$/, /core-js/, /core-js-pure/, /tslib/, /@swc\/helpers/, /@babel\/runtime/, /babel-runtime/].concat(extraExcludes);
 
   return createFilter(includes, excludes);
