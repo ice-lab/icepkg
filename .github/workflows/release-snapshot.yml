@@ -1,0 +1,39 @@
+name: Release Snapshot Version
+
+on: workflow_dispatch
+
+jobs:
+  release-snapshot-version:
+    name: Release Snapshot Version
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16]
+
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Setup
+        run: pnpm run setup
+
+      - name: Publish snapshot version to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release:snapshot
+        env:
+          GITHUB_TOKEN: ${{ secrets.LUHC228_GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
