@@ -14,6 +14,8 @@ import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
+import transformAliasPlugin from '../rollupPlugins/alias.js';
+import bundleAliasPlugin from '@rollup/plugin-alias';
 
 import {
   Context,
@@ -27,6 +29,7 @@ import type {
   RollupOptions,
   OutputOptions,
 } from 'rollup';
+import path from 'path';
 
 interface PkgJson {
   name: string;
@@ -78,6 +81,7 @@ export function getRollupOptions(
         outputDir: taskConfig.outputDir,
       }),
     );
+    rollupOptions.plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
     rollupOptions.input = taskConfig.entry;
@@ -102,7 +106,11 @@ export function getRollupOptions(
       minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
       sourceMap: taskConfig.sourcemap,
     };
-
+    const alias = {};
+    Object.keys(taskConfig.alias).forEach((key) => {
+      // Add full path for relative path alias
+      alias[key] = taskConfig.alias[key].startsWith('.') ? path.resolve(rootDir, taskConfig.alias[key]) : taskConfig.alias[key];
+    });
     rollupOptions.plugins.push(
       replace({
         values: {
@@ -132,6 +140,9 @@ export function getRollupOptions(
           ...(taskConfig.extensions || []),
         ],
         transformMixedEsModules: true,
+      }),
+      bundleAliasPlugin({
+        entries: alias,
       }),
     );
     if (commandArgs.analyzer) {

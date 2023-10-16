@@ -351,6 +351,9 @@ importers:
       '@babel/preset-typescript':
         specifier: ^7.18.6
         version: 7.18.6(@babel/core@7.18.6)
+      '@rollup/plugin-alias':
+        specifier: ^5.0.1
+        version: 5.0.1(rollup@2.79.1)
       '@rollup/plugin-commonjs':
         specifier: ^25.0.0
         version: 25.0.0(rollup@2.79.1)
@@ -396,6 +399,9 @@ importers:
       deepmerge:
         specifier: ^4.2.2
         version: 4.2.2
+      es-module-lexer:
+        specifier: ^1.3.1
+        version: 1.3.1
       escape-string-regexp:
         specifier: ^5.0.0
         version: 5.0.0
@@ -599,6 +605,9 @@ importers:
       babel-plugin-transform-jsx-slot:
         specifier: ^0.1.2
         version: 0.1.2
+      babel-runtime-jsx-plus:
+        specifier: ^0.1.5
+        version: 0.1.5
     devDependencies:
       '@ice/pkg':
         specifier: ^1.5.4
@@ -7059,6 +7068,19 @@ packages:
   /@polka/url@1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
 
+  /@rollup/plugin-alias@5.0.1(rollup@2.79.1):
+    resolution: {integrity: sha512-JObvbWdOHoMy9W7SU0lvGhDtWq9PllP5mjpAy+TUslZG/WzOId9u80Hsqq1vCUn9pFJ0cxpdcnAv+QzU2zFH3Q==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      rollup: 2.79.1
+      slash: 4.0.0
+    dev: false
+
   /@rollup/plugin-commonjs@25.0.0(rollup@2.79.1):
     resolution: {integrity: sha512-hoho2Kay9TZrLu0bnDsTTCaj4Npa+THk9snajP/XDNb9a9mmjTjh52EQM9sKl3HD1LsnihX7js+eA2sd2uKAhw==, tarball: '@rollup/plugin-commonjs/download/@rollup/plugin-commonjs-25.0.0.tgz'}
     engines: {node: '>=14.0.0'}
@@ -8507,11 +8529,11 @@ packages:
       picomatch: 2.3.1
 
   /aproba@1.2.0:
-    resolution: {integrity: sha1-aALmJk79GMeQobDVF/DyYnvyyUo=, tarball: https://registry.npmmirror.com/aproba/download/aproba-1.2.0.tgz}
+    resolution: {integrity: sha1-aALmJk79GMeQobDVF/DyYnvyyUo=, tarball: aproba/download/aproba-1.2.0.tgz}
     dev: false
 
   /are-we-there-yet@1.1.7:
-    resolution: {integrity: sha1-sVR0qTKtq0/4pQ2a36fk6SbyEUY=, tarball: https://registry.npmmirror.com/are-we-there-yet/download/are-we-there-yet-1.1.7.tgz}
+    resolution: {integrity: sha1-sVR0qTKtq0/4pQ2a36fk6SbyEUY=, tarball: are-we-there-yet/download/are-we-there-yet-1.1.7.tgz}
     dependencies:
       delegates: 1.0.0
       readable-stream: 2.3.7
@@ -9181,7 +9203,7 @@ packages:
     dev: false
 
   /build-scripts@2.0.0:
-    resolution: {integrity: sha512-OZRX/aSasqrnB/+xPQZn2cyUAlxduFKxsNJFp11u8C2NA/giyUigMfIaT3to7HZi+10//ErHKDqm4M7zf7nSrw==, tarball: https://registry.npmmirror.com/build-scripts/download/build-scripts-2.0.0.tgz}
+    resolution: {integrity: sha512-OZRX/aSasqrnB/+xPQZn2cyUAlxduFKxsNJFp11u8C2NA/giyUigMfIaT3to7HZi+10//ErHKDqm4M7zf7nSrw==, tarball: build-scripts/download/build-scripts-2.0.0.tgz}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       camelcase: 5.3.1
@@ -9548,7 +9570,7 @@ packages:
     dev: true
 
   /code-point-at@1.1.0:
-    resolution: {integrity: sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=, tarball: https://registry.npmmirror.com/code-point-at/download/code-point-at-1.1.0.tgz}
+    resolution: {integrity: sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=, tarball: code-point-at/download/code-point-at-1.1.0.tgz}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -9694,7 +9716,7 @@ packages:
     resolution: {integrity: sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==}
 
   /console-control-strings@1.1.0:
-    resolution: {integrity: sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=, tarball: https://registry.npmmirror.com/console-control-strings/download/console-control-strings-1.1.0.tgz}
+    resolution: {integrity: sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=, tarball: console-control-strings/download/console-control-strings-1.1.0.tgz}
     dev: false
 
   /content-disposition@0.5.2:
@@ -10321,7 +10343,7 @@ packages:
     dev: true
 
   /delegates@1.0.0:
-    resolution: {integrity: sha1-hMbhWbgZBP3KWaDvRM2HDTElD5o=, tarball: https://registry.npmmirror.com/delegates/download/delegates-1.0.0.tgz}
+    resolution: {integrity: sha1-hMbhWbgZBP3KWaDvRM2HDTElD5o=, tarball: delegates/download/delegates-1.0.0.tgz}
     dev: false
 
   /depd@1.1.2:
@@ -10794,6 +10816,10 @@ packages:
   /es-module-lexer@0.9.3:
     resolution: {integrity: sha512-1HQ2M2sPtxwnvOvT1ZClHyQDiggdNjURWpY2we6aMKCQiUVxTmVs2UYPLIrD84sS+kMdUwfBSylbJPwNnBrnHQ==}
 
+  /es-module-lexer@1.3.1:
+    resolution: {integrity: sha512-JUFAyicQV9mXc3YRxPnDlrfBKpqt6hUYzz9/boprUJHs4e4KVr3XwOF70doO6gwXUor6EWZJAyWAfKki84t20Q==}
+    dev: false
+
   /es-set-tostringtag@2.0.1:
     resolution: {integrity: sha512-g3OMbtlwY3QewlqAiMLI47KywjWZoEytKr8pf6iTC8uJq5bIAH52Z9pnQ8pVL6whrCto53JZDuUIsifGeLorTg==}
     engines: {node: '>= 0.4'}
@@ -10999,7 +11025,7 @@ packages:
     optional: true
 
   /esbuild@0.14.49:
-    resolution: {integrity: sha512-/TlVHhOaq7Yz8N1OJrjqM3Auzo5wjvHFLk+T8pIue+fhnhIMpfAzsG6PLVMbFveVxqD2WOp3QHei+52IMUNmCw==, tarball: https://registry.npmmirror.com/esbuild/download/esbuild-0.14.49.tgz}
+    resolution: {integrity: sha512-/TlVHhOaq7Yz8N1OJrjqM3Auzo5wjvHFLk+T8pIue+fhnhIMpfAzsG6PLVMbFveVxqD2WOp3QHei+52IMUNmCw==, tarball: esbuild/download/esbuild-0.14.49.tgz}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
@@ -11926,7 +11952,7 @@ packages:
     dev: true
 
   /gauge@2.7.4:
-    resolution: {integrity: sha512-14x4kjc6lkD3ltw589k0NrPD6cCNTD6CWoVUNpB85+DrtONoZn+Rug6xZU5RvSC4+TZPxA5AnBibQYAvZn41Hg==, tarball: https://registry.npmmirror.com/gauge/download/gauge-2.7.4.tgz}
+    resolution: {integrity: sha512-14x4kjc6lkD3ltw589k0NrPD6cCNTD6CWoVUNpB85+DrtONoZn+Rug6xZU5RvSC4+TZPxA5AnBibQYAvZn41Hg==, tarball: gauge/download/gauge-2.7.4.tgz}
     dependencies:
       aproba: 1.2.0
       console-control-strings: 1.1.0
@@ -12242,7 +12268,7 @@ packages:
     dev: true
 
   /has-unicode@2.0.1:
-    resolution: {integrity: sha1-4Ob+aijPUROIVeCG0Wkedx3iqLk=, tarball: https://registry.npmmirror.com/has-unicode/download/has-unicode-2.0.1.tgz}
+    resolution: {integrity: sha1-4Ob+aijPUROIVeCG0Wkedx3iqLk=, tarball: has-unicode/download/has-unicode-2.0.1.tgz}
     dev: false
 
   /has-yarn@2.1.0:
@@ -12897,7 +12923,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   /is-fullwidth-code-point@1.0.0:
-    resolution: {integrity: sha1-754xOG8DGn8NZDr4L95QxFfvAMs=, tarball: https://registry.npmmirror.com/is-fullwidth-code-point/download/is-fullwidth-code-point-1.0.0.tgz}
+    resolution: {integrity: sha1-754xOG8DGn8NZDr4L95QxFfvAMs=, tarball: is-fullwidth-code-point/download/is-fullwidth-code-point-1.0.0.tgz}
     engines: {node: '>=0.10.0'}
     dependencies:
       number-is-nan: 1.0.1
@@ -15601,7 +15627,7 @@ packages:
       path-key: 3.1.1
 
   /npmlog@4.1.2:
-    resolution: {integrity: sha1-CKfyqL9zRgR3mp76StXMcXq7lUs=, tarball: https://registry.npmmirror.com/npmlog/download/npmlog-4.1.2.tgz}
+    resolution: {integrity: sha1-CKfyqL9zRgR3mp76StXMcXq7lUs=, tarball: npmlog/download/npmlog-4.1.2.tgz}
     dependencies:
       are-we-there-yet: 1.1.7
       console-control-strings: 1.1.0
@@ -15623,7 +15649,7 @@ packages:
     dev: true
 
   /number-is-nan@1.0.1:
-    resolution: {integrity: sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=, tarball: https://registry.npmmirror.com/number-is-nan/download/number-is-nan-1.0.1.tgz}
+    resolution: {integrity: sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=, tarball: number-is-nan/download/number-is-nan-1.0.1.tgz}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -16969,6 +16995,7 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -18590,7 +18617,7 @@ packages:
     dev: true
 
   /string-width@1.0.2:
-    resolution: {integrity: sha1-EYvfW4zcUaKn5w0hHgfisLmxB9M=, tarball: https://registry.npmmirror.com/string-width/download/string-width-1.0.2.tgz}
+    resolution: {integrity: sha1-EYvfW4zcUaKn5w0hHgfisLmxB9M=, tarball: string-width/download/string-width-1.0.2.tgz}
     engines: {node: '>=0.10.0'}
     dependencies:
       code-point-at: 1.1.0
@@ -19392,7 +19419,7 @@ packages:
     hasBin: true
 
   /typescript@4.9.4:
-    resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==, tarball: https://registry.npmmirror.com/typescript/download/typescript-4.9.4.tgz}
+    resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==, tarball: typescript/download/typescript-4.9.4.tgz}
     engines: {node: '>=4.2.0'}
     hasBin: true
 
@@ -20633,7 +20660,7 @@ packages:
       stackback: 0.0.2
 
   /wide-align@1.1.5:
-    resolution: {integrity: sha1-3x1MIGhUNp7PPJpImPGyP72dFdM=, tarball: https://registry.npmmirror.com/wide-align/download/wide-align-1.1.5.tgz}
+    resolution: {integrity: sha1-3x1MIGhUNp7PPJpImPGyP72dFdM=, tarball: wide-align/download/wide-align-1.1.5.tgz}
     dependencies:
       string-width: 4.2.3
     dev: false
