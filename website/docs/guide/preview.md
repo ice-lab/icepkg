@@ -585,6 +585,13 @@ export default defineConfig({
 
 侧边栏标题。
 
+#### host
+
+- 类型：`string`
+- 默认值：本机 IP
+
+文档本地预览服务启动的 Host。
+
 #### port
 
 - 类型：`number`
