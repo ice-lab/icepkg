@@ -95,7 +95,7 @@ export interface BundleUserConfig {
   /**
    * Weather or not compile the dependencies in node_modules.
    */
-  compileDependencies?: boolean | RegExp[];
+  compileDependencies?: boolean | Array<RegExp | string>;
 }
 
 export interface UserConfig {
