@@ -24,4 +24,4 @@ export default function App () {
 
 ## API
 
-<ReactDocgenProps path="../src/components/Input/index.jsx"></ReactDocgenProps>
+<ReactDocgenProps path="../src/components/Input/index.tsx"></ReactDocgenProps>

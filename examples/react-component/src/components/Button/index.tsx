@@ -1,5 +1,8 @@
 import * as React from 'react';
 import './index.scss';
+import Input from '@/components/Input';
+
+console.log('input', Input);
 
 interface ButtonProps {
   /**
