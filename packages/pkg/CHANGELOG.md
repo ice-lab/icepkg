@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.14
+
+### Patch Changes
+
+- ff11dad: fix: module alias(like `react` -> `react-dom`)
+- ac854dd: fix: compile all deps when specify deps in compileDependencies
+- 374f81c: feat: supporty compile cjs and cts
+
 ## 1.5.13
 
 ### Patch Changes
