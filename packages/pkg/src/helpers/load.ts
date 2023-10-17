@@ -26,7 +26,7 @@ export function loadEntryFiles(entry: string, excludes: string | string[]) {
   });
 }
 
-export const INCLUDES_UTF8_FILE_TYPE = /\.(js|mjs|mts|ts|jsx|tsx|css|sass|less|json|html)$/;
+export const INCLUDES_UTF8_FILE_TYPE = /\.(js|mjs|mts|ts|jsx|tsx|cjs|cts|css|sass|less|json|html)$/;
 
 export function loadSource(path: string): string {
   try {
