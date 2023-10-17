@@ -10,7 +10,7 @@ import fse from 'fs-extra';
 import * as path from 'path';
 import merge from 'lodash.merge';
 
-export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'mjs' | 'mts';
+export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'cjs' | 'mjs' | 'mts' | 'cts';
 
 export interface File {
   filePath: string;

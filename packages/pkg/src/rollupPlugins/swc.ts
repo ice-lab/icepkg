@@ -4,7 +4,7 @@ import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
 import { checkDependencyExists, createScriptsFilter, formatCnpmDepFilepath, getIncludeNodeModuleScripts } from '../utils.js';
 
-import type { Options as swcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
+import type { Options as SwcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
 import type { TaskConfig, OutputFile, BundleTaskConfig } from '../types.js';
 import type { Plugin } from 'rollup';
 
@@ -13,8 +13,8 @@ const JSX_RUNTIME_SOURCE = '@ice/jsx-runtime';
 const normalizeSwcConfig = (
   file: OutputFile,
   jsxRuntime: TaskConfig['jsxRuntime'],
-  mergeOptions?: swcCompileOptions,
-): swcCompileOptions => {
+  mergeOptions?: SwcCompileOptions,
+): SwcCompileOptions => {
   const { filePath, ext } = file;
   const isTypeScript = isTypescriptOnly(ext, filePath);
   const syntaxFeatures = {
@@ -28,7 +28,7 @@ const normalizeSwcConfig = (
     syntax: 'ecmascript',
     jsx: true,
   };
-  const commonOptions: swcCompileOptions = {
+  const commonOptions: SwcCompileOptions = {
     jsc: {
       transform: {
         react: {
@@ -50,9 +50,24 @@ const normalizeSwcConfig = (
     configFile: false,
   };
 
+  // For .cts .cjs .mts .mjs, use the specified module type
+  function getModuleConfig(fileExt: string, moduleConfig: SwcCompileOptions['module']): SwcCompileOptions['module'] {
+    if (['.cts', '.cjs'].includes(fileExt)) {
+      return { type: 'commonjs' };
+    }
+    if (['.mts', '.mjs'].includes(fileExt)) {
+      return { type: 'es6' };
+    }
+
+    return moduleConfig;
+  }
+
   return deepmerge.all([
     commonOptions,
     mergeOptions,
+    {
+      module: getModuleConfig(ext, mergeOptions?.module),
+    },
   ]);
 };
 
