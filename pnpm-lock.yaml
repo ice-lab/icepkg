@@ -610,7 +610,7 @@ importers:
         version: 0.1.5
     devDependencies:
       '@ice/pkg':
-        specifier: ^1.5.4
+        specifier: ^1.5.14
         version: link:../pkg
 
   packages/plugin-rax-component:
