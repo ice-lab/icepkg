@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3
+
+### Patch Changes
+
+- 86b56d4: add missing babel-runtime-jsx-plus
+
 ## 1.0.2
 
 ### Patch Changes
