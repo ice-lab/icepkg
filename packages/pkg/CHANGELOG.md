@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.15-canary-5f26bce-20231018063551
+
+### Patch Changes
+
+- 4242a13: fix: compile deps that excluded
+
 ## 1.5.14
 
 ### Patch Changes
