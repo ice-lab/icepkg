@@ -35,6 +35,7 @@ jobs:
         with:
           version: pnpm changeset version --snapshot canary
           publish: pnpm install:frozen && pnpm build && pnpm release --tag canary --no-git-tag --snapshot
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.LUHC228_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
