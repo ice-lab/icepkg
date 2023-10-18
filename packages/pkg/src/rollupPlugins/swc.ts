@@ -3,7 +3,8 @@ import * as swc from '@swc/core';
 import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
 import { checkDependencyExists, createScriptsFilter, formatCnpmDepFilepath, getIncludeNodeModuleScripts } from '../utils.js';
-
+import { init, parse } from 'es-module-lexer';
+import MagicString from 'magic-string';
 import type { Options as SwcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
 import type { TaskConfig, OutputFile, BundleTaskConfig } from '../types.js';
 import type { Plugin } from 'rollup';
@@ -71,6 +72,52 @@ const normalizeSwcConfig = (
   ]);
 };
 
+// Transform @swc/helpers to cjs path if in commonjs module.
+async function transformImport(source: string, sourceFilename: string) {
+  await init;
+  const [imports, exports] = await parse(source);
+  let s: MagicString | undefined;
+  const str = () => {
+    if (!s) {
+      s = new MagicString(source);
+    }
+    return s;
+  };
+  const isESM = exports.length > 0 || imports.some((targetImport) => {
+    const importString = targetImport.n;
+    // `targetImport.n` get undefined when code has `import.meta.*`.
+    return importString && !importString.includes('core-js') && !importString.includes('@swc/helpers');
+  });
+
+  imports.forEach((targetImport) => {
+    if (targetImport.n.startsWith('@swc/helpers')) {
+      if (!isESM) {
+        // Replace @swc/helpers with cjs path.
+        const importStr = source.substring(targetImport.ss, targetImport.se);
+        // Import rule: import { _ as _type_of } from "@swc/helpers/_/_type_of";
+        const matchImport = importStr.match(/import\s+{\s+([\w*\s{},]*)\s+}\s+from\s+['"](.*)['"]/);
+        if (matchImport) {
+          const [, identifier] = matchImport;
+          const replaceModule = `var ${identifier.split(' as ')[1].trim()} = require('${targetImport.n.replace(/@swc\/helpers\/_\/(.*)$/,
+            (_, matched) => `@swc/helpers/cjs/${matched}.cjs`)}')._`;
+          str().overwrite(targetImport.ss, targetImport.se, replaceModule);
+        }
+      }
+    }
+  });
+
+  return s ? {
+    code: s.toString(),
+    map: s.generateMap({
+      source: sourceFilename,
+      file: `${sourceFilename}.map`,
+      includeContent: true,
+    }),
+  } : {
+    code: source,
+  };
+}
+
 /**
  * plugin-swc works as substitute of plugin-typescript, babel, babel-preset-env and plugin-minify.
  */
@@ -99,20 +146,24 @@ const swcPlugin = (
       // If file's name comes with .mjs、.mts、.cjs、.cts suffix
       const destExtname = ['m', 'c'].includes(file.ext[1]) ? `.${file.ext[1]}js` : '.js';
       const destFilename = basename(id).replace(RegExp(`${extname(id)}$`), destExtname);
+      const sourceFileName = `.${sep}${relative(rootDir, id)}`;
+
       const { code, map } = await swc.transform(
         source,
         normalizeSwcConfig(file, jsxRuntime, {
           ...extraSwcOptions,
           // If filename is omitted, will lose filename info in sourcemap.
           // e.g: ./src/index.mts
-          sourceFileName: `.${sep}${relative(rootDir, id)}`,
+          sourceFileName,
           filename: id,
         }),
       );
 
+      const transformedCode = await transformImport(code, sourceFileName);
+
       return {
-        code,
-        map,
+        code: transformedCode.code,
+        map: transformedCode.map ?? map,
         meta: {
           filename: destFilename,
         },
