@@ -90,6 +90,10 @@ async function transformImport(source: string, sourceFilename: string) {
   });
 
   imports.forEach((targetImport) => {
+    if (!targetImport.n) {
+      // If visiting `import.meta.*`, `targetImport.n` will be undefined, that should be ignored.
+      return;
+    }
     if (targetImport.n.startsWith('@swc/helpers')) {
       if (!isESM) {
         // Replace @swc/helpers with cjs path.
