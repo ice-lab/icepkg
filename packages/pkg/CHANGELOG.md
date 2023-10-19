@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.15
+
+### Patch Changes
+
+- 0bfc966: fix: compile deps that excluded
+- 9b92a09: fix: add esm @swc/helpers module to cjs module by swc
+
 ## 1.5.14
 
 ### Patch Changes
