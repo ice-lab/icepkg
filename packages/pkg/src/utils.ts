@@ -289,7 +289,7 @@ export const stringifyObject = (obj: PlainObject) => {
 // @ref: It will pass to createScriptFilter function
 export function getIncludeNodeModuleScripts(compileDependencies: boolean | Array<RegExp | string>): RegExp[] {
   if (compileDependencies === true || (Array.isArray(compileDependencies) && compileDependencies.length === 0)) {
-    return [/node_modules/];
+    return [/node_modules\/.*(?:\.[cm]?[jt]s|[jt]sx)$/];
   }
   if (Array.isArray(compileDependencies) && compileDependencies.length > 0) {
     // compile all deps in node_modules except compileDependencies
@@ -303,7 +303,7 @@ export function getIncludeNodeModuleScripts(compileDependencies: boolean | Array
     // will not match:
     // node_modules/abc/node_modules/def/index.js
     // node_modules/def/index.js
-    return [new RegExp(`node_modules/(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')})/(?!node_modules).*.(?:[cm]?[jt]s|[jt]sx)$`)];
+    return [new RegExp(`node_modules/(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')})/(?!node_modules/)[^\\/]+.(?:[cm]?[jt]s|[jt]sx)$`)];
   }
   // default
   return [];
