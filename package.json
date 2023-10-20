@@ -5,7 +5,7 @@
   "description": "The next generation of npm package development kit.",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "setup": "rm -rf node_modules && rm -rf ./packages/*/node_modules && pnpm i --registry=https://registry.npmmirror.com && pnpm run build",
+    "setup": "rm -rf node_modules && rm -rf ./packages/*/node_modules && pnpm i && pnpm run build",
     "build": "pnpm run clean && pnpm -r --filter=./packages/* run build",
     "watch": "pnpm --parallel --filter=./packages/* run watch",
     "clean": "rm -rf packages/*/lib",
