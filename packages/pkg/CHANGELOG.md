@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.16
+
+### Patch Changes
+
+- 374655e: fix: not compile non src entry
+
 ## 1.5.15
 
 ### Patch Changes
