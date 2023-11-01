@@ -23,7 +23,7 @@ module.exports = (context, options) => {
     },
   });
 
-  babelPlugins.plugins = mergeBabelPlugins(babelConfig.plugins, (babelPlugins || []));
+  babelConfig.plugins = mergeBabelPlugins(babelConfig.plugins, (babelPlugins || []));
 
   setBabelAlias(config);
 
