@@ -76,21 +76,18 @@ function dtsPlugin({
           return { ...rest };
         });
       }
-      const entries = getTransformEntryDirs(rootDir, entry);
-      entries.forEach((entryItem) => {
-        dtsFiles.forEach((file) => {
-          this.emitFile({
-            type: 'asset',
-            fileName: relative(entryItem, file.dtsPath),
-            source: file.dtsContent,
-          });
-
-          cachedContents[file.filePath] = {
-            ...cachedContents[file.filePath],
-            ...file,
-          };
+      dtsFiles.forEach((file) => {
+        this.emitFile({
+          type: 'asset',
+          fileName: file.dtsPath,
+          source: file.dtsContent,
         });
-      });
+
+        cachedContents[file.filePath] = {
+          ...cachedContents[file.filePath],
+          ...file,
+        };
+      })
 
       updatedIds.forEach((updateId) => { cachedContents[updateId].updated = false; });
     },
