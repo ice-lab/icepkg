@@ -1,7 +1,6 @@
-import { extname, relative } from 'path';
+import { extname } from 'path';
 import { createFilter } from '@rollup/pluginutils';
 import { dtsCompile, type File } from '../helpers/dts.js';
-import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
 
 import type { Plugin } from 'rollup';
 import type { TaskConfig, UserConfig } from '../types.js';
@@ -22,7 +21,6 @@ interface DtsPluginOptions {
 // dtsPlugin is used to generate declaration file when transforming
 function dtsPlugin({
   rootDir,
-  entry,
   alias,
   generateTypesForJs,
   outputDir,
