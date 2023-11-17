@@ -8,9 +8,10 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ProgressPlugin = require('webpackbar');
 const TimeFixPlugin = require('time-fix-plugin');
 const setDefine = require('../../useConfig/define');
+const mergeBabelPlugins = require('../../utils/mergeBabelPlugins');
 
 module.exports = (context, options) => {
-  const { rootDir, command, pkg, webpack, userConfig: { define } } = context;
+  const { rootDir, command, pkg, webpack, userConfig: { define, babelPlugins } } = context;
   const { isES6, target, name, inlineStyle = true, https } = options || {};
   const config = new Chain();
 
@@ -21,6 +22,8 @@ module.exports = (context, options) => {
       ignore: ['**/**/*.d.ts'],
     },
   });
+
+  babelConfig.plugins = mergeBabelPlugins(babelConfig.plugins, (babelPlugins || []));
 
   setBabelAlias(config);
 

@@ -142,7 +142,7 @@ function getSatisfiesVersions(npm: string, range: string, registry?: string) {
     return versions
       .filter((version) => semver.satisfies(version, range))
       .sort((a, b) => {
-        return semver.gt(b, a);
+        return semver.gt(b, a) === true ? 1 : -1;
       });
   });
 }

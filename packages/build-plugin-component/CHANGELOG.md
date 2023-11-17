@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.2
+
+- [fix] not consume babelPlugins in rax component
+
 ## 1.12.1
 
 - [fix] can't merge babel plugin
