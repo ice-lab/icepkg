@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.17
+
+### Patch Changes
+
+- 38c2aef: fix dts file write path
+
 ## 1.5.16
 
 ### Patch Changes
