@@ -1,7 +1,6 @@
-import { extname, relative } from 'path';
+import { extname } from 'path';
 import { createFilter } from '@rollup/pluginutils';
 import { dtsCompile, type File } from '../helpers/dts.js';
-import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
 
 import type { Plugin } from 'rollup';
 import type { TaskConfig, UserConfig } from '../types.js';
@@ -22,7 +21,6 @@ interface DtsPluginOptions {
 // dtsPlugin is used to generate declaration file when transforming
 function dtsPlugin({
   rootDir,
-  entry,
   alias,
   generateTypesForJs,
   outputDir,
@@ -76,21 +74,18 @@ function dtsPlugin({
           return { ...rest };
         });
       }
-      const entries = getTransformEntryDirs(rootDir, entry);
-      entries.forEach((entryItem) => {
-        dtsFiles.forEach((file) => {
-          this.emitFile({
-            type: 'asset',
-            fileName: relative(entryItem, file.dtsPath),
-            source: file.dtsContent,
-          });
-
-          cachedContents[file.filePath] = {
-            ...cachedContents[file.filePath],
-            ...file,
-          };
+      dtsFiles.forEach((file) => {
+        this.emitFile({
+          type: 'asset',
+          fileName: file.dtsPath,
+          source: file.dtsContent,
         });
-      });
+
+        cachedContents[file.filePath] = {
+          ...cachedContents[file.filePath],
+          ...file,
+        };
+      })
 
       updatedIds.forEach((updateId) => { cachedContents[updateId].updated = false; });
     },
