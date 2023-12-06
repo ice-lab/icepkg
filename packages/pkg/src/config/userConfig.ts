@@ -49,6 +49,11 @@ function getUserConfig() {
         return mergeValueToTaskConfig(config, 'define', define);
       },
     },
+    {
+      name: 'declaration',
+      validation: 'boolean',
+      default: true,
+    },
     // TODO: Modify `sourcemaps` to `sourcemap` and make sure to be compatible with icepkg v1 version.
     {
       name: 'sourceMaps',

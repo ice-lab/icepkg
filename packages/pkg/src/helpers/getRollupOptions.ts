@@ -72,15 +72,17 @@ export function getRollupOptions(
   );
 
   if (taskConfig.type === 'transform') {
-    rollupOptions.plugins.unshift(
-      dtsPlugin({
-        rootDir,
-        entry: taskConfig.entry as Record<string, string>,
-        generateTypesForJs: userConfig.generateTypesForJs,
-        alias: taskConfig.alias,
-        outputDir: taskConfig.outputDir,
-      }),
-    );
+    if (userConfig.declaration) {
+      rollupOptions.plugins.unshift(
+        dtsPlugin({
+          rootDir,
+          entry: taskConfig.entry as Record<string, string>,
+          generateTypesForJs: userConfig.generateTypesForJs,
+          alias: taskConfig.alias,
+          outputDir: taskConfig.outputDir,
+        }),
+      );
+    }
     rollupOptions.plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
@@ -97,10 +99,7 @@ export function getRollupOptions(
 
     const cssMinify = taskConfig.cssMinify(taskRunnerContext.mode, command);
     const defaultStylesOptions: StylesRollupPluginOptions = {
-      plugins: [
-        autoprefixer(),
-        PostcssPluginRpxToVw,
-      ],
+      plugins: [autoprefixer(), PostcssPluginRpxToVw],
       mode: 'extract',
       autoModules: true,
       minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
@@ -109,7 +108,9 @@ export function getRollupOptions(
     const alias = {};
     Object.keys(taskConfig.alias).forEach((key) => {
       // Add full path for relative path alias
-      alias[key] = taskConfig.alias[key].startsWith('.') ? path.resolve(rootDir, taskConfig.alias[key]) : taskConfig.alias[key];
+      alias[key] = taskConfig.alias[key].startsWith('.')
+        ? path.resolve(rootDir, taskConfig.alias[key])
+        : taskConfig.alias[key];
     });
     rollupOptions.plugins.push(
       replace({
@@ -120,23 +121,37 @@ export function getRollupOptions(
         },
         preventAssignment: true,
       }),
-      styles((taskConfig.modifyStylesOptions ?? [((options) => options)]).reduce(
-        (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
-        defaultStylesOptions,
-      )),
+      styles(
+        (taskConfig.modifyStylesOptions ?? [(options) => options]).reduce(
+          (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
+          defaultStylesOptions,
+        ),
+      ),
       image(),
       json(),
-      nodeResolve({ // To locates modules using the node resolution algorithm.
+      nodeResolve({
+        // To locates modules using the node resolution algorithm.
         extensions: [
-          '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
-          '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
+          '.mjs',
+          '.js',
+          '.json',
+          '.node', // plugin-node-resolve default extensions
+          '.ts',
+          '.jsx',
+          '.tsx',
+          '.mts',
+          '.cjs',
+          '.cts', // @ice/pkg default extensions
           ...(taskConfig.extensions || []),
         ],
       }),
-      commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
+      commonjs({
+        // To convert commonjs to import, make it compatible with rollup to bundle
         extensions: [
           '.js', // plugin-commonjs default extensions
-          '.jsx', '.ts', '.tsx',
+          '.jsx',
+          '.ts',
+          '.tsx',
           ...(taskConfig.extensions || []),
         ],
         transformMixedEsModules: true,
@@ -146,11 +161,13 @@ export function getRollupOptions(
       }),
     );
     if (commandArgs.analyzer) {
-      rollupOptions.plugins.push(visualizer({
-        title: `Rollup Visualizer(${taskName})`,
-        open: true,
-        filename: `${taskName}-stats.html`,
-      }));
+      rollupOptions.plugins.push(
+        visualizer({
+          title: `Rollup Visualizer(${taskName})`,
+          open: true,
+          filename: `${taskName}-stats.html`,
+        }),
+      );
     }
   }
 

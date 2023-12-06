@@ -145,6 +145,12 @@ export interface UserConfig {
    * "bundle mode" means bundle everything up by using Rollup
    */
   bundle?: BundleUserConfig;
+
+  /**
+   * Generate .d.ts files from TypeScript and JavaScript files in your project.
+   * @default true
+   */
+  declaration?: boolean;
 }
 
 interface _TaskConfig {
