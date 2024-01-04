@@ -196,7 +196,7 @@ export default defineConfig({
 
 默认情况下，当我们访问根路由(`/`)是返回 404 页面的。如果我们想定制文档首页的内容，我们可以增加 [`pageRouteBasePath`](./preview#pageroutebasepath) 配置：
 
-首先在 `ice.config.mts` 中新增以下内容：
+首先在 `build.config.mts` 中新增以下内容：
 ```diff
 import { defineConfig } from '@ice/pkg';
 

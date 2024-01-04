@@ -227,7 +227,7 @@ export default App;
 
 在 ICE PKG 仅配置输出 ES2017 产物：
 
-```ts title="ice.config.mts"
+```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
