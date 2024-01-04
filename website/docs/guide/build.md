@@ -27,7 +27,7 @@ ICE PKG 默认支持 `esm`、`es2017`、`cjs`、`umd` 四种构建产物类型�
 
 下面是 ICE PKG 默认的产物构建配置：
 
-```ts title="ice.config.mts"
+```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
@@ -57,7 +57,7 @@ export default defineConfig({
 
 如果你确定你的运行环境支持 [ES2017 产物](./abilities#es2017-产物)，推荐使用以下的配置仅生成体积更小的构建产物：
 
-```ts title="ice.config.mts"
+```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
@@ -91,7 +91,7 @@ export default defineConfig({
 
 由于 Node 12.20.0 支持 ES Module 和所有的 ES2017 的语法。因此推荐以下的配置：
 
-```ts title="ice.config.mts"
+```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
@@ -146,7 +146,7 @@ export default defineConfig({
 
 ICE PKG 仅支持在 [Bundle 模式](./abilities#bundle-模式)下构建出 UMD 产物，配置方式如下：
 
-```ts title="ice.config.mts"
+```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
@@ -167,7 +167,7 @@ dist
 
 如果需要额外输出一份未压缩的 UMD 产物以方便调试构建，可以新增 [bundle.modes 配置项](../reference/config#modes)：
 
-```diff title="ice.config.mts"
+```diff title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
