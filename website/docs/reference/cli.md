@@ -9,7 +9,7 @@ $ ice-pkg start [options]
 ```
 |     选项     |   类型    | 说明                          |
 | :----------: | :-------: | ----------------------------- |
-| `--config <config>` | `string` | Bundle 模式下开启体积构建分析 |
+| `--config <config>` | `string` | 指定配置文件路径 |
 | `--rootDir <rootDir>` | `string` | 指定应用运行的根目录 |
 | `--analyzer` | `boolean` | Bundle 模式下开启体积构建分析 |
 
@@ -24,6 +24,6 @@ $ ice-pkg build [options]
 
 |     选项     |   类型    | 说明                          |
 | :----------: | :-------: | ----------------------------- |
-| `--config <config>` | `string` | Bundle 模式下开启体积构建分析 |
+| `--config <config>` | `string` | 指定配置文件路径 |
 | `--rootDir <rootDir>` | `string` | 指定应用运行的根目录 |
 | `--analyzer` | `boolean` | Bundle 模式下开启体积构建分析 |
