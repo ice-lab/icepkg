@@ -89,6 +89,9 @@ const config = {
         logo: {
           src: '{{navBarLogo}}',
         },
+        {{#if navBarItems}}
+        items: {{{navBarItems}}}
+        {{/if}}
       },
       prism: {
         theme: require('{{prismReactRendererPath}}/themes/github'),
