@@ -1,9 +1,9 @@
 import test from 'ava';
 
-import { runTransform } from '../index.js';
+import { doTransform } from '../index.js';
 
 test('sum from native', (t) => {
-  runTransform({
+  doTransform({
     rootDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component',
     entryDir: 'src',
     outputDir: './esm',

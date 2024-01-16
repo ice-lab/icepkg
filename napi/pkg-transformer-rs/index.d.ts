@@ -12,6 +12,6 @@ export interface TaskConfig {
   transformExcludes?: Array<string>
   transforms?: Array<(...args: any[]) => any>
 }
-export function runTransform(taskConfig: TaskConfig): void
+export function doTransform(taskConfig: TaskConfig): void
 export function callThreadsafeFunction(callback: (...args: any[]) => any): void
 export function sum(a: number, b: number): number

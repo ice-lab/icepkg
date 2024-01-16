@@ -281,8 +281,8 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { runTransform, callThreadsafeFunction, sum } = nativeBinding
+const { doTransform, callThreadsafeFunction, sum } = nativeBinding
 
-module.exports.runTransform = runTransform
+module.exports.doTransform = doTransform
 module.exports.callThreadsafeFunction = callThreadsafeFunction
 module.exports.sum = sum

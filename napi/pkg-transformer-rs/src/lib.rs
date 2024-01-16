@@ -7,7 +7,7 @@ mod transformer;
 use std::{fs, path};
 use thread_pool::ThreadPool;
 
-pub use transformer::run_transform;
+pub use transformer::do_transform;
 
 #[macro_use]
 extern crate napi_derive;

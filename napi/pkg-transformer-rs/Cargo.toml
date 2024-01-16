@@ -12,6 +12,9 @@ glob-match = "0.2.1"
 # Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
 napi = { version = "2.12.2", default-features = false, features = ["napi4"] }
 napi-derive = "2.12.2"
+swc = "0.270.23"
+swc_core = {version = "0.87.24", features = ["base", "__ecma", "ecma_ast", "__parser"]}
+tokio = {version = "1.35.1", features = ["full"]}
 walkdir = "2.4.0"
 
 [build-dependencies]
