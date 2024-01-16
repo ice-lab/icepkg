@@ -23,7 +23,7 @@ import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
 export const watchTransformTasks: RunTasks = async (taskOptionsList, context, watcher) => {
   const handleChangeFunctions: HandleChange[] = [];
   const outputResults: OutputResult[] = [];
-
+  // TODO: use rust
   for (const taskOptions of taskOptionsList) {
     const [rollupOptions, taskRunnerContext] = taskOptions;
     const entryDirs = getTransformEntryDirs(

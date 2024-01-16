@@ -1,9 +1,10 @@
 #![deny(clippy::all)]
 
 mod thread_pool;
+mod plugin_container;
+mod transformer;
 
 use std::{fs, path};
-
 use thread_pool::ThreadPool;
 
 #[macro_use]
