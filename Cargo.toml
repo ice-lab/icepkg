@@ -1,0 +1,6 @@
+[workspace]
+resolver = "2"
+members  = ["napi/*"]
+
+[workspace.package]
+repository   = "https://github.com/ice-lab/icepkg"

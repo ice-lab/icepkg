@@ -1,0 +1,36 @@
+{
+  "name": "@ice/pkg-transformer-rs",
+  "version": "0.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "napi": {
+    "name": "pkg-transformer-rs",
+    "triples": {
+      "additional": [
+        "aarch64-apple-darwin",
+        "aarch64-unknown-linux-gnu",
+        "aarch64-pc-windows-msvc"
+      ]
+    }
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@napi-rs/cli": "^2.17.0",
+    "ava": "^5.1.1"
+  },
+  "ava": {
+    "timeout": "3m"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
+    "prepublishOnly": "napi prepublish -t npm",
+    "test": "ava",
+    "universal": "napi universal",
+    "version": "napi version"
+  }
+}
