@@ -37,7 +37,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
     try { 
       params.navBarItems = JSON.stringify(params.navBarItems);
     } catch(e) {
-      consola.warn('There is an error with stringifying the navbar items, please review your navBarItems configuration.');
+      consola.error('There is an error with stringifying the navbar items, please review your navBarItems configuration.');
     }
   }
   
