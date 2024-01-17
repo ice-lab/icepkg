@@ -13,5 +13,5 @@ export interface TaskConfig {
   transforms?: Array<(...args: any[]) => any>
 }
 export function doTransform(taskConfig: TaskConfig): void
+export function tsfnAsyncCall(func: (...args: any[]) => any): Promise<void>
 export function callThreadsafeFunction(callback: (...args: any[]) => any): void
-export function sum(a: number, b: number): number
