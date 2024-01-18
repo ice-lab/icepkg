@@ -1,13 +1,11 @@
 #![deny(clippy::all)]
-mod napi_env;
-
-use std::{path::{Path, PathBuf}, sync::Arc};
+use std::path::{Path, PathBuf};
+use tokio::time::Sleep;
 use walkdir::WalkDir;
-use std::thread;
 use glob_match::glob_match;
 use napi::{
   bindgen_prelude::*,
-  threadsafe_function::{ThreadsafeFunction, ThreadsafeFunctionCallMode, ThreadSafeCallContext, ErrorStrategy}, JsString, JsNumber, JsObject, NapiRaw,
+  threadsafe_function::{ThreadsafeFunction, ThreadSafeCallContext, ThreadsafeFunctionCallMode},
 };
 use swc_core::{
   base::config::Options as SwcOptions,
@@ -16,14 +14,25 @@ use swc_core::{
     parser::{Syntax, TsConfig},
   },
 };
+use serde_json::{Map, Value};
 use swc::Compiler;
-use serde_json::to_string;
-use napi_env::get_napi_env;
 
 #[macro_use]
 extern crate napi_derive;
 
+struct TransformInput {
+  id: String,
+  code: String,
+  map: String,
+}
+
 #[napi(object)]
+pub struct TransformResult {
+  pub code: String,
+  pub map: Option<String>,
+}
+
+#[napi(object, object_to_js=false)]
 pub struct TaskConfig {
   pub root_dir: String,
   // entry directory. default is `./src`
@@ -36,13 +45,8 @@ pub struct TaskConfig {
   pub task_name: String,
   // files should be excluded relative to the entry_dir,
   pub transform_excludes: Option<Vec<String>>,
-
-  pub transforms: Option<Vec<JsFunction>>,
-}
-
-struct TransformResult {
-  code: String,
-  map: Option<String>,
+  #[napi(ts_return_type = "Array<Promise<string>>")]
+  pub transforms: Option<Vec<ThreadsafeFunction<String>>>,
 }
 
 #[tokio::main]
@@ -54,66 +58,30 @@ pub async fn do_transform(
   let files = get_files(&task_config);
 
   // 2. transform each files
-  let transforms = task_config.transforms.unwrap_or(vec![]);
-
-  // let struct = { code, map }
-  for transform in transforms.into_iter() {
-    call_threadsafe_function(transform);
-
-
-    // crate::js_fn_into_threadsafe_fn!(transform, &Env::from(String::from("xx")))
-  //   // 在这里传入 code 和 map
-  //   let code = String::from("code");
-  //   println!("a: {}", a);
-  }
+  // let transforms = task_config.transforms.unwrap_or(vec![]);
+  // for loader in transforms.into_iter() {
+  //   run_transform(String::from("code111"), loader).await.unwrap();
+  // }
+  let loader = task_config.transforms.unwrap_or(vec![])[0].clone();
+  transform(String::from("code111"), loader).await.unwrap();
 
   for file in files {
 
   }
 }
-#[napi(ts_return_type = "Promise<void>")]
-pub fn tsfn_async_call(func: JsFunction) -> napi::Result<Object> {
-  let env = get_napi_env();
-  let env = Env::from(env);
-  let tsfn: ThreadsafeFunction<()> =
-    func.create_threadsafe_function(0, move |_| Ok(vec![0u32, 1u32, 2u32]))?;
-
-  env.spawn_future(async move {
-    let msg: String = tsfn.call_async(Ok(())).await?;
-    assert_eq!(msg, "ReturnFromJavaScriptRawCallback".to_owned());
-    Ok(())
-  })
-}
 
 #[napi]
-pub fn call_threadsafe_function(callback: JsFunction) -> napi::Result<()> {
-  let tsfn: ThreadsafeFunction<TransformInput, ErrorStrategy::Fatal> = callback
-    .create_threadsafe_function(0, |ctx: ThreadSafeCallContext<TransformInput>| {
-        let mut obj = ctx.env.create_object().unwrap();
-        obj.set("test", 1).unwrap();
-        Ok(vec![obj])
-    })?;
-  let env = get_napi_env();
-  let env = Env::from(env);
-  let tsfn = tsfn.clone();
-
-  env.spawn_future(async move {
-    let input = TransformInput {
-      id: String::from("id"),
-      code: String::from("code"),
-      map: String::from("map"),
-    };
-    let result: String = tsfn.call_async(input).await?;
-
-    Ok(result)
-  })?;
-  Ok(())
-}
-
-struct TransformInput {
-  id: String,
-  code: String,
-  map: String,
+pub async fn transform(code: String, loader: ThreadsafeFunction<String>) -> Result<TransformResult> {
+  // let transform_input = TransformResult {
+  //   code: "code".to_string(),
+  //   map: Some("map".to_string()),
+  // };
+  println!("cccc");
+  let TransformResult { code, map } = loader.call_async::<Promise<TransformResult>>(Ok(code)).await?.await?;
+  // ... do something with code and map
+  println!("code: {}", code);
+  println!("map: {:?}", map.clone());
+  Ok(TransformResult { code, map })
 }
 
 fn get_files(task_config: &TaskConfig) -> Vec<String> {

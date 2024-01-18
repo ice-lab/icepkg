@@ -281,8 +281,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { doTransform, tsfnAsyncCall, callThreadsafeFunction } = nativeBinding
+const { doTransform, transform } = nativeBinding
 
 module.exports.doTransform = doTransform
-module.exports.tsfnAsyncCall = tsfnAsyncCall
-module.exports.callThreadsafeFunction = callThreadsafeFunction
+module.exports.transform = transform
