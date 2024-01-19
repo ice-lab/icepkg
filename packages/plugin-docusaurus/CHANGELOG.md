@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.17
+
+### Patch Changes
+
+- 23d6be8: feat: support navbar items configurations
+
 ## 1.4.16
 
 ### Patch Changes
