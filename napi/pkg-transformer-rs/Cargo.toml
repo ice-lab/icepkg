@@ -19,7 +19,6 @@ napi = { version = "2.12.2", default-features = false, features = [
   "tokio_macros",
   ] }
 napi-derive = "2.12.2"
-serde_json = "1.0.111"
 swc = "0.270.23"
 swc_core = {version = "0.87.24", features = ["base", "__ecma", "ecma_ast", "__parser"]}
 tokio = {version = "1.35.1", features = ["full"]}

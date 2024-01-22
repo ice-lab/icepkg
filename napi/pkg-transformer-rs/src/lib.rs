@@ -1,11 +1,10 @@
 #![deny(clippy::all)]
 use std::path::{Path, PathBuf};
-use tokio::time::Sleep;
 use walkdir::WalkDir;
 use glob_match::glob_match;
 use napi::{
   bindgen_prelude::*,
-  threadsafe_function::{ThreadsafeFunction, ThreadSafeCallContext, ThreadsafeFunctionCallMode},
+  threadsafe_function::ThreadsafeFunction, CallContext,
 };
 use swc_core::{
   base::config::Options as SwcOptions,
@@ -14,16 +13,17 @@ use swc_core::{
     parser::{Syntax, TsConfig},
   },
 };
-use serde_json::{Map, Value};
-use swc::Compiler;
+// use swc::Compiler;
 
 #[macro_use]
 extern crate napi_derive;
 
-struct TransformInput {
-  id: String,
-  code: String,
-  map: String,
+#[derive(Clone, Debug)]
+#[napi(object)]
+pub struct TransformInput {
+  pub id: String,
+  pub code: String,
+  pub map: Option<String>,
 }
 
 #[napi(object)]
@@ -45,40 +45,54 @@ pub struct TaskConfig {
   pub task_name: String,
   // files should be excluded relative to the entry_dir,
   pub transform_excludes: Option<Vec<String>>,
-  #[napi(ts_return_type = "Array<Promise<string>>")]
-  pub transforms: Option<Vec<ThreadsafeFunction<String>>>,
+  #[napi(ts_return_type = "Array<() => <Promise<string>>")]
+  pub transforms: Option<Vec<ThreadsafeFunction<TransformInput>>>,
 }
 
-#[tokio::main]
 #[napi]
 pub async fn do_transform(
   task_config: TaskConfig,
 ) {
   // 1. get all files in entry_dir
-  let files = get_files(&task_config);
+  let all_files = get_files(&task_config);
 
   // 2. transform each files
-  // let transforms = task_config.transforms.unwrap_or(vec![]);
-  // for loader in transforms.into_iter() {
-  //   run_transform(String::from("code111"), loader).await.unwrap();
-  // }
-  let loader = task_config.transforms.unwrap_or(vec![])[0].clone();
-  transform(String::from("code111"), loader).await.unwrap();
+  let transform_funcs= task_config.transforms.unwrap_or(vec![]);
 
-  for file in files {
+  for file in all_files {
+    let transform_funcs = transform_funcs.clone();
 
+    tokio::spawn(async move {
+      let file_content = tokio::fs::read_to_string(&file).await.unwrap();
+      let mut transform_input = TransformInput {
+        id: file.clone(),
+        code: file_content,
+        map: None,
+      };
+      for transform_func in transform_funcs.iter() {
+        let TransformResult { code, map } = transform_func.call_async::<Promise<TransformResult>>(Ok(transform_input.clone())).await.unwrap().await.unwrap();
+        transform_input.code = code;
+        transform_input.map = map;
+      }
+
+      println!("transform_input: {:?}", transform_input);
+    });
   }
 }
 
 #[napi]
-pub async fn transform(code: String, loader: ThreadsafeFunction<String>) -> Result<TransformResult> {
-  // let transform_input = TransformResult {
-  //   code: "code".to_string(),
-  //   map: Some("map".to_string()),
-  // };
-  println!("cccc");
-  let TransformResult { code, map } = loader.call_async::<Promise<TransformResult>>(Ok(code)).await?.await?;
-  // ... do something with code and map
+pub async fn transform(
+  id: String,
+  code: String,
+  map: Option<String>,
+  loader: ThreadsafeFunction<TransformInput>
+) -> Result<TransformResult> {
+  let transform_input = TransformInput {
+    id,
+    code,
+    map,
+  };
+  let TransformResult { code, map } = loader.call_async::<Promise<TransformResult>>(Ok(transform_input)).await?.await?;
   println!("code: {}", code);
   println!("map: {:?}", map.clone());
   Ok(TransformResult { code, map })
@@ -107,10 +121,7 @@ fn get_files(task_config: &TaskConfig) -> Vec<String> {
   files
 }
 
-fn get_swc_config(
-  file: PathBuf,
-  es_target: EsVersion,
-) -> SwcOptions {
+fn get_swc_config(file: PathBuf, es_target: EsVersion) -> SwcOptions {
   let mut swc_options = SwcOptions {
     ..Default::default()
   };

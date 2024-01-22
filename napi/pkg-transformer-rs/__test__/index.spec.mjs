@@ -1,7 +1,7 @@
 import test from 'ava';
 
 import {
-  // transform,
+  transform,
   doTransform,
 } from '../index.js';
 
@@ -14,14 +14,18 @@ test('sum from native', (t) => {
     taskName: 'esm',
     transformExcludes: ['components/**'],
     transforms: [
-      async (...args) => {
-        console.log('code===>', ...args);
+      async (err, input) => {
+        console.log('code===>', input);
         return { code: 'I am return new code' };
+      },
+      async (err, input) => {
+        console.log('code===>', err, input);
+        return { code: `${input.code}111` };
       },
     ],
   });
 
-  // transform('I am code', async (...args) => {
+  // transform('id', 'I am code', null, async (...args) => {
   //   console.log(args);
   //   return {
   //     code: 'I am return new code',

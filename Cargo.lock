@@ -521,7 +521,6 @@ dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
- "serde_json",
  "swc",
  "swc_core",
  "tokio",
