@@ -15,10 +15,10 @@ const escapeCode = (code) => {
 /**
  * Remark Plugin to extract codeBlock & rendered as component
  * @type {import('unified').Plugin}
- * @param {options: { mobilePreview: boolean; baseUrl: string; }}
+ * @param {options: { mobilePreview: boolean; baseUrl: string; mobilePreviewUrlParams: string; }}
  */
 const extractCodePlugin = (options) => {
-  const { mobilePreview = false, baseUrl = '/' } = options;
+  const { mobilePreview = false, baseUrl = '/', mobilePreviewUrlParams } = options;
 
   const transformer = (ast, vfile) => {
     const demosMeta = [];
@@ -53,7 +53,7 @@ const extractCodePlugin = (options) => {
           idx: index,
           demoFilename,
           demoFilepath,
-          url: path.join(baseUrl.startsWith('/') ? '' : '/', baseUrl, 'demos', demoFilename, '/'),
+          url: `${path.join(baseUrl.startsWith('/') ? '' : '/', baseUrl, 'demos', demoFilename, '/')}?${mobilePreviewUrlParams}`,
         });
         demoIndex += 1;
       }

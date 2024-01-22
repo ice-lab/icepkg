@@ -66,6 +66,10 @@ export interface PluginDocusaurusOptions {
    * Whether preview components of mobile styles
    */
   mobilePreview?: boolean;
+  /**
+   * When mobilePreview is true, the url parameters of the mobile preview page
+   */
+  mobilePreviewUrlParams?: string;
 
   /**
    * Default locale that does not have its name in the base URL

@@ -46,7 +46,7 @@ const config = {
           sidebarItemsGenerator: {{{sidebarItemsGenerator}}},
         {{/if}}
           remarkPlugins: [
-            [extractCode, { mobilePreview: {{mobilePreview}}, baseUrl: '{{baseUrl}}' }],
+            [extractCode, { mobilePreview: {{mobilePreview}}, baseUrl: '{{baseUrl}}', mobilePreviewUrlParams: '{{mobilePreviewUrlParams}}' }],
         {{#if remarkPlugins}}
           {{#each remarkPlugins}}
             {{{this}}},
