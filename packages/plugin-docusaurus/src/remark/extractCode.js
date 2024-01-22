@@ -18,7 +18,7 @@ const escapeCode = (code) => {
  * @param {options: { mobilePreview: boolean; baseUrl: string; mobilePreviewUrlParams: string; }}
  */
 const extractCodePlugin = (options) => {
-  const { mobilePreview = false, baseUrl = '/', mobilePreviewUrlParams } = options;
+  const { mobilePreview = false, baseUrl = '/', mobilePreviewUrlParams = '' } = options;
 
   const transformer = (ast, vfile) => {
     const demosMeta = [];
