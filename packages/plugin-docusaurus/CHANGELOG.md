@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.18
+
+feat: add url params for mobilePreview
+
 ## 1.4.17
 
 ### Patch Changes
