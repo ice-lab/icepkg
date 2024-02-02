@@ -72,15 +72,17 @@ export function getRollupOptions(
   );
 
   if (taskConfig.type === 'transform') {
-    rollupOptions.plugins.unshift(
-      dtsPlugin({
-        rootDir,
-        entry: taskConfig.entry as Record<string, string>,
-        generateTypesForJs: userConfig.generateTypesForJs,
-        alias: taskConfig.alias,
-        outputDir: taskConfig.outputDir,
-      }),
-    );
+    if (userConfig.declaration) {
+      rollupOptions.plugins.unshift(
+        dtsPlugin({
+          rootDir,
+          entry: taskConfig.entry as Record<string, string>,
+          generateTypesForJs: userConfig.generateTypesForJs,
+          alias: taskConfig.alias,
+          outputDir: taskConfig.outputDir,
+        }),
+      );
+    }
     rollupOptions.plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);

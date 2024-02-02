@@ -74,6 +74,11 @@ function getUserConfig() {
       validation: 'boolean',
       default: false,
     },
+    {
+      name: 'declaration',
+      validation: 'boolean',
+      default: true,
+    },
     // TODO: validate values recursively
     {
       name: 'transform',
