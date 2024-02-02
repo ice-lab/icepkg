@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.18
+
+### Patch Changes
+
+- e099923: feat: add declaration user config
+
 ## 1.5.17
 
 ### Patch Changes
