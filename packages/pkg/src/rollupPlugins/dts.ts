@@ -85,7 +85,7 @@ function dtsPlugin({
           ...cachedContents[file.filePath],
           ...file,
         };
-      })
+      });
 
       updatedIds.forEach((updateId) => { cachedContents[updateId].updated = false; });
     },

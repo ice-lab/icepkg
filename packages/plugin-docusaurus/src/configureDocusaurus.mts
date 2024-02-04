@@ -26,7 +26,7 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
   const docusaurusPluginContentPagesPath = require.resolve('@docusaurus/plugin-content-pages', {
     paths: [__dirname, rootDir],
   });
-  
+
   const sidebarItemsGenerator = params?.sidebarItemsGenerator
     ? params?.sidebarItemsGenerator.toString()
     : false;
@@ -34,13 +34,13 @@ export function configureDocusaurus(rootDir: string, params: ConfigureDocusaurus
   const haveStaticFiles = fse.pathExistsSync(path.join(rootDir, 'static'));
   const mobilePreview = !!params.mobilePreview;
   if (params.navBarItems) {
-    try { 
+    try {
       params.navBarItems = JSON.stringify(params.navBarItems);
-    } catch(e) {
+    } catch (e) {
       consola.error('There is an error with stringifying the navbar items, please review your navBarItems configuration.');
     }
   }
-  
+
   const prismReactRendererPath = path.dirname(require.resolve('prism-react-renderer/package.json', {
     paths: [rootDir, __dirname],
   }));
