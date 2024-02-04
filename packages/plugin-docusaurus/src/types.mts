@@ -48,7 +48,7 @@ export interface PluginDocusaurusOptions {
   /**
    * A list of navbar items.
    */
-  navBarItems?: string | {[key: string]: string}[];
+  navBarItems?: string | Array<{[key: string]: string}>;
   /**
    * Specify a host to use.
    */
