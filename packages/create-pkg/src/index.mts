@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { fileURLToPath } from 'url';
+import { checkAliInternal } from 'ice-npm-utils';
+import { globby } from 'globby';
 import consola from 'consola';
 import { cac } from 'cac';
 import fs from 'fs-extra';
@@ -55,6 +57,8 @@ interface CliOptions {
 
 async function create(dirPath: string, dirname: string, options: CliOptions): Promise<void> {
   const info = await getInfo();
+  const isInternal = await checkAliInternal();
+
   await fs.ensureDir(dirPath);
   const empty = await checkEmpty(dirPath);
 
@@ -85,6 +89,7 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
       npmName,
       // @ts-expect-error generateMaterial should support index signature.
       workspace: options.workspace,
+      internal: isInternal,
     },
     materialTemplateDir: tempDir,
     materialType: 'component',
@@ -95,6 +100,20 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
 
   if (options.workspace) {
     await removeFilesAndContent(dirPath);
+  }
+
+  if (isInternal) {
+    const docsDirectories = await globby('**/docs', {
+      cwd: dirPath,
+      onlyFiles: false,
+    });
+    await Promise.all(docsDirectories.map((doc) => fs.remove(path.join(dirPath, doc))));
+  } else {
+    const devDirectories = await globby('**/dev', {
+      cwd: dirPath,
+      onlyFiles: false,
+    });
+    await Promise.all(devDirectories.map((dev) => fs.remove(path.join(dirPath, dev))));
   }
 
   console.log();
