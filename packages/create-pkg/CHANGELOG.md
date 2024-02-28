@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.3
+
+- feat: support handle pkg-plugin-dev
+
 ## 1.3.2
 
 ### Patch Changes
