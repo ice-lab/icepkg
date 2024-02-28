@@ -102,7 +102,8 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
     await removeFilesAndContent(dirPath);
   }
 
-  if (isAliInternal) {
+  if (isAliInternal && ['@ice/template-pkg-monorepo-react', '@ice/template-pkg-react'].includes(templateNpmName)) {
+    // we use the dev directory to preview components
     const docsDirectories = await globby('**/docs', {
       cwd: dirPath,
       onlyFiles: false,
