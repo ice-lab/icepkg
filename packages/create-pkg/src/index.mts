@@ -57,7 +57,7 @@ interface CliOptions {
 
 async function create(dirPath: string, dirname: string, options: CliOptions): Promise<void> {
   const info = await getInfo();
-  const isInternal = await checkAliInternal();
+  const isAliInternal = await checkAliInternal();
 
   await fs.ensureDir(dirPath);
   const empty = await checkEmpty(dirPath);
@@ -89,7 +89,7 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
       npmName,
       // @ts-expect-error generateMaterial should support index signature.
       workspace: options.workspace,
-      internal: isInternal,
+      isAliInternal,
     },
     materialTemplateDir: tempDir,
     materialType: 'component',
@@ -102,7 +102,7 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
     await removeFilesAndContent(dirPath);
   }
 
-  if (isInternal) {
+  if (isAliInternal) {
     const docsDirectories = await globby('**/docs', {
       cwd: dirPath,
       onlyFiles: false,
