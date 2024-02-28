@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.4
+
+- chore rename internal -> isAliInternal
+
 ## 1.3.3
 
 - feat: support handle pkg-plugin-dev
