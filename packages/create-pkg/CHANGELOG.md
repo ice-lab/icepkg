@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.3.5
+
+- fix: remove docs directory
+
 ## 1.3.4
 
-- chore rename internal -> isAliInternal
+- chore: rename internal -> isAliInternal
 
 ## 1.3.3
 
