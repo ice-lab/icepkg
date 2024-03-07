@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.20
+
+### Patch Changes
+
+- fix: alias path is incorrect on windows system
+
 ## 1.5.19
 
 ### Patch Changes
