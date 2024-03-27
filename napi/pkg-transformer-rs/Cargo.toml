@@ -17,12 +17,30 @@ napi = { version = "2.12.2", default-features = false, features = [
   "tokio_rt",
   "tokio_fs",
   "tokio_macros",
-  ] }
+] }
 napi-derive = "2.12.2"
-swc = "0.270.23"
-swc_core = {version = "0.87.24", features = ["base", "__ecma", "ecma_ast", "__parser"]}
-tokio = {version = "1.35.1", features = ["full"]}
+swc_core = { workspace = true, features = [
+  "common",
+  "base",
+  "ecma_ast",
+  "__parser",
+  "__visit",
+  "__ecma_transforms",
+  "swc_ecma_visit",
+  "ecma_visit_path",
+] }
+tokio = { version = "1.35.1", features = ["full"] }
 walkdir = "2.4.0"
+swc_config = { workspace = true }
+anyhow = { workspace = true }
+serde_json = { workspace = true }
+dashmap = { workspace = true }
+jsonc-parser = { version = "0.23.0", features = ["serde"] }
+swc_error_reporters = { workspace = true }
+swc_node_comments = { workspace = true }
+path-absolutize = { version = "3.1.1" }
+remove_dir_all = { version = "0.5.3" }
+futures = "0.3.30"
 
 [build-dependencies]
 napi-build = "2.0.1"

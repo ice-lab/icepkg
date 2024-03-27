@@ -1,6 +1,15 @@
 [workspace]
 resolver = "2"
-members  = ["napi/*"]
+members = ["napi/*"]
 
 [workspace.package]
-repository   = "https://github.com/ice-lab/icepkg"
+repository = "https://github.com/ice-lab/icepkg"
+
+[workspace.dependencies]
+anyhow = { version = "1.0.80", features = ["backtrace"] }
+serde_json = { version = "1.0.114" }
+swc_config = { version = "0.1.11" }
+swc_core = { version = "0.90.18", default-features = false }
+dashmap = { version = "5.5.3" }
+swc_error_reporters = { version = "0.17.18" }
+swc_node_comments = { version = "0.20.18" }
