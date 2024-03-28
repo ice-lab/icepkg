@@ -69,7 +69,7 @@ export function resolveAliasConfig(alias: Record<string, string>, rootDir: strin
     const target = alias[pattern];
     newAlias[pattern] = target[0] === '.' ?
       // transform alias relative target to relative to the rootDir
-      path.relative(path.dirname(filePath), path.resolve(rootDir, target)) || '.' :
+      path.relative(path.dirname(filePath), path.resolve(rootDir, target)).split(path.sep).join('/') || '.' :
       target;
   });
 
