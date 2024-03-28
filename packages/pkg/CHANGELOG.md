@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.20
+
+### Patch Changes
+
+- fix: can't compile some deps
+
 ## 1.5.19
 
 ### Patch Changes
