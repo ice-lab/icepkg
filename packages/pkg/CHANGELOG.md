@@ -4,6 +4,7 @@
 
 ### Patch Changes
 
+- fix: can't compile some deps
 - fix: alias path is incorrect on windows system
 
 ## 1.5.19
