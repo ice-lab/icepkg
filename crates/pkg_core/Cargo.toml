@@ -1,0 +1,16 @@
+[package]
+name = "pkg_core"
+version = "0.1.0"
+edition = "2021"
+repository.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = { workspace = true }
+glob = { workspace = true }
+tokio = { workspace = true }
+futures = { workspace = true }
+testing_macros = { workspace = true }
+pkg_loader_alias = { workspace = true }
+pkg_loader = { workspace = true }

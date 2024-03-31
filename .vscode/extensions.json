@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "streetsidesoftware.code-spell-checker",
+    "tamasfe.even-better-toml",
+    "rust-lang.rust-analyzer",
+    "EditorConfig.EditorConfig"
+  ]
+}

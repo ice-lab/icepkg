@@ -1,0 +1,21 @@
+{
+  "name": "@ice/pkg-binding-linux-x64-gnu",
+  "version": "0.0.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "pkg-binding.linux-x64-gnu.node",
+  "files": [
+    "pkg-binding.linux-x64-gnu.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "libc": [
+    "glibc"
+  ]
+}

@@ -1,0 +1,19 @@
+[package]
+edition = "2021"
+name = "ice_pkg_binding"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi = { workspace = true }
+napi-derive = { workspace = true }
+pkg_core = { workspace = true }
+
+[build-dependencies]
+napi-build = "2.0.1"
+
+[profile.release]
+lto = true
+strip = "symbols"

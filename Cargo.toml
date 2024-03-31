@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["napi/*"]
+members = ["crates/*"]
 
 [workspace.package]
 repository = "https://github.com/ice-lab/icepkg"
@@ -13,3 +13,17 @@ swc_core = { version = "0.90.18", default-features = false }
 dashmap = { version = "5.5.3" }
 swc_error_reporters = { version = "0.17.18" }
 swc_node_comments = { version = "0.20.18" }
+tokio = { version = "1.35.1", features = ["full"] }
+glob = "0.3.1"
+futures = "0.3.30"
+testing_macros = "0.2.11"
+async-trait = { version = "0" }
+
+# napi
+# Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
+napi = { version = "2.12.2", default-features = false, features = ["napi4"] }
+napi-derive = "2.12.2"
+
+pkg_core = { path = "./crates/pkg_core" }
+pkg_loader = { path = "./crates/pkg_loader" }
+pkg_loader_alias = { path = "./crates/pkg_loader_alias" }

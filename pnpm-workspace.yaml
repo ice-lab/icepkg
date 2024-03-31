@@ -3,3 +3,4 @@ packages:
   - 'napi/*'
   - 'examples/*'
   - 'website'
+  - "crates/node_binding"
