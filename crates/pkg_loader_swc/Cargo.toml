@@ -1,0 +1,25 @@
+[package]
+name = "pkg_loader_swc"
+version = "0.1.0"
+edition = "2021"
+repository.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+pkg_loader = { workspace = true }
+async-trait = { workspace = true }
+anyhow = { workspace = true }
+dashmap = { workspace = true }
+swc_core = { workspace = true, features = [
+  "base",
+  "common",
+  "ecma_ast",
+  "ecma_parser",
+  "ecma_codegen",
+  "__ecma_transforms",
+  "__visit",
+] }
+swc_node_comments = { workspace = true }
+swc_error_reporters = { workspace = true }
+swc_config = { workspace = true }

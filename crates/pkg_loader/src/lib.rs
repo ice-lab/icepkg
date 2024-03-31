@@ -27,11 +27,11 @@ pub trait BuildErrorLike: Debug + Sync + Send {
 
 pub type LoaderReturn = Result<Option<LoaderOutput>>;
 
-#[derive(Debug)]
-pub struct BuildError {
-    inner: Box<dyn BuildErrorLike>,
-    source: Option<Box<dyn std::error::Error + 'static + Send + Sync>>,
-}
+// #[derive(Debug)]
+// pub struct BuildError {
+//     inner: Box<dyn BuildErrorLike>,
+//     source: Option<Box<dyn std::error::Error + 'static + Send + Sync>>,
+// }
 
 #[async_trait::async_trait]
 pub trait Loader: Send + Sync + Debug + 'static + Any {

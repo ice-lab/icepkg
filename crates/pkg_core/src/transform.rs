@@ -3,6 +3,7 @@ use futures::future::join_all;
 use glob::glob;
 use pkg_loader::{Loader, LoaderArgs};
 use pkg_loader_alias::LoaderAlias;
+use pkg_loader_swc::LoaderSWC;
 use tokio::{fs, spawn};
 
 pub struct TransformOptions {
@@ -18,6 +19,7 @@ fn create_loader() -> Vec<BoxLoader> {
     vec![
         // builtin alias loader
         Box::new(LoaderAlias),
+        Box::new(LoaderSWC),
     ]
 }
 
