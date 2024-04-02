@@ -4,3 +4,4 @@ packages:
   - 'examples/*'
   - 'website'
   - "crates/node_binding"
+  - "crates/node_binding/npm/*"

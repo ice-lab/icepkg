@@ -906,6 +906,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "normalize-path"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f5438dd2b2ff4c6df6e1ce22d825ed2fa93ee2922235cc45186991717f0a892d"
+
+[[package]]
 name = "normpath"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1112,6 +1118,7 @@ dependencies = [
  "anyhow",
  "futures",
  "glob",
+ "normalize-path",
  "pkg_loader",
  "pkg_loader_alias",
  "pkg_loader_swc",
@@ -1132,13 +1139,6 @@ name = "pkg_loader_alias"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "pkg_loader",
-]
-
-[[package]]
-name = "pkg_loader_dts"
-version = "0.1.0"
-dependencies = [
  "pkg_loader",
 ]
 

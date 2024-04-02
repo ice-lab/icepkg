@@ -5,6 +5,7 @@ use std::{
 
 use anyhow::{Ok, Result};
 use futures::future::join_all;
+use normalize_path::NormalizePath;
 use pkg_loader::{Loader, LoaderArgs};
 use pkg_loader_alias::LoaderAlias;
 use pkg_loader_swc::LoaderSWC;
@@ -17,6 +18,7 @@ pub struct TransformOptions {
     pub out_dir: String,
     pub target: String,
     pub module: String,
+    // TODO: sourcemap
 }
 
 type BoxLoader = Box<dyn Loader>;
@@ -48,7 +50,9 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
         let target = target.clone();
         let module = module.clone();
 
-        let file_path = PathBuf::from(&options.src_dir).join(&input_file);
+        let file_path = PathBuf::from(&options.src_dir)
+            .join(&input_file)
+            .normalize();
         let out_file_path = get_output_file_path(&input_file, &options.out_dir);
 
         spawn(async move {
@@ -84,13 +88,16 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
 
     // 2. write outputs
     for output in outputs {
+        // FIXME: 如果父目录不存在，生成会失败
         let output = output
             .expect("get output file error")
             .expect("get output file error");
         write_file_jobs.push(fs::write(output.path.clone(), output.code));
+
         if let Some(sourcemap) = output.sourcemap {
-            let source_map_path = Path::new(&output.path.clone()).join(".map");
-            write_file_jobs.push(fs::write(source_map_path, sourcemap));
+            let source_map_path = output.path.to_string_lossy().to_string() + ".map";
+            let source_map_path = PathBuf::from(source_map_path);
+            write_file_jobs.push(fs::write(source_map_path.clone(), sourcemap));
         }
     }
 
@@ -100,7 +107,7 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
 }
 
 fn get_output_file_path(input_file: &str, out_dir: &str) -> PathBuf {
-    let output_file_path = PathBuf::from(out_dir).join(input_file);
+    let output_file_path = Path::new(out_dir).join(input_file).normalize();
     let ext = output_file_path.extension().unwrap();
 
     if ext == "ts" {

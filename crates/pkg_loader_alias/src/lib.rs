@@ -10,7 +10,6 @@ impl Loader for LoaderAlias {
     }
 
     async fn run(&self, input: &LoaderArgs) -> LoaderReturn {
-        println!("LoaderAlias::run: id: {}, code: {}", input.id, input.code);
         let new_code = input.code.replace("add", "sub");
         Ok(Some(LoaderOutput {
             code: new_code,

@@ -62,6 +62,16 @@ importers:
         version: 4.9.4
 
   crates/node_binding:
+    optionalDependencies:
+      '@ice/pkg-binding-darwin-x64':
+        specifier: 0.0.0
+        version: link:npm/darwin-x64
+      '@ice/pkg-binding-linux-x64-gnu':
+        specifier: 0.0.0
+        version: link:npm/linux-x64-gnu
+      '@ice/pkg-binding-win32-x64-msvc':
+        specifier: 0.0.0
+        version: link:npm/win32-x64-msvc
     devDependencies:
       '@napi-rs/cli':
         specifier: ^2.18.0
@@ -69,6 +79,14 @@ importers:
       ava:
         specifier: ^6.0.1
         version: 6.1.2
+
+  crates/node_binding/npm/darwin-arm64: {}
+
+  crates/node_binding/npm/darwin-x64: {}
+
+  crates/node_binding/npm/linux-x64-gnu: {}
+
+  crates/node_binding/npm/win32-x64-msvc: {}
 
   examples/application:
     dependencies:

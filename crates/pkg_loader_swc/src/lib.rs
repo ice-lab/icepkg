@@ -7,7 +7,7 @@ use swc_compiler::compiler::{IntoJsAst, SwcCompiler};
 use swc_core::base::config::{ModuleConfig, Options, OutputCharset};
 use swc_core::base::TransformOutput;
 use swc_core::ecma::ast::{op, EsVersion};
-use swc_core::ecma::parser::{Syntax, TsConfig};
+use swc_core::ecma::parser::{EsConfig, Syntax, TsConfig};
 use swc_core::ecma::visit::{as_folder, VisitMut, VisitMutWith};
 
 #[derive(Debug)]
@@ -20,7 +20,6 @@ impl Loader for LoaderSWC {
     }
 
     async fn run(&self, input: &LoaderArgs) -> LoaderReturn {
-        println!("LoaderSWC::run: id: {}, code: {}", input.id, input.code);
         let file_path = PathBuf::from(input.id);
         let content = input.code;
 
@@ -40,6 +39,12 @@ impl Loader for LoaderSWC {
         if ts_extensions.iter().any(|ext| ext == &file_extension) {
             swc_options.config.jsc.syntax = Some(Syntax::Typescript(TsConfig {
                 tsx: true,
+                decorators: true,
+                ..Default::default()
+            }));
+        } else {
+            swc_options.config.jsc.syntax = Some(Syntax::Es(EsConfig {
+                jsx: true,
                 decorators: true,
                 ..Default::default()
             }));
@@ -65,7 +70,7 @@ impl Loader for LoaderSWC {
                 .as_ref()
                 .map(|v| matches!(v, OutputCharset::Ascii)),
             source_map_config: swc_compiler::ast::SourceMapConfig {
-                enable: false,
+                enable: true,
                 inline_sources_content: false,
                 emit_columns: false,
                 names: Default::default(),

@@ -47,5 +47,7 @@ examples/**/.DS_Store
 examples/**/.docusaurus
 examples/**/build
 
+out/
+
 # rust
 target

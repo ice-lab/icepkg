@@ -5,7 +5,11 @@
   "types": "index.d.ts",
   "napi": {
     "name": "pkg-binding",
-    "triples": {}
+    "triples": {
+      "additional": [
+        "aarch64-apple-darwin"
+      ]
+    }
   },
   "license": "MIT",
   "devDependencies": {
@@ -26,5 +30,10 @@
     "test": "ava",
     "universal": "napi universal",
     "version": "napi version"
+  },
+  "optionalDependencies": {
+    "@ice/pkg-binding-win32-x64-msvc": "0.0.0",
+    "@ice/pkg-binding-darwin-x64": "0.0.0",
+    "@ice/pkg-binding-linux-x64-gnu": "0.0.0"
   }
 }
