@@ -36,6 +36,9 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
         .filter_map(Result::ok)
         .collect::<Vec<_>>();
     println!("file_paths: {:?}", file_paths);
+
+    // we need to handle the output file
+
     // run loaders to transform files
     let jobs = file_paths.into_iter().map(|file_path| {
         // let out_file_path = format!("{}/{}", options.out_dir, file_name);

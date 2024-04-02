@@ -11,6 +11,9 @@ pkg_loader = { workspace = true }
 async-trait = { workspace = true }
 anyhow = { workspace = true }
 dashmap = { workspace = true }
+serde_json = { workspace = true }
+regex = { workspace = true }
+either = "1"
 swc_core = { workspace = true, features = [
   "base",
   "common",

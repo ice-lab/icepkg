@@ -1,11 +1,11 @@
-use std::path::{Path, PathBuf};
-
-use pkg_loader::{Loader, LoaderArgs, LoaderOutput, LoaderReturn};
-
 mod ast;
 mod compiler;
+mod transformer;
+
+use std::path::{Path, PathBuf};
 
 use compiler::{IntoJsAst, SwcCompiler};
+use pkg_loader::{Loader, LoaderArgs, LoaderOutput, LoaderReturn};
 use swc_core::base::config::{Options, OutputCharset};
 use swc_core::base::TransformOutput;
 use swc_core::ecma::ast::EsVersion;
@@ -46,8 +46,10 @@ impl Loader for LoaderSWC {
             .map_err(anyhow::Error::from)?;
         let built = c
             .parse(None, |_| {
-                // TODO: remove it
-                optimize()
+                // TODO: 把 alias_config 传入
+                let mut alias_config = serde_json::Map::new();
+                alias_config.insert("@".to_string(), "./src".into());
+                transformer::alias::alias_transform(alias_config)
             })
             .map_err(anyhow::Error::from)?;
         let codegen_options = ast::CodegenOptions {
