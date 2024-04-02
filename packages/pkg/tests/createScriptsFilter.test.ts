@@ -62,12 +62,14 @@ test('createScriptsFilter with some compileDependencies', async () => {
   expect(scriptsFilter('/w/node_modules/@ice/runtime/node_modules/@ice/app/a.js')).toBe(true);
   expect(scriptsFilter('/w/node_modules/@ice/app/node_modules/rax-compat/index.js')).toBe(false);
   expect(scriptsFilter('/w/node_modules/lodash/node_modules/rax-compat/index.js')).toBe(false);
+  expect(scriptsFilter('/w/node_modules/lodash/node_modules/rax-compat/dist/index.js')).toBe(false);
   // Windows path
   expect(scriptsFilter('C:\\w\\node_modules\\lodash\\a.js')).toBe(true);
   expect(scriptsFilter('C:\\w\\node_modules\\@ice\\app\\a.js')).toBe(true);
   expect(scriptsFilter('C:\\w\\node_modules\\@ice\\runtime\\node_modules\\lodash\\a.js')).toBe(true);
   expect(scriptsFilter('C:\\w\\node_modules\\@ice\\runtime\\node_modules\\@ice\\app\\a.js')).toBe(true);
   expect(scriptsFilter('C:\\w\\node_modules\\@ice\\app\\node_modules\\rax-compat\\index.js')).toBe(false);
+  expect(scriptsFilter('C:\\w\\node_modules\\@ice\\app\\node_modules\\rax-compat\\dist\\index.js')).toBe(false);
 
   // default exclude some deps
   expect(scriptsFilter('/w/node_modules/@babel/runtime/a.js')).toBe(false);

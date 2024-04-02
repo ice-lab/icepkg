@@ -72,7 +72,12 @@ function getUserConfig() {
     {
       name: 'generateTypesForJs',
       validation: 'boolean',
-      default: false,
+      defaultValue: false,
+    },
+    {
+      name: 'declaration',
+      validation: 'boolean',
+      defaultValue: true,
     },
     // TODO: validate values recursively
     {

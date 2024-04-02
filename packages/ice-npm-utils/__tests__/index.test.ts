@@ -16,9 +16,9 @@ import {
   getAndExtractTarball,
 } from '../src/index';
 
-const defaultRegistry = 'https://registry.npm.taobao.org';
+const defaultRegistry = 'https://registry.npmmirror.com';
 // 可能会返回不同的源
-const tbRegisties = [defaultRegistry, 'https://registry.npmmirror.com'];
+const tbRegisties = [defaultRegistry];
 
 test('getNpmRegistry', () => {
   expect(tbRegisties.includes(getNpmRegistry('koa'))).toBeTruthy();

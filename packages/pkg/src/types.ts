@@ -100,9 +100,9 @@ export interface BundleUserConfig {
 
 export interface UserConfig {
   /**
-  * Entry for a task
-  * @default  `./src/index`
-  */
+   * Entry for a task
+   * @default  `./src/index`
+   */
   entry?: RollupOptions['input'];
   /**
    * Alias to file system paths
@@ -114,16 +114,22 @@ export interface UserConfig {
    */
   define?: PlainObject;
   /**
-  * - true to generate a sourcemap for the code and include it in the result object.
-  * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
-  * but not include it in the result object.
+   * - true to generate a sourcemap for the code and include it in the result object.
+   * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
+   * but not include it in the result object.
    */
   sourceMaps?: boolean | 'inline';
   /**
-  * Whether or not to generate declaration files for Ecmascript
-  * @default false
-  */
+   * Whether or not to generate declaration files for Ecmascript
+   * @default false
+   */
   generateTypesForJs?: boolean;
+
+  /**
+   * Generate .d.ts files from TypeScript files in your project.
+   * @default true
+   */
+  declaration?: boolean;
 
   /**
    * Configure JSX transform type.
