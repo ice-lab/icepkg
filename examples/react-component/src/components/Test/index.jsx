@@ -43,7 +43,7 @@ Test.propTypes = {
 
 Test.defaultProps = {
   title: 'Hello World',
-  bar: () => {},
+  bar: () => { },
   baz: 'baz',
 };
 

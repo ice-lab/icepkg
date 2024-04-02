@@ -113,8 +113,8 @@ impl Take for Context {
 /// The global javascript ast
 #[derive(Debug, Clone)]
 pub struct Ast {
-    program: Program,
-    context: Arc<Context>,
+    pub program: Program,
+    pub context: Arc<Context>,
 }
 
 impl Hash for Ast {

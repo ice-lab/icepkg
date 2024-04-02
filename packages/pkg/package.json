@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg",
-  "version": "1.5.17",
+  "version": "2.0.0",
   "description": "A fast builder for React components, Node modules and web libraries.",
   "type": "module",
   "main": "./lib/index.js",
@@ -31,6 +31,7 @@
   },
   "homepage": "https://pkg.ice.work",
   "dependencies": {
+    "@ice/pkg-binding": "0.0.0",
     "@ampproject/remapping": "^2.0.3",
     "@babel/core": "^7.17.5",
     "@babel/parser": "^7.17.3",

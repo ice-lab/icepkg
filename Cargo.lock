@@ -842,6 +842,7 @@ dependencies = [
  "napi-derive",
  "napi-sys",
  "once_cell",
+ "tokio",
 ]
 
 [[package]]
@@ -1147,15 +1148,12 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
- "dashmap",
- "either",
  "pkg_loader",
  "regex",
  "serde_json",
- "swc_config",
+ "swc_compiler",
  "swc_core",
- "swc_error_reporters",
- "swc_node_comments",
+ "swc_ecma_transforms",
 ]
 
 [[package]]
@@ -1729,6 +1727,18 @@ dependencies = [
  "tracing",
  "unicode-width",
  "url",
+]
+
+[[package]]
+name = "swc_compiler"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "dashmap",
+ "swc_config",
+ "swc_core",
+ "swc_error_reporters",
+ "swc_node_comments",
 ]
 
 [[package]]

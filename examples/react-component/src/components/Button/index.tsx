@@ -39,7 +39,7 @@ const Button: React.FunctionComponent<React.PropsWithChildren<ButtonProps>> = (p
       onClick={props.onClick}
       data-testid="normal-button"
     >
-      {props.children}
+      {/* {props.children} */}
     </button>
   );
 };

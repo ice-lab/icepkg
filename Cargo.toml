@@ -36,3 +36,4 @@ pkg_loader = { path = "./crates/pkg_loader" }
 pkg_loader_alias = { path = "./crates/pkg_loader_alias" }
 pkg_loader_swc = { path = "./crates/pkg_loader_swc" }
 ice_pkg_binding = { path = "./crates/node_binding" }
+swc_compiler = { path = "./crates/swc_compiler" }

@@ -10,6 +10,8 @@ pub struct LoaderOutput {
 pub struct LoaderArgs<'a> {
     pub id: &'a str,
     pub code: &'a String,
+    pub target: &'a String,
+    pub module: &'a String,
 }
 pub trait BuildErrorLike: Debug + Sync + Send {
     fn code(&self) -> String;

@@ -13,7 +13,6 @@ impl Ast {
     pub fn as_javascript(&self) -> Option<&JsAst> {
         match self {
             Ast::JavaScript(program) => Some(program),
-            // Ast::Css(_) => None,
         }
     }
 }

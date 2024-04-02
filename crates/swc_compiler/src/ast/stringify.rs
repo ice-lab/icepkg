@@ -111,9 +111,9 @@ pub fn print(
                 cm: source_map.clone(),
                 wr,
             };
-            // TODO:
+            // TODO: Handle diagnostics
             // node.emit_with(&mut emitter).into_diagnostic()?;
-            node.emit_with(&mut emitter);
+            let _ = node.emit_with(&mut emitter);
         }
         // SAFETY: SWC will emit valid utf8 for sure
         unsafe { String::from_utf8_unchecked(buf) }
