@@ -9,5 +9,7 @@ export interface RawTransformOptions {
   outDir: string
   target: string
   module: 'es6' | 'commonjs'
+  sourcemap: boolean
+  aliasConfig: Record<string, string>
 }
 export function transform(rawOptions: RawTransformOptions): Promise<void>

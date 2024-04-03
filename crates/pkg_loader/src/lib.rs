@@ -1,45 +1,48 @@
 use anyhow::Result;
-use std::{any::Any, fmt::Debug};
+use std::{any::Any, collections::HashMap, fmt::Debug};
+use swc_compiler::ast::javascript::Ast;
 
-pub struct LoaderOutput {
-    pub code: String,
-    pub map: Option<String>,
-}
-
-#[derive(Debug)]
-pub struct LoaderArgs<'a> {
-    pub id: &'a str,
-    pub code: &'a String,
-    pub target: &'a String,
-    pub module: &'a String,
-}
 pub trait BuildErrorLike: Debug + Sync + Send {
     fn code(&self) -> String;
 
     fn message(&self) -> String;
-    // TODO:
-    // fn diagnostic_builder(&self) -> DiagnosticBuilder {
-    //     DiagnosticBuilder {
-    //         code: Some(self.code()),
-    //         summary: Some(self.message()),
-    //         ..Default::default()
-    //     }
-    // }
+    // TODO: Implement Diagnostic
 }
 
-pub type LoaderReturn = Result<Option<LoaderOutput>>;
+#[derive(Debug)]
+pub struct TransformTaskOptions<'a> {
+    pub target: &'a str,
+    pub module: &'a str,
+    pub alias_config: &'a HashMap<String, String>,
+}
 
-// #[derive(Debug)]
-// pub struct BuildError {
-//     inner: Box<dyn BuildErrorLike>,
-//     source: Option<Box<dyn std::error::Error + 'static + Send + Sync>>,
-// }
+pub struct GenerateOutput {
+    pub code: String,
+    pub map: Option<String>,
+}
+pub type GenerateReturn = Result<Option<GenerateOutput>>;
 
 #[async_trait::async_trait]
 pub trait Loader: Send + Sync + Debug + 'static + Any {
     fn name(&self) -> &'static str;
 
-    async fn run(&self, _input: &LoaderArgs) -> LoaderReturn {
+    fn can_reuse_ast(&self) -> bool;
+
+    async fn transform(
+        &self,
+        _id: &str,
+        _ast: &mut Ast,
+        _transform_task_options: &TransformTaskOptions,
+    ) {
+    }
+
+    async fn generate(
+        &self,
+        _id: &str,
+        _code: String,
+        _map: Option<String>,
+        _transform_task_options: &TransformTaskOptions,
+    ) -> GenerateReturn {
         Ok(None)
     }
 }

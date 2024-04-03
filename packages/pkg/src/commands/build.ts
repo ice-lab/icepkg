@@ -84,7 +84,9 @@ export default async function build(context: Context) {
       inputFiles: files,
       outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/esm',
       target: 'es5',
-      module: 'es6'
+      module: 'es6',
+      sourcemap: true,
+      aliasConfig: { '@': './src' },
     });
     console.timeEnd('1');
     await applyHook('after.build.compile', []);

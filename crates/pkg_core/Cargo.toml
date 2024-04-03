@@ -16,3 +16,15 @@ normalize-path = { workspace = true }
 pkg_loader = { workspace = true }
 pkg_loader_alias = { workspace = true }
 pkg_loader_swc = { workspace = true }
+swc_core = { workspace = true, features = [
+  "base",
+  "common",
+  "ecma_ast",
+  "ecma_parser",
+  "ecma_codegen",
+  "__ecma_transforms",
+  "__visit",
+] }
+swc_ecma_transforms = { version = "*" }
+serde_json = { workspace = true }
+swc_compiler = { workspace = true }

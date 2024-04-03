@@ -9,3 +9,12 @@ repository.workspace = true
 [dependencies]
 pkg_loader = { workspace = true }
 async-trait = { workspace = true }
+swc_compiler = { workspace = true }
+swc_core = { workspace = true, features = [
+  "base",
+  "common",
+  "ecma_ast",
+  "ecma_parser",
+  "ecma_codegen",
+] }
+regex = { workspace = true }

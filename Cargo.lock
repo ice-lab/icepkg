@@ -1122,6 +1122,10 @@ dependencies = [
  "pkg_loader",
  "pkg_loader_alias",
  "pkg_loader_swc",
+ "serde_json",
+ "swc_compiler",
+ "swc_core",
+ "swc_ecma_transforms",
  "testing_macros",
  "tokio",
 ]
@@ -1132,6 +1136,8 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "serde_json",
+ "swc_compiler",
 ]
 
 [[package]]
@@ -1140,6 +1146,9 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "pkg_loader",
+ "regex",
+ "swc_compiler",
+ "swc_core",
 ]
 
 [[package]]

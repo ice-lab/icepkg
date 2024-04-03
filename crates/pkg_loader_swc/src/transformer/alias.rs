@@ -21,7 +21,6 @@ impl Fold for Alias {
             let alias_path = self.alias_config.get(matched_key).expect("");
             let re = Regex::new(&format!("^({})(.*)", matched_key)).expect("create alias error.");
             let new_src = re.replace(&source, |caps: &Captures| {
-                // TODO: format the correct
                 format!("{}{}", alias_path, &caps[2])
             });
             let mut new_decl = decl.clone();
