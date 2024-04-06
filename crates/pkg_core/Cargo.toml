@@ -25,6 +25,5 @@ swc_core = { workspace = true, features = [
 swc_ecma_transforms = { version = "*" }
 serde_json = { workspace = true }
 swc_compiler = { workspace = true }
-
-[dev-dependencies]
 glob = { workspace = true }
+glob-match = { workspace = true }

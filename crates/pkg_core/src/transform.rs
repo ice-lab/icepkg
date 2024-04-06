@@ -6,6 +6,8 @@ use std::{
 
 use anyhow::{Ok, Result};
 use futures::future::join_all;
+use glob::glob;
+use glob_match::glob_match;
 use normalize_path::NormalizePath;
 use pkg_loader::{GenerateOutput, Loader, TransformTaskOptions};
 use swc_compiler::compiler::{IntoJsAst, SwcCompiler};
@@ -44,6 +46,19 @@ fn create_loader() -> Vec<BoxLoader> {
     ]
 }
 
+// fn create_module_rules() -> HashMap<String, Vec<BoxLoader>> {
+//     let mut module_rules: HashMap<String, Vec<BoxLoader>> = HashMap::new();
+//     module_rules.insert(
+//         "*.{js,mjs,cjs,jsx,ts,cts,tsx,mts}".to_string(),
+//         vec![
+//             // builtin loaders
+//             Box::new(LoaderAlias),
+//         ],
+//     );
+
+//     module_rules
+// }
+
 struct OutputFile {
     pub path: PathBuf,
     pub code: String,
@@ -51,135 +66,155 @@ struct OutputFile {
 }
 
 /**
- * File to file compile transformer.
+ * File to file js transformer.
  */
 pub async fn transform(options: TransformOptions) -> Result<()> {
-    // TODO: need to support loader copy non-js/ts files
     let TransformOptions {
         target,
         module,
         alias_config,
         external_helpers,
+        input_files,
         ..
     } = options;
+
     let target = Arc::new(target);
     let module = Arc::new(module);
     let alias_config = Arc::new(alias_config);
 
+    let mut all_files = input_files;
+    if all_files.is_empty() {
+        all_files = glob(&format!("{}/**/*.*", options.src_dir))
+            .unwrap()
+            .map(|x: Result<std::path::PathBuf, glob::GlobError>| {
+                x.unwrap().to_str().unwrap().to_string()
+            })
+            .map(|abs_file| abs_file.replace(&options.src_dir, "."))
+            .collect::<Vec<_>>();
+    }
+
+    let mut copy_file_jobs = vec![];
+    let mut compiled_jobs = vec![];
+
     // 1. run loaders to transform files
-    let loader_runner_jobs = options.input_files.into_iter().map(|input_file| {
+    for input_file in all_files.into_iter() {
         let target = target.clone();
         let module = module.clone();
         let alias_config = alias_config.clone();
 
-        let file_path = PathBuf::from(&options.src_dir)
+        let input_file_path = PathBuf::from(&options.src_dir)
             .join(&input_file)
             .normalize();
-        let out_file_path = get_output_file_path(&input_file, &options.out_dir);
+        let id = input_file_path.to_string_lossy().into_owned();
 
-        spawn(async move {
-            // TODO: can it move of the scope?
-            let transform_task_options = TransformTaskOptions {
-                target: &target,
-                module: &module,
-                alias_config: &alias_config,
-            };
-            let id = file_path.to_string_lossy().into_owned();
+        if glob_match("**/*.d.{ts,mts,cts}", &id)
+            || !glob_match("**/*.{js,mjs,cjs,jsx,ts,cts,tsx,mts}", &id)
+        {
+            let output_file_path = Path::new(&options.out_dir).join(&input_file).normalize();
+            copy_file_jobs.push(fs::copy(input_file_path, output_file_path))
+        } else {
+            let output_file_path = get_output_file_path(&input_file, &options.out_dir);
+            compiled_jobs.push(spawn(async move {
+                // TODO: can it move of the scope?
+                let transform_task_options = TransformTaskOptions {
+                    target: &target,
+                    module: &module,
+                    alias_config: &alias_config,
+                };
 
-            let original_code = fs::read_to_string(&id).await?;
-            let (original_ast, codegen_options) = get_ast_and_codegen_options(
-                &id,
-                &original_code,
-                &target,
-                &module,
-                external_helpers,
-            )
-            .expect("Failed to get ast.");
+                let original_code = fs::read_to_string(&id).await?;
+                let (original_ast, codegen_options) = get_ast_and_codegen_options(
+                    &id,
+                    &original_code,
+                    &target,
+                    &module,
+                    external_helpers,
+                )
+                .expect("Failed to get ast.");
 
-            let mut cur_code = original_code.clone();
-            let mut cur_sourcemap = None;
-            let mut cur_ast = original_ast;
-            let mut is_called_generate_method_last_time = false;
+                let mut cur_code = original_code.clone();
+                let mut cur_sourcemap = None;
+                let mut cur_ast = original_ast;
+                let mut is_called_generate_method_last_time = false;
 
-            for loader in create_loader() {
-                let can_reuse_ast = loader.can_reuse_ast();
-                if can_reuse_ast {
-                    // call transform function to get the latest AST
-                    if !is_called_generate_method_last_time {
-                        loader
-                            .transform(&id, &mut cur_ast, &transform_task_options)
-                            .await;
+                for loader in create_loader() {
+                    let can_reuse_ast = loader.can_reuse_ast();
+                    if can_reuse_ast {
+                        // call transform function to get the latest AST
+                        if !is_called_generate_method_last_time {
+                            loader
+                                .transform(&id, &mut cur_ast, &transform_task_options)
+                                .await;
+                        } else {
+                            // parse it again to get the latest AST
+                            let (mut new_ast, _codegen_options) = get_ast_and_codegen_options(
+                                &id,
+                                &cur_code,
+                                &target,
+                                &module,
+                                external_helpers,
+                            )
+                            .expect("failed to get ast in the loader runner.");
+                            loader
+                                .transform(&id, &mut new_ast, &transform_task_options)
+                                .await;
+                        }
+                        is_called_generate_method_last_time = false;
                     } else {
-                        // parse it again to get the latest AST
-                        let (mut new_ast, _codegen_options) = get_ast_and_codegen_options(
-                            &id,
-                            &cur_code,
-                            &target,
-                            &module,
-                            external_helpers,
-                        )
-                        .expect("failed to get ast in the loader runner.");
-                        loader
-                            .transform(&id, &mut new_ast, &transform_task_options)
-                            .await;
-                    }
-                    is_called_generate_method_last_time = false;
-                } else {
-                    // call generate function to get the code and sourcemap
-                    let code: String;
-                    let map: Option<String>;
-                    if !is_called_generate_method_last_time {
-                        // Get the latest code and map from the latest AST
-                        let transform_output =
-                            swc_compiler::ast::stringify(&cur_ast, codegen_options.clone())?;
-                        code = transform_output.code;
-                        map = transform_output.map;
-                    } else {
-                        code = cur_code.clone();
-                        map = cur_sourcemap.clone();
-                    }
+                        // call generate function to get the code and sourcemap
+                        let code: String;
+                        let map: Option<String>;
+                        if !is_called_generate_method_last_time {
+                            // Get the latest code and map from the latest AST
+                            let transform_output =
+                                swc_compiler::ast::stringify(&cur_ast, codegen_options.clone())?;
+                            code = transform_output.code;
+                            map = transform_output.map;
+                        } else {
+                            code = cur_code.clone();
+                            map = cur_sourcemap.clone();
+                        }
 
-                    if let Some(GenerateOutput {
+                        if let Some(GenerateOutput {
+                            code: new_code,
+                            map: new_map,
+                        }) = loader
+                            .generate(&id, code, map, &transform_task_options)
+                            .await?
+                        {
+                            cur_code = new_code;
+                            if new_map.is_some() {
+                                cur_sourcemap = new_map;
+                            }
+                        }
+
+                        is_called_generate_method_last_time = true;
+                    }
+                }
+
+                if !is_called_generate_method_last_time {
+                    let TransformOutput {
                         code: new_code,
                         map: new_map,
-                    }) = loader
-                        .generate(&id, code, map, &transform_task_options)
-                        .await?
-                    {
-                        cur_code = new_code;
-                        if new_map.is_some() {
-                            cur_sourcemap = new_map;
-                        }
+                    } = swc_compiler::ast::stringify(&cur_ast, codegen_options.clone())?;
+                    cur_code = new_code;
+                    if new_map.is_some() {
+                        cur_sourcemap = new_map;
                     }
-
-                    is_called_generate_method_last_time = true;
                 }
-            }
 
-            if !is_called_generate_method_last_time {
-                let TransformOutput {
-                    code: new_code,
-                    map: new_map,
-                } = swc_compiler::ast::stringify(&cur_ast, codegen_options.clone())?;
-                cur_code = new_code;
-                if new_map.is_some() {
-                    cur_sourcemap = new_map;
-                }
-            }
-
-            Ok(OutputFile {
-                path: out_file_path,
-                code: cur_code,
-                sourcemap: cur_sourcemap,
-            })
-        })
-    });
-
-    let outputs = join_all(loader_runner_jobs).await;
-
-    let mut write_file_jobs = vec![];
+                Ok(OutputFile {
+                    path: output_file_path,
+                    code: cur_code,
+                    sourcemap: cur_sourcemap,
+                })
+            }))
+        }
+    }
+    let outputs = join_all(compiled_jobs).await;
 
     // 2. write outputs
+    let mut write_file_jobs = vec![];
     for output in outputs {
         let output = output
             .expect("failed to get output file")
@@ -201,6 +236,7 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
     }
 
     join_all(write_file_jobs).await;
+    join_all(copy_file_jobs).await;
 
     Ok(())
 }

@@ -59,7 +59,7 @@ export default async function build(context: Context) {
     .flat(1);
 
   try {
-    const outputResults: OutputResult[] = [];
+    // const outputResults: OutputResult[] = [];   
     console.time('1');
     const { outputResults: transformOutputResults } = await buildTransformTasks(
       transformOptions,
@@ -77,54 +77,32 @@ export default async function build(context: Context) {
     //   ...transformOutputResults,
     // );
 
-    console.time('2');
-    let srcDir = '/Users/luhc228/workspace/github/icepkg/examples/react-component/src';
-    // {js,mjs,cjs,jsx,ts,cts,tsx,mts}
-    const compile_files = [];
-    const copy_files = [];
-    const files = (await globby('**/*', {
-      cwd: srcDir,
-      ignore: ['node_modules/**'],
-      onlyFiles: true,
-    }))
+    // console.time('2');
+    // let srcDir = '/Users/luhc228/workspace/github/icepkg/examples/react-component/src';
+    // await Promise.all([
+    //   transform({
+    //     srcDir,
+    //     inputFiles: [],
+    //     outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/es2017',
+    //     target: 'es5',
+    //     module: 'es6',
+    //     sourcemap: true,
+    //     aliasConfig: { '@': './src' },
+    //     externalHelpers: true,
+    //   }),
+    //   transform({
+    //     srcDir,
+    //     inputFiles: [],
+    //     outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/esm',
+    //     target: 'es5',
+    //     module: 'es6',
+    //     sourcemap: true,
+    //     aliasConfig: { '@': './src' },
+    //     externalHelpers: true,
+    //   }),
+    // ]);
 
-    const task = [];
-    // for (const file of copy_files) {
-    //   task.push(fse.copy(
-    //     path.join(srcDir, file),
-    //     path.join('/Users/luhc228/workspace/github/icepkg/examples/react-component/es2017', file)
-    //   ));
-    //   task.push(fse.copy(
-    //     path.join(srcDir, file),
-    //     path.join('/Users/luhc228/workspace/github/icepkg/examples/react-component/esm', file)
-    //   ));
-    // }
-
-    await Promise.all([
-      ...task,
-      transform({
-        srcDir,
-        inputFiles: compile_files,
-        outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/es2017',
-        target: 'es5',
-        module: 'es6',
-        sourcemap: true,
-        aliasConfig: { '@': './src' },
-        externalHelpers: true,
-      }),
-      transform({
-        srcDir,
-        inputFiles: compile_files,
-        outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/esm',
-        target: 'es5',
-        module: 'es6',
-        sourcemap: true,
-        aliasConfig: { '@': './src' },
-        externalHelpers: true,
-      }),
-    ]);
-
-    console.timeEnd('2');
+    // console.timeEnd('2');
 
     await applyHook('after.build.compile', []);
   } catch (err) {

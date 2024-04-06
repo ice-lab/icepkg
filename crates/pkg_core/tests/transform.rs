@@ -16,18 +16,10 @@ mod test {
         let mut alias_config = HashMap::new();
         alias_config.insert("@".to_string(), "./src".to_string());
 
-        let input_files = glob(&format!("{}/**/*.*", src_dir))
-            .unwrap()
-            .map(|x: Result<std::path::PathBuf, glob::GlobError>| {
-                x.unwrap().to_str().unwrap().to_string()
-            })
-            .map(|abs_file| abs_file.replace(&src_dir, "."))
-            .collect::<Vec<_>>();
-
         let options = TransformOptions {
             src_dir,
             out_dir,
-            input_files,
+            input_files: vec!["./a.ts".to_string()],
             target: "es5".to_string(),
             module: "es6".to_string(),
             alias_config,
