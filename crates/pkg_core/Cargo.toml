@@ -15,7 +15,6 @@ testing_macros = { workspace = true }
 normalize-path = { workspace = true }
 pkg_loader = { workspace = true }
 pkg_loader_alias = { workspace = true }
-pkg_loader_swc = { workspace = true }
 swc_core = { workspace = true, features = [
   "base",
   "common",

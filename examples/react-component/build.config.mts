@@ -17,6 +17,7 @@ export default defineConfig({
   transform: {
     formats: ['esm'],
   },
+  declaration: false,
   jsxRuntime: 'classic',
   sourceMaps: false,
   bundle: {

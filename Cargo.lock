@@ -1121,7 +1121,6 @@ dependencies = [
  "normalize-path",
  "pkg_loader",
  "pkg_loader_alias",
- "pkg_loader_swc",
  "serde_json",
  "swc_compiler",
  "swc_core",
@@ -1149,20 +1148,6 @@ dependencies = [
  "regex",
  "swc_compiler",
  "swc_core",
-]
-
-[[package]]
-name = "pkg_loader_swc"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "pkg_loader",
- "regex",
- "serde_json",
- "swc_compiler",
- "swc_core",
- "swc_ecma_transforms",
 ]
 
 [[package]]

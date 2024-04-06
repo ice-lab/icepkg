@@ -19,7 +19,6 @@ use swc_ecma_transforms::modules::{common_js::Config as CommonJsConfig, EsModule
 use tokio::{fs, spawn};
 
 use pkg_loader_alias::LoaderAlias;
-// use pkg_loader_swc::LoaderSWC;
 
 pub struct TransformOptions {
     pub src_dir: String,
@@ -73,6 +72,7 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
         let out_file_path = get_output_file_path(&input_file, &options.out_dir);
 
         spawn(async move {
+            // TODO: can it move of the scope?
             let transform_task_options = TransformTaskOptions {
                 target: &target,
                 module: &module,

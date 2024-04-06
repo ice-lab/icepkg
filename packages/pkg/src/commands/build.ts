@@ -29,48 +29,52 @@ export default async function build(context: Context) {
   });
 
   // Empty outputDir before run the task.
-  // const outputDirs = taskConfigs.map((config) => config.outputDir).filter(Boolean);
-  // outputDirs.forEach((outputDir) => fse.emptyDirSync(outputDir));
+  const outputDirs = taskConfigs.map((config) => config.outputDir).filter(Boolean);
+  outputDirs.forEach((outputDir) => fse.emptyDirSync(outputDir));
 
-  // const transformOptions = buildTasks
-  //   .filter(({ config }) => config.type === 'transform')
-  //   .map((buildTask) => {
-  //     const { config: { modes } } = buildTask;
-  //     return modes.map((mode) => {
-  //       const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
-  //       const rollupOptions = getRollupOptions(context, taskRunnerContext);
-  //       return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
-  //     });
-  //   })
-  //   .flat(1);
+  const transformOptions = buildTasks
+    .filter(({ config }) => config.type === 'transform')
+    .map((buildTask) => {
+      const { config: { modes } } = buildTask;
+      return modes.map((mode) => {
+        const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
+        const rollupOptions = getRollupOptions(context, taskRunnerContext);
+        return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
+      });
+    })
+    .flat(1);
 
-  // const bundleOptions = buildTasks
-  //   .filter(({ config }) => config.type === 'bundle')
-  //   .map((buildTask) => {
-  //     const { config: { modes } } = buildTask;
-  //     return modes.map((mode) => {
-  //       const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
-  //       const rollupOptions = getRollupOptions(context, taskRunnerContext);
-  //       return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
-  //     });
-  //   })
-  //   .flat(1);
+  const bundleOptions = buildTasks
+    .filter(({ config }) => config.type === 'bundle')
+    .map((buildTask) => {
+      const { config: { modes } } = buildTask;
+      return modes.map((mode) => {
+        const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
+        const rollupOptions = getRollupOptions(context, taskRunnerContext);
+        return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
+      });
+    })
+    .flat(1);
 
   try {
-    //   const outputResults: OutputResult[] = [];
-    //   const { outputResults: transformOutputResults } = await buildTransformTasks(
-    //     transformOptions,
-    //     context,
-    //   );
-    //   const { outputResults: bundleOutputResults } = await buildBundleTasks(
-    //     bundleOptions,
-    //     context,
-    //   );
+    const outputResults: OutputResult[] = [];
+    console.time('1');
+    const { outputResults: transformOutputResults } = await buildTransformTasks(
+      transformOptions,
+      context,
+    );
+    console.timeEnd('1');
+    // const { outputResults: bundleOutputResults } = await buildBundleTasks(
+    //   bundleOptions,
+    //   context,
+    // );
 
-    //   outputResults.push(
-    //     ...bundleOutputResults,
-    //     ...transformOutputResults,
-    //   );
+    // outputResults.push(
+    //   ...bundleOutputResults,
+    //   ...transformOutputResults,
+    // );
+
+    console.time('2');
     let srcDir = '/Users/luhc228/workspace/github/icepkg/examples/react-component/src';
     const files = await globby('**/*.{js,jsx,ts,tsx}', {
       cwd: srcDir,
@@ -78,17 +82,29 @@ export default async function build(context: Context) {
       onlyFiles: true,
     });
 
-    console.time('1');
-    await transform({
-      srcDir,
-      inputFiles: files,
-      outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/esm',
-      target: 'es5',
-      module: 'es6',
-      sourcemap: true,
-      aliasConfig: { '@': './src' },
-    });
-    console.timeEnd('1');
+    Promise.all([
+      transform({
+        srcDir,
+        inputFiles: files,
+        outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/esm2017',
+        target: 'es5',
+        module: 'es6',
+        sourcemap: true,
+        aliasConfig: { '@': './src' },
+      }),
+      transform({
+        srcDir,
+        inputFiles: files,
+        outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/esm',
+        target: 'es5',
+        module: 'es6',
+        sourcemap: true,
+        aliasConfig: { '@': './src' },
+      }),
+    ]);
+
+    console.timeEnd('2');
+
     await applyHook('after.build.compile', []);
   } catch (err) {
     await applyHook('error', {
