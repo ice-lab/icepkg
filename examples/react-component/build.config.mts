@@ -15,7 +15,7 @@ export default defineConfig({
   //   ['@ice/pkg-plugin-jsx-plus'],
   // ],
   transform: {
-    formats: ['esm'],
+    formats: ['esm', 'es2017'],
   },
   declaration: false,
   jsxRuntime: 'classic',

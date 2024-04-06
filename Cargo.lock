@@ -1125,7 +1125,6 @@ dependencies = [
  "swc_compiler",
  "swc_core",
  "swc_ecma_transforms",
- "testing_macros",
  "tokio",
 ]
 
@@ -1306,12 +1305,6 @@ name = "regex-syntax"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "adad44e29e4c806119491a7f06f03de4d1af22c3a680dd47f1e6e179439d1f56"
-
-[[package]]
-name = "relative-path"
-version = "1.9.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e898588f33fdd5b9420719948f9f2a32c922a246964576f71ba7f24f80610fbc"
 
 [[package]]
 name = "rustc-demangle"
@@ -2584,22 +2577,6 @@ checksum = "633c1a546cee861a1a6d0dc69ebeca693bf4296661ba7852b9d21d159e0506df"
 dependencies = [
  "libc",
  "winapi",
-]
-
-[[package]]
-name = "testing_macros"
-version = "0.2.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f9d3864d4184569c1428645a51a304b3b6e8d3094cd61fb3cce8dfdd9f6d0f72"
-dependencies = [
- "anyhow",
- "glob",
- "once_cell",
- "proc-macro2",
- "quote",
- "regex",
- "relative-path",
- "syn 2.0.57",
 ]
 
 [[package]]

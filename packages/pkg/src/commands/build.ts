@@ -7,6 +7,8 @@ import { buildTransformTasks } from '../tasks/transform.js';
 import { transform } from '@ice/pkg-binding';
 import globby from 'globby';
 import type { Context, OutputResult, TaskRunnerContext } from '../types.js';
+import { isDeclaration } from '../helpers/suffix.js';
+import path from 'path';
 
 export default async function build(context: Context) {
   const { applyHook, commandArgs } = context;
@@ -64,6 +66,7 @@ export default async function build(context: Context) {
       context,
     );
     console.timeEnd('1');
+
     // const { outputResults: bundleOutputResults } = await buildBundleTasks(
     //   bundleOptions,
     //   context,
@@ -76,30 +79,48 @@ export default async function build(context: Context) {
 
     console.time('2');
     let srcDir = '/Users/luhc228/workspace/github/icepkg/examples/react-component/src';
-    const files = await globby('**/*.{js,jsx,ts,tsx}', {
+    // {js,mjs,cjs,jsx,ts,cts,tsx,mts}
+    const compile_files = [];
+    const copy_files = [];
+    const files = (await globby('**/*', {
       cwd: srcDir,
-      ignore: ['node_modules/**', "*.d.ts"],
+      ignore: ['node_modules/**'],
       onlyFiles: true,
-    });
+    }))
 
-    Promise.all([
+    const task = [];
+    // for (const file of copy_files) {
+    //   task.push(fse.copy(
+    //     path.join(srcDir, file),
+    //     path.join('/Users/luhc228/workspace/github/icepkg/examples/react-component/es2017', file)
+    //   ));
+    //   task.push(fse.copy(
+    //     path.join(srcDir, file),
+    //     path.join('/Users/luhc228/workspace/github/icepkg/examples/react-component/esm', file)
+    //   ));
+    // }
+
+    await Promise.all([
+      ...task,
       transform({
         srcDir,
-        inputFiles: files,
-        outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/esm2017',
+        inputFiles: compile_files,
+        outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/es2017',
         target: 'es5',
         module: 'es6',
         sourcemap: true,
         aliasConfig: { '@': './src' },
+        externalHelpers: true,
       }),
       transform({
         srcDir,
-        inputFiles: files,
+        inputFiles: compile_files,
         outDir: '/Users/luhc228/workspace/github/icepkg/examples/react-component/esm',
         target: 'es5',
         module: 'es6',
         sourcemap: true,
         aliasConfig: { '@': './src' },
+        externalHelpers: true,
       }),
     ]);
 

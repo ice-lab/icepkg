@@ -19,6 +19,7 @@ pub struct RawTransformOptions {
   pub module: String,
   pub sourcemap: bool,
   pub alias_config: HashMap<String, String>,
+  pub external_helpers: bool,
 }
 
 #[napi]
@@ -31,6 +32,7 @@ pub async fn transform(raw_options: RawTransformOptions) {
     module,
     alias_config,
     sourcemap,
+    external_helpers,
   } = raw_options;
 
   let transform_options = TransformOptions {
@@ -41,6 +43,7 @@ pub async fn transform(raw_options: RawTransformOptions) {
     module,
     alias_config,
     sourcemap,
+    external_helpers,
   };
   let _ = pkg_core::transform(transform_options).await;
 }

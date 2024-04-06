@@ -24,7 +24,6 @@ impl<'a> Loader for LoaderAlias {
         ast: &mut Ast,
         transform_task_options: &TransformTaskOptions,
     ) {
-        // ast.program.fold_with(v);
         ast.program
             .visit_mut_with(&mut as_folder(AliasTransformVisitor {
                 alias_config: transform_task_options.alias_config.clone(),

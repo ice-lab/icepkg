@@ -8,10 +8,8 @@ repository.workspace = true
 
 [dependencies]
 anyhow = { workspace = true }
-glob = { workspace = true }
 tokio = { workspace = true }
 futures = { workspace = true }
-testing_macros = { workspace = true }
 normalize-path = { workspace = true }
 pkg_loader = { workspace = true }
 pkg_loader_alias = { workspace = true }
@@ -27,3 +25,6 @@ swc_core = { workspace = true, features = [
 swc_ecma_transforms = { version = "*" }
 serde_json = { workspace = true }
 swc_compiler = { workspace = true }
+
+[dev-dependencies]
+glob = { workspace = true }

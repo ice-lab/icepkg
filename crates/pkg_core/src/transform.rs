@@ -9,10 +9,13 @@ use futures::future::join_all;
 use normalize_path::NormalizePath;
 use pkg_loader::{GenerateOutput, Loader, TransformTaskOptions};
 use swc_compiler::compiler::{IntoJsAst, SwcCompiler};
-use swc_core::ecma::parser::{EsConfig, Syntax, TsConfig};
 use swc_core::{
     base::config::{ModuleConfig, Options, OutputCharset},
     ecma::visit::Fold,
+};
+use swc_core::{
+    base::BoolConfig,
+    ecma::parser::{EsConfig, Syntax, TsConfig},
 };
 use swc_core::{base::TransformOutput, ecma::ast::EsVersion};
 use swc_ecma_transforms::modules::{common_js::Config as CommonJsConfig, EsModuleConfig};
@@ -29,6 +32,7 @@ pub struct TransformOptions {
     pub module: String,
     pub sourcemap: bool,
     pub alias_config: HashMap<String, String>,
+    pub external_helpers: bool,
 }
 
 type BoxLoader = Box<dyn Loader>;
@@ -50,10 +54,12 @@ struct OutputFile {
  * File to file compile transformer.
  */
 pub async fn transform(options: TransformOptions) -> Result<()> {
+    // TODO: need to support loader copy non-js/ts files
     let TransformOptions {
         target,
         module,
         alias_config,
+        external_helpers,
         ..
     } = options;
     let target = Arc::new(target);
@@ -81,8 +87,14 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
             let id = file_path.to_string_lossy().into_owned();
 
             let original_code = fs::read_to_string(&id).await?;
-            let (original_ast, codegen_options) =
-                get_ast(&id, &original_code, &target, &module).expect("Failed to get ast.");
+            let (original_ast, codegen_options) = get_ast_and_codegen_options(
+                &id,
+                &original_code,
+                &target,
+                &module,
+                external_helpers,
+            )
+            .expect("Failed to get ast.");
 
             let mut cur_code = original_code.clone();
             let mut cur_sourcemap = None;
@@ -92,16 +104,21 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
             for loader in create_loader() {
                 let can_reuse_ast = loader.can_reuse_ast();
                 if can_reuse_ast {
-                    // call transform function to get the latest ast
+                    // call transform function to get the latest AST
                     if !is_called_generate_method_last_time {
                         loader
                             .transform(&id, &mut cur_ast, &transform_task_options)
                             .await;
                     } else {
-                        // parse it again to get the latest ast
-                        let (mut new_ast, _codegen_options) =
-                            get_ast(&id, &cur_code, &target, &module)
-                                .expect("failed to get ast in the loader runner.");
+                        // parse it again to get the latest AST
+                        let (mut new_ast, _codegen_options) = get_ast_and_codegen_options(
+                            &id,
+                            &cur_code,
+                            &target,
+                            &module,
+                            external_helpers,
+                        )
+                        .expect("failed to get ast in the loader runner.");
                         loader
                             .transform(&id, &mut new_ast, &transform_task_options)
                             .await;
@@ -112,7 +129,7 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
                     let code: String;
                     let map: Option<String>;
                     if !is_called_generate_method_last_time {
-                        // Get the latest code and map from the latest ast
+                        // Get the latest code and map from the latest AST
                         let transform_output =
                             swc_compiler::ast::stringify(&cur_ast, codegen_options.clone())?;
                         code = transform_output.code;
@@ -164,18 +181,23 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
 
     // 2. write outputs
     for output in outputs {
-        // FIXME: 如果父目录不存在，生成会失败
         let output = output
-            .expect("get output file error")
-            .expect("get output file error");
+            .expect("failed to get output file")
+            .expect("failed to get output file");
+        let mut code = output.code;
+
+        if let Some(parent) = output.path.parent() {
+            ensure_dir_exists(parent).await?;
+        }
 
         if let Some(sourcemap) = output.sourcemap {
             let source_map_path = output.path.to_string_lossy().to_string() + ".map";
             let source_map_path = PathBuf::from(source_map_path);
+            code =
+                add_source_map_comment(code, &output.path.file_name().unwrap().to_string_lossy());
             write_file_jobs.push(fs::write(source_map_path.clone(), sourcemap));
         }
-        // FIXME: 需要额外加 //# sourceMappingURL=<index.js>.map
-        write_file_jobs.push(fs::write(output.path.clone(), output.code));
+        write_file_jobs.push(fs::write(output.path.clone(), code));
     }
 
     join_all(write_file_jobs).await;
@@ -183,11 +205,12 @@ pub async fn transform(options: TransformOptions) -> Result<()> {
     Ok(())
 }
 
-fn get_ast(
+fn get_ast_and_codegen_options(
     id: &str,
     code: &str,
     target: &str,
     module: &str,
+    external_helpers: bool,
 ) -> Result<(
     swc_compiler::ast::javascript::Ast,
     swc_compiler::ast::CodegenOptions,
@@ -198,6 +221,7 @@ fn get_ast(
     let mut swc_options = Options {
         ..Default::default()
     };
+    swc_options.config.jsc.external_helpers = BoolConfig::new(Some(external_helpers));
     swc_options.config.jsc.target = Some(match target {
         "es3" => EsVersion::Es3,
         "es5" => EsVersion::Es5,
@@ -225,8 +249,11 @@ fn get_ast(
         ),
     });
     let file_extension = file_path.extension().unwrap();
-    let ts_extensions = ["tsx", "ts", "mts"];
-    if ts_extensions.iter().any(|ext| ext == &file_extension) {
+
+    if ["tsx", "ts", "mts", "cts"]
+        .iter()
+        .any(|ext| ext == &file_extension)
+    {
         swc_options.config.jsc.syntax = Some(Syntax::Typescript(TsConfig {
             tsx: true,
             decorators: true,
@@ -273,26 +300,37 @@ fn get_ast(
     Ok((ast, codegen_options))
 }
 
-struct MockBeforePassTransform;
-
-impl Fold for MockBeforePassTransform {}
-
-fn mock_before_pass_transform() -> impl Fold {
-    MockBeforePassTransform {}
-}
-
 fn get_output_file_path(input_file: &str, out_dir: &str) -> PathBuf {
     let output_file_path = Path::new(out_dir).join(input_file).normalize();
     let ext = output_file_path.extension().unwrap();
 
-    if ext == "ts" {
+    if ext == "ts" || ext == "tsx" || ext == "jsx" {
         output_file_path.with_extension("js")
     } else if ext == "mts" {
         output_file_path.with_extension("mjs")
     } else if ext == "cts" {
         output_file_path.with_extension("cjs")
     } else {
-        // .js / .cjs / .mjs, don't need to replace file extension
+        // .js / .cjs / .mjs, keep the same extension
         output_file_path
     }
+}
+
+fn add_source_map_comment(code: String, filename: &str) -> String {
+    format!("{}\n//# sourceMappingURL={filename}.map", code,)
+}
+
+async fn ensure_dir_exists(path: &Path) -> Result<()> {
+    if !path.exists() {
+        fs::create_dir_all(path).await?;
+    }
+    Ok(())
+}
+
+struct MockBeforePassTransform;
+
+impl Fold for MockBeforePassTransform {}
+
+fn mock_before_pass_transform() -> impl Fold {
+    MockBeforePassTransform {}
 }

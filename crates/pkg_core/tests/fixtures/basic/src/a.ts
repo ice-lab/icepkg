@@ -1,5 +1,5 @@
 // @ts-expect-error
-import { b } from '@/b';
+import { b } from '@/folders/b';
 
 export default function add(a: number, b: number) { return a + b; }
 

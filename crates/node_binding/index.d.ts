@@ -11,5 +11,6 @@ export interface RawTransformOptions {
   module: 'es6' | 'commonjs'
   sourcemap: boolean
   aliasConfig: Record<string, string>
+  externalHelpers: boolean
 }
 export function transform(rawOptions: RawTransformOptions): Promise<void>
