@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.21
+
+### Patch Changes
+
+- b3e745d: fix: fail to resolve alias when `import.meta` in the code
+
 ## 1.5.20
 
 ### Patch Changes

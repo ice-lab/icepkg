@@ -53,6 +53,10 @@ const aliasPlugin = (rootDir: string, originalAlias: Record<string, string>): Pl
 };
 
 export function matches(pattern: string, importee: string) {
+  // empty importee or pattern just return false
+  if (!importee || !pattern) {
+    return false;
+  }
   if (importee.length < pattern.length) {
     return false;
   }
