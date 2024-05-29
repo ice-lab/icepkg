@@ -1,10 +1,16 @@
 # Changelog
 
-## 1.5.21-canary-c9cde89-20240529082230
+## 1.5.22
 
 ### Patch Changes
 
 - chore: upgrade @swc/core version(keep the same as `@ice/app`)
+
+## 1.5.21
+
+### Patch Changes
+
+- b3e745d: fix: fail to resolve alias when `import.meta` in the code
 
 ## 1.5.20
 
