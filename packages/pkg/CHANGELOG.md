@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.22
+
+### Patch Changes
+
+- chore: upgrade @swc/core version(keep the same as `@ice/app`)
+
 ## 1.5.21
 
 ### Patch Changes
