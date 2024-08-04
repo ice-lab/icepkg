@@ -127,7 +127,10 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
   // Reason: https://github.com/microsoft/TypeScript/issues/30952#issuecomment-1114225407
   const tsConfigLocalPath = path.join(rootDir, 'node_modules/pkg/tsconfig.json');
   await fse.ensureFile(tsConfigLocalPath);
-  await fse.writeJSON(tsConfigLocalPath, tsConfig, { spaces: 2 });
+  await fse.writeJSON(tsConfigLocalPath, {
+    ...tsConfig,
+    compilerOptions: tsConfig.options,
+  }, { spaces: 2 });
 
   const runFile = await prepareSingleFileReplaceTscAliasPaths({
     configFile: tsConfigLocalPath,

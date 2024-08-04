@@ -1,0 +1,123 @@
+// Vitest Snapshot v1
+
+exports[`Run config bundle > cjs structure 1`] = `null`;
+
+exports[`Run config bundle > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.esm.es2017.production.js",
+    },
+    {
+      "name": "index.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config bundle > es2017 structure 1`] = `null`;
+
+exports[`Run config bundle > esm structure 1`] = `null`;
+
+exports[`Run config bundle-full > cjs structure 1`] = `null`;
+
+exports[`Run config bundle-full > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.cjs.es2017.production.js",
+    },
+    {
+      "name": "index.cjs.es5.production.js",
+    },
+    {
+      "name": "index.esm.es2017.production.js",
+    },
+    {
+      "name": "index.esm.es5.production.js",
+    },
+    {
+      "name": "index.umd.es2017.production.js",
+    },
+    {
+      "name": "index.umd.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config bundle-full > es2017 structure 1`] = `null`;
+
+exports[`Run config bundle-full > esm structure 1`] = `null`;
+
+exports[`Run config default > cjs structure 1`] = `null`;
+
+exports[`Run config default > dist structure 1`] = `null`;
+
+exports[`Run config default > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config default > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config sourcemap-enable > cjs structure 1`] = `null`;
+
+exports[`Run config sourcemap-enable > dist structure 1`] = `null`;
+
+exports[`Run config sourcemap-enable > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+    {
+      "name": "index.js.map",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config sourcemap-enable > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+    {
+      "name": "index.js.map",
+    },
+  ],
+  "name": "esm",
+}
+`;

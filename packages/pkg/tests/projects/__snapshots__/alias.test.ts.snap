@@ -1,0 +1,162 @@
+// Vitest Snapshot v1
+
+exports[`Run config default > cjs structure 1`] = `
+{
+  "files": [
+    {
+      "name": "alias.d.ts",
+    },
+    {
+      "name": "alias.js",
+    },
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "cjs",
+}
+`;
+
+exports[`Run config default > dist structure 1`] = `null`;
+
+exports[`Run config default > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "alias.d.ts",
+    },
+    {
+      "name": "alias.js",
+    },
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config default > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "alias.d.ts",
+    },
+    {
+      "name": "alias.js",
+    },
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config default > file content cjs/alias.d.ts 1`] = `
+"export declare const bar = 2;
+"
+`;
+
+exports[`Run config default > file content cjs/alias.js 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", {
+    value: true
+});
+Object.defineProperty(exports, \\"bar\\", {
+    enumerable: true,
+    get: function() {
+        return bar;
+    }
+});
+var bar = 2;
+"
+`;
+
+exports[`Run config default > file content cjs/index.d.ts 1`] = `
+"import { bar } from './alias.js';
+export declare const foo = 1;
+export { bar };
+"
+`;
+
+exports[`Run config default > file content cjs/index.js 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", {
+    value: true
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    foo: function() {
+        return foo;
+    },
+    bar: function() {
+        return _alias.bar;
+    }
+});
+var _alias = require(\\"@/alias.js\\");
+var foo = 1;
+"
+`;
+
+exports[`Run config default > file content es2017/alias.d.ts 1`] = `
+"export declare const bar = 2;
+"
+`;
+
+exports[`Run config default > file content es2017/alias.js 1`] = `
+"export const bar = 2;
+"
+`;
+
+exports[`Run config default > file content es2017/index.d.ts 1`] = `
+"import { bar } from './alias.js';
+export declare const foo = 1;
+export { bar };
+"
+`;
+
+exports[`Run config default > file content es2017/index.js 1`] = `
+"import { bar } from './alias.js';
+export const foo = 1;
+export { bar };
+"
+`;
+
+exports[`Run config default > file content esm/alias.d.ts 1`] = `
+"export declare const bar = 2;
+"
+`;
+
+exports[`Run config default > file content esm/alias.js 1`] = `
+"export var bar = 2;
+"
+`;
+
+exports[`Run config default > file content esm/index.d.ts 1`] = `
+"import { bar } from './alias.js';
+export declare const foo = 1;
+export { bar };
+"
+`;
+
+exports[`Run config default > file content esm/index.js 1`] = `
+"import { bar } from \\"./alias.js\\";
+export var foo = 1;
+export { bar };
+"
+`;
