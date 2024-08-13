@@ -28,6 +28,9 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
 
   config.sourcemap = config.sourcemap ?? command === 'start';
 
+  const mode = command === 'build' ? 'production' : 'development';
+  config.modes = [mode];
+
   if (config.type === 'bundle') {
     const defaultBundleSwcConfig = getDefaultBundleSwcConfig(config, context, taskName);
     config.swcCompileOptions = typeof config.modifySwcCompileOptions === 'function' ?
@@ -38,8 +41,6 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
       );
   } else if (config.type === 'transform') {
     config.outputDir = getTransformDefaultOutputDir(rootDir, taskName);
-    const mode = command === 'build' ? 'production' : 'development';
-    config.modes = [mode];
     const defaultTransformSwcConfig = getDefaultTransformSwcConfig(config, context, taskName, mode);
     config.swcCompileOptions = typeof config.modifySwcCompileOptions === 'function' ?
       config.modifySwcCompileOptions(defaultTransformSwcConfig) :

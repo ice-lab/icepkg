@@ -33,6 +33,7 @@ packages/*/es/
 /packages/**/es2017
 /packages/**/cjs
 /packages/**/esm
+/packages/pkg/tests/fixtures/**/build.config.for-test.mts
 **/node_modules
 /.pnpm-debug.log
 **/pnpm-global

@@ -94,6 +94,10 @@ async function runTransform(
   const logger = createLogger(`${taskName}-${mode}`);
   const entryDirs = getTransformEntryDirs(rootDir, config.entry as Record<string, string>);
 
+  if (config.sourcemap === 'inline') {
+    logger.warn('The sourcemap "inline" for transform has not fully supported.');
+  }
+
   const files: OutputFile[] = [];
 
   if (updatedFile) {
@@ -180,7 +184,8 @@ async function runTransform(
       }
     }
 
-    if (map) {
+    // IMPROVE: should disable sourcemap generation in the transform step for speed.
+    if (map && config.sourcemap !== false) {
       const standardizedMap = typeof map === 'string' ? map : JSON.stringify(map);
 
       fs.writeFileSync(
