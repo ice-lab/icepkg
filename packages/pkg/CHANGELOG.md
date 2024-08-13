@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.23
+
+### Patch Changes
+
+- fabaecb: fix: bundle mode with start command should be `development` environment instead of `production`
+- fabaecb: fix: alias is should be working for .d.ts file
+- fabaecb: fix: sourcemap option should be working and default should be false for transform
+
 ## 1.5.22
 
 ### Patch Changes
