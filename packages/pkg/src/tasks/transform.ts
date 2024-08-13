@@ -95,7 +95,7 @@ async function runTransform(
   const entryDirs = getTransformEntryDirs(rootDir, config.entry as Record<string, string>);
 
   if (config.sourcemap === 'inline') {
-    logger.warn('The sourcemap "inline" for transform has not fully support.');
+    logger.warn('The sourcemap "inline" for transform has not fully supported.');
   }
 
   const files: OutputFile[] = [];
