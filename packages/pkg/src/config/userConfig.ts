@@ -13,7 +13,6 @@ import type {
 function getUserConfig() {
   const defaultBundleUserConfig: BundleUserConfig = {
     formats: ['esm', 'es2017'],
-    modes: ['production'],
     outputDir: 'dist',
     minify: {
       js: (mode: string, command: string) => { return mode === 'production' && command === 'build'; },

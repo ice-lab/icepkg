@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.24
+
+### Patch Changes
+
+- support modes which is removed in the previous version(1.5.23)
+
 ## 1.5.23
 
 ### Patch Changes
