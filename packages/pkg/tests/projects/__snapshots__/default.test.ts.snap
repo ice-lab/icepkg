@@ -52,6 +52,65 @@ exports[`Run config bundle-full > es2017 structure 1`] = `null`;
 
 exports[`Run config bundle-full > esm structure 1`] = `null`;
 
+exports[`Run config bundle-with-dev-mode > cjs structure 1`] = `null`;
+
+exports[`Run config bundle-with-dev-mode > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.esm.es2017.development.js",
+    },
+    {
+      "name": "index.esm.es5.development.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config bundle-with-dev-mode > es2017 structure 1`] = `null`;
+
+exports[`Run config bundle-with-dev-mode > esm structure 1`] = `null`;
+
+exports[`Run config bundle-with-empty-mode > cjs structure 1`] = `null`;
+
+exports[`Run config bundle-with-empty-mode > dist structure 1`] = `
+{
+  "files": [],
+  "name": "dist",
+}
+`;
+
+exports[`Run config bundle-with-empty-mode > es2017 structure 1`] = `null`;
+
+exports[`Run config bundle-with-empty-mode > esm structure 1`] = `null`;
+
+exports[`Run config bundle-with-full-modes > cjs structure 1`] = `null`;
+
+exports[`Run config bundle-with-full-modes > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.esm.es2017.development.js",
+    },
+    {
+      "name": "index.esm.es2017.production.js",
+    },
+    {
+      "name": "index.esm.es5.development.js",
+    },
+    {
+      "name": "index.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config bundle-with-full-modes > es2017 structure 1`] = `null`;
+
+exports[`Run config bundle-with-full-modes > esm structure 1`] = `null`;
+
 exports[`Run config default > cjs structure 1`] = `null`;
 
 exports[`Run config default > dist structure 1`] = `null`;

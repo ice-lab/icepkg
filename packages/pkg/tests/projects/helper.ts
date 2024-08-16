@@ -15,6 +15,8 @@ export interface ProjectTestUserConfig {
   config?: string | UserConfig
   mode?: 'build' | 'start'
   snapshot?: 'full' | 'structure'
+  skip?: boolean
+  only?: boolean
 }
 
 export interface ProjectTestConfig extends Required<ProjectTestUserConfig> {
@@ -40,7 +42,9 @@ export function runProjectTest(name: string, userConfigs: ProjectTestConfigs) {
       name: config.name,
       config: config.config,
       mode: config?.mode ?? 'build',
-      snapshot: config?.snapshot ?? 'full'
+      snapshot: config?.snapshot ?? 'full',
+      skip: config.skip ?? false,
+      only: config.only ?? false,
     })
   }
 
@@ -93,7 +97,8 @@ export function runProjectTest(name: string, userConfigs: ProjectTestConfigs) {
   })
 
   for (const config of configs) {
-    it(`Run config ${config.name}`, async () => {
+    const test = config.only ? it.only : config.skip ? it.skip : it;
+    test(`Run config ${config.name}`, async () => {
       await runBuild(config)
       await runSnapshot(config)
     }, {

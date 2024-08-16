@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg",
-  "version": "1.5.23",
+  "version": "1.5.24",
   "description": "A fast builder for React components, Node modules and web libraries.",
   "type": "module",
   "main": "./lib/index.js",
