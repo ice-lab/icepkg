@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16]
+        node-version: [18]
 
     steps:
       - name: Checkout Branch
@@ -35,4 +35,4 @@ jobs:
         with:
           version: pnpm run version
         env:
-          GITHUB_TOKEN: ${{ secrets.LUHC228_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

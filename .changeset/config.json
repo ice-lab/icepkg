@@ -7,7 +7,10 @@
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": [],
+  "ignore": [
+    "@ice/pkg-tests-*",
+    "example-*"
+  ],
   "snapshot": {
     "useCalculatedVersion": true,
     "prereleaseTemplate": "{tag}-{commit}-{datetime}"
