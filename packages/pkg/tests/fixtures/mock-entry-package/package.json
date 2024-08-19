@@ -1,0 +1,12 @@
+{
+  "name": "@ice/pkg-tests-fixtures-mock-entry-package",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./main.js",
+  "module": "./module.js",
+  "browser": "./browser.js",
+  "types": "./index.d.ts",
+  "description": "模块入口测试",
+  "dependencies": {
+  }
+}
