@@ -96,6 +96,11 @@ export interface BundleUserConfig {
    * Weather or not compile the dependencies in node_modules.
    */
   compileDependencies?: boolean | Array<RegExp | string>;
+
+  /**
+   * Resolve node module by prefer using `browser` field in package.json.
+   */
+  browser?: boolean;
 }
 
 export interface UserConfig {

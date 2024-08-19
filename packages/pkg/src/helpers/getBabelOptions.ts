@@ -28,7 +28,7 @@ function getBabelOptions(
         jsxRuntime === 'automatic'
           ? {
             runtime: jsxRuntime,
-            importSource: JSX_RUNTIME_SOURCE
+            importSource: JSX_RUNTIME_SOURCE,
           }
           : {
             pragma,

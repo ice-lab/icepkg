@@ -1,0 +1,61 @@
+// Vitest Snapshot v1
+
+exports[`Run config default > cjs structure 1`] = `null`;
+
+exports[`Run config default > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.cjs.es5.production.js",
+    },
+    {
+      "name": "index.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config default > es2017 structure 1`] = `null`;
+
+exports[`Run config default > esm structure 1`] = `null`;
+
+exports[`Run config default > file content dist/index.cjs.es5.production.js 1`] = `
+"\\"use strict\\";console.log(\\"module\\");
+"
+`;
+
+exports[`Run config default > file content dist/index.esm.es5.production.js 1`] = `
+"console.log(\\"module\\");
+"
+`;
+
+exports[`Run config enable-browser > cjs structure 1`] = `null`;
+
+exports[`Run config enable-browser > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.cjs.es5.production.js",
+    },
+    {
+      "name": "index.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config enable-browser > es2017 structure 1`] = `null`;
+
+exports[`Run config enable-browser > esm structure 1`] = `null`;
+
+exports[`Run config enable-browser > file content dist/index.cjs.es5.production.js 1`] = `
+"\\"use strict\\";console.log(\\"browser\\");
+"
+`;
+
+exports[`Run config enable-browser > file content dist/index.esm.es5.production.js 1`] = `
+"console.log(\\"browser\\");
+"
+`;
