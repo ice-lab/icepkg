@@ -14,6 +14,6 @@
   },
   "devDependencies": {
     "@ice/pkg": "workspace:*",
-    "typescript": "^4.5.4"
+    "typescript": "catalog:"
   }
 }

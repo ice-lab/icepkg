@@ -29,7 +29,7 @@
     "build": "rm -rf lib && tsc"
   },
   "devDependencies": {
-    "typescript": "^4.9.4"
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@iceworks/generate-material": "^1.1.0",
