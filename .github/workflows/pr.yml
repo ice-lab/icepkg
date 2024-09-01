@@ -1,13 +1,8 @@
-name: Release
-
-on:
-  push:
-    branches:
-      - main
+name: Pull Request Check
+on: [pull_request]
 
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
 
     steps:
@@ -26,11 +21,4 @@ jobs:
       - name: Setup
         run: pnpm run setup
 
-      - name: Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          publish: pnpm release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: pnpx pkg-pr-new publish './packages/*' --template './examples/*'
