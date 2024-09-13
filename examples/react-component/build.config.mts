@@ -9,6 +9,9 @@ export default defineConfig({
     formats: ['esm', 'es2017', 'cjs'],
   },
   jsxRuntime: 'classic',
+  declaration: {
+    generator: 'oxc'
+  },
   sourceMaps: false,
   bundle: {
     formats: ['esm', 'es2017'],

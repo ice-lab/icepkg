@@ -112,6 +112,14 @@ export interface DeclarationUserConfig {
    * @default 'multi'
    */
   outputMode?: 'multi' | 'unique';
+
+  /**
+   * The generator to generate .d.ts file
+   * - `'tsc'` use typescript
+   * - `'oxc'` use oxc-transform to generate isolated declaration
+   * @default 'tsc'
+   */
+  generator?: 'tsc' | 'oxc';
 }
 
 export interface UserConfig {
