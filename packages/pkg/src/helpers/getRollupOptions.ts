@@ -80,6 +80,7 @@ export function getRollupOptions(
           generateTypesForJs: userConfig.generateTypesForJs,
           alias: taskConfig.alias,
           outputDir: taskConfig.outputDir,
+          usingOxc: !!userConfig.experimental?.enableOxcIsolatedDeclaration,
         }),
       );
     }

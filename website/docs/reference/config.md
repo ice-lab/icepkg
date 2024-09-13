@@ -508,3 +508,19 @@ export default defineConfig({
 - index.esm.es2017.development.js # 输出未压缩产物 （ES module + es2017）
 - index.esm.es2017.production.js  # 输出未压缩产物 (ES module + es2017)
 ```
+
+### experimental
+
+实验性参数，如果遇到问题，请提交到[此处](https://github.com/ice-lab/icepkg/issues)。
+
+#### enableOxcIsolatedDeclaration
+
++ 类型：`boolean`
++ 可用版本：`1.6.0`
+
+使用 `oxc-transform` 替代 `tsc` 去生成 [isolated declaration](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations)，可以获得数十倍的构建性能提升。
+
+开启此选项需要注意以下内容：
+
+- `isolated declaration` 是 TypeScript 5.5 引入的新功能，需要开启此功能，请保证你的代码对此兼容
+- `oxc-transform` 目前不支持 alias 能力

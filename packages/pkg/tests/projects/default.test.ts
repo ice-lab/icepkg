@@ -60,5 +60,5 @@ runProjectTest('default', [
     config: {
       sourceMaps: true
     }
-  }
+  },
 ])

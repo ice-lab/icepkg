@@ -423,6 +423,9 @@ importers:
       magic-string:
         specifier: ^0.25.7
         version: 0.25.9
+      oxc-transform:
+        specifier: ^0.28.0
+        version: 0.28.0
       picocolors:
         specifier: ^1.0.0
         version: 1.0.0
@@ -448,8 +451,8 @@ importers:
         specifier: ^1.8.2
         version: 1.8.2
       typescript:
-        specifier: ^4.9.4
-        version: 4.9.4
+        specifier: ^5.5.0
+        version: 5.6.2
     devDependencies:
       '@types/babel__core':
         specifier: ^7.1.20
@@ -6622,6 +6625,70 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
+
+  /@oxc-transform/binding-darwin-arm64@0.28.0:
+    resolution: {integrity: sha512-WBqUfFjr/6I5nrImc8Teo5lqM6SPCkxSjl59bJbSMNSeeDiO6TPqXNd8JmmLoFRIi834aPV0tcLNRs3R5k1cgA==}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@oxc-transform/binding-darwin-x64@0.28.0:
+    resolution: {integrity: sha512-9ndgXbENCHmYhS5py40f2OG5v17INO72UI+KvHCztejm1E2D0mKYOt+ZTp4H8uDkU1LmyQWX+60U2dXTTHBgWQ==}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@oxc-transform/binding-linux-arm64-gnu@0.28.0:
+    resolution: {integrity: sha512-5NZKi3DruTEtxUd/uHP1RXdnoB0vWZRZbOqTI96wf6RzWZ62djj1ywPb4fGESyPmsb+5I77p5o4yozVSs5LfAQ==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@oxc-transform/binding-linux-arm64-musl@0.28.0:
+    resolution: {integrity: sha512-ZSU18gGHzDhrs34FrF6i8+TUkOBhphHLUc5QAlm+Qu77b3m+Q1Drqri5vc96E+TvrYBybCLvryOG+WwILCavBQ==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@oxc-transform/binding-linux-x64-gnu@0.28.0:
+    resolution: {integrity: sha512-ozgoPjEUgU1UOHiZDwNzbNJQceDWBhsHYtzcNKkas7v5EPRegSLdSpQLJ8bj88wmS1XermL9/3vMe0+xfN3/nA==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@oxc-transform/binding-linux-x64-musl@0.28.0:
+    resolution: {integrity: sha512-HYMRAfsqjTDyN9bu8KhSMIF1mjRVogOgVkovW/Iz5G2JydzIse+ZEKR6lXx0lctIQxbFKW6TatQLWCoABGHQjw==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@oxc-transform/binding-win32-arm64-msvc@0.28.0:
+    resolution: {integrity: sha512-9vTEGSj+ZcNGTkQu/0WdRrK1qqYgiBm47UWXmlmPSPnbiZmFZ+hvkFG/3qwwYaAnhe486w6el3Vc4VoHtzCiKQ==}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@oxc-transform/binding-win32-x64-msvc@0.28.0:
+    resolution: {integrity: sha512-+RRend+n8iCULBVg1HyhPpXL2oD1UUuIgyY6R2IYQ3MDYHZ9pMvzgfZvr/qmYD5HbUUVK8RM8Ad4lVHa6Hp61g==}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
 
   /@polka/url@1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
@@ -15284,6 +15351,19 @@ packages:
     resolution: {integrity: sha512-/jHxFIzoMXdqPzTaCpFzAAWhpkSjZPF4Vsn6jAfNpmbH/ymsmd7Qc6VE9BGn0L6YMj6uwpQLxCECpus4ukKS9Q==}
     dev: true
 
+  /oxc-transform@0.28.0:
+    resolution: {integrity: sha512-TxJhypZ9V6pFmApi/hyP0pX5jrxxJBH/GgXU9SJ7bFbfiA6W0GG7l5D+WMXixy8MBrs8WxoWBX5FCABhRfVgig==}
+    optionalDependencies:
+      '@oxc-transform/binding-darwin-arm64': 0.28.0
+      '@oxc-transform/binding-darwin-x64': 0.28.0
+      '@oxc-transform/binding-linux-arm64-gnu': 0.28.0
+      '@oxc-transform/binding-linux-arm64-musl': 0.28.0
+      '@oxc-transform/binding-linux-x64-gnu': 0.28.0
+      '@oxc-transform/binding-linux-x64-musl': 0.28.0
+      '@oxc-transform/binding-win32-arm64-msvc': 0.28.0
+      '@oxc-transform/binding-win32-x64-msvc': 0.28.0
+    dev: false
+
   /p-cancelable@1.1.0:
     resolution: {integrity: sha512-s73XxOZ4zpt1edZYZzvhqFa6uvQc1vwUa0K0BdtIZgQMAJj9IbebH+JkgKZc9h+B05PKHLOTl4ajG1BmNrVZlw==}
     engines: {node: '>=6'}
@@ -18882,6 +18962,13 @@ packages:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
+
+  /typescript@5.6.2:
+    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: false
 
   /typical@4.0.0:
     resolution: {integrity: sha512-VAH4IvQ7BDFYglMd7BPRDfLgxZZX4O4TFcRDA6EN5X7erNJJq+McIEp8np9aVtxrCJ6qx4GTYVfOWNjcqwZgRw==}

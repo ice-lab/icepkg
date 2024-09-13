@@ -15,6 +15,7 @@ interface DtsPluginOptions {
   entry: Record<string, string>;
   alias: TaskConfig['alias'];
   outputDir: string;
+  usingOxc: boolean;
   generateTypesForJs?: UserConfig['generateTypesForJs'];
 }
 
@@ -24,6 +25,7 @@ function dtsPlugin({
   alias,
   generateTypesForJs,
   outputDir,
+  usingOxc,
 }: DtsPluginOptions): Plugin {
   const includeFileRegexps = [/\.(?:[cm]?ts|tsx)$/];
   if (generateTypesForJs) {
@@ -67,7 +69,7 @@ function dtsPlugin({
           filePath: id,
           srcCode: cachedContents[id].srcCode,
         }));
-        dtsFiles = await dtsCompile({ files, alias, rootDir, outputDir });
+        dtsFiles = await dtsCompile({ files, alias, rootDir, outputDir, usingOxc });
       } else {
         dtsFiles = Object.keys(cachedContents).map((id) => {
           const { updated, ...rest } = cachedContents[id];

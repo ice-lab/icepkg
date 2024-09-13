@@ -156,6 +156,19 @@ export interface UserConfig {
    * "bundle mode" means bundle everything up by using Rollup
    */
   bundle?: BundleUserConfig;
+
+  /**
+   * Experimental features
+   * Is not ready for procution. If you found any bugs, please report to https://github.com/ice-lab/icepkg/issues
+   */
+  experimental?: ExperimentalUserConfig;
+}
+
+export interface ExperimentalUserConfig {
+  /**
+   * Using oxc-transform to genreation [isolated declaration](https://www.typescriptlang.org/tsconfig/#isolatedDeclarations).
+   */
+  enableOxcIsolatedDeclaration?: boolean;
 }
 
 interface _TaskConfig {

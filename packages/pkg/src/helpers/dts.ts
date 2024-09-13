@@ -9,6 +9,7 @@ import { prepareSingleFileReplaceTscAliasPaths } from 'tsc-alias';
 import fse from 'fs-extra';
 import * as path from 'path';
 import merge from 'lodash.merge';
+import oxc from 'oxc-transform';
 
 export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'cjs' | 'mjs' | 'mts' | 'cts';
 
@@ -45,16 +46,77 @@ interface DtsCompileOptions {
   alias: TaskConfig['alias'];
   rootDir: string;
   outputDir: string;
-
+  usingOxc: boolean;
 }
 
-export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompileOptions): Promise<DtsInputFile[]> {
-  if (!files.length) {
+export async function dtsCompile(options: DtsCompileOptions): Promise<DtsInputFile[]> {
+  if (!options.files.length) {
     return;
   }
 
-  const tsConfig = await getTSConfig(rootDir, outputDir, alias);
+  const tsConfig = await getTSConfig(options.rootDir, options.outputDir, options.alias);
+  const logger = createLogger('dts');
 
+  if (options.usingOxc) {
+    if (!tsConfig.options.isolatedDeclarations) {
+      logger.warn('[experimental.enableOxcIsolatedDeclaration] prefer to enable isolatedDeclaration in tsconfig.json');
+    }
+    if (Object.keys(tsConfig.options.paths ?? {}).length !== 0) {
+      logger.warn('[experimental.enableOxcIsolatedDeclaration] not works with alias');
+    }
+    return compileFromOxc(options);
+  }
+
+  return compileFromTsc(options, tsConfig);
+}
+
+async function getTSConfig(
+  rootDir: string,
+  outputDir: string,
+  alias: TaskConfig['alias'],
+) {
+  const defaultTSCompilerOptions: ts.CompilerOptions = {
+    allowJs: true,
+    declaration: true,
+    emitDeclarationOnly: true,
+    incremental: true,
+    skipLibCheck: true,
+    paths: formatAliasToTSPathsConfig(alias), // default add alias to paths
+  };
+  const projectTSConfig = await getProjectTSConfig(rootDir);
+  const tsConfig: ts.ParsedCommandLine = merge(
+    { options: defaultTSCompilerOptions },
+    projectTSConfig,
+    {
+      options: {
+        outDir: outputDir,
+        rootDir: path.join(rootDir, 'src'),
+      },
+    },
+  );
+
+  return tsConfig;
+}
+
+async function getProjectTSConfig(rootDir: string): Promise<ts.ParsedCommandLine> {
+  const tsconfigPath = ts.findConfigFile(rootDir, ts.sys.fileExists);
+  if (tsconfigPath) {
+    const tsconfigFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+    return ts.parseJsonConfigFileContent(
+      tsconfigFile.config,
+      ts.sys,
+      path.dirname(tsconfigPath),
+    );
+  }
+
+  return {
+    options: {},
+    fileNames: [],
+    errors: [],
+  };
+}
+
+async function compileFromTsc({ files, rootDir, outputDir }: DtsCompileOptions, tsConfig: ts.ParsedCommandLine) {
   const logger = createLogger('dts');
 
   logger.debug('Start Compiling typescript declarations...');
@@ -147,48 +209,29 @@ export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompil
   return result;
 }
 
-async function getTSConfig(
-  rootDir: string,
-  outputDir: string,
-  alias: TaskConfig['alias'],
-) {
-  const defaultTSCompilerOptions: ts.CompilerOptions = {
-    allowJs: true,
-    declaration: true,
-    emitDeclarationOnly: true,
-    incremental: true,
-    skipLibCheck: true,
-    paths: formatAliasToTSPathsConfig(alias), // default add alias to paths
-  };
-  const projectTSConfig = await getProjectTSConfig(rootDir);
-  const tsConfig: ts.ParsedCommandLine = merge(
-    { options: defaultTSCompilerOptions },
-    projectTSConfig,
-    {
-      options: {
-        outDir: outputDir,
-        rootDir: path.join(rootDir, 'src'),
-      },
-    },
-  );
+async function compileFromOxc({ files, alias, rootDir, outputDir }: DtsCompileOptions) {
+  const _files = files
+    .map((file) => normalizeDtsInput(file, rootDir, outputDir))
+    .map(({ filePath, dtsPath, ...rest }) => ({
+      ...rest,
+      // Be compatible with Windows env.
+      filePath: normalizePath(filePath),
+      dtsPath: normalizePath(dtsPath),
+    }));
 
-  return tsConfig;
-}
+  const dtsFiles: Record<string, string> = {};
+  for (const file of _files) {
+    const fileContent = fse.readFileSync(file.filePath, 'utf-8');
+    const { code, map } = oxc.isolatedDeclaration(file.filePath, fileContent, {
+      sourcemap: true,
+    });
 
-async function getProjectTSConfig(rootDir: string): Promise<ts.ParsedCommandLine> {
-  const tsconfigPath = ts.findConfigFile(rootDir, ts.sys.fileExists);
-  if (tsconfigPath) {
-    const tsconfigFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
-    return ts.parseJsonConfigFileContent(
-      tsconfigFile.config,
-      ts.sys,
-      path.dirname(tsconfigPath),
-    );
+    dtsFiles[file.filePath] = code;
+    // fse.writeFileSync(file.dtsPath, code)
   }
 
-  return {
-    options: {},
-    fileNames: [],
-    errors: [],
-  };
+  return _files.map((file) => ({
+    ...file,
+    dtsContent: dtsFiles[file.filePath],
+  }));
 }
