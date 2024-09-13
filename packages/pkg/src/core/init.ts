@@ -3,7 +3,7 @@ import { formatEntry, getTransformDefaultOutputDir } from '../helpers/getTaskIO.
 import getDefaultDefineValues from '../helpers/getDefaultDefineValues.js';
 import { stringifyObject } from '../utils.js';
 import { merge, mergeWith, omit } from 'es-toolkit/object';
-import path from 'node:path';
+import path, { resolve } from 'node:path';
 import { groupBy } from 'es-toolkit';
 
 const mergeDefaults: typeof merge = (target, source) => {
@@ -27,6 +27,7 @@ const defaultBundleUserConfig: BundleUserConfig = {
 
 const defaultDeclarationUserConfig = {
   outputMode: 'multi',
+  generator: 'tsc',
 } satisfies DeclarationUserConfig;
 
 export function initContextTasks(ctx: Context) {
@@ -103,6 +104,8 @@ export function initTask(buildTask: BuildTask, options: InitTaskOptions) {
     config.cssMinify = cssMinify;
 
     config.outputDir ??= pkg?.outputDir ?? bundleConfig.outputDir ?? defaultBundleUserConfig.outputDir;
+    // resolve to absolute
+    config.outputDir = resolve(rootDir, config.outputDir!);
 
     if (pkg) {
       mergeDefaults(config, omit(pkg, ['id', 'pluginInfos', 'id', 'target', 'module', 'declaration', 'outputDir']));
@@ -112,6 +115,7 @@ export function initTask(buildTask: BuildTask, options: InitTaskOptions) {
   } else if (config.type === 'transform') {
     config.modes ??= [expectedMode];
     config.outputDir ??= pkg?.outputDir ?? getTransformDefaultOutputDir(rootDir, taskName, config);
+    config.outputDir = resolve(rootDir, config.outputDir!);
   } else if (config.type === 'declaration') {
     // should run in initDeclarationTask
   } else {
@@ -136,10 +140,14 @@ export function initDeclarationTask(buildTask: BuildTask, options: InitTaskOptio
     throw new Error('Cannot disable declaration when transform formats is not empty.');
   }
   initSharedTask(buildTask, options);
-  config.outputMode ??=
-    declarationConfig === true
-      ? defaultDeclarationUserConfig.outputMode
-      : (declarationConfig?.outputMode ?? defaultDeclarationUserConfig.outputMode);
+
+  if (declarationConfig === true) {
+    mergeDefaults(config, defaultDeclarationUserConfig);
+  } else {
+    config.outputMode ??= declarationConfig?.outputMode ?? defaultDeclarationUserConfig.outputMode;
+    config.generator ??= declarationConfig?.generator ?? defaultDeclarationUserConfig.generator;
+  }
+
   const allOutputDirs = allTasks
     .map((v) => {
       return v.config.type === 'transform' ? v.config.outputDir! : '';

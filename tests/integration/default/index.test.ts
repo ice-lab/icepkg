@@ -118,4 +118,12 @@ runProjectTest(import.meta.url, [
       ],
     },
   },
+  {
+    name: 'declaration-generator-oxc',
+    config: {
+      declaration: {
+        generator: 'oxc',
+      },
+    },
+  },
 ]);
