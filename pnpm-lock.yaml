@@ -426,6 +426,9 @@ importers:
       picocolors:
         specifier: ^1.0.0
         version: 1.0.0
+      picomatch:
+        specifier: ^2.3.1
+        version: 2.3.1
       postcss:
         specifier: ^8.4.6
         version: 8.4.14
@@ -463,6 +466,9 @@ importers:
       '@types/node':
         specifier: ^17.0.2
         version: 17.0.45
+      '@types/picomatch':
+        specifier: ^2.0.0
+        version: 2.3.4
       cssnano:
         specifier: ^5.1.15
         version: 5.1.15(postcss@8.4.14)
@@ -486,6 +492,12 @@ importers:
         version: link:../../..
 
   packages/pkg/tests/fixtures/default:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../..
+
+  packages/pkg/tests/fixtures/transform-excludes:
     dependencies:
       '@ice/pkg':
         specifier: workspace:*
@@ -7419,6 +7431,10 @@ packages:
 
   /@types/parse5@5.0.3:
     resolution: {integrity: sha512-kUNnecmtkunAoQ3CnjmMkzNU/gtxG8guhi+Fk2U/kOpIKjIMKnXGp4IJCgQJrXSgMsWYimYG4TGjz/UzbGEBTw==}
+
+  /@types/picomatch@2.3.4:
+    resolution: {integrity: sha512-0so8lU8O5zatZS/2Fi4zrwks+vZv7e0dygrgEZXljODXBig97l4cPQD+9LabXfGJOWwoRkTVz6Q4edZvD12UOA==}
+    dev: true
 
   /@types/prettier@2.7.2:
     resolution: {integrity: sha512-KufADq8uQqo1pYKVIYzfKbJfBAc0sOeXqGbFaSpv8MRmC/zXgowNZmFcbngndGk922QDmOASEXUZCaY48gs4cg==}

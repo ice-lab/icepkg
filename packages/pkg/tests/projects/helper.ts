@@ -3,12 +3,14 @@ import * as path from 'node:path'
 import * as url from "node:url";
 import * as fse from 'fs-extra'
 import fs from "fs-extra";
-import { execSync, spawn } from 'node:child_process'
-import { UserConfig } from '../../src'
+import { execSync } from 'node:child_process'
+import { UserConfig, TransformUserConfig } from '../../src'
 
 const fixturesDir = path.join(url.fileURLToPath(import.meta.url), '../../fixtures')
 
 const CHECK_DIRS = ['es2017', 'esm', 'dist', 'cjs']
+
+export const ALL_TRANSFORM_FORMATS: TransformUserConfig['formats'] = ['cjs', 'es2017', 'esm']
 
 export interface ProjectTestUserConfig {
   name: string,
