@@ -266,19 +266,42 @@ export default defineConfig({
 + 类型：`string | string[]`
 + 默认值：`undefined`
 
-排除无需编译的文件。比如，我们不想编译 `src` 下的所有测试文件，其中测试文件包含在 `__tests__` 目录下，或以 `*.test.[j|t]s` 结尾。
+排除无需处理的文件，既不会进行编译，也不会进行拷贝。
+比如，不想处理 `src` 下的所有测试文件，其中测试文件包含在 `__tests__` 目录下，或以 `*.test.[j|t]s` 结尾。
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   transfrom: {
-    excludes: ['**/__tests__/**', '*.test.[j|t]s'],
+    excludes: ['**/__tests__/**', '**/*.test.[j|t]s'],
   },
 });
 ```
 
 `excludes` 的配置完全遵循 [minimatch](https://github.com/isaacs/minimatch) 写法。
+
+#### compileExcludes
+
++ 类型：`string | string[]`
++ 默认值: `undefined`
++ 可用版本: `1.6.0`
+
+排除无需编译但需要进行拷贝的代码文件。
+
+例如，不希望重复编译 `.min.js` 后缀的文件，但是又希望能够直接拷贝到输出文件夹内，则可以按照如下配置
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  transfrom: {
+    compileExcludes: ['**/*.min.js'],
+  },
+});
+```
+
+配置规则和 `excludes` 一致。
 
 ### bundle
 

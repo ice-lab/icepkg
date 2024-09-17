@@ -19,6 +19,7 @@ import type {
 } from '../types.js';
 import type { RollupOptions, SourceMapInput } from 'rollup';
 import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
+import picomatch from 'picomatch';
 
 export const watchTransformTasks: RunTasks = async (taskOptionsList, context, watcher) => {
   const handleChangeFunctions: HandleChange[] = [];
@@ -128,6 +129,8 @@ async function runTransform(
     },
   });
 
+  const excludeMatcher = picomatch(userConfig?.transform?.compileExcludes ?? []);
+
   const start = performance.now();
 
   logger.debug('Transform start...');
@@ -150,7 +153,7 @@ async function runTransform(
     let map: SourceMapInput = null;
 
     // User should use plugins to transform other types of files.
-    if (loadResult === null && !INCLUDES_UTF8_FILE_TYPE.test(files[i].ext)) {
+    if (excludeMatcher(files[i].filePath) || (loadResult === null && !INCLUDES_UTF8_FILE_TYPE.test(files[i].ext))) {
       fs.copyFileSync(files[i].absolutePath, dest);
 
       logger.debug(`Transform file ${files[i].absolutePath}`, timeFrom(traverseFileStart));

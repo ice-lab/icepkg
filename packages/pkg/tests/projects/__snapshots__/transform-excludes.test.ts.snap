@@ -1,0 +1,305 @@
+// Vitest Snapshot v1
+
+exports[`Run config compile-excludes > cjs structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.js",
+    },
+    {
+      "name": "index.min.js",
+    },
+    {
+      "files": [
+        {
+          "name": "n1.js",
+        },
+        {
+          "name": "n1.less",
+        },
+        {
+          "name": "n1.min.js",
+        },
+        {
+          "name": "n2.js",
+        },
+      ],
+      "name": "nested",
+    },
+  ],
+  "name": "cjs",
+}
+`;
+
+exports[`Run config compile-excludes > dist structure 1`] = `null`;
+
+exports[`Run config compile-excludes > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.js",
+    },
+    {
+      "name": "index.min.js",
+    },
+    {
+      "files": [
+        {
+          "name": "n1.js",
+        },
+        {
+          "name": "n1.less",
+        },
+        {
+          "name": "n1.min.js",
+        },
+        {
+          "name": "n2.js",
+        },
+      ],
+      "name": "nested",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config compile-excludes > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.js",
+    },
+    {
+      "name": "index.min.js",
+    },
+    {
+      "files": [
+        {
+          "name": "n1.js",
+        },
+        {
+          "name": "n1.less",
+        },
+        {
+          "name": "n1.min.js",
+        },
+        {
+          "name": "n2.js",
+        },
+      ],
+      "name": "nested",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config compile-excludes > file content cjs/index.js 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", {
+    value: true
+});
+Object.defineProperty(exports, \\"title\\", {
+    enumerable: true,
+    get: function() {
+        return title;
+    }
+});
+var title = \\"index\\";
+"
+`;
+
+exports[`Run config compile-excludes > file content cjs/index.min.js 1`] = `
+"'use strict';
+const path = require('path');
+console.log(path);
+"
+`;
+
+exports[`Run config compile-excludes > file content cjs/nested/n1.js 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", {
+    value: true
+});
+Object.defineProperty(exports, \\"path\\", {
+    enumerable: true,
+    get: function() {
+        return path;
+    }
+});
+var path = \\"nested/n1\\";
+"
+`;
+
+exports[`Run config compile-excludes > file content cjs/nested/n1.less 1`] = `
+".foo { color: red; }
+"
+`;
+
+exports[`Run config compile-excludes > file content cjs/nested/n1.min.js 1`] = `
+"'use strict';
+const path = require('path');
+console.log(path);
+"
+`;
+
+exports[`Run config compile-excludes > file content cjs/nested/n2.js 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", {
+    value: true
+});
+Object.defineProperty(exports, \\"path\\", {
+    enumerable: true,
+    get: function() {
+        return path;
+    }
+});
+var path = \\"nested/n2\\";
+"
+`;
+
+exports[`Run config compile-excludes > file content es2017/index.js 1`] = `
+"export const title = 'index';
+"
+`;
+
+exports[`Run config compile-excludes > file content es2017/index.min.js 1`] = `
+"'use strict';
+const path = require('path');
+console.log(path);
+"
+`;
+
+exports[`Run config compile-excludes > file content es2017/nested/n1.js 1`] = `
+"export const path = 'nested/n1';
+"
+`;
+
+exports[`Run config compile-excludes > file content es2017/nested/n1.less 1`] = `
+".foo { color: red; }
+"
+`;
+
+exports[`Run config compile-excludes > file content es2017/nested/n1.min.js 1`] = `
+"'use strict';
+const path = require('path');
+console.log(path);
+"
+`;
+
+exports[`Run config compile-excludes > file content es2017/nested/n2.js 1`] = `
+"export const path = 'nested/n2';
+"
+`;
+
+exports[`Run config compile-excludes > file content esm/index.js 1`] = `
+"export var title = \\"index\\";
+"
+`;
+
+exports[`Run config compile-excludes > file content esm/index.min.js 1`] = `
+"'use strict';
+const path = require('path');
+console.log(path);
+"
+`;
+
+exports[`Run config compile-excludes > file content esm/nested/n1.js 1`] = `
+"export var path = \\"nested/n1\\";
+"
+`;
+
+exports[`Run config compile-excludes > file content esm/nested/n1.less 1`] = `
+".foo { color: red; }
+"
+`;
+
+exports[`Run config compile-excludes > file content esm/nested/n1.min.js 1`] = `
+"'use strict';
+const path = require('path');
+console.log(path);
+"
+`;
+
+exports[`Run config compile-excludes > file content esm/nested/n2.js 1`] = `
+"export var path = \\"nested/n2\\";
+"
+`;
+
+exports[`Run config excludes > cjs structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.js",
+    },
+    {
+      "name": "index.min.js",
+    },
+    {
+      "files": [
+        {
+          "name": "n1.less",
+        },
+        {
+          "name": "n1.min.js",
+        },
+      ],
+      "name": "nested",
+    },
+  ],
+  "name": "cjs",
+}
+`;
+
+exports[`Run config excludes > dist structure 1`] = `null`;
+
+exports[`Run config excludes > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.js",
+    },
+    {
+      "name": "index.min.js",
+    },
+    {
+      "files": [
+        {
+          "name": "n1.less",
+        },
+        {
+          "name": "n1.min.js",
+        },
+      ],
+      "name": "nested",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config excludes > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.js",
+    },
+    {
+      "name": "index.min.js",
+    },
+    {
+      "files": [
+        {
+          "name": "n1.less",
+        },
+        {
+          "name": "n1.min.js",
+        },
+      ],
+      "name": "nested",
+    },
+  ],
+  "name": "esm",
+}
+`;

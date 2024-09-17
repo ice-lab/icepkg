@@ -36,6 +36,10 @@ export interface TransformUserConfig {
    * @see https://github.com/isaacs/minimatch
    */
   excludes?: string | string[];
+  /**
+   * Exclude compiling files which are copy.
+   */
+  compileExcludes?: string | string[];
 }
 
 export interface BundleUserConfig {
