@@ -2,4 +2,4 @@
 '@ice/pkg': patch
 ---
 
-fix babel jsx importSource
+fix: babel jsx importSource
