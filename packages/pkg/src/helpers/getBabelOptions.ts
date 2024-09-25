@@ -1,5 +1,6 @@
 import { TransformOptions } from '@babel/core';
 import { BabelPluginOptions } from 'src/rollupPlugins/babel.js';
+import { JSX_RUNTIME_SOURCE } from '../const.js';
 
 function getBabelOptions(
   plugins: babel.PluginItem[],
@@ -27,6 +28,7 @@ function getBabelOptions(
         jsxRuntime === 'automatic'
           ? {
             runtime: jsxRuntime,
+            importSource: JSX_RUNTIME_SOURCE
           }
           : {
             pragma,

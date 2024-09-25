@@ -8,8 +8,8 @@ import MagicString from 'magic-string';
 import type { Options as SwcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
 import type { TaskConfig, OutputFile, BundleTaskConfig } from '../types.js';
 import type { Plugin } from 'rollup';
+import { JSX_RUNTIME_SOURCE } from '../const.js';
 
-const JSX_RUNTIME_SOURCE = '@ice/jsx-runtime';
 
 const normalizeSwcConfig = (
   file: OutputFile,
