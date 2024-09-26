@@ -32,7 +32,7 @@
     "@tsconfig/docusaurus": "^1.0.5",
     "@types/react": "^18.0.0",
     "my-button": "file:./my-button",
-    "typescript": "^4.6.4"
+    "typescript": "catalog:"
   },
   "browserslist": {
     "production": [

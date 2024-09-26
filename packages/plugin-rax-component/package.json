@@ -33,7 +33,7 @@
     "@ice/pkg": "^1.5.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^4.9.4"
+    "typescript": "catalog:"
   },
   "publishConfig": {
     "access": "public",
