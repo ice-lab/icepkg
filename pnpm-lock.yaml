@@ -505,11 +505,22 @@ importers:
         specifier: workspace:*
         version: link:../../..
 
+  packages/pkg/tests/fixtures/bundle-browser:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../..
+      '@ice/pkg-tests-fixtures-mock-entry-package':
+        specifier: workspace:*
+        version: link:../mock-entry-package
+
   packages/pkg/tests/fixtures/default:
     dependencies:
       '@ice/pkg':
         specifier: workspace:*
         version: link:../../..
+
+  packages/pkg/tests/fixtures/mock-entry-package: {}
 
   packages/plugin-docusaurus:
     dependencies:
