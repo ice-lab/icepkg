@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.25
+
+### Patch Changes
+
+- b4c9dad: fix: babel jsx importSource
+
 ## 1.5.24
 
 ### Patch Changes
