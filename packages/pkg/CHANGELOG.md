@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.0
+
+### Minor Changes
+
+- 0c52dd5: feat: support `browser` option for bundle mode
+
 ## 1.5.25
 
 ### Patch Changes
