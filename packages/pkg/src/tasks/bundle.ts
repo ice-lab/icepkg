@@ -35,10 +35,10 @@ export const watchBundleTasks: RunTasks = async (taskOptionsList, context, watch
     handleChangeFunctions.push(handleChange);
   }
 
-  const handleChange: HandleChange<OutputResult[]> = async (id, event) => {
+  const handleChange: HandleChange<OutputResult[]> = async (changedFiles) => {
     const newOutputResults: OutputResult[] = [];
     for (const handleChangeFunction of handleChangeFunctions) {
-      const newOutputResult = await handleChangeFunction(id, event);
+      const newOutputResult = await handleChangeFunction(changedFiles);
       newOutputResults.push(newOutputResult);
     }
 
@@ -215,16 +215,18 @@ async function rawWatch(
     }
   };
 
-  const handleChange: HandleChange = async (id: string, event: string) => {
+  const handleChange: HandleChange = async (changedFiles) => {
     const changeStart = performance.now();
 
     logger.debug('Bundle start...');
 
     for (const task of watcher.tasks) {
-      task.invalidate(id, {
-        event,
-        isTransformDependency: false,
-      });
+      for (const file of changedFiles) {
+        task.invalidate(file.path, {
+          event: file.event,
+          isTransformDependency: false,
+        });
+      }
     }
 
     const outputResult = await getOutputResult();
