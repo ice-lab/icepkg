@@ -40,17 +40,17 @@ export const watchTransformTasks: RunTasks = async (taskOptionsList, context, wa
     }
     outputResults.push(outputResult);
 
-    handleChangeFunctions.push(async (id, event) => {
-      if (event === 'update' || event === 'create') {
-        return await runTransform(rollupOptions, taskRunnerContext, context, id);
+    handleChangeFunctions.push(async (changedFiles) => {
+      if (changedFiles.some((file) => file.event === 'update' || file.event === 'create')) {
+        return await runTransform(rollupOptions, taskRunnerContext, context, changedFiles.map((file) => file.path));
       }
     });
   }
 
-  const handleChange: HandleChange<OutputResult[]> = async (id, event) => {
+  const handleChange: HandleChange<OutputResult[]> = async (changedFiles) => {
     const newOutputResults: OutputResult[] = [];
     for (const handleChangeFunction of handleChangeFunctions) {
-      const newOutputResult = await handleChangeFunction(id, event);
+      const newOutputResult = await handleChangeFunction(changedFiles);
       newOutputResults.push(newOutputResult);
     }
 
@@ -81,7 +81,7 @@ async function runTransform(
   rollupOptions: RollupOptions,
   taskRunnerContext: TaskRunnerContext,
   context: Context,
-  updatedFile?: string,
+  updatedFiles?: string[],
 ): Promise<OutputResult> {
   let isDistContainingSWCHelpers = false;
   let isDistContainingJSXRuntime = false;
@@ -100,11 +100,13 @@ async function runTransform(
 
   const files: OutputFile[] = [];
 
-  if (updatedFile) {
-    for (const entryDir of entryDirs) {
-      if (updatedFile.startsWith(entryDir)) {
-        files.push(getFileInfo(updatedFile, entryDir));
-        break;
+  if (updatedFiles) {
+    for (const updatedFile of updatedFiles) {
+      for (const entryDir of entryDirs) {
+        if (updatedFile.startsWith(entryDir)) {
+          files.push(getFileInfo(updatedFile, entryDir));
+          break;
+        }
       }
     }
   } else {
