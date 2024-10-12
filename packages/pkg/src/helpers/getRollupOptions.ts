@@ -134,6 +134,7 @@ export function getRollupOptions(
           '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
           ...(taskConfig.extensions || []),
         ],
+        browser: taskConfig.browser,
       }),
       commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
         extensions: [

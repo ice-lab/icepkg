@@ -37,8 +37,8 @@ describe('transform', () => {
     const ret = babelPlugin.transform('<div x-if={false}></div>', 'src/test.tsx');
     expect(cleanCode(ret.code)).toBe(
       cleanCode(`import { createCondition as __create_condition__ } from "babel-runtime-jsx-plus";
-    import { jsx as _jsx } from "react/jsx-runtime";
-    __create_condition__([[() => false, () => /*#__PURE__*/_jsx("div", {})]]);`),
+    import { jsx as _jsx } from "@ice/jsx-runtime/jsx-runtime";
+    __create_condition__([[() => false, () => _jsx("div", {})]]);`),
     );
   });
 

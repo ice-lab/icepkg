@@ -458,6 +458,25 @@ export default defineConfig({
 });
 ```
 
+#### browser
+
++ 类型: `boolean`
++ 默认值: `false`
++ 可用版本: `1.6.0` 
+
+配置解析 Node 模块的时候，是否优先读取 package.json 中的 `browser` 字段。
+如果你的模块**只运行**在浏览器端，可以开启此选项只 bundle 浏览器相关的代码。
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  bundle: {
+    browser: true,
+  },
+});
+```
+
 #### development
 
 :::caution
