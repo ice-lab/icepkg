@@ -1,10 +1,7 @@
 import ts from 'typescript';
 import consola from 'consola';
-import { performance } from 'perf_hooks';
-import { timeFrom, normalizePath } from '../utils.js';
-import { createLogger } from './logger.js';
-import formatAliasToTSPathsConfig from './formatAliasToTSPathsConfig.js';
-import type { TaskConfig } from '../types.js';
+import { normalizePath } from '../utils.js';
+import { TaskConfig } from '../types.js';
 import { prepareSingleFileReplaceTscAliasPaths } from 'tsc-alias';
 import fse from 'fs-extra';
 import * as path from 'path';
@@ -23,8 +20,8 @@ export interface DtsInputFile extends File {
   dtsPath?: string;
 }
 
-const normalizeDtsInput = (file: File, rootDir: string, outputDir: string): DtsInputFile => {
-  const { filePath, ext } = file;
+const normalizeDtsInput = (filePath: string, rootDir: string, outputDir: string): DtsInputFile => {
+  const ext = path.extname(filePath) as FileExt;
   // https://www.typescriptlang.org/docs/handbook/esm-node.html#new-file-extensions
   // a.js -> a.d.ts
   // a.cjs -> a.d.cts
@@ -34,117 +31,43 @@ const normalizeDtsInput = (file: File, rootDir: string, outputDir: string): DtsI
   // a.mts -> a.d.mts
   const dtsPath = filePath.replace(path.join(rootDir, 'src'), outputDir).replace(ext, `.d.${/^\.[jt]/.test(ext) ? '' : ext[1]}ts`);
   return {
-    ...file,
+    filePath,
+    ext,
     dtsPath,
   };
 };
 
-interface DtsCompileOptions {
+export interface DtsCompileOptions {
   // In watch mode, it only contains the updated file names. In build mode, it contains all file names.
-  files: File[];
+  files: string[];
   alias: TaskConfig['alias'];
   rootDir: string;
   outputDir: string;
-
 }
 
-export async function dtsCompile({ files, alias, rootDir, outputDir }: DtsCompileOptions): Promise<DtsInputFile[]> {
-  if (!files.length) {
-    return;
-  }
+function formatAliasToTSPathsConfig(alias: TaskConfig['alias']) {
+  const paths: { [from: string]: [string] } = {};
 
-  const tsConfig = await getTSConfig(rootDir, outputDir, alias);
-
-  const logger = createLogger('dts');
-
-  logger.debug('Start Compiling typescript declarations...');
-
-  const dtsCompileStart = performance.now();
-
-  const _files = files
-    .map((file) => normalizeDtsInput(file, rootDir, outputDir))
-    .map(({ filePath, dtsPath, ...rest }) => ({
-      ...rest,
-      // Be compatible with Windows env.
-      filePath: normalizePath(filePath),
-      dtsPath: normalizePath(dtsPath),
-    }));
-
-  const dtsFiles = {};
-
-  // Create ts host and custom the writeFile and readFile.
-  const host = ts.createCompilerHost(tsConfig.options);
-  host.writeFile = (fileName, contents) => {
-    dtsFiles[fileName] = contents;
-  };
-
-  const _readFile = host.readFile;
-  // Hijack `readFile` to prevent reading file twice
-  host.readFile = (fileName) => {
-    const foundItem = files.find((file) => file.filePath === fileName);
-    if (foundItem && foundItem.srcCode) {
-      return foundItem.srcCode;
-    }
-    return _readFile(fileName);
-  };
-
-  // In order to only include the update files instead of all the files in the watch mode.
-  function getProgramRootNames(originalFilenames: string[]) {
-    // Should include all the resolved .d.ts file to avoid dts generate error:
-    // TS4025: Exported variable '<name>' has or is using private name '<name>'.
-    const dtsFilenames = originalFilenames.filter((filename) => filename.endsWith('.d.ts'));
-    const needCompileFileNames = _files.map(({ filePath }) => filePath);
-    return [...needCompileFileNames, ...dtsFilenames];
-  }
-
-  // Create ts program.
-  const programOptions: ts.CreateProgramOptions = {
-    rootNames: getProgramRootNames(tsConfig.fileNames),
-    options: tsConfig.options,
-    host,
-    projectReferences: tsConfig.projectReferences,
-    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(tsConfig),
-  };
-  const program = ts.createProgram(programOptions);
-
-  logger.debug(`Initializing program takes ${timeFrom(dtsCompileStart)}`);
-
-  const emitResult = program.emit();
-
-  if (emitResult.diagnostics && emitResult.diagnostics.length > 0) {
-    emitResult.diagnostics.forEach((diagnostic) => {
-      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-      if (diagnostic.file) {
-        const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-        consola.error('DTS', `${diagnostic.file.fileName} (${line + 1}, ${character + 1}): ${message}`);
-      } else {
-        consola.error('DTS', message);
-      }
+  Object.entries(alias || {})
+    .forEach(([key, value]) => {
+      const [pathKey, pathValue] = formatPath(key, value);
+      paths[pathKey] = [pathValue];
     });
+
+  return paths;
+}
+
+function formatPath(key: string, value: string) {
+  if (key.endsWith('$')) {
+    return [key.replace(/\$$/, ''), value];
   }
+  // abc -> abc/*
+  // abc/ -> abc/*
+  return [addWildcard(key), addWildcard(value)];
+}
 
-  // We use tsc-alias to resolve d.ts alias.
-  // Reason: https://github.com/microsoft/TypeScript/issues/30952#issuecomment-1114225407
-  const tsConfigLocalPath = path.join(rootDir, 'node_modules/pkg/tsconfig.json');
-  await fse.ensureFile(tsConfigLocalPath);
-  await fse.writeJSON(tsConfigLocalPath, {
-    ...tsConfig,
-    compilerOptions: tsConfig.options,
-  }, { spaces: 2 });
-
-  const runFile = await prepareSingleFileReplaceTscAliasPaths({
-    configFile: tsConfigLocalPath,
-    outDir: outputDir,
-  });
-
-  const result = _files.map((file) => ({
-    ...file,
-    dtsContent: dtsFiles[file.dtsPath] ? runFile({ fileContents: dtsFiles[file.dtsPath], filePath: file.dtsPath }) : '',
-  }));
-
-  logger.debug(`Generating declaration files take ${timeFrom(dtsCompileStart)}`);
-
-  return result;
+function addWildcard(str: string) {
+  return `${str.endsWith('/') ? str : `${str}/`}*`;
 }
 
 async function getTSConfig(
@@ -191,4 +114,89 @@ async function getProjectTSConfig(rootDir: string): Promise<ts.ParsedCommandLine
     fileNames: [],
     errors: [],
   };
+}
+
+export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompileOptions): Promise<DtsInputFile[]> {
+  if (!files.length) {
+    return [];
+  }
+
+  const tsConfig = await getTSConfig(rootDir, outputDir, alias);
+
+  const _files = files
+    .map((file) => normalizeDtsInput(file, rootDir, outputDir))
+    .map<DtsInputFile>(({ filePath, dtsPath, ...rest }) => ({
+    ...rest,
+    // Be compatible with Windows env.
+    filePath: normalizePath(filePath),
+    dtsPath: normalizePath(dtsPath),
+  }));
+
+  // In order to only include the update files instead of all the files in the watch mode.
+  function getProgramRootNames(originalFilenames: string[]) {
+    // Should include all the resolved .d.ts file to avoid dts generate error:
+    // TS4025: Exported variable '<name>' has or is using private name '<name>'.
+    const dtsFilenames = originalFilenames.filter((filename) => filename.endsWith('.d.ts'));
+    const needCompileFileNames = _files.map(({ filePath }) => filePath);
+    return [...needCompileFileNames, ...dtsFilenames];
+  }
+
+  const dtsFiles = {};
+  const host = ts.createCompilerHost(tsConfig.options);
+
+  host.writeFile = (fileName, contents) => {
+    dtsFiles[fileName] = contents;
+  };
+
+  const programOptions: ts.CreateProgramOptions = {
+    rootNames: getProgramRootNames(tsConfig.fileNames),
+    options: tsConfig.options,
+    host,
+    projectReferences: tsConfig.projectReferences,
+    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(tsConfig),
+  };
+  const program = ts.createProgram(programOptions);
+
+  const emitResult = program.emit();
+
+  if (emitResult.diagnostics && emitResult.diagnostics.length > 0) {
+    emitResult.diagnostics.forEach((diagnostic) => {
+      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+      if (diagnostic.file) {
+        const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+        consola.error('DTS', `${diagnostic.file.fileName} (${line + 1}, ${character + 1}): ${message}`);
+      } else {
+        consola.error('DTS', message);
+      }
+    });
+  }
+
+  if (!Object.keys(alias).length) {
+    // no alias config
+    return _files.map((file) => ({
+      ...file,
+      dtsContent: dtsFiles[file.dtsPath],
+    }));
+  }
+
+  // We use tsc-alias to resolve d.ts alias.
+  // Reason: https://github.com/microsoft/TypeScript/issues/30952#issuecomment-1114225407
+  const tsConfigLocalPath = path.join(rootDir, 'node_modules/.cache/ice-pkg/tsconfig.json');
+  await fse.ensureFile(tsConfigLocalPath);
+  await fse.writeJSON(tsConfigLocalPath, {
+    ...tsConfig,
+    compilerOptions: tsConfig.options,
+  }, { spaces: 2 });
+
+  const runFile = await prepareSingleFileReplaceTscAliasPaths({
+    configFile: tsConfigLocalPath,
+    outDir: outputDir,
+  });
+
+  const result = _files.map((file) => ({
+    ...file,
+    dtsContent: dtsFiles[file.dtsPath] ? runFile({ fileContents: dtsFiles[file.dtsPath], filePath: file.dtsPath }) : '',
+  }));
+
+  return result;
 }

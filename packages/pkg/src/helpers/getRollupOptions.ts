@@ -6,7 +6,6 @@ import autoprefixer from 'autoprefixer';
 import PostcssPluginRpxToVw from 'postcss-plugin-rpx2vw';
 import json from '@rollup/plugin-json';
 import swcPlugin from '../rollupPlugins/swc.js';
-import dtsPlugin from '../rollupPlugins/dts.js';
 import minifyPlugin from '../rollupPlugins/minify.js';
 import babelPlugin from '../rollupPlugins/babel.js';
 import { builtinNodeModules } from './builtinModules.js';
@@ -44,7 +43,7 @@ export function getRollupOptions(
   context: Context,
   taskRunnerContext: TaskRunnerContext,
 ) {
-  const { pkg, commandArgs, command, userConfig, rootDir } = context;
+  const { pkg, commandArgs, command, rootDir } = context;
   const { name: taskName, config: taskConfig } = taskRunnerContext.buildTask;
   const rollupOptions: RollupOptions = {};
   const plugins: Plugin[] = [];
@@ -73,17 +72,6 @@ export function getRollupOptions(
   );
 
   if (taskConfig.type === 'transform') {
-    if (userConfig.declaration) {
-      plugins.unshift(
-        dtsPlugin({
-          rootDir,
-          entry: taskConfig.entry as Record<string, string>,
-          generateTypesForJs: userConfig.generateTypesForJs,
-          alias: taskConfig.alias,
-          outputDir: taskConfig.outputDir,
-        }),
-      );
-    }
     plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);

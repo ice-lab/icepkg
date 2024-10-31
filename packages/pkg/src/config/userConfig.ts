@@ -8,6 +8,8 @@ import type {
   BundleUserConfig,
   TransformUserConfig,
   TransformTaskConfig,
+  DeclarationTaskConfig,
+  DeclarationUserConfig,
 } from '../types.js';
 
 function getUserConfig() {
@@ -23,6 +25,9 @@ function getUserConfig() {
   };
   const defaultTransformUserConfig: TransformUserConfig = {
     formats: ['esm', 'es2017'],
+  };
+  const defaultDeclarationUserConfig: DeclarationUserConfig = {
+    outputMode: 'multi',
   };
   const userConfig = [
     {
@@ -75,8 +80,30 @@ function getUserConfig() {
     },
     {
       name: 'declaration',
-      validation: 'boolean',
+      validation: 'boolean|object',
       defaultValue: true,
+      setConfig: (config: TaskConfig, declaration: UserConfig['declaration']) => {
+        if (config.type === 'declaration') {
+          if (declaration === false) {
+            return config;
+          }
+          let taskConfig = config;
+          const mergedConfig = typeof declaration === 'object' ? {
+            ...defaultDeclarationUserConfig,
+            ...declaration,
+          } : { ...defaultDeclarationUserConfig };
+
+          Object.keys(mergedConfig).forEach((key) => {
+            taskConfig = mergeValueToTaskConfig<DeclarationTaskConfig>(
+              taskConfig,
+              key,
+              mergedConfig[key],
+            );
+          });
+
+          return taskConfig;
+        }
+      },
     },
     // TODO: validate values recursively
     {

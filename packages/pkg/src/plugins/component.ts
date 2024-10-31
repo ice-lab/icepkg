@@ -14,8 +14,9 @@ const plugin: Plugin = (api) => {
 
   registerUserConfig(config.getUserConfig());
   registerCliOption(config.getCliOptions());
+  const transformFormats = userConfig.transform?.formats || ['esm', 'es2017'];
   // TODO: Move default value to userConfig defaultValue
-  (userConfig.transform?.formats || ['esm', 'es2017']).forEach((format) => {
+  transformFormats.forEach((format) => {
     registerTask(`transform-${format}`, {
       type: 'transform',
     });
@@ -34,6 +35,14 @@ const plugin: Plugin = (api) => {
         type: 'bundle',
       });
     }
+  }
+
+  if ((userConfig.declaration ?? true) && transformFormats.length) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    registerTask(TaskName.DECLARATION, {
+      type: 'declaration',
+      transformFormats,
+    });
   }
 };
 

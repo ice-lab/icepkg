@@ -1,6 +1,7 @@
 import { BuildTask, Context, type OutputResult, type TaskRunnerContext } from '../types.js';
 import { createTransformTask } from '../tasks/transform.js';
 import { createBundleTask } from '../tasks/bundle.js';
+import { createDeclarationTask } from '../tasks/declaration.js';
 import { Runner } from './runner.js';
 import { FSWatcher } from 'chokidar';
 
@@ -19,6 +20,10 @@ export function getTaskRunners(buildTasks: BuildTask[], context: Context, watche
           const taskRunnerContext: TaskRunnerContext = { mode, buildTask, buildContext: context, watcher };
           return createBundleTask(taskRunnerContext);
         });
+      }
+      case 'declaration': {
+        const taskRunnerContext: TaskRunnerContext = { mode: 'production', buildTask, buildContext: context, watcher };
+        return createDeclarationTask(taskRunnerContext);
       }
       default: {
         // @ts-expect-error unreachable
