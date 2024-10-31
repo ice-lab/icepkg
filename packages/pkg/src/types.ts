@@ -3,7 +3,7 @@ import * as swc from '@swc/core';
 import type { RollupOptions, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
 import type { Context as _Context, PluginAPI as _PluginAPI, Plugin as _Plugin, TaskConfig as _BuildTask } from 'build-scripts';
 import type { Config } from '@swc/core';
-import type stylesPlugin from 'rollup-plugin-styles';
+import type stylesPlugin from 'rollup-plugin-styler';
 import type { FSWatcher } from 'chokidar';
 import cssnano from 'cssnano';
 import { TransformOptions } from '@babel/core';
@@ -145,7 +145,7 @@ export interface UserConfig {
    * Plugins of build scripts
    * @default []
    */
-  plugins?: Array<string | [string, any?]>;
+  plugins?: PluginUserConfig[];
 
   /**
    * "transform mode" means transform files one by one
@@ -157,6 +157,8 @@ export interface UserConfig {
    */
   bundle?: BundleUserConfig;
 }
+
+export type PluginUserConfig = string | [string, any?] | Plugin;
 
 interface _TaskConfig {
   /**
@@ -320,6 +322,8 @@ export interface TaskResult {
 export interface TaskRunnerContext {
   mode: NodeEnvMode;
   buildTask: BuildTask;
+  buildContext: Context;
+  watcher?: FSWatcher;
 }
 
 export type RunTasks = (

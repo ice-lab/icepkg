@@ -1,7 +1,7 @@
 import escapeStringRegexp from 'escape-string-regexp';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import styles from 'rollup-plugin-styles';
+import styles from 'rollup-plugin-styler';
 import autoprefixer from 'autoprefixer';
 import PostcssPluginRpxToVw from 'postcss-plugin-rpx2vw';
 import json from '@rollup/plugin-json';
@@ -28,6 +28,7 @@ import {
 import type {
   RollupOptions,
   OutputOptions,
+  Plugin,
 } from 'rollup';
 import path from 'path';
 
@@ -46,10 +47,10 @@ export function getRollupOptions(
   const { pkg, commandArgs, command, userConfig, rootDir } = context;
   const { name: taskName, config: taskConfig } = taskRunnerContext.buildTask;
   const rollupOptions: RollupOptions = {};
-  rollupOptions.plugins ??= [];
+  const plugins: Plugin[] = [];
 
   if (taskConfig.babelPlugins?.length) {
-    rollupOptions.plugins.push(
+    plugins.push(
       babelPlugin(
         taskConfig.babelPlugins,
         {
@@ -62,7 +63,7 @@ export function getRollupOptions(
       ),
     );
   }
-  rollupOptions.plugins.push(
+  plugins.push(
     swcPlugin(
       taskConfig.jsxRuntime,
       rootDir,
@@ -73,7 +74,7 @@ export function getRollupOptions(
 
   if (taskConfig.type === 'transform') {
     if (userConfig.declaration) {
-      rollupOptions.plugins.unshift(
+      plugins.unshift(
         dtsPlugin({
           rootDir,
           entry: taskConfig.entry as Record<string, string>,
@@ -83,7 +84,7 @@ export function getRollupOptions(
         }),
       );
     }
-    rollupOptions.plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
+    plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
     rollupOptions.input = taskConfig.entry;
@@ -113,7 +114,7 @@ export function getRollupOptions(
       // Add full path for relative path alias
       alias[key] = taskConfig.alias[key].startsWith('.') ? path.resolve(rootDir, taskConfig.alias[key]) : taskConfig.alias[key];
     });
-    rollupOptions.plugins.push(
+    plugins.push(
       replace({
         values: {
           ...getDefaultDefineValues(taskRunnerContext.mode),
@@ -149,13 +150,15 @@ export function getRollupOptions(
       }),
     );
     if (commandArgs.analyzer) {
-      rollupOptions.plugins.push(visualizer({
+      plugins.push(visualizer({
         title: `Rollup Visualizer(${taskName})`,
         open: true,
         filename: `${taskName}-stats.html`,
       }));
     }
   }
+
+  rollupOptions.plugins = plugins;
 
   return (taskConfig.modifyRollupOptions ?? [((options) => options)]).reduce(
     (prevRollupOptions, modifyRollupOptions) => modifyRollupOptions(prevRollupOptions),

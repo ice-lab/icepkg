@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "noImplicitOverride": true
   },
   "include": ["src"]
 }

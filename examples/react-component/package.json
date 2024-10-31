@@ -37,8 +37,9 @@
   },
   "dependencies": {
     "@ice/jsx-runtime": "^0.2.0",
-    "@swc/helpers": "^0.5.1",
-    "babel-runtime-jsx-plus": "^0.1.5"
+    "@swc/helpers": "^0.5.13",
+    "babel-runtime-jsx-plus": "^0.1.5",
+    "core-js": "^3.38.1"
   },
   "devDependencies": {
     "@ice/pkg": "workspace:*",

@@ -101,11 +101,11 @@ function _export(target, all) {
     });
 }
 _export(exports, {
-    foo: function() {
-        return foo;
-    },
     bar: function() {
         return _alias.bar;
+    },
+    foo: function() {
+        return foo;
     }
 });
 var _alias = require(\\"@/alias.js\\");
@@ -155,7 +155,7 @@ export { bar };
 `;
 
 exports[`Run config default > file content esm/index.js 1`] = `
-"import { bar } from \\"./alias.js\\";
+"import { bar } from './alias.js';
 export var foo = 1;
 export { bar };
 "

@@ -10,7 +10,6 @@ import type { TaskConfig, OutputFile, BundleTaskConfig } from '../types.js';
 import type { Plugin } from 'rollup';
 import { JSX_RUNTIME_SOURCE } from '../constants.js';
 
-
 const normalizeSwcConfig = (
   file: OutputFile,
   jsxRuntime: TaskConfig['jsxRuntime'],
@@ -176,7 +175,7 @@ const swcPlugin = (
     options(options) {
       const { onwarn } = options;
       options.onwarn = (warning, warn) => {
-        if (warning.code === 'UNRESOLVED_IMPORT' && warning.source.includes(JSX_RUNTIME_SOURCE)) {
+        if (warning.code === 'UNRESOLVED_IMPORT' && warning.exporter.startsWith(JSX_RUNTIME_SOURCE)) {
           checkDependencyExists(JSX_RUNTIME_SOURCE, 'https://pkg.ice.work/faq');
         }
         if (onwarn) {

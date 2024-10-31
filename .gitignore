@@ -48,3 +48,4 @@ examples/**/.vscode
 examples/**/.DS_Store
 examples/**/.docusaurus
 examples/**/build
+examples/**/typings

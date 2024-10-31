@@ -1,11 +1,9 @@
 import fse from 'fs-extra';
-import { RollupOptions } from 'rollup';
 import { getBuildTasks } from '../helpers/getBuildTasks.js';
-import { getRollupOptions } from '../helpers/getRollupOptions.js';
-import { buildBundleTasks } from '../tasks/bundle.js';
-import { buildTransformTasks } from '../tasks/transform.js';
-
-import type { Context, OutputResult, TaskRunnerContext } from '../types.js';
+import type { Context, OutputResult } from '../types.js';
+import { RunnerLinerTerminalReporter } from '../helpers/runnerReporter.js';
+import { getTaskRunners } from '../helpers/getTaskRunners.js';
+import { RunnerScheduler } from '../helpers/runnerScheduler.js';
 
 export default async function build(context: Context) {
   const { applyHook, commandArgs } = context;
@@ -31,45 +29,14 @@ export default async function build(context: Context) {
   const outputDirs = taskConfigs.map((config) => config.outputDir).filter(Boolean);
   outputDirs.forEach((outputDir) => fse.emptyDirSync(outputDir));
 
-  const transformOptions = buildTasks
-    .filter(({ config }) => config.type === 'transform')
-    .map((buildTask) => {
-      const { config: { modes } } = buildTask;
-      return modes.map((mode) => {
-        const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
-        const rollupOptions = getRollupOptions(context, taskRunnerContext);
-        return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
-      });
-    })
-    .flat(1);
-
-  const bundleOptions = buildTasks
-    .filter(({ config }) => config.type === 'bundle')
-    .map((buildTask) => {
-      const { config: { modes } } = buildTask;
-      return modes.map((mode) => {
-        const taskRunnerContext: TaskRunnerContext = { mode, buildTask };
-        const rollupOptions = getRollupOptions(context, taskRunnerContext);
-        return [rollupOptions, taskRunnerContext] as [RollupOptions, TaskRunnerContext];
-      });
-    })
-    .flat(1);
+  const tasks = getTaskRunners(buildTasks, context);
 
   try {
-    const outputResults: OutputResult[] = [];
-    const { outputResults: transformOutputResults } = await buildTransformTasks(
-      transformOptions,
-      context,
-    );
-    const { outputResults: bundleOutputResults } = await buildBundleTasks(
-      bundleOptions,
-      context,
-    );
+    const terminal = new RunnerLinerTerminalReporter();
+    const taskGroup = new RunnerScheduler(tasks, terminal);
 
-    outputResults.push(
-      ...bundleOutputResults,
-      ...transformOutputResults,
-    );
+    const results = taskGroup.run();
+    const outputResults: OutputResult[] = await results;
 
     await applyHook('after.build.compile', outputResults);
   } catch (err) {

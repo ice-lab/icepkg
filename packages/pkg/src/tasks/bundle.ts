@@ -1,17 +1,13 @@
 import * as path from 'path';
-import consola from 'consola';
 import * as rollup from 'rollup';
 import { Watcher } from 'rollup/dist/shared/watch.js';
-import { performance } from 'perf_hooks';
-import { toArray, timeFrom } from '../utils.js';
-import { createLogger } from '../helpers/logger.js';
-import EventEmitter from 'events';
+import { toArray } from '../utils.js';
+import EventEmitter from 'node:events';
 import type {
-  HandleChange,
   OutputFile,
   OutputResult,
-  RunTasks,
   TaskRunnerContext,
+  WatchChangedFile,
 } from '../types.js';
 import type {
   OutputChunk as RollupOutputChunk,
@@ -21,49 +17,106 @@ import type {
   RollupOutput,
   OutputOptions,
   RollupOptions,
+  AwaitedEventListener,
 } from 'rollup';
 import type { FSWatcher } from 'chokidar';
+import { getRollupOptions } from '../helpers/getRollupOptions.js';
+import { Runner } from '../helpers/runner.js';
 
-export const watchBundleTasks: RunTasks = async (taskOptionsList, context, watcher) => {
-  const handleChangeFunctions: HandleChange[] = [];
-  const outputResults = [];
+export function createBundleTask(taskRunningContext: TaskRunnerContext) {
+  return new BundleRunner(taskRunningContext);
+}
 
-  for (const taskOptions of taskOptionsList) {
-    const [rollupOptions, taskRunnerContext] = taskOptions;
-    const { outputResult, handleChange } = await rawWatch(rollupOptions, taskRunnerContext, watcher);
-    outputResults.push(outputResult);
-    handleChangeFunctions.push(handleChange);
+export class BundleRunner extends Runner<OutputResult> {
+  private rollupOptions: RollupOptions;
+  private watcher: Watcher | null = null;
+  private result: Error | OutputResult | null;
+  private readonly executors = [];
+  constructor(taskRunningContext: TaskRunnerContext) {
+    super(taskRunningContext);
+    this.rollupOptions = getRollupOptions(taskRunningContext.buildContext, taskRunningContext);
   }
 
-  const handleChange: HandleChange<OutputResult[]> = async (changedFiles) => {
-    const newOutputResults: OutputResult[] = [];
-    for (const handleChangeFunction of handleChangeFunctions) {
-      const newOutputResult = await handleChangeFunction(changedFiles);
-      newOutputResults.push(newOutputResult);
+  async doRun(changedFiles: WatchChangedFile[]): Promise<OutputResult> {
+    const { rollupOptions, context } = this;
+    if (context.watcher) {
+      if (this.watcher) {
+        for (const file of changedFiles) {
+          for (const task of this.watcher.tasks) {
+            task.invalidate(file.path, {
+              event: file.event,
+              isTransformDependency: false,
+            });
+          }
+        }
+      } else {
+        const rollupOutputOptions = toArray(rollupOptions.output);
+        const fileWatcher = new FileWatcher(context.watcher, rollupOutputOptions);
+        const emitter = new WatchEmitter();
+        const watcher = this.watcher = new Watcher(
+          [{ ...rollupOptions, watch: { skipWrite: false } }],
+          emitter,
+        );
+        for (const task of watcher.tasks) {
+          // Disable rollup chokidar watch service.
+          await task.fileWatcher.watcher.close();
+        }
+
+        emitter.on('event', async (event: RollupWatcherEvent) => {
+          if (event.code === 'ERROR') {
+            this.result = new Error(event.error.stack);
+            let executor;
+            // eslint-disable-next-line no-cond-assign
+            while (executor = this.executors.shift()) {
+              const [, reject] = executor;
+              reject(this.result);
+            }
+            this.result = null;
+          } else if (event.code === 'BUNDLE_END') {
+            const { result: bundleResult } = event;
+            const { write, cache } = bundleResult;
+            fileWatcher.updateWatchedFiles(bundleResult);
+            const buildResult = await writeFiles(rollupOutputOptions, write);
+            this.result = {
+              taskName: context.buildTask.name,
+              modules: cache.modules,
+              ...buildResult,
+            };
+            let executor;
+            // eslint-disable-next-line no-cond-assign
+            while (executor = this.executors.shift()) {
+              const [resolve] = executor;
+              resolve(this.result);
+            }
+            this.result = null;
+          }
+        });
+      }
+
+      return this.getOutputResult();
     }
-
-    return newOutputResults;
-  };
-
-  return {
-    handleChange,
-    outputResults,
-  };
-};
-
-export const buildBundleTasks: RunTasks = async (taskOptionsList) => {
-  const outputResults: OutputResult[] = [];
-
-  for (const taskOptions of taskOptionsList) {
-    const [rollupOptions, taskRunnerContext] = taskOptions;
-    const { outputResult } = await rawBuild(rollupOptions, taskRunnerContext);
-    outputResults.push(outputResult);
+    return rawBuild(rollupOptions, context);
   }
-  return { outputResults };
-};
+
+  private getOutputResult(): Promise<OutputResult> {
+    const { result, executors } = this;
+    if (result instanceof Error) {
+      return Promise.reject(result);
+    } else if (result) {
+      return Promise.resolve(result);
+    } else {
+      return new Promise((resolve, reject) => {
+        executors.push([resolve, reject]);
+      });
+    }
+  }
+}
 
 // Fork from https://github.com/rollup/rollup/blob/v2.79.1/src/watch/WatchEmitter.ts
-class WatchEmitter extends EventEmitter {
+class WatchEmitter<T extends Record<string, (...parameters: any) => any>> extends EventEmitter {
+  private currentHandlers: {
+    [K in keyof T]?: Array<AwaitedEventListener<T, K>>;
+  } = Object.create(null);
   private awaitedHandlers: any;
   constructor() {
     super();
@@ -91,12 +144,24 @@ class WatchEmitter extends EventEmitter {
     // eslint-disable-next-line no-return-assign
     return this.awaitedHandlers[event] || (this.awaitedHandlers[event] = []);
   }
-  once(eventName: string | symbol, listener: (...args: any[]) => void): this {
+  override once(eventName: string | symbol, listener: (...args: any[]) => void): this {
     const handle = (...args) => {
       this.off(eventName, handle);
       return listener.apply(this, args);
     };
     return this.on(eventName, handle);
+  }
+  onCurrentRun<K extends keyof T>(event: K, listener: AwaitedEventListener<T, K>): this {
+    this.getCurrentHandlers(event).push(listener);
+    return this;
+  }
+  removeListenersForCurrentRun(): this {
+    this.currentHandlers = Object.create(null);
+    return this;
+  }
+  private getCurrentHandlers<K extends keyof T>(event: K): Array<AwaitedEventListener<T, K>> {
+    // eslint-disable-next-line no-return-assign
+    return this.currentHandlers[event] || (this.currentHandlers[event] = []);
   }
 }
 
@@ -148,124 +213,13 @@ class FileWatcher {
   }
 }
 
-async function rawWatch(
-  rollupOptions: RollupOptions,
-  taskRunnerContext: TaskRunnerContext,
-  fsWatcher: FSWatcher,
-): Promise<{ handleChange: HandleChange; outputResult: OutputResult }> {
-  const rollupOutputOptions = toArray(rollupOptions.output);
-  const { mode, buildTask } = taskRunnerContext;
-  const { name: taskName } = buildTask;
-  const logger = createLogger(`${taskName}-${mode}`);
-
-  const start = performance.now();
-
-  logger.debug('Bundle start...');
-  const fileWatcher = new FileWatcher(fsWatcher, rollupOutputOptions);
-  const emitter = new WatchEmitter();
-  const watcher = new Watcher(
-    [{ ...rollupOptions, watch: { skipWrite: false } }],
-    emitter,
-  );
-  for (const task of watcher.tasks) {
-    // Disable rollup chokidar watch service.
-    await task.fileWatcher.watcher.close();
-  }
-  let result: Error | OutputResult | null;
-  const executors = [];
-  emitter.on('event', async (event: RollupWatcherEvent) => {
-    if (event.code === 'ERROR') {
-      result = new Error(event.error.stack);
-      let executor;
-      // eslint-disable-next-line no-cond-assign
-      while (executor = executors.shift()) {
-        const [, reject] = executor;
-        reject(result);
-      }
-      result = null;
-    } else if (event.code === 'BUNDLE_END') {
-      const { result: bundleResult } = event;
-      const { write, cache } = bundleResult;
-      fileWatcher.updateWatchedFiles(bundleResult);
-      const buildResult = await writeFiles(rollupOutputOptions, write);
-      result = {
-        taskName,
-        modules: cache.modules,
-        ...buildResult,
-      };
-      let executor;
-      // eslint-disable-next-line no-cond-assign
-      while (executor = executors.shift()) {
-        const [resolve] = executor;
-        resolve(result);
-      }
-      result = null;
-    }
-  });
-
-  const getOutputResult = (): Promise<OutputResult> => {
-    if (result instanceof Error) {
-      return Promise.reject(result);
-    } else if (result) {
-      return Promise.resolve(result);
-    } else {
-      return new Promise((resolve, reject) => {
-        executors.push([resolve, reject]);
-      });
-    }
-  };
-
-  const handleChange: HandleChange = async (changedFiles) => {
-    const changeStart = performance.now();
-
-    logger.debug('Bundle start...');
-
-    for (const task of watcher.tasks) {
-      for (const file of changedFiles) {
-        task.invalidate(file.path, {
-          event: file.event,
-          isTransformDependency: false,
-        });
-      }
-    }
-
-    const outputResult = await getOutputResult();
-
-    logger.debug('Bundle end...');
-    logger.info(`✅ ${timeFrom(changeStart)}`);
-
-    return outputResult;
-  };
-
-  let outputResult: OutputResult;
-
-  try {
-    outputResult = await getOutputResult();
-    logger.info(`✅ ${timeFrom(start)}`);
-  } catch (error) {
-    consola.error(error.stack);
-  }
-
-  logger.debug('Bundle end...');
-
-  return {
-    handleChange,
-    outputResult,
-  };
-}
-
 async function rawBuild(
   rollupOptions: RollupOptions,
   taskRunnerContext: TaskRunnerContext,
-): Promise<{ outputResult: OutputResult }> {
+): Promise<OutputResult> {
   const rollupOutputOptions = toArray(rollupOptions.output);
-  const { mode, buildTask } = taskRunnerContext;
+  const { buildTask } = taskRunnerContext;
   const { name: taskName } = buildTask;
-  const logger = createLogger(`${taskName}-${mode}`);
-
-  const start = performance.now();
-
-  logger.debug('Bundle start...');
 
   const bundle = await rollup.rollup(rollupOptions);
 
@@ -273,15 +227,10 @@ async function rawBuild(
 
   await bundle.close();
 
-  logger.debug('Bundle end...');
-  logger.info(`✅ ${timeFrom(start)}`);
-
   return {
-    outputResult: {
-      taskName,
-      modules: bundle.cache.modules,
-      ...buildResult,
-    },
+    taskName,
+    modules: bundle.cache.modules,
+    ...buildResult,
   };
 }
 
@@ -290,7 +239,6 @@ async function writeFiles(rollupOutputOptions: OutputOptions[], write: RollupBui
   const outputs: Array<RollupOutput['output']> = [];
 
   for (let o = 0; o < rollupOutputOptions.length; ++o) {
-    // eslint-disable-next-line no-await-in-loop
     const writeResult = await write(rollupOutputOptions[o]);
     const distDir = rollupOutputOptions[o].dir;
     writeResult.output.forEach((chunk: RollupOutputChunk | RollupOutputAsset) => {
