@@ -305,7 +305,13 @@ export interface OutputResult {
 export type NodeEnvMode = 'development' | 'production' | string;
 
 export type WatchEvent = 'create' | 'update' | 'delete';
-export type HandleChange<R = OutputResult> = (id: string, event: WatchEvent) => Promise<R>;
+
+export interface WatchChangedFile {
+  path: string;
+  event: WatchEvent;
+}
+
+export type HandleChange<R = OutputResult> = (changedFiles: WatchChangedFile[]) => Promise<R>;
 
 export interface TaskResult {
   handleChange?: HandleChange<OutputResult[]>;
