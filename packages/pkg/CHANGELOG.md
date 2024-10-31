@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0
+
+### Minor Changes
+
+- 0c52dd5: feat: support `browser` option for bundle mode
+- c2b0b0e: feat: add batch for watcher change event
+
 ## 1.5.25
 
 ### Patch Changes
