@@ -1,0 +1,14 @@
+{
+  "name": "@ice/pkg-tests-react",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@ice/pkg": "workspace:*",
+    "@ice/jsx-runtime": "^0.3.0",
+    "@swc/helpers": "^0.5.15",
+    "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0"
+  }
+}

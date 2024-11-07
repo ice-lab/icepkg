@@ -52,6 +52,25 @@ exports[`Run config bundle-full > es2017 structure 1`] = `null`;
 
 exports[`Run config bundle-full > esm structure 1`] = `null`;
 
+exports[`Run config bundle-rolldown > cjs structure 1`] = `null`;
+
+exports[`Run config bundle-rolldown > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.esm.es2017.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config bundle-rolldown > es2017 structure 1`] = `null`;
+
+exports[`Run config bundle-rolldown > esm structure 1`] = `null`;
+
+exports[`Run config bundle-rolldown > file content dist/index.esm.es2017.production.js 1`] = `"let o=1;export{o as foo};"`;
+
 exports[`Run config bundle-with-dev-mode > cjs structure 1`] = `null`;
 
 exports[`Run config bundle-with-dev-mode > dist structure 1`] = `

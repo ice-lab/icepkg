@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {},
   "devDependencies": {
-    "@ice/pkg": "workspace:*"
+    "@ice/pkg": "workspace:*",
+    "@types/serialize-javascript": "^5.0.4",
+    "serialize-javascript": "^6.0.2"
   }
 }

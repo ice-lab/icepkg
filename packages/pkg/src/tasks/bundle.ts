@@ -18,6 +18,7 @@ import type { FSWatcher } from 'chokidar';
 import type { RslibConfig, rsbuild } from '@rslib/core';
 import { getRollupOptions } from '../engine/rollup/options.js';
 import { Runner } from '../helpers/runner.js';
+import { RolldownOptions } from 'rolldown';
 import { noop } from 'es-toolkit';
 import { consola } from 'consola';
 
@@ -28,6 +29,7 @@ export function createBundleTask(taskRunningContext: TaskRunnerContext) {
 export class BundleRunner extends Runner<OutputResult> {
   private rollupOptions?: RollupOptions;
   private rslibConfig?: RslibConfig;
+  private rolldownOptions?: RolldownOptions;
   private engine: EngineType;
   private watcher: Watcher | null = null;
   private result: Error | OutputResult | null = null;
@@ -45,6 +47,8 @@ export class BundleRunner extends Runner<OutputResult> {
         return this.handleRollupBuild(changedFiles);
       case 'rslib':
         return this.handleRslibBuild(changedFiles);
+      case 'rolldown':
+        return this.handleRolldownBuild(changedFiles);
       default:
         throw new Error(`Unsupported engine: ${this.engine}`);
     }
@@ -193,6 +197,23 @@ export class BundleRunner extends Runner<OutputResult> {
       outputFiles: stats?.assets as any,
     } as OutputResult;
   }
+
+  private async handleRolldownBuild(changedFiles: WatchChangedFile[]): Promise<OutputResult> {
+    const { context } = this;
+    const { build } = await import('rolldown');
+    if (!this.rolldownOptions) {
+      const { getRolldownOptions } = await import('../engine/rolldown/options.js');
+      this.rolldownOptions = getRolldownOptions(context.buildContext, context);
+    }
+    const bundle = await build(this.rolldownOptions);
+
+    return {
+      taskName: context.buildTask.name,
+      // TODO: correct type and value
+      outputs: bundle.output as any,
+      outputFiles: bundle.output as any,
+    };
+  }
 }
 
 // Fork from https://github.com/rollup/rollup/blob/v2.79.1/src/watch/WatchEmitter.ts
@@ -312,7 +333,7 @@ async function rawBuild(rollupOptions: RollupOptions, taskRunnerContext: TaskRun
 
   const bundle = await rollup.rollup(rollupOptions);
 
-  const buildResult = await writeFiles((rollupOutputOptions as OutputOptions[]).filter(Boolean), bundle.write);
+  const buildResult = await writeFiles((rollupOutputOptions as OutputOptions[]).filter(Boolean), bundle.write.bind(bundle));
 
   await bundle.close();
 

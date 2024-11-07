@@ -126,4 +126,17 @@ runProjectTest(import.meta.url, [
       },
     },
   },
+  {
+    name: 'bundle-rolldown',
+    config: {
+      pkgs: [
+        {
+          module: 'esm',
+          target: 'es2017',
+          bundle: true,
+          engine: 'rolldown',
+        },
+      ],
+    },
+  },
 ]);

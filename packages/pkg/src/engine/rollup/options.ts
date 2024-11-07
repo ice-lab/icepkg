@@ -168,7 +168,14 @@ interface GetRollupOutputsOptions {
   mode: NodeEnvMode;
   command: Context['command'];
 }
-function getRollupOutputs({ globals, bundleTaskConfig, pkg, mode, command }: GetRollupOutputsOptions): OutputOptions[] {
+
+export function getRollupOutputs({
+  globals,
+  bundleTaskConfig,
+  pkg,
+  mode,
+  command,
+}: GetRollupOutputsOptions): OutputOptions[] {
   const { outputDir, vendorName = 'vendor' } = bundleTaskConfig;
 
   const outputFormats = bundleTaskConfig.formats ?? [];
