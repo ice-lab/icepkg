@@ -101,6 +101,12 @@ export interface BundleUserConfig {
    * Resolve node module by prefer using `browser` field in package.json.
    */
   browser?: boolean;
+
+  /**
+   * Which bundler to use.
+   * @default 'rollup'
+   */
+  bundler?: 'rollup' | 'rolldown' | 'rslib';
 }
 
 

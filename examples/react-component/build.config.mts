@@ -12,6 +12,7 @@ export default defineConfig({
   sourceMaps: false,
   bundle: {
     formats: ['esm', 'es2017'],
+    bundler: 'rolldown'
   },
   alias: {
     '@': './src',

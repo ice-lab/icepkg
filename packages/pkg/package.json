@@ -64,6 +64,7 @@
     "picocolors": "^1.0.0",
     "postcss": "^8.4.31",
     "postcss-plugin-rpx2vw": "^1.0.0",
+    "rolldown": "^0.14.0",
     "rollup": "^4.0.0",
     "rollup-plugin-styler": "^1.8.0",
     "rollup-plugin-visualizer": "^5.12.0",

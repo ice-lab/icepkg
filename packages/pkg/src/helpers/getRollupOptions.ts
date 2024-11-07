@@ -1,3 +1,4 @@
+import { RolldownOptions } from 'rolldown'
 import escapeStringRegexp from 'escape-string-regexp';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
@@ -102,41 +103,61 @@ export function getRollupOptions(
       // Add full path for relative path alias
       alias[key] = taskConfig.alias[key].startsWith('.') ? path.resolve(rootDir, taskConfig.alias[key]) : taskConfig.alias[key];
     });
-    plugins.push(
-      replace({
-        values: {
-          ...getDefaultDefineValues(taskRunnerContext.mode),
-          // User define can override above.
-          ...taskConfig.define,
-        },
-        preventAssignment: true,
-      }),
-      styles((taskConfig.modifyStylesOptions ?? [((options) => options)]).reduce(
-        (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
-        defaultStylesOptions,
-      )),
-      image(),
-      json(),
-      nodeResolve({ // To locates modules using the node resolution algorithm.
-        extensions: [
-          '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
-          '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
-          ...(taskConfig.extensions || []),
-        ],
-        browser: taskConfig.browser,
-      }),
-      commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
-        extensions: [
-          '.js', // plugin-commonjs default extensions
-          '.jsx', '.ts', '.tsx',
-          ...(taskConfig.extensions || []),
-        ],
-        transformMixedEsModules: true,
-      }),
-      bundleAliasPlugin({
-        entries: alias,
-      }),
-    );
+
+    if (taskConfig.bundler === 'rolldown') {
+      const rolldownOptions = rollupOptions as RolldownOptions
+      rolldownOptions.resolve = {
+        alias
+      };
+      rolldownOptions.define = {
+        ...getDefaultDefineValues(taskRunnerContext.mode),
+        // User define can override above.
+        ...taskConfig.define,
+      }
+      plugins.push(
+        styles((taskConfig.modifyStylesOptions ?? [((options) => options)]).reduce(
+          (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
+          defaultStylesOptions,
+        )),
+        image(),
+      )
+    } else {
+      plugins.push(
+        replace({
+          values: {
+            ...getDefaultDefineValues(taskRunnerContext.mode),
+            // User define can override above.
+            ...taskConfig.define,
+          },
+          preventAssignment: true,
+        }),
+        styles((taskConfig.modifyStylesOptions ?? [((options) => options)]).reduce(
+          (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
+          defaultStylesOptions,
+        )),
+        image(),
+        json(),
+        nodeResolve({ // To locates modules using the node resolution algorithm.
+          extensions: [
+            '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
+            '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
+            ...(taskConfig.extensions || []),
+          ],
+          browser: taskConfig.browser,
+        }),
+        commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
+          extensions: [
+            '.js', // plugin-commonjs default extensions
+            '.jsx', '.ts', '.tsx',
+            ...(taskConfig.extensions || []),
+          ],
+          transformMixedEsModules: true,
+        }),
+        bundleAliasPlugin({
+          entries: alias,
+        }),
+      );
+    }
     if (commandArgs.analyzer) {
       plugins.push(visualizer({
         title: `Rollup Visualizer(${taskName})`,

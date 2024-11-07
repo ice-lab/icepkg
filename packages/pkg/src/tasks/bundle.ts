@@ -1,9 +1,11 @@
 import * as path from 'path';
 import * as rollup from 'rollup';
+import * as rolldown from 'rolldown'
 import { Watcher } from 'rollup/dist/shared/watch.js';
 import { toArray } from '../utils.js';
 import EventEmitter from 'node:events';
 import type {
+  BundleTaskConfig,
   OutputFile,
   OutputResult,
   TaskRunnerContext,
@@ -22,6 +24,7 @@ import type {
 import type { FSWatcher } from 'chokidar';
 import { getRollupOptions } from '../helpers/getRollupOptions.js';
 import { Runner } from '../helpers/runner.js';
+import { RolldownOptions } from 'rolldown';
 
 export function createBundleTask(taskRunningContext: TaskRunnerContext) {
   return new BundleRunner(taskRunningContext);
@@ -220,16 +223,17 @@ async function rawBuild(
   const rollupOutputOptions = toArray(rollupOptions.output);
   const { buildTask } = taskRunnerContext;
   const { name: taskName } = buildTask;
+  const config = buildTask.config as BundleTaskConfig
 
-  const bundle = await rollup.rollup(rollupOptions);
+  const bundle = config.bundler === 'rolldown' ? await rolldown.rolldown(rollupOptions as RolldownOptions) : await rollup.rollup(rollupOptions);
 
-  const buildResult = await writeFiles(rollupOutputOptions, bundle.write);
+  const buildResult = await writeFiles(rollupOutputOptions, bundle.write.bind(bundle));
 
   await bundle.close();
 
   return {
     taskName,
-    modules: bundle.cache.modules,
+    // modules: bundle.cache.modules,
     ...buildResult,
   };
 }
