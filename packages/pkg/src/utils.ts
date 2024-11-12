@@ -1,15 +1,15 @@
-import { performance } from 'perf_hooks';
+import { performance } from 'node:perf_hooks';
 import fs from 'fs-extra';
 import picocolors from 'picocolors';
-import path from 'path';
-import os from 'os';
+import path from 'node:path';
+import os from 'node:os';
 import debug from 'debug';
+import { EventEmitter } from 'node:events';
 import { createRequire } from 'module';
 import { createFilter } from '@rollup/pluginutils';
 import remapping from '@ampproject/remapping';
 import { loadPkg } from './helpers/load.js';
 import consola from 'consola';
-
 import type { PlainObject, OutputResult, TaskConfig } from './types';
 import type {
   DecodedSourceMap,
@@ -223,6 +223,7 @@ export const booleanToObject = (value: object | boolean): object => (isObject(va
 
 export function debouncePromise<T extends unknown[]>(
   fn: (...args: T) => Promise<OutputResult[]>,
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   delay: number,
   onError: (err: unknown) => void,
 ) {
@@ -272,6 +273,17 @@ export const timeFrom = (start: number, subtract = 0): string => {
     return picocolors.red(timeString);
   }
 };
+
+export function formatTimeCost(time: number) {
+  const timeString = (`${time.toFixed(2)} ms`).padEnd(5, ' ');
+  if (time < 500) {
+    return picocolors.green(timeString);
+  } else if (time < 3000) {
+    return picocolors.yellow(timeString);
+  } else {
+    return picocolors.red(timeString);
+  }
+}
 
 export const unique = <T>(arr: T[]): T[] => {
   return [...new Set(arr)];
@@ -386,5 +398,59 @@ export function checkDependencyExists(dependency: string, link: string) {
 }
 
 export const getBuiltInPlugins = () => [
-  require.resolve('./plugins/component'),
+  require.resolve('./plugins/component.js'),
 ];
+
+/**
+ * Run promise all with max concurrent limit
+ */
+export async function concurrentPromiseAll<T>(tasks: Array<() => Promise<T>>, limit = 3): Promise<T[]> {
+  const size = tasks.length;
+  const results: T[] = new Array(size);
+  let i = 0;
+  let running = 0;
+
+  return new Promise((resolve, reject) => {
+    const next = () => {
+      if (running === -1) {
+        // error
+        return;
+      }
+      if (i === size && running === 0) {
+        // all finished
+        return resolve(results);
+      }
+      if (i < size && running < limit) {
+        const index = i++;
+        running += 1;
+        Promise.resolve(tasks[index]()).then((v) => {
+          results[index] = v;
+          running -= 1;
+          next();
+        }, (e) => {
+          reject(e);
+          running = -1;
+        });
+      }
+    };
+
+    for (let j = 0; j < limit; j++) {
+      next();
+    }
+  });
+}
+
+export interface TypedEventEmitterInstance<T extends Record<string, unknown>> extends Omit<EventEmitter, 'on' | 'off' | 'emit'> {
+  on: <K extends keyof T>(name: K, fn: (value: T[K]) => void) => this;
+  off: <K extends keyof T>(name: K, fn: (value: T[K]) => void) => this;
+  emit: <K extends keyof T>(name: K, value: T[K]) => this;
+  // TODO: add more method if needed
+}
+
+export const TypedEventEmitter = EventEmitter as unknown as {
+  new <T extends Record<string, unknown>>(): TypedEventEmitterInstance<T>;
+};
+
+export function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

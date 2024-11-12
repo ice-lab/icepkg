@@ -9,32 +9,30 @@ coverage/
 node_modules
 extensions/*/out
 .vscode-test
-packages/**/lib/
-packages/**/es/
-packages/**/esnext/
-packages/**/esm/
-packages/**/es2017/
-packages/**/cjs/
-packages/**/build/
+packages/*/lib/
+packages/*/es/
+packages/*/esnext/
+packages/*/esm/
+packages/*/es2017/
+packages/*/cjs/
+packages/*/build/
 packages/build-plugin-component/*/template
 app/main_dist/
 app/build/
 tmp
 .tmp
 __mocks__
-__tests__
 
 # 忽略文件
 **/*-min.js
 **/*.min.js
 
 lib
-node_modules
-__tests__
-examples/**/esm
-examples/**/es
-examples/**/es2017
-examples/**/cjs
-examples/**/lib
-examples/**/dist
-examples/**/build
+examples/*/esm
+examples/*/es
+examples/*/es2017
+examples/*/cjs
+examples/*/lib
+examples/*/dist
+examples/*/build
+examples/*/typings

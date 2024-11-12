@@ -1,18 +1,4 @@
-import { Service } from 'build-scripts';
-import build from './commands/build.js';
-import start from './commands/start.js';
-import test from './commands/test.js';
-
-import type { TaskConfig, UserConfig } from './types.js';
-
-const pkgService = new Service<TaskConfig, {}, UserConfig>({
-  name: 'pkgService',
-  command: {
-    build,
-    start,
-    test,
-  },
-});
+import { pkgService } from './service.js';
 
 export default pkgService;
 

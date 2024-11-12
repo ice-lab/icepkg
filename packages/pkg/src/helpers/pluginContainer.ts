@@ -1,4 +1,3 @@
-
 import consola from 'consola';
 import fs from 'fs-extra';
 import { resolve, join, isAbsolute } from 'path';
@@ -137,6 +136,10 @@ export async function createPluginContainer(
       // rollupVersion: '2.3.4',
       watchMode: true,
     },
+    debug: () => {},
+    error: (e) => { throw e; },
+    info: () => {},
+    warn: () => {},
   };
 
   function warnIncompatibleMethod(method: string, plugin: string) {
@@ -206,13 +209,17 @@ export async function createPluginContainer(
       this._activePlugin = initialPlugin || null;
     }
 
+    debug() {}
+
+    info() {}
+
     parse(code: string, opts: any = {}) {
       return parser.parse(code, {
         sourceType: 'module',
         ecmaVersion: 'latest',
         locations: true,
         ...opts,
-      });
+      }) as ReturnType<PluginContext['parse']>;
     }
 
     async resolve(
@@ -257,16 +264,16 @@ export async function createPluginContainer(
         return resolve(root, output, fileName);
       }
 
-      const { type, fileName } = assetOrFile;
-      const name = type === 'chunk' ? assetOrFile.name || assetOrFile.id : assetOrFile.name;
-      const source = type === 'asset' && assetOrFile.source;
-      const filename = resolveFileName(fileName);
+      // TODO: improve this
+      const name = assetOrFile.type === 'chunk' ? assetOrFile.name || assetOrFile.id : assetOrFile.type === 'asset' ? assetOrFile.name : assetOrFile.fileName;
+      const source = assetOrFile.type === 'asset' && assetOrFile.source;
+      const filename = resolveFileName(assetOrFile.fileName);
 
       const id = String(++ids);
       files.set(id, { id, name, filename });
 
-      if (type === 'chunk') {
-        consola.warn(`type ${type} of this.emitFile is not supported in transform mode. This plugin is likely not compatible`);
+      if (assetOrFile.type === 'chunk') {
+        consola.warn(`type ${assetOrFile.type} of this.emitFile is not supported in transform mode. This plugin is likely not compatible`);
       } else if (source) {
         fs.writeFileSync(filename, source);
       }
@@ -319,7 +326,7 @@ export async function createPluginContainer(
     position: number | { column: number; line: number } | undefined,
     ctx: Context,
   ) {
-    let err = (
+    const err = (
       typeof e === 'string' ? new Error(e) : e
     ) as postcss.CssSyntaxError & RollupError;
 
@@ -396,11 +403,6 @@ export async function createPluginContainer(
           }
         }
       }
-    }
-
-    // Be consistent of rollup https://github.com/rollup/rollup/blob/master/src/utils/pluginUtils.ts#L7
-    if (!(err instanceof Error)) {
-      err = Object.assign(new Error(err.message), err);
     }
 
     return err;

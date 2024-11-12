@@ -40,6 +40,7 @@ test('getUnpkgHost custom host', () => {
 });
 
 test('getUnpkgHost', () => {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const defaultRegistry = 'https://unpkg.com';
 
   expect(getUnpkgHost('koa')).toBe(defaultRegistry);
@@ -123,7 +124,7 @@ test('getNpmTarball', () => {
     console.log('getNpmTarball ice-npm-utils', tarball);
     expect(
       tbRegisties
-        .some(registry => tarball === `${registry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`)
+        .some((registry) => tarball === `${registry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`),
     ).toBeTruthy();
   });
 });
@@ -139,7 +140,7 @@ test('getNpmTarball should get latest version', () => {
     console.log('getNpmTarball http', tarball);
     expect(
       tbRegisties
-        .some(registry => tarball === `${registry}/http/-/http-0.0.1-security.tgz`)
+        .some((registry) => tarball === `${registry}/http/-/http-0.0.1-security.tgz`),
     ).toBeTruthy();
   });
 });
@@ -164,7 +165,7 @@ test('getAndExtractTarballWithDir', () => {
   const tempDir = path.resolve(tmpdir(), 'babel_helper_function_name_tarball');
   return getAndExtractTarball(
     tempDir,
-    `${defaultRegistry}/@babel/helper-function-name/download/@babel/helper-function-name-7.1.0.tgz`
+    `${defaultRegistry}/@babel/helper-function-name/download/@babel/helper-function-name-7.1.0.tgz`,
   )
     .then((files) => {
       rimraf.sync(tempDir);

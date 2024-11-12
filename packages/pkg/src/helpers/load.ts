@@ -28,9 +28,9 @@ export function loadEntryFiles(entry: string, excludes: string | string[]) {
 
 export const INCLUDES_UTF8_FILE_TYPE = /\.(js|mjs|mts|ts|jsx|tsx|cjs|cts|css|sass|less|json|html)$/;
 
-export function loadSource(path: string): string {
+export async function loadSource(path: string): Promise<string> {
   try {
-    return fs.readFileSync(path, 'utf-8');
+    return fs.readFile(path, 'utf-8');
   } catch (err) {
     if (err.code !== 'ENOENT') {
       throw err;

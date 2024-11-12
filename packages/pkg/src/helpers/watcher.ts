@@ -80,3 +80,15 @@ export function createBatchChangeHandler(changeCallback: WatchCallback) {
     onChange,
   };
 }
+
+export function getExistedChangedFiles(files: WatchChangedFile[]) {
+  return files.filter((file) => file.event !== 'delete');
+}
+
+export function getChangedFilesPath(files: WatchChangedFile[]) {
+  return files.map((file) => file.path);
+}
+
+export function getExistedChangedFilesPath(files: WatchChangedFile[]) {
+  return getChangedFilesPath(getExistedChangedFiles(files));
+}
