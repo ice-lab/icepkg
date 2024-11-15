@@ -143,6 +143,32 @@ exports[`Run config default > esm structure 1`] = `
 }
 `;
 
+exports[`Run config no-declaration > cjs structure 1`] = `null`;
+
+exports[`Run config no-declaration > dist structure 1`] = `null`;
+
+exports[`Run config no-declaration > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config no-declaration > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
 exports[`Run config sourcemap-enable > cjs structure 1`] = `null`;
 
 exports[`Run config sourcemap-enable > dist structure 1`] = `null`;

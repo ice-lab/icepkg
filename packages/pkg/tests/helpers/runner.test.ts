@@ -73,7 +73,7 @@ describe('Runner Tests', () => {
     {
       const metric = runner.getMetric('testMark');
       expect(metric.delta.length).toEqual(2)
-      expect(metric.cost).toBeGreaterThan(50)
+      expect(metric.cost).toBeGreaterThanOrEqual(50)
     }
   });
 

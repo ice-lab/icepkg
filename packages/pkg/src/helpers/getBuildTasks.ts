@@ -1,4 +1,5 @@
 import deepmerge from 'deepmerge';
+import path from 'node:path';
 import { formatEntry, getTransformDefaultOutputDir } from './getTaskIO.js';
 import { getDefaultBundleSwcConfig, getDefaultTransformSwcConfig } from './defaultSwcConfig.js';
 import { stringifyObject } from '../utils.js';
@@ -49,6 +50,14 @@ function getBuildTask(buildTask: BuildTask, context: Context): BuildTask {
         defaultTransformSwcConfig,
         config.swcCompileOptions || {},
       );
+  } else if (config.type === 'declaration') {
+    // 这个 output 仅仅用于生成正确的 .d.ts 的 alias，不做实际输出目录
+    config.outputDir = path.resolve(rootDir, config.transformFormats[0]);
+    if (config.outputMode === 'unique') {
+      config.declarationOutputDirs = [path.resolve(rootDir, 'typings')];
+    } else {
+      config.declarationOutputDirs = config.transformFormats.map((format) => path.resolve(rootDir, format));
+    }
   } else {
     throw new Error('Invalid task type.');
   }

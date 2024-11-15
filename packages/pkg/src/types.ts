@@ -103,6 +103,17 @@ export interface BundleUserConfig {
   browser?: boolean;
 }
 
+
+export interface DeclarationUserConfig {
+  /**
+   * How to output declaration files.
+   * - 'multi' output .d.ts to every transform format folder, like esm/es2017
+   * - 'unique' output .d.ts to `typings` folder of the root
+   * @default 'multi'
+   */
+  outputMode?: 'multi' | 'unique';
+}
+
 export interface UserConfig {
   /**
    * Entry for a task
@@ -134,7 +145,7 @@ export interface UserConfig {
    * Generate .d.ts files from TypeScript files in your project.
    * @default true
    */
-  declaration?: boolean;
+  declaration?: boolean | DeclarationUserConfig;
 
   /**
    * Configure JSX transform type.
@@ -248,7 +259,19 @@ export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {
   define?: Record<string, string>;
 }
 
-export type TaskConfig = BundleTaskConfig | TransformTaskConfig;
+export interface DeclarationTaskConfig extends _TaskConfig, DeclarationUserConfig {
+  type: 'declaration';
+  /**
+   * 记录 transform 配置的 format 用于计算实际的输出目录
+   */
+  transformFormats?: TransformUserConfig['formats'];
+  /**
+   * 实际的输出目录，可以同时输出到 esm、es2017 内等
+   */
+  declarationOutputDirs?: string[];
+}
+
+export type TaskConfig = BundleTaskConfig | TransformTaskConfig | DeclarationTaskConfig;
 
 export type BuildTask = _BuildTask<TaskConfig, TaskName>;
 
@@ -273,6 +296,7 @@ export enum TaskName {
   'TRANSFORM_ES2017' = 'transform-es2017',
   'BUNDLE_ES5' = 'bundle-es5',
   'BUNDLE_ES2017' = 'bundle-es2017',
+  'DECLARATION' = 'declaration'
 }
 type TaskKey = keyof typeof TaskName;
 // TODO: The type name should be renamed to TaskName.

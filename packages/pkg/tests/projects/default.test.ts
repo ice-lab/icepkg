@@ -60,5 +60,12 @@ runProjectTest('default', [
     config: {
       sourceMaps: true
     }
-  }
+  },
+  {
+    name: 'no-declaration',
+    snapshot: 'structure',
+    config: {
+      declaration: false
+    }
+  },
 ])
