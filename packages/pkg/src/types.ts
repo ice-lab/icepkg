@@ -337,21 +337,9 @@ export interface WatchChangedFile {
   event: WatchEvent;
 }
 
-export type HandleChange<R = OutputResult> = (changedFiles: WatchChangedFile[]) => Promise<R>;
-
-export interface TaskResult {
-  handleChange?: HandleChange<OutputResult[]>;
-  outputResults: OutputResult[];
-}
 export interface TaskRunnerContext {
   mode: NodeEnvMode;
   buildTask: BuildTask;
   buildContext: Context;
   watcher?: FSWatcher;
 }
-
-export type RunTasks = (
-  taskOptionsList: Array<[RollupOptions, TaskRunnerContext]>,
-  context: Context,
-  watcher?: FSWatcher,
-) => Promise<TaskResult>;

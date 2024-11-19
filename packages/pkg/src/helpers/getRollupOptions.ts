@@ -5,17 +5,12 @@ import styles from 'rollup-plugin-styler';
 import autoprefixer from 'autoprefixer';
 import PostcssPluginRpxToVw from 'postcss-plugin-rpx2vw';
 import json from '@rollup/plugin-json';
-import swcPlugin from '../rollupPlugins/swc.js';
 import minifyPlugin from '../rollupPlugins/minify.js';
-import babelPlugin from '../rollupPlugins/babel.js';
 import { builtinNodeModules } from './builtinModules.js';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
-import transformAliasPlugin from '../rollupPlugins/alias.js';
-import bundleAliasPlugin from '@rollup/plugin-alias';
-
 import {
   Context,
   TaskName,
@@ -30,6 +25,7 @@ import type {
   Plugin,
 } from 'rollup';
 import path from 'path';
+import { transformerPlugin } from '../rollupPlugins/transformer.js';
 
 interface PkgJson {
   name: string;
@@ -44,106 +40,96 @@ export function getRollupOptions(
   taskRunnerContext: TaskRunnerContext,
 ) {
   const { pkg, commandArgs, command, rootDir } = context;
-  const { name: taskName, config: taskConfig } = taskRunnerContext.buildTask;
+  const { name: taskName, config: _taskConfig } = taskRunnerContext.buildTask;
+  // TODO: assert is BundleTaskConfig
+  const taskConfig = _taskConfig as BundleTaskConfig
   const rollupOptions: RollupOptions = {};
-  const plugins: Plugin[] = [];
 
-  if (taskConfig.babelPlugins?.length) {
-    plugins.push(
-      babelPlugin(
-        taskConfig.babelPlugins,
-        {
-          jsxRuntime: taskConfig.jsxRuntime,
-          pragma: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragma,
-          pragmaFrag: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
-        },
-        taskConfig.type === 'bundle' && taskConfig.compileDependencies,
-        taskConfig.modifyBabelOptions,
-      ),
-    );
-  }
-  plugins.push(
-    swcPlugin(
-      taskConfig.jsxRuntime,
+  const alias = {};
+  Object.keys(taskConfig.alias).forEach((key) => {
+    // Add full path for relative path alias
+    alias[key] = taskConfig.alias[key].startsWith('.') ? path.resolve(rootDir, taskConfig.alias[key]) : taskConfig.alias[key];
+  });
+
+  const plugins: Plugin[] = [
+    transformerPlugin({
+      transformers: [],
+      alias,
+      babelPlugins: taskConfig.babelPlugins,
+      babelOptions: {
+        jsxRuntime: taskConfig.jsxRuntime,
+        pragma: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragma,
+        pragmaFrag: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
+      },
+      compileDependencies: taskConfig.compileDependencies,
+      modifyBabelOptions: taskConfig.modifyBabelOptions,
+      jsxRuntime: taskConfig.jsxRuntime,
       rootDir,
-      taskConfig.swcCompileOptions,
-      taskConfig.type === 'bundle' && taskConfig.compileDependencies,
-    ),
-  );
+      extraSwcOptions: taskConfig.swcCompileOptions,
+    }),
+  ];
 
-  if (taskConfig.type === 'transform') {
-    plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
-  } else if (taskConfig.type === 'bundle') {
-    const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
-    rollupOptions.input = taskConfig.entry;
-    rollupOptions.external = external;
-    rollupOptions.output = getRollupOutputs({
-      globals,
-      bundleTaskConfig: taskConfig,
-      pkg: pkg as PkgJson,
-      esVersion: taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5',
-      mode: taskRunnerContext.mode,
-      command,
-    });
+  const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
+  rollupOptions.input = taskConfig.entry;
+  rollupOptions.external = external;
+  rollupOptions.output = getRollupOutputs({
+    globals,
+    bundleTaskConfig: taskConfig,
+    pkg: pkg as PkgJson,
+    esVersion: taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5',
+    mode: taskRunnerContext.mode,
+    command,
+  });
 
-    const cssMinify = taskConfig.cssMinify(taskRunnerContext.mode, command);
-    const defaultStylesOptions: StylesRollupPluginOptions = {
-      plugins: [
-        autoprefixer(),
-        PostcssPluginRpxToVw,
+  const cssMinify = taskConfig.cssMinify(taskRunnerContext.mode, command);
+  const defaultStylesOptions: StylesRollupPluginOptions = {
+    plugins: [
+      autoprefixer(),
+      PostcssPluginRpxToVw,
+    ],
+    mode: 'extract',
+    autoModules: true,
+    minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
+    sourceMap: taskConfig.sourcemap,
+  };
+  plugins.push(
+    replace({
+      values: {
+        ...getDefaultDefineValues(taskRunnerContext.mode),
+        // User define can override above.
+        ...taskConfig.define,
+      },
+      preventAssignment: true,
+    }),
+    styles((taskConfig.modifyStylesOptions ?? [((options) => options)]).reduce(
+      (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
+      defaultStylesOptions,
+    )),
+    image(),
+    json(),
+    nodeResolve({ // To locates modules using the node resolution algorithm.
+      extensions: [
+        '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
+        '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
+        ...(taskConfig.extensions || []),
       ],
-      mode: 'extract',
-      autoModules: true,
-      minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
-      sourceMap: taskConfig.sourcemap,
-    };
-    const alias = {};
-    Object.keys(taskConfig.alias).forEach((key) => {
-      // Add full path for relative path alias
-      alias[key] = taskConfig.alias[key].startsWith('.') ? path.resolve(rootDir, taskConfig.alias[key]) : taskConfig.alias[key];
-    });
-    plugins.push(
-      replace({
-        values: {
-          ...getDefaultDefineValues(taskRunnerContext.mode),
-          // User define can override above.
-          ...taskConfig.define,
-        },
-        preventAssignment: true,
-      }),
-      styles((taskConfig.modifyStylesOptions ?? [((options) => options)]).reduce(
-        (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
-        defaultStylesOptions,
-      )),
-      image(),
-      json(),
-      nodeResolve({ // To locates modules using the node resolution algorithm.
-        extensions: [
-          '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
-          '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
-          ...(taskConfig.extensions || []),
-        ],
-        browser: taskConfig.browser,
-      }),
-      commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
-        extensions: [
-          '.js', // plugin-commonjs default extensions
-          '.jsx', '.ts', '.tsx',
-          ...(taskConfig.extensions || []),
-        ],
-        transformMixedEsModules: true,
-      }),
-      bundleAliasPlugin({
-        entries: alias,
-      }),
-    );
-    if (commandArgs.analyzer) {
-      plugins.push(visualizer({
-        title: `Rollup Visualizer(${taskName})`,
-        open: true,
-        filename: `${taskName}-stats.html`,
-      }));
-    }
+      browser: taskConfig.browser,
+    }),
+    commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
+      extensions: [
+        '.js', // plugin-commonjs default extensions
+        '.jsx', '.ts', '.tsx',
+        ...(taskConfig.extensions || []),
+      ],
+      transformMixedEsModules: true,
+    }),
+  );
+  if (commandArgs.analyzer) {
+    plugins.push(visualizer({
+      title: `Rollup Visualizer(${taskName})`,
+      open: true,
+      filename: `${taskName}-stats.html`,
+    }));
   }
 
   rollupOptions.plugins = plugins;

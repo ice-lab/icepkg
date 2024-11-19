@@ -3,11 +3,12 @@
  */
 import * as babel from '@babel/core';
 import type { ParserPlugin } from '@babel/parser';
-import { Plugin } from 'rollup';
-import { createScriptsFilter, formatCnpmDepFilepath, getIncludeNodeModuleScripts } from '../utils.js';
+import { formatCnpmDepFilepath, getIncludeNodeModuleScripts } from '../utils.js';
 import type { BundleTaskConfig } from '../types.js';
 import { TransformOptions } from '@babel/core';
 import getBabelOptions from '../helpers/getBabelOptions.js';
+import { CompileTransformer } from './compose.js';
+import { createScriptsFilter } from '../helpers/filter.js';
 
 const getParserPlugins = (isTS?: boolean): ParserPlugin[] => {
   const commonPlugins: ParserPlugin[] = [
@@ -35,19 +36,23 @@ export interface BabelPluginOptions {
   pragmaFrag?: string;
 }
 
-const babelPlugin = (
-  plugins: babel.PluginItem[],
-  options: BabelPluginOptions,
+export interface BabelTransformerOptions {
+  babelPlugins?: babel.PluginItem[],
+  babelOptions?: BabelPluginOptions,
   compileDependencies?: BundleTaskConfig['compileDependencies'],
   modifyBabelOptions?: (babelCompileOptions: TransformOptions) => TransformOptions,
-): Plugin => {
+}
+
+export function babelTransformer(
+  { babelOptions: options, babelPlugins: plugins, compileDependencies, modifyBabelOptions}: BabelTransformerOptions
+): CompileTransformer {
+  if (!plugins || !options) {
+    return async () => null
+  }
   // https://babeljs.io/docs/en/babel-preset-react#usage
   const babelOptions = getBabelOptions(plugins, options, modifyBabelOptions);
   const scriptsFilter = createScriptsFilter(getIncludeNodeModuleScripts(compileDependencies));
-  return {
-    name: 'ice-pkg:babel',
-
-    transform(source, id) {
+  return async (source, id) => {
       if (!scriptsFilter(formatCnpmDepFilepath(id))) {
         return null;
       }
@@ -69,8 +74,5 @@ const babelPlugin = (
         code,
         map,
       };
-    },
-  };
+    }
 };
-
-export default babelPlugin;

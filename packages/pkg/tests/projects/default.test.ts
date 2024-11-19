@@ -62,6 +62,12 @@ runProjectTest('default', [
     }
   },
   {
+    name: 'sourcemap-inline',
+    config: {
+      sourceMaps: 'inline'
+    }
+  },
+  {
     name: 'no-declaration',
     snapshot: 'structure',
     config: {

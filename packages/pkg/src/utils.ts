@@ -6,15 +6,7 @@ import os from 'node:os';
 import debug from 'debug';
 import { EventEmitter } from 'node:events';
 import { createRequire } from 'module';
-import { createFilter } from '@rollup/pluginutils';
-import remapping from '@ampproject/remapping';
-import { loadPkg } from './helpers/load.js';
-import consola from 'consola';
-import type { PlainObject, OutputResult, TaskConfig } from './types';
-import type {
-  DecodedSourceMap,
-  RawSourceMap,
-} from '@ampproject/remapping';
+import type { OutputResult, PlainObject, TaskConfig } from './types';
 import type { FSWatcher } from 'chokidar';
 
 export function toArray<T>(any: T | T[]): T[] {
@@ -150,51 +142,6 @@ export function generateCodeFrame(
   return res.join('\n');
 }
 
-const nullSourceMap: RawSourceMap = {
-  names: [],
-  sources: [],
-  mappings: '',
-  version: 3,
-};
-
-export function combineSourcemaps(
-  filename: string,
-  sourcemapList: Array<DecodedSourceMap | RawSourceMap>,
-): RawSourceMap {
-  if (
-    sourcemapList.length === 0 ||
-    sourcemapList.every((m) => m.sources.length === 0)
-  ) {
-    return { ...nullSourceMap };
-  }
-
-  // We don't declare type here so we can convert/fake/map as RawSourceMap
-  let map; // : SourceMap
-  let mapIndex = 1;
-  const useArrayInterface =
-    sourcemapList.slice(0, -1).find((m) => m.sources.length !== 1) === undefined;
-  if (useArrayInterface) {
-    map = remapping(sourcemapList, () => null, true);
-  } else {
-    map = remapping(
-      sourcemapList[0],
-      (sourcefile) => {
-        if (sourcefile === filename && sourcemapList[mapIndex]) {
-          return sourcemapList[mapIndex++];
-        } else {
-          return { ...nullSourceMap };
-        }
-      },
-      true,
-    );
-  }
-  if (!map.file) {
-    delete map.file;
-  }
-
-  return map as RawSourceMap;
-}
-
 export const require = createRequire(import.meta.url);
 
 export const safeRequire = (filePath: string) => {
@@ -264,14 +211,7 @@ export function debouncePromise<T extends unknown[]>(
 //            3000-    Red
 export const timeFrom = (start: number, subtract = 0): string => {
   const time: number | string = performance.now() - start - subtract;
-  const timeString = (`${time.toFixed(2)} ms`).padEnd(5, ' ');
-  if (time < 500) {
-    return picocolors.green(timeString);
-  } else if (time < 3000) {
-    return picocolors.yellow(timeString);
-  } else {
-    return picocolors.red(timeString);
-  }
+  return formatTimeCost(time);
 };
 
 export function formatTimeCost(time: number) {
@@ -336,28 +276,6 @@ export function formatCnpmDepFilepath(filepath: string) {
   return p1 + p2;
 }
 
-/**
- * default include src/**.m?[jt]sx? but exclude .d.ts file
- *
- * @param extraInclude include other file types
- * @param extraExclude exclude other file types
- *
- * @example exclude node_modules createScriptsFilter([], [/node_modules/])
- */
-export const createScriptsFilter = (
-  extraIncludes: RegExp[] = [],
-  extraExcludes: RegExp[] = [],
-) => {
-  // Match non node_modules files. In ICEPKG V2, we only compile src/**.m?[jt]sx? files.
-  const includes = [/^(?!.*node_modules\/).*\.(?:[cm]?[jt]s|[jt]sx)$/].concat(extraIncludes);
-
-  const notCompiledDeps = ['core-js', 'core-js-pure', 'tslib', '@swc/helpers', '@babel/runtime', 'babel-runtime'];
-  const excludes = [/\.d\.ts$/, new RegExp(`node_modules/(${notCompiledDeps.join('|')})`)].concat(extraExcludes);
-  return createFilter(includes, excludes);
-};
-
-export const cwd = process.cwd();
-
 export function normalizeSlashes(file: string) {
   return file.split(path.win32.sep).join('/');
 }
@@ -385,16 +303,6 @@ export function mergeValueToTaskConfig<C = TaskConfig, T = any>(config: C, key: 
 export function getEntryItems(entry: TaskConfig['entry']) {
   const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.values(entry);
   return entries;
-}
-
-const pkg = loadPkg(cwd);
-
-export function checkDependencyExists(dependency: string, link: string) {
-  if (!pkg?.dependencies?.[dependency]) {
-    consola.error(`当前组件/库依赖 \`${dependency}\`, 请运行命令 \`npm i ${dependency} --save\` 安装此依赖。更多详情请看 \`${link}\``);
-    process.exit(1);
-  }
-  return pkg?.dependencies?.[dependency];
 }
 
 export const getBuiltInPlugins = () => [
@@ -453,4 +361,15 @@ export const TypedEventEmitter = EventEmitter as unknown as {
 
 export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const BEFORE_COMPILE_EXT_REG = /^\.([mc]?)[tj]s(x?)$/
+
+export function getCompiledFileExt(ext: string): string {
+  const extMatch = ext.match(BEFORE_COMPILE_EXT_REG)
+  if (extMatch) {
+    return `.${extMatch[1]}js${extMatch[2]}`;
+  }
+
+  return ext
 }

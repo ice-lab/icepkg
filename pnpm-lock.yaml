@@ -401,9 +401,6 @@ importers:
       '@swc/core':
         specifier: 1.7.40
         version: 1.7.40(@swc/helpers@0.5.13)
-      acorn:
-        specifier: ^8.10.0
-        version: 8.14.0
       autoprefixer:
         specifier: ^10.4.2
         version: 10.4.7(postcss@8.4.47)

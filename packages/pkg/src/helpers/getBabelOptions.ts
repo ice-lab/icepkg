@@ -1,6 +1,6 @@
 import { TransformOptions } from '@babel/core';
-import { BabelPluginOptions } from 'src/rollupPlugins/babel.js';
 import { JSX_RUNTIME_SOURCE } from '../constants.js';
+import { BabelPluginOptions } from '../transformers/babel.js';
 
 function getBabelOptions(
   plugins: babel.PluginItem[],

@@ -206,3 +206,57 @@ exports[`Run config sourcemap-enable > esm structure 1`] = `
   "name": "esm",
 }
 `;
+
+exports[`Run config sourcemap-inline > cjs structure 1`] = `null`;
+
+exports[`Run config sourcemap-inline > dist structure 1`] = `null`;
+
+exports[`Run config sourcemap-inline > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config sourcemap-inline > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config sourcemap-inline > file content es2017/index.d.ts 1`] = `
+"export declare const foo = 1;
+"
+`;
+
+exports[`Run config sourcemap-inline > file content es2017/index.js 1`] = `
+"export const foo = 1;
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vc3JjL2luZGV4LnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBjb25zdCBmb28gPSAxXG4iXSwibmFtZXMiOlsiZm9vIl0sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLE1BQU1BLE1BQU0sRUFBQyJ9"
+`;
+
+exports[`Run config sourcemap-inline > file content esm/index.d.ts 1`] = `
+"export declare const foo = 1;
+"
+`;
+
+exports[`Run config sourcemap-inline > file content esm/index.js 1`] = `
+"export var foo = 1;
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vc3JjL2luZGV4LnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBjb25zdCBmb28gPSAxXG4iXSwibmFtZXMiOlsiZm9vIl0sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLElBQU1BLE1BQU0sRUFBQyJ9"
+`;

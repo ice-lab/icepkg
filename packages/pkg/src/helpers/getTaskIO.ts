@@ -22,16 +22,16 @@ function getEntryId(entry: string): string {
   return entry.split('/').pop().split('.').shift();
 }
 
-export const getTransformEntryDirs = (rootDir: string, entry: Record<string, string>) => {
+export const getTransformEntryDirs = (rootDir: string, entry: Record<string, string>): string[] => {
   const entries = Object.values(entry);
-  const transformEntryDirs: string[] = [];
+  const transformEntryDirs = new Set<string>()
 
   entries.forEach((entryItem) => {
     const absoluteEntry = isAbsolute(entryItem) ? entryItem : resolve(rootDir, entryItem);
-    transformEntryDirs.push(join(absoluteEntry, '..'));
+    transformEntryDirs.add(join(absoluteEntry, '..'));
   });
 
-  return transformEntryDirs;
+  return Array.from(transformEntryDirs);
 };
 
 export const getTransformDefaultOutputDir = (rootDir: string, taskName: TaskValue) => {

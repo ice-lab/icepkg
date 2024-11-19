@@ -1,21 +1,32 @@
-import { extname, basename, relative, sep } from 'path';
+import type { BundleTaskConfig, OutputFile, TaskConfig } from '../types.js';
 import * as swc from '@swc/core';
-import deepmerge from 'deepmerge';
+import { Options as SwcCompileOptions, Config, type EsParserConfig, type TsParserConfig } from '@swc/core';
+import { formatCnpmDepFilepath, getIncludeNodeModuleScripts } from '../utils.js';
+import { extname, relative, sep } from 'path';
+import { CompileTransformer } from './compose.js';
 import { isTypescriptOnly } from '../helpers/suffix.js';
-import { checkDependencyExists, createScriptsFilter, formatCnpmDepFilepath, getIncludeNodeModuleScripts } from '../utils.js';
+import { JSX_RUNTIME_SOURCE } from '../constants.js';
+import deepmerge from 'deepmerge';
 import { init, parse } from 'es-module-lexer';
 import MagicString from 'magic-string';
-import type { Options as SwcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
-import type { TaskConfig, OutputFile, BundleTaskConfig } from '../types.js';
-import type { Plugin } from 'rollup';
-import { JSX_RUNTIME_SOURCE } from '../constants.js';
+import { createScriptsFilter } from '../helpers/filter.js';
 
-const normalizeSwcConfig = (
+export interface SwcTransformerOptions {
+  jsxRuntime: TaskConfig['jsxRuntime'],
+  rootDir: string,
+  extraSwcOptions?: Config,
+  compileDependencies?: BundleTaskConfig['compileDependencies'],
+}
+
+export const normalizeSwcConfig = (
   file: OutputFile,
   jsxRuntime: TaskConfig['jsxRuntime'],
   mergeOptions?: SwcCompileOptions,
 ): SwcCompileOptions => {
-  const { filePath, ext } = file;
+  const {
+    filePath,
+    ext,
+  } = file;
   const isTypeScript = isTypescriptOnly(ext, filePath);
   const syntaxFeatures = {
     decorators: true,
@@ -72,7 +83,7 @@ const normalizeSwcConfig = (
 };
 
 // Transform @swc/helpers to cjs path if in commonjs module.
-async function transformImport(source: string, sourceFilename: string) {
+export async function transformImport(source: string, sourceFilename: string) {
   await init;
   const [imports, exports] = await parse(source);
   let s: MagicString | undefined;
@@ -103,7 +114,8 @@ async function transformImport(source: string, sourceFilename: string) {
           const [, identifier] = matchImport;
           const replaceModule = `var ${identifier.split(' as ')[1].trim()} = require('${targetImport.n.replace(/@swc\/helpers\/_\/(.*)$/,
             (_, matched) => `@swc/helpers/cjs/${matched}.cjs`)}')._`;
-          str().overwrite(targetImport.ss, targetImport.se, replaceModule);
+          str()
+            .overwrite(targetImport.ss, targetImport.se, replaceModule);
         }
       }
     }
@@ -121,71 +133,47 @@ async function transformImport(source: string, sourceFilename: string) {
   };
 }
 
-/**
- * plugin-swc works as substitute of plugin-typescript, babel, babel-preset-env and plugin-minify.
- */
-const swcPlugin = (
-  jsxRuntime: TaskConfig['jsxRuntime'],
-  rootDir: string,
-  extraSwcOptions?: Config,
-  compileDependencies?: BundleTaskConfig['compileDependencies'],
-): Plugin => {
+export function swcTransformer({
+                                 jsxRuntime,
+                                 rootDir,
+                                 extraSwcOptions,
+                                 compileDependencies,
+                               }: SwcTransformerOptions): CompileTransformer {
   const scriptsFilter = createScriptsFilter(
     getIncludeNodeModuleScripts(compileDependencies),
   );
-  return {
-    name: 'ice-pkg:swc',
 
-    async transform(source, id) {
-      if (!scriptsFilter(formatCnpmDepFilepath(id))) {
-        return null;
-      }
+  return async (source, id) => {
+    if (!scriptsFilter(formatCnpmDepFilepath(id))) {
+      return null;
+    }
 
-      const file = {
-        filePath: id,
-        absolutePath: id,
-        ext: extname(id),
-      };
-      // If file's name comes with .mjs、.mts、.cjs、.cts suffix
-      const destExtname = ['m', 'c'].includes(file.ext[1]) ? `.${file.ext[1]}js` : '.js';
-      const destFilename = basename(id).replace(RegExp(`${extname(id)}$`), destExtname);
-      const sourceFileName = `.${sep}${relative(rootDir, id)}`;
+    const file = {
+      filePath: id,
+      absolutePath: id,
+      ext: extname(id),
+    };
+    const sourceFileName = `.${sep}${relative(rootDir, id)}`;
 
-      const { code, map } = await swc.transform(
-        source,
-        normalizeSwcConfig(file, jsxRuntime, {
-          ...extraSwcOptions,
-          // If filename is omitted, will lose filename info in sourcemap.
-          // e.g: ./src/index.mts
-          sourceFileName,
-          filename: id,
-        }),
-      );
+    const {
+      code,
+      map,
+    } = await swc.transform(
+      source,
+      normalizeSwcConfig(file, jsxRuntime, {
+        ...extraSwcOptions,
+        // If filename is omitted, will lose filename info in sourcemap.
+        // e.g: ./src/index.mts
+        sourceFileName,
+        filename: id,
+      }),
+    );
 
-      const transformedCode = await transformImport(code, sourceFileName);
+    const transformedCode = await transformImport(code, sourceFileName);
 
-      return {
-        code: transformedCode.code,
-        map: transformedCode.map ?? map,
-        meta: {
-          filename: destFilename,
-        },
-      };
-    },
-    options(options) {
-      const { onwarn } = options;
-      options.onwarn = (warning, warn) => {
-        if (warning.code === 'UNRESOLVED_IMPORT' && warning.exporter.startsWith(JSX_RUNTIME_SOURCE)) {
-          checkDependencyExists(JSX_RUNTIME_SOURCE, 'https://pkg.ice.work/faq');
-        }
-        if (onwarn) {
-          onwarn(warning, warn);
-        } else {
-          warn(warning);
-        }
-      };
-    },
+    return {
+      code: transformedCode.code,
+      map: transformedCode.map ?? map,
+    };
   };
-};
-
-export default swcPlugin;
+}
