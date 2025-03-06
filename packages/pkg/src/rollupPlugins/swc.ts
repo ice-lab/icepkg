@@ -1,6 +1,5 @@
 import { extname, basename, relative, sep } from 'path';
 import * as swc from '@swc/core';
-import deepmerge from 'deepmerge';
 import { isTypescriptOnly } from '../helpers/suffix.js';
 import { checkDependencyExists, createScriptsFilter, formatCnpmDepFilepath, getIncludeNodeModuleScripts } from '../utils.js';
 import { init, parse } from 'es-module-lexer';
@@ -9,6 +8,7 @@ import type { Options as SwcCompileOptions, Config, TsParserConfig, EsParserConf
 import type { TaskConfig, OutputFile, BundleTaskConfig } from '../types.js';
 import type { Plugin } from 'rollup';
 import { JSX_RUNTIME_SOURCE } from '../constants.js';
+import { merge } from 'es-toolkit/object';
 
 const normalizeSwcConfig = (
   file: OutputFile,
@@ -62,13 +62,13 @@ const normalizeSwcConfig = (
     return moduleConfig;
   }
 
-  return deepmerge.all([
+  return merge(merge(
     commonOptions,
     mergeOptions,
-    {
-      module: getModuleConfig(ext, mergeOptions?.module),
-    },
-  ]);
+  ),
+  {
+    module: getModuleConfig(ext, mergeOptions?.module),
+  });
 };
 
 // Transform @swc/helpers to cjs path if in commonjs module.

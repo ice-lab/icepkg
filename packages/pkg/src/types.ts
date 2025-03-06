@@ -7,6 +7,7 @@ import type stylesPlugin from 'rollup-plugin-styler';
 import type { FSWatcher } from 'chokidar';
 import cssnano from 'cssnano';
 import { TransformOptions } from '@babel/core';
+import { ALL_FORMAT_MODULES, ALL_FORMAT_TARGET, NODE_FORMAT_MODULE } from './constants.js';
 
 export type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
@@ -20,6 +21,29 @@ type CSSMinify = boolean | {
   options?: Parameters<typeof cssnano>[0];
 };
 
+export type NodeModuleType = typeof NODE_FORMAT_MODULE[number];
+export type ModuleType = typeof ALL_FORMAT_MODULES[number];
+
+export type JsTarget = typeof ALL_FORMAT_TARGET[number];
+
+export type StandardTransformFormatString = `${NodeModuleType}:${JsTarget}`;
+export type StandardBundleFormatString = `${ModuleType}:${JsTarget}`;
+export type StandardFormatString = StandardTransformFormatString | StandardBundleFormatString;
+
+export interface Format<M extends ModuleType = ModuleType, T extends JsTarget = JsTarget> {
+  module: M;
+  target: T;
+}
+
+export type TransformFormat = Format<NodeModuleType, JsTarget>;
+export type BundleFormat = Format<ModuleType, JsTarget>;
+
+export type AliasTransformFormatString = 'cjs' | 'esm' | 'es2017';
+export type AliasBundleFormatString = AliasTransformFormatString | 'umd';
+
+export type TransformUserFormat = StandardTransformFormatString | AliasTransformFormatString;
+export type BundleUserFormat = StandardBundleFormatString | AliasBundleFormatString;
+
 export interface TransformUserConfig {
   /**
    * Which type of contents would be generated
@@ -28,7 +52,7 @@ export interface TransformUserConfig {
    * "es2017" - ES Module with ES2017 (targeting modern browsers and Node version upon 12)
    * @default ['esm', 'es2017']
    */
-  formats?: Array<'cjs' | 'esm' | 'es2017'>;
+  formats?: TransformUserFormat[];
   /**
    * Exclude all files matching any of those conditions.
    * - `string` to match any paths by `minimatch` glob patterns
@@ -67,7 +91,7 @@ export interface BundleUserConfig {
    * "es2017"
    * @default ['esm','es2017']
    */
-  formats?: Array<'umd' | 'esm' | 'cjs' | 'es2017'>;
+  formats?: BundleUserFormat[];
   /**
    * Specify external dependencies.
    * "boolean" - whether to bundle all dependencies or not;
@@ -227,8 +251,10 @@ interface _TaskConfig {
 
 export interface BundleTaskConfig extends
   _TaskConfig,
-  Omit<BundleUserConfig, 'development' | 'minify'> {
+  Omit<BundleUserConfig, 'development' | 'minify' | 'formats'> {
   type: 'bundle';
+  originalFormats?: string[];
+  formats: BundleFormat[];
   /**
   * Files extensions
   * @see https://www.npmjs.com/package/@rollup/plugin-node-resolve
@@ -246,8 +272,10 @@ export interface BundleTaskConfig extends
   vendorName?: string;
 }
 
-export interface TransformTaskConfig extends _TaskConfig, TransformUserConfig {
+export interface TransformTaskConfig extends _TaskConfig, Omit<TransformUserConfig, 'formats'> {
   type: 'transform';
+  originalFormat?: string;
+  format: TransformFormat;
   /**
    * Node env modes. For example: 'production', 'development'
    * @default `['development']` on start, `['production']` on build.
@@ -271,19 +299,36 @@ export interface DeclarationTaskConfig extends _TaskConfig, DeclarationUserConfi
   declarationOutputDirs?: string[];
 }
 
+
 export type TaskConfig = BundleTaskConfig | TransformTaskConfig | DeclarationTaskConfig;
 
-export type BuildTask = _BuildTask<TaskConfig, TaskName>;
+export type BuildTask = _BuildTask<TaskConfig, TaskName | string>;
 
 export type Context = _Context<TaskConfig, {}, UserConfig>;
 
-export type PluginAPI = _PluginAPI<TaskConfig>;
+// Plugins
+export interface CustomFormatTaskOptions {
+  format: string;
+  type: 'bundle' | 'transform';
+}
+
+export type CustomFormatTaskCreator = (options: CustomFormatTaskOptions) => TaskConfig | null;
+
+export type CustomFormatTaskRegister = (format: string, creator: CustomFormatTaskCreator) => void;
+
+export interface ExtendsPluginAPI {
+  registerFormat: CustomFormatTaskRegister;
+}
+
+export type PluginAPI = _PluginAPI<TaskConfig, ExtendsPluginAPI>;
+
 /**
  * @deprecated Please use PluginAPI instead.
  */
 export type PkgPluginAPI = PluginAPI;
 
-export type Plugin = _Plugin<TaskConfig>;
+export type Plugin = _Plugin<TaskConfig, ExtendsPluginAPI>;
+
 /**
  * @deprecated Please use Plugin instead.
  */
@@ -337,21 +382,9 @@ export interface WatchChangedFile {
   event: WatchEvent;
 }
 
-export type HandleChange<R = OutputResult> = (changedFiles: WatchChangedFile[]) => Promise<R>;
-
-export interface TaskResult {
-  handleChange?: HandleChange<OutputResult[]>;
-  outputResults: OutputResult[];
-}
 export interface TaskRunnerContext {
   mode: NodeEnvMode;
   buildTask: BuildTask;
   buildContext: Context;
   watcher?: FSWatcher;
 }
-
-export type RunTasks = (
-  taskOptionsList: Array<[RollupOptions, TaskRunnerContext]>,
-  context: Context,
-  watcher?: FSWatcher,
-) => Promise<TaskResult>;

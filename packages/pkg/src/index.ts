@@ -1,7 +1,3 @@
-import { pkgService } from './service.js';
-
-export default pkgService;
-
 export * from './test/index.js';
 
 export * from './types.js';

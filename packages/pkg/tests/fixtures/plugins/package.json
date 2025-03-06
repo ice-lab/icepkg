@@ -1,0 +1,8 @@
+{
+  "name": "@ice/pkg-tests-fixtures-plugins",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@ice/pkg": "workspace:*"
+  }
+}

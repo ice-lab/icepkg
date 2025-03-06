@@ -3,8 +3,7 @@ import consola from 'consola';
 import { cac } from 'cac';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { pkgService } from './service.js';
-import { getBuiltInPlugins } from './utils.js';
+import { createPkg } from './core/createPkg.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -26,12 +25,13 @@ const cli = cac('ice-pkg');
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
 
-      await pkgService.run({
+      const pkg = await createPkg({
+        rootDir: options.rootDir,
         command: 'build',
         commandArgs,
-        getBuiltInPlugins,
-        rootDir: options.rootDir,
       });
+
+      await pkg.run();
     });
 
   cli
@@ -49,12 +49,13 @@ const cli = cac('ice-pkg');
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
 
-      await pkgService.run({
+      const pkg = await createPkg({
+        rootDir: options.rootDir,
         command: 'start',
         commandArgs,
-        getBuiltInPlugins,
-        rootDir: options.rootDir,
       });
+
+      await pkg.run();
     });
 
   cli.help();

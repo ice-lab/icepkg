@@ -1,6 +1,5 @@
 import fse from 'fs-extra';
-import { getBuildTasks } from '../helpers/getBuildTasks.js';
-import type { Context, OutputResult } from '../types.js';
+import type { BuildTask, Context, OutputResult } from '../types.js';
 import { RunnerLinerTerminalReporter } from '../helpers/runnerReporter.js';
 import { getTaskRunners } from '../helpers/getTaskRunners.js';
 import { RunnerScheduler } from '../helpers/runnerScheduler.js';
@@ -8,7 +7,7 @@ import { RunnerScheduler } from '../helpers/runnerScheduler.js';
 export default async function build(context: Context) {
   const { applyHook, commandArgs } = context;
 
-  const buildTasks = getBuildTasks(context);
+  const buildTasks = context.getTaskConfig() as BuildTask[];
   const taskConfigs = buildTasks.map(({ config }) => config);
 
   await applyHook('before.build.load', {

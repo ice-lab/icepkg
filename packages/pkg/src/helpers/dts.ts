@@ -5,7 +5,7 @@ import { TaskConfig } from '../types.js';
 import { prepareSingleFileReplaceTscAliasPaths } from 'tsc-alias';
 import fse from 'fs-extra';
 import * as path from 'path';
-import merge from 'lodash.merge';
+import { merge } from 'es-toolkit/object';
 
 export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'cjs' | 'mjs' | 'mts' | 'cts';
 
@@ -84,16 +84,16 @@ async function getTSConfig(
     paths: formatAliasToTSPathsConfig(alias), // default add alias to paths
   };
   const projectTSConfig = await getProjectTSConfig(rootDir);
-  const tsConfig: ts.ParsedCommandLine = merge(
+  const tsConfig: ts.ParsedCommandLine = merge(merge(
     { options: defaultTSCompilerOptions },
     projectTSConfig,
-    {
-      options: {
-        outDir: outputDir,
-        rootDir: path.join(rootDir, 'src'),
-      },
+  ),
+  {
+    options: {
+      outDir: outputDir,
+      rootDir: path.join(rootDir, 'src'),
     },
-  );
+  });
 
   return tsConfig;
 }

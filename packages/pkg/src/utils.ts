@@ -16,6 +16,7 @@ import type {
   RawSourceMap,
 } from '@ampproject/remapping';
 import type { FSWatcher } from 'chokidar';
+import { mapValues } from 'es-toolkit/object';
 
 export function toArray<T>(any: T | T[]): T[] {
   return Array.isArray(any) ? any : [any];
@@ -290,12 +291,7 @@ export const unique = <T>(arr: T[]): T[] => {
 };
 
 export const stringifyObject = (obj: PlainObject) => {
-  return Object.keys(obj).reduce((pre, next) => {
-    return {
-      ...pre,
-      [next]: JSON.stringify(obj[next]),
-    };
-  }, {});
+  return mapValues(obj, (value) => JSON.stringify(value));
 };
 
 // @ref: It will pass to createScriptFilter function

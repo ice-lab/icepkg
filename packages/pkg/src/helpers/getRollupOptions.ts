@@ -81,7 +81,6 @@ export function getRollupOptions(
       globals,
       bundleTaskConfig: taskConfig,
       pkg: pkg as PkgJson,
-      esVersion: taskName === TaskName.BUNDLE_ES2017 ? 'es2017' : 'es5',
       mode: taskRunnerContext.mode,
       command,
     });
@@ -158,7 +157,6 @@ interface GetRollupOutputsOptions {
   bundleTaskConfig: BundleTaskConfig;
   globals: Record<string, string>;
   pkg: PkgJson;
-  esVersion: string;
   mode: NodeEnvMode;
   command: Context['command'];
 }
@@ -167,27 +165,26 @@ function getRollupOutputs({
   bundleTaskConfig,
   pkg,
   mode,
-  esVersion,
   command,
 }: GetRollupOutputsOptions): OutputOptions[] {
   const { outputDir, vendorName = 'vendor' } = bundleTaskConfig;
 
-  const outputFormats = (bundleTaskConfig.formats || []).filter((format) => format !== 'es2017') as Array<'umd' | 'esm' | 'cjs'>;
+  const outputFormats = bundleTaskConfig.formats ?? [];
 
   const name = bundleTaskConfig.name ?? pkg.name;
   const minify = bundleTaskConfig.jsMinify(mode, command);
 
   return outputFormats.map((format) => ({
     name,
-    format,
+    format: format.module,
     globals,
     sourcemap: bundleTaskConfig.sourcemap,
     exports: 'auto',
     dir: outputDir,
-    assetFileNames: getFilename('[name]', format, esVersion, mode, '[ext]'),
-    entryFileNames: getFilename('[name]', format, esVersion, mode, 'js'),
-    chunkFileNames: getFilename('[name]', format, esVersion, mode, 'js'),
-    manualChunks: format !== 'umd' ? (id, { getModuleInfo }) => {
+    assetFileNames: getFilename('[name]', format.module, format.target, mode, '[ext]'),
+    entryFileNames: getFilename('[name]', format.module, format.target, mode, 'js'),
+    chunkFileNames: getFilename('[name]', format.module, format.target, mode, 'js'),
+    manualChunks: format.module !== 'umd' ? (id, { getModuleInfo }) => {
       if (/node_modules/.test(id)) {
         return vendorName;
       }

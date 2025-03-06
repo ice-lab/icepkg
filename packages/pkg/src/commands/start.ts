@@ -1,10 +1,9 @@
 import consola from 'consola';
-import { getBuildTasks } from '../helpers/getBuildTasks.js';
 import { createBatchChangeHandler, createWatcher } from '../helpers/watcher.js';
 import type {
   OutputResult,
   Context,
-  WatchChangedFile,
+  WatchChangedFile, BuildTask,
 } from '../types.js';
 import { RunnerLinerTerminalReporter } from '../helpers/runnerReporter.js';
 import { getTaskRunners } from '../helpers/getTaskRunners.js';
@@ -13,7 +12,7 @@ import { RunnerScheduler } from '../helpers/runnerScheduler.js';
 export default async function start(context: Context) {
   const { applyHook, commandArgs } = context;
 
-  const buildTasks = getBuildTasks(context);
+  const buildTasks = context.getTaskConfig() as BuildTask[];
   const taskConfigs = buildTasks.map(({ config }) => config);
 
   await applyHook('before.start.load', {
@@ -59,4 +58,6 @@ export default async function start(context: Context) {
       consola.error(error);
     }
   }
+
+  return watcher;
 }
