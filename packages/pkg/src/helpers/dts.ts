@@ -43,6 +43,7 @@ export interface DtsCompileOptions {
   alias: TaskConfig['alias'];
   rootDir: string;
   outputDir: string;
+  usingOxc: boolean;
 }
 
 function formatAliasToTSPathsConfig(alias: TaskConfig['alias']) {
@@ -116,7 +117,7 @@ async function getProjectTSConfig(rootDir: string): Promise<ts.ParsedCommandLine
   };
 }
 
-export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompileOptions): Promise<DtsInputFile[]> {
+export async function dtsCompile({ files, rootDir, outputDir, alias, usingOxc }: DtsCompileOptions): Promise<DtsInputFile[]> {
   if (!files.length) {
     return [];
   }
@@ -132,44 +133,8 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
     dtsPath: normalizePath(dtsPath),
   }));
 
-  // In order to only include the update files instead of all the files in the watch mode.
-  function getProgramRootNames(originalFilenames: string[]) {
-    // Should include all the resolved .d.ts file to avoid dts generate error:
-    // TS4025: Exported variable '<name>' has or is using private name '<name>'.
-    const dtsFilenames = originalFilenames.filter((filename) => filename.endsWith('.d.ts'));
-    const needCompileFileNames = _files.map(({ filePath }) => filePath);
-    return [...needCompileFileNames, ...dtsFilenames];
-  }
-
-  const dtsFiles = {};
-  const host = ts.createCompilerHost(tsConfig.options);
-
-  host.writeFile = (fileName, contents) => {
-    dtsFiles[fileName] = contents;
-  };
-
-  const programOptions: ts.CreateProgramOptions = {
-    rootNames: getProgramRootNames(tsConfig.fileNames),
-    options: tsConfig.options,
-    host,
-    projectReferences: tsConfig.projectReferences,
-    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(tsConfig),
-  };
-  const program = ts.createProgram(programOptions);
-
-  const emitResult = program.emit();
-
-  if (emitResult.diagnostics && emitResult.diagnostics.length > 0) {
-    emitResult.diagnostics.forEach((diagnostic) => {
-      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-      if (diagnostic.file) {
-        const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-        consola.error('DTS', `${diagnostic.file.fileName} (${line + 1}, ${character + 1}): ${message}`);
-      } else {
-        consola.error('DTS', message);
-      }
-    });
-  }
+  const compileFunction = usingOxc ? compileFromOxc : compileFromTsc;
+  const dtsFiles = await compileFunction(_files, tsConfig)
 
   if (!Object.keys(alias).length) {
     // no alias config
@@ -199,4 +164,66 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
   }));
 
   return result;
+}
+
+async function compileFromTsc(files: DtsInputFile[], tsConfig: ts.ParsedCommandLine): Promise<Record<string, string>> {
+  // In order to only include the update files instead of all the files in the watch mode.
+  function getProgramRootNames(originalFilenames: string[]) {
+    // Should include all the resolved .d.ts file to avoid dts generate error:
+    // TS4025: Exported variable '<name>' has or is using private name '<name>'.
+    const dtsFilenames = originalFilenames.filter((filename) => filename.endsWith('.d.ts'));
+    const needCompileFileNames = files.map(({ filePath }) => filePath);
+    return [...needCompileFileNames, ...dtsFilenames];
+  }
+
+  const host = ts.createCompilerHost(tsConfig.options);
+
+  const dtsFiles: Record<string, string> = {};
+
+  host.writeFile = (fileName, contents) => {
+    dtsFiles[fileName] = contents;
+  };
+
+  const programOptions: ts.CreateProgramOptions = {
+    rootNames: getProgramRootNames(tsConfig.fileNames),
+    options: tsConfig.options,
+    host,
+    projectReferences: tsConfig.projectReferences,
+    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(tsConfig),
+  };
+  const program = ts.createProgram(programOptions);
+
+  const emitResult = program.emit();
+
+  if (emitResult.diagnostics && emitResult.diagnostics.length > 0) {
+    emitResult.diagnostics.forEach((diagnostic) => {
+      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+      if (diagnostic.file) {
+        const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+        consola.error('DTS', `${diagnostic.file.fileName} (${line + 1}, ${character + 1}): ${message}`);
+      } else {
+        consola.error('DTS', message);
+      }
+    });
+  }
+
+  return dtsFiles
+}
+
+async function compileFromOxc(absFiles: DtsInputFile[], tsConfig: ts.ParsedCommandLine): Promise<Record<string, string>> {
+  if (!tsConfig.options.isolatedDeclarations) {
+    consola.warn(`Enable isolatedDeclarations in tsconfig.json for correct .d.ts file generation`)
+  }
+  const oxc = await import('oxc-transform');
+  const dtsFiles: Record<string, string> = {};
+  for (const file of absFiles) {
+    const fileContent = fse.readFileSync(file.filePath, 'utf-8');
+    const { code } = oxc.isolatedDeclaration(file.filePath, fileContent, {
+      sourcemap: false,
+    });
+
+    dtsFiles[file.dtsPath] = code;
+  }
+
+  return dtsFiles
 }
