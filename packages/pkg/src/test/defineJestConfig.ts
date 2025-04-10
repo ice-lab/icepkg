@@ -1,8 +1,7 @@
-import merge from 'lodash.merge';
 import * as path from 'path';
 import fse from 'fs-extra';
 import getTaskConfig from './getTaskConfig.js';
-
+import { merge } from 'es-toolkit/object';
 import type { Config as JestConfig } from 'jest';
 import type { Service } from 'build-scripts';
 import type { TaskConfig, UserConfig } from '../types';

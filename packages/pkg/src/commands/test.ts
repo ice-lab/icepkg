@@ -1,9 +1,7 @@
-import { getBuildTasks } from '../helpers/getBuildTasks.js';
-
-import type { Context } from '../types.js';
+import type { BuildTask, Context } from '../types.js';
 
 export default async function test(context: Context) {
-  const buildTasks = getBuildTasks(context);
+  const buildTasks = context.getTaskConfig() as BuildTask[];
   const taskConfigs = buildTasks.map(({ config }) => config);
 
   return {

@@ -1,6 +1,5 @@
 import {
   BundleTaskConfig,
-  Context,
   TaskName,
   TaskValue,
   TransformTaskConfig,
@@ -24,10 +23,8 @@ const MODERN_BROWSER_TARGETS = {
 
 export const getDefaultBundleSwcConfig = (
   bundleTaskConfig: BundleTaskConfig,
-  ctx: Context,
-  taskName: TaskValue,
 ): Config => {
-  const browserTargets = taskName === TaskName.BUNDLE_ES2017 ? MODERN_BROWSER_TARGETS : LEGACY_BROWSER_TARGETS;
+  const browserTargets = bundleTaskConfig.formats[0].target !== 'es5' ? MODERN_BROWSER_TARGETS : LEGACY_BROWSER_TARGETS;
   return {
     jsc: {
       externalHelpers: true,
@@ -47,15 +44,13 @@ export const getDefaultBundleSwcConfig = (
 
 export const getDefaultTransformSwcConfig = (
   transformTaskConfig: TransformTaskConfig,
-  ctx: Context,
-  taskName: TaskValue,
   mode: NodeEnvMode,
 ): Config => {
-  const module: ModuleConfig = taskName === TaskName.TRANSFORM_CJS
+  const module: ModuleConfig = transformTaskConfig.format.module === 'cjs'
     ? { type: 'commonjs' }
     : undefined;
 
-  const target = taskName === TaskName.TRANSFORM_ES2017 ? 'es2017' : 'es5';
+  const target = transformTaskConfig.format.target === 'es2017' ? 'es2017' : 'es5';
 
   return {
     jsc: {

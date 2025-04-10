@@ -1,0 +1,42 @@
+// Vitest Snapshot v1
+
+exports[`Run config custom-format > cjs structure 1`] = `null`;
+
+exports[`Run config custom-format > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.asset.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config custom-format > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config custom-format > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
