@@ -1,0 +1,25 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "example-application": "1.0.0",
+    "example-pkg-plugin": "0.0.0",
+    "example-rax-component": "0.1.0",
+    "example-pkg-react-component": "0.0.0",
+    "example-pkg-react-multi-components": "0.0.0",
+    "@ice/create-pkg": "1.3.5",
+    "ice-npm-utils": "3.0.3",
+    "@ice/pkg": "1.6.0",
+    "@ice/pkg-tests-fixtures-alias": "0.0.0",
+    "@ice/pkg-tests-fixtures-bundle-browser": "0.0.0",
+    "@ice/pkg-tests-fixtures-default": "0.0.0",
+    "@ice/pkg-tests-fixtures-mock-entry-package": "0.0.0",
+    "@ice/pkg-tests-fixtures-plugins": "0.0.0",
+    "@ice/pkg-plugin-docusaurus": "1.4.18",
+    "@ice/pkg-plugin-jsx-plus": "1.0.3",
+    "@ice/pkg-plugin-rax-component": "1.1.2",
+    "@ice/remark-react-docgen-docusaurus": "1.0.1",
+    "icepkg-site": "0.0.0"
+  },
+  "changesets": []
+}
