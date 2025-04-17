@@ -18,7 +18,6 @@ A fast builder for React components、Node modules and web libraries.
 - **Modern Mode**：Outputs es2017 JavaScript specially designed to work in all modern browsers.
 - **Doc Preview**：Enhanced doc preview, powered by [Docusaurus](https://docusaurus.io/).
 
-
 ## Quick Start
 
 ```bash
@@ -40,6 +39,12 @@ For complete usages, please dive into the [docs](https://pkg.ice.work/).
 ## Contributing
 
 Please see our [CONTRIBUTING.md](/.github/CONTRIBUTING.md)
+
+## Deprecated Packages
+
+Those packages are deprecated and removed in v2 project. You can switch to v1 branch to see the packages.
+
+- `@ice/pkg-plugin-rax-component`
 
 ## License
 
