@@ -3,34 +3,27 @@ import picocolors from 'picocolors';
 
 // copy from consola
 enum LogLevel {
-  Fatal= 0,
-  Error= 0,
-  Warn= 1,
-  Log= 2,
-  Info= 3,
-  Success= 3,
-  Debug= 4,
-  Trace= 5,
-  Silent= -Infinity,
-  Verbose= Infinity,
+  Fatal = 0,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+  Error = 0,
+  Warn = 1,
+  Log = 2,
+  Info = 3,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+  Success = 3,
+  Debug = 4,
+  Trace = 5,
+  Silent = -Infinity,
+  Verbose = Infinity,
 }
 
 const colorize = (type: LogLevel) => (msg: string) => {
   const color =
-    type === LogLevel.Info
-      ? 'green'
-      : type === LogLevel.Error
-        ? 'red'
-        : type === LogLevel.Warn
-          ? 'yellow'
-          : 'white';
+    type === LogLevel.Info ? 'green' : type === LogLevel.Error ? 'red' : type === LogLevel.Warn ? 'yellow' : 'white';
   return picocolors[color](msg);
 };
 
-function colorizeNamespace(
-  name: string,
-  type: LogLevel,
-) {
+function colorizeNamespace(name: string, type: LogLevel) {
   return `${picocolors.dim('[')}${colorize(type)(name.toUpperCase())}${picocolors.dim(']')} `;
 }
 
@@ -42,10 +35,7 @@ function colorizeNamespace(
 export function createLogger(namespace?: string) {
   return {
     info(...args) {
-      consola.info(
-        colorizeNamespace(namespace, LogLevel.Info),
-        ...args.map((item) => colorize(LogLevel.Info)(item)),
-      );
+      consola.info(colorizeNamespace(namespace, LogLevel.Info), ...args.map((item) => colorize(LogLevel.Info)(item)));
     },
 
     error(...args) {
@@ -56,10 +46,7 @@ export function createLogger(namespace?: string) {
     },
 
     warn(...args) {
-      consola.warn(
-        colorizeNamespace(namespace, LogLevel.Warn),
-        ...args.map((item) => colorize(LogLevel.Warn)(item)),
-      );
+      consola.warn(colorizeNamespace(namespace, LogLevel.Warn), ...args.map((item) => colorize(LogLevel.Warn)(item)));
     },
 
     debug(...args) {

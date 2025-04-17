@@ -28,9 +28,11 @@ export class RunnerLinerTerminalReporter implements RunnerReporter {
   private isRendering = false;
   private runningRunners: Runner[] = [];
 
-  constructor(options: {
-    stream?: NodeJS.WriteStream;
-  } = {}) {
+  constructor(
+    options: {
+      stream?: NodeJS.WriteStream;
+    } = {},
+  ) {
     this.stream = options.stream ?? process.stderr;
   }
 
@@ -55,6 +57,7 @@ export class RunnerLinerTerminalReporter implements RunnerReporter {
 
       // remove loading
       this.clear();
+      // eslint-disable-next-line no-console
       console.log(`  ${items.join(' ')}`);
       // resume loading
       this.render();
@@ -74,7 +77,10 @@ export class RunnerLinerTerminalReporter implements RunnerReporter {
     // 停下来之后进行最后一次更新
     this.clear();
     this.isRendering = false;
-    console.log(`  ${chalk.blue(figures.info)} Done in ${formatTimeCost(options.cost)} for ${options.runners.length} tasks`);
+    // eslint-disable-next-line no-console
+    console.log(
+      `  ${chalk.blue(figures.info)} Done in ${formatTimeCost(options.cost)} for ${options.runners.length} tasks`,
+    );
   }
 
   private clear() {

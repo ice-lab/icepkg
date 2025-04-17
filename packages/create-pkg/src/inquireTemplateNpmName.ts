@@ -1,7 +1,6 @@
 import inquirer from 'inquirer';
 import getInfo from './langs/index.js';
 
-
 export default async function inquireTemplateNpmName(workspace?: boolean) {
   const info = await getInfo();
   const baseTemplateChoices = [

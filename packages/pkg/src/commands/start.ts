@@ -1,10 +1,6 @@
 import consola from 'consola';
 import { createBatchChangeHandler, createWatcher } from '../helpers/watcher.js';
-import type {
-  OutputResult,
-  Context,
-  WatchChangedFile, BuildTask,
-} from '../types.js';
+import type { OutputResult, Context, WatchChangedFile, BuildTask } from '../types.js';
 import { RunnerLinerTerminalReporter } from '../helpers/runnerReporter.js';
 import { getTaskRunners } from '../helpers/getTaskRunners.js';
 import { RunnerScheduler } from '../helpers/runnerScheduler.js';
@@ -21,7 +17,7 @@ export default async function start(context: Context) {
   });
 
   if (!taskConfigs.length) {
-    throw new Error('Could not Find any pending tasks when executing \'start\' command.');
+    throw new Error("Could not Find any pending tasks when executing 'start' command.");
   }
 
   await applyHook('before.start.run', {

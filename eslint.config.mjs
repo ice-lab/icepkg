@@ -5,19 +5,17 @@ export default [
     preset: 'pkg',
   }),
   {
-    files: ['**/{demo,__tests__}/**/*.{ts,tsx}', 'scripts/**/*.{ts,js}'],
+    files: [
+      'examples/**/*.{js,jsx,ts,tsx}',
+      'packages/pkg/tests/fixtures/**/*.{js,jsx,ts,tsx}',
+      'scripts/**/*.{ts,js}',
+    ],
     rules: {
       // 测试文件允许使用 console
       'no-console': 'off',
     },
   },
   {
-    ignores: [
-      '**/esm/',
-      '**/es2017',
-      '**/cjs/',
-      '**/.icecream',
-      '**/asn/'
-    ],
+    ignores: ['**/{esm,es2017,cjs,lib}/'],
   },
 ];

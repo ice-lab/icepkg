@@ -1,1 +1,1 @@
-export const id = 'module'
+export const id = 'module';

@@ -4,11 +4,11 @@ import { TaskRunnerContext, WatchChangedFile } from '../../src';
 import { delay } from '../../src/utils';
 
 class MockRunner extends Runner {
-  public doRun(files?: WatchChangedFile[]): Promise<unknown> {
+  doRun(files?: WatchChangedFile[]): Promise<unknown> {
     return Promise.resolve({});
   }
 
-  public doRunWithError(): Promise<unknown> {
+  doRunWithError(): Promise<unknown> {
     return Promise.reject(new Error('Test error'));
   }
 }
@@ -16,8 +16,8 @@ class MockRunner extends Runner {
 describe('Runner Tests', () => {
   const mockContext: TaskRunnerContext = {
     buildTask: {
-      name: 'transform-esm'
-    }
+      name: 'transform-esm',
+    },
   } as TaskRunnerContext;
 
   it('should initialize with correct initial state', () => {
@@ -63,17 +63,17 @@ describe('Runner Tests', () => {
 
     {
       const metric = runner.getMetric('testMark');
-      expect(metric.delta).toEqual([0])
-      expect(metric.cost).toBe(0)
+      expect(metric.delta).toEqual([0]);
+      expect(metric.cost).toBe(0);
     }
 
-    await delay(50)
-    runner.mark('testMark')
+    await delay(50);
+    runner.mark('testMark');
 
     {
       const metric = runner.getMetric('testMark');
-      expect(metric.delta.length).toEqual(2)
-      expect(metric.cost).toBeGreaterThanOrEqual(50)
+      expect(metric.delta.length).toEqual(2);
+      expect(metric.cost).toBeGreaterThanOrEqual(50);
     }
   });
 

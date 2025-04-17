@@ -1,7 +1,12 @@
 import * as swc from '@swc/core';
 
 import type { RollupOptions, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
-import type { Context as _Context, PluginAPI as _PluginAPI, Plugin as _Plugin, TaskConfig as _BuildTask } from 'build-scripts';
+import type {
+  Context as _Context,
+  PluginAPI as _PluginAPI,
+  Plugin as _Plugin,
+  TaskConfig as _BuildTask,
+} from 'build-scripts';
 import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styler';
 import type { FSWatcher } from 'chokidar';
@@ -13,18 +18,22 @@ export type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
 export type PlainObject = Record<string, string | boolean | number | object | null>;
 
-type JSMinify = boolean | {
-  options?: swc.JsMinifyOptions;
-};
+type JSMinify =
+  | boolean
+  | {
+      options?: swc.JsMinifyOptions;
+    };
 
-type CSSMinify = boolean | {
-  options?: Parameters<typeof cssnano>[0];
-};
+type CSSMinify =
+  | boolean
+  | {
+      options?: Parameters<typeof cssnano>[0];
+    };
 
-export type NodeModuleType = typeof NODE_FORMAT_MODULE[number];
-export type ModuleType = typeof ALL_FORMAT_MODULES[number];
+export type NodeModuleType = (typeof NODE_FORMAT_MODULE)[number];
+export type ModuleType = (typeof ALL_FORMAT_MODULES)[number];
 
-export type JsTarget = typeof ALL_FORMAT_TARGET[number];
+export type JsTarget = (typeof ALL_FORMAT_TARGET)[number];
 
 export type StandardTransformFormatString = `${NodeModuleType}:${JsTarget}`;
 export type StandardBundleFormatString = `${ModuleType}:${JsTarget}`;
@@ -100,15 +109,17 @@ export interface BundleUserConfig {
    * "false" - all the dependencies will be bundled by default.
    * @default false
    */
-  externals?: boolean | Record<string, string> | (string | RegExp | Record<string, string>)[];
+  externals?: boolean | Record<string, string> | Array<string | RegExp | Record<string, string>>;
 
   /**
    * Minify JS and CSS bundle.
    */
-  minify?: boolean | {
-    js?: boolean | ((mode: string, command: string) => JSMinify);
-    css?: boolean | ((mode: string, command: string) => CSSMinify);
-  };
+  minify?:
+    | boolean
+    | {
+        js?: boolean | ((mode: string, command: string) => JSMinify);
+        css?: boolean | ((mode: string, command: string) => CSSMinify);
+      };
 
   /**
    * Weather or not add the polyfill to the code.
@@ -128,7 +139,6 @@ export interface BundleUserConfig {
    */
   browser?: boolean;
 }
-
 
 export interface DeclarationUserConfig {
   /**
@@ -199,23 +209,23 @@ export type PluginUserConfig = string | [string, any?] | Plugin;
 
 interface _TaskConfig {
   /**
-  * Entry for a task
-  * @default  `./src/index`
-  */
+   * Entry for a task
+   * @default  `./src/index`
+   */
   entry?: RollupOptions['input'];
   /**
-  * Output directory
-  */
+   * Output directory
+   */
   outputDir?: string;
   /**
    * Define global constant replacements
    */
   define?: PlainObject;
   /**
-    * - true to generate a sourcemap for the code and include it in the result object.
-    * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
-    * but not include it in the result object.
-    */
+   * - true to generate a sourcemap for the code and include it in the result object.
+   * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
+   * but not include it in the result object.
+   */
   sourcemap?: boolean | 'inline';
   /**
    *  Alias to file system paths
@@ -231,9 +241,9 @@ interface _TaskConfig {
    */
   modifyRollupOptions?: Array<(rollupOptions: RollupOptions) => RollupOptions>;
   /**
-  * Configure extra swc compile options.
-  * @see https://swc.rs/docs/configuration/compilation
-  */
+   * Configure extra swc compile options.
+   * @see https://swc.rs/docs/configuration/compilation
+   */
   swcCompileOptions?: Config;
   /**
    * Modify inner swc compile options.
@@ -251,16 +261,14 @@ interface _TaskConfig {
   modifyBabelOptions?: (babelCompileOptions: TransformOptions) => TransformOptions;
 }
 
-export interface BundleTaskConfig extends
-  _TaskConfig,
-  Omit<BundleUserConfig, 'development' | 'minify' | 'formats'> {
+export interface BundleTaskConfig extends _TaskConfig, Omit<BundleUserConfig, 'development' | 'minify' | 'formats'> {
   type: 'bundle';
   originalFormats?: string[];
   formats: BundleFormat[];
   /**
-  * Files extensions
-  * @see https://www.npmjs.com/package/@rollup/plugin-node-resolve
-  */
+   * Files extensions
+   * @see https://www.npmjs.com/package/@rollup/plugin-node-resolve
+   */
   extensions?: string[];
   /**
    * Config styles options. See https://www.npmjs.com/package/rollup-plugin-styles
@@ -300,7 +308,6 @@ export interface DeclarationTaskConfig extends _TaskConfig, DeclarationUserConfi
    */
   declarationOutputDirs?: string[];
 }
-
 
 export type TaskConfig = BundleTaskConfig | TransformTaskConfig | DeclarationTaskConfig;
 
@@ -343,11 +350,11 @@ export enum TaskName {
   'TRANSFORM_ES2017' = 'transform-es2017',
   'BUNDLE_ES5' = 'bundle-es5',
   'BUNDLE_ES2017' = 'bundle-es2017',
-  'DECLARATION' = 'declaration'
+  'DECLARATION' = 'declaration',
 }
 type TaskKey = keyof typeof TaskName;
 // TODO: The type name should be renamed to TaskName.
-export type TaskValue = typeof TaskName[TaskKey];
+export type TaskValue = (typeof TaskName)[TaskKey];
 
 export interface OutputFile {
   // globby parsed path, which is relative

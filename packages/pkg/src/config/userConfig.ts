@@ -1,6 +1,4 @@
-import type {
-  TransformUserConfig,
-} from '../types.js';
+import type { TransformUserConfig } from '../types.js';
 
 function getUserConfig() {
   const defaultTransformUserConfig: TransformUserConfig = {

@@ -1,1 +1,1 @@
-export declare const id: string
+export declare const id: string;

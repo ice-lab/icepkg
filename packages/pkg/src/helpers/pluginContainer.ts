@@ -73,7 +73,7 @@ export interface PluginContainer {
     options?: {
       skip?: Set<Plugin>;
       ssr?: boolean;
-    }
+    },
   ) => Promise<PartialResolvedId | null>;
   transform: (
     code: string,
@@ -81,30 +81,30 @@ export interface PluginContainer {
     options?: {
       inMap?: SourceDescription['map'];
       ssr?: boolean;
-    }
+    },
   ) => Promise<SourceDescription | null>;
   load: (
     id: string,
     options?: {
       ssr?: boolean;
-    }
+    },
   ) => Promise<LoadResult | null>;
   close: () => Promise<void>;
 }
 
 type PluginContext = Omit<
-RollupPluginContext,
-// not documented
-| 'cache'
-// deprecated
-| 'emitAsset'
-| 'emitChunk'
-| 'getAssetFileName'
-| 'getChunkFileName'
-| 'isExternal'
-| 'moduleIds'
-| 'resolveId'
-| 'load'
+  RollupPluginContext,
+  // not documented
+  | 'cache'
+  // deprecated
+  | 'emitAsset'
+  | 'emitChunk'
+  | 'getAssetFileName'
+  | 'getChunkFileName'
+  | 'isExternal'
+  | 'moduleIds'
+  | 'resolveId'
+  | 'load'
 >;
 
 export let parser = acorn.Parser;
@@ -131,13 +131,14 @@ export async function createPluginContainer(
   const rollupPkgPath = resolve(require.resolve('rollup'), '../../package.json');
   const minimalContext: MinimalPluginContext = {
     meta: {
-      rollupVersion: safeRequire(rollupPkgPath)
-        .version,
+      rollupVersion: safeRequire(rollupPkgPath).version,
       // rollupVersion: '2.3.4',
       watchMode: true,
     },
     debug: () => {},
-    error: (e) => { throw e; },
+    error: (e) => {
+      throw e;
+    },
     info: () => {},
     warn: () => {},
   };
@@ -160,9 +161,7 @@ export async function createPluginContainer(
       if (key in info) {
         return info[key];
       }
-      throw Error(
-        `[vite] The "${key}" property of ModuleInfo is not supported.`,
-      );
+      throw Error(`[vite] The "${key}" property of ModuleInfo is not supported.`);
     },
   };
 
@@ -175,11 +174,7 @@ export async function createPluginContainer(
       return null;
     }
     if (!module.info) {
-      module.info = new Proxy(
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        { id, meta: module.meta || EMPTY_OBJECT } as ModuleInfo,
-        ModuleInfoProxy,
-      );
+      module.info = new Proxy({ id, meta: module.meta || EMPTY_OBJECT } as ModuleInfo, ModuleInfoProxy);
     }
     return module.info;
   }
@@ -222,11 +217,7 @@ export async function createPluginContainer(
       }) as ReturnType<PluginContext['parse']>;
     }
 
-    async resolve(
-      id: string,
-      importer?: string,
-      options?: { skipSelf?: boolean },
-    ) {
+    async resolve(id: string, importer?: string, options?: { skipSelf?: boolean }) {
       let skip: Set<Plugin> | undefined;
       if (options?.skipSelf && this._activePlugin) {
         skip = new Set(this._resolveSkips);
@@ -242,9 +233,7 @@ export async function createPluginContainer(
     }
 
     getModuleIds() {
-      return moduleGraph
-        ? moduleGraph.idToModuleMap.keys()
-        : Array.prototype[Symbol.iterator]();
+      return moduleGraph ? moduleGraph.idToModuleMap.keys() : Array.prototype[Symbol.iterator]();
     }
 
     addWatchFile(id: string) {
@@ -265,7 +254,12 @@ export async function createPluginContainer(
       }
 
       // TODO: improve this
-      const name = assetOrFile.type === 'chunk' ? assetOrFile.name || assetOrFile.id : assetOrFile.type === 'asset' ? assetOrFile.name : assetOrFile.fileName;
+      const name =
+        assetOrFile.type === 'chunk'
+          ? assetOrFile.name || assetOrFile.id
+          : assetOrFile.type === 'asset'
+            ? assetOrFile.name
+            : assetOrFile.fileName;
       const source = assetOrFile.type === 'asset' && assetOrFile.source;
       const filename = resolveFileName(assetOrFile.fileName);
 
@@ -273,7 +267,9 @@ export async function createPluginContainer(
       files.set(id, { id, name, filename });
 
       if (assetOrFile.type === 'chunk') {
-        consola.warn(`type ${assetOrFile.type} of this.emitFile is not supported in transform mode. This plugin is likely not compatible`);
+        consola.warn(
+          `type ${assetOrFile.type} of this.emitFile is not supported in transform mode. This plugin is likely not compatible`,
+        );
       } else if (source) {
         fs.writeFileSync(filename, source);
       }
@@ -294,10 +290,7 @@ export async function createPluginContainer(
       return '';
     }
 
-    warn(
-      e: string | RollupError,
-      position?: number | { column: number; line: number },
-    ) {
+    warn(e: string | RollupError, position?: number | { column: number; line: number }) {
       const err = formatError(e, position, this);
       const msg = err.message;
       // const msg = buildErrorMessage(
@@ -311,10 +304,7 @@ export async function createPluginContainer(
       });
     }
 
-    error(
-      e: string | RollupError,
-      position?: number | { column: number; line: number },
-    ): never {
+    error(e: string | RollupError, position?: number | { column: number; line: number }): never {
       // error thrown here is caught by the transform middleware and passed on
       // the the error middleware.
       throw formatError(e, position, this);
@@ -326,9 +316,7 @@ export async function createPluginContainer(
     position: number | { column: number; line: number } | undefined,
     ctx: Context,
   ) {
-    const err = (
-      typeof e === 'string' ? new Error(e) : e
-    ) as postcss.CssSyntaxError & RollupError;
+    const err = (typeof e === 'string' ? new Error(e) : e) as postcss.CssSyntaxError & RollupError;
 
     if (err.file && err.name === 'CssSyntaxError') {
       err.id = normalizePath(err.file);
@@ -345,7 +333,7 @@ export async function createPluginContainer(
           : err.pos != null
             ? err.pos
             : // some rollup plugins, e.g. json, sets position instead of pos
-            (err as any).position;
+              (err as any).position;
 
       if (pos != null) {
         let errLocation;
@@ -353,9 +341,7 @@ export async function createPluginContainer(
           errLocation = numberToPos(ctx._activeCode, pos);
         } catch (err2) {
           logger.error(
-            colors.red(
-              `Error in error handler:\n${err2.stack || err2.message}\n`,
-            ),
+            colors.red(`Error in error handler:\n${err2.stack || err2.message}\n`),
             // print extra newline to separate the two errors
             { error: err2 },
           );
@@ -450,10 +436,10 @@ export async function createPluginContainer(
       if (!combinedMap) {
         return createIfNull
           ? new MagicString(this.originalCode).generateMap({
-            includeContent: true,
-            hires: true,
-            source: this.filename,
-          })
+              includeContent: true,
+              hires: true,
+              source: this.filename,
+            })
           : null;
       }
       if (combinedMap !== this.combinedMap) {
@@ -475,8 +461,7 @@ export async function createPluginContainer(
       let options = rollupOptions;
       for (const plugin of plugins) {
         if (!plugin.options) continue;
-        options =
-          (await plugin.options.call(minimalContext, options)) || options;
+        options = (await plugin.options.call(minimalContext, options)) || options;
       }
       if (options.acornInjectPlugins) {
         parser = acorn.Parser.extend(options.acornInjectPlugins as any);
@@ -494,10 +479,7 @@ export async function createPluginContainer(
       await Promise.all(
         plugins.map((plugin) => {
           if (plugin.buildStart) {
-            return plugin.buildStart.call(
-              new Context(plugin) as any,
-              container.options as NormalizedInputOptions,
-            );
+            return plugin.buildStart.call(new Context(plugin) as any, container.options as NormalizedInputOptions);
           }
           return null;
         }),
@@ -521,12 +503,7 @@ export async function createPluginContainer(
         ctx._activePlugin = plugin;
 
         const pluginResolveStart = isDebug ? performance.now() : 0;
-        const result = await plugin.resolveId.call(
-          ctx as any,
-          rawId,
-          importer,
-          { ssr },
-        );
+        const result = await plugin.resolveId.call(ctx as any, rawId, importer, { ssr });
         if (!result) continue;
 
         if (typeof result === 'string') {
@@ -552,12 +529,7 @@ export async function createPluginContainer(
         // avoid spamming
         if (!seenResolves[key]) {
           seenResolves[key] = true;
-          debugResolve.info(
-            `${timeFrom(resolveStart)}`,
-            `${colors.cyan(rawId)} -> ${colors.dim(
-              id,
-            )}`,
-          );
+          debugResolve.info(`${timeFrom(resolveStart)}`, `${colors.cyan(rawId)} -> ${colors.dim(id)}`);
         }
       }
 
@@ -576,7 +548,7 @@ export async function createPluginContainer(
       for (const plugin of plugins) {
         if (!plugin.load) continue;
         ctx._activePlugin = plugin;
-        // eslint-disable-next-line no-await-in-loop
+
         const result = await plugin.load.call(ctx as any, id, { ssr });
         if (result != null) {
           if (isObject(result)) {
@@ -602,7 +574,6 @@ export async function createPluginContainer(
         const start = isDebug ? performance.now() : 0;
         let result: TransformResult | string | undefined;
         try {
-          // eslint-disable-next-line no-await-in-loop
           result = await plugin.transform.call(ctx as any, code, id, { ssr });
         } catch (e) {
           ctx.error(e);
@@ -641,12 +612,8 @@ export async function createPluginContainer(
     async close() {
       if (closed) return;
       const ctx = new Context();
-      await Promise.all(
-        plugins.map((p) => p.buildEnd && p.buildEnd.call(ctx as any)),
-      );
-      await Promise.all(
-        plugins.map((p) => p.closeBundle && p.closeBundle.call(ctx as any)),
-      );
+      await Promise.all(plugins.map((p) => p.buildEnd && p.buildEnd.call(ctx as any)));
+      await Promise.all(plugins.map((p) => p.closeBundle && p.closeBundle.call(ctx as any)));
       closed = true;
     },
   };

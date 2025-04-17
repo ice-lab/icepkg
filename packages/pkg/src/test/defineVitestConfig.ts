@@ -1,7 +1,12 @@
 import getTaskConfig from './getTaskConfig.js';
 import { merge } from 'es-toolkit/object';
 import type { Service } from 'build-scripts';
-import type { UserConfigExport, ConfigEnv, UserConfig as VitestUserConfig, UserConfigFn as VitestUserConfigFn } from 'vitest/config';
+import type {
+  UserConfigExport,
+  ConfigEnv,
+  UserConfig as VitestUserConfig,
+  UserConfigFn as VitestUserConfigFn,
+} from 'vitest/config';
 import type { TaskConfig, UserConfig } from '../types';
 
 export default function defineVitestConfig(

@@ -6,13 +6,7 @@ import consola from 'consola';
 import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
 import { checkDependencyExists, isObject, timeFrom } from '../utils.js';
-import type {
-  OutputFile,
-  OutputResult,
-  TaskRunnerContext,
-  TransformTaskConfig,
-  WatchChangedFile,
-} from '../types.js';
+import type { OutputFile, OutputResult, TaskRunnerContext, TransformTaskConfig, WatchChangedFile } from '../types.js';
 import type { RollupOptions, SourceMapInput } from 'rollup';
 import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
 import { getRollupOptions } from '../helpers/getRollupOptions.js';
@@ -78,12 +72,13 @@ async function runTransform(
     }
   } else {
     for (const entryDir of entryDirs) {
-      files.push(...loadEntryFiles(entryDir, (userConfig?.transform?.excludes || []))
-        .map((filePath) => ({
+      files.push(
+        ...loadEntryFiles(entryDir, userConfig?.transform?.excludes || []).map((filePath) => ({
           filePath,
           absolutePath: resolve(entryDir, filePath),
           ext: extname(filePath),
-        })));
+        })),
+      );
     }
   }
 
@@ -135,9 +130,7 @@ async function runTransform(
 
     const transformResult = await container.transform(code, files[i].absolutePath);
 
-    if (transformResult === null ||
-      (isObject(transformResult) && transformResult.code === null)
-    ) {
+    if (transformResult === null || (isObject(transformResult) && transformResult.code === null)) {
       // Do not need to transform the code.
     } else {
       files[i].code = code = transformResult.code;
@@ -146,7 +139,7 @@ async function runTransform(
       const destFilename = transformResult?.meta?.filename;
 
       if (destFilename) {
-        files[i].dest = (files[i].dest).replace(basename(files[i].dest), destFilename);
+        files[i].dest = files[i].dest.replace(basename(files[i].dest), destFilename);
       }
     }
 

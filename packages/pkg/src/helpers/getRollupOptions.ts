@@ -1,4 +1,3 @@
-import escapeStringRegexp from 'escape-string-regexp';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import styles from 'rollup-plugin-styler';
@@ -16,19 +15,8 @@ import getDefaultDefineValues from './getDefaultDefineValues.js';
 import transformAliasPlugin from '../rollupPlugins/alias.js';
 import bundleAliasPlugin from '@rollup/plugin-alias';
 
-import {
-  Context,
-  TaskName,
-  NodeEnvMode,
-  BundleTaskConfig,
-  TaskRunnerContext,
-  StylesRollupPluginOptions,
-} from '../types.js';
-import type {
-  RollupOptions,
-  OutputOptions,
-  Plugin,
-} from 'rollup';
+import { Context, NodeEnvMode, BundleTaskConfig, TaskRunnerContext, StylesRollupPluginOptions } from '../types.js';
+import type { RollupOptions, OutputOptions, Plugin } from 'rollup';
 import path from 'path';
 
 interface PkgJson {
@@ -39,10 +27,7 @@ interface PkgJson {
   [k: string]: string | Record<string, string>;
 }
 
-export function getRollupOptions(
-  context: Context,
-  taskRunnerContext: TaskRunnerContext,
-) {
+export function getRollupOptions(context: Context, taskRunnerContext: TaskRunnerContext) {
   const { pkg, commandArgs, command, rootDir } = context;
   const { name: taskName, config: taskConfig } = taskRunnerContext.buildTask;
   const rollupOptions: RollupOptions = {};
@@ -87,10 +72,7 @@ export function getRollupOptions(
 
     const cssMinify = taskConfig.cssMinify(taskRunnerContext.mode, command);
     const defaultStylesOptions: StylesRollupPluginOptions = {
-      plugins: [
-        autoprefixer(),
-        PostcssPluginRpxToVw,
-      ],
+      plugins: [autoprefixer(), PostcssPluginRpxToVw],
       mode: 'extract',
       autoModules: true,
       minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
@@ -99,7 +81,9 @@ export function getRollupOptions(
     const alias = {};
     Object.keys(taskConfig.alias).forEach((key) => {
       // Add full path for relative path alias
-      alias[key] = taskConfig.alias[key].startsWith('.') ? path.resolve(rootDir, taskConfig.alias[key]) : taskConfig.alias[key];
+      alias[key] = taskConfig.alias[key].startsWith('.')
+        ? path.resolve(rootDir, taskConfig.alias[key])
+        : taskConfig.alias[key];
     });
     plugins.push(
       replace({
@@ -110,24 +94,38 @@ export function getRollupOptions(
         },
         preventAssignment: true,
       }),
-      styles((taskConfig.modifyStylesOptions ?? [((options) => options)]).reduce(
-        (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
-        defaultStylesOptions,
-      )),
+      styles(
+        (taskConfig.modifyStylesOptions ?? [(options) => options]).reduce(
+          (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
+          defaultStylesOptions,
+        ),
+      ),
       image(),
       json(),
-      nodeResolve({ // To locates modules using the node resolution algorithm.
+      nodeResolve({
+        // To locates modules using the node resolution algorithm.
         extensions: [
-          '.mjs', '.js', '.json', '.node', // plugin-node-resolve default extensions
-          '.ts', '.jsx', '.tsx', '.mts', '.cjs', '.cts', // @ice/pkg default extensions
+          '.mjs',
+          '.js',
+          '.json',
+          '.node', // plugin-node-resolve default extensions
+          '.ts',
+          '.jsx',
+          '.tsx',
+          '.mts',
+          '.cjs',
+          '.cts', // @ice/pkg default extensions
           ...(taskConfig.extensions || []),
         ],
         browser: taskConfig.browser,
       }),
-      commonjs({ // To convert commonjs to import, make it compatible with rollup to bundle
+      commonjs({
+        // To convert commonjs to import, make it compatible with rollup to bundle
         extensions: [
           '.js', // plugin-commonjs default extensions
-          '.jsx', '.ts', '.tsx',
+          '.jsx',
+          '.ts',
+          '.tsx',
           ...(taskConfig.extensions || []),
         ],
         transformMixedEsModules: true,
@@ -137,17 +135,19 @@ export function getRollupOptions(
       }),
     );
     if (commandArgs.analyzer) {
-      plugins.push(visualizer({
-        title: `Rollup Visualizer(${taskName})`,
-        open: true,
-        filename: `${taskName}-stats.html`,
-      }));
+      plugins.push(
+        visualizer({
+          title: `Rollup Visualizer(${taskName})`,
+          open: true,
+          filename: `${taskName}-stats.html`,
+        }),
+      );
     }
   }
 
   rollupOptions.plugins = plugins;
 
-  return (taskConfig.modifyRollupOptions ?? [((options) => options)]).reduce(
+  return (taskConfig.modifyRollupOptions ?? [(options) => options]).reduce(
     (prevRollupOptions, modifyRollupOptions) => modifyRollupOptions(prevRollupOptions),
     rollupOptions,
   );
@@ -160,13 +160,7 @@ interface GetRollupOutputsOptions {
   mode: NodeEnvMode;
   command: Context['command'];
 }
-function getRollupOutputs({
-  globals,
-  bundleTaskConfig,
-  pkg,
-  mode,
-  command,
-}: GetRollupOutputsOptions): OutputOptions[] {
+function getRollupOutputs({ globals, bundleTaskConfig, pkg, mode, command }: GetRollupOutputsOptions): OutputOptions[] {
   const { outputDir, vendorName = 'vendor' } = bundleTaskConfig;
 
   const outputFormats = bundleTaskConfig.formats ?? [];
@@ -184,32 +178,33 @@ function getRollupOutputs({
     assetFileNames: getFilename('[name]', format.module, format.target, mode, '[ext]'),
     entryFileNames: getFilename('[name]', format.module, format.target, mode, 'js'),
     chunkFileNames: getFilename('[name]', format.module, format.target, mode, 'js'),
-    manualChunks: format.module !== 'umd' ? (id, { getModuleInfo }) => {
-      if (/node_modules/.test(id)) {
-        return vendorName;
-      }
+    manualChunks:
+      format.module !== 'umd'
+        ? (id, { getModuleInfo }) => {
+            if (/node_modules/.test(id)) {
+              return vendorName;
+            }
 
-      const entryPoints = [];
+            const entryPoints = [];
 
-      const idsToHandle = new Set(getModuleInfo(id).importers);
+            const idsToHandle = new Set(getModuleInfo(id).importers);
 
-      for (const moduleId of idsToHandle) {
-        const { isEntry, importers } = getModuleInfo(
-          moduleId,
-        );
-        if (isEntry) {
-          entryPoints.push(moduleId);
-        }
+            for (const moduleId of idsToHandle) {
+              const { isEntry, importers } = getModuleInfo(moduleId);
+              if (isEntry) {
+                entryPoints.push(moduleId);
+              }
 
-        for (const importerId of importers) {
-          idsToHandle.add(importerId);
-        }
-      }
-      // For multiple entries, we put it into a "shared code" bundle
-      if (entryPoints.length > 1) {
-        return vendorName;
-      }
-    } : undefined,
+              for (const importerId of importers) {
+                idsToHandle.add(importerId);
+              }
+            }
+            // For multiple entries, we put it into a "shared code" bundle
+            if (entryPoints.length > 1) {
+              return vendorName;
+            }
+          }
+        : undefined,
     plugins: [
       minify && minifyPlugin(bundleTaskConfig.sourcemap, typeof minify === 'boolean' ? {} : minify.options),
     ].filter(Boolean),
@@ -217,12 +212,9 @@ function getRollupOutputs({
 }
 
 const BUILTIN_EXTERNAL_MAP: Record<string, string[]> = {
-  'builtin:normal': [
-    'core-js',
-    'regenerator-runtime',
-  ],
+  'builtin:normal': ['core-js', 'regenerator-runtime'],
   'builtin:node': builtinNodeModules,
-}
+};
 
 function getExternalsAndGlobals(
   bundleTaskConfig: BundleTaskConfig,
@@ -241,7 +233,7 @@ function getExternalsAndGlobals(
       ...BUILTIN_EXTERNAL_MAP['builtin:node'],
       ...Object.keys(pkg.dependencies ?? {}),
       ...Object.keys(pkg.peerDependencies ?? {}),
-    )
+    );
   } else if (userExternals === false) {
     // do nothing
   } else if (Array.isArray(userExternals)) {
@@ -256,7 +248,7 @@ function getExternalsAndGlobals(
         regexpExternals.push(item);
       } else if (typeof item === 'object') {
         exactExternals.push(...Object.keys(item));
-        Object.assign(globals, item)
+        Object.assign(globals, item);
       }
     }
   } else if (typeof userExternals === 'object') {
@@ -264,9 +256,10 @@ function getExternalsAndGlobals(
     Object.assign(globals, userExternals);
   }
 
-  const externalFun = !exactExternals.length && !regexpExternals.length
-    ? () => false
-    : (id: string) => exactExternals.includes(id) || regexpExternals.some(reg => reg.test(id));
+  const externalFun =
+    !exactExternals.length && !regexpExternals.length
+      ? () => false
+      : (id: string) => exactExternals.includes(id) || regexpExternals.some((reg) => reg.test(id));
 
   return [externalFun, globals];
 }

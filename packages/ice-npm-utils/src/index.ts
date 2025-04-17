@@ -28,14 +28,13 @@ function getNpmTarball(npm: string, version?: string, registry?: string): Promis
   });
 }
 
-
 /**
  * 获取 tar 并将其解压到指定的文件夹
  */
 function getAndExtractTarball(
   destDir: string,
   tarball: string,
-  // eslint-disable-next-line
+
   progressFunc = (state) => {},
   formatFilename = (filename: string): string => {
     // 为了兼容
@@ -95,9 +94,11 @@ function getAndExtractTarball(
           allWriteStream.push(
             new Promise((streamResolve) => {
               entry
-                .pipe(fse.createWriteStream(destPath, {
-                  mode: entry.mode,
-                }))
+                .pipe(
+                  fse.createWriteStream(destPath, {
+                    mode: entry.mode,
+                  }),
+                )
                 .on('finish', () => streamResolve(true))
                 .on('close', () => streamResolve(true)); // resolve when file is empty in node v8
             }),
@@ -257,7 +258,6 @@ async function readPackageJSON(projectPath: string) {
   const packagePath = path.join(projectPath, packageJSONFilename);
   const packagePathIsExist = await fse.pathExists(packagePath);
   if (!packagePathIsExist) {
-    // eslint-disable-next-line quotes
     throw new Error("Project's package.json file not found in local environment");
   }
   const content = await fse.readJson(packagePath);

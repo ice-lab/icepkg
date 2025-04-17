@@ -1,10 +1,4 @@
-import {
-  BundleTaskConfig,
-  TaskName,
-  TaskValue,
-  TransformTaskConfig,
-  NodeEnvMode,
-} from '../types.js';
+import { BundleTaskConfig, TransformTaskConfig, NodeEnvMode } from '../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
 import getDefaultDefineValues from './getDefaultDefineValues.js';
 
@@ -21,9 +15,7 @@ const MODERN_BROWSER_TARGETS = {
   ios: 11,
 };
 
-export const getDefaultBundleSwcConfig = (
-  bundleTaskConfig: BundleTaskConfig,
-): Config => {
+export const getDefaultBundleSwcConfig = (bundleTaskConfig: BundleTaskConfig): Config => {
   const browserTargets = bundleTaskConfig.formats[0].target !== 'es5' ? MODERN_BROWSER_TARGETS : LEGACY_BROWSER_TARGETS;
   return {
     jsc: {
@@ -42,13 +34,8 @@ export const getDefaultBundleSwcConfig = (
   };
 };
 
-export const getDefaultTransformSwcConfig = (
-  transformTaskConfig: TransformTaskConfig,
-  mode: NodeEnvMode,
-): Config => {
-  const module: ModuleConfig = transformTaskConfig.format.module === 'cjs'
-    ? { type: 'commonjs' }
-    : undefined;
+export const getDefaultTransformSwcConfig = (transformTaskConfig: TransformTaskConfig, mode: NodeEnvMode): Config => {
+  const module: ModuleConfig = transformTaskConfig.format.module === 'cjs' ? { type: 'commonjs' } : undefined;
 
   const target = transformTaskConfig.format.target === 'es2017' ? 'es2017' : 'es5';
 

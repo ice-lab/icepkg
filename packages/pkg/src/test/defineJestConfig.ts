@@ -26,7 +26,10 @@ export default function defineJestConfig(
 }
 
 async function getDefaultConfig(service: Service<TaskConfig, {}, UserConfig>): Promise<JestConfig> {
-  const { taskConfig, context: { rootDir } } = await getTaskConfig(service);
+  const {
+    taskConfig,
+    context: { rootDir },
+  } = await getTaskConfig(service);
   const { alias = {}, define = {} } = taskConfig;
 
   const moduleNameMapper = generateModuleNameMapper(rootDir, alias);

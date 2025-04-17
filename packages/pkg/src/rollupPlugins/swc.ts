@@ -1,7 +1,12 @@
 import { extname, basename, relative, sep } from 'path';
 import * as swc from '@swc/core';
 import { isTypescriptOnly } from '../helpers/suffix.js';
-import { checkDependencyExists, createScriptsFilter, formatCnpmDepFilepath, getIncludeNodeModuleScripts } from '../utils.js';
+import {
+  checkDependencyExists,
+  createScriptsFilter,
+  formatCnpmDepFilepath,
+  getIncludeNodeModuleScripts,
+} from '../utils.js';
 import { init, parse } from 'es-module-lexer';
 import MagicString from 'magic-string';
 import type { Options as SwcCompileOptions, Config, TsParserConfig, EsParserConfig } from '@swc/core';
@@ -62,11 +67,7 @@ const normalizeSwcConfig = (
     return moduleConfig;
   }
 
-  return merge(merge(
-    commonOptions,
-    mergeOptions,
-  ),
-  {
+  return merge(merge(commonOptions, mergeOptions), {
     module: getModuleConfig(ext, mergeOptions?.module),
   });
 };
@@ -82,11 +83,13 @@ async function transformImport(source: string, sourceFilename: string) {
     }
     return s;
   };
-  const isESM = exports.length > 0 || imports.some((targetImport) => {
-    const importString = targetImport.n;
-    // `targetImport.n` get undefined when code has `import.meta.*`.
-    return importString && !importString.includes('core-js') && !importString.includes('@swc/helpers');
-  });
+  const isESM =
+    exports.length > 0 ||
+    imports.some((targetImport) => {
+      const importString = targetImport.n;
+      // `targetImport.n` get undefined when code has `import.meta.*`.
+      return importString && !importString.includes('core-js') && !importString.includes('@swc/helpers');
+    });
 
   imports.forEach((targetImport) => {
     if (!targetImport.n) {
@@ -101,24 +104,28 @@ async function transformImport(source: string, sourceFilename: string) {
         const matchImport = importStr.match(/import\s+{\s+([\w*\s{},]*)\s+}\s+from\s+['"](.*)['"]/);
         if (matchImport) {
           const [, identifier] = matchImport;
-          const replaceModule = `var ${identifier.split(' as ')[1].trim()} = require('${targetImport.n.replace(/@swc\/helpers\/_\/(.*)$/,
-            (_, matched) => `@swc/helpers/cjs/${matched}.cjs`)}')._`;
+          const replaceModule = `var ${identifier.split(' as ')[1].trim()} = require('${targetImport.n.replace(
+            /@swc\/helpers\/_\/(.*)$/,
+            (_, matched) => `@swc/helpers/cjs/${matched}.cjs`,
+          )}')._`;
           str().overwrite(targetImport.ss, targetImport.se, replaceModule);
         }
       }
     }
   });
 
-  return s ? {
-    code: s.toString(),
-    map: s.generateMap({
-      source: sourceFilename,
-      file: `${sourceFilename}.map`,
-      includeContent: true,
-    }),
-  } : {
-    code: source,
-  };
+  return s
+    ? {
+        code: s.toString(),
+        map: s.generateMap({
+          source: sourceFilename,
+          file: `${sourceFilename}.map`,
+          includeContent: true,
+        }),
+      }
+    : {
+        code: source,
+      };
 }
 
 /**
@@ -130,9 +137,7 @@ const swcPlugin = (
   extraSwcOptions?: Config,
   compileDependencies?: BundleTaskConfig['compileDependencies'],
 ): Plugin => {
-  const scriptsFilter = createScriptsFilter(
-    getIncludeNodeModuleScripts(compileDependencies),
-  );
+  const scriptsFilter = createScriptsFilter(getIncludeNodeModuleScripts(compileDependencies));
   return {
     name: 'ice-pkg:swc',
 

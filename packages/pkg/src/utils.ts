@@ -11,10 +11,7 @@ import remapping from '@ampproject/remapping';
 import { loadPkg } from './helpers/load.js';
 import consola from 'consola';
 import type { PlainObject, OutputResult, TaskConfig } from './types';
-import type {
-  DecodedSourceMap,
-  RawSourceMap,
-} from '@ampproject/remapping';
+import type { DecodedSourceMap, RawSourceMap } from '@ampproject/remapping';
 import type { FSWatcher } from 'chokidar';
 import { mapValues } from 'es-toolkit/object';
 
@@ -35,11 +32,7 @@ export function normalizePath(id: string): string {
   return path.posix.normalize(isWindows ? slash(id) : id);
 }
 
-export function ensureWatchedFile(
-  watcher: FSWatcher,
-  file: string | null,
-  root: string,
-): void {
+export function ensureWatchedFile(watcher: FSWatcher, file: string | null, root: string): void {
   if (
     file &&
     // only need to watch if out of root
@@ -53,9 +46,7 @@ export function ensureWatchedFile(
   }
 }
 
-export function createDebugger(
-  namespace: string,
-): debug.Debugger['log'] {
+export function createDebugger(namespace: string): debug.Debugger['log'] {
   const log = debug(namespace);
   return (msg: string, ...args: any[]) => {
     log(msg, ...args);
@@ -70,9 +61,7 @@ export function numberToPos(
 ): { line: number; column: number } {
   if (typeof offset !== 'number') return offset;
   if (offset > source.length) {
-    throw new Error(
-      `offset is longer than source length! offset ${offset} > length ${source.length}`,
-    );
+    throw new Error(`offset is longer than source length! offset ${offset} > length ${source.length}`);
   }
   const lines = source.split(splitRE);
   let counted = 0;
@@ -89,10 +78,7 @@ export function numberToPos(
   return { line: line + 1, column };
 }
 
-export function posToNumber(
-  source: string,
-  pos: number | { line: number; column: number },
-): number {
+export function posToNumber(source: string, pos: number | { line: number; column: number }): number {
   if (typeof pos === 'number') return pos;
   const lines = source.split(splitRE);
   const { line, column } = pos;
@@ -123,19 +109,12 @@ export function generateCodeFrame(
       for (let j = i - range; j <= i + range || end > count; j++) {
         if (j < 0 || j >= lines.length) continue;
         const line = j + 1;
-        res.push(
-          `${line}${' '.repeat(Math.max(3 - String(line).length, 0))}|  ${
-            lines[j]
-          }`,
-        );
+        res.push(`${line}${' '.repeat(Math.max(3 - String(line).length, 0))}|  ${lines[j]}`);
         const lineLength = lines[j].length;
         if (j === i) {
           // push underline
           const pad = start - (count - lineLength) + 1;
-          const length = Math.max(
-            1,
-            end > count ? lineLength - pad : end - start,
-          );
+          const length = Math.max(1, end > count ? lineLength - pad : end - start);
           res.push(`   |  ${' '.repeat(pad)}${'^'.repeat(length)}`);
         } else if (j > i) {
           if (end > count) {
@@ -162,18 +141,14 @@ export function combineSourcemaps(
   filename: string,
   sourcemapList: Array<DecodedSourceMap | RawSourceMap>,
 ): RawSourceMap {
-  if (
-    sourcemapList.length === 0 ||
-    sourcemapList.every((m) => m.sources.length === 0)
-  ) {
+  if (sourcemapList.length === 0 || sourcemapList.every((m) => m.sources.length === 0)) {
     return { ...nullSourceMap };
   }
 
   // We don't declare type here so we can convert/fake/map as RawSourceMap
   let map; // : SourceMap
   let mapIndex = 1;
-  const useArrayInterface =
-    sourcemapList.slice(0, -1).find((m) => m.sources.length !== 1) === undefined;
+  const useArrayInterface = sourcemapList.slice(0, -1).find((m) => m.sources.length !== 1) === undefined;
   if (useArrayInterface) {
     map = remapping(sourcemapList, () => null, true);
   } else {
@@ -201,9 +176,9 @@ export const require = createRequire(import.meta.url);
 export const safeRequire = (filePath: string) => {
   try {
     // FIXME: how to require file without require
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+
     return require(filePath);
-  } catch (e) {
+  } catch (_e) {
     return {};
   }
 };
@@ -213,12 +188,12 @@ export const safeRequire = (filePath: string) => {
  * @param name
  * @returns Promise<Boolean>
  */
-export const isDirectory =
-  (name: string) => fs.existsSync(name) && fs.statSync(name).isDirectory();
+export const isDirectory = (name: string) => fs.existsSync(name) && fs.statSync(name).isDirectory();
 
 export const isFile = (name: string) => fs.existsSync(name) && fs.statSync(name).isFile();
 
-export const isObject = (value: unknown): value is Record<string, any> => Object.prototype.toString.call(value) === '[object Object]';
+export const isObject = (value: unknown): value is Record<string, any> =>
+  Object.prototype.toString.call(value) === '[object Object]';
 
 export const booleanToObject = (value: object | boolean): object => (isObject(value) ? value : {});
 
@@ -265,7 +240,7 @@ export function debouncePromise<T extends unknown[]>(
 //            3000-    Red
 export const timeFrom = (start: number, subtract = 0): string => {
   const time: number | string = performance.now() - start - subtract;
-  const timeString = (`${time.toFixed(2)} ms`).padEnd(5, ' ');
+  const timeString = `${time.toFixed(2)} ms`.padEnd(5, ' ');
   if (time < 500) {
     return picocolors.green(timeString);
   } else if (time < 3000) {
@@ -276,7 +251,7 @@ export const timeFrom = (start: number, subtract = 0): string => {
 };
 
 export function formatTimeCost(time: number) {
-  const timeString = (`${time.toFixed(2)} ms`).padEnd(5, ' ');
+  const timeString = `${time.toFixed(2)} ms`.padEnd(5, ' ');
   if (time < 500) {
     return picocolors.green(timeString);
   } else if (time < 3000) {
@@ -311,7 +286,11 @@ export function getIncludeNodeModuleScripts(compileDependencies: boolean | Array
     // will not match:
     // node_modules/abc/node_modules/def/index.js
     // node_modules/def/index.js
-    return [new RegExp(`node_modules/(${compileDependencies.map((dep: string | RegExp) => (`${typeof dep === 'string' ? dep : dep.source}`)).join('|')})/(?!node_modules/).*.(?:[cm]?[jt]s|[jt]sx)$`)];
+    return [
+      new RegExp(
+        `node_modules/(${compileDependencies.map((dep: string | RegExp) => `${typeof dep === 'string' ? dep : dep.source}`).join('|')})/(?!node_modules/).*.(?:[cm]?[jt]s|[jt]sx)$`,
+      ),
+    ];
   }
   // default
   return [];
@@ -323,7 +302,8 @@ export function getIncludeNodeModuleScripts(compileDependencies: boolean | Array
  * @example transform react/node_modules/_idb@7.1.1@idb/build/index.js to react/node_modules/idb/build/index.js
  */
 export function formatCnpmDepFilepath(filepath: string) {
-  const reg = /(.*(?:\/|\\\\))(?:_.*@(?:\d+)\.(?:\d+)\.(?:\d+)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?@)(.*)/;
+  const reg =
+    /(.*(?:\/|\\\\))(?:_.*@(?:\d+)\.(?:\d+)\.(?:\d+)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?@)(.*)/;
   const matchedResult = filepath.match(reg);
   if (!matchedResult) {
     return filepath;
@@ -340,10 +320,7 @@ export function formatCnpmDepFilepath(filepath: string) {
  *
  * @example exclude node_modules createScriptsFilter([], [/node_modules/])
  */
-export const createScriptsFilter = (
-  extraIncludes: RegExp[] = [],
-  extraExcludes: RegExp[] = [],
-) => {
+export const createScriptsFilter = (extraIncludes: RegExp[] = [], extraExcludes: RegExp[] = []) => {
   // Match non node_modules files. In ICEPKG V2, we only compile src/**.m?[jt]sx? files.
   const includes = [/^(?!.*node_modules\/).*\.(?:[cm]?[jt]s|[jt]sx)$/].concat(extraIncludes);
 
@@ -387,15 +364,15 @@ const pkg = loadPkg(cwd);
 
 export function checkDependencyExists(dependency: string, link: string) {
   if (!pkg?.dependencies?.[dependency]) {
-    consola.error(`当前组件/库依赖 \`${dependency}\`, 请运行命令 \`npm i ${dependency} --save\` 安装此依赖。更多详情请看 \`${link}\``);
+    consola.error(
+      `当前组件/库依赖 \`${dependency}\`, 请运行命令 \`npm i ${dependency} --save\` 安装此依赖。更多详情请看 \`${link}\``,
+    );
     process.exit(1);
   }
   return pkg?.dependencies?.[dependency];
 }
 
-export const getBuiltInPlugins = () => [
-  require.resolve('./plugins/component.js'),
-];
+export const getBuiltInPlugins = () => [require.resolve('./plugins/component.js')];
 
 /**
  * Run promise all with max concurrent limit
@@ -419,14 +396,17 @@ export async function concurrentPromiseAll<T>(tasks: Array<() => Promise<T>>, li
       if (i < size && running < limit) {
         const index = i++;
         running += 1;
-        Promise.resolve(tasks[index]()).then((v) => {
-          results[index] = v;
-          running -= 1;
-          next();
-        }, (e) => {
-          reject(e);
-          running = -1;
-        });
+        Promise.resolve(tasks[index]()).then(
+          (v) => {
+            results[index] = v;
+            running -= 1;
+            next();
+          },
+          (e) => {
+            reject(e);
+            running = -1;
+          },
+        );
       }
     };
 
@@ -436,7 +416,8 @@ export async function concurrentPromiseAll<T>(tasks: Array<() => Promise<T>>, li
   });
 }
 
-export interface TypedEventEmitterInstance<T extends Record<string, unknown>> extends Omit<EventEmitter, 'on' | 'off' | 'emit'> {
+export interface TypedEventEmitterInstance<T extends Record<string, unknown>>
+  extends Omit<EventEmitter, 'on' | 'off' | 'emit'> {
   on: <K extends keyof T>(name: K, fn: (value: T[K]) => void) => this;
   off: <K extends keyof T>(name: K, fn: (value: T[K]) => void) => this;
   emit: <K extends keyof T>(name: K, value: T[K]) => this;

@@ -2,7 +2,6 @@ import { osLocale } from 'os-locale';
 import zhCN from './zh-CN.js';
 import enUS from './en-US.js';
 
-
 let lang: string;
 
 async function getLocale() {
@@ -12,7 +11,6 @@ async function getLocale() {
   }
   return lang;
 }
-
 
 export default async function getInfo() {
   const currentLang = await getLocale();

@@ -5,15 +5,18 @@ import './index.css';
  * Test component
  */
 const Test = ({ title }) => {
-  // eslint-disable-next-line
   console.log(__DEV__);
   console.log(process.env.NODE_ENV);
 
   const [visible, setVisible] = React.useState(false);
   return (
     <div>
-      <h1 style={{ fontSize: '100rpx' }} data-testid="title">{title}</h1>
-      <button onClick={() => setVisible(!visible)} className="btn">Click Me to Set Visible</button>
+      <h1 style={{ fontSize: '100rpx' }} data-testid="title">
+        {title}
+      </h1>
+      <button onClick={() => setVisible(!visible)} className="btn">
+        Click Me to Set Visible
+      </button>
 
       <div>
         <div x-if={visible}>Hello</div>

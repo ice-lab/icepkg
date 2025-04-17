@@ -1,4 +1,4 @@
-import { BuildTask, BundleUserConfig, Context, DeclarationUserConfig, TransformUserConfig, UserConfig } from '../types.js'; // 添加 .js 后缀
+import { BuildTask, BundleUserConfig, Context, DeclarationUserConfig } from '../types.js'; // 添加 .js 后缀
 import { formatEntry, getTransformDefaultOutputDir } from '../helpers/getTaskIO.js'; // 添加 .js 后缀
 import getDefaultDefineValues from '../helpers/getDefaultDefineValues.js'; // 添加 .js 后缀
 import { stringifyObject } from '../utils.js'; // 添加 .js 后缀
@@ -15,7 +15,6 @@ const mergeDefaults: typeof merge = (target, source) => {
 const defaultMinifyFunction = (mode: string, command: string) => {
   return mode === 'production' && command === 'build';
 };
-
 
 const defaultBundleUserConfig: BundleUserConfig = {
   outputDir: 'dist',
@@ -42,13 +41,11 @@ export function initContextTasks(ctx: Context) {
 /**
  * @internal export for test
  */
-export function initTask(buildTask: BuildTask, { userConfig,
-  rootDir,
-  command }: Pick<Context, 'userConfig' | 'rootDir' | 'command'>) {
-  const {
-    config,
-    name: taskName,
-  } = buildTask;
+export function initTask(
+  buildTask: BuildTask,
+  { userConfig, rootDir, command }: Pick<Context, 'userConfig' | 'rootDir' | 'command'>,
+) {
+  const { config, name: taskName } = buildTask;
 
   config.entry = formatEntry(config.entry ?? userConfig.entry);
   config.alias ??= userConfig.alias;
@@ -70,20 +67,15 @@ export function initTask(buildTask: BuildTask, { userConfig,
     const bundleConfig = userConfig.bundle ?? {};
     config.modes ??= bundleConfig.modes ?? [expectedMode];
     const defaultBundleSwcConfig = getDefaultBundleSwcConfig(config);
-    config.swcCompileOptions = typeof config.modifySwcCompileOptions === 'function' ?
-      config.modifySwcCompileOptions(defaultBundleSwcConfig) :
-      merge(
-        defaultBundleSwcConfig,
-        config.swcCompileOptions || {},
-      );
+    config.swcCompileOptions =
+      typeof config.modifySwcCompileOptions === 'function'
+        ? config.modifySwcCompileOptions(defaultBundleSwcConfig)
+        : merge(defaultBundleSwcConfig, config.swcCompileOptions || {});
     // TODO: 判断下这个东西是否真的有用
     // Set outputDir to process.env for CI
     process.env.ICE_PKG_BUNDLE_OUTPUT_DIR = config.outputDir;
     const originMinifyConfig = bundleConfig.minify ?? defaultBundleUserConfig.minify ?? {};
-    let {
-      jsMinify,
-      cssMinify,
-    } = config;
+    let { jsMinify, cssMinify } = config;
     if (typeof originMinifyConfig === 'object') {
       jsMinify ??= getMinifyFunction(originMinifyConfig.js);
       cssMinify ??= getMinifyFunction(originMinifyConfig.css);
@@ -101,18 +93,19 @@ export function initTask(buildTask: BuildTask, { userConfig,
     config.modes ??= [expectedMode];
     config.outputDir ??= getTransformDefaultOutputDir(rootDir, taskName);
     const defaultTransformSwcConfig = getDefaultTransformSwcConfig(config, expectedMode);
-    config.swcCompileOptions = typeof config.modifySwcCompileOptions === 'function' ?
-      config.modifySwcCompileOptions(defaultTransformSwcConfig) :
-      merge(
-        defaultTransformSwcConfig,
-        config.swcCompileOptions || {},
-      );
+    config.swcCompileOptions =
+      typeof config.modifySwcCompileOptions === 'function'
+        ? config.modifySwcCompileOptions(defaultTransformSwcConfig)
+        : merge(defaultTransformSwcConfig, config.swcCompileOptions || {});
   } else if (config.type === 'declaration') {
     const { declaration: declarationConfig } = userConfig;
     if (declarationConfig === false) {
       throw new Error('Cannot disable declaration when transform formats is not empty.');
     }
-    config.outputMode ??= declarationConfig === true ? defaultDeclarationUserConfig.outputMode : declarationConfig.outputMode ?? defaultDeclarationUserConfig.outputMode;
+    config.outputMode ??=
+      declarationConfig === true
+        ? defaultDeclarationUserConfig.outputMode
+        : (declarationConfig.outputMode ?? defaultDeclarationUserConfig.outputMode);
     // 这个 output 仅仅用于生成正确的 .d.ts 的 alias，不做实际输出目录
     config.outputDir = path.resolve(rootDir, config.transformFormats[0]);
     if (config.outputMode === 'unique') {

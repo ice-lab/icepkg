@@ -26,19 +26,13 @@ interface ButtonProps {
 export const app: Application = { add: () => Promise.resolve(1) };
 
 const Button: React.FunctionComponent<React.PropsWithChildren<ButtonProps>> = (props: ButtonProps) => {
-  const {
-    type = 'default',
-  } = props;
+  const { type = 'default' } = props;
   const typeCssSelector = {
     primary: 'pkg-btn-primary',
     default: 'pkg-btn-default',
   };
   return (
-    <button
-      className={`pkg-btn ${typeCssSelector[type] || ''}`}
-      onClick={props.onClick}
-      data-testid="normal-button"
-    >
+    <button className={`pkg-btn ${typeCssSelector[type] || ''}`} onClick={props.onClick} data-testid="normal-button">
       {props.children}
     </button>
   );
@@ -46,7 +40,7 @@ const Button: React.FunctionComponent<React.PropsWithChildren<ButtonProps>> = (p
 
 Button.defaultProps = {
   type: 'default',
-  onClick: () => { },
+  onClick: () => {},
   href: undefined,
 };
 

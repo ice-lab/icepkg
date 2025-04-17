@@ -11,10 +11,12 @@ test('formatEntry', () => {
     client: 'src/client',
   });
 
-  expect(formatEntry({
-    index: 'src/index',
-    client: 'src/client',
-  })).toEqual({
+  expect(
+    formatEntry({
+      index: 'src/index',
+      client: 'src/client',
+    }),
+  ).toEqual({
     index: 'src/index',
     client: 'src/client',
   });

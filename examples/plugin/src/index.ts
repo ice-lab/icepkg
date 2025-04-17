@@ -8,14 +8,7 @@ const plugin: Plugin = (api) => {
     // if (config.type === 'transform') {
     //   return;
     // }
-    config.extensions = [
-      '.js',
-      '.json',
-      '.jsx',
-      '.ts',
-      '.tsx',
-      '.html',
-    ];
+    config.extensions = ['.js', '.json', '.jsx', '.ts', '.tsx', '.html'];
     config.entry = {
       avatar: './src/Avatar/index',
       button: './src/Button/index',

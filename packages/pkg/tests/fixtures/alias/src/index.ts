@@ -1,4 +1,4 @@
-import { bar } from '@/alias.js'
+import { bar } from '@/alias.js';
 
-export const foo = 1
-export { bar }
+export const foo = 1;
+export { bar };

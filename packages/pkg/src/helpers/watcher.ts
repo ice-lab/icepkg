@@ -4,17 +4,13 @@ import type { TaskConfig, WatchChangedFile, WatchEvent } from '../types.js';
 
 const WATCH_INTERVAL = 250;
 
-type WatchCallback = (changedFiles: WatchChangedFile[]) => (Promise<void>);
+type WatchCallback = (changedFiles: WatchChangedFile[]) => Promise<void>;
 
 export const createWatcher = (taskConfigs: TaskConfig[]) => {
   const outputs = unique(taskConfigs.map((taskConfig) => taskConfig.outputDir));
 
   const watcher = chokidar.watch([], {
-    ignored: [
-      '**/node_modules/**',
-      '**/.git/**',
-      ...outputs,
-    ],
+    ignored: ['**/node_modules/**', '**/.git/**', ...outputs],
     ignoreInitial: true,
     ignorePermissionErrors: true, // Prevent permission errors
   });
@@ -61,7 +57,6 @@ export function createBatchChangeHandler(changeCallback: WatchCallback) {
       });
     }
   }
-
 
   return {
     /**

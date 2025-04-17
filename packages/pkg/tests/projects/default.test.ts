@@ -1,18 +1,18 @@
-import {runProjectTest} from "./helper";
+import { runProjectTest } from './helper';
 
 runProjectTest('default', [
   {
     name: 'default',
     config: {},
-    snapshot: 'structure'
+    snapshot: 'structure',
   },
   {
     name: 'bundle',
     snapshot: 'structure',
     config: {
       transform: { formats: [] },
-      bundle: {}
-    }
+      bundle: {},
+    },
   },
   {
     name: 'bundle-full',
@@ -20,9 +20,9 @@ runProjectTest('default', [
     config: {
       transform: { formats: [] },
       bundle: {
-        formats: ['cjs', 'es2017', 'esm', 'umd']
-      }
-    }
+        formats: ['cjs', 'es2017', 'esm', 'umd'],
+      },
+    },
   },
   {
     name: 'bundle-with-full-modes',
@@ -30,9 +30,9 @@ runProjectTest('default', [
     config: {
       transform: { formats: [] },
       bundle: {
-        modes: ['development', 'production']
-      }
-    }
+        modes: ['development', 'production'],
+      },
+    },
   },
   {
     name: 'bundle-with-dev-mode',
@@ -40,9 +40,9 @@ runProjectTest('default', [
     config: {
       transform: { formats: [] },
       bundle: {
-        modes: ['development']
-      }
-    }
+        modes: ['development'],
+      },
+    },
   },
   {
     name: 'bundle-with-empty-mode',
@@ -50,22 +50,22 @@ runProjectTest('default', [
     config: {
       transform: { formats: [] },
       bundle: {
-        modes: []
-      }
-    }
+        modes: [],
+      },
+    },
   },
   {
     name: 'sourcemap-enable',
     snapshot: 'structure',
     config: {
-      sourceMaps: true
-    }
+      sourceMaps: true,
+    },
   },
   {
     name: 'no-declaration',
     snapshot: 'structure',
     config: {
-      declaration: false
-    }
+      declaration: false,
+    },
   },
-])
+]);

@@ -29,7 +29,9 @@ const normalizeDtsInput = (filePath: string, rootDir: string, outputDir: string)
   // a.ts -> a.d.ts
   // a.cts -> a.d.cts
   // a.mts -> a.d.mts
-  const dtsPath = filePath.replace(path.join(rootDir, 'src'), outputDir).replace(ext, `.d.${/^\.[jt]/.test(ext) ? '' : ext[1]}ts`);
+  const dtsPath = filePath
+    .replace(path.join(rootDir, 'src'), outputDir)
+    .replace(ext, `.d.${/^\.[jt]/.test(ext) ? '' : ext[1]}ts`);
   return {
     filePath,
     ext,
@@ -48,11 +50,10 @@ export interface DtsCompileOptions {
 function formatAliasToTSPathsConfig(alias: TaskConfig['alias']) {
   const paths: { [from: string]: [string] } = {};
 
-  Object.entries(alias || {})
-    .forEach(([key, value]) => {
-      const [pathKey, pathValue] = formatPath(key, value);
-      paths[pathKey] = [pathValue];
-    });
+  Object.entries(alias || {}).forEach(([key, value]) => {
+    const [pathKey, pathValue] = formatPath(key, value);
+    paths[pathKey] = [pathValue];
+  });
 
   return paths;
 }
@@ -70,11 +71,7 @@ function addWildcard(str: string) {
   return `${str.endsWith('/') ? str : `${str}/`}*`;
 }
 
-async function getTSConfig(
-  rootDir: string,
-  outputDir: string,
-  alias: TaskConfig['alias'],
-) {
+async function getTSConfig(rootDir: string, outputDir: string, alias: TaskConfig['alias']) {
   const defaultTSCompilerOptions: ts.CompilerOptions = {
     allowJs: true,
     declaration: true,
@@ -84,11 +81,7 @@ async function getTSConfig(
     paths: formatAliasToTSPathsConfig(alias), // default add alias to paths
   };
   const projectTSConfig = await getProjectTSConfig(rootDir);
-  const tsConfig: ts.ParsedCommandLine = merge(merge(
-    { options: defaultTSCompilerOptions },
-    projectTSConfig,
-  ),
-  {
+  const tsConfig: ts.ParsedCommandLine = merge(merge({ options: defaultTSCompilerOptions }, projectTSConfig), {
     options: {
       outDir: outputDir,
       rootDir: path.join(rootDir, 'src'),
@@ -102,11 +95,7 @@ async function getProjectTSConfig(rootDir: string): Promise<ts.ParsedCommandLine
   const tsconfigPath = ts.findConfigFile(rootDir, ts.sys.fileExists);
   if (tsconfigPath) {
     const tsconfigFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
-    return ts.parseJsonConfigFileContent(
-      tsconfigFile.config,
-      ts.sys,
-      path.dirname(tsconfigPath),
-    );
+    return ts.parseJsonConfigFileContent(tsconfigFile.config, ts.sys, path.dirname(tsconfigPath));
   }
 
   return {
@@ -126,11 +115,11 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
   const _files = files
     .map((file) => normalizeDtsInput(file, rootDir, outputDir))
     .map<DtsInputFile>(({ filePath, dtsPath, ...rest }) => ({
-    ...rest,
-    // Be compatible with Windows env.
-    filePath: normalizePath(filePath),
-    dtsPath: normalizePath(dtsPath),
-  }));
+      ...rest,
+      // Be compatible with Windows env.
+      filePath: normalizePath(filePath),
+      dtsPath: normalizePath(dtsPath),
+    }));
 
   // In order to only include the update files instead of all the files in the watch mode.
   function getProgramRootNames(originalFilenames: string[]) {
@@ -183,10 +172,14 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
   // Reason: https://github.com/microsoft/TypeScript/issues/30952#issuecomment-1114225407
   const tsConfigLocalPath = path.join(rootDir, 'node_modules/.cache/ice-pkg/tsconfig.json');
   await fse.ensureFile(tsConfigLocalPath);
-  await fse.writeJSON(tsConfigLocalPath, {
-    ...tsConfig,
-    compilerOptions: tsConfig.options,
-  }, { spaces: 2 });
+  await fse.writeJSON(
+    tsConfigLocalPath,
+    {
+      ...tsConfig,
+      compilerOptions: tsConfig.options,
+    },
+    { spaces: 2 },
+  );
 
   const runFile = await prepareSingleFileReplaceTscAliasPaths({
     configFile: tsConfigLocalPath,

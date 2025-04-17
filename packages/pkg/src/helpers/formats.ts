@@ -1,6 +1,4 @@
-import {
-  StandardFormatString, Format, ModuleType, JsTarget,
-} from '../types.js';
+import { StandardFormatString, Format, ModuleType, JsTarget } from '../types.js';
 import { ALL_FORMAT_MODULES, ALL_FORMAT_TARGET } from '../constants.js';
 
 export function toFormat<T extends Format>(format: StandardFormatString): T {
@@ -18,7 +16,12 @@ export function createFormat<M extends ModuleType, T extends JsTarget>(module: M
 
 export function tryToFormat<T extends Format>(format: string): T | null {
   const [module, target] = format.split(':');
-  if (module && target && ALL_FORMAT_MODULES.includes(module as ModuleType) && ALL_FORMAT_TARGET.includes(target as JsTarget)) {
+  if (
+    module &&
+    target &&
+    ALL_FORMAT_MODULES.includes(module as ModuleType) &&
+    ALL_FORMAT_TARGET.includes(target as JsTarget)
+  ) {
     return {
       module,
       target,

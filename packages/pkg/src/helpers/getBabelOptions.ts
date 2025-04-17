@@ -27,19 +27,17 @@ function getBabelOptions(
         '@babel/preset-react',
         jsxRuntime === 'automatic'
           ? {
-            runtime: jsxRuntime,
-            importSource: JSX_RUNTIME_SOURCE,
-          }
+              runtime: jsxRuntime,
+              importSource: JSX_RUNTIME_SOURCE,
+            }
           : {
-            pragma,
-            pragmaFrag,
-            throwIfNamespace: false,
-          },
+              pragma,
+              pragmaFrag,
+              throwIfNamespace: false,
+            },
       ],
     ],
   };
-  return typeof modifyBabelOptions === 'function'
-    ? modifyBabelOptions(baseBabelOptions)
-    : baseBabelOptions;
+  return typeof modifyBabelOptions === 'function' ? modifyBabelOptions(baseBabelOptions) : baseBabelOptions;
 }
 export default getBabelOptions;

@@ -5,7 +5,7 @@ export type RpcMethods = Record<string, (...args: any[]) => Promise<any>>;
 enum RpcMessageType {
   Request = 'req',
   Response = 'res',
-  ResponseError = 'resError'
+  ResponseError = 'resError',
 }
 
 interface RpcBaseMessage {
@@ -38,7 +38,10 @@ export class Rpc<R extends RpcMethods, L extends RpcMethods> {
   private requestId = 0;
   private requestStore = new Map<number, [resolve: (v: unknown) => void, reject: (e: unknown) => void]>();
 
-  constructor(private tunnel: MessagePort, private rpcMethods: L) {
+  constructor(
+    private tunnel: MessagePort,
+    private rpcMethods: L,
+  ) {
     // tunnel.onMessage?.(this.onMessage.bind(this));
     this.tunnel.on('message', this.onMessage.bind(this));
   }
@@ -78,22 +81,25 @@ export class Rpc<R extends RpcMethods, L extends RpcMethods> {
             } else {
               reject(new Error(`Method ${method} not found`));
             }
-          }).then((returnData) => {
-            this.postMessage({
-              __rpc__: RPC_SIGN,
-              type: RpcMessageType.Response,
-              id,
-              data: returnData,
-            });
-          }, (error) => {
-            this.postMessage({
-              __rpc__: RPC_SIGN,
-              type: RpcMessageType.ResponseError,
-              id,
-              // TODO: stringify error
-              data: error,
-            });
-          });
+          }).then(
+            (returnData) => {
+              this.postMessage({
+                __rpc__: RPC_SIGN,
+                type: RpcMessageType.Response,
+                id,
+                data: returnData,
+              });
+            },
+            (error) => {
+              this.postMessage({
+                __rpc__: RPC_SIGN,
+                type: RpcMessageType.ResponseError,
+                id,
+                // TODO: stringify error
+                data: error,
+              });
+            },
+          );
           break;
         }
         case RpcMessageType.ResponseError:

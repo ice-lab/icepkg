@@ -14,7 +14,10 @@ export class RunnerScheduler<T> {
   private parallelRunners: Array<Runner<T>> = [];
   private concurrentRunners: Array<Runner<T>> = [];
 
-  constructor(public runners: Array<Runner<T>>, public reporter: RunnerReporter) {
+  constructor(
+    public runners: Array<Runner<T>>,
+    public reporter: RunnerReporter,
+  ) {
     for (const runner of runners) {
       if (runner.isParallel) {
         this.parallelRunners.push(runner);
@@ -35,7 +38,10 @@ export class RunnerScheduler<T> {
     const startTime = Date.now();
     this.reporter.onStart?.();
     const parallelPromise = Promise.all(this.parallelRunners.map((runner) => runner.run(changedFiles)));
-    const concurrentPromise = concurrentPromiseAll(this.concurrentRunners.map((runner) => () => runner.run(changedFiles)), 1);
+    const concurrentPromise = concurrentPromiseAll(
+      this.concurrentRunners.map((runner) => () => runner.run(changedFiles)),
+      1,
+    );
 
     const [parallelResults, concurrentResults] = await Promise.all([parallelPromise, concurrentPromise]);
     const stopTime = Date.now();

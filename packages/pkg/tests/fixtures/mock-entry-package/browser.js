@@ -1,1 +1,1 @@
-export const id = 'browser'
+export const id = 'browser';

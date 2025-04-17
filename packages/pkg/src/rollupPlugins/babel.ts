@@ -19,11 +19,7 @@ const getParserPlugins = (isTS?: boolean): ParserPlugin[] => {
   ];
 
   if (isTS) {
-    return [
-      ...commonPlugins,
-      'typescript',
-      'decorators-legacy',
-    ];
+    return [...commonPlugins, 'typescript', 'decorators-legacy'];
   }
 
   return commonPlugins;

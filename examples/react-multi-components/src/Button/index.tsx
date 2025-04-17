@@ -7,18 +7,12 @@ interface ButtonProps {
 }
 
 const Button: React.FunctionComponent<React.PropsWithChildren<ButtonProps>> = (props) => {
-  const {
-    type = 'default',
-  } = props;
+  const { type = 'default' } = props;
   const typeCssSelector = {
     primary: 'pkg-btn-primary',
     default: 'pkg-btn-default',
   };
-  return (
-    <button className={`pkg-btn ${typeCssSelector[type] || ''}`}>
-      {props.children}
-    </button>
-  );
+  return <button className={`pkg-btn ${typeCssSelector[type] || ''}`}>{props.children}</button>;
 };
 
 export default Button;

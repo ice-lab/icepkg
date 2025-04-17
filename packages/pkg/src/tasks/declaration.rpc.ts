@@ -1,8 +1,7 @@
 import type { DtsCompileOptions } from '../helpers/dts.js';
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type DeclarationMainMethods = {
-};
+export type DeclarationMainMethods = {};
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type DeclarationWorkerMethods = {

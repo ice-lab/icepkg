@@ -64,8 +64,7 @@ const cli = cac('ice-pkg');
   cli.version(JSON.parse(readFileSync(pkgPath, 'utf-8')).version);
 
   cli.parse(process.argv, { run: true });
-})()
-  .catch((err) => {
-    consola.error(err);
-    process.exit(1);
-  });
+})().catch((err) => {
+  consola.error(err);
+  process.exit(1);
+});

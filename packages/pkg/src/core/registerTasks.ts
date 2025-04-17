@@ -11,10 +11,7 @@ import { ALIAS_BUNDLE_FORMATS_MAP, ALIAS_TRANSFORM_FORMATS_MAP } from '../consta
 import { groupBy } from 'es-toolkit/array';
 
 export function registerTasks(ctx: Context, customFormats: Record<string, CustomFormatTaskCreator>) {
-  const {
-    userConfig,
-    registerTask,
-  } = ctx;
+  const { userConfig, registerTask } = ctx;
   const transformUserFormats = userConfig.transform.formats;
   for (const format of transformUserFormats) {
     if (isAliasFormatString(format, ALIAS_TRANSFORM_FORMATS_MAP)) {
@@ -97,7 +94,7 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
     }
   }
 
-  if ((userConfig.declaration ?? true) && (transformUserFormats.length)) {
+  if ((userConfig.declaration ?? true) && transformUserFormats.length) {
     registerTask(TaskName.DECLARATION, {
       type: 'declaration',
       transformFormats: transformUserFormats,

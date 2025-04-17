@@ -63,7 +63,7 @@ export function matches(pattern: string, importee: string) {
   if (importee === pattern) {
     return true;
   }
-  // eslint-disable-next-line prefer-template
+
   return importee.startsWith(pattern + '/');
 }
 
@@ -71,10 +71,11 @@ export function resolveAliasConfig(alias: Record<string, string>, rootDir: strin
   const newAlias = {};
   Object.keys(alias).forEach((pattern) => {
     const target = alias[pattern];
-    newAlias[pattern] = target[0] === '.' ?
-      // transform alias relative target to relative to the rootDir
-      path.relative(path.dirname(filePath), path.resolve(rootDir, target)).split(path.sep).join('/') || '.' :
-      target;
+    newAlias[pattern] =
+      target[0] === '.'
+        ? // transform alias relative target to relative to the rootDir
+          path.relative(path.dirname(filePath), path.resolve(rootDir, target)).split(path.sep).join('/') || '.'
+        : target;
   });
 
   return newAlias;

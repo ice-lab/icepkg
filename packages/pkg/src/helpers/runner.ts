@@ -68,18 +68,21 @@ export abstract class Runner<T = unknown> extends TypedEventEmitter<{
       this.updateStatus(RunnerStatus.Running);
       this.mark(TASK_MARK);
       let running = this.doRun(files);
-      running = running.then((data) => {
-        this.mark(TASK_MARK);
-        this.updateStatus(RunnerStatus.Finished);
-        this.taskRunning = null;
-        return data;
-      }, (e) => {
-        this.mark(TASK_MARK);
-        this.updateStatus(RunnerStatus.Error);
-        this.taskRunning = null;
-        // TODO
-        throw e;
-      });
+      running = running.then(
+        (data) => {
+          this.mark(TASK_MARK);
+          this.updateStatus(RunnerStatus.Finished);
+          this.taskRunning = null;
+          return data;
+        },
+        (e) => {
+          this.mark(TASK_MARK);
+          this.updateStatus(RunnerStatus.Error);
+          this.taskRunning = null;
+          // TODO
+          throw e;
+        },
+      );
       this.taskRunning = running;
     }
     return this.taskRunning;

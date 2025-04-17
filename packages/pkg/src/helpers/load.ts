@@ -1,4 +1,3 @@
-
 import * as glob from 'globby';
 import { join } from 'path';
 import fs from 'fs-extra';

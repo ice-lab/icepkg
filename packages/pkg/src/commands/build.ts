@@ -16,7 +16,7 @@ export default async function build(context: Context) {
   });
 
   if (!taskConfigs.length) {
-    throw new Error('Could not Find any pending tasks when executing \'build\' command.');
+    throw new Error("Could not Find any pending tasks when executing 'build' command.");
   }
 
   await applyHook('before.build.run', {

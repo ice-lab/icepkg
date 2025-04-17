@@ -1,5 +1,4 @@
 import { isAbsolute, resolve, join } from 'path';
-import type { TaskValue } from '../types.js';
 
 export function formatEntry(inputEntry: string | string[] | Record<string, string>): Record<string, string> {
   const entry = {};

@@ -3,7 +3,7 @@ import { Rpc, RpcMethods } from '../../src/helpers/rpc';
 import { MessageChannel } from 'node:worker_threads';
 
 interface TestMethods extends RpcMethods {
-  testMethod(arg: string): Promise<string>;
+  testMethod: (arg: string) => Promise<string>;
 }
 
 const serverMethods: TestMethods = {
@@ -14,11 +14,10 @@ describe('Rpc', () => {
   it('should handle call method correctly', async () => {
     const channel = new MessageChannel();
     const clientRpc = new Rpc<TestMethods, {}>(channel.port1, {});
-    const serverRpc = new Rpc<{}, TestMethods>(channel.port2, serverMethods);
+    const _serverRpc = new Rpc<{}, TestMethods>(channel.port2, serverMethods);
     const resultPromise = clientRpc.call('testMethod', ['arg1']);
     const result = await resultPromise;
-    expect(result)
-      .toBe('result-arg1');
+    expect(result).toBe('result-arg1');
   });
 
   it('should handle errors in the server method', async () => {
@@ -32,18 +31,17 @@ describe('Rpc', () => {
       },
     };
     const clientRpc = new Rpc<TestMethods, {}>(channel.port1, {});
-    const serverRpc = new Rpc<{}, TestMethods>(channel.port2, serverMethodsWithError);
+    const _serverRpc = new Rpc<{}, TestMethods>(channel.port2, serverMethodsWithError);
     try {
       await clientRpc.call('testMethod', ['error']);
     } catch (error) {
-      expect(error.message)
-        .toBe('Server error');
+      expect(error.message).toBe('Server error');
     }
   });
 
   it('should throw error for non-existent method', async () => {
     const channel = new MessageChannel();
-    const serverRpc = new Rpc<{}, TestMethods>(channel.port2, serverMethods);
+    const _serverRpc = new Rpc<{}, TestMethods>(channel.port2, serverMethods);
     const clientRpc = new Rpc<TestMethods, {}>(channel.port1, {});
     try {
       await clientRpc.call('nonExistentMethod', []);

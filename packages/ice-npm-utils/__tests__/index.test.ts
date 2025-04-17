@@ -114,17 +114,14 @@ test('getNpmClient', () => {
 
 test('checkAliInternal', () => {
   return checkAliInternal().then((internal) => {
-    console.log('checkAliInternal', internal);
     expect(typeof internal === 'boolean').toBeTruthy();
   });
 });
 
 test('getNpmTarball', () => {
   return getNpmTarball('ice-npm-utils', '1.0.0').then((tarball) => {
-    console.log('getNpmTarball ice-npm-utils', tarball);
     expect(
-      tbRegisties
-        .some((registry) => tarball === `${registry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`),
+      tbRegisties.some((registry) => tarball === `${registry}/ice-npm-utils/-/ice-npm-utils-1.0.0.tgz`),
     ).toBeTruthy();
   });
 });
@@ -137,11 +134,7 @@ test('getNpmTarball 404', () => {
 
 test('getNpmTarball should get latest version', () => {
   return getNpmTarball('http').then((tarball) => {
-    console.log('getNpmTarball http', tarball);
-    expect(
-      tbRegisties
-        .some((registry) => tarball === `${registry}/http/-/http-0.0.1-security.tgz`),
-    ).toBeTruthy();
+    expect(tbRegisties.some((registry) => tarball === `${registry}/http/-/http-0.0.1-security.tgz`)).toBeTruthy();
   });
 });
 

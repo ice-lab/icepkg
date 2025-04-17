@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { test, expect } from 'vitest';
 import { createScriptsFilter, getIncludeNodeModuleScripts } from '../src/utils';
 
 test('default createScriptsFilter', async () => {
@@ -26,7 +26,7 @@ test('default createScriptsFilter', async () => {
   expect(scriptsFilter('/w/node_modules/core-js-pure/a.js')).toBe(false);
   expect(scriptsFilter('/w/node_modules/tslib/a.js')).toBe(false);
   expect(scriptsFilter('/w/node_modules/@swc/helpers/a.js')).toBe(false);
-})
+});
 
 test('createScriptsFilter with compileDependencies true', async () => {
   const scriptsFilter = createScriptsFilter(getIncludeNodeModuleScripts(true));
@@ -47,8 +47,7 @@ test('createScriptsFilter with compileDependencies true', async () => {
   expect(scriptsFilter('/w/node_modules/core-js-pure/a.js')).toBe(false);
   expect(scriptsFilter('/w/node_modules/tslib/a.js')).toBe(false);
   expect(scriptsFilter('/w/node_modules/@swc/helpers/a.js')).toBe(false);
-
-})
+});
 
 test('createScriptsFilter with some compileDependencies', async () => {
   const scriptsFilter = createScriptsFilter(getIncludeNodeModuleScripts(['lodash', '@ice/app']));
@@ -78,4 +77,4 @@ test('createScriptsFilter with some compileDependencies', async () => {
   expect(scriptsFilter('/w/node_modules/core-js-pure/a.js')).toBe(false);
   expect(scriptsFilter('/w/node_modules/tslib/a.js')).toBe(false);
   expect(scriptsFilter('/w/node_modules/@swc/helpers/a.js')).toBe(false);
-})
+});

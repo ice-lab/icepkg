@@ -42,12 +42,10 @@ const uselessFields: Record<string, string[]> = {
 async function deleteFieldsInPkgJSON(dir: string) {
   const pkgJSONPath = path.join(dir, 'package.json');
   const pkgJSON = await fse.readJSON(pkgJSONPath);
-  Object
-    .entries(uselessFields)
-    .forEach(([field, properties]) => {
-      properties.forEach((property) => {
-        delete pkgJSON[field][property];
-      });
+  Object.entries(uselessFields).forEach(([field, properties]) => {
+    properties.forEach((property) => {
+      delete pkgJSON[field][property];
     });
+  });
   await fse.writeJSON(pkgJSONPath, pkgJSON, { spaces: 2 });
 }

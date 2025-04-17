@@ -15,9 +15,8 @@ export const isDeclaration = (filePath: string) => declaration.some((dec) => fil
  * @param suffix
  * @returns
  */
-export const isTypescriptOnly = (
-  suffix: string, filePath: string,
-) => typescript.includes(suffix) && !isDeclaration(filePath);
+export const isTypescriptOnly = (suffix: string, filePath: string) =>
+  typescript.includes(suffix) && !isDeclaration(filePath);
 
 /**
  * Wether is ecmascript only file, checked by filepath and suffix
@@ -25,10 +24,8 @@ export const isTypescriptOnly = (
  * @param filePath
  * @returns
  */
-export const isEcmascriptOnly = (
-  suffix: string, filePath: string,
-) => ecmascript.includes(suffix) && !isDeclaration(filePath);
-
+export const isEcmascriptOnly = (suffix: string, filePath: string) =>
+  ecmascript.includes(suffix) && !isDeclaration(filePath);
 
 /**
  * Wether is [j|t]SX，only need suffix
