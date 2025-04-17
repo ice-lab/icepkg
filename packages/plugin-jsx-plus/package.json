@@ -42,7 +42,7 @@
     "babel-runtime-jsx-plus": "^0.1.5"
   },
   "devDependencies": {
-    "@ice/pkg": "^1.5.14"
+    "@ice/pkg": "workspace:*"
   },
   "publishConfig": {
     "access": "public",
