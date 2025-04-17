@@ -216,44 +216,57 @@ function getRollupOutputs({
   }));
 }
 
+const BUILTIN_EXTERNAL_MAP: Record<string, string[]> = {
+  'builtin:normal': [
+    'core-js',
+    'regenerator-runtime',
+  ],
+  'builtin:node': builtinNodeModules,
+}
+
 function getExternalsAndGlobals(
   bundleTaskConfig: BundleTaskConfig,
   pkg: PkgJson,
 ): [(id?: string) => boolean, Record<string, string>] {
-  let externals: string[] = [];
-  let globals: Record<string, string> = {};
+  const exactExternals: string[] = [];
+  const regexpExternals: RegExp[] = [];
+  const globals: Record<string, string> = {};
 
-  const builtinExternals = [
-    'react/jsx-runtime',
-    'core-js',
-    'regenerator-runtime',
-  ];
+  const userExternals = bundleTaskConfig.externals ?? false;
 
-  const externalsConfig = bundleTaskConfig.externals ?? false;
-
-  switch (externalsConfig) {
-    case true:
-      externals = [
-        ...builtinNodeModules,
-        ...builtinExternals,
-        ...Object.keys(pkg.dependencies ?? {}),
-        ...Object.keys(pkg.peerDependencies ?? {}),
-      ];
-      break;
-    case false:
-      externals = [];
-      break;
-    default:
-      externals = Object.keys(externalsConfig);
-      globals = externalsConfig;
-      break;
+  if (userExternals === true) {
+    exactExternals.push(
+      ...BUILTIN_EXTERNAL_MAP['builtin:normal'],
+      ...BUILTIN_EXTERNAL_MAP['builtin:node'],
+      ...Object.keys(pkg.dependencies ?? {}),
+      ...Object.keys(pkg.peerDependencies ?? {}),
+    )
+  } else if (userExternals === false) {
+    // do nothing
+  } else if (Array.isArray(userExternals)) {
+    for (const item of userExternals) {
+      if (typeof item === 'string') {
+        if (item in BUILTIN_EXTERNAL_MAP) {
+          exactExternals.push(...BUILTIN_EXTERNAL_MAP[item]);
+        } else {
+          exactExternals.push(item);
+        }
+        exactExternals.push(item);
+      } else if (item instanceof RegExp) {
+        regexpExternals.push(item);
+      } else if (typeof item === 'object') {
+        exactExternals.push(...Object.keys(item));
+        Object.assign(globals, item)
+      }
+    }
+  } else if (typeof userExternals === 'object') {
+    exactExternals.push(...Object.keys(userExternals));
+    Object.assign(globals, userExternals);
   }
 
-  const externalPredicate = new RegExp(`^(${externals.map(escapeStringRegexp).join('|')})($|/)`);
-
-  const externalFun = externals.length === 0
+  const externalFun = !exactExternals.length && !regexpExternals.length
     ? () => false
-    : (id: string) => externalPredicate.test(id);
+    : (id: string) => exactExternals.includes(id) || regexpExternals.some(reg => reg.test(id));
 
   return [externalFun, globals];
 }
