@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.0-alpha.0
+
+### Major Changes
+
+- 9d79a4e: feat: upgrade rollup to v4 and other packages
+- 9f732e5: feat: external support RegExp and not external sub path of package
+- 95f233d: feat: support custom format
+
+### Minor Changes
+
+- 073a6cb: feat: add individual declaration task for speed
+
 ## 1.6.0
 
 ### Minor Changes
