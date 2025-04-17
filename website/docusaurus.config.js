@@ -1,6 +1,5 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-const extractCode = require('@ice/pkg-plugin-docusaurus/remark/extractCode');
 
 const config = {
   title: 'ICE PKG',
@@ -49,7 +48,6 @@ const config = {
               { type: 'doc', id: 'faq', label: '常见问题' },
             ];
           },
-          remarkPlugins: [[extractCode, { mobilePreview: false }]],
           routeBasePath: '/',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.

@@ -48,7 +48,6 @@
   },
   "devDependencies": {
     "@ice/pkg": "workspace:*",
-    "@ice/pkg-plugin-docusaurus": "workspace:*",
     "example-pkg-plugin": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

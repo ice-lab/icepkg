@@ -45,6 +45,8 @@ Please see our [CONTRIBUTING.md](/.github/CONTRIBUTING.md)
 Those packages are deprecated and removed in v2 project. You can switch to v1 branch to see the packages.
 
 - `@ice/pkg-plugin-rax-component`
+- `@ice/pkg-plugin-docusaurus`
+- `@ice/remark-react-docgen-docusaurus`
 
 ## License
 
