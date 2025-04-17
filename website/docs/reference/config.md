@@ -373,10 +373,12 @@ export default defineConfig({
 
 #### externals
 
-+ 类型：`boolean | Record<string, string>`
-+ 默认值：`true`
++ 类型：`boolean | Record<string, string> | (string | RegExp | Record<string, string>)[]`
++ 默认值：`false`
 
-默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。若想要 Bundle 不包含依赖产物，可如下配置：
+默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。
+若想要 Bundle 不包含依赖产物，可以传入 `true`，其会解析 `package.json` 并将所有依赖 external 掉，包括 node 的依赖。
+适合针对 Node 环境的构建。
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
@@ -388,7 +390,18 @@ export default defineConfig({
 });
 ```
 
-若想要自定义配置 externals，参考如下配置：
+若想要自定义配置 externals，则可以直接传入想要 external 的依赖，支持字符串和正则表达式。
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+export default defineConfig({
+  bundle: {
+    externals: ['react', 'react-dom', /^@ice($|\/)/],
+  },
+});
+```
+
+如果你选择构建 umd 格式，默认情况下会根据一定的规则生成从全局对象上获取依赖的名字，如果你想自定义，则可以直接传入一个对象来配置。
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
@@ -402,6 +415,8 @@ export default defineConfig({
   },
 });
 ```
+
+当然，也可以进行混合使用。
 
 #### minify
 

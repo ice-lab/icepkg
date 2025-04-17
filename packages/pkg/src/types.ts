@@ -96,9 +96,11 @@ export interface BundleUserConfig {
    * Specify external dependencies.
    * "boolean" - whether to bundle all dependencies or not;
    * "object" - specific external dependencies.
-   * @default false All of dependencies will be bundled by default.
+   * "array" - specific external match logic
+   * "false" - all the dependencies will be bundled by default.
+   * @default false
    */
-  externals?: boolean | Record<string, string>;
+  externals?: boolean | Record<string, string> | (string | RegExp | Record<string, string>)[];
 
   /**
    * Minify JS and CSS bundle.
