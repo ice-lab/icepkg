@@ -228,6 +228,7 @@ function getExternalsAndGlobals(
   bundleTaskConfig: BundleTaskConfig,
   pkg: PkgJson,
 ): [(id?: string) => boolean, Record<string, string>] {
+  // TODO: unique externals after all pushed
   const exactExternals: string[] = [];
   const regexpExternals: RegExp[] = [];
   const globals: Record<string, string> = {};
@@ -251,7 +252,6 @@ function getExternalsAndGlobals(
         } else {
           exactExternals.push(item);
         }
-        exactExternals.push(item);
       } else if (item instanceof RegExp) {
         regexpExternals.push(item);
       } else if (typeof item === 'object') {
