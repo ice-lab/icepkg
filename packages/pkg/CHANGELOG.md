@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.1
+
+### Major Changes
+
+- 3eeafe1: feat: remove transform swc helpers to cjs
+
 ## 2.0.0-alpha.0
 
 ### Major Changes
