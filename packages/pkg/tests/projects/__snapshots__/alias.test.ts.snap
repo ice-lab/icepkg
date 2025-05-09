@@ -108,7 +108,7 @@ _export(exports, {
         return _alias.bar;
     }
 });
-var _alias = require(\\"@/alias.js\\");
+var _alias = require(\\"./alias.js\\");
 var foo = 1;
 "
 `;

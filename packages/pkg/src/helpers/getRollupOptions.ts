@@ -83,7 +83,7 @@ export function getRollupOptions(
         }),
       );
     }
-    rollupOptions.plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
+    rollupOptions.plugins.unshift(transformAliasPlugin(rootDir, taskConfig.alias));
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
     rollupOptions.input = taskConfig.entry;
