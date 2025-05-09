@@ -465,8 +465,8 @@ importers:
         specifier: ^7.0.0
         version: 7.3.7
       tsc-alias:
-        specifier: ^1.8.2
-        version: 1.8.2
+        specifier: 1.8.13
+        version: 1.8.13
       typescript:
         specifier: ^4.9.4
         version: 4.9.4
@@ -8698,8 +8698,9 @@ packages:
     peerDependencies:
       typescript: '>=2.7'
 
-  tsc-alias@1.8.2:
-    resolution: {integrity: sha512-ukBkcNekOgwtnSWYLD5QsMX3yQWg7JviAs8zg3qJGgu4LGtY3tsV4G6vnqvOXIDkbC+XL9vbhObWSpRA5/6wbg==}
+  tsc-alias@1.8.13:
+    resolution: {integrity: sha512-hpuglrm2DoHZE62L8ntYqRNiSQ7J8kvIxEsajzY/QfGOm7EcdhgG5asqoWYi2E2KX0SqUuhOTnV8Ry8D/TnsEA==}
+    engines: {node: '>=16.20.2'}
     hasBin: true
 
   tsconfig-paths@3.14.1:
@@ -12398,7 +12399,7 @@ snapshots:
       rollup-plugin-styles: 4.0.0(rollup@2.79.1)
       rollup-plugin-visualizer: 5.8.3(rollup@2.79.1)
       semver: 7.3.7
-      tsc-alias: 1.8.2
+      tsc-alias: 1.8.13
       typescript: 4.9.4
     transitivePeerDependencies:
       - '@swc/helpers'
@@ -20507,7 +20508,7 @@ snapshots:
       typescript: 4.9.4
       yn: 3.1.1
 
-  tsc-alias@1.8.2:
+  tsc-alias@1.8.13:
     dependencies:
       chokidar: 3.5.3
       commander: 9.5.0
