@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.1
+
+### Patch Changes
+
+- 3e6f78a: fix: cjs format should support alias for .d.ts file
+- 05410c1: fix: lock tsc-alias version to 1.8.13 for fix compiling error.
+
 ## 1.6.0
 
 ### Minor Changes
