@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.2
+
+### Patch Changes
+
+- 07cb447: revert: #670 which is not fully tested for jsx
+
 ## 1.6.1
 
 ### Patch Changes
