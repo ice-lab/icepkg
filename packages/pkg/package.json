@@ -66,7 +66,7 @@
     "rollup-plugin-styler": "^1.8.0",
     "rollup-plugin-visualizer": "^5.12.0",
     "semver": "^7.5.2",
-    "tsc-alias": "^1.8.2",
+    "tsc-alias": "1.8.13",
     "typescript": "^4.9.5",
     "zod": "^3.24.2",
     "zod-validation-error": "^3.4.0"
