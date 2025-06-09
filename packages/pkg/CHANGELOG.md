@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0-alpha.1
+
+### Major Changes
+
+- 3eeafe1: feat: remove transform swc helpers to cjs
+
+### Patch Changes
+
+- 3d5189b: fix: lock tsc-alias version to 1.8.13 for fix compiling error.
+
 ## 2.0.0-alpha.0
 
 ### Major Changes
