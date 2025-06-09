@@ -13,6 +13,7 @@ import type { FSWatcher } from 'chokidar';
 import cssnano from 'cssnano';
 import { TransformOptions } from '@babel/core';
 import { ALL_FORMAT_MODULES, ALL_FORMAT_TARGET, NODE_FORMAT_MODULE } from './constants.js';
+import { RslibConfig } from '@rslib/core';
 
 export type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
@@ -138,6 +139,12 @@ export interface BundleUserConfig {
    * Resolve node module by prefer using `browser` field in package.json.
    */
   browser?: boolean;
+
+  /**
+   * Define which bundler engine to use
+   * @experimental
+   */
+  engine?: EngineType;
 }
 
 export interface DeclarationUserConfig {
@@ -222,6 +229,10 @@ interface _TaskConfig {
    */
   define?: PlainObject;
   /**
+   * Define which bundler engine to use
+   */
+  engine?: EngineType;
+  /**
    * - true to generate a sourcemap for the code and include it in the result object.
    * - "inline" to generate a sourcemap and append it as a data URL to the end of the code,
    * but not include it in the result object.
@@ -259,7 +270,13 @@ interface _TaskConfig {
    * @see https://babeljs.io/docs/options
    */
   modifyBabelOptions?: (babelCompileOptions: TransformOptions) => TransformOptions;
+  /**
+   * modify rslib config
+   */
+  modifyRslibConfig?: Array<(rslibOptions: RslibConfig) => RslibConfig>;
 }
+
+export type EngineType = 'rollup' | 'rslib';
 
 export interface BundleTaskConfig extends _TaskConfig, Omit<BundleUserConfig, 'development' | 'minify' | 'formats'> {
   type: 'bundle';

@@ -10,7 +10,7 @@ import { createFilter } from '@rollup/pluginutils';
 import remapping from '@ampproject/remapping';
 import { loadPkg } from './helpers/load.js';
 import consola from 'consola';
-import type { PlainObject, OutputResult, TaskConfig } from './types';
+import type { PlainObject, OutputResult, TaskConfig } from './types.js';
 import type { DecodedSourceMap, RawSourceMap } from '@ampproject/remapping';
 import type { FSWatcher } from 'chokidar';
 import { mapValues } from 'es-toolkit/object';

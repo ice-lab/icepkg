@@ -1,7 +1,7 @@
 import * as swc from '@swc/core';
 
 import type { Plugin } from 'rollup';
-import type { TaskConfig } from '../types';
+import type { TaskConfig } from '../types.js';
 
 /**
  * plugin-minify use minimize bundle outputs using swc

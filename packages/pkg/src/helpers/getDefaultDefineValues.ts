@@ -1,4 +1,4 @@
-import { NodeEnvMode } from '../types';
+import { NodeEnvMode } from '../types.js';
 
 export default function getDefaultDefineValues(mode: NodeEnvMode) {
   return {

@@ -3,7 +3,7 @@ import * as rollup from 'rollup';
 import { Watcher } from 'rollup/dist/shared/watch.js';
 import { toArray } from '../utils.js';
 import EventEmitter from 'node:events';
-import type { OutputFile, OutputResult, TaskRunnerContext, WatchChangedFile } from '../types.js';
+import type { EngineType, OutputFile, OutputResult, TaskRunnerContext, WatchChangedFile } from '../types.js';
 import type {
   OutputChunk as RollupOutputChunk,
   OutputAsset as RollupOutputAsset,
@@ -15,25 +15,56 @@ import type {
   AwaitedEventListener,
 } from 'rollup';
 import type { FSWatcher } from 'chokidar';
-import { getRollupOptions } from '../helpers/getRollupOptions.js';
+import type { RslibConfig, Rspack, rsbuild } from '@rslib/core';
+import { getRollupOptions } from '../engine/rollup/options.js';
 import { Runner } from '../helpers/runner.js';
+import { noop } from 'es-toolkit';
+import consola from 'consola';
 
 export function createBundleTask(taskRunningContext: TaskRunnerContext) {
   return new BundleRunner(taskRunningContext);
 }
 
 export class BundleRunner extends Runner<OutputResult> {
-  private rollupOptions: RollupOptions;
+  private rollupOptions?: RollupOptions;
+  private rslibConfig?: RslibConfig;
+  private engine: EngineType;
   private watcher: Watcher | null = null;
   private result: Error | OutputResult | null;
   private readonly executors = [];
   constructor(taskRunningContext: TaskRunnerContext) {
     super(taskRunningContext);
-    this.rollupOptions = getRollupOptions(taskRunningContext.buildContext, taskRunningContext);
+    this.engine = taskRunningContext.buildTask.config.engine ?? 'rollup';
   }
 
   async doRun(changedFiles: WatchChangedFile[]): Promise<OutputResult> {
-    const { rollupOptions, context } = this;
+    switch (this.engine) {
+      case 'rollup':
+        return this.handleRollupBuild(changedFiles);
+      case 'rslib':
+        return this.handleRslibBuild(changedFiles);
+    }
+  }
+
+  private getOutputResult(): Promise<OutputResult> {
+    const { result, executors } = this;
+    if (result instanceof Error) {
+      return Promise.reject(result);
+    } else if (result) {
+      return Promise.resolve(result);
+    } else {
+      return new Promise((resolve, reject) => {
+        executors.push([resolve, reject]);
+      });
+    }
+  }
+
+  private async handleRollupBuild(changedFiles: WatchChangedFile[]): Promise<OutputResult> {
+    const { context } = this;
+    if (!this.rollupOptions) {
+      this.rollupOptions = getRollupOptions(context.buildContext, context);
+    }
+    const { rollupOptions } = this;
     if (context.watcher) {
       if (this.watcher) {
         for (const file of changedFiles) {
@@ -90,17 +121,73 @@ export class BundleRunner extends Runner<OutputResult> {
     return rawBuild(rollupOptions, context);
   }
 
-  private getOutputResult(): Promise<OutputResult> {
-    const { result, executors } = this;
-    if (result instanceof Error) {
-      return Promise.reject(result);
-    } else if (result) {
-      return Promise.resolve(result);
-    } else {
-      return new Promise((resolve, reject) => {
-        executors.push([resolve, reject]);
+  private async handleRslibBuild(changedFiles: WatchChangedFile[]): Promise<OutputResult> {
+    const { context } = this;
+    const { build: buildRslib, logger, rsbuild } = await import('@rslib/core');
+    if (!this.rslibConfig) {
+      const { getRslibConfig } = await import('../engine/rslib/config.js');
+      this.rslibConfig = getRslibConfig(context.buildContext, context);
+
+      // Hack: disable all logger
+      logger.override({
+        ready: noop,
+        info: noop,
+        warn: noop,
+        error: noop,
+        debug: noop,
+        success: noop,
+        log: noop,
+      });
+      rsbuild.logger.override({
+        ready: noop,
+        info: noop,
+        warn: noop,
+        error: noop,
+        debug: noop,
+        success: noop,
+        log: noop,
       });
     }
+    const { rslibConfig } = this;
+    let resolve;
+    const defer = new Promise<Parameters<rsbuild.OnAfterBuildFn>[0]>((res) => {
+      resolve = res;
+    });
+
+    const statsPlugin: rsbuild.RsbuildPlugin = {
+      name: 'icepkg-plugin-hook',
+      setup(api) {
+        api.onAfterBuild((result) => resolve(result));
+      },
+    };
+
+    // TODO: wait 1.0 to correct handle error
+    await buildRslib(
+      {
+        ...rslibConfig,
+        plugins: [...rslibConfig.plugins, statsPlugin],
+      },
+      {},
+    );
+
+    const result = await defer;
+
+    const stats: Rspack.StatsCompilation = result.stats?.toJson(true);
+
+    if (stats.errorsCount) {
+      stats.errors.forEach((error) => {
+        consola.error(error);
+      });
+      throw new Error(`Build error`);
+    }
+
+    return {
+      taskName: context.buildTask.name,
+      // TODO: correct type and value
+      modules: stats.modules as any,
+      outputs: stats.chunks as any,
+      outputFiles: stats.assets as any,
+    };
   }
 }
 
