@@ -1,0 +1,16 @@
+@primary-color: #1890ff;
+@secondary-color: #ff6b6b;
+
+.app-container {
+  border: 2px solid @primary-color;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    border-color: @secondary-color;
+    transition: all 0.3s ease;
+  }
+}
+
+.app-title {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}

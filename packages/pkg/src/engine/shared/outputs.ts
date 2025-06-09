@@ -3,6 +3,7 @@ import type { OutputOptions } from 'rollup';
 import type { OutputOptions as RolldownOutputOptions } from 'rolldown';
 import { getFilenameConfig } from './filename.js';
 import minifyPlugin from '../../rollupPlugins/minify.js';
+import { assertIsBundleFormatModule } from '../../helpers/formats.js';
 
 interface GetOutputsOptions {
   engine: 'rollup' | 'rolldown';
@@ -29,6 +30,8 @@ export function getOutputs({
   const minify = bundleTaskConfig.jsMinify!(mode, command);
 
   return outputFormats.map((format) => {
+    // for rollup/rolldown, mf is not supported
+    assertIsBundleFormatModule(format.module);
     const filenameConfig = getFilenameConfig(format, mode);
     const options: OutputOptions = {
       name,

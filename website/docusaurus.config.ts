@@ -30,6 +30,7 @@ const config: Config = {
               { type: 'doc', id: 'guide/publish' },
               { type: 'doc', id: 'guide/test' },
               { type: 'doc', id: 'guide/preview' },
+              { type: 'doc', id: 'guide/mf' },
               { type: 'doc', id: 'guide/jsx-plus' },
               { type: 'doc', id: 'guide/monorepo' },
               {

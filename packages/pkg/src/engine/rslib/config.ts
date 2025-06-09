@@ -23,10 +23,10 @@ export function getRslibConfig(context: Context, taskRunnerContext: TaskRunnerCo
 
   let rslibConfig: RslibConfig = {
     source: {
-      // TODO
-      entry: {
-        index: './src/index.ts',
-      },
+      entry:
+        typeof taskConfig.entry === 'string' || Array.isArray(taskConfig.entry)
+          ? { index: taskConfig.entry }
+          : taskConfig.entry,
       define: taskConfig.define,
     },
     lib: [],
@@ -53,10 +53,12 @@ export function getRslibConfig(context: Context, taskRunnerContext: TaskRunnerCo
         bundle: true,
         format: fmt.module,
         syntax: fmt.target,
-        outBase: taskConfig.outputDir,
         umdName: taskConfig.name,
         autoExternal: false,
         output: {
+          distPath: {
+            root: taskConfig.outputDir,
+          },
           filename: {
             html: filenameConfig.asset,
             js: filenameConfig.js,
@@ -67,6 +69,8 @@ export function getRslibConfig(context: Context, taskRunnerContext: TaskRunnerCo
             media: filenameConfig.asset,
             assets: filenameConfig.asset,
           },
+          // mf is not set target
+          target: fmt.module === 'mf' ? undefined : taskConfig.browser ? 'web' : 'node',
         },
       });
     });
@@ -88,8 +92,6 @@ export function getRslibConfig(context: Context, taskRunnerContext: TaskRunnerCo
     merge<RslibConfig, Partial<RslibConfig>>(rslibConfig, {
       output: {
         externals,
-        // TODO: maybe error config
-        target: taskConfig.browser ? 'web' : 'node',
       },
       resolve: {
         extensions: [

@@ -13,7 +13,7 @@ import type stylesPlugin from 'rollup-plugin-styler';
 import type { FSWatcher } from 'chokidar';
 import cssnano from 'cssnano';
 import { TransformOptions } from '@babel/core';
-import { ALL_FORMAT_MODULES, ALL_FORMAT_TARGET, NODE_FORMAT_MODULE } from './constants.js';
+import { ALL_FORMAT_MODULES, ALL_FORMAT_TARGET, BUNDLE_FORMAT_MODULE, NODE_FORMAT_MODULE } from './constants.js';
 import { RslibConfig } from '@rslib/core';
 import type { SecureServerSessionOptions } from 'node:http2';
 import { ServerOptions as HttpsServerOptions } from 'node:https';
@@ -37,6 +37,7 @@ type CSSMinify =
     };
 
 export type NodeModuleType = (typeof NODE_FORMAT_MODULE)[number];
+export type BundleModuleType = (typeof BUNDLE_FORMAT_MODULE)[number];
 export type ModuleType = (typeof ALL_FORMAT_MODULES)[number];
 
 export type JsTarget = (typeof ALL_FORMAT_TARGET)[number];
@@ -54,7 +55,7 @@ export type TransformFormat = Format<NodeModuleType, JsTarget>;
 export type BundleFormat = Format<ModuleType, JsTarget>;
 
 export type AliasTransformFormatString = 'cjs' | 'esm' | 'es2017';
-export type AliasBundleFormatString = AliasTransformFormatString | 'umd';
+export type AliasBundleFormatString = AliasTransformFormatString | 'umd' | 'mf';
 
 export type TransformUserFormat = StandardTransformFormatString | AliasTransformFormatString;
 export type BundleUserFormat = StandardBundleFormatString | AliasBundleFormatString;

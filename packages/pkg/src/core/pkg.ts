@@ -256,6 +256,11 @@ export async function resolvePackage(ctx: Context) {
       resolvedPkg.id = id;
     }
 
+    if (pkg.module === 'mf' && pkg.engine !== 'rslib') {
+      console.warn(`mf must use rslib engine, so it will be automatically set to rslib`);
+      pkg.engine = 'rslib';
+    }
+
     pkgsMap.set(resolvedPkg.id, resolvedPkg);
     resolvedPkgs.push(resolvedPkg);
   }
