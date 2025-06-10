@@ -1,5 +1,5 @@
 {
-  "name": "@ice/pkg-tests-fixtures-alias",
+  "name": "@ice/pkg-tests-plugins",
   "version": "0.0.0",
   "private": true,
   "dependencies": {

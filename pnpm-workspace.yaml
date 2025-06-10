@@ -2,7 +2,8 @@ packages:
   - packages/*
   - examples/*
   - website
-  - packages/pkg/tests/fixtures/*
+  - tests
+  - tests/integration/*
 
 catalog:
   vitest: ^0.28.5

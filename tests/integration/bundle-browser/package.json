@@ -1,0 +1,9 @@
+{
+  "name": "@ice/pkg-tests-bundle-browser",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@ice/pkg": "workspace:*",
+    "@ice/pkg-tests-mock-entry-package": "workspace:*"
+  }
+}

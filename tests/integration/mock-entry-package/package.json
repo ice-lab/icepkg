@@ -1,5 +1,5 @@
 {
-  "name": "@ice/pkg-tests-fixtures-mock-entry-package",
+  "name": "@ice/pkg-tests-mock-entry-package",
   "version": "0.0.0",
   "private": true,
   "main": "./main.js",
@@ -7,6 +7,5 @@
   "browser": "./browser.js",
   "types": "./index.d.ts",
   "description": "模块入口测试",
-  "dependencies": {
-  }
+  "dependencies": {}
 }

@@ -4,9 +4,7 @@ import * as url from 'node:url';
 import * as fse from 'fs-extra';
 import fs from 'fs-extra';
 import { execSync } from 'node:child_process';
-import { UserConfig } from '../../src';
-
-const fixturesDir = path.join(url.fileURLToPath(import.meta.url), '../../fixtures');
+import { UserConfig } from '@ice/pkg';
 
 const CHECK_DIRS = ['es2017', 'esm', 'dist', 'cjs'];
 
@@ -23,8 +21,8 @@ export type ProjectTestConfig = Required<ProjectTestUserConfig>;
 
 export type ProjectTestConfigs = ProjectTestUserConfig[];
 
-export function runProjectTest(name: string, userConfigs: ProjectTestConfigs) {
-  const projectPath = path.join(fixturesDir, name);
+export function runProjectTest(fileUrl: string, userConfigs: ProjectTestConfigs) {
+  const projectPath = path.dirname(url.fileURLToPath(fileUrl));
 
   const configs: ProjectTestConfig[] = [];
 
@@ -86,7 +84,7 @@ export function runProjectTest(name: string, userConfigs: ProjectTestConfigs) {
   }
 
   beforeAll(async () => {
-    expect(fse.existsSync(projectPath), `Project ${name} is not found`).toBe(true);
+    expect(fse.existsSync(projectPath), `Project ${path.basename(projectPath)} is not found`).toBe(true);
   });
 
   beforeEach(async () => {

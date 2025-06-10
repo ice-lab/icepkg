@@ -1,6 +1,6 @@
-import { runProjectTest } from './helper';
+import { runProjectTest } from '../../helpers/run';
 
-runProjectTest('default', [
+runProjectTest(import.meta.url, [
   {
     name: 'default',
     config: {},

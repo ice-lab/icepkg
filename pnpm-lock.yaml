@@ -432,35 +432,6 @@ importers:
         specifier: 'catalog:'
         version: 0.28.5(jsdom@21.1.0)(less@4.1.3)(sass@1.58.3)(sugarss@2.0.0)(terser@5.14.1)
 
-  packages/pkg/tests/fixtures/alias:
-    dependencies:
-      '@ice/pkg':
-        specifier: workspace:*
-        version: link:../../..
-
-  packages/pkg/tests/fixtures/bundle-browser:
-    dependencies:
-      '@ice/pkg':
-        specifier: workspace:*
-        version: link:../../..
-      '@ice/pkg-tests-fixtures-mock-entry-package':
-        specifier: workspace:*
-        version: link:../mock-entry-package
-
-  packages/pkg/tests/fixtures/default:
-    dependencies:
-      '@ice/pkg':
-        specifier: workspace:*
-        version: link:../../..
-
-  packages/pkg/tests/fixtures/mock-entry-package: {}
-
-  packages/pkg/tests/fixtures/plugins:
-    dependencies:
-      '@ice/pkg':
-        specifier: workspace:*
-        version: link:../../..
-
   packages/plugin-jsx-plus:
     dependencies:
       babel-plugin-transform-jsx-class:
@@ -488,6 +459,41 @@ importers:
       '@ice/pkg':
         specifier: workspace:*
         version: link:../pkg
+
+  tests:
+    devDependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../packages/pkg
+
+  tests/integration/alias:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../../packages/pkg
+
+  tests/integration/bundle-browser:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../../packages/pkg
+      '@ice/pkg-tests-mock-entry-package':
+        specifier: workspace:*
+        version: link:../mock-entry-package
+
+  tests/integration/default:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../../packages/pkg
+
+  tests/integration/mock-entry-package: {}
+
+  tests/integration/plugins:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../../packages/pkg
 
   website:
     dependencies:

@@ -7,7 +7,7 @@ export default [
   {
     files: [
       'examples/**/*.{js,jsx,ts,tsx}',
-      'packages/pkg/tests/fixtures/**/*.{js,jsx,ts,tsx}',
+      'tests/**/*.{js,jsx,ts,tsx}',
       'scripts/**/*.{ts,js}',
     ],
     rules: {
