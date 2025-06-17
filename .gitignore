@@ -34,7 +34,11 @@ packages/*/es/
 /packages/**/cjs
 /packages/**/esm
 /packages/**/dist
-/packages/pkg/tests/fixtures/**/build.config.for-test.mts
+/tests/**/esm
+/tests/**/es2017
+/tests/**/cjs
+/tests/**/dist
+/tests/integration/**/build.config.for-test.mts
 **/node_modules
 /.pnpm-debug.log
 **/pnpm-global

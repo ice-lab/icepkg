@@ -1,6 +1,6 @@
-import { runProjectTest } from './helper';
+import { runProjectTest } from '../../helpers/run';
 
-runProjectTest('bundle-browser', [
+runProjectTest(import.meta.url, [
   {
     name: 'default',
     config: {

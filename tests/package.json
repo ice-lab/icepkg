@@ -1,0 +1,10 @@
+{
+  "name": "@ice/pkg-tests",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "@ice/pkg": "workspace:*"
+  }
+}

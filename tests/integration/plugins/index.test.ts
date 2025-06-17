@@ -1,6 +1,6 @@
-import { runProjectTest } from './helper';
+import { runProjectTest } from '../../helpers/run';
 
-runProjectTest('plugins', [
+runProjectTest(import.meta.url, [
   {
     name: 'custom-format',
     config: 'build.config.custom-format.mts',
