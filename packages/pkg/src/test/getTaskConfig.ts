@@ -1,5 +1,5 @@
 import type { Service } from 'build-scripts';
-import type { TaskConfig, UserConfig } from '../types';
+import type { TaskConfig, UserConfig } from '../types.js';
 import { getBuiltInPlugins } from '../utils.js';
 
 export default async function getTaskConfig(service: Service<TaskConfig, {}, UserConfig>) {

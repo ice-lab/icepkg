@@ -66,6 +66,7 @@ export function initTask(
   if (config.type === 'bundle') {
     const bundleConfig = userConfig.bundle ?? {};
     config.modes ??= bundleConfig.modes ?? [expectedMode];
+    config.engine ??= bundleConfig.engine;
     const defaultBundleSwcConfig = getDefaultBundleSwcConfig(config);
     config.swcCompileOptions =
       typeof config.modifySwcCompileOptions === 'function'

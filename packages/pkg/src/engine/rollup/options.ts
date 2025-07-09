@@ -4,20 +4,20 @@ import styles from 'rollup-plugin-styler';
 import autoprefixer from 'autoprefixer';
 import PostcssPluginRpxToVw from 'postcss-plugin-rpx2vw';
 import json from '@rollup/plugin-json';
-import swcPlugin from '../rollupPlugins/swc.js';
-import minifyPlugin from '../rollupPlugins/minify.js';
-import babelPlugin from '../rollupPlugins/babel.js';
-import { builtinNodeModules } from './builtinModules.js';
+import swcPlugin from '../../rollupPlugins/swc.js';
+import minifyPlugin from '../../rollupPlugins/minify.js';
+import babelPlugin from '../../rollupPlugins/babel.js';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
-import getDefaultDefineValues from './getDefaultDefineValues.js';
-import transformAliasPlugin from '../rollupPlugins/alias.js';
+import getDefaultDefineValues from '../../helpers/getDefaultDefineValues.js';
+import transformAliasPlugin from '../../rollupPlugins/alias.js';
 import bundleAliasPlugin from '@rollup/plugin-alias';
-
-import { Context, NodeEnvMode, BundleTaskConfig, TaskRunnerContext, StylesRollupPluginOptions } from '../types.js';
-import type { RollupOptions, OutputOptions, Plugin } from 'rollup';
+import { BundleTaskConfig, Context, NodeEnvMode, StylesRollupPluginOptions, TaskRunnerContext } from '../../types.js';
+import type { OutputOptions, Plugin, RollupOptions } from 'rollup';
 import path from 'path';
+import { BUILTIN_EXTERNAL_MAP } from '../shared/external.js';
+import { getFilenameConfig } from '../shared/filename.js';
 
 interface PkgJson {
   name: string;
@@ -168,55 +168,53 @@ function getRollupOutputs({ globals, bundleTaskConfig, pkg, mode, command }: Get
   const name = bundleTaskConfig.name ?? pkg.name;
   const minify = bundleTaskConfig.jsMinify(mode, command);
 
-  return outputFormats.map((format) => ({
-    name,
-    format: format.module,
-    globals,
-    sourcemap: bundleTaskConfig.sourcemap,
-    exports: 'auto',
-    dir: outputDir,
-    assetFileNames: getFilename('[name]', format.module, format.target, mode, '[ext]'),
-    entryFileNames: getFilename('[name]', format.module, format.target, mode, 'js'),
-    chunkFileNames: getFilename('[name]', format.module, format.target, mode, 'js'),
-    manualChunks:
-      format.module !== 'umd'
-        ? (id, { getModuleInfo }) => {
-            if (/node_modules/.test(id)) {
-              return vendorName;
-            }
-
-            const entryPoints = [];
-
-            const idsToHandle = new Set(getModuleInfo(id).importers);
-
-            for (const moduleId of idsToHandle) {
-              const { isEntry, importers } = getModuleInfo(moduleId);
-              if (isEntry) {
-                entryPoints.push(moduleId);
+  return outputFormats.map((format) => {
+    const filenameConfig = getFilenameConfig(format, mode);
+    return {
+      name,
+      format: format.module,
+      globals,
+      sourcemap: bundleTaskConfig.sourcemap,
+      exports: 'auto',
+      dir: outputDir,
+      assetFileNames: filenameConfig.asset,
+      entryFileNames: filenameConfig.js,
+      chunkFileNames: filenameConfig.js,
+      manualChunks:
+        format.module !== 'umd'
+          ? (id, { getModuleInfo }) => {
+              if (/node_modules/.test(id)) {
+                return vendorName;
               }
 
-              for (const importerId of importers) {
-                idsToHandle.add(importerId);
+              const entryPoints = [];
+
+              const idsToHandle = new Set(getModuleInfo(id).importers);
+
+              for (const moduleId of idsToHandle) {
+                const { isEntry, importers } = getModuleInfo(moduleId);
+                if (isEntry) {
+                  entryPoints.push(moduleId);
+                }
+
+                for (const importerId of importers) {
+                  idsToHandle.add(importerId);
+                }
+              }
+              // For multiple entries, we put it into a "shared code" bundle
+              if (entryPoints.length > 1) {
+                return vendorName;
               }
             }
-            // For multiple entries, we put it into a "shared code" bundle
-            if (entryPoints.length > 1) {
-              return vendorName;
-            }
-          }
-        : undefined,
-    plugins: [
-      minify && minifyPlugin(bundleTaskConfig.sourcemap, typeof minify === 'boolean' ? {} : minify.options),
-    ].filter(Boolean),
-  }));
+          : undefined,
+      plugins: [
+        minify && minifyPlugin(bundleTaskConfig.sourcemap, typeof minify === 'boolean' ? {} : minify.options),
+      ].filter(Boolean),
+    };
+  });
 }
 
-const BUILTIN_EXTERNAL_MAP: Record<string, string[]> = {
-  'builtin:normal': ['core-js', 'regenerator-runtime'],
-  'builtin:node': builtinNodeModules,
-};
-
-function getExternalsAndGlobals(
+export function getExternalsAndGlobals(
   bundleTaskConfig: BundleTaskConfig,
   pkg: PkgJson,
 ): [(id?: string) => boolean, Record<string, string>] {
@@ -262,8 +260,4 @@ function getExternalsAndGlobals(
       : (id: string) => exactExternals.includes(id) || regexpExternals.some((reg) => reg.test(id));
 
   return [externalFun, globals];
-}
-
-function getFilename(...args: string[]): string {
-  return args.join('.');
 }

@@ -4,7 +4,7 @@ import getTaskConfig from './getTaskConfig.js';
 import { merge } from 'es-toolkit/object';
 import type { Config as JestConfig } from 'jest';
 import type { Service } from 'build-scripts';
-import type { TaskConfig, UserConfig } from '../types';
+import type { TaskConfig, UserConfig } from '../types.js';
 
 export default function defineJestConfig(
   service: Service<TaskConfig, {}, UserConfig>,

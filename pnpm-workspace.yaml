@@ -11,3 +11,8 @@ catalog:
   typescript: ^4.9.4
   sass: ^1.58.3
   sass-loader: ^13.2.0
+
+catalogs:
+  example:
+    '@ice/jsx-runtime': ^0.3.0
+    '@swc/helpers': ^0.5.15

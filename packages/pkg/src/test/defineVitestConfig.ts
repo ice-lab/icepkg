@@ -7,7 +7,7 @@ import type {
   UserConfig as VitestUserConfig,
   UserConfigFn as VitestUserConfigFn,
 } from 'vitest/config';
-import type { TaskConfig, UserConfig } from '../types';
+import type { TaskConfig, UserConfig } from '../types.js';
 
 export default function defineVitestConfig(
   service: Service<TaskConfig, {}, UserConfig>,

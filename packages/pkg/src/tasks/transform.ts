@@ -9,7 +9,7 @@ import { checkDependencyExists, isObject, timeFrom } from '../utils.js';
 import type { OutputFile, OutputResult, TaskRunnerContext, TransformTaskConfig, WatchChangedFile } from '../types.js';
 import type { RollupOptions, SourceMapInput } from 'rollup';
 import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
-import { getRollupOptions } from '../helpers/getRollupOptions.js';
+import { getRollupOptions } from '../engine/rollup/options.js';
 import { Runner } from '../helpers/runner.js';
 import { getExistedChangedFilesPath } from '../helpers/watcher.js';
 
