@@ -1,0 +1,9 @@
+{
+  "name": "@ice/pkg-tests-mix-cjs-mjs",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@ice/pkg": "workspace:*",
+    "@swc/helpers": "^0.5.15"
+  }
+}
