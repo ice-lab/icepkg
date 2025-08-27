@@ -47,16 +47,16 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
       ),
     );
   }
-  plugins.push(
-    swcPlugin(
-      taskConfig.jsxRuntime,
-      rootDir,
-      taskConfig.swcCompileOptions,
-      taskConfig.type === 'bundle' && taskConfig.compileDependencies,
-    ),
+
+  const swcPluginInstance = swcPlugin(
+    taskConfig.jsxRuntime,
+    rootDir,
+    taskConfig.swcCompileOptions,
+    taskConfig.type === 'bundle' && taskConfig.compileDependencies,
   );
 
   if (taskConfig.type === 'transform') {
+    plugins.push(swcPluginInstance);
     plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
@@ -86,22 +86,17 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
         : taskConfig.alias[key];
     });
     plugins.push(
-      replace({
-        values: {
-          ...getDefaultDefineValues(taskRunnerContext.mode),
-          // User define can override above.
-          ...taskConfig.define,
-        },
-        preventAssignment: true,
+      commonjs({
+        // To convert commonjs to import, make it compatible with rollup to bundle
+        extensions: [
+          '.js', // plugin-commonjs default extensions
+          '.jsx',
+          '.ts',
+          '.tsx',
+          ...(taskConfig.extensions || []),
+        ],
+        transformMixedEsModules: true,
       }),
-      styles(
-        (taskConfig.modifyStylesOptions ?? [(options) => options]).reduce(
-          (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
-          defaultStylesOptions,
-        ),
-      ),
-      image(),
-      json(),
       nodeResolve({
         // To locates modules using the node resolution algorithm.
         extensions: [
@@ -119,17 +114,23 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
         ],
         browser: taskConfig.browser,
       }),
-      commonjs({
-        // To convert commonjs to import, make it compatible with rollup to bundle
-        extensions: [
-          '.js', // plugin-commonjs default extensions
-          '.jsx',
-          '.ts',
-          '.tsx',
-          ...(taskConfig.extensions || []),
-        ],
-        transformMixedEsModules: true,
+      replace({
+        values: {
+          ...getDefaultDefineValues(taskRunnerContext.mode),
+          // User define can override above.
+          ...taskConfig.define,
+        },
+        preventAssignment: true,
       }),
+      styles(
+        (taskConfig.modifyStylesOptions ?? [(options) => options]).reduce(
+          (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
+          defaultStylesOptions,
+        ),
+      ),
+      image(),
+      json(),
+      swcPluginInstance,
       bundleAliasPlugin({
         entries: alias,
       }),

@@ -10,7 +10,13 @@ export const bundleSchema = z.object({
   outputDir: z.string().optional(),
   modes: z.enum(['production', 'development']).array().optional(),
   formats: z.string().array().optional(),
-  externals: z.union([z.boolean(), z.record(z.string())]).optional(),
+  externals: z
+    .union([
+      z.boolean(),
+      z.record(z.string()),
+      z.array(z.union([z.string(), z.instanceof(RegExp), z.record(z.string())])),
+    ])
+    .optional(),
   minify: z
     .union([
       z.boolean(),
