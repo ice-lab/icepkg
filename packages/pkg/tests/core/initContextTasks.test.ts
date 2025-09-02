@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { initTask } from '../../src/core/initContextTasks';
+import { initDeclarationTask, initTask } from '../../src/core/init';
 import { toFormat } from '../../src/helpers/formats';
 import {
   BuildTask,
@@ -53,12 +53,11 @@ function bt(
 }
 
 // Declaration Task
-function dt(formats: string[], config: Partial<DeclarationTaskConfig>): _BuildTask<DeclarationTaskConfig> {
+function dt(config: Partial<DeclarationTaskConfig>): _BuildTask<DeclarationTaskConfig> {
   return {
     name: `declaration`,
     config: {
       type: 'declaration',
-      transformFormats: formats as any,
       ...config,
     },
     modifyFunctions: [],
@@ -448,38 +447,41 @@ describe('initTask', () => {
   });
 
   describe('declaration', () => {
-    const FORMATS = ['esm'];
+    const TASKS = [tt('esm', 'esm:es5', {})];
     describe('outputMode', () => {
       it('userConfig is true', () => {
-        const task = initTask(
-          dt(FORMATS, {}),
+        const task = initDeclarationTask(
+          dt({}),
           c({
             declaration: true,
           }),
+          TASKS,
         );
         expect((task.config as DeclarationTaskConfig).outputMode).toEqual('multi');
       });
 
       it('userConfig is Object', () => {
-        const task = initTask(
-          dt(FORMATS, {}),
+        const task = initDeclarationTask(
+          dt({}),
           c({
             declaration: {
               outputMode: 'unique',
             },
           }),
+          TASKS,
         );
         expect((task.config as DeclarationTaskConfig).outputMode).toEqual('unique');
       });
 
       it('taskConfig is present', () => {
-        const task = initTask(
-          dt(FORMATS, {
+        const task = initDeclarationTask(
+          dt({
             outputMode: 'unique',
           }),
           c({
             declaration: true,
           }),
+          TASKS,
         );
         expect((task.config as DeclarationTaskConfig).outputMode).toEqual('unique');
       });

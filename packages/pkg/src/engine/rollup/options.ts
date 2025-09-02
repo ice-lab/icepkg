@@ -18,6 +18,8 @@ import type { OutputOptions, Plugin, RollupOptions } from 'rollup';
 import path from 'path';
 import { BUILTIN_EXTERNAL_MAP } from '../shared/external.js';
 import { getFilenameConfig } from '../shared/filename.js';
+import { getTaskSwcOptions } from '../../helpers/defaultSwcConfig.js';
+import { assertTaskBuildableConfig } from '../../helpers/taskConfig.js';
 
 interface PkgJson {
   name: string;
@@ -33,14 +35,18 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
   const rollupOptions: RollupOptions = {};
   const plugins: Plugin[] = [];
 
+  assertTaskBuildableConfig(taskConfig);
+
+  const swcCompileOptions = getTaskSwcOptions(taskConfig);
+
   if (taskConfig.babelPlugins?.length) {
     plugins.push(
       babelPlugin(
         taskConfig.babelPlugins,
         {
           jsxRuntime: taskConfig.jsxRuntime,
-          pragma: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragma,
-          pragmaFrag: taskConfig?.swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
+          pragma: swcCompileOptions?.jsc?.transform?.react?.pragma,
+          pragmaFrag: swcCompileOptions?.jsc?.transform?.react?.pragmaFrag,
         },
         taskConfig.type === 'bundle' && taskConfig.compileDependencies,
         taskConfig.modifyBabelOptions,
@@ -52,7 +58,7 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
     swcPlugin(
       taskConfig.jsxRuntime,
       rootDir,
-      taskConfig.swcCompileOptions,
+      swcCompileOptions,
       taskConfig.type === 'bundle' && taskConfig.compileDependencies,
     ),
   );

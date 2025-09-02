@@ -3,7 +3,7 @@ import consola from 'consola';
 import { cac } from 'cac';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { createPkg } from './core/createPkg.js';
+import { createCore } from './core/create.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -25,7 +25,7 @@ const cli = cac('ice-pkg');
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
 
-      const pkg = await createPkg({
+      const pkg = await createCore({
         rootDir: options.rootDir,
         command: 'build',
         commandArgs,
@@ -49,7 +49,7 @@ const cli = cac('ice-pkg');
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
 
-      const pkg = await createPkg({
+      const pkg = await createCore({
         rootDir: options.rootDir,
         command: 'start',
         commandArgs,

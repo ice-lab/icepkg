@@ -68,4 +68,37 @@ runProjectTest(import.meta.url, [
       declaration: false,
     },
   },
+  {
+    name: 'pkg-compat-transform',
+    snapshot: 'structure',
+    config: {
+      pkgs: ['esm', 'es2017', 'cjs'],
+    },
+  },
+  {
+    name: 'pkg-compat-bundle',
+    snapshot: 'structure',
+    config: {
+      pkgs: ['!esm', '!es2017', '!cjs'],
+    },
+  },
+  {
+    name: 'pkg-compat-bundle-2',
+    snapshot: 'structure',
+    config: {
+      pkgs: ['!es2017', '!umd'],
+    },
+  },
+  {
+    name: 'pkg-config',
+    snapshot: 'structure',
+    config: {
+      pkgs: [
+        {
+          module: 'esm',
+          target: 'es2017',
+        },
+      ],
+    },
+  },
 ]);

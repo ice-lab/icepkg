@@ -4,8 +4,9 @@ import { Context, CustomFormatTaskCreator, ExtendsPluginAPI, TaskConfig, UserCon
 import taskRegisterPlugin from '../plugins/component.js';
 import { userConfigSchema } from '../config/schema.js';
 import { createMessageBuilder, fromZodError } from 'zod-validation-error';
-import { registerTasks } from './registerTasks.js';
-import { initContextTasks } from './initContextTasks.js';
+import { registerPkgTasks, registerTasks } from './register.js';
+import { initContextTasks } from './init.js';
+import { resolvePackage, runPkgPlugins } from './pkg.js';
 
 export interface CreatePkgOptions {
   rootDir: string;
@@ -37,7 +38,7 @@ export interface PkgCore {
  *
  * 为了实现以上流程，需要魔改 build-scripts 的部分逻辑，所以会尝试调用其 private 方法
  */
-export async function createPkg(options: CreatePkgOptions) {
+export async function createCore(options: CreatePkgOptions) {
   const customFormats: Record<string, CustomFormatTaskCreator> = {};
 
   const extendsPluginAPI: ExtendsPluginAPI = {
@@ -105,7 +106,15 @@ export async function createPkg(options: CreatePkgOptions) {
     throw prettyError;
   }
 
-  registerTasks(ctx, customFormats);
+  const pkgs = await resolvePackage(ctx);
+  await runPkgPlugins(ctx, pkgs);
+
+  if (pkgs.length) {
+    // when pkg is preset, no need to register old tasks
+    await registerPkgTasks(ctx, pkgs);
+  } else {
+    registerTasks(ctx, customFormats);
+  }
 
   initContextTasks(ctx);
 

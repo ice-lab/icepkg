@@ -40,3 +40,63 @@ exports[`Run config custom-format > esm structure 1`] = `
   "name": "esm",
 }
 `;
+
+exports[`Run config pkg-scope > cjs structure 1`] = `null`;
+
+exports[`Run config pkg-scope > dist structure 1`] = `null`;
+
+exports[`Run config pkg-scope > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config pkg-scope > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config pkg-scope > file content es2017/index.d.ts 1`] = `
+"export declare const foo = 1;
+export declare const info: any;
+"
+`;
+
+exports[`Run config pkg-scope > file content es2017/index.js 1`] = `
+"export const foo = 1;
+export const info = {
+    \\"name\\": \\"global\\"
+};
+"
+`;
+
+exports[`Run config pkg-scope > file content esm/index.d.ts 1`] = `
+"export declare const foo = 1;
+export declare const info: any;
+"
+`;
+
+exports[`Run config pkg-scope > file content esm/index.js 1`] = `
+"export var foo = 1;
+export var info = {
+    \\"name\\": \\"pkg-config\\"
+};
+"
+`;

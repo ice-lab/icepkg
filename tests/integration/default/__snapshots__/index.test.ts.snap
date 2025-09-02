@@ -169,6 +169,116 @@ exports[`Run config no-declaration > esm structure 1`] = `
 }
 `;
 
+exports[`Run config pkg-compat-bundle > cjs structure 1`] = `null`;
+
+exports[`Run config pkg-compat-bundle > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.cjs.es2017.production.js",
+    },
+    {
+      "name": "index.cjs.es5.production.js",
+    },
+    {
+      "name": "index.esm.es2017.production.js",
+    },
+    {
+      "name": "index.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config pkg-compat-bundle > es2017 structure 1`] = `null`;
+
+exports[`Run config pkg-compat-bundle > esm structure 1`] = `null`;
+
+exports[`Run config pkg-compat-bundle-2 > cjs structure 1`] = `null`;
+
+exports[`Run config pkg-compat-bundle-2 > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.umd.es2017.production.js",
+    },
+    {
+      "name": "index.umd.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config pkg-compat-bundle-2 > es2017 structure 1`] = `null`;
+
+exports[`Run config pkg-compat-bundle-2 > esm structure 1`] = `null`;
+
+exports[`Run config pkg-compat-transform > cjs structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "cjs",
+}
+`;
+
+exports[`Run config pkg-compat-transform > dist structure 1`] = `null`;
+
+exports[`Run config pkg-compat-transform > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config pkg-compat-transform > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config pkg-config > cjs structure 1`] = `null`;
+
+exports[`Run config pkg-config > dist structure 1`] = `null`;
+
+exports[`Run config pkg-config > es2017 structure 1`] = `null`;
+
+exports[`Run config pkg-config > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
 exports[`Run config sourcemap-enable > cjs structure 1`] = `null`;
 
 exports[`Run config sourcemap-enable > dist structure 1`] = `null`;

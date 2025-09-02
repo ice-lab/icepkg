@@ -1,4 +1,4 @@
-import { it, beforeEach, expect, beforeAll } from 'vitest';
+import { it, expect, beforeAll } from 'vitest';
 import * as path from 'node:path';
 import * as url from 'node:url';
 import * as fse from 'fs-extra';
@@ -12,7 +12,14 @@ export interface ProjectTestUserConfig {
   name: string;
   config?: string | UserConfig;
   mode?: 'build' | 'start';
+  /**
+   * How to snapshot file
+   * - 'full' - snapshot full file content and folder structure
+   * - 'structure' - snapshot folder structure, not file content
+   */
   snapshot?: 'full' | 'structure';
+  // To custom snapshot folders
+  snapshotFolders?: string[];
   skip?: boolean;
   only?: boolean;
 }
@@ -40,13 +47,14 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestConfigs)
       config: config.config,
       mode: config?.mode ?? 'build',
       snapshot: config?.snapshot ?? 'full',
+      snapshotFolders: config?.snapshotFolders ?? CHECK_DIRS,
       skip: config.skip ?? false,
       only: config.only ?? false,
     });
   }
 
-  async function resetProject() {
-    for (const dir of CHECK_DIRS) {
+  async function resetProject(config: ProjectTestConfig) {
+    for (const dir of config.snapshotFolders) {
       await fse.remove(path.join(projectPath, dir));
     }
   }
@@ -62,14 +70,14 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestConfigs)
     }
 
     execSync(`./node_modules/.bin/ice-pkg build --config ${configPath}`, {
-      stdio: 'inherit',
+      stdio: 'pipe',
       cwd: projectPath,
     });
   }
 
   async function runSnapshot(config: ProjectTestConfig) {
     const { snapshot } = config;
-    for (const checkDir of CHECK_DIRS) {
+    for (const checkDir of config.snapshotFolders) {
       const receivedPath = path.join(projectPath, checkDir);
 
       const isReceivedExists = fs.existsSync(receivedPath);
@@ -87,17 +95,17 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestConfigs)
     expect(fse.existsSync(projectPath), `Project ${path.basename(projectPath)} is not found`).toBe(true);
   });
 
-  beforeEach(async () => {
-    await resetProject();
-  });
-
   for (const config of configs) {
     const test = config.only ? it.only : config.skip ? it.skip : it;
     test(
       `Run config ${config.name}`,
       async () => {
-        await runBuild(config);
-        await runSnapshot(config);
+        try {
+          await runBuild(config);
+          await runSnapshot(config);
+        } finally {
+          await resetProject(config);
+        }
       },
       {
         timeout: 30 * 1000,
