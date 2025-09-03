@@ -48,15 +48,16 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
     );
   }
 
-  const swcPluginInstance = swcPlugin(
-    taskConfig.jsxRuntime,
-    rootDir,
-    taskConfig.swcCompileOptions,
-    taskConfig.type === 'bundle' && taskConfig.compileDependencies,
+  plugins.push(
+    swcPlugin(
+      taskConfig.jsxRuntime,
+      rootDir,
+      taskConfig.swcCompileOptions,
+      taskConfig.type === 'bundle' && taskConfig.compileDependencies,
+    ),
   );
 
   if (taskConfig.type === 'transform') {
-    plugins.push(swcPluginInstance);
     plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
   } else if (taskConfig.type === 'bundle') {
     const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
@@ -130,7 +131,6 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
       ),
       image(),
       json(),
-      swcPluginInstance,
       bundleAliasPlugin({
         entries: alias,
       }),
