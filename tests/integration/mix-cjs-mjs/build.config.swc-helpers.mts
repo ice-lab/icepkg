@@ -6,7 +6,7 @@ export default defineConfig({
     formats: ['cjs', 'esm']
   },
   bundle: {
-    formats: ['cjs', 'esm'],
+    formats: ['cjs', 'esm', 'umd'],
     externals: [/@swc\/helpers/]
   },
 })

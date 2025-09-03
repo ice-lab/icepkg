@@ -1,7 +1,7 @@
-import { join, extend } from './cjs';
+import { add, extend } from './cjs';
 
-export { join, extend };
+export { add, extend };
 
-export const foo = {
+export const foo: Record<string, any> = {
   ...extend({ a: 1 }, { b: 2 }),
 };
