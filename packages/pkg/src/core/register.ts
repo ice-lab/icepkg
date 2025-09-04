@@ -5,19 +5,25 @@ import {
   BundleFormat,
   TransformFormat,
   TaskName,
+  PackageResolvedConfig,
+  NodeModuleType,
 } from '../types.js';
 import { createFormat, isAliasFormatString, toFormat, tryToFormat } from '../helpers/formats.js';
 import { ALIAS_BUNDLE_FORMATS_MAP, ALIAS_TRANSFORM_FORMATS_MAP } from '../constants.js';
 import { groupBy } from 'es-toolkit/array';
+import { getPkgTaskName } from './pkg.js';
 
 export function registerTasks(ctx: Context, customFormats: Record<string, CustomFormatTaskCreator>) {
   const { userConfig, registerTask } = ctx;
   const transformUserFormats = userConfig.transform.formats;
+  let hasTransformTasks = false;
   for (const format of transformUserFormats) {
+    hasTransformTasks = true;
     if (isAliasFormatString(format, ALIAS_TRANSFORM_FORMATS_MAP)) {
+      const fmt = toFormat<TransformFormat>(ALIAS_TRANSFORM_FORMATS_MAP[format]);
       registerTask(`transform-${format}`, {
         type: 'transform',
-        format: toFormat<TransformFormat>(ALIAS_TRANSFORM_FORMATS_MAP[format]),
+        format: fmt,
       });
     } else if (customFormats[format]) {
       const task = customFormats[format]({
@@ -94,10 +100,50 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
     }
   }
 
-  if ((userConfig.declaration ?? true) && transformUserFormats.length) {
+  if ((userConfig.declaration ?? true) && hasTransformTasks) {
     registerTask(TaskName.DECLARATION, {
       type: 'declaration',
-      transformFormats: transformUserFormats,
+    });
+  }
+}
+
+export function registerPkgTasks(ctx: Context, pkgs: PackageResolvedConfig[]) {
+  const { userConfig, registerTask } = ctx;
+  let hasTransformTasks = false;
+  for (const pkg of pkgs) {
+    const taskName = getPkgTaskName(pkg);
+    if (pkg.bundle) {
+      registerTask(taskName, {
+        type: 'bundle',
+        formats: pkg.legacyModules
+          ? pkg.legacyModules.map((module) => ({
+              module,
+              target: pkg.target,
+            }))
+          : [
+              {
+                module: pkg.module,
+                target: pkg.target,
+              },
+            ],
+        pkg,
+      });
+    } else {
+      hasTransformTasks = true;
+      registerTask(taskName, {
+        type: 'transform',
+        format: {
+          module: pkg.module as NodeModuleType,
+          target: pkg.target,
+        },
+        pkg,
+      });
+    }
+  }
+
+  if ((userConfig.declaration ?? true) && hasTransformTasks) {
+    registerTask(TaskName.DECLARATION, {
+      type: 'declaration',
     });
   }
 }

@@ -1,4 +1,5 @@
 import { isAbsolute, resolve, join } from 'path';
+import { TransformTaskConfig } from '../types.js';
 
 export function formatEntry(inputEntry: string | string[] | Record<string, string>): Record<string, string> {
   const entry = {};
@@ -33,6 +34,9 @@ export const getTransformEntryDirs = (rootDir: string, entry: Record<string, str
   return transformEntryDirs;
 };
 
-export const getTransformDefaultOutputDir = (rootDir: string, taskName: string) => {
+export const getTransformDefaultOutputDir = (rootDir: string, taskName: string, config: TransformTaskConfig) => {
+  if (config.pkg) {
+    return resolve(rootDir, config.pkg.id);
+  }
   return resolve(rootDir, taskName.split('-')[1]);
 };

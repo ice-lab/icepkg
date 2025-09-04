@@ -61,3 +61,22 @@ export const getDefaultTransformSwcConfig = (transformTaskConfig: TransformTaskC
     sourceMaps: transformTaskConfig.sourcemap,
   };
 };
+
+export function getTaskSwcOptions(taskConfig: TransformTaskConfig | BundleTaskConfig) {
+  let { swcCompileOptions = {} } = taskConfig;
+  const defaultSwcOptions =
+    taskConfig.type === 'transform'
+      ? getDefaultTransformSwcConfig(taskConfig, taskConfig.modes![0])
+      : getDefaultBundleSwcConfig(taskConfig);
+
+  swcCompileOptions = {
+    ...defaultSwcOptions,
+    ...swcCompileOptions,
+  };
+
+  if (taskConfig.modifySwcCompileOptions) {
+    swcCompileOptions = taskConfig.modifySwcCompileOptions(swcCompileOptions);
+  }
+
+  return swcCompileOptions;
+}

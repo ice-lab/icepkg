@@ -6,6 +6,8 @@ import type {
   PluginAPI as _PluginAPI,
   Plugin as _Plugin,
   TaskConfig as _BuildTask,
+  PluginInfo as _PluginInfo,
+  Json,
 } from 'build-scripts';
 import type { Config } from '@swc/core';
 import type stylesPlugin from 'rollup-plugin-styler';
@@ -157,7 +159,69 @@ export interface DeclarationUserConfig {
   outputMode?: 'multi' | 'unique';
 }
 
+export interface PackageUserConfig
+  extends Pick<BundleUserConfig, 'externals' | 'name' | 'compileDependencies' | 'polyfill' | 'engine' | 'minify'>,
+    Pick<UserConfig, 'alias' | 'define' | 'jsxRuntime' | 'declaration' | 'entry' | 'sourceMaps'> {
+  /**
+   * Unique id to indicate a package
+   */
+  id?: string;
+
+  /**
+   * JS target
+   * @default 'es5'
+   */
+  target?: JsTarget;
+
+  /**
+   * Module type
+   * @default 'esm'
+   */
+  module?: ModuleType;
+
+  /**
+   * Is bundle or bundless
+   * @default false
+   */
+  bundle?: boolean;
+
+  /**
+   * Extends other packages, use preset package or other package id
+   */
+  extends?: Array<PresetPackage | string>;
+
+  /**
+   * Plugins only for this package
+   */
+  plugins?: UserConfig['plugins'];
+
+  /**
+   * Define output directory
+   */
+  outputDir?: string;
+}
+
+type PackageResolvedRequiredConfigKeys = 'module' | 'target' | 'id';
+export interface PackageResolvedConfig
+  extends Omit<PackageUserConfig, 'extends' | 'preset' | 'plugins' | PackageResolvedRequiredConfigKeys>,
+    Required<Pick<PackageUserConfig, PackageResolvedRequiredConfigKeys>> {
+  pluginInfos: Array<_PluginInfo<any, any, any>>;
+  /**
+   * for compat old task config, used for build task name
+   */
+  displayId?: string;
+
+  /**
+   * for compat old task config, used for multi module output.
+   * When extraModules is preset, `module` is ignored
+   */
+  legacyModules?: ModuleType[];
+}
+
+type PresetPackage = TransformUserFormat | `!${BundleUserFormat}`;
+
 export interface UserConfig {
+  pkgs?: Array<PresetPackage | PackageUserConfig>;
   /**
    * Entry for a task
    * @default  `./src/index`
@@ -212,7 +276,7 @@ export interface UserConfig {
   bundle?: BundleUserConfig;
 }
 
-export type PluginUserConfig = string | [string, any?] | Plugin;
+export type PluginUserConfig = string | [string, Json] | Plugin;
 
 interface _TaskConfig {
   /**
@@ -274,6 +338,8 @@ interface _TaskConfig {
    * modify rslib config
    */
   modifyRslibConfig?: Array<(rslibOptions: RslibConfig) => RslibConfig>;
+
+  pkg?: PackageResolvedConfig;
 }
 
 export type EngineType = 'rollup' | 'rslib';
@@ -317,11 +383,8 @@ export interface TransformTaskConfig extends _TaskConfig, Omit<TransformUserConf
 export interface DeclarationTaskConfig extends _TaskConfig, DeclarationUserConfig {
   type: 'declaration';
   /**
-   * 记录 transform 配置的 format 用于计算实际的输出目录
-   */
-  transformFormats?: TransformUserConfig['formats'];
-  /**
    * 实际的输出目录，可以同时输出到 esm、es2017 内等
+   * @internal
    */
   declarationOutputDirs?: string[];
 }

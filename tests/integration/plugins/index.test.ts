@@ -6,4 +6,8 @@ runProjectTest(import.meta.url, [
     config: 'build.config.custom-format.mts',
     snapshot: 'structure',
   },
+  {
+    name: 'pkg-scope',
+    config: 'build.config.pkg-scope.mts',
+  },
 ]);
