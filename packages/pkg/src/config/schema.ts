@@ -29,6 +29,7 @@ export const bundleSchema = z.object({
   polyfill: z.union([z.literal(false), z.enum(['entry', 'usage'])]).optional(),
   compileDependencies: z.union([z.boolean(), z.union([z.string(), z.instanceof(RegExp)]).array()]).optional(),
   browser: z.boolean().optional(),
+  codeSplitting: z.boolean().optional(),
 });
 
 export const userConfigSchema = z.object({
