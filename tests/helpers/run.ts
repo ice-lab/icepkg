@@ -28,7 +28,7 @@ export type ProjectTestConfig = Required<ProjectTestUserConfig>;
 
 export type ProjectTestConfigs = ProjectTestUserConfig[];
 
-export function runProjectTest(fileUrl: string, userConfigs: ProjectTestConfigs) {
+export function runProjectTest(fileUrl: string, userConfigs: ProjectTestUserConfig[]) {
   const projectPath = path.dirname(url.fileURLToPath(fileUrl));
 
   const configs: ProjectTestConfig[] = [];

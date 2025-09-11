@@ -147,6 +147,13 @@ export interface BundleUserConfig {
    * @experimental
    */
   engine?: EngineType;
+
+  /**
+   * Wether or not to code splitting into different chunks
+   * @since 2.0.0
+   * @default true
+   */
+  codeSplitting?: boolean;
 }
 
 export interface DeclarationUserConfig {
@@ -160,7 +167,10 @@ export interface DeclarationUserConfig {
 }
 
 export interface PackageUserConfig
-  extends Pick<BundleUserConfig, 'externals' | 'name' | 'compileDependencies' | 'polyfill' | 'engine' | 'minify'>,
+  extends Pick<
+      BundleUserConfig,
+      'externals' | 'name' | 'compileDependencies' | 'polyfill' | 'engine' | 'minify' | 'codeSplitting'
+    >,
     Pick<UserConfig, 'alias' | 'define' | 'jsxRuntime' | 'declaration' | 'entry' | 'sourceMaps'> {
   /**
    * Unique id to indicate a package
@@ -363,6 +373,7 @@ export interface BundleTaskConfig extends _TaskConfig, Omit<BundleUserConfig, 'd
   cssMinify?: (mode: string, command: string) => CSSMinify;
 
   vendorName?: string;
+  codeSplitting?: boolean;
 }
 
 export interface TransformTaskConfig extends _TaskConfig, Omit<TransformUserConfig, 'formats'> {

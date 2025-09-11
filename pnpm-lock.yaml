@@ -490,6 +490,15 @@ importers:
         specifier: workspace:*
         version: link:../mock-entry-package
 
+  tests/integration/bundle-dep:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../../packages/pkg
+      es-toolkit:
+        specifier: ^1.32.0
+        version: 1.32.0
+
   tests/integration/default:
     dependencies:
       '@ice/pkg':

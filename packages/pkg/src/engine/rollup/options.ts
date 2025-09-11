@@ -188,7 +188,7 @@ function getRollupOutputs({ globals, bundleTaskConfig, pkg, mode, command }: Get
       entryFileNames: filenameConfig.js,
       chunkFileNames: filenameConfig.js,
       manualChunks:
-        format.module !== 'umd'
+        format.module !== 'umd' && bundleTaskConfig.codeSplitting !== false
           ? (id, { getModuleInfo }) => {
               if (/node_modules/.test(id)) {
                 return vendorName;

@@ -1,0 +1,58 @@
+// Vitest Snapshot v1
+
+exports[`Run config default-no-venders > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "normal.cjs.es5.production.js",
+    },
+    {
+      "name": "normal.esm.es5.production.js",
+    },
+    {
+      "name": "normal.umd.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config default-no-venders-pkg > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "no-venders.esm.es5.production.js",
+    },
+    {
+      "name": "vendor.esm.es2017.production.js",
+    },
+    {
+      "name": "with-venders.esm.es2017.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config default-venders > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "normal.cjs.es5.production.js",
+    },
+    {
+      "name": "normal.esm.es5.production.js",
+    },
+    {
+      "name": "normal.umd.es5.production.js",
+    },
+    {
+      "name": "vendor.cjs.es5.production.js",
+    },
+    {
+      "name": "vendor.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
