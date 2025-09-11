@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18]
+        node-version: [18, 20]
 
     steps:
       - name: Set branch name
@@ -35,7 +35,7 @@ jobs:
       - run: pnpm run build:doc
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.0
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && matrix.node-version == 18
         with:
           BRANCH: gh-pages
           FOLDER: website/build
