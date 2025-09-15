@@ -402,7 +402,7 @@ describe('initTask', () => {
     });
 
     describe.each<[key: keyof BundleUserConfig, defaultValue: any, validValues: any[]]>([
-      ['polyfill', 'usage', [false, 'usage', 'entry']],
+      ['polyfill', undefined, [false, 'usage', 'entry']],
       ['compileDependencies', false, [false, true, ['react']]],
       ['externals', undefined, [false, { react: 'React' }]],
       ['browser', undefined, [false, true]],
