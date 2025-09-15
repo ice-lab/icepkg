@@ -1,7 +1,7 @@
 import { performance } from 'perf_hooks';
 import { isAbsolute, resolve, extname, dirname, relative, basename } from 'path';
 import fs from 'fs-extra';
-import semver from 'semver';
+import semverGtr from 'semver/ranges/gtr.js';
 import consola from 'consola';
 import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
@@ -174,9 +174,13 @@ async function runTransform(
     // take the semver in package.json for now, the actual used version may not be the same
     const curUsedRange = checkDependencyExists('@swc/helpers', 'https://pkg.ice.work/faq');
 
-    if (curUsedRange && semver.gtr('0.5.13', curUsedRange)) {
-      consola.error('`@swc/helpers` 需更新到 `0.5.13` 及以上版本');
-      process.exit(1);
+    if (
+      curUsedRange &&
+      !curUsedRange.startsWith('workspace:') &&
+      !curUsedRange.startsWith('catalog:') &&
+      semverGtr('0.5.17', curUsedRange)
+    ) {
+      consola.error('`@swc/helpers` 需更新到 `0.5.17` 及以上版本');
     }
   }
 
