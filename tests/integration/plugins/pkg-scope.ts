@@ -8,7 +8,6 @@ const plugin: Plugin = (api) => {
         name: 'pkg-config',
       }),
     };
-    console.log('config', config);
   });
 };
 

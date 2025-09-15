@@ -74,7 +74,10 @@ exports[`Run config pkg-scope > esm structure 1`] = `
 `;
 
 exports[`Run config pkg-scope > file content es2017/index.d.ts 1`] = `
-"export declare const foo = 1;
+"declare global {
+    const __PLUGIN_INFO__: any;
+}
+export declare const foo = 1;
 export declare const info: any;
 "
 `;
@@ -88,7 +91,10 @@ export const info = {
 `;
 
 exports[`Run config pkg-scope > file content esm/index.d.ts 1`] = `
-"export declare const foo = 1;
+"declare global {
+    const __PLUGIN_INFO__: any;
+}
+export declare const foo = 1;
 export declare const info: any;
 "
 `;

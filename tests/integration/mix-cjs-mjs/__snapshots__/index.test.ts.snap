@@ -83,17 +83,17 @@ Object.defineProperty(exports, \\"__esModule\\", {
 function _export(target, all) {
     for(var name in all)Object.defineProperty(target, name, {
         enumerable: true,
-        get: all[name]
+        get: Object.getOwnPropertyDescriptor(all, name).get
     });
 }
 _export(exports, {
-    add: function() {
+    get add () {
         return _cjs.add;
     },
-    extend: function() {
+    get extend () {
         return _cjs.extend;
     },
-    foo: function() {
+    get foo () {
         return foo;
     }
 });
