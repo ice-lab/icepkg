@@ -22,7 +22,6 @@ const defaultBundleUserConfig: BundleUserConfig = {
     js: defaultMinifyFunction,
     css: defaultMinifyFunction,
   },
-  polyfill: 'usage',
   compileDependencies: false,
 };
 

@@ -97,7 +97,7 @@ async function transformImport(source: string, sourceFilename: string) {
     }
     if (targetImport.n.startsWith('@swc/helpers')) {
       if (!isESM) {
-        // Replace @swc/helpers with cjs path.
+        // Replace @swc/helpers with cjs
         const importStr = source.substring(targetImport.ss, targetImport.se);
         // Import rule: import { _ as _type_of } from "@swc/helpers/_/_type_of";
         const matchImport = importStr.match(/import\s+{\s+([\w*\s{},]*)\s+}\s+from\s+['"](.*)['"]/);
@@ -106,6 +106,12 @@ async function transformImport(source: string, sourceFilename: string) {
           const replaceModule = `var ${identifier.split(' as ')[1].trim()} = require('${targetImport.n}')._`;
           str().overwrite(targetImport.ss, targetImport.se, replaceModule);
         }
+      }
+    } else if (targetImport.n.startsWith('core-js')) {
+      // Replace core-js with cjs
+      if (!isESM) {
+        const replaceRequire = `require('${targetImport.n}')`;
+        str().overwrite(targetImport.ss, targetImport.se, replaceRequire);
       }
     }
   });

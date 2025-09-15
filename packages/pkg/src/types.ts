@@ -125,10 +125,8 @@ export interface BundleUserConfig {
       };
 
   /**
-   * Weather or not add the polyfill to the code.
-   * @default ['usage']
-   *
-   * In the next version(v2), the value of polyfill will be `false`.
+   * Weather or not add the polyfill(core-js) to the code.
+   * `undefined` is equivalent to `false`
    */
   polyfill?: false | 'entry' | 'usage';
 
