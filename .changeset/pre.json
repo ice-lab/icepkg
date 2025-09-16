@@ -19,7 +19,21 @@
     "@ice/pkg-plugin-jsx-plus": "1.0.3",
     "@ice/pkg-plugin-rax-component": "1.1.2",
     "@ice/remark-react-docgen-docusaurus": "1.0.1",
-    "icepkg-site": "0.0.0"
+    "icepkg-site": "0.0.0",
+    "@ice/pkg-tests": "0.0.0",
+    "@ice/pkg-tests-bundle-dep": "0.0.0",
+    "@ice/pkg-tests-mix-cjs-mjs": "0.0.0"
   },
-  "changesets": ["cold-camels-rest", "dry-pots-buy", "long-experts-design", "quick-wasps-shake", "violet-pots-brush"]
+  "changesets": [
+    "cold-camels-rest",
+    "dry-pots-buy",
+    "eighty-trees-behave",
+    "famous-fans-yell",
+    "funny-tomatoes-count",
+    "hip-beans-fail",
+    "long-experts-design",
+    "quick-wasps-shake",
+    "slimy-walls-tease",
+    "violet-pots-brush"
+  ]
 }
