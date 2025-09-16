@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.0-alpha.2
+
+### Major Changes
+
+- fc8417f: feat: change polyfill default to none [BREAK]
+- be6e233: feat: remove `development` option
+
+### Minor Changes
+
+- 76fa5f6: feat: support disable codeSplitting
+- 493eb9d: feat: update swc to 1.13 and not throw @swc/helpers version check error
+- 33edb9c: feat: support `pkg` options
+
 ## 2.0.0-alpha.1
 
 ### Major Changes
