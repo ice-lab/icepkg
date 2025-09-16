@@ -101,4 +101,21 @@ runProjectTest(import.meta.url, [
       ],
     },
   },
+  {
+    name: 'pkg-config-disabled',
+    snapshot: 'structure',
+    config: {
+      pkgs: [
+        {
+          module: 'esm',
+          target: 'es2017',
+        },
+        {
+          module: 'cjs',
+          target: 'es2017',
+          disable: true,
+        },
+      ],
+    },
+  },
 ]);
