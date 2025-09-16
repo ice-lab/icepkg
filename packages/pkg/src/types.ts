@@ -159,7 +159,7 @@ export interface DeclarationUserConfig {
   outputMode?: 'multi' | 'unique';
 }
 
-export interface PackageUserConfig
+export interface PkgUserConfig
   extends Pick<
       BundleUserConfig,
       'externals' | 'name' | 'compileDependencies' | 'polyfill' | 'engine' | 'minify' | 'codeSplitting'
@@ -191,7 +191,7 @@ export interface PackageUserConfig
   /**
    * Extends other packages, use preset package or other package id
    */
-  extends?: Array<PresetPackage | string>;
+  extends?: Array<PresetPkg | string>;
 
   /**
    * Plugins only for this package
@@ -202,12 +202,17 @@ export interface PackageUserConfig
    * Define output directory
    */
   outputDir?: string;
+
+  /**
+   * Disable this pkg to build
+   */
+  disable?: boolean;
 }
 
-type PackageResolvedRequiredConfigKeys = 'module' | 'target' | 'id';
-export interface PackageResolvedConfig
-  extends Omit<PackageUserConfig, 'extends' | 'preset' | 'plugins' | PackageResolvedRequiredConfigKeys>,
-    Required<Pick<PackageUserConfig, PackageResolvedRequiredConfigKeys>> {
+type PkgResolvedRequiredConfigKeys = 'module' | 'target' | 'id';
+export interface PkgResolvedConfig
+  extends Omit<PkgUserConfig, 'extends' | 'preset' | 'plugins' | PkgResolvedRequiredConfigKeys>,
+    Required<Pick<PkgUserConfig, PkgResolvedRequiredConfigKeys>> {
   pluginInfos: Array<_PluginInfo<any, any, any>>;
   /**
    * for compat old task config, used for build task name
@@ -221,10 +226,10 @@ export interface PackageResolvedConfig
   legacyModules?: ModuleType[];
 }
 
-type PresetPackage = TransformUserFormat | `!${BundleUserFormat}`;
+export type PresetPkg = TransformUserFormat | `!${BundleUserFormat}`;
 
 export interface UserConfig {
-  pkgs?: Array<PresetPackage | PackageUserConfig>;
+  pkgs?: Array<PresetPkg | PkgUserConfig | boolean | undefined>;
   /**
    * Entry for a task
    * @default  `./src/index`
@@ -279,7 +284,7 @@ export interface UserConfig {
   bundle?: BundleUserConfig;
 }
 
-export type PluginUserConfig = string | [string, Json] | Plugin;
+export type PluginUserConfig = string | [string, Json?] | Plugin;
 
 interface _TaskConfig {
   /**
@@ -342,7 +347,7 @@ interface _TaskConfig {
    */
   modifyRslibConfig?: Array<(rslibOptions: RslibConfig) => RslibConfig>;
 
-  pkg?: PackageResolvedConfig;
+  pkg?: PkgResolvedConfig;
 }
 
 export type EngineType = 'rollup' | 'rslib';

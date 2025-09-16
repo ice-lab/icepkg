@@ -5,7 +5,7 @@ import {
   BundleFormat,
   TransformFormat,
   TaskName,
-  PackageResolvedConfig,
+  PkgResolvedConfig,
   NodeModuleType,
 } from '../types.js';
 import { createFormat, isAliasFormatString, toFormat, tryToFormat } from '../helpers/formats.js';
@@ -107,7 +107,7 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
   }
 }
 
-export function registerPkgTasks(ctx: Context, pkgs: PackageResolvedConfig[]) {
+export function registerPkgTasks(ctx: Context, pkgs: PkgResolvedConfig[]) {
   const { userConfig, registerTask } = ctx;
   let hasTransformTasks = false;
   for (const pkg of pkgs) {

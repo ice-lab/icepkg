@@ -1,4 +1,4 @@
-import { AliasBundleFormatString, Context, PackageResolvedConfig, PackageUserConfig, UserConfig } from '../types';
+import { AliasBundleFormatString, Context, PkgResolvedConfig, PkgUserConfig, UserConfig } from '../types.js';
 import { ApplyMethodAPI, Context as BuildScriptContext, OnGetConfig } from 'build-scripts';
 import { merge, pick, omit } from 'es-toolkit/object';
 import { groupBy } from 'es-toolkit/array';
@@ -25,7 +25,7 @@ async function resolvePlugins(ctx: Context, plugins: UserConfig['plugins']) {
     commandArgs: ctx.commandArgs,
   });
   mockContext.userConfig = {
-    plugins,
+    plugins: plugins as BuildScriptContext['userConfig']['plugins'],
   };
   return await mockContext.resolvePlugins();
 }
@@ -36,7 +36,7 @@ function isBundlePresetPkgString(pkg: string): boolean {
 
 const LEGACY_PRESET_CONFIG_MAP: Record<
   string,
-  Pick<PackageResolvedConfig, 'id' | 'module' | 'target' | 'bundle' | 'outputDir' | 'displayId'>
+  Pick<PkgResolvedConfig, 'id' | 'module' | 'target' | 'bundle' | 'outputDir' | 'displayId'>
 > = {
   esm: {
     id: 'esm',
@@ -88,7 +88,7 @@ const LEGACY_PRESET_CONFIG_MAP: Record<
 
 function parsePresetPkgString(
   preset?: string,
-): Pick<PackageResolvedConfig, 'id' | 'module' | 'target' | 'bundle' | 'outputDir' | 'displayId'> | null {
+): Pick<PkgResolvedConfig, 'id' | 'module' | 'target' | 'bundle' | 'outputDir' | 'displayId'> | null {
   if (!preset) {
     return null;
   }
@@ -110,14 +110,11 @@ function parsePresetPkgString(
   };
 }
 
-function resolveExtends(
-  extendsConfig: string[] = [],
-  pkgsMap: Map<string, PackageResolvedConfig>,
-): Partial<PackageUserConfig> {
-  let mergedConfig: Partial<PackageUserConfig> = {};
+function resolveExtends(extendsConfig: string[] = [], pkgsMap: Map<string, PkgResolvedConfig>): Partial<PkgUserConfig> {
+  let mergedConfig: Partial<PkgUserConfig> = {};
 
   for (const extend of extendsConfig) {
-    let extendConfig: Partial<PackageUserConfig> | null = null;
+    let extendConfig: Partial<PkgUserConfig> | null = null;
 
     // 尝试解析为预设字符串
     const presetConfig = parsePresetPkgString(extend);
@@ -140,9 +137,10 @@ function resolveExtends(
 
 export async function resolvePackage(ctx: Context) {
   const { userConfig } = ctx;
+  // filter undefined or boolean out
   const pkgs = userConfig.pkgs ?? [];
-  const resolvedPkgs: PackageResolvedConfig[] = [];
-  const pkgsMap = new Map<string, PackageResolvedConfig>();
+  const resolvedPkgs: PkgResolvedConfig[] = [];
+  const pkgsMap = new Map<string, PkgResolvedConfig>();
 
   function toValidId(id: string): string {
     if (!pkgsMap.has(id)) return id;
@@ -157,16 +155,22 @@ export async function resolvePackage(ctx: Context) {
     if (typeof pkg === 'string') {
       if (isBundlePresetPkgString(pkg)) {
         if (isAliasFormatString(pkg.slice(1), ALIAS_BUNDLE_FORMATS_MAP)) {
+          // 旧版本的 Bundle 配置，例如 esm/es2017，它们之间关系比较特殊，属于正交的能力，所以需要单独处理
           return 'bundleLegacy';
         }
       }
       return 'preset';
     }
+    if (typeof pkg !== 'object' || pkg.disable) {
+      // invalid pkg or disabled pkg
+      return 'ignore';
+    }
     return 'pkg';
   }) as {
     bundleLegacy?: string[];
     preset?: string[];
-    pkg?: PackageUserConfig[];
+    pkg?: PkgUserConfig[];
+    ignore?: unknown[];
   };
 
   if (groupedPkgs.bundleLegacy?.length) {
@@ -175,7 +179,7 @@ export async function resolvePackage(ctx: Context) {
     const es5Formats = aliasedFormatsGroup.es5 as Array<Exclude<AliasBundleFormatString, 'es2017'>> | undefined;
 
     if (es5Formats?.length) {
-      const resolvedPkg: PackageResolvedConfig = {
+      const resolvedPkg: PkgResolvedConfig = {
         id: toValidId('!es5'),
         module: 'esm', // will be ignored
         target: 'es5',
@@ -189,7 +193,7 @@ export async function resolvePackage(ctx: Context) {
     }
 
     if (aliasedFormatsGroup.es2017?.length) {
-      const resolvedPkg: PackageResolvedConfig = {
+      const resolvedPkg: PkgResolvedConfig = {
         id: toValidId('!es2017'),
         module: 'esm', // will be ignored
         target: 'es2017',
@@ -209,7 +213,7 @@ export async function resolvePackage(ctx: Context) {
       throw new Error(`Unknown preset package "${pkg}"`);
     }
     const id = toValidId(presetConfig.id);
-    const resolvedPkg: PackageResolvedConfig = {
+    const resolvedPkg: PkgResolvedConfig = {
       ...presetConfig,
       id,
       pluginInfos: [],
@@ -223,7 +227,7 @@ export async function resolvePackage(ctx: Context) {
     // 处理 extends 配置
     const extendedConfig = resolveExtends(extendsConfig, pkgsMap);
 
-    const resolvedPkg: PackageResolvedConfig = {
+    const resolvedPkg: PkgResolvedConfig = {
       target,
       module,
       ...extendedConfig,
@@ -252,7 +256,7 @@ export async function resolvePackage(ctx: Context) {
   return resolvedPkgs;
 }
 
-export async function runPkgPlugins(ctx: Context, pkgs: PackageResolvedConfig[]) {
+export async function runPkgPlugins(ctx: Context, pkgs: PkgResolvedConfig[]) {
   for (const pkg of pkgs) {
     for (const pluginInfo of pkg.pluginInfos) {
       const { setup, options, name: pluginName } = pluginInfo;
@@ -317,6 +321,6 @@ export async function runPkgPlugins(ctx: Context, pkgs: PackageResolvedConfig[])
   }
 }
 
-export function getPkgTaskName(pkg: PackageResolvedConfig) {
+export function getPkgTaskName(pkg: PkgResolvedConfig) {
   return `${pkg.bundle ? 'bundle' : 'transform'}-${pkg.displayId ?? pkg.id}`;
 }
