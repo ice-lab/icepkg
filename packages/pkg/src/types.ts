@@ -86,11 +86,6 @@ export interface BundleUserConfig {
    */
   outputDir?: string;
   /**
-   * @deprecated Please use `bundle.modes` config.
-   * Generate uncompressed bundle for development debug.
-   */
-  development?: boolean;
-  /**
    * Node env modes. For example: 'production', 'development'
    * @default ['production']
    */
@@ -352,7 +347,7 @@ interface _TaskConfig {
 
 export type EngineType = 'rollup' | 'rslib';
 
-export interface BundleTaskConfig extends _TaskConfig, Omit<BundleUserConfig, 'development' | 'minify' | 'formats'> {
+export interface BundleTaskConfig extends _TaskConfig, Omit<BundleUserConfig, 'minify' | 'formats'> {
   type: 'bundle';
   originalFormats?: string[];
   formats: BundleFormat[];
