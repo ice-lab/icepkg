@@ -29,6 +29,8 @@
     "build": "rm -rf lib && tsc"
   },
   "devDependencies": {
+    "@types/inquirer": "^9.0.9",
+    "@types/validate-npm-package-name": "^4.0.2",
     "typescript": "catalog:"
   },
   "dependencies": {

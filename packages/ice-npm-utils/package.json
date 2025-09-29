@@ -30,6 +30,12 @@
   "license": "MIT",
   "devDependencies": {
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@types/node": "^17.0.45",
+    "@types/fs-extra": "^9.0.13",
+    "@types/semver": "^7.7.1",
+    "@types/mkdirp": "^1.0.2",
+    "@types/tar": "^6.0.0",
+    "@types/url-join": "^4.0.0"
   }
 }

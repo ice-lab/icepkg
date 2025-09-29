@@ -15,8 +15,8 @@ export const isDeclaration = (filePath: string) => declaration.some((dec) => fil
  * @param suffix
  * @returns
  */
-export const isTypescriptOnly = (suffix: string, filePath: string) =>
-  typescript.includes(suffix) && !isDeclaration(filePath);
+export const isTypescriptOnly = (suffix: string | undefined, filePath: string | undefined) =>
+  typescript.includes(suffix as string) && !isDeclaration(filePath as string);
 
 /**
  * Wether is ecmascript only file, checked by filepath and suffix

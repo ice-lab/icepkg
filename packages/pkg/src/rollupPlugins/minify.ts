@@ -6,7 +6,7 @@ import type { TaskConfig } from '../types.js';
 /**
  * plugin-minify use minimize bundle outputs using swc
  */
-const minifyPlugin = (sourcemap: TaskConfig['sourcemap'], minifyOptions: swc.JsMinifyOptions): Plugin => {
+const minifyPlugin = (sourcemap: TaskConfig['sourcemap'], minifyOptions?: swc.JsMinifyOptions): Plugin => {
   return {
     name: 'ice-pkg:minify',
     renderChunk(code) {

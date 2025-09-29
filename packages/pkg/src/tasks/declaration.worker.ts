@@ -5,7 +5,7 @@ import { dtsCompile } from '../helpers/dts.js';
 import { Rpc } from '../helpers/rpc.js';
 import { DeclarationMainMethods, DeclarationWorkerMethods } from './declaration.rpc.js';
 
-void new Rpc<DeclarationMainMethods, DeclarationWorkerMethods>(parentPort, {
+void new Rpc<DeclarationMainMethods, DeclarationWorkerMethods>(parentPort!, {
   run: async (outputDirs, options) => {
     const dtsFiles = await dtsCompile(options);
 

@@ -9,6 +9,7 @@ import axios from 'axios';
 import urlJoin from 'url-join';
 
 import type { AxiosResponse } from 'axios';
+import { Readable } from 'stream';
 
 /**
  * 获取指定 npm 包版本的 tarball
@@ -17,11 +18,11 @@ function getNpmTarball(npm: string, version?: string, registry?: string): Promis
   return getNpmInfo(npm, registry).then((json: any) => {
     if (!semver.valid(version)) {
       // support beta or other tag
-      version = json['dist-tags'][version] || json['dist-tags'].latest;
+      version = json['dist-tags'][version!] || json['dist-tags'].latest;
     }
 
-    if (semver.valid(version) && json.versions && json.versions[version] && json.versions[version].dist) {
-      return json.versions[version].dist.tarball;
+    if (semver.valid(version) && json.versions && json.versions[version!] && json.versions[version!].dist) {
+      return json.versions[version!].dist.tarball;
     }
 
     return Promise.reject(new Error(`没有在 ${registry} 源上找到 ${npm}@${version} 包`));
@@ -35,7 +36,7 @@ function getAndExtractTarball(
   destDir: string,
   tarball: string,
 
-  progressFunc = (state) => {},
+  progressFunc = (_: any) => {},
   formatFilename = (filename: string): string => {
     // 为了兼容
     if (filename === '_package.json') {
@@ -46,9 +47,9 @@ function getAndExtractTarball(
   },
 ): Promise<string[]> {
   return new Promise((resolve, reject) => {
-    const allFiles = [];
-    const allWriteStream = [];
-    const dirCollector = [];
+    const allFiles: string[] = [];
+    const allWriteStream: Array<Promise<boolean>> = [];
+    const dirCollector: string[] = [];
 
     axios({
       url: tarball,
@@ -60,8 +61,7 @@ function getAndExtractTarball(
     }).then((response) => {
       const totalLength = Number(response.headers['content-length']);
       let downloadLength = 0;
-      response.data
-        // @ts-ignore
+      (response.data as Readable)
         .on('data', (chunk) => {
           downloadLength += chunk.length;
           progressFunc({
@@ -70,8 +70,8 @@ function getAndExtractTarball(
         })
         // @ts-ignore
         .pipe(zlib.Unzip())
-        // @ts-ignore
         .pipe(new tar.Parse())
+        // @ts-ignore
         .on('entry', (entry) => {
           if (entry.type === 'Directory') {
             entry.resume();
@@ -149,7 +149,7 @@ function getSatisfiesVersions(npm: string, range: string, registry?: string) {
     return versions
       .filter((version) => semver.satisfies(version, range))
       .sort((a, b) => {
-        return semver.gt(b, a);
+        return +semver.gt(b, a);
       });
   });
 }
@@ -186,7 +186,7 @@ function getNpmLatestSemverVersion(npm: string, baseVersion: string, registry?: 
  *
  * @param {String} npm
  */
-function getLatestVersion(npm, registry?: string): Promise<string> {
+function getLatestVersion(npm: string, registry?: string): Promise<string> {
   return getNpmInfo(npm, registry).then((data) => {
     if (!data['dist-tags'] || !data['dist-tags'].latest) {
       console.error('没有 latest 版本号', data);
@@ -199,7 +199,7 @@ function getLatestVersion(npm, registry?: string): Promise<string> {
 }
 
 function isAliNpm(npmName?: string): boolean {
-  return /^(@alife|@ali|@alipay|@kaola)\//.test(npmName);
+  return npmName ? /^(@alife|@ali|@alipay|@kaola)\//.test(npmName) : false;
 }
 
 function getNpmRegistry(npmName = ''): string {

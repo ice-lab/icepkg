@@ -1,4 +1,4 @@
-import consola from 'consola';
+import { consola } from 'consola';
 import { createBatchChangeHandler, createWatcher } from '../helpers/watcher.js';
 import type { OutputResult, Context, WatchChangedFile, BuildTask } from '../types.js';
 import { RunnerLinerTerminalReporter } from '../helpers/runnerReporter.js';

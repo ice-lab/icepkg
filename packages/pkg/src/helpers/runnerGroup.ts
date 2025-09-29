@@ -19,9 +19,9 @@ export class RunnerGroup<T> {
       }
       runner.on('status', () => {
         if (runner.isRunning) {
-          this.reporter.onRunnerStart(runner);
+          this.reporter.onRunnerStart?.(runner);
         } else if (runner.isFinished) {
-          this.reporter.onRunnerEnd(runner);
+          this.reporter.onRunnerEnd?.(runner);
         }
       });
     }
@@ -37,7 +37,7 @@ export class RunnerGroup<T> {
 
     const [parallelResults, concurrentResults] = await Promise.all([parallelPromise, concurrentPromise]);
     const stopTime = Date.now();
-    this.reporter.onStop({
+    this.reporter.onStop?.({
       startTime,
       stopTime,
       cost: stopTime - startTime,

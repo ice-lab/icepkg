@@ -35,7 +35,8 @@ export const getDefaultBundleSwcConfig = (bundleTaskConfig: BundleTaskConfig): C
 };
 
 export const getDefaultTransformSwcConfig = (transformTaskConfig: TransformTaskConfig, mode: NodeEnvMode): Config => {
-  const module: ModuleConfig = transformTaskConfig.format.module === 'cjs' ? { type: 'commonjs' } : undefined;
+  const module: ModuleConfig | undefined =
+    transformTaskConfig.format.module === 'cjs' ? { type: 'commonjs' } : undefined;
 
   const target = transformTaskConfig.format.target === 'es2017' ? 'es2017' : 'es5';
 

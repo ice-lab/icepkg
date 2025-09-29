@@ -74,7 +74,7 @@ async function create(dirPath: string, dirname: string, options: CliOptions): Pr
 
   const tempDir = path.join(dirPath, '.tmp');
 
-  let templateNpmName = options.template;
+  let templateNpmName = options.template!;
   if (!templateNpmName) {
     templateNpmName = await inquireTemplateNpmName(options.workspace);
   }

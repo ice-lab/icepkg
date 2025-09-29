@@ -45,12 +45,12 @@ const babelPlugin = (
 
     transform(source, id) {
       if (!scriptsFilter(formatCnpmDepFilepath(id))) {
-        return null;
+        return;
       }
 
       const parserPlugins = getParserPlugins(/\.tsx?$/.test(id));
 
-      const { code, map } = babel.transformSync(source, {
+      const result = babel.transformSync(source, {
         ...babelOptions,
         babelrc: false,
         configFile: false,
@@ -62,8 +62,8 @@ const babelPlugin = (
         sourceFileName: id,
       });
       return {
-        code,
-        map,
+        code: result?.code ?? undefined,
+        map: result?.map ?? undefined,
       };
     },
   };

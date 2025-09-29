@@ -13,21 +13,20 @@ import replace from '@rollup/plugin-replace';
 import getDefaultDefineValues from '../../helpers/getDefaultDefineValues.js';
 import transformAliasPlugin from '../../rollupPlugins/alias.js';
 import bundleAliasPlugin from '@rollup/plugin-alias';
-import { BundleTaskConfig, Context, NodeEnvMode, StylesRollupPluginOptions, TaskRunnerContext } from '../../types.js';
+import {
+  BundleTaskConfig,
+  Context,
+  NodeEnvMode,
+  PackageJson,
+  StylesRollupPluginOptions,
+  TaskRunnerContext,
+} from '../../types.js';
 import type { OutputOptions, Plugin, RollupOptions } from 'rollup';
 import path from 'path';
 import { BUILTIN_EXTERNAL_MAP } from '../shared/external.js';
 import { getFilenameConfig } from '../shared/filename.js';
 import { getTaskSwcOptions } from '../../helpers/defaultSwcConfig.js';
 import { assertTaskBuildableConfig } from '../../helpers/taskConfig.js';
-
-interface PkgJson {
-  name: string;
-  version?: string;
-  dependencies?: Record<string, string>;
-  peerDependencies?: Record<string, string>;
-  [k: string]: string | Record<string, string>;
-}
 
 export function getRollupOptions(context: Context, taskRunnerContext: TaskRunnerContext) {
   const { pkg, commandArgs, command, rootDir } = context;
@@ -64,20 +63,20 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
   );
 
   if (taskConfig.type === 'transform') {
-    plugins.push(transformAliasPlugin(rootDir, taskConfig.alias));
+    plugins.push(transformAliasPlugin(rootDir, (taskConfig.alias as Record<string, string>) ?? {}));
   } else if (taskConfig.type === 'bundle') {
-    const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PkgJson);
-    rollupOptions.input = taskConfig.entry;
+    const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PackageJson);
+    rollupOptions.input = taskConfig.entry ?? '';
     rollupOptions.external = external;
     rollupOptions.output = getRollupOutputs({
-      globals,
+      globals: globals ?? {},
       bundleTaskConfig: taskConfig,
-      pkg: pkg as PkgJson,
+      pkg: pkg as PackageJson,
       mode: taskRunnerContext.mode,
       command,
     });
 
-    const cssMinify = taskConfig.cssMinify(taskRunnerContext.mode, command);
+    const cssMinify = taskConfig.cssMinify!(taskRunnerContext.mode, command);
     const defaultStylesOptions: StylesRollupPluginOptions = {
       plugins: [autoprefixer(), PostcssPluginRpxToVw],
       mode: 'extract',
@@ -85,13 +84,15 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
       minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
       sourceMap: taskConfig.sourcemap,
     };
-    const alias = {};
-    Object.keys(taskConfig.alias).forEach((key) => {
-      // Add full path for relative path alias
-      alias[key] = taskConfig.alias[key].startsWith('.')
-        ? path.resolve(rootDir, taskConfig.alias[key])
-        : taskConfig.alias[key];
-    });
+    const alias: Record<string, string> = {};
+    if (taskConfig.alias) {
+      for (const key of Object.keys(taskConfig.alias)) {
+        // Add full path for relative path alias
+        alias[key] = taskConfig.alias[key].startsWith('.')
+          ? path.resolve(rootDir, taskConfig.alias[key])
+          : taskConfig.alias[key];
+      }
+    }
     plugins.push(
       commonjs({
         // To convert commonjs to import, make it compatible with rollup to bundle
@@ -130,7 +131,7 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
         preventAssignment: true,
       }),
       styles(
-        (taskConfig.modifyStylesOptions ?? [(options) => options]).reduce(
+        (taskConfig.modifyStylesOptions ?? [(options) => options]).reduce<StylesRollupPluginOptions>(
           (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
           defaultStylesOptions,
         ),
@@ -163,7 +164,7 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
 interface GetRollupOutputsOptions {
   bundleTaskConfig: BundleTaskConfig;
   globals: Record<string, string>;
-  pkg: PkgJson;
+  pkg: PackageJson;
   mode: NodeEnvMode;
   command: Context['command'];
 }
@@ -173,7 +174,7 @@ function getRollupOutputs({ globals, bundleTaskConfig, pkg, mode, command }: Get
   const outputFormats = bundleTaskConfig.formats ?? [];
 
   const name = bundleTaskConfig.name ?? pkg.name;
-  const minify = bundleTaskConfig.jsMinify(mode, command);
+  const minify = bundleTaskConfig.jsMinify!(mode, command);
 
   return outputFormats.map((format) => {
     const filenameConfig = getFilenameConfig(format, mode);
@@ -194,12 +195,16 @@ function getRollupOutputs({ globals, bundleTaskConfig, pkg, mode, command }: Get
                 return vendorName;
               }
 
-              const entryPoints = [];
+              const entryPoints: string[] = [];
 
-              const idsToHandle = new Set(getModuleInfo(id).importers);
+              const moduleInfo = getModuleInfo(id);
+              if (!moduleInfo) return;
+              const idsToHandle = new Set(moduleInfo.importers);
 
               for (const moduleId of idsToHandle) {
-                const { isEntry, importers } = getModuleInfo(moduleId);
+                const info = getModuleInfo(moduleId);
+                if (!info) continue;
+                const { isEntry, importers } = info;
                 if (isEntry) {
                   entryPoints.push(moduleId);
                 }
@@ -223,8 +228,8 @@ function getRollupOutputs({ globals, bundleTaskConfig, pkg, mode, command }: Get
 
 export function getExternalsAndGlobals(
   bundleTaskConfig: BundleTaskConfig,
-  pkg: PkgJson,
-): [(id?: string) => boolean, Record<string, string>] {
+  pkg: PackageJson,
+): [(id: string) => boolean, Record<string, string>] {
   // TODO: unique externals after all pushed
   const exactExternals: string[] = [];
   const regexpExternals: RegExp[] = [];

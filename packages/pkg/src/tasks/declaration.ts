@@ -31,7 +31,7 @@ class DeclarationRunner extends Runner<OutputResult> {
     } else {
       const entryDirs = getTransformEntryDirs(
         context.buildContext.rootDir,
-        context.buildTask.config.entry as Record<string, string>,
+        (context.buildTask.config.entry! as Record<string, string>) ?? {},
       );
       const result = await Promise.all(
         entryDirs.map((entry) =>
@@ -57,11 +57,11 @@ class DeclarationRunner extends Runner<OutputResult> {
 
     const buildConfig = context.buildTask.config as DeclarationTaskConfig;
     await rpc.call('run', [
-      buildConfig.declarationOutputDirs,
+      buildConfig.declarationOutputDirs!,
       {
         files,
         rootDir: context.buildContext.rootDir,
-        outputDir: buildConfig.outputDir,
+        outputDir: buildConfig.outputDir!,
         alias: buildConfig.alias,
       },
     ]);

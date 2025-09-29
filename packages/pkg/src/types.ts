@@ -210,10 +210,13 @@ export interface PkgUserConfig
 }
 
 type PkgResolvedRequiredConfigKeys = 'module' | 'target' | 'id';
+
+export type PluginInfo<T = unknown, U = unknown, K = unknown> = _PluginInfo<T, U, K>;
+
 export interface PkgResolvedConfig
   extends Omit<PkgUserConfig, 'extends' | 'preset' | 'plugins' | PkgResolvedRequiredConfigKeys>,
     Required<Pick<PkgUserConfig, PkgResolvedRequiredConfigKeys>> {
-  pluginInfos: Array<_PluginInfo<any, any, any>>;
+  pluginInfos: PluginInfo[];
   /**
    * for compat old task config, used for build task name
    */
@@ -462,6 +465,8 @@ export interface OutputFile {
   map?: string | SourceMapInput;
 }
 
+export type TransformOutputFile = Required<Pick<OutputFile, 'absolutePath' | 'ext' | 'filePath'>>;
+
 export interface OutputResult {
   taskName: string;
   outputFiles: OutputFile[];
@@ -485,4 +490,12 @@ export interface TaskRunnerContext {
   buildTask: BuildTask;
   buildContext: Context;
   watcher?: FSWatcher;
+}
+
+export interface PackageJson {
+  name: string;
+  version?: string;
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+  [k: string]: string | Record<string, string> | undefined;
 }

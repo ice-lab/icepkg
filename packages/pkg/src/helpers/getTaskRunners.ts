@@ -15,13 +15,13 @@ export function getTaskRunners(
       const { config } = buildTask;
       switch (config.type) {
         case 'transform': {
-          return config.modes.map((mode) => {
+          return config.modes!.map((mode) => {
             const taskRunnerContext: TaskRunnerContext = { mode, buildTask, buildContext: context, watcher };
             return createTransformTask(taskRunnerContext);
           });
         }
         case 'bundle': {
-          return config.modes.map((mode) => {
+          return config.modes!.map((mode) => {
             const taskRunnerContext: TaskRunnerContext = { mode, buildTask, buildContext: context, watcher };
             return createBundleTask(taskRunnerContext);
           });

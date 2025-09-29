@@ -2,12 +2,12 @@ import { performance } from 'perf_hooks';
 import { isAbsolute, resolve, extname, dirname, relative, basename } from 'path';
 import fs from 'fs-extra';
 import semverGtr from 'semver/ranges/gtr.js';
-import consola from 'consola';
+import { consola } from 'consola';
 import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/load.js';
 import { createPluginContainer } from '../helpers/pluginContainer.js';
-import { checkDependencyExists, isObject, timeFrom } from '../utils.js';
+import { checkDependencyExists, isObject, RequireKeys, timeFrom } from '../utils.js';
 import type { OutputFile, OutputResult, TaskRunnerContext, TransformTaskConfig, WatchChangedFile } from '../types.js';
-import type { RollupOptions, SourceMapInput } from 'rollup';
+import { SourceDescription, type Plugin, type RollupOptions, type SourceMapInput } from 'rollup';
 import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
 import { getRollupOptions } from '../engine/rollup/options.js';
 import { Runner } from '../helpers/runner.js';
@@ -37,6 +37,8 @@ class TransformRunner extends Runner<OutputResult> {
   }
 }
 
+type TransformOutputFile = RequireKeys<OutputFile, 'absolutePath' | 'filePath' | 'ext'>;
+
 async function runTransform(
   task: Runner,
   rollupOptions: RollupOptions,
@@ -59,7 +61,7 @@ async function runTransform(
     task.logger.warn('The sourcemap "inline" for transform has not fully supported.');
   }
 
-  const files: OutputFile[] = [];
+  const files: TransformOutputFile[] = [];
 
   if (updatedFiles) {
     for (const updatedFile of updatedFiles) {
@@ -73,7 +75,7 @@ async function runTransform(
   } else {
     for (const entryDir of entryDirs) {
       files.push(
-        ...loadEntryFiles(entryDir, userConfig?.transform?.excludes || []).map((filePath) => ({
+        ...loadEntryFiles(entryDir, userConfig?.transform?.excludes || []).map<TransformOutputFile>((filePath) => ({
           filePath,
           absolutePath: resolve(entryDir, filePath),
           ext: extname(filePath),
@@ -83,9 +85,10 @@ async function runTransform(
   }
 
   const container = await createPluginContainer({
-    plugins: rollupOptions.plugins,
+    // asset plugins is Plugin[]
+    plugins: rollupOptions.plugins as Plugin[],
     root: rootDir,
-    output: config.outputDir,
+    output: config.outputDir!,
     logger,
     build: {
       rollupOptions,
@@ -98,73 +101,82 @@ async function runTransform(
 
   for (let i = 0; i < files.length; ++i) {
     const traverseFileStart = performance.now();
-    const dest = resolve(config.outputDir, files[i].filePath);
-    files[i].dest = dest;
+    // those are required keys
+    const file = files[i] as RequireKeys<TransformOutputFile, 'dest'>;
+    const { absolutePath, filePath } = file;
+    const dest = resolve(config.outputDir!, filePath);
+    file.dest = dest;
 
     await fs.ensureDir(dirname(dest));
 
-    const id = (await container.resolveId(files[i].filePath))?.id || files[i].absolutePath;
+    const resolved = await container.resolveId(filePath, absolutePath);
+    const id = resolved?.id ?? absolutePath;
 
     const loadResult = await container.load(id);
 
-    let code: string = null;
-    let map: SourceMapInput = null;
+    let code = '';
+    let map: SourceMapInput | undefined = undefined;
 
     // User should use plugins to transform other types of files.
-    if (loadResult === null && !INCLUDES_UTF8_FILE_TYPE.test(files[i].ext)) {
-      await fs.copyFile(files[i].absolutePath, dest);
+    if (loadResult === null && !INCLUDES_UTF8_FILE_TYPE.test(file.ext)) {
+      await fs.copyFile(absolutePath, dest);
 
-      logger.debug(`Transform file ${files[i].absolutePath}`, timeFrom(traverseFileStart));
-      logger.debug(`Copy File ${files[i].absolutePath} to ${dest}`);
+      logger.debug(`Transform file ${absolutePath}`, timeFrom(traverseFileStart));
+      logger.debug(`Copy File ${absolutePath} to ${dest}`);
 
       continue;
     }
 
     if (loadResult === null) {
-      code = await loadSource(files[i].absolutePath);
+      code = await loadSource(absolutePath);
       // Need to generate .map ?
-    } else if (isObject(loadResult)) {
+    } else if (isObject<SourceDescription>(loadResult)) {
       code = loadResult.code;
-      map = loadResult.map as string;
+      map = loadResult.map;
     }
 
-    const transformResult = await container.transform(code, files[i].absolutePath);
+    const transformResult = await container.transform(code, absolutePath);
 
-    if (transformResult === null || (isObject(transformResult) && transformResult.code === null)) {
+    if (transformResult === null || (isObject(transformResult) && transformResult.code == null)) {
       // Do not need to transform the code.
-    } else {
-      files[i].code = code = transformResult.code;
-      files[i].map = map = transformResult.map;
+    } else if (isObject(transformResult)) {
+      const resultCode = transformResult.code as string | undefined;
+      if (typeof resultCode === 'string') {
+        file.code = code = resultCode;
+      }
+      const resultMap = transformResult.map as SourceMapInput | undefined;
+      if (resultMap != null) {
+        file.map = map = resultMap as SourceMapInput;
+      }
 
       const destFilename = transformResult?.meta?.filename;
 
       if (destFilename) {
-        files[i].dest = files[i].dest.replace(basename(files[i].dest), destFilename);
+        file.dest = file.dest.replace(basename(file.dest), destFilename);
       }
     }
 
     // IMPROVE: should disable sourcemap generation in the transform step for speed.
     if (map && config.sourcemap !== false) {
       const standardizedMap = typeof map === 'string' ? map : JSON.stringify(map);
-
-      await fs.writeFile(
-        files[i].dest,
-        `${code}\n //# sourceMappingURL=${transformResult?.meta?.filename}.map`,
-        'utf-8',
-      );
-      await fs.writeFile(`${files[i].dest}.map`, standardizedMap, 'utf-8');
+      const filenameForMap = transformResult?.meta?.filename
+        ? `${transformResult.meta.filename}.map`
+        : `${basename(file.dest)}.map`;
+      const destPath = file.dest;
+      await fs.writeFile(destPath, `${code}\n //# sourceMappingURL=${filenameForMap}`, 'utf-8');
+      await fs.writeFile(`${destPath}.map`, standardizedMap, 'utf-8');
     } else {
-      await fs.writeFile(files[i].dest, code, 'utf-8');
+      await fs.writeFile(file.dest, code, 'utf-8');
     }
 
     if (!isDistContainingSWCHelpers) {
-      isDistContainingSWCHelpers = code?.includes('@swc/helpers');
+      isDistContainingSWCHelpers = !!code && code.includes('@swc/helpers');
     }
     if (!isDistContainingJSXRuntime) {
-      isDistContainingJSXRuntime = code?.includes('@ice/jsx-runtime');
+      isDistContainingJSXRuntime = !!code && code.includes('@ice/jsx-runtime');
     }
 
-    logger.debug(`Transform file ${files[i].absolutePath}`, timeFrom(traverseFileStart));
+    logger.debug(`Transform file ${absolutePath}`, timeFrom(traverseFileStart));
     task.updateProgress(1);
   }
 
@@ -189,12 +201,12 @@ async function runTransform(
   }
 
   return {
-    outputFiles: files.map((file) => ({ ...file, filename: relative(config.outputDir, file.dest) })),
+    outputFiles: files.map((file) => ({ ...file, filename: relative(config.outputDir!, file.dest!) })),
     taskName,
   };
 }
 
-function getFileInfo(filePath: string, rootDir: string) {
+function getFileInfo(filePath: string, rootDir: string): TransformOutputFile {
   const relativeFilePath = isAbsolute(filePath) ? relative(rootDir, filePath) : filePath;
   return {
     filePath: relativeFilePath,

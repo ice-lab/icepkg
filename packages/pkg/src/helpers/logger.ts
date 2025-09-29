@@ -1,4 +1,4 @@
-import consola from 'consola';
+import { consola } from 'consola';
 import picocolors from 'picocolors';
 
 // copy from consola
@@ -32,28 +32,26 @@ function colorizeNamespace(name: string, type: LogLevel) {
  * @param name
  * @returns
  */
-export function createLogger(namespace?: string) {
+export function createLogger(namespace: string) {
   return {
-    info(...args) {
-      consola.info(colorizeNamespace(namespace, LogLevel.Info), ...args.map((item) => colorize(LogLevel.Info)(item)));
+    info(...args: any[]) {
+      const prefix = colorizeNamespace(namespace, LogLevel.Info);
+      consola.info(prefix, ...args.map((item) => colorize(LogLevel.Info)(item)));
     },
 
-    error(...args) {
-      consola.error(
-        colorizeNamespace(namespace, LogLevel.Error),
-        ...args.map((item) => colorize(LogLevel.Error)(item)),
-      );
+    error(...args: any[]) {
+      const prefix = colorizeNamespace(namespace, LogLevel.Error);
+      consola.error(prefix, ...args.map((item) => colorize(LogLevel.Error)(item)));
     },
 
-    warn(...args) {
-      consola.warn(colorizeNamespace(namespace, LogLevel.Warn), ...args.map((item) => colorize(LogLevel.Warn)(item)));
+    warn(...args: any[]) {
+      const prefix = colorizeNamespace(namespace, LogLevel.Warn);
+      consola.warn(prefix, ...args.map((item) => colorize(LogLevel.Warn)(item)));
     },
 
-    debug(...args) {
-      consola.debug(
-        colorizeNamespace(namespace, LogLevel.Debug),
-        ...args.map((item) => colorize(LogLevel.Debug)(item)),
-      );
+    debug(...args: any[]) {
+      const prefix = colorizeNamespace(namespace, LogLevel.Debug);
+      consola.debug(prefix, ...args.map((item) => colorize(LogLevel.Debug)(item)));
     },
   };
 }

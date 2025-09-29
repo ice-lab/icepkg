@@ -26,7 +26,7 @@ export abstract class Runner<T = unknown> extends TypedEventEmitter<{
 
   logger = createLogger(`${this.name}-${this.mode}`);
 
-  private taskRunning: Promise<T> | null;
+  private taskRunning: Promise<T> | null = null;
 
   private metrics: Record<string, number[]> = {};
 

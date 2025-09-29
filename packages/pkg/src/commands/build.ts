@@ -25,7 +25,7 @@ export default async function build(context: Context) {
   });
 
   // Empty outputDir before run the task.
-  const outputDirs = taskConfigs.map((config) => config.outputDir).filter(Boolean);
+  const outputDirs = taskConfigs.map((config) => config.outputDir!).filter(Boolean);
   outputDirs.forEach((outputDir) => fse.emptyDirSync(outputDir));
 
   const tasks = getTaskRunners(buildTasks, context);
