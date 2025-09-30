@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'node:url';
-import consola from 'consola';
+import { consola } from 'consola';
 import { cac } from 'cac';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';

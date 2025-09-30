@@ -1,8 +1,9 @@
 import { isAbsolute, resolve, join } from 'path';
 import { TransformTaskConfig } from '../types.js';
 
-export function formatEntry(inputEntry: string | string[] | Record<string, string>): Record<string, string> {
-  const entry = {};
+export function formatEntry(inputEntry?: string | string[] | Record<string, string>): Record<string, string> {
+  const entry: Record<string, string> = {};
+  if (!inputEntry) return entry;
   if (typeof inputEntry === 'string') {
     entry[getEntryId(inputEntry)] = inputEntry;
   } else if (Array.isArray(inputEntry)) {
@@ -19,7 +20,7 @@ export function formatEntry(inputEntry: string | string[] | Record<string, strin
 
 // Eg. src/index.js => index
 function getEntryId(entry: string): string {
-  return entry.split('/').pop().split('.').shift();
+  return entry.split('/').pop()!.split('.').shift()!;
 }
 
 export const getTransformEntryDirs = (rootDir: string, entry: Record<string, string>) => {

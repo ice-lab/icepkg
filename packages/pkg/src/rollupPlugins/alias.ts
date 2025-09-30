@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { init, parse } from 'es-module-lexer';
-import consola from 'consola';
+import { consola } from 'consola';
 import MagicString from 'magic-string';
 import { createScriptsFilter } from '../utils.js';
 import type { ImportSpecifier } from 'es-module-lexer';
@@ -34,6 +34,7 @@ const aliasPlugin = (rootDir: string, originalAlias: Record<string, string>): Pl
       const alias = resolveAliasConfig(originalAlias, rootDir, id);
       const str: MagicString = new MagicString(code);
       imports.forEach(({ n, s, e }) => {
+        if (!n) return;
         const matchedEntry = Object.keys(alias).find((pattern) => matches(pattern, n));
         if (matchedEntry) {
           const updatedId = n.replace(matchedEntry, alias[matchedEntry]);
@@ -68,7 +69,7 @@ export function matches(pattern: string, importee: string) {
 }
 
 export function resolveAliasConfig(alias: Record<string, string>, rootDir: string, filePath: string) {
-  const newAlias = {};
+  const newAlias: Record<string, string> = {};
   Object.keys(alias).forEach((pattern) => {
     const target = alias[pattern];
     newAlias[pattern] =

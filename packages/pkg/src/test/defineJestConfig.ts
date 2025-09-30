@@ -41,7 +41,7 @@ async function getDefaultConfig(service: Service<TaskConfig, {}, UserConfig>): P
 }
 
 function generateModuleNameMapper(rootDir: string, alias: TaskConfig['alias']) {
-  const moduleNameMapper = {};
+  const moduleNameMapper: Record<string, string> = {};
   for (const key in alias) {
     const aliasPath = alias[key];
     const absoluteAliasPath = path.isAbsolute(aliasPath) ? aliasPath : path.join(rootDir, aliasPath);

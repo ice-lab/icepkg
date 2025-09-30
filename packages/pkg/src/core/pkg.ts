@@ -1,4 +1,11 @@
-import { AliasBundleFormatString, Context, PkgResolvedConfig, PkgUserConfig, UserConfig } from '../types.js';
+import {
+  AliasBundleFormatString,
+  Context,
+  PkgResolvedConfig,
+  PkgUserConfig,
+  PluginInfo,
+  UserConfig,
+} from '../types.js';
 import { ApplyMethodAPI, Context as BuildScriptContext, OnGetConfig } from 'build-scripts';
 import { merge, pick, omit } from 'es-toolkit/object';
 import { groupBy } from 'es-toolkit/array';
@@ -17,7 +24,7 @@ const PLUGIN_CONTEXT_KEY = [
 ];
 
 // 由于 build-scripts 并没有导出这个方法，所以只能先这样 mock 一下了
-async function resolvePlugins(ctx: Context, plugins: UserConfig['plugins']) {
+async function resolvePlugins(ctx: Context, plugins: UserConfig['plugins']): Promise<PluginInfo[]> {
   const mockContext = new BuildScriptContext({
     rootDir: ctx.rootDir,
     command: ctx.command,
@@ -27,7 +34,7 @@ async function resolvePlugins(ctx: Context, plugins: UserConfig['plugins']) {
   mockContext.userConfig = {
     plugins: plugins as BuildScriptContext['userConfig']['plugins'],
   };
-  return await mockContext.resolvePlugins();
+  return (await mockContext.resolvePlugins()) as PluginInfo[];
 }
 
 function isBundlePresetPkgString(pkg: string): boolean {
@@ -266,7 +273,7 @@ export async function runPkgPlugins(ctx: Context, pkgs: PkgResolvedConfig[]) {
       const applyMethod: ApplyMethodAPI = (methodName, ...args) => {
         return ctx['applyMethod']([methodName, pluginName], ...args);
       };
-      const ignoreGlobalApi = <T extends (...args: unknown[]) => unknown>(methodName, fn: T): T => {
+      const ignoreGlobalApi = <T extends (...args: any[]) => any>(methodName: string, fn: T): T => {
         return ((...args: Parameters<T>): ReturnType<T> => {
           ctx.logger.warn(
             `Pkg plugin "${pluginName}" is not allowed to use global plugin API "${methodName}". Please don't use it.`,
@@ -274,11 +281,16 @@ export async function runPkgPlugins(ctx: Context, pkgs: PkgResolvedConfig[]) {
           return null as ReturnType<T>;
         }) as T;
       };
-      const onGetConfig = ((nameOrFn, fn) => {
+      const onGetConfig = ((nameOrFn: string | ((config: unknown) => unknown), fn?: (config: unknown) => unknown) => {
         if (typeof nameOrFn === 'string') {
-          const oldFn = fn;
-          fn = (config) => {
-            if (config.pkg && getPkgTaskName(config.pkg) !== taskName) {
+          const oldFn = fn!;
+          fn = (config: unknown) => {
+            if (
+              typeof config === 'object' &&
+              config &&
+              'pkg' in config &&
+              getPkgTaskName((config as any).pkg) !== taskName
+            ) {
               return;
             }
             return oldFn(config);
@@ -289,7 +301,7 @@ export async function runPkgPlugins(ctx: Context, pkgs: PkgResolvedConfig[]) {
         }
 
         return ctx['onGetConfig'](nameOrFn, fn);
-      }) as OnGetConfig<any>;
+      }) as OnGetConfig<unknown>;
 
       const pluginAPI = merge(
         {
@@ -316,7 +328,9 @@ export async function runPkgPlugins(ctx: Context, pkgs: PkgResolvedConfig[]) {
         ctx['extendsPluginAPI'] || {},
       );
 
-      await setup(pluginAPI as any, options);
+      if (typeof setup === 'function') {
+        await setup(pluginAPI as any, options);
+      }
     }
   }
 }

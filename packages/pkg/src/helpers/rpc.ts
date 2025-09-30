@@ -31,7 +31,7 @@ type RpcMessage = RpcRequestMessage | RpcResponseMessage;
 const RPC_SIGN = 'pkg-rpc';
 
 function isRpcMessage(message: unknown): message is RpcMessage {
-  return message && typeof message === 'object' && (message as RpcMessage).__rpc__ === RPC_SIGN;
+  return !!message && typeof message === 'object' && (message as RpcMessage).__rpc__ === RPC_SIGN;
 }
 
 export class Rpc<R extends RpcMethods, L extends RpcMethods> {
@@ -64,7 +64,7 @@ export class Rpc<R extends RpcMethods, L extends RpcMethods> {
       reject = rej;
     });
 
-    this.requestStore.set(reqId, [resolve, reject]);
+    this.requestStore.set(reqId, [resolve!, reject!]);
 
     return promise as ReturnType<R[K]>;
   }

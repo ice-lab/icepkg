@@ -1,5 +1,5 @@
 import { Context, TaskRunnerContext } from '../../types';
-import { RslibConfig } from '@rslib/core';
+import { RslibConfig, Rspack } from '@rslib/core';
 import { merge } from 'es-toolkit/object';
 import { pluginLess } from '@rsbuild/plugin-less';
 import { pluginSass } from '@rsbuild/plugin-sass';
@@ -11,13 +11,15 @@ export function getRslibConfig(context: Context, taskRunnerContext: TaskRunnerCo
   const { rootDir, commandArgs, pkg } = context;
   const taskConfig = taskRunnerContext.buildTask.config;
 
-  const alias = {};
-  Object.keys(taskConfig.alias).forEach((key) => {
-    // Add full path for relative path alias
-    alias[key] = taskConfig.alias[key].startsWith('.')
-      ? path.resolve(rootDir, taskConfig.alias[key])
-      : taskConfig.alias[key];
-  });
+  const alias: Record<string, string> = {};
+  if (taskConfig.alias) {
+    const taskAlias = taskConfig.alias as Record<string, string>;
+    for (const key of Object.keys(taskConfig.alias)) {
+      const val = taskAlias[key];
+      // Add full path for relative path alias
+      alias[key] = val.startsWith('.') ? path.resolve(rootDir, val) : val;
+    }
+  }
 
   let rslibConfig: RslibConfig = {
     source: {
@@ -69,7 +71,7 @@ export function getRslibConfig(context: Context, taskRunnerContext: TaskRunnerCo
       });
     });
 
-    let externals: RslibConfig['output']['externals'];
+    let externals: Rspack.Externals | undefined;
     if (taskConfig.externals === true) {
       externals = [
         ...BUILTIN_EXTERNAL_MAP['builtin:normal'],
@@ -114,8 +116,14 @@ export function getRslibConfig(context: Context, taskRunnerContext: TaskRunnerCo
     throw new Error(`Cannot create rslib config of type ${taskConfig.type}`);
   }
 
-  if (taskConfig.modifyRslibConfig) {
-    rslibConfig = taskConfig.modifyRslibConfig?.reduce((config, modifier) => modifier(config), rslibConfig);
+  if (Array.isArray(taskConfig.modifyRslibConfig)) {
+    for (const modifier of taskConfig.modifyRslibConfig) {
+      if (typeof modifier === 'function') {
+        // allow modifier to mutate or return new config
+        const modified = modifier(rslibConfig);
+        if (modified) rslibConfig = modified;
+      }
+    }
   }
 
   return rslibConfig;

@@ -1,4 +1,4 @@
-import { CommandArgs, Context as BuildScriptContext } from 'build-scripts';
+import { CommandArgs, Context as BuildScriptContext, PluginList } from 'build-scripts';
 import type { ICommandFn } from 'build-scripts/lib/Service.js';
 import { Context, CustomFormatTaskCreator, ExtendsPluginAPI, TaskConfig, UserConfig } from '../types.js';
 import taskRegisterPlugin from '../plugins/component.js';
@@ -55,9 +55,9 @@ export async function createCore(options: CreatePkgOptions) {
     rootDir: options.rootDir,
     commandArgs: options.commandArgs,
     configFile: options.userConfigFile,
-    plugins: [taskRegisterPlugin],
+    plugins: [taskRegisterPlugin] as PluginList,
     extendsPluginAPI,
-  });
+  }) as Context;
 
   if (options.userConfig) {
     ctx.userConfig = {

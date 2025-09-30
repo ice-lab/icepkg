@@ -9,7 +9,7 @@ import { createRequire } from 'module';
 import { createFilter } from '@rollup/pluginutils';
 import remapping from '@ampproject/remapping';
 import { loadPkg } from './helpers/load.js';
-import consola from 'consola';
+import { consola } from 'consola';
 import type { PlainObject, OutputResult, TaskConfig } from './types.js';
 import type { DecodedSourceMap, RawSourceMap } from '@ampproject/remapping';
 import type { FSWatcher } from 'chokidar';
@@ -48,7 +48,7 @@ export function ensureWatchedFile(watcher: FSWatcher, file: string | null, root:
 
 export function createDebugger(namespace: string): debug.Debugger['log'] {
   const log = debug(namespace);
-  return (msg: string, ...args: any[]) => {
+  return (msg: string, ...args: unknown[]) => {
     log(msg, ...args);
   };
 }
@@ -192,7 +192,7 @@ export const isDirectory = (name: string) => fs.existsSync(name) && fs.statSync(
 
 export const isFile = (name: string) => fs.existsSync(name) && fs.statSync(name).isFile();
 
-export const isObject = (value: unknown): value is Record<string, any> =>
+export const isObject = <T extends object = Record<string, unknown>>(value: unknown): value is T =>
   Object.prototype.toString.call(value) === '[object Object]';
 
 export const booleanToObject = (value: object | boolean): object => (isObject(value) ? value : {});
@@ -270,7 +270,7 @@ export const stringifyObject = (obj: PlainObject) => {
 };
 
 // @ref: It will pass to createScriptFilter function
-export function getIncludeNodeModuleScripts(compileDependencies: boolean | Array<RegExp | string>): RegExp[] {
+export function getIncludeNodeModuleScripts(compileDependencies?: boolean | Array<RegExp | string>): RegExp[] {
   if (compileDependencies === true || (Array.isArray(compileDependencies) && compileDependencies.length === 0)) {
     return [/node_modules\/.*(?:\.[cm]?[jt]s|[jt]sx)$/];
   }
@@ -335,28 +335,34 @@ export function normalizeSlashes(file: string) {
   return file.split(path.win32.sep).join('/');
 }
 
-export function mergeValueToTaskConfig<C = TaskConfig, T = any>(config: C, key: string, value: T): C {
+export function mergeValueToTaskConfig<C extends TaskConfig | Record<string, unknown> = TaskConfig, T = unknown>(
+  config: C,
+  key: string,
+  value: T,
+): C {
   if (Array.isArray(value)) {
     return {
       ...config,
       [key]: value,
     };
-  } else if (typeof value === 'object') {
+  } else if (typeof value === 'object' && value !== null) {
+    // safely treat config as a record for indexing when merging object values
+    const asRecord = config as unknown as Record<string, unknown>;
     return {
       ...config,
       [key]: {
-        ...(config[key] || {}),
+        ...((asRecord[key] as Record<string, unknown> | undefined) || {}),
         ...value,
       },
-    };
+    } as C;
   } else {
-    config[key] = value;
+    (config as unknown as Record<string, unknown>)[key] = value as unknown;
     return config;
   }
 }
 
 export function getEntryItems(entry: TaskConfig['entry']) {
-  const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.values(entry);
+  const entries = typeof entry === 'string' ? [entry] : Array.isArray(entry) ? entry : Object.values(entry ?? {});
   return entries;
 }
 
@@ -431,3 +437,5 @@ export const TypedEventEmitter = EventEmitter as unknown as {
 export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export type RequireKeys<T extends object, K extends keyof T> = Required<Pick<T, K>> & Omit<T, K>;

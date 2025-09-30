@@ -55,18 +55,21 @@ const normalizeSwcConfig = (
   };
 
   // For .cts .cjs .mts .mjs, use the specified module type
-  function getModuleConfig(fileExt: string, moduleConfig: SwcCompileOptions['module']): SwcCompileOptions['module'] {
-    if (['.cts', '.cjs'].includes(fileExt)) {
+  function getModuleConfig(
+    fileExt: string | undefined,
+    moduleConfig: SwcCompileOptions['module'],
+  ): SwcCompileOptions['module'] {
+    if (['.cts', '.cjs'].includes(fileExt as string)) {
       return { type: 'commonjs' };
     }
-    if (['.mts', '.mjs'].includes(fileExt)) {
+    if (['.mts', '.mjs'].includes(fileExt as string)) {
       return { type: 'es6' };
     }
 
     return moduleConfig;
   }
 
-  return merge(merge(commonOptions, mergeOptions), {
+  return merge(merge(commonOptions, mergeOptions ?? {}), {
     module: getModuleConfig(ext, mergeOptions?.module),
   });
 };
@@ -182,7 +185,11 @@ const swcPlugin = (
     options(options) {
       const { onwarn } = options;
       options.onwarn = (warning, warn) => {
-        if (warning.code === 'UNRESOLVED_IMPORT' && warning.exporter.startsWith(JSX_RUNTIME_SOURCE)) {
+        if (
+          warning.code === 'UNRESOLVED_IMPORT' &&
+          warning.exporter &&
+          warning.exporter.startsWith(JSX_RUNTIME_SOURCE)
+        ) {
           checkDependencyExists(JSX_RUNTIME_SOURCE, 'https://pkg.ice.work/faq');
         }
         if (onwarn) {

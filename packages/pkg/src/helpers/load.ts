@@ -1,6 +1,6 @@
 import * as glob from 'globby';
 import { join } from 'path';
-import fs from 'fs-extra';
+import * as fs from 'node:fs/promises';
 import { safeRequire, toArray } from '../utils.js';
 
 /**
@@ -30,9 +30,11 @@ export const INCLUDES_UTF8_FILE_TYPE = /\.(js|mjs|mts|ts|jsx|tsx|cjs|cts|css|sas
 export async function loadSource(path: string): Promise<string> {
   try {
     return fs.readFile(path, 'utf-8');
-  } catch (err) {
-    if (err.code !== 'ENOENT') {
+  } catch (err: unknown) {
+    if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
       throw err;
     }
   }
+
+  return '';
 }

@@ -15,33 +15,35 @@ import { getPkgTaskName } from './pkg.js';
 
 export function registerTasks(ctx: Context, customFormats: Record<string, CustomFormatTaskCreator>) {
   const { userConfig, registerTask } = ctx;
-  const transformUserFormats = userConfig.transform.formats;
+  const transformUserFormats = userConfig.transform?.formats;
   let hasTransformTasks = false;
-  for (const format of transformUserFormats) {
-    hasTransformTasks = true;
-    if (isAliasFormatString(format, ALIAS_TRANSFORM_FORMATS_MAP)) {
-      const fmt = toFormat<TransformFormat>(ALIAS_TRANSFORM_FORMATS_MAP[format]);
-      registerTask(`transform-${format}`, {
-        type: 'transform',
-        format: fmt,
-      });
-    } else if (customFormats[format]) {
-      const task = customFormats[format]({
-        format,
-        type: 'transform',
-      });
-      if (task) {
-        registerTask(`transform-${format}`, task);
+  if (Array.isArray(transformUserFormats)) {
+    for (const format of transformUserFormats) {
+      hasTransformTasks = true;
+      if (isAliasFormatString(format, ALIAS_TRANSFORM_FORMATS_MAP)) {
+        const fmt = toFormat<TransformFormat>(ALIAS_TRANSFORM_FORMATS_MAP[format]);
+        registerTask(`transform-${format}`, {
+          type: 'transform',
+          format: fmt,
+        });
+      } else if (customFormats[format]) {
+        const task = customFormats[format]({
+          format,
+          type: 'transform',
+        });
+        if (task) {
+          registerTask(`transform-${format}`, task);
+        }
+      } else {
+        const structFormat = tryToFormat<TransformFormat>(format);
+        if (!structFormat) {
+          throw new Error(`Unknown transform format "${format}"`);
+        }
+        registerTask(`transform-${format}`, {
+          type: 'transform',
+          format: structFormat,
+        });
       }
-    } else {
-      const structFormat = tryToFormat<TransformFormat>(format);
-      if (!structFormat) {
-        throw new Error(`Unknown transform format "${format}"`);
-      }
-      registerTask(`transform-${format}`, {
-        type: 'transform',
-        format: structFormat,
-      });
     }
   }
 
@@ -70,7 +72,7 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
         });
       }
 
-      if (aliasedFormatsGroup.es2017?.length) {
+      if (aliasedFormatsGroup.es2017?.length && es5Formats) {
         registerTask(TaskName.BUNDLE_ES2017, {
           type: 'bundle',
           formats: es5Formats.map((module) => createFormat(module, 'es2017')),

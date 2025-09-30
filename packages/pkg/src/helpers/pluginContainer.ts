@@ -1,4 +1,4 @@
-import consola from 'consola';
+import { consola } from 'consola';
 import fs from 'fs-extra';
 import { resolve, join, isAbsolute } from 'path';
 import type {
@@ -17,6 +17,8 @@ import type {
   RollupError,
   TransformResult,
   Plugin,
+  RollupOptions,
+  ObjectHook,
 } from 'rollup';
 import * as acorn from 'acorn';
 import {
@@ -72,7 +74,6 @@ export interface PluginContainer {
     importer?: string,
     options?: {
       skip?: Set<Plugin>;
-      ssr?: boolean;
     },
   ) => Promise<PartialResolvedId | null>;
   transform: (
@@ -80,7 +81,6 @@ export interface PluginContainer {
     id: string,
     options?: {
       inMap?: SourceDescription['map'];
-      ssr?: boolean;
     },
   ) => Promise<SourceDescription | null>;
   load: (
@@ -110,12 +110,35 @@ type PluginContext = Omit<
 export let parser = acorn.Parser;
 
 export async function createPluginContainer(
-  { plugins, logger, root, output, build: { rollupOptions } },
+  {
+    plugins = [],
+    logger,
+    root,
+    output,
+    build: { rollupOptions },
+  }: {
+    plugins: Plugin[];
+    root: string;
+    output: string;
+    logger: any;
+    build: {
+      rollupOptions: RollupOptions;
+    };
+  },
   moduleGraph?: any,
   watcher?: FSWatcher,
 ): Promise<PluginContainer> {
   let ids = 0; // counter for generating unique emitted asset IDs
-  const files = new Map();
+  const files = new Map<
+    string,
+    {
+      id: string;
+      name?: string;
+      filename?: string;
+      type?: string;
+      source?: string | Uint8Array;
+    }
+  >();
 
   const isDebug = process.env.DEBUG;
 
@@ -135,12 +158,13 @@ export async function createPluginContainer(
       // rollupVersion: '2.3.4',
       watchMode: true,
     },
-    debug: () => {},
-    error: (e) => {
-      throw e;
+    debug: (..._args: unknown[]) => {},
+    error: (e: unknown) => {
+      if (e instanceof Error) throw e;
+      throw new Error(String(e));
     },
-    info: () => {},
-    warn: () => {},
+    info: (..._args: unknown[]) => {},
+    warn: (..._args: unknown[]) => {},
   };
 
   function warnIncompatibleMethod(method: string, plugin: string) {
@@ -191,7 +215,8 @@ export async function createPluginContainer(
   // we should create a new context for each async hook pipeline so that the
   // active plugin in that pipeline can be tracked in a concurrency-safe manner.
   // using a class to make creating new contexts more efficient
-  class Context implements PluginContext {
+  // NOTE: intentionally not implementing PluginContext exactly to allow gradual typing
+  class Context {
     meta = minimalContext.meta;
     ssr = false;
     _activePlugin: Plugin | null;
@@ -204,9 +229,9 @@ export async function createPluginContainer(
       this._activePlugin = initialPlugin || null;
     }
 
-    debug() {}
+    debug(..._args: unknown[]) {}
 
-    info() {}
+    info(..._args: unknown[]) {}
 
     parse(code: string, opts: any = {}) {
       return parser.parse(code, {
@@ -223,7 +248,7 @@ export async function createPluginContainer(
         skip = new Set(this._resolveSkips);
         skip.add(this._activePlugin);
       }
-      let out = await container.resolveId(id, importer, { skip, ssr: this.ssr });
+      let out = await container.resolveId(id, importer, { skip });
       if (typeof out === 'string') out = { id: out };
       return out as ResolvedId | null;
     }
@@ -247,7 +272,7 @@ export async function createPluginContainer(
     }
 
     emitFile(assetOrFile: EmittedFile) {
-      function resolveFileName(fileName: string) {
+      function resolveFileName(fileName?: string) {
         if (!fileName) return;
         if (isAbsolute(fileName)) return fileName;
         return resolve(root, output, fileName);
@@ -260,7 +285,7 @@ export async function createPluginContainer(
           : assetOrFile.type === 'asset'
             ? assetOrFile.name
             : assetOrFile.fileName;
-      const source = assetOrFile.type === 'asset' && assetOrFile.source;
+      const source = assetOrFile.type === 'asset' ? assetOrFile.source : undefined;
       const filename = resolveFileName(assetOrFile.fileName);
 
       const id = String(++ids);
@@ -270,19 +295,20 @@ export async function createPluginContainer(
         consola.warn(
           `type ${assetOrFile.type} of this.emitFile is not supported in transform mode. This plugin is likely not compatible`,
         );
-      } else if (source) {
-        fs.writeFileSync(filename, source);
+      } else if (source && filename) {
+        fs.writeFileSync(filename, source as any);
       }
       return id;
     }
 
     setAssetSource(assetId: string, source: string | Uint8Array) {
-      const asset = files.get(String(assetId));
+      const asset = files.get(assetId);
+      if (!asset) return;
       if (asset.type === 'chunk') {
         return;
       }
       asset.source = source;
-      fs.writeFile(asset.filename, source);
+      if (asset.filename) fs.writeFile(asset.filename, source);
     }
 
     getFileName() {
@@ -340,10 +366,11 @@ export async function createPluginContainer(
         try {
           errLocation = numberToPos(ctx._activeCode, pos);
         } catch (err2) {
+          const _err2: any = err2;
           logger.error(
-            colors.red(`Error in error handler:\n${err2.stack || err2.message}\n`),
+            colors.red(`Error in error handler:\n${_err2.stack || _err2.message}\n`),
             // print extra newline to separate the two errors
-            { error: err2 },
+            { error: _err2 },
           );
           throw err;
         }
@@ -461,10 +488,11 @@ export async function createPluginContainer(
       let options = rollupOptions;
       for (const plugin of plugins) {
         if (!plugin.options) continue;
-        options = (await plugin.options.call(minimalContext, options)) || options;
+        options = (await callHook(plugin.options, minimalContext, options)) || options;
       }
-      if (options.acornInjectPlugins) {
-        parser = acorn.Parser.extend(options.acornInjectPlugins as any);
+      // NOTE: maybe unused, try remove it in the future
+      if ((options as any).acornInjectPlugins) {
+        parser = acorn.Parser.extend((options as any).acornInjectPlugins as any);
       }
       return {
         acorn,
@@ -479,7 +507,7 @@ export async function createPluginContainer(
       await Promise.all(
         plugins.map((plugin) => {
           if (plugin.buildStart) {
-            return plugin.buildStart.call(new Context(plugin) as any, container.options as NormalizedInputOptions);
+            return callHook(plugin.buildStart, new Context(plugin), container.options as NormalizedInputOptions);
           }
           return null;
         }),
@@ -488,9 +516,7 @@ export async function createPluginContainer(
 
     async resolveId(rawId, importer = join(root, 'index.html'), options) {
       const skip = options?.skip;
-      const ssr = options?.ssr;
       const ctx = new Context();
-      ctx.ssr = !!ssr;
       ctx._resolveSkips = skip;
       const resolveStart = isDebug ? performance.now() : 0;
 
@@ -503,7 +529,11 @@ export async function createPluginContainer(
         ctx._activePlugin = plugin;
 
         const pluginResolveStart = isDebug ? performance.now() : 0;
-        const result = await plugin.resolveId.call(ctx as any, rawId, importer, { ssr });
+        const result = await callHook(plugin.resolveId, ctx, rawId, importer, {
+          // TODO: mock
+          attributes: {},
+          isEntry: false,
+        });
         if (!result) continue;
 
         if (typeof result === 'string') {
@@ -514,7 +544,7 @@ export async function createPluginContainer(
         }
 
         isDebug &&
-          debugPluginResolve.info(
+          debugPluginResolve(
             timeFrom(pluginResolveStart),
             plugin.name,
             // prettifyUrl(id, root),
@@ -549,9 +579,9 @@ export async function createPluginContainer(
         if (!plugin.load) continue;
         ctx._activePlugin = plugin;
 
-        const result = await plugin.load.call(ctx as any, id, { ssr });
+        const result = await callHook(plugin.load, ctx, id);
         if (result != null) {
-          if (isObject(result)) {
+          if (isObject<SourceDescription>(result)) {
             updateModuleInfo(id, result);
           }
           return result;
@@ -562,9 +592,7 @@ export async function createPluginContainer(
 
     async transform(code, id, options) {
       const inMap = options?.inMap;
-      const ssr = options?.ssr;
       const ctx = new TransformContext(id, code, inMap as SourceMap);
-      ctx.ssr = !!ssr;
       let meta = null;
       for (const plugin of plugins) {
         if (!plugin.transform) continue;
@@ -574,9 +602,9 @@ export async function createPluginContainer(
         const start = isDebug ? performance.now() : 0;
         let result: TransformResult | string | undefined;
         try {
-          result = await plugin.transform.call(ctx as any, code, id, { ssr });
+          result = await callHook(plugin.transform, ctx, code, id);
         } catch (e) {
-          ctx.error(e);
+          ctx.error(e as any);
         }
         if (!result) continue;
         isDebug &&
@@ -612,11 +640,23 @@ export async function createPluginContainer(
     async close() {
       if (closed) return;
       const ctx = new Context();
-      await Promise.all(plugins.map((p) => p.buildEnd && p.buildEnd.call(ctx as any)));
-      await Promise.all(plugins.map((p) => p.closeBundle && p.closeBundle.call(ctx as any)));
+      await Promise.all(plugins.map((p) => p.buildEnd && callHook(p.buildEnd, ctx)));
+      await Promise.all(plugins.map((p) => p.closeBundle && callHook(p.closeBundle, ctx)));
       closed = true;
     },
   };
 
   return container;
+}
+
+async function callHook<T extends (...args: any[]) => any>(
+  hook: ObjectHook<T>,
+  ctx: any,
+  ...args: Parameters<T>
+): Promise<Awaited<ReturnType<T>>> {
+  if (typeof hook === 'function') {
+    return await hook.call(ctx, ...args);
+  }
+  // ignore hook order
+  return await hook.handler.call(ctx, ...args);
 }

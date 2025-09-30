@@ -15,11 +15,11 @@ import type {
   AwaitedEventListener,
 } from 'rollup';
 import type { FSWatcher } from 'chokidar';
-import type { RslibConfig, Rspack, rsbuild } from '@rslib/core';
+import type { RslibConfig, rsbuild } from '@rslib/core';
 import { getRollupOptions } from '../engine/rollup/options.js';
 import { Runner } from '../helpers/runner.js';
 import { noop } from 'es-toolkit';
-import consola from 'consola';
+import { consola } from 'consola';
 
 export function createBundleTask(taskRunningContext: TaskRunnerContext) {
   return new BundleRunner(taskRunningContext);
@@ -30,8 +30,10 @@ export class BundleRunner extends Runner<OutputResult> {
   private rslibConfig?: RslibConfig;
   private engine: EngineType;
   private watcher: Watcher | null = null;
-  private result: Error | OutputResult | null;
-  private readonly executors = [];
+  private result: Error | OutputResult | null = null;
+  private readonly executors: Array<
+    [resolve: (value: OutputResult | PromiseLike<OutputResult>) => void, reject: (reason?: unknown) => void]
+  > = [];
   constructor(taskRunningContext: TaskRunnerContext) {
     super(taskRunningContext);
     this.engine = taskRunningContext.buildTask.config.engine ?? 'rollup';
@@ -43,6 +45,8 @@ export class BundleRunner extends Runner<OutputResult> {
         return this.handleRollupBuild(changedFiles);
       case 'rslib':
         return this.handleRslibBuild(changedFiles);
+      default:
+        throw new Error(`Unsupported engine: ${this.engine}`);
     }
   }
 
@@ -76,7 +80,7 @@ export class BundleRunner extends Runner<OutputResult> {
           }
         }
       } else {
-        const rollupOutputOptions = toArray(rollupOptions.output);
+        const rollupOutputOptions = toArray(rollupOptions.output).filter(Boolean) as OutputOptions[];
         const fileWatcher = new FileWatcher(context.watcher, rollupOutputOptions);
         const emitter = new WatchEmitter();
         const watcher = (this.watcher = new Watcher([{ ...rollupOptions, watch: { skipWrite: false } }], emitter));
@@ -102,9 +106,9 @@ export class BundleRunner extends Runner<OutputResult> {
             const buildResult = await writeFiles(rollupOutputOptions, write);
             this.result = {
               taskName: context.buildTask.name,
-              modules: cache.modules,
+              modules: cache!.modules,
               ...buildResult,
-            };
+            } as OutputResult;
             let executor;
 
             while ((executor = this.executors.shift())) {
@@ -149,7 +153,7 @@ export class BundleRunner extends Runner<OutputResult> {
       });
     }
     const { rslibConfig } = this;
-    let resolve;
+    let resolve: (value: any) => void;
     const defer = new Promise<Parameters<rsbuild.OnAfterBuildFn>[0]>((res) => {
       resolve = res;
     });
@@ -165,17 +169,17 @@ export class BundleRunner extends Runner<OutputResult> {
     await buildRslib(
       {
         ...rslibConfig,
-        plugins: [...rslibConfig.plugins, statsPlugin],
+        plugins: [...(rslibConfig.plugins ?? []), statsPlugin],
       },
       {},
     );
 
     const result = await defer;
 
-    const stats: Rspack.StatsCompilation = result.stats?.toJson(true);
+    const stats = result.stats?.toJson(true);
 
-    if (stats.errorsCount) {
-      stats.errors.forEach((error) => {
+    if (!stats || stats?.errorsCount) {
+      (stats?.errors || []).forEach((error: any) => {
         consola.error(error);
       });
       throw new Error(`Build error`);
@@ -184,19 +188,19 @@ export class BundleRunner extends Runner<OutputResult> {
     return {
       taskName: context.buildTask.name,
       // TODO: correct type and value
-      modules: stats.modules as any,
-      outputs: stats.chunks as any,
-      outputFiles: stats.assets as any,
-    };
+      modules: stats?.modules as any,
+      outputs: stats?.chunks as any,
+      outputFiles: stats?.assets as any,
+    } as OutputResult;
   }
 }
 
 // Fork from https://github.com/rollup/rollup/blob/v2.79.1/src/watch/WatchEmitter.ts
-class WatchEmitter<T extends Record<string, (...parameters: any) => any>> extends EventEmitter {
+class WatchEmitter<T extends Record<string, (...parameters: unknown[]) => unknown>> extends EventEmitter {
   private currentHandlers: {
     [K in keyof T]?: Array<AwaitedEventListener<T, K>>;
   } = Object.create(null);
-  private awaitedHandlers: any;
+  private awaitedHandlers: unknown;
   constructor() {
     super();
     this.awaitedHandlers = Object.create(null);
@@ -207,11 +211,18 @@ class WatchEmitter<T extends Record<string, (...parameters: any) => any>> extend
   // Will be overwritten by Rollup
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   async close() {}
-  emitAndAwait(event, ...args) {
-    this.emit(event, ...args);
-    return Promise.all(this.getHandlers(event).map((handler) => handler(...args)));
+  emitAndAwait(event: string | symbol, ...args: unknown[]) {
+    this.emit(event, ...(args as any[]));
+    return Promise.all(
+      this.getHandlers(event).map((handler) => {
+        if (typeof handler === 'function') {
+          return handler(...args);
+        }
+        return undefined;
+      }),
+    );
   }
-  onCurrentAwaited(event, listener) {
+  onCurrentAwaited(event: string | symbol, listener: (...args: unknown[]) => unknown) {
     this.getHandlers(event).push(listener);
     return this;
   }
@@ -219,11 +230,14 @@ class WatchEmitter<T extends Record<string, (...parameters: any) => any>> extend
     this.awaitedHandlers = {};
     return this;
   }
-  getHandlers(event) {
-    return this.awaitedHandlers[event] || (this.awaitedHandlers[event] = []);
+  getHandlers(event: string | symbol): Array<(...args: unknown[]) => unknown> {
+    const map = this.awaitedHandlers as Record<string | symbol, Array<(...args: unknown[]) => unknown>>;
+    const handlers = map[event];
+    if (handlers) return handlers;
+    return (map[event] = []);
   }
-  override once(eventName: string | symbol, listener: (...args: any[]) => void): this {
-    const handle = (...args) => {
+  override once(eventName: string | symbol, listener: (...args: unknown[]) => void): this {
+    const handle = (...args: unknown[]) => {
       this.off(eventName, handle);
       return listener.apply(this, args);
     };
@@ -256,18 +270,16 @@ class FileWatcher {
   updateWatchedFiles(result: RollupBuild) {
     const previouslyWatched = this.watched;
     this.watched = new Set<string>();
-    const {
-      watchFiles,
-      cache: { modules },
-    } = result;
+    const watchFiles: string[] = (result.watchFiles as string[] | undefined) ?? [];
+    const modules = ((result.cache as any)?.modules as any[] | undefined) ?? [];
 
     for (const id of watchFiles) {
       this.watchFile(id);
     }
 
-    for (const module of modules) {
+    for (const m of modules) {
       // TODO: support create TransformDependency watcher
-      for (const depId of module.transformDependencies) {
+      for (const depId of m.transformDependencies ?? []) {
         this.watchFile(depId);
       }
     }
@@ -300,13 +312,13 @@ async function rawBuild(rollupOptions: RollupOptions, taskRunnerContext: TaskRun
 
   const bundle = await rollup.rollup(rollupOptions);
 
-  const buildResult = await writeFiles(rollupOutputOptions, bundle.write);
+  const buildResult = await writeFiles((rollupOutputOptions as OutputOptions[]).filter(Boolean), bundle.write);
 
   await bundle.close();
 
   return {
     taskName,
-    modules: bundle.cache.modules,
+    modules: (bundle.cache as any)?.modules,
     ...buildResult,
   };
 }
@@ -320,13 +332,13 @@ async function writeFiles(
 
   for (let o = 0; o < rollupOutputOptions.length; ++o) {
     const writeResult = await write(rollupOutputOptions[o]);
-    const distDir = rollupOutputOptions[o].dir;
+    const distDir = rollupOutputOptions[o].dir ?? '';
     writeResult.output.forEach((chunk: RollupOutputChunk | RollupOutputAsset) => {
       outputFiles.push({
-        absolutePath: chunk['facadeModuleId'],
-        dest: path.join(distDir, chunk.fileName),
+        absolutePath: 'facadeModuleId' in chunk ? chunk['facadeModuleId']! : undefined,
+        dest: path.join(distDir ?? '', chunk.fileName ?? ''),
         filename: chunk.fileName,
-        code: chunk.type === 'chunk' ? chunk.code : chunk.source,
+        code: chunk.type === 'chunk' ? chunk.code : (chunk as any).source,
       });
     });
     outputs.push(writeResult.output);

@@ -1,5 +1,5 @@
 import ts from 'typescript';
-import consola from 'consola';
+import { consola } from 'consola';
 import { normalizePath } from '../utils.js';
 import { TaskConfig } from '../types.js';
 import { prepareSingleFileReplaceTscAliasPaths } from 'tsc-alias';
@@ -17,7 +17,7 @@ export interface File {
 
 export interface DtsInputFile extends File {
   dtsContent?: string | null;
-  dtsPath?: string;
+  dtsPath: string;
 }
 
 const normalizeDtsInput = (filePath: string, rootDir: string, outputDir: string): DtsInputFile => {
@@ -130,7 +130,7 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
     return [...needCompileFileNames, ...dtsFilenames];
   }
 
-  const dtsFiles = {};
+  const dtsFiles: Record<string, string> = {};
   const host = ts.createCompilerHost(tsConfig.options);
 
   host.writeFile = (fileName, contents) => {
@@ -152,7 +152,7 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
     emitResult.diagnostics.forEach((diagnostic) => {
       const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
       if (diagnostic.file) {
-        const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+        const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
         consola.error('DTS', `${diagnostic.file.fileName} (${line + 1}, ${character + 1}): ${message}`);
       } else {
         consola.error('DTS', message);
@@ -160,7 +160,7 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
     });
   }
 
-  if (!Object.keys(alias).length) {
+  if (!alias || !Object.keys(alias).length) {
     // no alias config
     return _files.map((file) => ({
       ...file,

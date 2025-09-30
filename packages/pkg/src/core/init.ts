@@ -139,7 +139,7 @@ export function initDeclarationTask(buildTask: BuildTask, options: InitTaskOptio
   config.outputMode ??=
     declarationConfig === true
       ? defaultDeclarationUserConfig.outputMode
-      : (declarationConfig.outputMode ?? defaultDeclarationUserConfig.outputMode);
+      : (declarationConfig?.outputMode ?? defaultDeclarationUserConfig.outputMode);
   const allOutputDirs = allTasks
     .map((v) => {
       return v.config.type === 'transform' ? v.config.outputDir! : '';
@@ -156,7 +156,7 @@ export function initDeclarationTask(buildTask: BuildTask, options: InitTaskOptio
   return buildTask;
 }
 
-function getMinifyFunction(minify: boolean | ((mode: string, command: string) => unknown)) {
+function getMinifyFunction<T>(minify?: boolean | ((mode: string, command: string) => T)) {
   switch (typeof minify) {
     case 'boolean':
       return () => minify;
