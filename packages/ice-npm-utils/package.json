@@ -31,7 +31,6 @@
   "devDependencies": {
     "typescript": "catalog:",
     "vitest": "catalog:",
-    "@types/node": "^17.0.45",
     "@types/fs-extra": "^9.0.13",
     "@types/semver": "^7.7.1",
     "@types/mkdirp": "^1.0.2",

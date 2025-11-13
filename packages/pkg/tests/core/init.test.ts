@@ -467,7 +467,7 @@ describe('initTask', () => {
         }),
         TASKS,
       );
-      expect(task.config as DeclarationTaskConfig).toContain({
+      expect(task.config as DeclarationTaskConfig).toMatchObject({
         outputMode: 'multi',
         generator: 'tsc',
       });

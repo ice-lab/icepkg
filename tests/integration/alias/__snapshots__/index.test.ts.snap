@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Run config default > cjs structure 1`] = `
 {
@@ -68,11 +68,11 @@ exports[`Run config default > file content cjs/alias.d.ts 1`] = `
 `;
 
 exports[`Run config default > file content cjs/alias.js 1`] = `
-"\\"use strict\\";
-Object.defineProperty(exports, \\"__esModule\\", {
+""use strict";
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, \\"bar\\", {
+Object.defineProperty(exports, "bar", {
     enumerable: true,
     get: function() {
         return bar;
@@ -90,8 +90,8 @@ export { bar };
 `;
 
 exports[`Run config default > file content cjs/index.js 1`] = `
-"\\"use strict\\";
-Object.defineProperty(exports, \\"__esModule\\", {
+""use strict";
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 function _export(target, all) {
@@ -108,7 +108,7 @@ _export(exports, {
         return foo;
     }
 });
-var _alias = require(\\"@/alias.js\\");
+var _alias = require("@/alias.js");
 var foo = 1;
 "
 `;

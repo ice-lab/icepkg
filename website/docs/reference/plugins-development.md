@@ -40,15 +40,13 @@ my-plugin
 ├── package.json
 ├── tsconfig.json
 ├── src
-|  └── index.ts       // 插件入口
+| └── index.ts // 插件入口
 ```
 
 ```ts src/index.ts
 import type { Plugin } from '@ice/pkg';
 
-const plugin: Plugin = (api) => {
-
-}
+const plugin: Plugin = (api) => {};
 
 export default plugin;
 ```
@@ -64,6 +62,7 @@ export default plugin;
   }
 }
 ```
+
 把插件发布到 npm 后，需要把插件添加到 `build.config.mts` 构建配置中：
 
 ```diff
@@ -91,18 +90,18 @@ export default defineConfig(() => ({
 ```js
 const plugin = (api) => {
   console.log(api.context);
-}
+};
 ```
 
 ### onGetConfig
 
 ICE PKG 会根据用户配置 Transform 和 Bundle 模式的输出产物格式，分别会注册以下任务：
 
-+ `transform-esm`：默认启动
-+ `transform-es2017`：默认启动
-+ `transform-cjs`：当 Transform 配置了 `formats: ['cjs']` 启动
-+ `bundle-es5`：当 Bundle 配置了 `formats: ['esm']` 或者 `formats: ['cjs']` 或者 `formats: ['umd']` 时启动
-+ `bundle-es2017`：当 Bundle 配置了 `formats: ['es2017']` 时启动
+- `transform-esm`：默认启动
+- `transform-es2017`：默认启动
+- `transform-cjs`：当 Transform 配置了 `formats: ['cjs']` 启动
+- `bundle-es5`：当 Bundle 配置了 `formats: ['esm']` 或者 `formats: ['cjs']` 或者 `formats: ['umd']` 时启动
+- `bundle-es2017`：当 Bundle 配置了 `formats: ['es2017']` 时启动
 
 通过 `onGetConfig` API，可以修改每个 Task 任务的配置项。
 
@@ -127,11 +126,11 @@ const plugin = (api) => {
 const plugin = (api) => {
   const { onGetConfig } = api;
   // 仅仅修改 transform-esm 任务的配置
-  onGetConfig('transform-esm', config => {
-    return ({
+  onGetConfig('transform-esm', (config) => {
+    return {
       ...config,
       entry: './component/index',
-    });
+    };
   });
 };
 ```
@@ -140,8 +139,8 @@ const plugin = (api) => {
 
 #### entry
 
-+ 类型：`string | string[] | { [entryAlias: string]: string }`
-+ 默认值：`'./src/index'`
+- 类型：`string | string[] | { [entryAlias: string]: string }`
+- 默认值：`'./src/index'`
 
 指定构建入口。支持配置单入口或者多个入口。
 
@@ -150,11 +149,11 @@ const plugin = (api) => {
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
-    return ({
+  onGetConfig((config) => {
+    return {
       ...config,
       entry: './component/index',
-    });
+    };
   });
 };
 ```
@@ -164,78 +163,78 @@ const plugin = (api) => {
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
-    return ({
+  onGetConfig((config) => {
+    return {
       ...config,
       // 1. 数组形式
       entry: ['./src/foo', './src/bar'],
       // 2. 对象形式，key 值作为 chunk name
       entry: {
         foo: './src/foo',
-        bar2: './src/bar'
-      }
-    });
+        bar2: './src/bar',
+      },
+    };
   });
 };
 ```
 
 #### define
 
-+ 类型：`Record<string, string>`
-+ 默认值：`{ 'process.env.NODE_ENV': 'development' | 'production', __DEV__: true | false }`
+- 类型：`Record<string, string>`
+- 默认值：`{ 'process.env.NODE_ENV': 'development' | 'production', __DEV__: true | false }`
 
 定义编译时环境变量，会在编译时被替换。注意：属性值会经过一次 `JSON.stringify()` 转换。
 
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
-    return ({
+  onGetConfig((config) => {
+    return {
       ...config,
       define: {
-        VERSION: '1.0.0'
+        VERSION: '1.0.0',
       },
-    });
+    };
   });
 };
 ```
 
 #### sourcemap
 
-+ 类型：`boolean | 'inline'`
-+ 默认值：start 阶段为 `true`，build 阶段为 `false`
+- 类型：`boolean | 'inline'`
+- 默认值：start 阶段为 `true`，build 阶段为 `false`
 
 配置是否生成源码调试映射。
 
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
-    return ({
+  onGetConfig((config) => {
+    return {
       ...config,
       sourcemap: true,
-    });
+    };
   });
 };
 ```
 
 #### alias
 
-+ 类型：`Record<string, string>`
-+ 默认值：`{}`
+- 类型：`Record<string, string>`
+- 默认值：`{}`
 
 配置模块引入的别名。比如，将 `@` 指向 `./src` 目录：
 
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
-    return ({
+  onGetConfig((config) => {
+    return {
       ...config,
       alias: {
         '@': './src',
       },
-    });
+    };
   });
 };
 ```
@@ -244,8 +243,8 @@ const plugin = (api) => {
 
 #### modifyRollupOptions
 
-+ 类型：`Array<(rollupOptions: RollupOptions) => RollupOptions>`
-+ 默认值：`[]`
+- 类型：`Array<(rollupOptions: RollupOptions) => RollupOptions>`
+- 默认值：`[]`
 
 修改默认的 [Rollup 选项](https://rollupjs.org/guide/en/#rolluprollup)。
 
@@ -254,54 +253,55 @@ import svelte from 'rollup-plugin-svelte';
 
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
+  onGetConfig((config) => {
     config.modifyRollupOptions ??= [];
     config.modifyRollupOptions.push((rollupOptions) => {
       rollupOptions.plugins.push(svelte({}));
       return rollupOptions;
-    })
+    });
   });
 };
 ```
 
 #### babelPlugins
 
-+ 类型：`babel.PluginItem[] | undefined`
-+ 默认值：`undefined`
+- 类型：`babel.PluginItem[] | undefined`
+- 默认值：`undefined`
 
 配置额外的 babel 插件。当配置此选项后，将会先使用 babel 对代码进行编译，然后再经过 swc 编译。
 
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
+  onGetConfig((config) => {
     config.babelPlugins = [];
   });
 };
 ```
+
 #### modifySwcCompileOptions
 
-+ 类型：`(config: swc.Config) => swc.Config`
-+ 默认值：`undefined`
+- 类型：`(config: swc.Config) => swc.Config`
+- 默认值：`undefined`
 
 用于修改 SWC 编译选项，函数入参是内置的 SWC 配置。具体编译选项可参考 [SWC 配置](https://swc.rs/docs/configuration/swcrc)。
 
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
+  onGetConfig((config) => {
     config.modifySwcCompileOptions = (originOptions) => {
-      const newOptions = { ...originOptions, env: { } };
+      const newOptions = { ...originOptions, env: {} };
       return newOptions;
-    }
+    };
   });
 };
 ```
 
 #### swcCompileOptions
 
-+ 类型：`swc.Config`
-+ 默认值：`{}`
+- 类型：`swc.Config`
+- 默认值：`{}`
 
 :::tip
 推荐使用 [modifySwcCompileOptions](#modifyswccompileoptions) 来修改 SWC 编译选项。
@@ -312,7 +312,7 @@ const plugin = (api) => {
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig(config => {
+  onGetConfig((config) => {
     config.swcCompileOptions = {
       // config
     };
@@ -324,19 +324,19 @@ const plugin = (api) => {
 
 > 仅对 Bundle 模式生效。Transform 模式按照配置的 format 值分别输出到对应目录，比如 esm、cjs、es2017
 
-+ 类型：`string`
-+ 默认值：`dist`
+- 类型：`string`
+- 默认值：`dist`
 
 配置 Bundle 模式下组件编译产物的输出目录。
 
 ```js
 const plugin = (api) => {
   const { onGetConfig } = api;
-  onGetConfig('bundle-es5', config => {
-    return ({
+  onGetConfig('bundle-es5', (config) => {
+    return {
       ...config,
       outputDir: 'build',
-    });
+    };
   });
 };
 ```
@@ -345,8 +345,8 @@ const plugin = (api) => {
 
 > 仅对 Bundle 模式生效
 
-+ 类型 `Array<(options: StylesRollupPluginOptions) => StylesRollupPluginOptions>`
-+ 默认值：`[]`
+- 类型 `Array<(options: StylesRollupPluginOptions) => StylesRollupPluginOptions>`
+- 默认值：`[]`
 
 ICE PKG 默认使用 [rollup-plugin-styles](https://www.npmjs.com/package/rollup-plugin-styles) 处理样式文件，可以通过 `modifyStylesOptions` 方式修改插件的配置。
 
@@ -359,9 +359,9 @@ const plugin = (api) => {
     config.modifyStylesOptions ??= [];
     config.modifyStylesOptions.push((stylesOptions) => {
       stylesOptions.plugins ||= [];
-      (stylesOptions.plugins).push(PostcssPluginRpxToVw());
+      stylesOptions.plugins.push(PostcssPluginRpxToVw());
       return stylesOptions;
-    })
+    });
     return config;
   });
 };
@@ -371,8 +371,8 @@ const plugin = (api) => {
 
 > 仅对 Bundle 模式生效
 
-+ 类型 `string[]`
-+ 默认值：`['.mjs', '.js', '.json', '.node', '.jsx', '.ts', '.tsx', '.mts', '.cjs', '.cts']`
+- 类型 `string[]`
+- 默认值：`['.mjs', '.js', '.json', '.node', '.jsx', '.ts', '.tsx', '.mts', '.cjs', '.cts']`
 
 配置解析的文件后缀名，这样在引入模块时不需要带后缀名，配置后会与默认值合并。
 
@@ -390,8 +390,8 @@ const plugin = (api) => {
 
 > 仅对 Bundle 模式生效
 
-+ 类型：`string`
-+ 默认值：`package.name`
+- 类型：`string`
+- 默认值：`package.name`
 
 Bundle 导出名称。一般用于 umd 产物中通过 `window[name]` 拿到产物模块内容。
 
@@ -399,7 +399,7 @@ Bundle 导出名称。一般用于 umd 产物中通过 `window[name]` 拿到产�
 const plugin = (api) => {
   const { onGetConfig } = api;
   onGetConfig('bundle-es5', (config) => {
-    config.name = "ICEPKG";
+    config.name = 'ICEPKG';
     return config;
   });
 };
@@ -409,8 +409,8 @@ const plugin = (api) => {
 
 > 仅对 Bundle 模式生效
 
-+ 类型：`Array<'development' | 'production' | string>`
-+ 默认值：`['production']`
+- 类型：`Array<'development' | 'production' | string>`
+- 默认值：`['production']`
 
 指定输出的产物是否经过压缩。默认情况下输出的产物是压缩过的（也就是开启了 `production`）。
 
@@ -429,8 +429,8 @@ const plugin = (api) => {
 
 > 仅对 Bundle 模式生效
 
-+ 类型：`boolean | Record<string, string>`
-+ 默认值：`{}`
+- 类型：`boolean | Record<string, string>`
+- 默认值：`{}`
 
 设置哪些模块不打包，转而通过 `<script>` 或其他方式引入。
 
@@ -448,12 +448,13 @@ const plugin = (api) => {
   });
 };
 ```
+
 #### minify
 
 > 仅对 Bundle 模式生效
 
-+ 类型：`boolean`
-+ 默认值：start 阶段为 `false`，build 阶段为 `true`
+- 类型：`boolean`
+- 默认值：start 阶段为 `false`，build 阶段为 `true`
 
 是否压缩 JS 和 CSS 产物。
 
@@ -473,8 +474,8 @@ const plugin = (api) => {
 
 > 仅对 Bundle 模式生效
 
-+ 类型：`boolean`
-+ 默认值：`false`
+- 类型：`boolean`
+- 默认值：`false`
 
 是否生成 development 的产物。
 
@@ -493,21 +494,21 @@ const plugin = (api) => {
 
 ICE PKG 插件提供以下生命周期钩子：
 
-+ build 命令：
+- build 命令：
 
-| 生命周期            | 参数                                                  | 调用时机              |
-| ------------------- | ----------------------------------------------------- | --------------------- |
-| before.build.load   | { args: CommandArgs; config: PkgConfig[] } | 获取所有任务配置后|
-| before.build.run    | { args: CommandArgs; config: PkgConfig[]  } | 编译执行之前  |
-| after.build.compile | { taskName: string; outputFiles: OutputFile[]; outputs?: Array<rollup.RollupOutput['output']>; modules?: rollup.RollupCache['modules'] } | 编译结束              |
+| 生命周期            | 参数                                                                                                                                       | 调用时机           |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| before.build.load   | `{ args: CommandArgs; config: PkgConfig[] }`                                                                                               | 获取所有任务配置后 |
+| before.build.run    | `{ args: CommandArgs; config: PkgConfig[] }`                                                                                               | 编译执行之前       |
+| after.build.compile | `{ taskName: string; outputFiles: OutputFile[]; outputs?: Array<rollup.RollupOutput['output']>; modules?: rollup.RollupCache['modules'] }` | 编译结束           |
 
-+ start 命令
+- start 命令
 
-| 生命周期            | 参数                                                  | 调用时机              |
-| ------------------- | ----------------------------------------------------- | --------------------- |
-| before.start.load   | { args: CommandArgs; config: PkgConfig[] } | 获取所有任务配置后|
-| before.start.run    | { args: CommandArgs; config: PkgConfig[]  } | 编译执行之前  |
-| after.start.compile | { taskName: string; outputFiles: OutputFile[]; modules?: rollup.ModuleJSON[] } | 编译结束              |
+| 生命周期            | 参数                                                                             | 调用时机           |
+| ------------------- | -------------------------------------------------------------------------------- | ------------------ |
+| before.start.load   | `{ args: CommandArgs; config: PkgConfig[] }`                                     | 获取所有任务配置后 |
+| before.start.run    | `{ args: CommandArgs; config: PkgConfig[]  }`                                    | 编译执行之前       |
+| after.start.compile | `{ taskName: string; outputFiles: OutputFile[]; modules?: rollup.ModuleJSON[] }` | 编译结束           |
 
 ### registerTask
 
@@ -518,7 +519,7 @@ const plugin = (api) => {
   const { registerTask } = api;
   registerTask('transform-cjs', {
     type: 'transform', // 必填
-  }); 
+  });
 };
 ```
 
@@ -529,13 +530,14 @@ const plugin = (api) => {
 ```js
 const plugin = (api) => {
   const { getAllTask } = api;
-  const tasks = getAllTask(); 
+  const tasks = getAllTask();
 };
 ```
 
 ### modifyUserConfig
 
 修改用户配置内容：
+
 ```js
 const plugin = (api) => {
   const { modifyUserConfig } = api;

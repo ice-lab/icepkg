@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Run config default > cjs structure 1`] = `null`;
 
@@ -21,12 +21,12 @@ exports[`Run config default > es2017 structure 1`] = `null`;
 exports[`Run config default > esm structure 1`] = `null`;
 
 exports[`Run config default > file content dist/index.cjs.es5.production.js 1`] = `
-"\\"use strict\\";console.log(\\"module\\");
+""use strict";console.log("module");
 "
 `;
 
 exports[`Run config default > file content dist/index.esm.es5.production.js 1`] = `
-"console.log(\\"module\\");
+"console.log("module");
 "
 `;
 
@@ -51,11 +51,11 @@ exports[`Run config enable-browser > es2017 structure 1`] = `null`;
 exports[`Run config enable-browser > esm structure 1`] = `null`;
 
 exports[`Run config enable-browser > file content dist/index.cjs.es5.production.js 1`] = `
-"\\"use strict\\";console.log(\\"browser\\");
+""use strict";console.log("browser");
 "
 `;
 
 exports[`Run config enable-browser > file content dist/index.esm.es5.production.js 1`] = `
-"console.log(\\"browser\\");
+"console.log("browser");
 "
 `;

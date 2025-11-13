@@ -152,7 +152,10 @@ export async function createPluginContainer(
 
   // get rollup version
   const rollupPkgPath = resolve(require.resolve('rollup'), '../../package.json');
-  const minimalContext: MinimalPluginContext = {
+  // new vite pollute types of rollup, should restore it
+  const minimalContext: Omit<MinimalPluginContext, 'environment' | 'meta'> & {
+    meta?: Omit<MinimalPluginContext['meta'], 'viteVersion'>;
+  } = {
     meta: {
       rollupVersion: safeRequire(rollupPkgPath).version,
       // rollupVersion: '2.3.4',

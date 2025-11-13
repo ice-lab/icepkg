@@ -99,6 +99,9 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestUserConf
     const test = config.only ? it.only : config.skip ? it.skip : it;
     test(
       `Run config ${config.name}`,
+      {
+        timeout: 30 * 1000,
+      },
       async () => {
         try {
           await runBuild(config);
@@ -106,9 +109,6 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestUserConf
         } finally {
           await resetProject(config);
         }
-      },
-      {
-        timeout: 30 * 1000,
       },
     );
   }
