@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Run config swc-helpers > cjs structure 1`] = `
 {
@@ -54,11 +54,11 @@ exports[`Run config swc-helpers > esm structure 1`] = `
 `;
 
 exports[`Run config swc-helpers > file content cjs/cjs.js 1`] = `
-"\\"use strict\\";
-Object.defineProperty(exports, \\"__esModule\\", {
+""use strict";
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var _object_spread = require(\\"@swc/helpers/_/_object_spread\\");
+var _object_spread = require("@swc/helpers/_/_object_spread");
 module.exports.add = function(a, b) {
     return a + b;
 };
@@ -76,8 +76,8 @@ export declare const foo: Record<string, any>;
 `;
 
 exports[`Run config swc-helpers > file content cjs/entry-mts.js 1`] = `
-"\\"use strict\\";
-Object.defineProperty(exports, \\"__esModule\\", {
+""use strict";
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 function _export(target, all) {
@@ -97,8 +97,8 @@ _export(exports, {
         return foo;
     }
 });
-var _object_spread = require(\\"@swc/helpers/_/_object_spread\\");
-var _cjs = require(\\"./cjs\\");
+var _object_spread = require("@swc/helpers/_/_object_spread");
+var _cjs = require("./cjs");
 var foo = _object_spread._({}, (0, _cjs.extend)({
     a: 1
 }, {
@@ -108,17 +108,17 @@ var foo = _object_spread._({}, (0, _cjs.extend)({
 `;
 
 exports[`Run config swc-helpers > file content dist/entry-mts.cjs.es5.production.js 1`] = `
-"\\"use strict\\";var e,r=require(\\"@swc/helpers/_/_object_spread\\"),t={},n=function(){if(e)return t;e=1;var n=r._;return t.add=function(e,r){return e+r},t.extend=function(e,r){return n({},e,r)},t}(),d=r._({},n.extend({a:1},{b:2}));exports.add=n.add,exports.extend=n.extend,exports.foo=d;
+""use strict";var e,r=require("@swc/helpers/_/_object_spread"),t={},n=function(){if(e)return t;e=1;var n=r._;return t.add=function(e,r){return e+r},t.extend=function(e,r){return n({},e,r)},t}(),d=r._({},n.extend({a:1},{b:2}));exports.add=n.add,exports.extend=n.extend,exports.foo=d;
 "
 `;
 
 exports[`Run config swc-helpers > file content dist/entry-mts.esm.es5.production.js 1`] = `
-"import e,{_ as r}from\\"@swc/helpers/_/_object_spread\\";var n,t={},d=function(){if(n)return t;n=1;var r=e._;return t.add=function(e,r){return e+r},t.extend=function(e,n){return r({},e,n)},t}(),o=r({},d.extend({a:1},{b:2})),a=d.add,u=d.extend;export{a as add,u as extend,o as foo};
+"import e,{_ as r}from"@swc/helpers/_/_object_spread";var n,t={},d=function(){if(n)return t;n=1;var r=e._;return t.add=function(e,r){return e+r},t.extend=function(e,n){return r({},e,n)},t}(),o=r({},d.extend({a:1},{b:2})),a=d.add,u=d.extend;export{a as add,u as extend,o as foo};
 "
 `;
 
 exports[`Run config swc-helpers > file content dist/entry-mts.umd.es5.production.js 1`] = `
-"var e,t;e=this,t=function(e,t){\\"use strict\\";var n,r={},d=function(){if(n)return r;n=1;var e=t._;return r.add=function(e,t){return e+t},r.extend=function(t,n){return e({},t,n)},r}(),o=t._({},d.extend({a:1},{b:2}));e.add=d.add,e.extend=d.extend,e.foo=o},\\"object\\"==typeof exports&&\\"undefined\\"!=typeof module?t(exports,require(\\"@swc/helpers/_/_object_spread\\")):\\"function\\"==typeof define&&define.amd?define([\\"exports\\",\\"@swc/helpers/_/_object_spread\\"],t):t((e=\\"undefined\\"!=typeof globalThis?globalThis:e||self)[\\"@ice/pkg-tests-mix-cjs-mjs\\"]={},e.require$$0);
+"var e,t;e=this,t=function(e,t){"use strict";var n,r={},d=function(){if(n)return r;n=1;var e=t._;return r.add=function(e,t){return e+t},r.extend=function(t,n){return e({},t,n)},r}(),o=t._({},d.extend({a:1},{b:2}));e.add=d.add,e.extend=d.extend,e.foo=o},"object"==typeof exports&&"undefined"!=typeof module?t(exports,require("@swc/helpers/_/_object_spread")):"function"==typeof define&&define.amd?define(["exports","@swc/helpers/_/_object_spread"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self)["@ice/pkg-tests-mix-cjs-mjs"]={},e.require$$0);
 "
 `;
 
@@ -141,7 +141,7 @@ export declare const foo: Record<string, any>;
 `;
 
 exports[`Run config swc-helpers > file content esm/entry-mts.js 1`] = `
-"import { _ as _object_spread } from \\"@swc/helpers/_/_object_spread\\";
+"import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
 import { add, extend } from './cjs';
 export { add, extend };
 export var foo = _object_spread({}, extend({

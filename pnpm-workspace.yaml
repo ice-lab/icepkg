@@ -6,11 +6,12 @@ packages:
   - tests/integration/*
 
 catalog:
-  vitest: ^0.28.5
-  '@vitest/coverage-c8': ^0.28.5
+  vitest: ^4.0.0
+  '@vitest/coverage-v8': ^4.0.0
   typescript: ^5.0.0
-  sass: ^1.58.3
+  sass: ^1.70.0
   sass-loader: ^13.2.0
+  "@types/node": "^20.19.0"
 
 catalogs:
   example:
