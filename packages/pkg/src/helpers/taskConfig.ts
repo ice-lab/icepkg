@@ -7,3 +7,9 @@ export function assertTaskBuildableConfig(
     throw new Error('Only accept bundle or transform task.');
   }
 }
+
+export function assertTaskBundleConfig(taskConfig: TaskConfig): asserts taskConfig is BundleTaskConfig {
+  if (taskConfig.type !== 'bundle') {
+    throw new Error('Only accept bundle task.');
+  }
+}

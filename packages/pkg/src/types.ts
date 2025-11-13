@@ -312,7 +312,11 @@ interface _TaskConfig {
    */
   define?: PlainObject;
   /**
-   * Define which bundler engine to use
+   * Define which bundler engine to use.
+   * - 'rollup'
+   * - 'rslib' common used for mf build
+   * - 'rolldown' experimental
+   * @default 'rollup'
    */
   engine?: EngineType;
   /**
@@ -361,7 +365,7 @@ interface _TaskConfig {
   pkg?: PkgResolvedConfig;
 }
 
-export type EngineType = 'rollup' | 'rslib';
+export type EngineType = 'rollup' | 'rslib' | 'rolldown';
 
 export interface BundleTaskConfig extends _TaskConfig, Omit<BundleUserConfig, 'minify' | 'formats'> {
   type: 'bundle';

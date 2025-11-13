@@ -1,0 +1,126 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Run config default > cjs structure 1`] = `null`;
+
+exports[`Run config default > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config default > es2017 structure 1`] = `null`;
+
+exports[`Run config default > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config default > file content dist/index.esm.es5.production.js 1`] = `
+"import{_ as e}from"@swc/helpers/_/_object_spread";import{_ as r}from"@swc/helpers/_/_object_spread_props";import{jsx as o}from"@ice/jsx-runtime/jsx-runtime";import"react";function s(){return o("div",r(e({},{className:"common-class-name"}),{children:"Hello World"}))}export{s as default};
+"
+`;
+
+exports[`Run config default > file content esm/index.d.ts 1`] = `
+"declare const _default: () => JSX.Element;
+export default _default;
+"
+`;
+
+exports[`Run config default > file content esm/index.js 1`] = `
+"import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
+import { _ as _object_spread_props } from "@swc/helpers/_/_object_spread_props";
+import { jsx as _jsx } from "@ice/jsx-runtime/jsx-runtime";
+import React from 'react';
+export default function() {
+    var commonProps = {
+        className: 'common-class-name'
+    };
+    return /*#__PURE__*/ _jsx("div", _object_spread_props(_object_spread({}, commonProps), {
+        children: "Hello World"
+    }));
+};
+"
+`;
+
+exports[`Run config pkg > cjs structure 1`] = `null`;
+
+exports[`Run config pkg > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.esm.es2017.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config pkg > es2017 structure 1`] = `null`;
+
+exports[`Run config pkg > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config pkg > file content dist/index.esm.es2017.production.js 1`] = `
+"import{_ as e}from"@swc/helpers/_/_object_spread";import{_ as r}from"@swc/helpers/_/_object_spread_props";import{jsx as o}from"@ice/jsx-runtime/jsx-runtime";import"react";var s=()=>o("div",r(e({},{className:"common-class-name"}),{children:"Hello World"}));export{s as default};
+"
+`;
+
+exports[`Run config pkg > file content esm/index.d.ts 1`] = `
+"declare const _default: () => JSX.Element;
+export default _default;
+"
+`;
+
+exports[`Run config pkg > file content esm/index.js 1`] = `
+"import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
+import { _ as _object_spread_props } from "@swc/helpers/_/_object_spread_props";
+import { jsx as _jsx } from "@ice/jsx-runtime/jsx-runtime";
+import React from 'react';
+export default (()=>{
+    const commonProps = {
+        className: 'common-class-name'
+    };
+    return /*#__PURE__*/ _jsx("div", _object_spread_props(_object_spread({}, commonProps), {
+        children: "Hello World"
+    }));
+});
+"
+`;
+
+exports[`Run config rolldown > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.esm.es2017.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config rolldown > file content dist/index.esm.es2017.production.js 1`] = `"import"react";import{jsx as e}from"@ice/jsx-runtime/jsx-runtime";var r=()=>e("div",{className:"common-class-name",children:"Hello World"});export{r as default};"`;

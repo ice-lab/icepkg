@@ -5,6 +5,7 @@ import * as fse from 'fs-extra';
 import fs from 'fs-extra';
 import { execSync } from 'node:child_process';
 import { UserConfig } from '@ice/pkg';
+import stringifyJavascript from 'serialize-javascript';
 
 const CHECK_DIRS = ['es2017', 'esm', 'dist', 'cjs'];
 
@@ -103,12 +104,9 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestUserConf
         timeout: 30 * 1000,
       },
       async () => {
-        try {
-          await runBuild(config);
-          await runSnapshot(config);
-        } finally {
-          await resetProject(config);
-        }
+        await resetProject(config);
+        await runBuild(config);
+        await runSnapshot(config);
       },
     );
   }
@@ -164,6 +162,6 @@ function buildIcePkgConfigScript(config: UserConfig) {
   return `
 import { defineConfig } from '@ice/pkg'
 
-export default defineConfig(${JSON.stringify(config, null, 2)})
+export default defineConfig(${stringifyJavascript(config, { space: 2 })})
   `.trim();
 }
