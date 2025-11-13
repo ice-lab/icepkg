@@ -47,8 +47,9 @@ export const userConfigSchema = z.object({
     z.boolean(),
     z.object({
       outputMode: z.enum(['multi', 'unique']).optional(),
+      generator: z.enum(['tsc', 'oxc']).optional(),
     }),
   ]),
 });
 
-export type UserConfig = z.infer<typeof userConfigSchema>;
+export type UserConfigSchemaType = z.infer<typeof userConfigSchema>;

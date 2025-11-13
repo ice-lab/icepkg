@@ -40,7 +40,7 @@ function bt(
   format: string,
   standardFormat: StandardBundleFormatString[],
   config: Partial<BundleTaskConfig>,
-): _BuildTask<BundleTaskConfig> {
+): BuildTask {
   return {
     name: `bundle-${format}`,
     config: {
@@ -53,7 +53,7 @@ function bt(
 }
 
 // Declaration Task
-function dt(config: Partial<DeclarationTaskConfig>): _BuildTask<DeclarationTaskConfig> {
+function dt(config: Partial<DeclarationTaskConfig>): BuildTask {
   return {
     name: `declaration`,
     config: {
@@ -305,7 +305,7 @@ describe('initTask', () => {
     describe('outputDir', () => {
       it('use default', () => {
         const task = initTask(bt('esm', ['esm:es5'], {}), c({}));
-        expect((task.config as BundleTaskConfig).outputDir).toEqual('dist');
+        expect((task.config as BundleTaskConfig).outputDir).toEqual(join(MOCK_ROOT, 'dist'));
       });
 
       it('userConfig is preset', () => {
@@ -317,7 +317,7 @@ describe('initTask', () => {
             },
           }),
         );
-        expect((task.config as BundleTaskConfig).outputDir).toEqual('custom');
+        expect((task.config as BundleTaskConfig).outputDir).toEqual(join(MOCK_ROOT, 'custom'));
       });
 
       it('taskConfig is preset', () => {
@@ -331,7 +331,7 @@ describe('initTask', () => {
             },
           }),
         );
-        expect((task.config as BundleTaskConfig).outputDir).toEqual('custom1');
+        expect((task.config as BundleTaskConfig).outputDir).toEqual(join(MOCK_ROOT, 'custom1'));
       });
     });
 
@@ -352,8 +352,8 @@ describe('initTask', () => {
 
       it('using default', () => {
         const task = initTask(bt('esm', ['esm:es5'], {}), c({}));
-        expect(minifyFunctionTable((task.config as BundleTaskConfig).jsMinify)).toEqual([false, false, false, true]);
-        expect(minifyFunctionTable((task.config as BundleTaskConfig).cssMinify)).toEqual([false, false, false, true]);
+        expect(minifyFunctionTable((task.config as BundleTaskConfig).jsMinify!)).toEqual([false, false, false, true]);
+        expect(minifyFunctionTable((task.config as BundleTaskConfig).cssMinify!)).toEqual([false, false, false, true]);
       });
 
       it('boolean', () => {
@@ -366,8 +366,13 @@ describe('initTask', () => {
               },
             }),
           );
-          expect(minifyFunctionTable((task.config as BundleTaskConfig).jsMinify)).toEqual([value, value, value, value]);
-          expect(minifyFunctionTable((task.config as BundleTaskConfig).cssMinify)).toEqual([
+          expect(minifyFunctionTable((task.config as BundleTaskConfig).jsMinify!)).toEqual([
+            value,
+            value,
+            value,
+            value,
+          ]);
+          expect(minifyFunctionTable((task.config as BundleTaskConfig).cssMinify!)).toEqual([
             value,
             value,
             value,
@@ -390,10 +395,10 @@ describe('initTask', () => {
                 },
               }),
             );
-            expect(minifyFunctionTable((task.config as BundleTaskConfig).jsMinify)).toEqual(
+            expect(minifyFunctionTable((task.config as BundleTaskConfig).jsMinify!)).toEqual(
               jsValue === undefined ? DEFAULT_TABLE : [jsValue, jsValue, jsValue, jsValue],
             );
-            expect(minifyFunctionTable((task.config as BundleTaskConfig).cssMinify)).toEqual(
+            expect(minifyFunctionTable((task.config as BundleTaskConfig).cssMinify!)).toEqual(
               cssValue === undefined ? DEFAULT_TABLE : [cssValue, cssValue, cssValue, cssValue],
             );
           }
@@ -401,7 +406,13 @@ describe('initTask', () => {
       });
     });
 
-    describe.each<[key: keyof BundleUserConfig, defaultValue: any, validValues: any[]]>([
+    describe.each<
+      [
+        key: Exclude<keyof BundleUserConfig, Exclude<keyof BundleUserConfig, keyof BundleTaskConfig>>,
+        defaultValue: any,
+        validValues: any[],
+      ]
+    >([
       ['polyfill', undefined, [false, 'usage', 'entry']],
       ['compileDependencies', false, [false, true, ['react']]],
       ['externals', undefined, [false, { react: 'React' }]],
@@ -448,19 +459,22 @@ describe('initTask', () => {
 
   describe('declaration', () => {
     const TASKS = [tt('esm', 'esm:es5', {})];
-    describe('outputMode', () => {
-      it('userConfig is true', () => {
-        const task = initDeclarationTask(
-          dt({}),
-          c({
-            declaration: true,
-          }),
-          TASKS,
-        );
-        expect((task.config as DeclarationTaskConfig).outputMode).toEqual('multi');
+    it('userConfig is true to use default value', () => {
+      const task = initDeclarationTask(
+        dt({}),
+        c({
+          declaration: true,
+        }),
+        TASKS,
+      );
+      expect(task.config as DeclarationTaskConfig).toContain({
+        outputMode: 'multi',
+        generator: 'tsc',
       });
+    });
 
-      it('userConfig is Object', () => {
+    describe('outputMode', () => {
+      it('using userConfig', () => {
         const task = initDeclarationTask(
           dt({}),
           c({
@@ -473,7 +487,7 @@ describe('initTask', () => {
         expect((task.config as DeclarationTaskConfig).outputMode).toEqual('unique');
       });
 
-      it('taskConfig is present', () => {
+      it('using taskConfig', () => {
         const task = initDeclarationTask(
           dt({
             outputMode: 'unique',
@@ -484,6 +498,34 @@ describe('initTask', () => {
           TASKS,
         );
         expect((task.config as DeclarationTaskConfig).outputMode).toEqual('unique');
+      });
+    });
+
+    describe('generator', () => {
+      it('using userConfig', () => {
+        const task = initDeclarationTask(
+          dt({}),
+          c({
+            declaration: {
+              generator: 'oxc',
+            },
+          }),
+          TASKS,
+        );
+        expect((task.config as DeclarationTaskConfig).generator).toEqual('oxc');
+      });
+
+      it('using taskConfigValue', () => {
+        const task = initDeclarationTask(
+          dt({
+            generator: 'oxc',
+          }),
+          c({
+            declaration: true,
+          }),
+          TASKS,
+        );
+        expect((task.config as DeclarationTaskConfig).generator).toEqual('oxc');
       });
     });
 

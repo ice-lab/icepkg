@@ -111,6 +111,58 @@ exports[`Run config bundle-with-full-modes > es2017 structure 1`] = `null`;
 
 exports[`Run config bundle-with-full-modes > esm structure 1`] = `null`;
 
+exports[`Run config declaration-generator-oxc > cjs structure 1`] = `null`;
+
+exports[`Run config declaration-generator-oxc > dist structure 1`] = `null`;
+
+exports[`Run config declaration-generator-oxc > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config declaration-generator-oxc > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config declaration-generator-oxc > file content es2017/index.d.ts 1`] = `
+"export declare const foo = 1;
+"
+`;
+
+exports[`Run config declaration-generator-oxc > file content es2017/index.js 1`] = `
+"export const foo = 1;
+"
+`;
+
+exports[`Run config declaration-generator-oxc > file content esm/index.d.ts 1`] = `
+"export declare const foo = 1;
+"
+`;
+
+exports[`Run config declaration-generator-oxc > file content esm/index.js 1`] = `
+"export var foo = 1;
+"
+`;
+
 exports[`Run config default > cjs structure 1`] = `null`;
 
 exports[`Run config default > dist structure 1`] = `null`;

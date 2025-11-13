@@ -63,6 +63,7 @@ class DeclarationRunner extends Runner<OutputResult> {
         rootDir: context.buildContext.rootDir,
         outputDir: buildConfig.outputDir!,
         alias: buildConfig.alias,
+        usingOxc: buildConfig.generator === 'oxc',
       },
     ]);
 

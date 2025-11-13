@@ -1,4 +1,3 @@
-import ts from 'typescript';
 import { consola } from 'consola';
 import { normalizePath } from '../utils.js';
 import { TaskConfig } from '../types.js';
@@ -6,6 +5,8 @@ import { prepareSingleFileReplaceTscAliasPaths } from 'tsc-alias';
 import fse from 'fs-extra';
 import * as path from 'path';
 import { merge } from 'es-toolkit/object';
+import { getTsconfig, TsConfigJson } from 'get-tsconfig';
+import type ts from 'typescript';
 
 export type FileExt = 'js' | 'ts' | 'tsx' | 'jsx' | 'cjs' | 'mjs' | 'mts' | 'cts';
 
@@ -45,6 +46,7 @@ export interface DtsCompileOptions {
   alias: TaskConfig['alias'];
   rootDir: string;
   outputDir: string;
+  usingOxc: boolean;
 }
 
 function formatAliasToTSPathsConfig(alias: TaskConfig['alias']) {
@@ -71,46 +73,39 @@ function addWildcard(str: string) {
   return `${str.endsWith('/') ? str : `${str}/`}*`;
 }
 
-async function getTSConfig(rootDir: string, outputDir: string, alias: TaskConfig['alias']) {
-  const defaultTSCompilerOptions: ts.CompilerOptions = {
-    allowJs: true,
-    declaration: true,
-    emitDeclarationOnly: true,
-    incremental: true,
-    skipLibCheck: true,
-    paths: formatAliasToTSPathsConfig(alias), // default add alias to paths
-  };
-  const projectTSConfig = await getProjectTSConfig(rootDir);
-  const tsConfig: ts.ParsedCommandLine = merge(merge({ options: defaultTSCompilerOptions }, projectTSConfig), {
-    options: {
-      outDir: outputDir,
-      rootDir: path.join(rootDir, 'src'),
-    },
-  });
-
-  return tsConfig;
-}
-
-async function getProjectTSConfig(rootDir: string): Promise<ts.ParsedCommandLine> {
-  const tsconfigPath = ts.findConfigFile(rootDir, ts.sys.fileExists);
-  if (tsconfigPath) {
-    const tsconfigFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
-    return ts.parseJsonConfigFileContent(tsconfigFile.config, ts.sys, path.dirname(tsconfigPath));
-  }
-
-  return {
-    options: {},
-    fileNames: [],
-    errors: [],
-  };
-}
-
-export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompileOptions): Promise<DtsInputFile[]> {
+export async function dtsCompile({
+  files,
+  rootDir,
+  outputDir,
+  alias,
+  usingOxc,
+}: DtsCompileOptions): Promise<DtsInputFile[]> {
   if (!files.length) {
     return [];
   }
 
-  const tsConfig = await getTSConfig(rootDir, outputDir, alias);
+  const projectTSConfigResult = getTsconfig(rootDir);
+
+  const defaultTSConfig: TsConfigJson = {
+    compilerOptions: {
+      allowJs: true,
+      declaration: true,
+      emitDeclarationOnly: true,
+      incremental: true,
+      skipLibCheck: true,
+      paths: formatAliasToTSPathsConfig(alias), // default add alias to paths
+    },
+  };
+
+  const tsConfig: TsConfigJson = merge<TsConfigJson, TsConfigJson>(
+    projectTSConfigResult ? merge(defaultTSConfig, projectTSConfigResult.config) : defaultTSConfig,
+    {
+      compilerOptions: {
+        outDir: outputDir,
+        rootDir: path.join(rootDir, 'src'),
+      },
+    },
+  );
 
   const _files = files
     .map((file) => normalizeDtsInput(file, rootDir, outputDir))
@@ -121,28 +116,73 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
       dtsPath: normalizePath(dtsPath),
     }));
 
+  const compileFunction = usingOxc ? compileFromOxc : compileFromTsc;
+  const dtsFiles = await compileFunction(_files, tsConfig, projectTSConfigResult?.path);
+
+  if (!alias || !Object.keys(alias).length) {
+    // no alias config
+    return _files.map((file) => ({
+      ...file,
+      dtsContent: dtsFiles[file.dtsPath],
+    }));
+  }
+
+  // We use tsc-alias to resolve d.ts alias.
+  // Reason: https://github.com/microsoft/TypeScript/issues/30952#issuecomment-1114225407
+  const tsConfigLocalPath = path.join(rootDir, 'node_modules/.cache/ice-pkg/tsconfig.json');
+  await fse.ensureFile(tsConfigLocalPath);
+  await fse.writeJSON(tsConfigLocalPath, tsConfig, { spaces: 2 });
+
+  const runFile = await prepareSingleFileReplaceTscAliasPaths({
+    configFile: tsConfigLocalPath,
+    outDir: outputDir,
+  });
+
+  const result = _files.map((file) => ({
+    ...file,
+    dtsContent: dtsFiles[file.dtsPath] ? runFile({ fileContents: dtsFiles[file.dtsPath], filePath: file.dtsPath }) : '',
+  }));
+
+  return result;
+}
+
+async function compileFromTsc(
+  files: DtsInputFile[],
+  tsConfig: TsConfigJson,
+  configPath?: string,
+): Promise<Record<string, string>> {
   // In order to only include the update files instead of all the files in the watch mode.
   function getProgramRootNames(originalFilenames: string[]) {
     // Should include all the resolved .d.ts file to avoid dts generate error:
     // TS4025: Exported variable '<name>' has or is using private name '<name>'.
     const dtsFilenames = originalFilenames.filter((filename) => filename.endsWith('.d.ts'));
-    const needCompileFileNames = _files.map(({ filePath }) => filePath);
+    const needCompileFileNames = files.map(({ filePath }) => filePath);
     return [...needCompileFileNames, ...dtsFilenames];
   }
 
+  const ts = await import('typescript');
+
+  const parsedTsConfig: ts.ParsedCommandLine = configPath
+    ? ts.parseJsonConfigFileContent(tsConfig, ts.sys, configPath)
+    : ({
+        ...tsConfig,
+        options: tsConfig.compilerOptions,
+      } as ts.ParsedCommandLine);
+
+  const host = ts.createCompilerHost(parsedTsConfig.options);
+
   const dtsFiles: Record<string, string> = {};
-  const host = ts.createCompilerHost(tsConfig.options);
 
   host.writeFile = (fileName, contents) => {
     dtsFiles[fileName] = contents;
   };
 
   const programOptions: ts.CreateProgramOptions = {
-    rootNames: getProgramRootNames(tsConfig.fileNames),
-    options: tsConfig.options,
+    rootNames: getProgramRootNames(parsedTsConfig.fileNames),
+    options: parsedTsConfig.options,
     host,
-    projectReferences: tsConfig.projectReferences,
-    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(tsConfig),
+    projectReferences: parsedTsConfig.projectReferences,
+    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(parsedTsConfig),
   };
   const program = ts.createProgram(programOptions);
 
@@ -160,36 +200,27 @@ export async function dtsCompile({ files, rootDir, outputDir, alias }: DtsCompil
     });
   }
 
-  if (!alias || !Object.keys(alias).length) {
-    // no alias config
-    return _files.map((file) => ({
-      ...file,
-      dtsContent: dtsFiles[file.dtsPath],
-    }));
+  return dtsFiles;
+}
+
+async function compileFromOxc(
+  absFiles: DtsInputFile[],
+  tsConfig: TsConfigJson,
+  configPath?: string,
+): Promise<Record<string, string>> {
+  if (!tsConfig?.compilerOptions?.isolatedDeclarations) {
+    consola.warn(`Enable isolatedDeclarations in tsconfig.json for correct .d.ts file generation`);
+  }
+  const oxc = await import('oxc-transform');
+  const dtsFiles: Record<string, string> = {};
+  for (const file of absFiles) {
+    const fileContent = fse.readFileSync(file.filePath, 'utf-8');
+    const { code } = oxc.isolatedDeclaration(file.filePath, fileContent, {
+      sourcemap: false,
+    });
+
+    dtsFiles[file.dtsPath] = code;
   }
 
-  // We use tsc-alias to resolve d.ts alias.
-  // Reason: https://github.com/microsoft/TypeScript/issues/30952#issuecomment-1114225407
-  const tsConfigLocalPath = path.join(rootDir, 'node_modules/.cache/ice-pkg/tsconfig.json');
-  await fse.ensureFile(tsConfigLocalPath);
-  await fse.writeJSON(
-    tsConfigLocalPath,
-    {
-      ...tsConfig,
-      compilerOptions: tsConfig.options,
-    },
-    { spaces: 2 },
-  );
-
-  const runFile = await prepareSingleFileReplaceTscAliasPaths({
-    configFile: tsConfigLocalPath,
-    outDir: outputDir,
-  });
-
-  const result = _files.map((file) => ({
-    ...file,
-    dtsContent: dtsFiles[file.dtsPath] ? runFile({ fileContents: dtsFiles[file.dtsPath], filePath: file.dtsPath }) : '',
-  }));
-
-  return result;
+  return dtsFiles;
 }

@@ -1,4 +1,4 @@
-import { isAbsolute, resolve, join } from 'path';
+import { isAbsolute, resolve, join } from 'node:path';
 import { TransformTaskConfig } from '../types.js';
 
 export function formatEntry(inputEntry?: string | string[] | Record<string, string>): Record<string, string> {
