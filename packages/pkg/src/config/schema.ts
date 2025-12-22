@@ -13,8 +13,8 @@ export const bundleSchema = z.object({
   externals: z
     .union([
       z.boolean(),
-      z.record(z.string()),
-      z.array(z.union([z.string(), z.instanceof(RegExp), z.record(z.string())])),
+      z.record(z.string(), z.string()),
+      z.array(z.union([z.string(), z.instanceof(RegExp), z.record(z.string(), z.string())])),
     ])
     .optional(),
   minify: z
@@ -33,9 +33,11 @@ export const bundleSchema = z.object({
 });
 
 export const userConfigSchema = z.object({
-  entry: z.union([z.string(), z.string().array(), z.record(z.string())]).optional(),
-  alias: z.record(z.string()).optional(),
-  define: z.record(z.union([z.string(), z.boolean(), z.number(), z.null(), z.record(z.any())])).optional(),
+  entry: z.union([z.string(), z.string().array(), z.record(z.string(), z.string())]).optional(),
+  alias: z.record(z.string(), z.string()).optional(),
+  define: z
+    .record(z.string(), z.union([z.string(), z.boolean(), z.number(), z.null(), z.record(z.string(), z.any())]))
+    .optional(),
   sourceMaps: z.union([z.boolean(), z.enum(['inline'])]).optional(),
   generateTypeForJs: z.boolean().optional(),
   jsxRuntime: z.enum(['classic', 'automatic']).optional(),

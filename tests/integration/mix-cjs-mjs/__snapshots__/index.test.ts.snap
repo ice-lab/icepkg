@@ -118,7 +118,7 @@ exports[`Run config swc-helpers > file content dist/entry-mts.esm.es5.production
 `;
 
 exports[`Run config swc-helpers > file content dist/entry-mts.umd.es5.production.js 1`] = `
-"var e,t;e=this,t=function(e,t){"use strict";var n,r={},d=function(){if(n)return r;n=1;var e=t._;return r.add=function(e,t){return e+t},r.extend=function(t,n){return e({},t,n)},r}(),o=t._({},d.extend({a:1},{b:2}));e.add=d.add,e.extend=d.extend,e.foo=o},"object"==typeof exports&&"undefined"!=typeof module?t(exports,require("@swc/helpers/_/_object_spread")):"function"==typeof define&&define.amd?define(["exports","@swc/helpers/_/_object_spread"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self)["@ice/pkg-tests-mix-cjs-mjs"]={},e.require$$0);
+"var e,t;e=this,t=function(e,t){"use strict";var r,n={},o=function(){if(r)return n;r=1;var e=t._;return n.add=function(e,t){return e+t},n.extend=function(t,r){return e({},t,r)},n}(),s=t._({},o.extend({a:1},{b:2}));e.add=o.add,e.extend=o.extend,e.foo=s},"object"==typeof exports&&"u">typeof module?t(exports,require("@swc/helpers/_/_object_spread")):"function"==typeof define&&define.amd?define(["exports","@swc/helpers/_/_object_spread"],t):t((e="u">typeof globalThis?globalThis:e||self)["@ice/pkg-tests-mix-cjs-mjs"]={},e.require$$0);
 "
 `;
 
