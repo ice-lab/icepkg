@@ -21,8 +21,8 @@ export const bundleSchema = z.object({
     .union([
       z.boolean(),
       z.object({
-        js: z.union([z.boolean(), z.function()]),
-        css: z.union([z.boolean(), z.function()]),
+        js: z.union([z.boolean(), z.function()]).optional(),
+        css: z.union([z.boolean(), z.function()]).optional(),
       }),
     ])
     .optional(),
@@ -30,6 +30,25 @@ export const bundleSchema = z.object({
   compileDependencies: z.union([z.boolean(), z.union([z.string(), z.instanceof(RegExp)]).array()]).optional(),
   browser: z.boolean().optional(),
   codeSplitting: z.boolean().optional(),
+});
+
+export const serverPublicDirOptionSchema = z.object({
+  name: z.string().optional(),
+});
+
+export const serverPublicDirOptionWithStringSchema = z.union([z.string(), serverPublicDirOptionSchema]);
+
+export const serverSchema = z.object({
+  publicDir: z
+    .union([serverPublicDirOptionWithStringSchema, z.array(serverPublicDirOptionWithStringSchema)])
+    .optional(),
+  port: z.number().optional(),
+  https: z.any().optional(),
+  host: z.string().optional(),
+  headers: z.record(z.string(), z.union([z.string(), z.string().array()])).optional(),
+  cors: z.union([z.boolean(), z.any()]).optional(),
+  proxy: z.union([z.record(z.string(), z.union([z.string(), z.any()])), z.any().array()]).optional(),
+  autoServeBundle: z.boolean().optional(),
 });
 
 export const userConfigSchema = z.object({
@@ -52,6 +71,7 @@ export const userConfigSchema = z.object({
       generator: z.enum(['tsc', 'oxc']).optional(),
     }),
   ]),
+  server: z.union([z.boolean(), serverSchema]).optional(),
 });
 
 export type UserConfigSchemaType = z.infer<typeof userConfigSchema>;

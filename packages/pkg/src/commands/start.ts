@@ -4,9 +4,10 @@ import type { OutputResult, Context, WatchChangedFile, BuildTask } from '../type
 import { RunnerLinerTerminalReporter } from '../helpers/runnerReporter.js';
 import { getTaskRunners } from '../helpers/getTaskRunners.js';
 import { RunnerScheduler } from '../helpers/runnerScheduler.js';
+import { createServer } from '../server/createServer.js';
 
 export default async function start(context: Context) {
-  const { applyHook, commandArgs } = context;
+  const { applyHook, commandArgs, userConfig } = context;
 
   const buildTasks = context.getTaskConfig() as BuildTask[];
   const taskConfigs = buildTasks.map(({ config }) => config);
@@ -26,6 +27,14 @@ export default async function start(context: Context) {
   });
 
   const watcher = createWatcher(taskConfigs);
+  const serverConfig = commandArgs.server !== undefined ? commandArgs.server : userConfig.server;
+  const devServer = serverConfig
+    ? createServer({
+        ...(serverConfig === true ? {} : serverConfig),
+        ...(commandArgs.port ? { port: commandArgs.port } : {}),
+        ...(commandArgs.host ? { host: commandArgs.host } : {}),
+      })
+    : null;
   const batchHandler = createBatchChangeHandler(runChangedCompile);
   batchHandler.beginBlock();
 
@@ -43,6 +52,8 @@ export default async function start(context: Context) {
 
   await applyHook('after.start.compile', outputResults);
 
+  await devServer?.listen();
+  devServer?.printUrls();
   batchHandler.endBlock();
 
   async function runChangedCompile(changedFiles: WatchChangedFile[]) {
