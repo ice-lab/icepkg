@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.0-alpha.3
+
+### Minor Changes
+
+- bd2d88d: feat: update typescript version and enable strict compiler option
+- ce59d6b: feat: add oxc-transform as optional declaration generator
+- e0285a9: feat: support rolldown as an experimental engine
+- a67f3f8: feat: support builtin dev server
+
+### Patch Changes
+
+- c97868a: chore: update @swc/core to 1.15 and pnpm to 9.15
+- 6dac234: feat: support `disable` for pkg config
+
 ## 2.0.0-alpha.2
 
 ### Major Changes
