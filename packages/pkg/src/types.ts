@@ -1,5 +1,4 @@
 import * as swc from '@swc/core';
-
 import type { RollupOptions, SourceMapInput, ModuleJSON, RollupOutput } from 'rollup';
 import type {
   Context as _Context,
@@ -16,6 +15,10 @@ import cssnano from 'cssnano';
 import { TransformOptions } from '@babel/core';
 import { ALL_FORMAT_MODULES, ALL_FORMAT_TARGET, NODE_FORMAT_MODULE } from './constants.js';
 import { RslibConfig } from '@rslib/core';
+import type { SecureServerSessionOptions } from 'node:http2';
+import { ServerOptions as HttpsServerOptions } from 'node:https';
+import { CorsOptions } from 'cors';
+import type { Options as HttpProxyMiddlewareOptions } from 'http-proxy-middleware';
 
 export type StylesRollupPluginOptions = Parameters<typeof stylesPlugin>[0];
 
@@ -293,6 +296,12 @@ export interface UserConfig {
    * "bundle mode" means bundle everything up by using Rollup
    */
   bundle?: BundleUserConfig;
+
+  /**
+   * Server config
+   * @default false
+   */
+  server?: boolean | ServerUserConfig;
 }
 
 export type PluginUserConfig = string | [string, Json?] | Plugin;
@@ -510,4 +519,66 @@ export interface PackageJson {
   dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
   [k: string]: string | Record<string, string> | undefined;
+}
+
+export interface ServerPublicDirOptions {
+  /**
+   * The name of the public directory, can be set as a relative path or an absolute path.
+   */
+  name?: string;
+}
+
+export type ServerPublicDirOptionsWithString = ServerPublicDirOptions | string;
+
+export type ServerPublicDir = ServerPublicDirOptionsWithString | ServerPublicDirOptionsWithString[];
+
+export type ServerProxyConfig = Record<string, string | HttpProxyMiddlewareOptions> | HttpProxyMiddlewareOptions[];
+
+export interface ServerUserConfig {
+  /**
+   * Serving static files from the directory
+   * @default { name: 'public', copyOnBuild: 'auto', watch: false }
+   */
+  publicDir?: ServerPublicDir;
+  /**
+   * Specify a port number for server to listen.
+   * @default 5138
+   * - 5 => nothing, just a prefix
+   * - 1 => i
+   * - 3 => c => three
+   * - 8 => e => eight
+   */
+  port?: number;
+  /**
+   * Configure HTTPS options to enable HTTPS server.
+   * When enabled, HTTP server will be disabled.
+   */
+  https?: HttpsServerOptions | SecureServerSessionOptions;
+  /**
+   * Specify the host that the server listens to.
+   * @default '0.0.0.0'
+   */
+  host?: string;
+  /**
+   * Adds headers to all responses.
+   */
+  headers?: Record<string, string | string[]>;
+  /**
+   * Configure CORS for the dev server or preview server.
+   * - object: enable CORS with the specified options.
+   * - true: enable CORS with default options (allow all origins, not recommended).
+   * - false: disable CORS.
+   * @link https://github.com/expressjs/cors
+   */
+  cors?: boolean | CorsOptions;
+  /**
+   * Configure proxy rules for the dev server or preview server to proxy requests to
+   * the specified service.
+   */
+  proxy?: ServerProxyConfig;
+  /**
+   * Whether to enable serve bundled files in the server
+   * @default true
+   */
+  autoServeBundle?: boolean;
 }

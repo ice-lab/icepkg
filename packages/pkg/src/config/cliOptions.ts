@@ -10,6 +10,10 @@ function getCliOptions() {
         return mergeValueToTaskConfig(config, 'analyzer', analyzer);
       },
     },
+    {
+      name: 'server',
+      commands: ['start'],
+    },
   ];
   return cliOptions;
 }

@@ -45,6 +45,9 @@ const cli = cac('ice-pkg');
     .option('--rootDir <rootDir>', 'specify root directory', {
       default: process.cwd(),
     })
+    .option('--server', 'Override server config', {})
+    .option('--port <port>', 'Override default server port', {})
+    .option('--host <host>', 'Override default server host', {})
     .action(async (options) => {
       delete options['--'];
       const { rootDir, ...commandArgs } = options;
