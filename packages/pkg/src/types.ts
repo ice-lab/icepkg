@@ -428,7 +428,7 @@ export type TaskConfig = BundleTaskConfig | TransformTaskConfig | DeclarationTas
 
 export type BuildTask = _BuildTask<TaskConfig, TaskName | string>;
 
-export type Context = _Context<TaskConfig, {}, UserConfig>;
+export type Context = _Context<TaskConfig, ExtendsPluginAPI, UserConfig>;
 
 // Plugins
 export interface CustomFormatTaskOptions {
@@ -442,6 +442,7 @@ export type CustomFormatTaskRegister = (format: string, creator: CustomFormatTas
 
 export interface ExtendsPluginAPI {
   registerFormat: CustomFormatTaskRegister;
+  pluginScope?: 'global' | 'pkg';
 }
 
 export type PluginAPI = _PluginAPI<TaskConfig, ExtendsPluginAPI>;

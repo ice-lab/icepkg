@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.common.json",
+  "exclude": ["**/esm/**", "**/cjs/**", "**/es2017/**", "**/dist/**"]
+}

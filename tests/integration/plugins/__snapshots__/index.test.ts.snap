@@ -1,46 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Run config custom-format > cjs structure 1`] = `null`;
-
-exports[`Run config custom-format > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.asset.js",
-    },
-  ],
-  "name": "dist",
-}
-`;
-
-exports[`Run config custom-format > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
-`;
-
-exports[`Run config custom-format > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
-`;
-
 exports[`Run config pkg-scope > cjs structure 1`] = `null`;
 
 exports[`Run config pkg-scope > dist structure 1`] = `null`;
@@ -105,4 +64,107 @@ export var info = {
     "name": "pkg-config"
 };
 "
+`;
+
+exports[`Run config plugin-scope > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config plugin-scope > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config plugin-scope > file content es2017/index.d.ts 1`] = `
+"declare global {
+    const __PLUGIN_INFO__: any;
+}
+export declare const foo = 1;
+export declare const info: any;
+"
+`;
+
+exports[`Run config plugin-scope > file content es2017/index.js 1`] = `
+"export const foo = 1;
+export const info = {
+    "pluginScope": "global"
+};
+"
+`;
+
+exports[`Run config plugin-scope > file content esm/index.d.ts 1`] = `
+"declare global {
+    const __PLUGIN_INFO__: any;
+}
+export declare const foo = 1;
+export declare const info: any;
+"
+`;
+
+exports[`Run config plugin-scope > file content esm/index.js 1`] = `
+"export var foo = 1;
+export var info = {
+    "pluginScope": "pkg"
+};
+"
+`;
+
+exports[`Run config register-format > cjs structure 1`] = `null`;
+
+exports[`Run config register-format > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.asset.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config register-format > es2017 structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "es2017",
+}
+`;
+
+exports[`Run config register-format > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.d.ts",
+    },
+    {
+      "name": "index.js",
+    },
+  ],
+  "name": "esm",
+}
 `;

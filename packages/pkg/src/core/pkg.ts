@@ -319,7 +319,11 @@ export async function runPkgPlugins(ctx: Context, pkgs: PkgResolvedConfig[]) {
           modifyConfigRegistration: ignoreGlobalApi('modifyConfigRegistration', ctx['modifyConfigRegistration']),
           modifyCliRegistration: ignoreGlobalApi('modifyCliRegistration', ctx['modifyCliRegistration']),
         },
-        ctx['extendsPluginAPI'] || {},
+        {
+          ...(ctx['extendsPluginAPI'] || {}),
+          registerFormat: ignoreGlobalApi('registerFormat', ctx['extendsPluginAPI'].registerFormat),
+          pluginScope: 'pkg',
+        },
       );
 
       if (typeof setup === 'function') {
