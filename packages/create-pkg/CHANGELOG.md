@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.0-alpha.0
+
+### Minor Changes
+
+- bd2d88d: feat: update typescript version and enable strict compiler option
+
+### Patch Changes
+
+- Updated dependencies [bd2d88d]
+  - ice-npm-utils@3.1.0-alpha.0
+
 ## 1.3.5
 
 - fix: remove docs directory

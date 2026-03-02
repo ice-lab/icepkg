@@ -22,18 +22,25 @@
     "icepkg-site": "0.0.0",
     "@ice/pkg-tests": "0.0.0",
     "@ice/pkg-tests-bundle-dep": "0.0.0",
-    "@ice/pkg-tests-mix-cjs-mjs": "0.0.0"
+    "@ice/pkg-tests-mix-cjs-mjs": "0.0.0",
+    "@ice/pkg-tests-react": "0.0.0"
   },
   "changesets": [
+    "chilled-chefs-drive",
     "cold-camels-rest",
     "dry-pots-buy",
     "eighty-trees-behave",
     "famous-fans-yell",
+    "friendly-birds-invent",
+    "friendly-radios-walk",
     "funny-tomatoes-count",
+    "giant-seahorses-call",
+    "green-crabs-add",
     "hip-beans-fail",
     "long-experts-design",
     "quick-wasps-shake",
     "slimy-walls-tease",
-    "violet-pots-brush"
+    "violet-pots-brush",
+    "wet-rocks-dream"
   ]
 }

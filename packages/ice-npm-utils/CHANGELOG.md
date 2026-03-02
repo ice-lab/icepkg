@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0-alpha.0
+
+### Minor Changes
+
+- bd2d88d: feat: update typescript version and enable strict compiler option
+
 ## 3.0.3
 
 - [fix] Using `fs.createWriteStream` will change all file permissions to `0o666`. However, there are cases where files need to be executable, such as files within the `.husky` directory. Therefore, `fs.createWriteStream` should maintain the original file permissions instead of overwriting them.
