@@ -63,7 +63,7 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       ice-npm-utils:
-        specifier: workspace:^3.0.2
+        specifier: workspace:*
         version: link:packages/ice-npm-utils
       lint-staged:
         specifier: ^15.5.1
@@ -243,8 +243,8 @@ importers:
         specifier: ^14.0.1
         version: 14.0.1
       ice-npm-utils:
-        specifier: ^3.0.2
-        version: 3.0.2
+        specifier: workspace:^3.1.0-alpha.0
+        version: link:../ice-npm-utils
       inquirer:
         specifier: ^8.2.1
         version: 8.2.4
