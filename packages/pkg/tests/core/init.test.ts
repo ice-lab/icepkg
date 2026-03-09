@@ -406,6 +406,45 @@ describe('initTask', () => {
       });
     });
 
+    describe('formats', () => {
+      it('without pkg and without formats, using default bundleConfig.formats', () => {
+        const task = initTask(bt('esm', [], { formats: undefined }), c({}));
+        // Default bundleConfig.formats is ['esm', 'es2017'], but now only module formats are kept.
+        expect((task.config as BundleTaskConfig).formats).toEqual([{ module: 'esm', target: 'es5' }]);
+      });
+
+      it('without pkg and without formats, using custom bundleConfig.formats', () => {
+        const task = initTask(
+          bt('esm', [], { formats: undefined }),
+          c({
+            bundle: {
+              formats: ['umd', 'cjs'],
+            },
+          }),
+        );
+        expect((task.config as BundleTaskConfig).formats).toEqual([
+          { module: 'umd', target: 'es5' },
+          { module: 'cjs', target: 'es5' },
+        ]);
+      });
+
+      it('without pkg and without formats, ignore es2017 and only keep cjs/umd/esm modules', () => {
+        const task = initTask(
+          bt('esm', [], { formats: undefined }),
+          c({
+            bundle: {
+              formats: ['esm', 'es2017', 'cjs', 'umd'],
+            },
+          }),
+        );
+        expect((task.config as BundleTaskConfig).formats).toEqual([
+          { module: 'esm', target: 'es5' },
+          { module: 'cjs', target: 'es5' },
+          { module: 'umd', target: 'es5' },
+        ]);
+      });
+    });
+
     describe.each<
       [
         key: Exclude<keyof BundleUserConfig, Exclude<keyof BundleUserConfig, keyof BundleTaskConfig>>,

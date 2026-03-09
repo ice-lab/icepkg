@@ -160,7 +160,8 @@ async function compileFromTsc(
     return [...needCompileFileNames, ...dtsFilenames];
   }
 
-  const ts = await import('typescript');
+  const importTs = await import('typescript');
+  const ts = importTs.default ?? importTs;
 
   const parsedTsConfig: ts.ParsedCommandLine = configPath
     ? ts.parseJsonConfigFileContent(tsConfig, ts.sys, configPath)
