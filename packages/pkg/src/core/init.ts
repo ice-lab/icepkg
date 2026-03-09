@@ -1,10 +1,11 @@
-import { BuildTask, BundleUserConfig, Context, DeclarationUserConfig } from '../types.js';
+import { AliasBundleFormatString, BuildTask, BundleUserConfig, Context, DeclarationUserConfig } from '../types.js';
 import { formatEntry, getTransformDefaultOutputDir } from '../helpers/getTaskIO.js';
 import getDefaultDefineValues from '../helpers/getDefaultDefineValues.js';
 import { stringifyObject } from '../utils.js';
 import { merge, mergeWith, omit } from 'es-toolkit/object';
 import path, { resolve } from 'node:path';
 import { groupBy } from 'es-toolkit';
+import { createFormat } from '../helpers/formats.js';
 
 const mergeDefaults: typeof merge = (target, source) => {
   return mergeWith(target, source, (targetValue, sourceValue) => {
@@ -107,10 +108,23 @@ export function initTask(buildTask: BuildTask, options: InitTaskOptions) {
     // resolve to absolute
     config.outputDir = resolve(rootDir, config.outputDir!);
 
+    if (!config.formats) {
+      if (!pkg) {
+        // compact mode，以前的旧版本在注册任务的时候，可能不会添加 formats，则降级使用旧模式
+        const legacyFormats = bundleConfig.formats ?? ['esm', 'es2017'];
+        const aliasedFormatsGroup = groupBy(legacyFormats, (format) => (format === 'es2017' ? 'es2017' : 'es5'));
+        const es5Formats = aliasedFormatsGroup.es5 as Array<Exclude<AliasBundleFormatString, 'es2017'>> | undefined;
+        config.formats = [...(es5Formats?.map((module) => createFormat(module, 'es5')) ?? [])];
+      } else {
+        // 理论上 Pkg 模式不会出现这个情况，但为了健壮性还是尝试补上这部分
+        config.formats = [{ module: 'esm', target: 'es5' }];
+      }
+    }
+
     if (pkg) {
       mergeDefaults(config, omit(pkg, ['id', 'pluginInfos', 'id', 'target', 'module', 'declaration', 'outputDir']));
     }
-    mergeDefaults(config, bundleConfig);
+    mergeDefaults(config, omit(bundleConfig, ['formats']));
     mergeDefaults(config, defaultBundleUserConfig);
   } else if (config.type === 'transform') {
     config.modes ??= [expectedMode];

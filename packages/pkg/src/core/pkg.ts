@@ -283,18 +283,12 @@ export async function runPkgPlugins(ctx: Context, pkgs: PkgResolvedConfig[]) {
       };
       const onGetConfig = ((nameOrFn: string | ((config: unknown) => unknown), fn?: (config: unknown) => unknown) => {
         if (typeof nameOrFn === 'string') {
-          const oldFn = fn!;
-          fn = (config: unknown) => {
-            if (
-              typeof config === 'object' &&
-              config &&
-              'pkg' in config &&
-              getPkgTaskName((config as any).pkg) !== taskName
-            ) {
-              return;
-            }
-            return oldFn(config);
-          };
+          if (nameOrFn !== taskName) {
+            ctx.logger.warn(
+              `Pkg plugin "${pluginName}" is not allowed to use onGetConfig with task name "${nameOrFn}". Only allow "${taskName}" or omitted`,
+            );
+            return;
+          }
         } else {
           fn = nameOrFn;
           nameOrFn = taskName;
