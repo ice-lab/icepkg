@@ -46,6 +46,43 @@ const tests: ProjectTestUserConfig[] = [
       ],
     },
   },
+  // should inlineDynamicImport for umd
+  {
+    name: 'dynamic-import',
+    config: {
+      entry: './src/dynamic-import.ts',
+      bundle: {
+        // rollup has error when using umd and cjs in same instance
+        // https://github.com/rollup/rollup/issues/6296
+        formats: ['umd'],
+      },
+    },
+    engine: ['rollup', 'rolldown'],
+  },
+  {
+    name: 'dynamic-import-pkg',
+    config: {
+      entry: './src/dynamic-import.ts',
+      pkgs: [
+        {
+          module: 'esm',
+          target: 'es5',
+          bundle: true,
+        },
+        {
+          module: 'cjs',
+          target: 'es5',
+          bundle: true,
+        },
+        {
+          module: 'umd',
+          target: 'es5',
+          bundle: true,
+        },
+      ],
+    },
+    engine: ['rollup', 'rolldown'],
+  },
 ];
 
 runProjectTest(
