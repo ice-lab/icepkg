@@ -77,11 +77,16 @@ export function getOutputs({
       if (minify) {
         options.plugins = [minifyPlugin(bundleTaskConfig.sourcemap, typeof minify === 'boolean' ? {} : minify.options)];
       }
+      options.inlineDynamicImports = format.module === 'umd';
     } else if (engine === 'rolldown') {
       const rolldownOuptut = options as RolldownOutputOptions;
       if (minify) {
         rolldownOuptut.minify = typeof minify === 'boolean' ? minify : minify.options;
       }
+      // rolldown can auto handle umd format to disable codeSplitting
+      // if (format.module === 'umd') {
+      //   rolldownOuptut.codeSplitting = false
+      // }
     }
 
     return options;

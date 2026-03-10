@@ -611,6 +611,9 @@ importers:
       '@ice/pkg':
         specifier: workspace:*
         version: link:../../../packages/pkg
+      '@swc/helpers':
+        specifier: ^0.5.15
+        version: 0.5.17
       es-toolkit:
         specifier: ^1.32.0
         version: 1.32.0

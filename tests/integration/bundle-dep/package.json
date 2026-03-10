@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ice/pkg": "workspace:*",
+    "@swc/helpers": "^0.5.15",
     "es-toolkit": "^1.32.0"
   }
 }
