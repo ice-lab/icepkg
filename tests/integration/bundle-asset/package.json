@@ -1,0 +1,10 @@
+{
+  "name": "@ice/pkg-tests-bundle-dep",
+  "version": "0.0.0",
+  "description": "test for static asset like .json .png .svg etc",
+  "private": true,
+  "dependencies": {
+    "@ice/pkg": "workspace:*",
+    "es-toolkit": "^1.32.0"
+  }
+}

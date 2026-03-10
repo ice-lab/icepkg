@@ -8,5 +8,8 @@
     "@ice/pkg": "workspace:*",
     "@types/serialize-javascript": "^5.0.4",
     "serialize-javascript": "^6.0.2"
+  },
+  "dependencies": {
+    "es-toolkit": "^1.32.0"
   }
 }

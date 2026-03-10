@@ -4,14 +4,13 @@ import * as url from 'node:url';
 import * as fse from 'fs-extra';
 import fs from 'fs-extra';
 import { execSync } from 'node:child_process';
-import { UserConfig } from '@ice/pkg';
+import { EngineType, UserConfig } from '@ice/pkg';
 import stringifyJavascript from 'serialize-javascript';
 
 const CHECK_DIRS = ['es2017', 'esm', 'dist', 'cjs'];
 
-export interface ProjectTestUserConfig {
+export interface ProjectTestUserConfigBase {
   name: string;
-  config?: string | UserConfig;
   mode?: 'build' | 'start';
   /**
    * How to snapshot file
@@ -25,33 +24,51 @@ export interface ProjectTestUserConfig {
   only?: boolean;
 }
 
+export interface ProjectTestUserConfigObject extends ProjectTestUserConfigBase {
+  config: UserConfig;
+  engine?: EngineType[];
+}
+
+export interface ProjectTestUserConfigString extends ProjectTestUserConfigBase {
+  config: string;
+}
+
+export type ProjectTestUserConfig = ProjectTestUserConfigObject | ProjectTestUserConfigString;
+
 export type ProjectTestConfig = Required<ProjectTestUserConfig>;
 
 export type ProjectTestConfigs = ProjectTestUserConfig[];
+
+function isStringUserConfig(config: ProjectTestUserConfig): config is ProjectTestUserConfigString {
+  return typeof config.config === 'string';
+}
 
 export function runProjectTest(fileUrl: string, userConfigs: ProjectTestUserConfig[]) {
   const projectPath = path.dirname(url.fileURLToPath(fileUrl));
 
   const configs: ProjectTestConfig[] = [];
 
-  for (const userConfig of userConfigs) {
-    let config: ProjectTestUserConfig;
-
-    if (typeof userConfig === 'string') {
-      config = { name: userConfig };
-    } else {
-      config = userConfig;
-    }
-
-    configs.push({
+  for (const config of userConfigs) {
+    const baseConfig: Required<ProjectTestUserConfigBase> = {
       name: config.name,
-      config: config.config,
       mode: config?.mode ?? 'build',
       snapshot: config?.snapshot ?? 'full',
       snapshotFolders: config?.snapshotFolders ?? CHECK_DIRS,
       skip: config.skip ?? false,
       only: config.only ?? false,
-    });
+    };
+    if (isStringUserConfig(config)) {
+      configs.push({
+        ...baseConfig,
+        config: config.config,
+      });
+    } else {
+      configs.push({
+        ...baseConfig,
+        config: config.config,
+        engine: config.engine ?? ['rollup'],
+      });
+    }
   }
 
   async function resetProject(config: ProjectTestConfig) {
@@ -60,14 +77,24 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestUserConf
     }
   }
 
-  async function runBuild(config: ProjectTestConfig) {
+  async function runBuild(config: ProjectTestConfig, engine: EngineType) {
     let configPath: string;
 
     if (typeof config.config === 'string') {
       configPath = config.config;
     } else {
       configPath = 'build.config.for-test.mts';
-      await fse.writeFile(path.join(projectPath, configPath), buildIcePkgConfigScript(config.config), 'utf8');
+      const withEngineConfig =
+        engine !== 'rollup'
+          ? {
+              ...config.config,
+              bundle: {
+                ...config.config.bundle,
+                engine,
+              },
+            }
+          : config.config;
+      await fse.writeFile(path.join(projectPath, configPath), buildIcePkgConfigScript(withEngineConfig), 'utf8');
     }
 
     execSync(`./node_modules/.bin/ice-pkg build --config ${configPath}`, {
@@ -98,17 +125,21 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestUserConf
 
   for (const config of configs) {
     const test = config.only ? it.only : config.skip ? it.skip : it;
-    test(
-      `Run config ${config.name}`,
-      {
-        timeout: 30 * 1000,
-      },
-      async () => {
-        await resetProject(config);
-        await runBuild(config);
-        await runSnapshot(config);
-      },
-    );
+    const engines = 'engine' in config ? config.engine : (['rollup'] as EngineType[]);
+    for (const engine of engines) {
+      const name = engine !== 'rollup' ? `${config.name}-${engine}` : config.name;
+      test(
+        `Run config ${name}`,
+        {
+          timeout: 30 * 1000,
+        },
+        async () => {
+          await resetProject(config);
+          await runBuild(config, engine);
+          await runSnapshot(config);
+        },
+      );
+    }
   }
 }
 

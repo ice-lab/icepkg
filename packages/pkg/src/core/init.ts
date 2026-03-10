@@ -1,6 +1,5 @@
 import { AliasBundleFormatString, BuildTask, BundleUserConfig, Context, DeclarationUserConfig } from '../types.js';
 import { formatEntry, getTransformDefaultOutputDir } from '../helpers/getTaskIO.js';
-import getDefaultDefineValues from '../helpers/getDefaultDefineValues.js';
 import { stringifyObject } from '../utils.js';
 import { merge, mergeWith, omit } from 'es-toolkit/object';
 import path, { resolve } from 'node:path';
@@ -60,10 +59,6 @@ function initSharedTask(buildTask: BuildTask, options: InitTaskOptions) {
   config.alias ??= mergeDefaults({ ...pkg?.alias }, userConfig.alias ?? {});
   // Configure define
   config.define = Object.assign(
-    // Note: The define values in bundle mode will be defined (according to the `modes` value)
-    // in generating rollup options. But when the command is test, we don't need to get the rollup options.
-    // So in test, we assume the mode is 'development'.
-    command === 'test' ? getDefaultDefineValues('development') : {},
     stringifyObject(userConfig.define ?? {}),
     stringifyObject(pkg?.define ?? {}),
     stringifyObject(config.define ?? {}),

@@ -216,7 +216,7 @@ async function compileFromOxc(
   const dtsFiles: Record<string, string> = {};
   for (const file of absFiles) {
     const fileContent = fse.readFileSync(file.filePath, 'utf-8');
-    const { code } = oxc.isolatedDeclaration(file.filePath, fileContent, {
+    const { code } = await oxc.isolatedDeclaration(file.filePath, fileContent, {
       sourcemap: false,
     });
 
