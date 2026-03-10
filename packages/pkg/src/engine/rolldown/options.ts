@@ -1,9 +1,10 @@
-import { RolldownOptions, Plugin, OutputOptions } from 'rolldown';
+import { Plugin, OutputOptions, BuildOptions } from 'rolldown';
 import { Context, StylesRollupPluginOptions, TaskRunnerContext, PackageJson } from '../../types.js';
-import { getExternalsAndGlobals, getRollupOutputs } from '../rollup/options.js';
+import { getExternalsAndGlobals } from '../shared/external.js';
+import { getOutputs } from '../shared/outputs.js';
 import { assertTaskBundleConfig } from '../../helpers/taskConfig.js';
 import path from 'node:path';
-import getDefaultDefineValues from '../../helpers/getDefaultDefineValues.js';
+import getDefaultDefineValues from '../shared/define.js';
 import styles from 'rollup-plugin-styler';
 import image from '@rollup/plugin-image';
 import autoprefixer from 'autoprefixer';
@@ -12,27 +13,24 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { JSX_RUNTIME_SOURCE } from '../../constants.js';
 import { RollupOptions } from 'rollup';
 
-export function getRolldownOptions(context: Context, taskRunnerContext: TaskRunnerContext): RolldownOptions {
+export function getRolldownOptions(context: Context, taskRunnerContext: TaskRunnerContext): BuildOptions[] {
   const { pkg, commandArgs, command, rootDir } = context;
   const { buildTask } = taskRunnerContext;
   const { name: taskName, config: taskConfig } = buildTask;
 
   assertTaskBundleConfig(taskConfig);
 
-  const options: RolldownOptions = {};
-
   const [external, globals] = getExternalsAndGlobals(taskConfig, pkg as PackageJson);
 
-  options.input = taskConfig.entry;
-  options.external = external;
   // TODO: should warning if output is multiple
-  options.output = getRollupOutputs({
+  const outputs = getOutputs({
+    engine: 'rolldown',
     globals,
     bundleTaskConfig: taskConfig,
     pkg: pkg as PackageJson,
     mode: taskRunnerContext.mode,
     command,
-  })[0] as OutputOptions;
+  }) as OutputOptions[];
 
   const alias: Record<string, string> = {};
   if (taskConfig.alias) {
@@ -44,56 +42,75 @@ export function getRolldownOptions(context: Context, taskRunnerContext: TaskRunn
     }
   }
 
-  const plugins: Plugin[] = [];
+  return outputs.map((output) => {
+    const options: BuildOptions = {
+      // disable module type of css
+      moduleTypes: {
+        '.css': 'js',
+      },
+      output,
+    };
 
-  options.resolve = {
-    alias,
-  };
-  options.define = {
-    ...getDefaultDefineValues(taskRunnerContext.mode),
-    // User define can override above.
-    ...taskConfig.define,
-  };
+    options.input = taskConfig.entry;
+    options.external = external;
 
-  options.jsx = {
-    mode: taskConfig.jsxRuntime ?? 'automatic',
-    jsxImportSource: JSX_RUNTIME_SOURCE,
-  };
+    const plugins: Plugin[] = [];
 
-  const cssMinify = taskConfig.cssMinify!(taskRunnerContext.mode, command);
-  const defaultStylesOptions: StylesRollupPluginOptions = {
-    plugins: [autoprefixer(), PostcssPluginRpxToVw],
-    mode: 'extract',
-    autoModules: true,
-    minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
-    sourceMap: taskConfig.sourcemap,
-  };
+    options.resolve = {
+      alias: {
+        ...alias,
+      },
+    };
 
-  plugins.push(
-    styles(
-      (taskConfig.modifyStylesOptions ?? [(options) => options]).reduce<StylesRollupPluginOptions>(
-        (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
-        defaultStylesOptions,
-      ),
-    ) as unknown as Plugin<any>,
-    image() as unknown as Plugin<any>,
-  );
+    options.platform = taskConfig.browser ? 'browser' : 'node';
 
-  if (commandArgs.analyzer) {
+    options.transform = {
+      define: {
+        ...getDefaultDefineValues(taskRunnerContext.mode),
+        // User define can override above.
+        ...taskConfig.define,
+      },
+      jsx: {
+        runtime: taskConfig.jsxRuntime ?? 'automatic',
+        importSource: JSX_RUNTIME_SOURCE,
+      },
+    };
+
+    const cssMinify = taskConfig.cssMinify!(taskRunnerContext.mode, command);
+    const defaultStylesOptions: StylesRollupPluginOptions = {
+      plugins: [autoprefixer(), PostcssPluginRpxToVw],
+      mode: 'extract',
+      autoModules: true,
+      minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
+      sourceMap: taskConfig.sourcemap,
+    };
+
     plugins.push(
-      visualizer({
-        title: `Rollup Visualizer(${taskName})`,
-        open: true,
-        filename: `${taskName}-stats.html`,
-      }) as unknown as Plugin,
+      styles(
+        (taskConfig.modifyStylesOptions ?? [(options) => options]).reduce<StylesRollupPluginOptions>(
+          (prevStylesOptions, modifyStylesOptions) => modifyStylesOptions(prevStylesOptions),
+          defaultStylesOptions,
+        ),
+      ) as unknown as Plugin<any>,
+      image() as unknown as Plugin<any>,
     );
-  }
 
-  options.plugins = plugins;
+    if (commandArgs.analyzer) {
+      plugins.push(
+        visualizer({
+          title: `Rollup Visualizer(${taskName})`,
+          open: true,
+          filename: `${taskName}-stats.html`,
+        }) as unknown as Plugin,
+      );
+    }
 
-  return (taskConfig.modifyRollupOptions ?? [(options) => options]).reduce(
-    (prevOptions, modifyRollupOptions) =>
-      modifyRollupOptions(prevOptions as unknown as RollupOptions) as RolldownOptions,
-    options,
-  );
+    options.plugins = plugins;
+
+    return (taskConfig.modifyRollupOptions ?? [(options) => options]).reduce(
+      (prevOptions, modifyRollupOptions) =>
+        modifyRollupOptions(prevOptions as unknown as RollupOptions) as BuildOptions,
+      options,
+    );
+  });
 }

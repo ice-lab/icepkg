@@ -69,7 +69,7 @@ exports[`Run config bundle-rolldown > es2017 structure 1`] = `null`;
 
 exports[`Run config bundle-rolldown > esm structure 1`] = `null`;
 
-exports[`Run config bundle-rolldown > file content dist/index.esm.es2017.production.js 1`] = `"let o=1;export{o as foo};"`;
+exports[`Run config bundle-rolldown > file content dist/index.esm.es2017.production.js 1`] = `"const e=1;export{e as foo};"`;
 
 exports[`Run config bundle-with-dev-mode > cjs structure 1`] = `null`;
 

@@ -123,4 +123,4 @@ exports[`Run config rolldown > dist structure 1`] = `
 }
 `;
 
-exports[`Run config rolldown > file content dist/index.esm.es2017.production.js 1`] = `"import"react";import{jsx as e}from"@ice/jsx-runtime/jsx-runtime";var r=()=>e("div",{className:"common-class-name",children:"Hello World"});export{r as default};"`;
+exports[`Run config rolldown > file content dist/index.esm.es2017.production.js 1`] = `"import"react";import{jsx as e}from"@ice/jsx-runtime/jsx-runtime";var t=()=>e(\`div\`,{className:\`common-class-name\`,children:\`Hello World\`});export{t as default};"`;

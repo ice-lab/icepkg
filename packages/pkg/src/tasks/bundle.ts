@@ -1,24 +1,14 @@
 import * as path from 'path';
-import * as rollup from 'rollup';
 import { Watcher } from 'rollup/dist/shared/watch.js';
 import { toArray } from '../utils.js';
 import EventEmitter from 'node:events';
-import type { EngineType, OutputFile, OutputResult, TaskRunnerContext, WatchChangedFile } from '../types.js';
-import type {
-  OutputChunk as RollupOutputChunk,
-  OutputAsset as RollupOutputAsset,
-  RollupWatcherEvent,
-  RollupBuild,
-  RollupOutput,
-  OutputOptions,
-  RollupOptions,
-  AwaitedEventListener,
-} from 'rollup';
+import type { EngineType, OutputResult, TaskRunnerContext, WatchChangedFile } from '../types.js';
+import type { RollupWatcherEvent, RollupBuild, OutputOptions, RollupOptions, AwaitedEventListener } from 'rollup';
 import type { FSWatcher } from 'chokidar';
 import type { RslibConfig, rsbuild } from '@rslib/core';
 import { getRollupOptions } from '../engine/rollup/options.js';
 import { Runner } from '../helpers/runner.js';
-import { RolldownOptions } from 'rolldown';
+import type { BuildOptions as RolldownBuildOptions } from 'rolldown';
 import { noop } from 'es-toolkit';
 import { consola } from 'consola';
 
@@ -29,7 +19,7 @@ export function createBundleTask(taskRunningContext: TaskRunnerContext) {
 export class BundleRunner extends Runner<OutputResult> {
   private rollupOptions?: RollupOptions;
   private rslibConfig?: RslibConfig;
-  private rolldownOptions?: RolldownOptions;
+  private rolldownOptions?: RolldownBuildOptions[];
   private engine: EngineType;
   private watcher: Watcher | null = null;
   private result: Error | OutputResult | null = null;
@@ -69,6 +59,7 @@ export class BundleRunner extends Runner<OutputResult> {
 
   private async handleRollupBuild(changedFiles: WatchChangedFile[]): Promise<OutputResult> {
     const { context } = this;
+    const { build: rawBuild, writeFiles } = await import('../engine/rollup/build.js');
     if (!this.rollupOptions) {
       this.rollupOptions = getRollupOptions(context.buildContext, context);
     }
@@ -200,19 +191,12 @@ export class BundleRunner extends Runner<OutputResult> {
 
   private async handleRolldownBuild(changedFiles: WatchChangedFile[]): Promise<OutputResult> {
     const { context } = this;
-    const { build } = await import('rolldown');
+    const { build } = await import('../engine/rolldown/build.js');
     if (!this.rolldownOptions) {
       const { getRolldownOptions } = await import('../engine/rolldown/options.js');
       this.rolldownOptions = getRolldownOptions(context.buildContext, context);
     }
-    const bundle = await build(this.rolldownOptions);
-
-    return {
-      taskName: context.buildTask.name,
-      // TODO: correct type and value
-      outputs: bundle.output as any,
-      outputFiles: bundle.output as any,
-    };
+    return await build(this.rolldownOptions!, this.context);
   }
 }
 
@@ -324,49 +308,4 @@ class FileWatcher {
   private unwatchFile(id: string): void {
     this.watcher.unwatch(id);
   }
-}
-
-async function rawBuild(rollupOptions: RollupOptions, taskRunnerContext: TaskRunnerContext): Promise<OutputResult> {
-  const rollupOutputOptions = toArray(rollupOptions.output);
-  const { buildTask } = taskRunnerContext;
-  const { name: taskName } = buildTask;
-
-  const bundle = await rollup.rollup(rollupOptions);
-
-  const buildResult = await writeFiles((rollupOutputOptions as OutputOptions[]).filter(Boolean), bundle.write.bind(bundle));
-
-  await bundle.close();
-
-  return {
-    taskName,
-    modules: (bundle.cache as any)?.modules,
-    ...buildResult,
-  };
-}
-
-async function writeFiles(
-  rollupOutputOptions: OutputOptions[],
-  write: RollupBuild['write'],
-): Promise<Omit<OutputResult, 'taskName' | 'modules'>> {
-  const outputFiles: OutputFile[] = [];
-  const outputs: Array<RollupOutput['output']> = [];
-
-  for (let o = 0; o < rollupOutputOptions.length; ++o) {
-    const writeResult = await write(rollupOutputOptions[o]);
-    const distDir = rollupOutputOptions[o].dir ?? '';
-    writeResult.output.forEach((chunk: RollupOutputChunk | RollupOutputAsset) => {
-      outputFiles.push({
-        absolutePath: 'facadeModuleId' in chunk ? chunk['facadeModuleId']! : undefined,
-        dest: path.join(distDir ?? '', chunk.fileName ?? ''),
-        filename: chunk.fileName,
-        code: chunk.type === 'chunk' ? chunk.code : (chunk as any).source,
-      });
-    });
-    outputs.push(writeResult.output);
-  }
-
-  return {
-    outputs,
-    outputFiles,
-  };
 }

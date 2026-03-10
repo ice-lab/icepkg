@@ -9,6 +9,8 @@ runProjectTest(import.meta.url, [
         formats: ['esm', 'cjs'],
       },
     },
+    // FIXME: for rolldown, resolution is different for rollup, so we need to update it later
+    engine: ['rollup', 'rolldown'],
   },
   {
     name: 'enable-browser',
@@ -19,5 +21,6 @@ runProjectTest(import.meta.url, [
         browser: true,
       },
     },
+    engine: ['rollup', 'rolldown'],
   },
 ]);

@@ -30,6 +30,30 @@ exports[`Run config default > file content dist/index.esm.es5.production.js 1`] 
 "
 `;
 
+exports[`Run config default-rolldown > cjs structure 1`] = `null`;
+
+exports[`Run config default-rolldown > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.cjs.es5.production.js",
+    },
+    {
+      "name": "index.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config default-rolldown > es2017 structure 1`] = `null`;
+
+exports[`Run config default-rolldown > esm structure 1`] = `null`;
+
+exports[`Run config default-rolldown > file content dist/index.cjs.es5.production.js 1`] = `"console.log(\`main\`);"`;
+
+exports[`Run config default-rolldown > file content dist/index.esm.es5.production.js 1`] = `"console.log(\`main\`);export{};"`;
+
 exports[`Run config enable-browser > cjs structure 1`] = `null`;
 
 exports[`Run config enable-browser > dist structure 1`] = `
@@ -59,3 +83,27 @@ exports[`Run config enable-browser > file content dist/index.esm.es5.production.
 "console.log("browser");
 "
 `;
+
+exports[`Run config enable-browser-rolldown > cjs structure 1`] = `null`;
+
+exports[`Run config enable-browser-rolldown > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "index.cjs.es5.production.js",
+    },
+    {
+      "name": "index.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config enable-browser-rolldown > es2017 structure 1`] = `null`;
+
+exports[`Run config enable-browser-rolldown > esm structure 1`] = `null`;
+
+exports[`Run config enable-browser-rolldown > file content dist/index.cjs.es5.production.js 1`] = `"console.log(\`browser\`);"`;
+
+exports[`Run config enable-browser-rolldown > file content dist/index.esm.es5.production.js 1`] = `"console.log(\`browser\`);"`;

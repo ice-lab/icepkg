@@ -1,6 +1,6 @@
-import { BundleTaskConfig, TransformTaskConfig, NodeEnvMode } from '../types.js';
+import { BundleTaskConfig, TransformTaskConfig, NodeEnvMode } from '../../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
-import getDefaultDefineValues from './getDefaultDefineValues.js';
+import getDefaultDefineValues from './define.js';
 
 // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
 const LEGACY_BROWSER_TARGETS = {
