@@ -12,6 +12,8 @@ import PostcssPluginRpxToVw from 'postcss-plugin-rpx2vw';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { JSX_RUNTIME_SOURCE } from '../../constants.js';
 import { RollupOptions } from 'rollup';
+import swcPlugin from '../../rollupPlugins/swc.js';
+import { getTaskSwcOptions } from '../shared/swcConfig.js';
 
 export function getRolldownOptions(context: Context, taskRunnerContext: TaskRunnerContext): BuildOptions[] {
   const { pkg, commandArgs, command, rootDir } = context;
@@ -41,6 +43,8 @@ export function getRolldownOptions(context: Context, taskRunnerContext: TaskRunn
         : taskConfig.alias[key];
     }
   }
+
+  const isCompileToEs5 = taskConfig.formats[0].target === 'es5';
 
   return outputs.map((output) => {
     const options: BuildOptions = {
@@ -74,6 +78,8 @@ export function getRolldownOptions(context: Context, taskRunnerContext: TaskRunn
         runtime: taskConfig.jsxRuntime ?? 'automatic',
         importSource: JSX_RUNTIME_SOURCE,
       },
+      // Rolldown only support ES2015 and later, So we need extra plugin to compile it
+      target: isCompileToEs5 ? undefined : taskConfig.formats[0].target,
     };
 
     const cssMinify = taskConfig.cssMinify!(taskRunnerContext.mode, command);
@@ -84,6 +90,18 @@ export function getRolldownOptions(context: Context, taskRunnerContext: TaskRunn
       minimize: typeof cssMinify === 'boolean' ? cssMinify : cssMinify.options,
       sourceMap: taskConfig.sourcemap,
     };
+
+    if (isCompileToEs5) {
+      const swcCompileOptions = getTaskSwcOptions(taskConfig);
+      plugins.push(
+        swcPlugin(
+          taskConfig.jsxRuntime,
+          rootDir,
+          swcCompileOptions,
+          taskConfig.type === 'bundle' && (taskConfig.compileDependencies || isCompileToEs5),
+        ) as any,
+      );
+    }
 
     plugins.push(
       styles(

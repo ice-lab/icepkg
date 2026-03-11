@@ -493,33 +493,30 @@ exports[`Run config swc-helpers-rolldown > file content dist/entry-mts.cjs.es5.p
 //#region \\0rolldown/runtime.js
 var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 //#endregion
+let _swc_helpers____object_spread = require("@swc/helpers/_/_object_spread");
 //#region src/cjs.js
 var require_cjs = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var _object_spread$2 = require("@swc/helpers/_/_object_spread");
 	module.exports.add = function(a, b) {
 		return a + b;
 	};
 	module.exports.extend = function(a, b) {
-		return {
-			...a,
-			...b
-		};
+		return _object_spread$2._({}, a, b);
 	};
 }));
 //#endregion
 //#region src/cts-file.cts
 var require_cts_file = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports.ctsFile = (options) => {
-		return {
-			type: "ctsFile",
-			...options
-		};
+	var _object_spread$1 = require("@swc/helpers/_/_object_spread");
+	module.exports.ctsFile = function(options) {
+		return _object_spread$1._({ type: "ctsFile" }, options);
 	};
 }));
 //#endregion
 //#region src/entry-mts.ts
 var import_cjs = require_cjs();
 var import_cts_file = require_cts_file();
-const foo = { ...(0, import_cjs.extend)({ a: 1 }, { b: 2 }) };
+var foo = (0, _swc_helpers____object_spread._)({}, (0, import_cjs.extend)({ a: 1 }, { b: 2 }));
 //#endregion
 exports.add = import_cjs.add;
 exports.ctsFile = import_cts_file.ctsFile;
@@ -529,36 +526,35 @@ exports.foo = foo;
 `;
 
 exports[`Run config swc-helpers-rolldown > file content dist/entry-mts.esm.es5.production.js 1`] = `
-"//#region \\0rolldown/runtime.js
+"import { createRequire } from "node:module";
+import { _ } from "@swc/helpers/_/_object_spread";
+//#region \\0rolldown/runtime.js
 var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var __require = /* @__PURE__ */ createRequire(import.meta.url);
 //#endregion
 //#region src/cjs.js
 var require_cjs = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var _object_spread$1 = __require("@swc/helpers/_/_object_spread");
 	module.exports.add = function(a, b) {
 		return a + b;
 	};
 	module.exports.extend = function(a, b) {
-		return {
-			...a,
-			...b
-		};
+		return _object_spread$1._({}, a, b);
 	};
 }));
 //#endregion
 //#region src/cts-file.cts
 var require_cts_file = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports.ctsFile = (options) => {
-		return {
-			type: "ctsFile",
-			...options
-		};
+	var _object_spread = __require("@swc/helpers/_/_object_spread");
+	module.exports.ctsFile = function(options) {
+		return _object_spread._({ type: "ctsFile" }, options);
 	};
 }));
 //#endregion
 //#region src/entry-mts.ts
 var import_cjs = require_cjs();
 var import_cts_file = require_cts_file();
-const foo = { ...(0, import_cjs.extend)({ a: 1 }, { b: 2 }) };
+var foo = _({}, (0, import_cjs.extend)({ a: 1 }, { b: 2 }));
 //#endregion
 var add = import_cjs.add;
 var ctsFile = import_cts_file.ctsFile;
@@ -569,39 +565,35 @@ export { add, ctsFile, extend, foo };
 
 exports[`Run config swc-helpers-rolldown > file content dist/entry-mts.umd.es5.production.js 1`] = `
 "(function(global, factory) {
-	typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global["@ice/pkg-tests-mix-cjs-mjs"] = {}));
-})(this, function(exports) {
+	typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("@swc/helpers/_/_object_spread")) : typeof define === "function" && define.amd ? define(["exports", "@swc/helpers/_/_object_spread"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global["@ice/pkg-tests-mix-cjs-mjs"] = {}, global._swc_helpers____object_spread));
+})(this, function(exports, _swc_helpers____object_spread) {
 	Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 	//#region \\0rolldown/runtime.js
 	var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 	//#endregion
 	//#region src/cjs.js
 	var require_cjs = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+		var _object_spread$2 = require("@swc/helpers/_/_object_spread");
 		module.exports.add = function(a, b) {
 			return a + b;
 		};
 		module.exports.extend = function(a, b) {
-			return {
-				...a,
-				...b
-			};
+			return _object_spread$2._({}, a, b);
 		};
 	}));
 	//#endregion
 	//#region src/cts-file.cts
 	var require_cts_file = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		module.exports.ctsFile = (options) => {
-			return {
-				type: "ctsFile",
-				...options
-			};
+		var _object_spread$1 = require("@swc/helpers/_/_object_spread");
+		module.exports.ctsFile = function(options) {
+			return _object_spread$1._({ type: "ctsFile" }, options);
 		};
 	}));
 	//#endregion
 	//#region src/entry-mts.ts
 	var import_cjs = require_cjs();
 	var import_cts_file = require_cts_file();
-	const foo = { ...(0, import_cjs.extend)({ a: 1 }, { b: 2 }) };
+	var foo = (0, _swc_helpers____object_spread._)({}, (0, import_cjs.extend)({ a: 1 }, { b: 2 }));
 	//#endregion
 	exports.add = import_cjs.add;
 	exports.ctsFile = import_cts_file.ctsFile;

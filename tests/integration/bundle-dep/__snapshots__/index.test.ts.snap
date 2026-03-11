@@ -1,5 +1,50 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Run config compile-dep-when-es5 > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "compile-dep-when-es5.esm.es2017.production.js",
+    },
+    {
+      "name": "compile-dep-when-es5.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config compile-dep-when-es5 > file content dist/compile-dep-when-es5.esm.es5.production.js 1`] = `
+"function r(r,t){(null==t||t>r.length)&&(t=r.length);for(var n=0,e=Array(t);n<t;n++)e[n]=r[n];return e}function t(t){var n,e=!1;return function(){for(var o=arguments.length,a=Array(o),i=0;i<o;i++)a[i]=arguments[i];return e||(e=!0,n=t.apply(void 0,function(t){if(Array.isArray(t))return r(t)}(a)||function(r){if("u">typeof Symbol&&null!=r[Symbol.iterator]||null!=r["@@iterator"])return Array.from(r)}(a)||function(t,n){if(t){if("string"==typeof t)return r(t,void 0);var e=Object.prototype.toString.call(t).slice(8,-1);if("Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e)return Array.from(e);if("Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e))return r(t,void 0)}}(a)||function(){throw TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}())),n}}export{t as once};
+"
+`;
+
+exports[`Run config compile-dep-when-es5 > file content dist/compile-dep-when-es5.esm.es2017.production.js 1`] = `
+"function n(n){let t,e=!1;return function(...r){return e||(e=!0,t=n(...r)),t}}export{n as once};
+"
+`;
+
+exports[`Run config compile-dep-when-es5-rolldown > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "compile-dep-when-es5.esm.es2017.production.js",
+    },
+    {
+      "name": "compile-dep-when-es5.esm.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config compile-dep-when-es5-rolldown > file content dist/compile-dep-when-es5.esm.es5.production.js 1`] = `
+"function e(e,t){(t==null||t>e.length)&&(t=e.length);for(var n=0,r=Array(t);n<t;n++)r[n]=e[n];return r}function t(t){if(Array.isArray(t))return e(t)}function n(e){if(typeof Symbol<\`u\`&&e[Symbol.iterator]!=null||e[\`@@iterator\`]!=null)return Array.from(e)}function r(){throw TypeError(\`Invalid attempt to spread non-iterable instance.
+In order to be iterable, non-array objects must have a [Symbol.iterator]() method.\`)}function i(t,n){if(t){if(typeof t==\`string\`)return e(t,n);var r=Object.prototype.toString.call(t).slice(8,-1);if(r===\`Object\`&&t.constructor&&(r=t.constructor.name),r===\`Map\`||r===\`Set\`)return Array.from(r);if(r===\`Arguments\`||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r))return e(t,n)}}function a(e){return t(e)||n(e)||i(e)||r()}function o(e){var t=!1,n;return function(){var r=[...arguments];return t||(t=!0,n=e.apply(void 0,a(r))),n}}export{o as once};"
+`;
+
+exports[`Run config compile-dep-when-es5-rolldown > file content dist/compile-dep-when-es5.esm.es2017.production.js 1`] = `"function e(e){let t=!1,n;return function(...r){return t||(t=!0,n=e(...r)),n}}export{e as once};"`;
+
 exports[`Run config default-no-venders > dist structure 1`] = `
 {
   "files": [

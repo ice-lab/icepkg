@@ -50,7 +50,7 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
       taskConfig.jsxRuntime,
       rootDir,
       swcCompileOptions,
-      taskConfig.type === 'bundle' && taskConfig.compileDependencies,
+      taskConfig.type === 'bundle' && (taskConfig.compileDependencies || taskConfig.formats[0].target === 'es5'),
     ),
   );
 
