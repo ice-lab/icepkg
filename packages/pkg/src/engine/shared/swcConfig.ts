@@ -1,22 +1,33 @@
-import { BundleTaskConfig, TransformTaskConfig, NodeEnvMode } from '../../types.js';
+import { BundleTaskConfig, TransformTaskConfig, NodeEnvMode, JsTarget } from '../../types.js';
 import type { Config, ModuleConfig } from '@swc/core';
 import getDefaultDefineValues from './define.js';
+import { ALL_FORMAT_TARGET } from '../../constants.js';
 
 // https://github.com/ice-lab/ice-next/issues/54#issuecomment-1083263523
-const LEGACY_BROWSER_TARGETS = {
-  chrome: 49,
-  ie: 11,
-};
-const MODERN_BROWSER_TARGETS = {
-  chrome: 61,
-  safari: 11,
-  firefox: 60,
-  edge: 16,
-  ios: 11,
+const BROWSER_TARGETS_MAP: Record<JsTarget, any> = {
+  es5: {
+    chrome: 49,
+    ie: 11,
+  },
+  es2017: {
+    chrome: 61,
+    safari: 11,
+    firefox: 60,
+    edge: 16,
+    ios: 11,
+  },
+  es2022: {
+    chrome: 85,
+    safari: 15,
+    firefox: 79,
+    edge: 85,
+    ios: 15,
+  },
 };
 
 export const getDefaultBundleSwcConfig = (bundleTaskConfig: BundleTaskConfig): Config => {
-  const browserTargets = bundleTaskConfig.formats[0].target !== 'es5' ? MODERN_BROWSER_TARGETS : LEGACY_BROWSER_TARGETS;
+  const formatTarget = bundleTaskConfig.formats[0].target;
+  const browserTargets = BROWSER_TARGETS_MAP[formatTarget] ?? BROWSER_TARGETS_MAP.es2017;
   return {
     jsc: {
       externalHelpers: true,
@@ -38,7 +49,9 @@ export const getDefaultTransformSwcConfig = (transformTaskConfig: TransformTaskC
   const module: ModuleConfig | undefined =
     transformTaskConfig.format.module === 'cjs' ? { type: 'commonjs' } : undefined;
 
-  const target = transformTaskConfig.format.target === 'es2017' ? 'es2017' : 'es5';
+  const target = ALL_FORMAT_TARGET.includes(transformTaskConfig.format.target)
+    ? transformTaskConfig.format.target
+    : 'es5';
 
   return {
     jsc: {

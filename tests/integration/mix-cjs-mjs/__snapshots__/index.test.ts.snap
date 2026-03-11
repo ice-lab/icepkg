@@ -7,6 +7,12 @@ exports[`Run config swc-helpers > cjs structure 1`] = `
       "name": "cjs.js",
     },
     {
+      "name": "cts-file.cjs",
+    },
+    {
+      "name": "cts-file.d.cts",
+    },
+    {
       "name": "entry-mts.d.ts",
     },
     {
@@ -43,6 +49,12 @@ exports[`Run config swc-helpers > esm structure 1`] = `
       "name": "cjs.js",
     },
     {
+      "name": "cts-file.cjs",
+    },
+    {
+      "name": "cts-file.d.cts",
+    },
+    {
       "name": "entry-mts.d.ts",
     },
     {
@@ -54,11 +66,7 @@ exports[`Run config swc-helpers > esm structure 1`] = `
 `;
 
 exports[`Run config swc-helpers > file content cjs/cjs.js 1`] = `
-""use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var _object_spread = require("@swc/helpers/_/_object_spread");
+"var _object_spread = require("@swc/helpers/_/_object_spread");
 module.exports.add = function(a, b) {
     return a + b;
 };
@@ -68,9 +76,26 @@ module.exports.extend = function(a, b) {
 "
 `;
 
+exports[`Run config swc-helpers > file content cjs/cts-file.cjs 1`] = `
+"var _object_spread = require("@swc/helpers/_/_object_spread");
+module.exports.ctsFile = function(options) {
+    return _object_spread._({
+        type: 'ctsFile'
+    }, options);
+};
+"
+`;
+
+exports[`Run config swc-helpers > file content cjs/cts-file.d.cts 1`] = `
+"export {};
+"
+`;
+
 exports[`Run config swc-helpers > file content cjs/entry-mts.d.ts 1`] = `
 "import { add, extend } from './cjs';
+import { ctsFile } from './cts-file.cjs';
 export { add, extend };
+export { ctsFile };
 export declare const foo: Record<string, any>;
 "
 `;
@@ -90,6 +115,9 @@ _export(exports, {
     get add () {
         return _cjs.add;
     },
+    get ctsFile () {
+        return _ctsfilecjs.ctsFile;
+    },
     get extend () {
         return _cjs.extend;
     },
@@ -99,6 +127,7 @@ _export(exports, {
 });
 var _object_spread = require("@swc/helpers/_/_object_spread");
 var _cjs = require("./cjs");
+var _ctsfilecjs = require("./cts-file.cjs");
 var foo = _object_spread._({}, (0, _cjs.extend)({
     a: 1
 }, {
@@ -108,34 +137,203 @@ var foo = _object_spread._({}, (0, _cjs.extend)({
 `;
 
 exports[`Run config swc-helpers > file content dist/entry-mts.cjs.es5.production.js 1`] = `
-""use strict";var e,r=require("@swc/helpers/_/_object_spread"),t={},n=function(){if(e)return t;e=1;var n=r._;return t.add=function(e,r){return e+r},t.extend=function(e,r){return n({},e,r)},t}(),d=r._({},n.extend({a:1},{b:2}));exports.add=n.add,exports.extend=n.extend,exports.foo=d;
+"'use strict';
+
+var require$$0 = require('@swc/helpers/_/_object_spread');
+
+var cjs = {};
+
+var hasRequiredCjs;
+
+function requireCjs () {
+	if (hasRequiredCjs) return cjs;
+	hasRequiredCjs = 1;
+	var _object_spread = require$$0;
+	cjs.add = function(a, b) {
+	    return a + b;
+	};
+	cjs.extend = function(a, b) {
+	    return _object_spread._({}, a, b);
+	};
+	return cjs;
+}
+
+var cjsExports = requireCjs();
+
+var ctsFile = {};
+
+var hasRequiredCtsFile;
+
+function requireCtsFile () {
+	if (hasRequiredCtsFile) return ctsFile;
+	hasRequiredCtsFile = 1;
+	var _object_spread = require$$0;
+	ctsFile.ctsFile = function(options) {
+	    return _object_spread._({
+	        type: 'ctsFile'
+	    }, options);
+	};
+	return ctsFile;
+}
+
+var ctsFileExports = requireCtsFile();
+
+var foo = require$$0._({}, cjsExports.extend({
+    a: 1
+}, {
+    b: 2
+}));
+
+exports.add = cjsExports.add;
+exports.ctsFile = ctsFileExports.ctsFile;
+exports.extend = cjsExports.extend;
+exports.foo = foo;
 "
 `;
 
 exports[`Run config swc-helpers > file content dist/entry-mts.esm.es5.production.js 1`] = `
-"import e,{_ as r}from"@swc/helpers/_/_object_spread";var n,t={},d=function(){if(n)return t;n=1;var r=e._;return t.add=function(e,r){return e+r},t.extend=function(e,n){return r({},e,n)},t}(),o=r({},d.extend({a:1},{b:2})),a=d.add,u=d.extend;export{a as add,u as extend,o as foo};
+"import require$$0, { _ } from '@swc/helpers/_/_object_spread';
+
+var cjs = {};
+
+var hasRequiredCjs;
+
+function requireCjs () {
+	if (hasRequiredCjs) return cjs;
+	hasRequiredCjs = 1;
+	var _object_spread = require$$0;
+	cjs.add = function(a, b) {
+	    return a + b;
+	};
+	cjs.extend = function(a, b) {
+	    return _object_spread._({}, a, b);
+	};
+	return cjs;
+}
+
+var cjsExports = requireCjs();
+
+var ctsFile = {};
+
+var hasRequiredCtsFile;
+
+function requireCtsFile () {
+	if (hasRequiredCtsFile) return ctsFile;
+	hasRequiredCtsFile = 1;
+	var _object_spread = require$$0;
+	ctsFile.ctsFile = function(options) {
+	    return _object_spread._({
+	        type: 'ctsFile'
+	    }, options);
+	};
+	return ctsFile;
+}
+
+var ctsFileExports = requireCtsFile();
+
+var foo = _({}, cjsExports.extend({
+    a: 1
+}, {
+    b: 2
+}));
+
+var add = cjsExports.add;
+var ctsFile$1 = ctsFileExports.ctsFile;
+var extend = cjsExports.extend;
+export { add, ctsFile$1 as ctsFile, extend, foo };
 "
 `;
 
 exports[`Run config swc-helpers > file content dist/entry-mts.umd.es5.production.js 1`] = `
-"var e,t;e=this,t=function(e,t){"use strict";var r,n={},o=function(){if(r)return n;r=1;var e=t._;return n.add=function(e,t){return e+t},n.extend=function(t,r){return e({},t,r)},n}(),s=t._({},o.extend({a:1},{b:2}));e.add=o.add,e.extend=o.extend,e.foo=s},"object"==typeof exports&&"u">typeof module?t(exports,require("@swc/helpers/_/_object_spread")):"function"==typeof define&&define.amd?define(["exports","@swc/helpers/_/_object_spread"],t):t((e="u">typeof globalThis?globalThis:e||self)["@ice/pkg-tests-mix-cjs-mjs"]={},e.require$$0);
+"(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@swc/helpers/_/_object_spread')) :
+  typeof define === 'function' && define.amd ? define(['exports', '@swc/helpers/_/_object_spread'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["@ice/pkg-tests-mix-cjs-mjs"] = {}, global.require$$0));
+})(this, (function (exports, require$$0) { 'use strict';
+
+  var cjs = {};
+
+  var hasRequiredCjs;
+
+  function requireCjs () {
+  	if (hasRequiredCjs) return cjs;
+  	hasRequiredCjs = 1;
+  	var _object_spread = require$$0;
+  	cjs.add = function(a, b) {
+  	    return a + b;
+  	};
+  	cjs.extend = function(a, b) {
+  	    return _object_spread._({}, a, b);
+  	};
+  	return cjs;
+  }
+
+  var cjsExports = requireCjs();
+
+  var ctsFile = {};
+
+  var hasRequiredCtsFile;
+
+  function requireCtsFile () {
+  	if (hasRequiredCtsFile) return ctsFile;
+  	hasRequiredCtsFile = 1;
+  	var _object_spread = require$$0;
+  	ctsFile.ctsFile = function(options) {
+  	    return _object_spread._({
+  	        type: 'ctsFile'
+  	    }, options);
+  	};
+  	return ctsFile;
+  }
+
+  var ctsFileExports = requireCtsFile();
+
+  var foo = require$$0._({}, cjsExports.extend({
+      a: 1
+  }, {
+      b: 2
+  }));
+
+  exports.add = cjsExports.add;
+  exports.ctsFile = ctsFileExports.ctsFile;
+  exports.extend = cjsExports.extend;
+  exports.foo = foo;
+
+}));
 "
 `;
 
 exports[`Run config swc-helpers > file content esm/cjs.js 1`] = `
-"var _object_spread = require('@swc/helpers/_/_object_spread')._;
+"var _object_spread = require("@swc/helpers/_/_object_spread");
 module.exports.add = function(a, b) {
     return a + b;
 };
 module.exports.extend = function(a, b) {
-    return _object_spread({}, a, b);
+    return _object_spread._({}, a, b);
 };
+"
+`;
+
+exports[`Run config swc-helpers > file content esm/cts-file.cjs 1`] = `
+"var _object_spread = require("@swc/helpers/_/_object_spread");
+module.exports.ctsFile = function(options) {
+    return _object_spread._({
+        type: 'ctsFile'
+    }, options);
+};
+"
+`;
+
+exports[`Run config swc-helpers > file content esm/cts-file.d.cts 1`] = `
+"export {};
 "
 `;
 
 exports[`Run config swc-helpers > file content esm/entry-mts.d.ts 1`] = `
 "import { add, extend } from './cjs';
+import { ctsFile } from './cts-file.cjs';
 export { add, extend };
+export { ctsFile };
 export declare const foo: Record<string, any>;
 "
 `;
@@ -143,7 +341,317 @@ export declare const foo: Record<string, any>;
 exports[`Run config swc-helpers > file content esm/entry-mts.js 1`] = `
 "import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
 import { add, extend } from './cjs';
+import { ctsFile } from './cts-file.cjs';
 export { add, extend };
+export { ctsFile };
+export var foo = _object_spread({}, extend({
+    a: 1
+}, {
+    b: 2
+}));
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > cjs structure 1`] = `
+{
+  "files": [
+    {
+      "name": "cjs.js",
+    },
+    {
+      "name": "cts-file.cjs",
+    },
+    {
+      "name": "cts-file.d.cts",
+    },
+    {
+      "name": "entry-mts.d.ts",
+    },
+    {
+      "name": "entry-mts.js",
+    },
+  ],
+  "name": "cjs",
+}
+`;
+
+exports[`Run config swc-helpers-rolldown > dist structure 1`] = `
+{
+  "files": [
+    {
+      "name": "entry-mts.cjs.es5.production.js",
+    },
+    {
+      "name": "entry-mts.esm.es5.production.js",
+    },
+    {
+      "name": "entry-mts.umd.es5.production.js",
+    },
+  ],
+  "name": "dist",
+}
+`;
+
+exports[`Run config swc-helpers-rolldown > es2017 structure 1`] = `null`;
+
+exports[`Run config swc-helpers-rolldown > esm structure 1`] = `
+{
+  "files": [
+    {
+      "name": "cjs.js",
+    },
+    {
+      "name": "cts-file.cjs",
+    },
+    {
+      "name": "cts-file.d.cts",
+    },
+    {
+      "name": "entry-mts.d.ts",
+    },
+    {
+      "name": "entry-mts.js",
+    },
+  ],
+  "name": "esm",
+}
+`;
+
+exports[`Run config swc-helpers-rolldown > file content cjs/cjs.js 1`] = `
+"var _object_spread = require("@swc/helpers/_/_object_spread");
+module.exports.add = function(a, b) {
+    return a + b;
+};
+module.exports.extend = function(a, b) {
+    return _object_spread._({}, a, b);
+};
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content cjs/cts-file.cjs 1`] = `
+"var _object_spread = require("@swc/helpers/_/_object_spread");
+module.exports.ctsFile = function(options) {
+    return _object_spread._({
+        type: 'ctsFile'
+    }, options);
+};
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content cjs/cts-file.d.cts 1`] = `
+"export {};
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content cjs/entry-mts.d.ts 1`] = `
+"import { add, extend } from './cjs';
+import { ctsFile } from './cts-file.cjs';
+export { add, extend };
+export { ctsFile };
+export declare const foo: Record<string, any>;
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content cjs/entry-mts.js 1`] = `
+""use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: Object.getOwnPropertyDescriptor(all, name).get
+    });
+}
+_export(exports, {
+    get add () {
+        return _cjs.add;
+    },
+    get ctsFile () {
+        return _ctsfilecjs.ctsFile;
+    },
+    get extend () {
+        return _cjs.extend;
+    },
+    get foo () {
+        return foo;
+    }
+});
+var _object_spread = require("@swc/helpers/_/_object_spread");
+var _cjs = require("./cjs");
+var _ctsfilecjs = require("./cts-file.cjs");
+var foo = _object_spread._({}, (0, _cjs.extend)({
+    a: 1
+}, {
+    b: 2
+}));
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content dist/entry-mts.cjs.es5.production.js 1`] = `
+"Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+//#region \\0rolldown/runtime.js
+var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+//#endregion
+//#region src/cjs.js
+var require_cjs = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports.add = function(a, b) {
+		return a + b;
+	};
+	module.exports.extend = function(a, b) {
+		return {
+			...a,
+			...b
+		};
+	};
+}));
+//#endregion
+//#region src/cts-file.cts
+var require_cts_file = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports.ctsFile = (options) => {
+		return {
+			type: "ctsFile",
+			...options
+		};
+	};
+}));
+//#endregion
+//#region src/entry-mts.ts
+var import_cjs = require_cjs();
+var import_cts_file = require_cts_file();
+const foo = { ...(0, import_cjs.extend)({ a: 1 }, { b: 2 }) };
+//#endregion
+exports.add = import_cjs.add;
+exports.ctsFile = import_cts_file.ctsFile;
+exports.extend = import_cjs.extend;
+exports.foo = foo;
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content dist/entry-mts.esm.es5.production.js 1`] = `
+"//#region \\0rolldown/runtime.js
+var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+//#endregion
+//#region src/cjs.js
+var require_cjs = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports.add = function(a, b) {
+		return a + b;
+	};
+	module.exports.extend = function(a, b) {
+		return {
+			...a,
+			...b
+		};
+	};
+}));
+//#endregion
+//#region src/cts-file.cts
+var require_cts_file = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports.ctsFile = (options) => {
+		return {
+			type: "ctsFile",
+			...options
+		};
+	};
+}));
+//#endregion
+//#region src/entry-mts.ts
+var import_cjs = require_cjs();
+var import_cts_file = require_cts_file();
+const foo = { ...(0, import_cjs.extend)({ a: 1 }, { b: 2 }) };
+//#endregion
+var add = import_cjs.add;
+var ctsFile = import_cts_file.ctsFile;
+var extend = import_cjs.extend;
+export { add, ctsFile, extend, foo };
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content dist/entry-mts.umd.es5.production.js 1`] = `
+"(function(global, factory) {
+	typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global["@ice/pkg-tests-mix-cjs-mjs"] = {}));
+})(this, function(exports) {
+	Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+	//#region \\0rolldown/runtime.js
+	var __commonJSMin = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+	//#endregion
+	//#region src/cjs.js
+	var require_cjs = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+		module.exports.add = function(a, b) {
+			return a + b;
+		};
+		module.exports.extend = function(a, b) {
+			return {
+				...a,
+				...b
+			};
+		};
+	}));
+	//#endregion
+	//#region src/cts-file.cts
+	var require_cts_file = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+		module.exports.ctsFile = (options) => {
+			return {
+				type: "ctsFile",
+				...options
+			};
+		};
+	}));
+	//#endregion
+	//#region src/entry-mts.ts
+	var import_cjs = require_cjs();
+	var import_cts_file = require_cts_file();
+	const foo = { ...(0, import_cjs.extend)({ a: 1 }, { b: 2 }) };
+	//#endregion
+	exports.add = import_cjs.add;
+	exports.ctsFile = import_cts_file.ctsFile;
+	exports.extend = import_cjs.extend;
+	exports.foo = foo;
+});
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content esm/cjs.js 1`] = `
+"var _object_spread = require("@swc/helpers/_/_object_spread");
+module.exports.add = function(a, b) {
+    return a + b;
+};
+module.exports.extend = function(a, b) {
+    return _object_spread._({}, a, b);
+};
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content esm/cts-file.cjs 1`] = `
+"var _object_spread = require("@swc/helpers/_/_object_spread");
+module.exports.ctsFile = function(options) {
+    return _object_spread._({
+        type: 'ctsFile'
+    }, options);
+};
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content esm/cts-file.d.cts 1`] = `
+"export {};
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content esm/entry-mts.d.ts 1`] = `
+"import { add, extend } from './cjs';
+import { ctsFile } from './cts-file.cjs';
+export { add, extend };
+export { ctsFile };
+export declare const foo: Record<string, any>;
+"
+`;
+
+exports[`Run config swc-helpers-rolldown > file content esm/entry-mts.js 1`] = `
+"import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
+import { add, extend } from './cjs';
+import { ctsFile } from './cts-file.cjs';
+export { add, extend };
+export { ctsFile };
 export var foo = _object_spread({}, extend({
     a: 1
 }, {

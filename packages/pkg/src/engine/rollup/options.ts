@@ -94,6 +94,8 @@ export function getRollupOptions(context: Context, taskRunnerContext: TaskRunner
           '.jsx',
           '.ts',
           '.tsx',
+          '.cts',
+          '.cjs',
           ...(taskConfig.extensions || []),
         ],
         transformMixedEsModules: true,
