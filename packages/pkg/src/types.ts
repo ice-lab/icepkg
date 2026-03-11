@@ -379,6 +379,8 @@ export type EngineType = 'rollup' | 'rslib' | 'rolldown';
 export interface BundleTaskConfig extends _TaskConfig, Omit<BundleUserConfig, 'minify' | 'formats'> {
   type: 'bundle';
   originalFormats?: string[];
+  // For normal usage(pkg mode), formats is always has one element
+  // For legacy usage, formats maybe has multiple elements which has same target
   formats: BundleFormat[];
   /**
    * Files extensions

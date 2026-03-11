@@ -83,6 +83,21 @@ const tests: ProjectTestUserConfig[] = [
     },
     engine: ['rollup', 'rolldown'],
   },
+  {
+    name: 'compile-dep-when-es5',
+    config: {
+      entry: './src/compile-dep-when-es5.ts',
+      transform: {
+        formats: [],
+      },
+      bundle: {
+        formats: ['esm', 'es2017'],
+        codeSplitting: false,
+      },
+    },
+    snapshot: 'full',
+    engine: ['rollup', 'rolldown'],
+  },
 ];
 
 runProjectTest(
