@@ -49,6 +49,7 @@ export async function createCore(options: CreatePkgOptions) {
         throw new Error(`Cannot register format ${format} twice`);
       }
     },
+    pluginScope: 'global',
   };
   const ctx = new BuildScriptContext<TaskConfig, ExtendsPluginAPI, UserConfig>({
     command: options.command,
@@ -75,7 +76,7 @@ export async function createCore(options: CreatePkgOptions) {
     },
   };
 
-  let commandHandler: ICommandFn<TaskConfig, {}, UserConfig>;
+  let commandHandler: ICommandFn<TaskConfig, ExtendsPluginAPI, UserConfig>;
   switch (options.command) {
     case 'start':
       commandHandler = (await import('../commands/start.js')).default;

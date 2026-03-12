@@ -1,11 +1,11 @@
 import { defineConfig } from '@ice/pkg'
-import pkgScope from './plugins/pkg-scope'
+import plugin from './plugins/plugin-scope'
 
 export default defineConfig({
   pkgs: [{
     target: 'es5',
     module: 'esm',
-    plugins: [pkgScope],
+    plugins: [plugin],
     outputDir: 'esm'
   }, {
     target: 'es2017',
@@ -18,5 +18,5 @@ export default defineConfig({
       name: 'global'
     }
   },
-  plugins: []
+  plugins: [plugin]
 })
