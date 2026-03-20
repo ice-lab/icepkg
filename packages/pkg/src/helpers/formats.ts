@@ -33,3 +33,9 @@ export function tryToFormat<T extends Format>(format: string): T | null {
 export function isAliasFormatString<T extends string>(format: string, alias: Record<T, string>): format is T {
   return format in alias;
 }
+
+export function assertIsBundleFormatModule(module: ModuleType): asserts module is Exclude<ModuleType, 'mf'> {
+  if (module === 'mf') {
+    throw new Error('Module "mf" is not a bundle format module.');
+  }
+}

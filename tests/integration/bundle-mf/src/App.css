@@ -1,0 +1,16 @@
+.app-container {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.app-title {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.app-description {
+  color: #666;
+  font-size: 16px;
+}

@@ -1,0 +1,53 @@
+{
+  "name": "@ice/pkg-plugin-mf",
+  "version": "0.1.0",
+  "description": "ICE PKG plugin for module federation",
+  "main": "es2017/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "type": "./es2017/index.d.ts",
+      "import": "./es2017/index.js",
+      "default": "./es2017/index.js"
+    }
+  },
+  "files": [
+    "es2017",
+    "!es2017/**/*.map"
+  ],
+  "engines": {
+    "node": ">=16.14.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ice-lab/icepkg.git",
+    "directory": "packages/plugin-mf"
+  },
+  "bugs": {
+    "url": "https://github.com/ice-lab/icepkg/issues"
+  },
+  "homepage": "https://pkg.ice.work",
+  "license": "MIT",
+  "scripts": {
+    "watch": "ice-pkg start",
+    "build": "ice-pkg build"
+  },
+  "dependencies": {
+    "@module-federation/rsbuild-plugin": "^2.0.0"
+  },
+  "devDependencies": {
+    "@ice/pkg": "workspace:*"
+  },
+  "peerDependencies": {
+    "@ice/pkg": "workspace:^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@ice/pkg": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

@@ -61,7 +61,9 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
 
     if (groupedFormats.alias?.length) {
       const formats = groupedFormats.alias as AliasBundleFormatString[];
-      const aliasedFormatsGroup = groupBy(formats, (format) => (format === 'es2017' ? 'es2017' : 'es5'));
+      const aliasedFormatsGroup = groupBy(formats, (format) =>
+        format === 'mf' ? 'mf' : format === 'es2017' ? 'es2017' : 'es5',
+      );
       const es5Formats = aliasedFormatsGroup.es5 as Array<Exclude<AliasBundleFormatString, 'es2017'>> | undefined;
 
       if (es5Formats?.length) {
@@ -76,6 +78,14 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
         registerTask(TaskName.BUNDLE_ES2017, {
           type: 'bundle',
           formats: es5Formats.map((module) => createFormat(module, 'es2017')),
+        });
+      }
+
+      if (aliasedFormatsGroup.mf?.length) {
+        registerTask(`bundle-mf`, {
+          type: 'bundle',
+          formats: [createFormat('mf', 'es5')],
+          engine: 'rslib',
         });
       }
     }

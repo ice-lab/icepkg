@@ -18,8 +18,10 @@ export const ALIAS_BUNDLE_FORMATS_MAP: Record<AliasBundleFormatString, StandardB
   esm: 'esm:es5',
   es2017: 'esm:es2017',
   cjs: 'cjs:es5',
+  mf: 'mf:es5',
 };
 
 export const NODE_FORMAT_MODULE = ['cjs', 'esm'] as const;
-export const ALL_FORMAT_MODULES = [...NODE_FORMAT_MODULE, 'umd'] as const;
+export const BUNDLE_FORMAT_MODULE = [...NODE_FORMAT_MODULE, 'umd'] as const;
+export const ALL_FORMAT_MODULES = [...BUNDLE_FORMAT_MODULE, 'mf'] as const;
 export const ALL_FORMAT_TARGET = ['es5', 'es2017', 'es2022'] as const;

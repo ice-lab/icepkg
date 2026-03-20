@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "strict": true,
+    "lib": ["es2015", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   }
 }
