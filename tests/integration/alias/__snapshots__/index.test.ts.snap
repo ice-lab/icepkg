@@ -1,65 +1,35 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Run config default > cjs structure 1`] = `
-{
-  "files": [
-    {
-      "name": "alias.d.ts",
-    },
-    {
-      "name": "alias.js",
-    },
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "cjs",
-}
+[
+  "cjs/",
+  "├── alias.d.ts",
+  "├── alias.js",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config default > dist structure 1`] = `null`;
 
 exports[`Run config default > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "alias.d.ts",
-    },
-    {
-      "name": "alias.js",
-    },
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "├── alias.d.ts",
+  "├── alias.js",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config default > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "alias.d.ts",
-    },
-    {
-      "name": "alias.js",
-    },
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── alias.d.ts",
+  "├── alias.js",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config default > file content cjs/alias.d.ts 1`] = `

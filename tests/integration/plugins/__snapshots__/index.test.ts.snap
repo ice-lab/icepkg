@@ -5,31 +5,19 @@ exports[`Run config pkg-scope > cjs structure 1`] = `null`;
 exports[`Run config pkg-scope > dist structure 1`] = `null`;
 
 exports[`Run config pkg-scope > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config pkg-scope > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config pkg-scope > file content es2017/index.d.ts 1`] = `
@@ -67,31 +55,19 @@ export var info = {
 `;
 
 exports[`Run config plugin-scope > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config plugin-scope > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config plugin-scope > file content es2017/index.d.ts 1`] = `
@@ -131,40 +107,24 @@ export var info = {
 exports[`Run config register-format > cjs structure 1`] = `null`;
 
 exports[`Run config register-format > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.asset.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "└── index.asset.js",
+]
 `;
 
 exports[`Run config register-format > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config register-format > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;

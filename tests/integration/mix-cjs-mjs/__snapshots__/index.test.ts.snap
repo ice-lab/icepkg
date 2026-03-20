@@ -1,68 +1,36 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Run config swc-helpers > cjs structure 1`] = `
-{
-  "files": [
-    {
-      "name": "cjs.js",
-    },
-    {
-      "name": "cts-file.cjs",
-    },
-    {
-      "name": "cts-file.d.cts",
-    },
-    {
-      "name": "entry-mts.d.ts",
-    },
-    {
-      "name": "entry-mts.js",
-    },
-  ],
-  "name": "cjs",
-}
+[
+  "cjs/",
+  "├── cjs.js",
+  "├── cts-file.cjs",
+  "├── cts-file.d.cts",
+  "├── entry-mts.d.ts",
+  "└── entry-mts.js",
+]
 `;
 
 exports[`Run config swc-helpers > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "entry-mts.cjs.es5.production.js",
-    },
-    {
-      "name": "entry-mts.esm.es5.production.js",
-    },
-    {
-      "name": "entry-mts.umd.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── entry-mts.cjs.es5.production.js",
+  "├── entry-mts.esm.es5.production.js",
+  "└── entry-mts.umd.es5.production.js",
+]
 `;
 
 exports[`Run config swc-helpers > es2017 structure 1`] = `null`;
 
 exports[`Run config swc-helpers > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "cjs.js",
-    },
-    {
-      "name": "cts-file.cjs",
-    },
-    {
-      "name": "cts-file.d.cts",
-    },
-    {
-      "name": "entry-mts.d.ts",
-    },
-    {
-      "name": "entry-mts.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── cjs.js",
+  "├── cts-file.cjs",
+  "├── cts-file.d.cts",
+  "├── entry-mts.d.ts",
+  "└── entry-mts.js",
+]
 `;
 
 exports[`Run config swc-helpers > file content cjs/cjs.js 1`] = `
@@ -353,68 +321,36 @@ export var foo = _object_spread({}, extend({
 `;
 
 exports[`Run config swc-helpers-rolldown > cjs structure 1`] = `
-{
-  "files": [
-    {
-      "name": "cjs.js",
-    },
-    {
-      "name": "cts-file.cjs",
-    },
-    {
-      "name": "cts-file.d.cts",
-    },
-    {
-      "name": "entry-mts.d.ts",
-    },
-    {
-      "name": "entry-mts.js",
-    },
-  ],
-  "name": "cjs",
-}
+[
+  "cjs/",
+  "├── cjs.js",
+  "├── cts-file.cjs",
+  "├── cts-file.d.cts",
+  "├── entry-mts.d.ts",
+  "└── entry-mts.js",
+]
 `;
 
 exports[`Run config swc-helpers-rolldown > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "entry-mts.cjs.es5.production.js",
-    },
-    {
-      "name": "entry-mts.esm.es5.production.js",
-    },
-    {
-      "name": "entry-mts.umd.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── entry-mts.cjs.es5.production.js",
+  "├── entry-mts.esm.es5.production.js",
+  "└── entry-mts.umd.es5.production.js",
+]
 `;
 
 exports[`Run config swc-helpers-rolldown > es2017 structure 1`] = `null`;
 
 exports[`Run config swc-helpers-rolldown > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "cjs.js",
-    },
-    {
-      "name": "cts-file.cjs",
-    },
-    {
-      "name": "cts-file.d.cts",
-    },
-    {
-      "name": "entry-mts.d.ts",
-    },
-    {
-      "name": "entry-mts.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── cjs.js",
+  "├── cts-file.cjs",
+  "├── cts-file.d.cts",
+  "├── entry-mts.d.ts",
+  "└── entry-mts.js",
+]
 `;
 
 exports[`Run config swc-helpers-rolldown > file content cjs/cjs.js 1`] = `

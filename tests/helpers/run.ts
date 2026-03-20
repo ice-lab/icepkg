@@ -111,7 +111,8 @@ export function runProjectTest(fileUrl: string, userConfigs: ProjectTestUserConf
       const isReceivedExists = fs.existsSync(receivedPath);
 
       const folder = isReceivedExists ? await buildFolderStructure(receivedPath) : null;
-      expect(folder).toMatchSnapshot(`${checkDir} structure`);
+      const folderTreeLines = folder ? buildFolderTreeCliLines(folder) : null;
+      expect(folderTreeLines).toMatchSnapshot(`${checkDir} structure`);
 
       if (snapshot !== 'structure' && folder) {
         await snapshotFolderContent(projectPath, folder);
@@ -170,6 +171,31 @@ async function buildFolderStructure(dir: string): Promise<Folder> {
       }),
     ),
   };
+}
+
+function buildFolderTreeCliLines(folder: Folder): string[] {
+  const lines: string[] = [formatTreeNodeName(folder)];
+
+  const walk = (node: Folder, prefix: string) => {
+    node.files.forEach((file, index) => {
+      const isLast = index === node.files.length - 1;
+      const connector = isLast ? '└── ' : '├── ';
+      lines.push(`${prefix}${connector}${formatTreeNodeName(file)}`);
+
+      if ('files' in file) {
+        const childPrefix = `${prefix}${isLast ? '    ' : '│   '}`;
+        walk(file, childPrefix);
+      }
+    });
+  };
+
+  walk(folder, '');
+
+  return lines;
+}
+
+function formatTreeNodeName(node: File | Folder): string {
+  return 'files' in node ? `${node.name}/` : node.name;
 }
 
 async function snapshotFolderContent(rootDir: string, folder: Folder, parentPath = '') {

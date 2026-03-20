@@ -3,17 +3,11 @@
 exports[`Run config default > cjs structure 1`] = `null`;
 
 exports[`Run config default > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.esm.es5.production.css",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.esm.es5.production.css",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config default > es2017 structure 1`] = `null`;
@@ -30,17 +24,11 @@ exports[`Run config default > file content dist/index.esm.es5.production.js 1`] 
 exports[`Run config default-rolldown > cjs structure 1`] = `null`;
 
 exports[`Run config default-rolldown > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.esm.es5.production.css",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.esm.es5.production.css",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config default-rolldown > es2017 structure 1`] = `null`;

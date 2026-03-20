@@ -3,17 +3,11 @@
 exports[`Run config default > cjs structure 1`] = `null`;
 
 exports[`Run config default > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.cjs.es5.production.js",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.cjs.es5.production.js",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config default > es2017 structure 1`] = `null`;
@@ -33,17 +27,11 @@ exports[`Run config default > file content dist/index.esm.es5.production.js 1`] 
 exports[`Run config default-rolldown > cjs structure 1`] = `null`;
 
 exports[`Run config default-rolldown > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.cjs.es5.production.js",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.cjs.es5.production.js",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config default-rolldown > es2017 structure 1`] = `null`;
@@ -57,17 +45,11 @@ exports[`Run config default-rolldown > file content dist/index.esm.es5.productio
 exports[`Run config enable-browser > cjs structure 1`] = `null`;
 
 exports[`Run config enable-browser > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.cjs.es5.production.js",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.cjs.es5.production.js",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config enable-browser > es2017 structure 1`] = `null`;
@@ -87,17 +69,11 @@ exports[`Run config enable-browser > file content dist/index.esm.es5.production.
 exports[`Run config enable-browser-rolldown > cjs structure 1`] = `null`;
 
 exports[`Run config enable-browser-rolldown > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.cjs.es5.production.js",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.cjs.es5.production.js",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config enable-browser-rolldown > es2017 structure 1`] = `null`;
