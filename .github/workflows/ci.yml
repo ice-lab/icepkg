@@ -29,7 +29,6 @@ jobs:
 
       - run: pnpm run setup
       - run: pnpm run lint
-      - run: pnpm run test
       - run: pnpm run coverage
 
       - run: pnpm run build:doc

@@ -3,17 +3,11 @@
 exports[`Run config bundle > cjs structure 1`] = `null`;
 
 exports[`Run config bundle > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.esm.es2017.production.js",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.esm.es2017.production.js",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config bundle > es2017 structure 1`] = `null`;
@@ -23,29 +17,15 @@ exports[`Run config bundle > esm structure 1`] = `null`;
 exports[`Run config bundle-full > cjs structure 1`] = `null`;
 
 exports[`Run config bundle-full > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.cjs.es2017.production.js",
-    },
-    {
-      "name": "index.cjs.es5.production.js",
-    },
-    {
-      "name": "index.esm.es2017.production.js",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-    {
-      "name": "index.umd.es2017.production.js",
-    },
-    {
-      "name": "index.umd.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.cjs.es2017.production.js",
+  "├── index.cjs.es5.production.js",
+  "├── index.esm.es2017.production.js",
+  "├── index.esm.es5.production.js",
+  "├── index.umd.es2017.production.js",
+  "└── index.umd.es5.production.js",
+]
 `;
 
 exports[`Run config bundle-full > es2017 structure 1`] = `null`;
@@ -55,14 +35,10 @@ exports[`Run config bundle-full > esm structure 1`] = `null`;
 exports[`Run config bundle-rolldown > cjs structure 1`] = `null`;
 
 exports[`Run config bundle-rolldown > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.esm.es2017.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "└── index.esm.es2017.production.js",
+]
 `;
 
 exports[`Run config bundle-rolldown > es2017 structure 1`] = `null`;
@@ -74,17 +50,11 @@ exports[`Run config bundle-rolldown > file content dist/index.esm.es2017.product
 exports[`Run config bundle-with-dev-mode > cjs structure 1`] = `null`;
 
 exports[`Run config bundle-with-dev-mode > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.esm.es2017.development.js",
-    },
-    {
-      "name": "index.esm.es5.development.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.esm.es2017.development.js",
+  "└── index.esm.es5.development.js",
+]
 `;
 
 exports[`Run config bundle-with-dev-mode > es2017 structure 1`] = `null`;
@@ -94,10 +64,9 @@ exports[`Run config bundle-with-dev-mode > esm structure 1`] = `null`;
 exports[`Run config bundle-with-empty-mode > cjs structure 1`] = `null`;
 
 exports[`Run config bundle-with-empty-mode > dist structure 1`] = `
-{
-  "files": [],
-  "name": "dist",
-}
+[
+  "dist/",
+]
 `;
 
 exports[`Run config bundle-with-empty-mode > es2017 structure 1`] = `null`;
@@ -107,23 +76,13 @@ exports[`Run config bundle-with-empty-mode > esm structure 1`] = `null`;
 exports[`Run config bundle-with-full-modes > cjs structure 1`] = `null`;
 
 exports[`Run config bundle-with-full-modes > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.esm.es2017.development.js",
-    },
-    {
-      "name": "index.esm.es2017.production.js",
-    },
-    {
-      "name": "index.esm.es5.development.js",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.esm.es2017.development.js",
+  "├── index.esm.es2017.production.js",
+  "├── index.esm.es5.development.js",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config bundle-with-full-modes > es2017 structure 1`] = `null`;
@@ -135,31 +94,19 @@ exports[`Run config declaration-generator-oxc > cjs structure 1`] = `null`;
 exports[`Run config declaration-generator-oxc > dist structure 1`] = `null`;
 
 exports[`Run config declaration-generator-oxc > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config declaration-generator-oxc > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config declaration-generator-oxc > file content es2017/index.d.ts 1`] = `
@@ -187,31 +134,19 @@ exports[`Run config default > cjs structure 1`] = `null`;
 exports[`Run config default > dist structure 1`] = `null`;
 
 exports[`Run config default > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config default > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config no-declaration > cjs structure 1`] = `null`;
@@ -219,47 +154,29 @@ exports[`Run config no-declaration > cjs structure 1`] = `null`;
 exports[`Run config no-declaration > dist structure 1`] = `null`;
 
 exports[`Run config no-declaration > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "└── index.js",
+]
 `;
 
 exports[`Run config no-declaration > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "└── index.js",
+]
 `;
 
 exports[`Run config pkg-compat-bundle > cjs structure 1`] = `null`;
 
 exports[`Run config pkg-compat-bundle > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.cjs.es2017.production.js",
-    },
-    {
-      "name": "index.cjs.es5.production.js",
-    },
-    {
-      "name": "index.esm.es2017.production.js",
-    },
-    {
-      "name": "index.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.cjs.es2017.production.js",
+  "├── index.cjs.es5.production.js",
+  "├── index.esm.es2017.production.js",
+  "└── index.esm.es5.production.js",
+]
 `;
 
 exports[`Run config pkg-compat-bundle > es2017 structure 1`] = `null`;
@@ -269,17 +186,11 @@ exports[`Run config pkg-compat-bundle > esm structure 1`] = `null`;
 exports[`Run config pkg-compat-bundle-2 > cjs structure 1`] = `null`;
 
 exports[`Run config pkg-compat-bundle-2 > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.umd.es2017.production.js",
-    },
-    {
-      "name": "index.umd.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── index.umd.es2017.production.js",
+  "└── index.umd.es5.production.js",
+]
 `;
 
 exports[`Run config pkg-compat-bundle-2 > es2017 structure 1`] = `null`;
@@ -287,47 +198,29 @@ exports[`Run config pkg-compat-bundle-2 > es2017 structure 1`] = `null`;
 exports[`Run config pkg-compat-bundle-2 > esm structure 1`] = `null`;
 
 exports[`Run config pkg-compat-transform > cjs structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "cjs",
-}
+[
+  "cjs/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config pkg-compat-transform > dist structure 1`] = `null`;
 
 exports[`Run config pkg-compat-transform > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config pkg-compat-transform > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config pkg-config > cjs structure 1`] = `null`;
@@ -337,17 +230,11 @@ exports[`Run config pkg-config > dist structure 1`] = `null`;
 exports[`Run config pkg-config > es2017 structure 1`] = `null`;
 
 exports[`Run config pkg-config > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config pkg-config-disabled > cjs structure 1`] = `null`;
@@ -357,17 +244,11 @@ exports[`Run config pkg-config-disabled > dist structure 1`] = `null`;
 exports[`Run config pkg-config-disabled > es2017 structure 1`] = `null`;
 
 exports[`Run config pkg-config-disabled > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
 `;
 
 exports[`Run config sourcemap-enable > cjs structure 1`] = `null`;
@@ -375,35 +256,19 @@ exports[`Run config sourcemap-enable > cjs structure 1`] = `null`;
 exports[`Run config sourcemap-enable > dist structure 1`] = `null`;
 
 exports[`Run config sourcemap-enable > es2017 structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-    {
-      "name": "index.js.map",
-    },
-  ],
-  "name": "es2017",
-}
+[
+  "es2017/",
+  "├── index.d.ts",
+  "├── index.js",
+  "└── index.js.map",
+]
 `;
 
 exports[`Run config sourcemap-enable > esm structure 1`] = `
-{
-  "files": [
-    {
-      "name": "index.d.ts",
-    },
-    {
-      "name": "index.js",
-    },
-    {
-      "name": "index.js.map",
-    },
-  ],
-  "name": "esm",
-}
+[
+  "esm/",
+  "├── index.d.ts",
+  "├── index.js",
+  "└── index.js.map",
+]
 `;

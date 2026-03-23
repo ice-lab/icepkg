@@ -1,17 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Run config compile-dep-when-es5 > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "compile-dep-when-es5.esm.es2017.production.js",
-    },
-    {
-      "name": "compile-dep-when-es5.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── compile-dep-when-es5.esm.es2017.production.js",
+  "└── compile-dep-when-es5.esm.es5.production.js",
+]
 `;
 
 exports[`Run config compile-dep-when-es5 > file content dist/compile-dep-when-es5.esm.es5.production.js 1`] = `
@@ -25,17 +19,11 @@ exports[`Run config compile-dep-when-es5 > file content dist/compile-dep-when-es
 `;
 
 exports[`Run config compile-dep-when-es5-rolldown > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "compile-dep-when-es5.esm.es2017.production.js",
-    },
-    {
-      "name": "compile-dep-when-es5.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── compile-dep-when-es5.esm.es2017.production.js",
+  "└── compile-dep-when-es5.esm.es5.production.js",
+]
 `;
 
 exports[`Run config compile-dep-when-es5-rolldown > file content dist/compile-dep-when-es5.esm.es5.production.js 1`] = `
@@ -46,126 +34,66 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 exports[`Run config compile-dep-when-es5-rolldown > file content dist/compile-dep-when-es5.esm.es2017.production.js 1`] = `"function e(e){let t=!1,n;return function(...r){return t||(t=!0,n=e(...r)),n}}export{e as once};"`;
 
 exports[`Run config default-no-venders > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "normal.cjs.es5.production.js",
-    },
-    {
-      "name": "normal.esm.es5.production.js",
-    },
-    {
-      "name": "normal.umd.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── normal.cjs.es5.production.js",
+  "├── normal.esm.es5.production.js",
+  "└── normal.umd.es5.production.js",
+]
 `;
 
 exports[`Run config default-no-venders-pkg > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "no-venders.esm.es5.production.js",
-    },
-    {
-      "name": "vendor.esm.es2017.production.js",
-    },
-    {
-      "name": "with-venders.esm.es2017.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── no-venders.esm.es5.production.js",
+  "├── vendor.esm.es2017.production.js",
+  "└── with-venders.esm.es2017.production.js",
+]
 `;
 
 exports[`Run config default-venders > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "normal.cjs.es5.production.js",
-    },
-    {
-      "name": "normal.esm.es5.production.js",
-    },
-    {
-      "name": "normal.umd.es5.production.js",
-    },
-    {
-      "name": "vendor.cjs.es5.production.js",
-    },
-    {
-      "name": "vendor.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── normal.cjs.es5.production.js",
+  "├── normal.esm.es5.production.js",
+  "├── normal.umd.es5.production.js",
+  "├── vendor.cjs.es5.production.js",
+  "└── vendor.esm.es5.production.js",
+]
 `;
 
 exports[`Run config dynamic-import > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "dynamic-import.umd.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "└── dynamic-import.umd.es5.production.js",
+]
 `;
 
 exports[`Run config dynamic-import-pkg > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "dynamic-import.cjs.es5.production.js",
-    },
-    {
-      "name": "dynamic-import.esm.es5.production.js",
-    },
-    {
-      "name": "dynamic-import.umd.es5.production.js",
-    },
-    {
-      "name": "vendor.cjs.es5.production.js",
-    },
-    {
-      "name": "vendor.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── dynamic-import.cjs.es5.production.js",
+  "├── dynamic-import.esm.es5.production.js",
+  "├── dynamic-import.umd.es5.production.js",
+  "├── vendor.cjs.es5.production.js",
+  "└── vendor.esm.es5.production.js",
+]
 `;
 
 exports[`Run config dynamic-import-pkg-rolldown > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "dynamic-import.cjs.es5.production.js",
-    },
-    {
-      "name": "dynamic-import.esm.es5.production.js",
-    },
-    {
-      "name": "dynamic-import.umd.es5.production.js",
-    },
-    {
-      "name": "vendor.cjs.es5.production.js",
-    },
-    {
-      "name": "vendor.esm.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── dynamic-import.cjs.es5.production.js",
+  "├── dynamic-import.esm.es5.production.js",
+  "├── dynamic-import.umd.es5.production.js",
+  "├── vendor.cjs.es5.production.js",
+  "└── vendor.esm.es5.production.js",
+]
 `;
 
 exports[`Run config dynamic-import-rolldown > dist structure 1`] = `
-{
-  "files": [
-    {
-      "name": "dynamic-import.umd.es5.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "└── dynamic-import.umd.es5.production.js",
+]
 `;

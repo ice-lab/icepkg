@@ -1,148 +1,52 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Run config mf-build > dist structure 1`] = `
-{
-  "files": [
-    {
-      "files": [
-        {
-          "name": "App.d.ts",
-        },
-        {
-          "name": "Counter.d.ts",
-        },
-        {
-          "files": [
-            {
-              "files": [
-                {
-                  "name": "App.d.ts",
-                },
-                {
-                  "name": "Counter.d.ts",
-                },
-                {
-                  "name": "index.d.ts",
-                },
-              ],
-              "name": "src",
-            },
-          ],
-          "name": "compiled-types",
-        },
-        {
-          "name": "index.d.ts",
-        },
-      ],
-      "name": "@mf-types",
-    },
-    {
-      "name": "@mf-types.d.ts",
-    },
-    {
-      "name": "@mf-types.zip",
-    },
-    {
-      "name": "__federation_expose_App.mf.es2017.production.css",
-    },
-    {
-      "name": "__federation_expose_App.mf.es2017.production.js",
-    },
-    {
-      "name": "__federation_expose_Counter.mf.es2017.production.js",
-    },
-    {
-      "name": "__federation_expose_default_export.mf.es2017.production.js",
-    },
-    {
-      "name": "index.mf.es2017.production.js",
-    },
-    {
-      "name": "mf-manifest.json",
-    },
-    {
-      "name": "mf-stats.json",
-    },
-    {
-      "name": "test_remote.mf.es2017.production.js",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "├── @mf-types/",
+  "│   ├── App.d.ts",
+  "│   ├── Counter.d.ts",
+  "│   ├── compiled-types/",
+  "│   │   └── src/",
+  "│   │       ├── App.d.ts",
+  "│   │       ├── Counter.d.ts",
+  "│   │       └── index.d.ts",
+  "│   └── index.d.ts",
+  "├── @mf-types.d.ts",
+  "├── @mf-types.zip",
+  "├── __federation_expose_App.mf.es2017.production.css",
+  "├── __federation_expose_App.mf.es2017.production.js",
+  "├── __federation_expose_Counter.mf.es2017.production.js",
+  "├── __federation_expose_default_export.mf.es2017.production.js",
+  "├── index.mf.es2017.production.js",
+  "├── mf-manifest.json",
+  "├── mf-stats.json",
+  "└── test_remote.mf.es2017.production.js",
+]
 `;
 
 exports[`Run config mf-build-custom-dir > dist structure 1`] = `
-{
-  "files": [
-    {
-      "files": [
-        {
-          "files": [
-            {
-              "name": "App.d.ts",
-            },
-            {
-              "name": "Counter.d.ts",
-            },
-            {
-              "files": [
-                {
-                  "files": [
-                    {
-                      "name": "App.d.ts",
-                    },
-                    {
-                      "name": "Counter.d.ts",
-                    },
-                    {
-                      "name": "index.d.ts",
-                    },
-                  ],
-                  "name": "src",
-                },
-              ],
-              "name": "compiled-types",
-            },
-            {
-              "name": "index.d.ts",
-            },
-          ],
-          "name": "@mf-types",
-        },
-        {
-          "name": "@mf-types.d.ts",
-        },
-        {
-          "name": "@mf-types.zip",
-        },
-        {
-          "name": "__federation_expose_App.mf.es2017.production.css",
-        },
-        {
-          "name": "__federation_expose_App.mf.es2017.production.js",
-        },
-        {
-          "name": "__federation_expose_Counter.mf.es2017.production.js",
-        },
-        {
-          "name": "__federation_expose_default_export.mf.es2017.production.js",
-        },
-        {
-          "name": "index.mf.es2017.production.js",
-        },
-        {
-          "name": "mf-manifest.json",
-        },
-        {
-          "name": "mf-stats.json",
-        },
-        {
-          "name": "test_remote.mf.es2017.production.js",
-        },
-      ],
-      "name": "custom",
-    },
-  ],
-  "name": "dist",
-}
+[
+  "dist/",
+  "└── custom/",
+  "    ├── @mf-types/",
+  "    │   ├── App.d.ts",
+  "    │   ├── Counter.d.ts",
+  "    │   ├── compiled-types/",
+  "    │   │   └── src/",
+  "    │   │       ├── App.d.ts",
+  "    │   │       ├── Counter.d.ts",
+  "    │   │       └── index.d.ts",
+  "    │   └── index.d.ts",
+  "    ├── @mf-types.d.ts",
+  "    ├── @mf-types.zip",
+  "    ├── __federation_expose_App.mf.es2017.production.css",
+  "    ├── __federation_expose_App.mf.es2017.production.js",
+  "    ├── __federation_expose_Counter.mf.es2017.production.js",
+  "    ├── __federation_expose_default_export.mf.es2017.production.js",
+  "    ├── index.mf.es2017.production.js",
+  "    ├── mf-manifest.json",
+  "    ├── mf-stats.json",
+  "    └── test_remote.mf.es2017.production.js",
+]
 `;
