@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.0-alpha.4
+
+### Minor Changes
+
+- 55d4f0d: feat: umd format will enable inlineDynamicImports
+- 4da01ea: feat: improve cjs import and performance
+- 3791133: feat: transform node_modules code when bundle mode and target is es5
+- 8fb9768: feat: support mf build
+- e1b6831: feat: improve rolldown engine
+- 6b5e5fc: feat: plugin api add pluginScope property
+
+### Patch Changes
+
+- d1f24b2: fix: dts error and compact bundle format
+
 ## 2.0.0-alpha.3
 
 ### Minor Changes

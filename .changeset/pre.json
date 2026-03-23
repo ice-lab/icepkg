@@ -23,14 +23,19 @@
     "@ice/pkg-tests": "0.0.0",
     "@ice/pkg-tests-bundle-dep": "0.0.0",
     "@ice/pkg-tests-mix-cjs-mjs": "0.0.0",
-    "@ice/pkg-tests-react": "0.0.0"
+    "@ice/pkg-tests-react": "0.0.0",
+    "@ice/pkg-examples-rolldown-react": "0.0.0",
+    "@ice/pkg-plugin-mf": "0.1.0",
+    "@ice/pkg-test-bundle-mf": "0.1.0"
   },
   "changesets": [
     "chilled-chefs-drive",
+    "chilled-pillows-joke",
     "cold-camels-rest",
     "dry-pots-buy",
     "eighty-trees-behave",
     "famous-fans-yell",
+    "few-pets-build",
     "friendly-birds-invent",
     "friendly-radios-walk",
     "funny-tomatoes-count",
@@ -38,9 +43,14 @@
     "green-crabs-add",
     "hip-beans-fail",
     "long-experts-design",
+    "perfect-chicken-travel",
     "quick-wasps-shake",
+    "rotten-wasps-relate",
     "slimy-walls-tease",
+    "tender-mails-guess",
+    "two-gifts-doubt",
     "violet-pots-brush",
-    "wet-rocks-dream"
+    "wet-rocks-dream",
+    "yellow-buckets-remain"
   ]
 }
