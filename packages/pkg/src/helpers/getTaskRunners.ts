@@ -4,13 +4,16 @@ import { createBundleTask } from '../tasks/bundle.js';
 import { createDeclarationTask } from '../tasks/declaration.js';
 import { Runner } from './runner.js';
 import { FSWatcher } from 'chokidar';
+import { sortBuildTasksByOrder } from './taskOrder.js';
 
 export function getTaskRunners(
   buildTasks: BuildTask[],
   context: Context,
   watcher?: FSWatcher,
 ): Array<Runner<OutputResult>> {
-  return buildTasks
+  const sortedBuildTasks = sortBuildTasksByOrder(buildTasks);
+
+  return sortedBuildTasks
     .map((buildTask) => {
       const { config } = buildTask;
       switch (config.type) {
