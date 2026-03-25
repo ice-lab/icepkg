@@ -4,6 +4,7 @@ import {
   CustomFormatTaskCreator,
   BundleFormat,
   TransformFormat,
+  TaskConfig,
   TaskName,
   PkgResolvedConfig,
   NodeModuleType,
@@ -13,8 +14,18 @@ import { ALIAS_BUNDLE_FORMATS_MAP, ALIAS_TRANSFORM_FORMATS_MAP } from '../consta
 import { groupBy } from 'es-toolkit/array';
 import { getPkgTaskName } from './pkg.js';
 
+function createRegisterBuiltinTask(registerTask: Context['registerTask']) {
+  return (name: string, config: TaskConfig) => {
+    registerTask(name, {
+      ...config,
+      order: 'builtin',
+    });
+  };
+}
+
 export function registerTasks(ctx: Context, customFormats: Record<string, CustomFormatTaskCreator>) {
   const { userConfig, registerTask } = ctx;
+  const registerBuiltinTask = createRegisterBuiltinTask(registerTask);
   const transformUserFormats = userConfig.transform?.formats;
   let hasTransformTasks = false;
   if (Array.isArray(transformUserFormats)) {
@@ -22,7 +33,7 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
       hasTransformTasks = true;
       if (isAliasFormatString(format, ALIAS_TRANSFORM_FORMATS_MAP)) {
         const fmt = toFormat<TransformFormat>(ALIAS_TRANSFORM_FORMATS_MAP[format]);
-        registerTask(`transform-${format}`, {
+        registerBuiltinTask(`transform-${format}`, {
           type: 'transform',
           format: fmt,
         });
@@ -32,14 +43,14 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
           type: 'transform',
         });
         if (task) {
-          registerTask(`transform-${format}`, task);
+          registerBuiltinTask(`transform-${format}`, task);
         }
       } else {
         const structFormat = tryToFormat<TransformFormat>(format);
         if (!structFormat) {
           throw new Error(`Unknown transform format "${format}"`);
         }
-        registerTask(`transform-${format}`, {
+        registerBuiltinTask(`transform-${format}`, {
           type: 'transform',
           format: structFormat,
         });
@@ -68,21 +79,21 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
 
       if (es5Formats?.length) {
         const structs: BundleFormat[] = es5Formats.map((module) => createFormat(module, 'es5'));
-        registerTask(TaskName.BUNDLE_ES5, {
+        registerBuiltinTask(TaskName.BUNDLE_ES5, {
           type: 'bundle',
           formats: structs,
         });
       }
 
       if (aliasedFormatsGroup.es2017?.length && es5Formats) {
-        registerTask(TaskName.BUNDLE_ES2017, {
+        registerBuiltinTask(TaskName.BUNDLE_ES2017, {
           type: 'bundle',
           formats: es5Formats.map((module) => createFormat(module, 'es2017')),
         });
       }
 
       if (aliasedFormatsGroup.mf?.length) {
-        registerTask(`bundle-mf`, {
+        registerBuiltinTask(`bundle-mf`, {
           type: 'bundle',
           formats: [createFormat('mf', 'es5')],
           engine: 'rslib',
@@ -96,7 +107,7 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
         type: 'bundle',
       });
       if (task) {
-        registerTask(`bundle-${format}`, task);
+        registerBuiltinTask(`bundle-${format}`, task);
       }
     }
 
@@ -105,7 +116,7 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
       if (!structFormat) {
         throw new Error(`Unknown bundle format "${format}"`);
       }
-      registerTask(`bundle-${format}`, {
+      registerBuiltinTask(`bundle-${format}`, {
         type: 'bundle',
         formats: [structFormat],
       });
@@ -113,7 +124,7 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
   }
 
   if ((userConfig.declaration ?? true) && hasTransformTasks) {
-    registerTask(TaskName.DECLARATION, {
+    registerBuiltinTask(TaskName.DECLARATION, {
       type: 'declaration',
     });
   }
@@ -121,11 +132,12 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
 
 export function registerPkgTasks(ctx: Context, pkgs: PkgResolvedConfig[]) {
   const { userConfig, registerTask } = ctx;
+  const registerBuiltinTask = createRegisterBuiltinTask(registerTask);
   let hasTransformTasks = false;
   for (const pkg of pkgs) {
     const taskName = getPkgTaskName(pkg);
     if (pkg.bundle) {
-      registerTask(taskName, {
+      registerBuiltinTask(taskName, {
         type: 'bundle',
         formats: pkg.legacyModules
           ? pkg.legacyModules.map((module) => ({
@@ -142,7 +154,7 @@ export function registerPkgTasks(ctx: Context, pkgs: PkgResolvedConfig[]) {
       });
     } else {
       hasTransformTasks = true;
-      registerTask(taskName, {
+      registerBuiltinTask(taskName, {
         type: 'transform',
         format: {
           module: pkg.module as NodeModuleType,
@@ -154,7 +166,7 @@ export function registerPkgTasks(ctx: Context, pkgs: PkgResolvedConfig[]) {
   }
 
   if ((userConfig.declaration ?? true) && hasTransformTasks) {
-    registerTask(TaskName.DECLARATION, {
+    registerBuiltinTask(TaskName.DECLARATION, {
       type: 'declaration',
     });
   }

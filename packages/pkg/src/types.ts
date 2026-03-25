@@ -307,6 +307,8 @@ export interface UserConfig {
 
 export type PluginUserConfig = string | [string, Json?] | Plugin;
 
+export type TaskOrder = 'pre' | 'builtin' | 'normal' | 'post';
+
 interface _TaskConfig {
   /**
    * Entry for a task
@@ -371,6 +373,16 @@ interface _TaskConfig {
    * modify rslib config
    */
   modifyRslibConfig?: Array<(rslibOptions: RslibConfig) => RslibConfig>;
+
+  /**
+   * Control task execution order globally across all task types.
+   * - 'pre' runs before normal tasks
+   * - 'builtin' runs between pre and normal
+   * - 'normal' keeps default order
+   * - 'post' runs after normal tasks
+   * @default 'normal'
+   */
+  order?: TaskOrder;
 
   pkg?: PkgResolvedConfig;
 }
