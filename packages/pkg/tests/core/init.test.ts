@@ -233,6 +233,61 @@ describe('initTask', () => {
     });
   });
 
+  describe('helpers', () => {
+    it('without helpers defaults to external', () => {
+      const task = initTask(tt('esm', 'esm:es5', {}), c({}));
+      expect(task.config.helpers).toBeUndefined();
+    });
+
+    it('userConfig sets global helpers', () => {
+      const task = initTask(
+        tt('esm', 'esm:es5', {}),
+        c({
+          helpers: 'inline',
+        }),
+      );
+      expect(task.config.helpers).toEqual('inline');
+    });
+
+    it('pkg helpers overrides userConfig', () => {
+      const task = initTask(
+        tt('esm', 'esm:es5', {
+          pkg: {
+            id: 'test-pkg',
+            module: 'esm',
+            target: 'es5',
+            pluginInfos: [],
+            helpers: 'inline',
+          },
+        }),
+        c({
+          helpers: 'external',
+        }),
+      );
+      expect(task.config.helpers).toEqual('inline');
+    });
+
+    it('taskConfig helpers has highest priority over pkg and userConfig', () => {
+      const task = initTask(
+        tt('esm', 'esm:es5', {
+          helpers: 'inline',
+          pkg: {
+            id: 'test-pkg',
+            module: 'esm',
+            target: 'es5',
+            pluginInfos: [],
+            helpers: 'external',
+          },
+        }),
+        c({
+          helpers: 'external',
+        }),
+      );
+      // Task config has highest priority
+      expect(task.config.helpers).toEqual('inline');
+    });
+  });
+
   describe('transform', () => {
     describe('modes', () => {
       it('default is based on command', () => {

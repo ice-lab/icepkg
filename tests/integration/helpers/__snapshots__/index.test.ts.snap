@@ -1,0 +1,139 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Run config external-helpers > cjs structure 1`] = `null`;
+
+exports[`Run config external-helpers > dist structure 1`] = `
+[
+  "dist/",
+  "├── index.esm.es5.production.js",
+  "└── vendor.esm.es5.production.js",
+]
+`;
+
+exports[`Run config external-helpers > es2017 structure 1`] = `null`;
+
+exports[`Run config external-helpers > esm structure 1`] = `
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
+`;
+
+exports[`Run config external-helpers > file content dist/index.esm.es5.production.js 1`] = `
+"import{_ as r}from"./vendor.esm.es5.production.js";function o(o,e){var n;return(n=Object).assign.apply(n,[{},o].concat(r(e)))}export{o as spread};
+"
+`;
+
+exports[`Run config external-helpers > file content dist/vendor.esm.es5.production.js 1`] = `
+"function r(r,t){(null==t||t>r.length)&&(t=r.length);for(var n=0,e=Array(t);n<t;n++)e[n]=r[n];return e}function t(t){return function(t){if(Array.isArray(t))return r(t)}(t)||function(r){if("u">typeof Symbol&&null!=r[Symbol.iterator]||null!=r["@@iterator"])return Array.from(r)}(t)||function(t,n){if(t){if("string"==typeof t)return r(t,void 0);var e=Object.prototype.toString.call(t).slice(8,-1);if("Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e)return Array.from(e);if("Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e))return r(t,void 0)}}(t)||function(){throw TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}export{t as _};
+"
+`;
+
+exports[`Run config external-helpers > file content esm/index.d.ts 1`] = `
+"export declare function spread(target: Record<string, unknown>, sources: Array<Record<string, unknown>>): Record<string, unknown>;
+"
+`;
+
+exports[`Run config external-helpers > file content esm/index.js 1`] = `
+"import { _ as _to_consumable_array } from "@swc/helpers/_/_to_consumable_array";
+export function spread(target, sources) {
+    var _Object;
+    return (_Object = Object).assign.apply(_Object, [
+        {},
+        target
+    ].concat(_to_consumable_array(sources)));
+}
+"
+`;
+
+exports[`Run config inline-helpers > cjs structure 1`] = `null`;
+
+exports[`Run config inline-helpers > dist structure 1`] = `
+[
+  "dist/",
+  "└── index.esm.es5.production.js",
+]
+`;
+
+exports[`Run config inline-helpers > es2017 structure 1`] = `null`;
+
+exports[`Run config inline-helpers > esm structure 1`] = `
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
+`;
+
+exports[`Run config inline-helpers > file content dist/index.esm.es5.production.js 1`] = `
+"function r(r,t){(null==t||t>r.length)&&(t=r.length);for(var n=0,e=Array(t);n<t;n++)e[n]=r[n];return e}function t(t,n){var e;return(e=Object).assign.apply(e,[{},t].concat(function(t){if(Array.isArray(t))return r(t)}(n)||function(r){if("u">typeof Symbol&&null!=r[Symbol.iterator]||null!=r["@@iterator"])return Array.from(r)}(n)||function(t,n){if(t){if("string"==typeof t)return r(t,void 0);var e=Object.prototype.toString.call(t).slice(8,-1);if("Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e)return Array.from(e);if("Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e))return r(t,void 0)}}(n)||function(){throw TypeError("Invalid attempt to spread non-iterable instance.\\\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()))}export{t as spread};
+"
+`;
+
+exports[`Run config inline-helpers > file content esm/index.d.ts 1`] = `
+"export declare function spread(target: Record<string, unknown>, sources: Array<Record<string, unknown>>): Record<string, unknown>;
+"
+`;
+
+exports[`Run config inline-helpers > file content esm/index.js 1`] = `
+"function _array_like_to_array(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+    return arr2;
+}
+function _array_without_holes(arr) {
+    if (Array.isArray(arr)) return _array_like_to_array(arr);
+}
+function _iterable_to_array(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+function _non_iterable_spread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\\\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _to_consumable_array(arr) {
+    return _array_without_holes(arr) || _iterable_to_array(arr) || _unsupported_iterable_to_array(arr) || _non_iterable_spread();
+}
+function _unsupported_iterable_to_array(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _array_like_to_array(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
+}
+export function spread(target, sources) {
+    var _Object;
+    return (_Object = Object).assign.apply(_Object, [
+        {},
+        target
+    ].concat(_to_consumable_array(sources)));
+}
+"
+`;
+
+exports[`Run config pkg-inline-helpers > cjs structure 1`] = `null`;
+
+exports[`Run config pkg-inline-helpers > dist structure 1`] = `null`;
+
+exports[`Run config pkg-inline-helpers > es2017 structure 1`] = `null`;
+
+exports[`Run config pkg-inline-helpers > esm structure 1`] = `
+[
+  "esm/",
+  "├── index.d.ts",
+  "└── index.js",
+]
+`;
+
+exports[`Run config pkg-inline-helpers > file content esm/index.d.ts 1`] = `
+"export declare function spread(target: Record<string, unknown>, sources: Array<Record<string, unknown>>): Record<string, unknown>;
+"
+`;
+
+exports[`Run config pkg-inline-helpers > file content esm/index.js 1`] = `
+"export function spread(target, sources) {
+    return Object.assign({}, target, ...sources);
+}
+"
+`;
