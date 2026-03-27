@@ -30,7 +30,7 @@ export const getDefaultBundleSwcConfig = (bundleTaskConfig: BundleTaskConfig): C
   const browserTargets = BROWSER_TARGETS_MAP[formatTarget] ?? BROWSER_TARGETS_MAP.es2017;
   return {
     jsc: {
-      externalHelpers: true,
+      externalHelpers: bundleTaskConfig.helpers !== 'inline',
     },
     minify: false,
     // Always generate map in bundle mode,
@@ -68,7 +68,7 @@ export const getDefaultTransformSwcConfig = (transformTaskConfig: TransformTaskC
       },
       // Helpers function will not be inlined into the output files for sake of optimizing.
       // Get more info https://github.com/ice-lab/ice-next/issues/95
-      externalHelpers: true,
+      externalHelpers: transformTaskConfig.helpers !== 'inline',
     },
     minify: false,
     module,

@@ -652,6 +652,15 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/pkg
 
+  tests/integration/helpers:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../../packages/pkg
+      '@swc/helpers':
+        specifier: ^0.5.15
+        version: 0.5.17
+
   tests/integration/mix-cjs-mjs:
     dependencies:
       '@ice/pkg':

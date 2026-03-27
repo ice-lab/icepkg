@@ -176,7 +176,7 @@ export interface PkgUserConfig
       BundleUserConfig,
       'externals' | 'name' | 'compileDependencies' | 'polyfill' | 'engine' | 'minify' | 'codeSplitting'
     >,
-    Pick<UserConfig, 'alias' | 'define' | 'jsxRuntime' | 'declaration' | 'entry' | 'sourceMaps'> {
+    Pick<UserConfig, 'alias' | 'define' | 'jsxRuntime' | 'declaration' | 'entry' | 'sourceMaps' | 'helpers'> {
   /**
    * Unique id to indicate a package
    */
@@ -303,6 +303,14 @@ export interface UserConfig {
    * @default false
    */
   server?: boolean | ServerUserConfig;
+
+  /**
+   * Configure how SWC helper functions are handled globally.
+   * - 'external': Import from @swc/helpers package (default, smaller output size)
+   * - 'inline': Inline helpers into each file (no external dependency needed)
+   * @default 'external'
+   */
+  helpers?: 'external' | 'inline';
 }
 
 export type PluginUserConfig = string | [string, Json?] | Plugin;
@@ -383,6 +391,14 @@ interface _TaskConfig {
    * @default 'normal'
    */
   order?: TaskOrder;
+
+  /**
+   * Configure how SWC helper functions are handled for this task.
+   * Resolved from userConfig.helpers or pkg.helpers.
+   * - 'external': Import from @swc/helpers package (default)
+   * - 'inline': Inline helpers into each file
+   */
+  helpers?: 'external' | 'inline';
 
   pkg?: PkgResolvedConfig;
 }

@@ -66,6 +66,7 @@ function initSharedTask(buildTask: BuildTask, options: InitTaskOptions) {
 
   config.sourcemap ??= pkg?.sourceMaps ?? userConfig.sourceMaps ?? command === 'start';
   config.jsxRuntime ??= pkg?.jsxRuntime ?? userConfig.jsxRuntime;
+  config.helpers ??= pkg?.helpers ?? userConfig.helpers;
 }
 
 /**

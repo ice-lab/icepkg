@@ -61,6 +61,7 @@ export const userConfigSchema = z.object({
   generateTypeForJs: z.boolean().optional(),
   jsxRuntime: z.enum(['classic', 'automatic']).optional(),
   plugins: z.any().array().optional(),
+  helpers: z.enum(['external', 'inline']).optional(),
 
   transform: transformSchema.optional(),
   bundle: bundleSchema.optional(),
