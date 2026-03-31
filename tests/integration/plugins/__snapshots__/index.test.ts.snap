@@ -103,28 +103,3 @@ export var info = {
 };
 "
 `;
-
-exports[`Run config register-format > cjs structure 1`] = `null`;
-
-exports[`Run config register-format > dist structure 1`] = `
-[
-  "dist/",
-  "└── index.asset.js",
-]
-`;
-
-exports[`Run config register-format > es2017 structure 1`] = `
-[
-  "es2017/",
-  "├── index.d.ts",
-  "└── index.js",
-]
-`;
-
-exports[`Run config register-format > esm structure 1`] = `
-[
-  "esm/",
-  "├── index.d.ts",
-  "└── index.js",
-]
-`;

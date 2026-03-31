@@ -1,7 +1,6 @@
 import {
   AliasBundleFormatString,
   Context,
-  CustomFormatTaskCreator,
   BundleFormat,
   TransformFormat,
   TaskConfig,
@@ -23,7 +22,7 @@ function createRegisterBuiltinTask(registerTask: Context['registerTask']) {
   };
 }
 
-export function registerTasks(ctx: Context, customFormats: Record<string, CustomFormatTaskCreator>) {
+export function registerTasks(ctx: Context) {
   const { userConfig, registerTask } = ctx;
   const registerBuiltinTask = createRegisterBuiltinTask(registerTask);
   const transformUserFormats = userConfig.transform?.formats;
@@ -37,14 +36,6 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
           type: 'transform',
           format: fmt,
         });
-      } else if (customFormats[format]) {
-        const task = customFormats[format]({
-          format,
-          type: 'transform',
-        });
-        if (task) {
-          registerBuiltinTask(`transform-${format}`, task);
-        }
       } else {
         const structFormat = tryToFormat<TransformFormat>(format);
         if (!structFormat) {
@@ -62,9 +53,6 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
     const groupedFormats = groupBy(userConfig.bundle?.formats ?? ['esm', 'es2017'], (format) => {
       if (isAliasFormatString(format, ALIAS_BUNDLE_FORMATS_MAP)) {
         return 'alias';
-      }
-      if (customFormats[format]) {
-        return 'custom';
       }
       // standard or unknow format string
       return 'others';
@@ -98,16 +86,6 @@ export function registerTasks(ctx: Context, customFormats: Record<string, Custom
           formats: [createFormat('mf', 'es5')],
           engine: 'rslib',
         });
-      }
-    }
-
-    for (const format of groupedFormats.custom ?? []) {
-      const task = customFormats[format]({
-        format,
-        type: 'bundle',
-      });
-      if (task) {
-        registerBuiltinTask(`bundle-${format}`, task);
       }
     }
 

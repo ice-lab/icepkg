@@ -1,6 +1,6 @@
 import { CommandArgs, Context as BuildScriptContext, PluginList } from 'build-scripts';
 import type { ICommandFn } from 'build-scripts/lib/Service.js';
-import { Context, CustomFormatTaskCreator, ExtendsPluginAPI, TaskConfig, UserConfig } from '../types.js';
+import { Context, ExtendsPluginAPI, TaskConfig, UserConfig } from '../types.js';
 import taskRegisterPlugin from '../plugins/component.js';
 import { userConfigSchema } from '../config/schema.js';
 import { createMessageBuilder, fromZodError } from 'zod-validation-error';
@@ -39,16 +39,7 @@ export interface PkgCore {
  * 为了实现以上流程，需要魔改 build-scripts 的部分逻辑，所以会尝试调用其 private 方法
  */
 export async function createCore(options: CreatePkgOptions) {
-  const customFormats: Record<string, CustomFormatTaskCreator> = {};
-
   const extendsPluginAPI: ExtendsPluginAPI = {
-    registerFormat: (format, creator) => {
-      if (!customFormats[format]) {
-        customFormats[format] = creator;
-      } else {
-        throw new Error(`Cannot register format ${format} twice`);
-      }
-    },
     pluginScope: 'global',
   };
   const ctx = new BuildScriptContext<TaskConfig, ExtendsPluginAPI, UserConfig>({
@@ -114,7 +105,7 @@ export async function createCore(options: CreatePkgOptions) {
     // when pkg is preset, no need to register old tasks
     await registerPkgTasks(ctx, pkgs);
   } else {
-    registerTasks(ctx, customFormats);
+    registerTasks(ctx);
   }
 
   initContextTasks(ctx);
