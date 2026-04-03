@@ -697,6 +697,12 @@ importers:
         specifier: ^18.0.0
         version: 18.0.15
 
+  tests/integration/transform:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../../packages/pkg
+
   website:
     dependencies:
       '@docusaurus/core':

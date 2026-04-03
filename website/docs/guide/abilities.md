@@ -16,8 +16,8 @@ Transform 模式即把源文件逐个编译到输出目录，不对依赖做任�
 ```md
 src
 ├── components
-|  ├── About.jsx
-|  └── Button.tsx
+| ├── About.jsx
+| └── Button.tsx
 ├── index.ts
 ├── util.js
 └── index.scss
@@ -28,9 +28,9 @@ src
 ```md
 esm
 ├── components
-|  ├── About.js
-|  ├── Button.d.ts
-|  └── Button.js
+| ├── About.js
+| ├── Button.d.ts
+| └── Button.js
 ├── index.d.ts
 ├── index.ts
 ├── util.js
@@ -45,6 +45,13 @@ esm
 - 其他类型的文件（比如 `.css`、`.scss` 等等），不做任何编译操作，将会被直接拷贝到输出目录
 
 Transform 模式下输出的产物具有较好的调试性，并且对 Tree-Shaking 友好。适用于大部分开发 React/Rax 组件或者 Node 模块场景。
+
+当配置了多个 entry 时，Transform 只会处理 entry 作用域内的文件，不会隐式处理未配置目录。你可以通过 `transform.entryRoot` 控制输出路径的相对根目录。例如，entry 为 `./src/a/b/c/index.ts` 时：
+
+- `entryRoot: './src/a/b'` 输出 `esm/c/index.js`
+- `entryRoot: './src'` 输出 `esm/a/b/c/index.js`
+
+若使用 `pkgs`，可在具体 pkg 上配置 `entryRoot`，其优先级高于全局 `transform.entryRoot`。
 
 ### Bundle 模式
 
@@ -98,9 +105,7 @@ import * as React from 'react';
 import './a.css';
 
 export default function Home() {
-  return (
-    <div className="container"></div>
-  )
+  return <div className="container"></div>;
 }
 ```
 
@@ -168,8 +173,8 @@ export default () => (
 
 ```diff
 - .container {
-+ .rc-container { 
-  color: red;  
++ .rc-container {
+  color: red;
 }
 ```
 
@@ -180,12 +185,12 @@ export default () => (
 
 ICE PKG 支持额外输出 ES2017 规范的 [Modern 产物](https://web.dev/publish-modern-javascript/)。这份产物在编译时会保留大部分的 JavaScript 语法特性，比如：
 
-+ Class
-+ 箭头函数
-+ async/await
-+ 解构
-+ spread 运算符
-+ Generator
+- Class
+- 箭头函数
+- async/await
+- 解构
+- spread 运算符
+- Generator
 
 但可以运行在[大部分的现代浏览器版本](https://caniuse.com/async-functions,object-values,object-entries,mdn-javascript_builtins_object_getownpropertydescriptors,pad-start-end,mdn-javascript_grammar_trailing_commas_trailing_commas_in_functions)上（市场份额 > 95%）。当网站不再转译这些语法时，文件的字节数得以大幅减少，从而极大地改善脚本加载性能。
 
@@ -214,8 +219,8 @@ export default App;
 
 输出 ES2017 产物与 ES5 产物的大小对比：
 
-| 产物        | 大小  |
-|-----------| ----  |
+| 产物        | 大小 |
+| ----------- | ---- |
 | ES2017 产物 | 1.8k |
 | ES5 产物    | 3.7k |
 

@@ -76,6 +76,12 @@ export interface TransformUserConfig {
    * @see https://github.com/isaacs/minimatch
    */
   excludes?: string | string[];
+
+  /**
+   * Root directory used to map transform output paths.
+   * This only affects output path layout, not file include scope.
+   */
+  entryRoot?: string;
 }
 
 export interface BundleUserConfig {
@@ -214,6 +220,12 @@ export interface PkgUserConfig
    * Define output directory
    */
   outputDir?: string;
+
+  /**
+   * Root directory used to map transform output paths for this pkg.
+   * Has higher priority than `transform.entryRoot`.
+   */
+  entryRoot?: string;
 
   /**
    * Disable this pkg to build
@@ -442,6 +454,11 @@ export interface TransformTaskConfig extends _TaskConfig, Omit<TransformUserConf
    * Same as https://swc.rs/docs/configuration/compilation#jsctransformoptimizerglobals
    */
   define?: Record<string, string>;
+
+  /**
+   * Absolute root directory used to map output paths in transform mode.
+   */
+  entryRoot?: string;
 }
 
 export interface DeclarationTaskConfig extends _TaskConfig, DeclarationUserConfig {

@@ -31,18 +31,21 @@ export default _default;
 `;
 
 exports[`Run config default > file content esm/index.js 1`] = `
-"import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
-import { _ as _object_spread_props } from "@swc/helpers/_/_object_spread_props";
-import { jsx as _jsx } from "@ice/jsx-runtime/jsx-runtime";
-import React from 'react';
-export default function() {
+"import { _ as _$1 } from '@swc/helpers/_/_object_spread';
+import { _ } from '@swc/helpers/_/_object_spread_props';
+import { jsx } from '@ice/jsx-runtime/jsx-runtime';
+import 'react';
+
+function index() {
     var commonProps = {
         className: 'common-class-name'
     };
-    return /*#__PURE__*/ _jsx("div", _object_spread_props(_object_spread({}, commonProps), {
+    return /*#__PURE__*/ jsx("div", _(_$1({}, commonProps), {
         children: "Hello World"
     }));
-};
+}
+
+export { index as default };
 "
 `;
 
@@ -77,18 +80,21 @@ export default _default;
 `;
 
 exports[`Run config pkg > file content esm/index.js 1`] = `
-"import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
-import { _ as _object_spread_props } from "@swc/helpers/_/_object_spread_props";
-import { jsx as _jsx } from "@ice/jsx-runtime/jsx-runtime";
-import React from 'react';
-export default (()=>{
+"import { _ as _$1 } from '@swc/helpers/_/_object_spread';
+import { _ } from '@swc/helpers/_/_object_spread_props';
+import { jsx } from '@ice/jsx-runtime/jsx-runtime';
+import 'react';
+
+var index = (()=>{
     const commonProps = {
         className: 'common-class-name'
     };
-    return /*#__PURE__*/ _jsx("div", _object_spread_props(_object_spread({}, commonProps), {
+    return /*#__PURE__*/ jsx("div", _(_$1({}, commonProps), {
         children: "Hello World"
     }));
 });
+
+export { index as default };
 "
 `;
 

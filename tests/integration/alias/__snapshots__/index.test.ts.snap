@@ -38,7 +38,8 @@ exports[`Run config default > file content cjs/alias.d.ts 1`] = `
 `;
 
 exports[`Run config default > file content cjs/alias.js 1`] = `
-""use strict";
+"'use strict';
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -60,7 +61,8 @@ export { bar };
 `;
 
 exports[`Run config default > file content cjs/index.js 1`] = `
-""use strict";
+"'use strict';
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -89,7 +91,9 @@ exports[`Run config default > file content es2017/alias.d.ts 1`] = `
 `;
 
 exports[`Run config default > file content es2017/alias.js 1`] = `
-"export const bar = 2;
+"const bar = 2;
+
+export { bar };
 "
 `;
 
@@ -101,9 +105,11 @@ export { bar };
 `;
 
 exports[`Run config default > file content es2017/index.js 1`] = `
-"import { bar } from './alias.js';
-export const foo = 1;
-export { bar };
+"export { bar } from './alias.js';
+
+const foo = 1;
+
+export { foo };
 "
 `;
 
@@ -113,7 +119,9 @@ exports[`Run config default > file content esm/alias.d.ts 1`] = `
 `;
 
 exports[`Run config default > file content esm/alias.js 1`] = `
-"export var bar = 2;
+"var bar = 2;
+
+export { bar };
 "
 `;
 
@@ -125,8 +133,10 @@ export { bar };
 `;
 
 exports[`Run config default > file content esm/index.js 1`] = `
-"import { bar } from './alias.js';
-export var foo = 1;
-export { bar };
+"export { bar } from './alias.js';
+
+var foo = 1;
+
+export { foo };
 "
 `;

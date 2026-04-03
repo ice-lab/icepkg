@@ -115,7 +115,9 @@ exports[`Run config declaration-generator-oxc > file content es2017/index.d.ts 1
 `;
 
 exports[`Run config declaration-generator-oxc > file content es2017/index.js 1`] = `
-"export const foo = 1;
+"const foo = 1;
+
+export { foo };
 "
 `;
 
@@ -125,7 +127,9 @@ exports[`Run config declaration-generator-oxc > file content esm/index.d.ts 1`] 
 `;
 
 exports[`Run config declaration-generator-oxc > file content esm/index.js 1`] = `
-"export var foo = 1;
+"var foo = 1;
+
+export { foo };
 "
 `;
 

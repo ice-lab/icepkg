@@ -289,6 +289,87 @@ describe('initTask', () => {
   });
 
   describe('transform', () => {
+    describe('excludes', () => {
+      it('uses transform.excludes from userConfig', () => {
+        const task = initTask(
+          tt('esm', 'esm:es5', {
+            entry: './src/a/index.ts',
+          }),
+          c({
+            transform: {
+              excludes: ['docs/**'],
+            },
+          }),
+        );
+        expect((task.config as TransformTaskConfig).excludes).toEqual(['docs/**']);
+      });
+
+      it('taskConfig excludes has highest priority', () => {
+        const task = initTask(
+          tt('esm', 'esm:es5', {
+            entry: './src/a/index.ts',
+            excludes: ['generated/**'],
+          }),
+          c({
+            transform: {
+              excludes: ['docs/**'],
+            },
+          }),
+        );
+        expect((task.config as TransformTaskConfig).excludes).toEqual(['generated/**']);
+      });
+    });
+
+    describe('entryRoot', () => {
+      it('uses auto inferred root by default', () => {
+        const task = initTask(
+          tt('esm', 'esm:es5', {
+            entry: {
+              a: './src/a/index.ts',
+              b: './src/b/index.ts',
+            },
+          }),
+          c({}),
+        );
+        expect((task.config as TransformTaskConfig).entryRoot).toEqual(join(MOCK_ROOT, 'src'));
+      });
+
+      it('uses transform.entryRoot from userConfig', () => {
+        const task = initTask(
+          tt('esm', 'esm:es5', {
+            entry: './src/a/index.ts',
+          }),
+          c({
+            transform: {
+              entryRoot: './src',
+            },
+          }),
+        );
+        expect((task.config as TransformTaskConfig).entryRoot).toEqual(join(MOCK_ROOT, 'src'));
+      });
+
+      it('pkg.entryRoot overrides transform.entryRoot', () => {
+        const task = initTask(
+          tt('esm', 'esm:es5', {
+            entry: './src/a/index.ts',
+            pkg: {
+              id: 'test-pkg',
+              module: 'esm',
+              target: 'es5',
+              pluginInfos: [],
+              entryRoot: './src/a',
+            },
+          }),
+          c({
+            transform: {
+              entryRoot: './src',
+            },
+          }),
+        );
+        expect((task.config as TransformTaskConfig).entryRoot).toEqual(join(MOCK_ROOT, 'src/a'));
+      });
+    });
+
     describe('modes', () => {
       it('default is based on command', () => {
         for (const [newCommand, expected] of [

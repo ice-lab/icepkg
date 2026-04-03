@@ -1,0 +1,218 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Run config copy-non-script-files > esm structure 1`] = `
+[
+  "esm/",
+  "├── docs/",
+  "│   └── readme.md",
+  "├── ext-cjs.cjs",
+  "├── ext-cts.cjs",
+  "├── ext-jsx.js",
+  "├── ext-mjs.mjs",
+  "├── ext-mts.mjs",
+  "├── ext-tsx.js",
+  "├── ext-types.d.ts",
+  "├── logic.js",
+  "├── main.js",
+  "├── meta.yaml",
+  "├── skip.ignore.txt",
+  "└── styles/",
+  "    ├── copy.less",
+  "    └── copy.scss",
+]
+`;
+
+exports[`Run config copy-non-script-files > file content esm/docs/readme.md 1`] = `
+"# copy fixture
+
+this markdown file should be copied.
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/ext-cjs.cjs 1`] = `
+"exports.cjsValue = 'cjs-value';
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/ext-cts.cjs 1`] = `
+"Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "ctsValue", {
+    enumerable: true,
+    get: function() {
+        return ctsValue;
+    }
+});
+var ctsValue = 'cts-value';
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/ext-jsx.js 1`] = `
+"var jsxValue = 'jsx-value';
+
+export { jsxValue };
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/ext-mjs.mjs 1`] = `
+"var mjsValue = 'mjs-value';
+
+export { mjsValue };
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/ext-mts.mjs 1`] = `
+"var mtsValue = 'mts-value';
+
+export { mtsValue };
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/ext-tsx.js 1`] = `
+"var tsxValue = 'tsx-value';
+
+export { tsxValue };
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/ext-types.d.ts 1`] = `
+"export interface CopiedType {
+  value: string;
+}
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/logic.js 1`] = `
+"var title = 'copy-non-script';
+
+export { title };
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/main.js 1`] = `
+"export { title } from './logic';
+import './styles/copy.less';
+import './styles/copy.scss';
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/meta.yaml 1`] = `
+"name: copy-fixture
+kind: static
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/skip.ignore.txt 1`] = `
+"excluded from copy fixture
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/styles/copy.less 1`] = `
+"@copy-color: #0ea5e9;
+
+.copy-less {
+  color: @copy-color;
+}
+"
+`;
+
+exports[`Run config copy-non-script-files > file content esm/styles/copy.scss 1`] = `
+"$copy-bg: #ecfeff;
+
+.copy-scss {
+  background: $copy-bg;
+}
+"
+`;
+
+exports[`Run config entry-root-wide > esm structure 1`] = `
+[
+  "esm/",
+  "└── src/",
+  "    ├── docs/",
+  "    │   └── readme.md",
+  "    ├── ext-cjs.cjs",
+  "    ├── ext-cts.cjs",
+  "    ├── ext-jsx.js",
+  "    ├── ext-mjs.mjs",
+  "    ├── ext-mts.mjs",
+  "    ├── ext-tsx.js",
+  "    ├── ext-types.d.ts",
+  "    ├── logic.js",
+  "    ├── main.js",
+  "    ├── meta.yaml",
+  "    ├── skip.ignore.txt",
+  "    └── styles/",
+  "        ├── copy.less",
+  "        └── copy.scss",
+]
+`;
+
+exports[`Run config excludes > esm structure 1`] = `
+[
+  "esm/",
+  "├── ext-cjs.cjs",
+  "├── ext-cts.cjs",
+  "├── ext-jsx.js",
+  "├── ext-mjs.mjs",
+  "├── ext-mts.mjs",
+  "├── ext-tsx.js",
+  "├── ext-types.d.ts",
+  "├── logic.js",
+  "├── main.js",
+  "├── meta.yaml",
+  "└── styles/",
+  "    ├── copy.less",
+  "    └── copy.scss",
+]
+`;
+
+exports[`Run config multi-entry > esm structure 1`] = `
+[
+  "esm/",
+  "├── src/",
+  "│   ├── docs/",
+  "│   │   └── readme.md",
+  "│   ├── ext-cjs.cjs",
+  "│   ├── ext-cts.cjs",
+  "│   ├── ext-jsx.js",
+  "│   ├── ext-mjs.mjs",
+  "│   ├── ext-mts.mjs",
+  "│   ├── ext-tsx.js",
+  "│   ├── ext-types.d.ts",
+  "│   ├── logic.js",
+  "│   ├── main.js",
+  "│   ├── meta.yaml",
+  "│   ├── skip.ignore.txt",
+  "│   └── styles/",
+  "│       ├── copy.less",
+  "│       └── copy.scss",
+  "└── src-multi-right/",
+  "    ├── entry.js",
+  "    └── nested/",
+  "        └── label.js",
+]
+`;
+
+exports[`Run config pkg > esm structure 1`] = `
+[
+  "esm/",
+  "├── docs/",
+  "│   └── readme.md",
+  "├── ext-cjs.cjs",
+  "├── ext-cts.cjs",
+  "├── ext-jsx.js",
+  "├── ext-mjs.mjs",
+  "├── ext-mts.mjs",
+  "├── ext-tsx.js",
+  "├── ext-types.d.ts",
+  "├── logic.js",
+  "├── main.js",
+  "├── meta.yaml",
+  "├── skip.ignore.txt",
+  "└── styles/",
+  "    ├── copy.less",
+  "    └── copy.scss",
+]
+`;

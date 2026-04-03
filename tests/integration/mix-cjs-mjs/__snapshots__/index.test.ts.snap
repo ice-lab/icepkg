@@ -34,7 +34,9 @@ exports[`Run config swc-helpers > esm structure 1`] = `
 `;
 
 exports[`Run config swc-helpers > file content cjs/cjs.js 1`] = `
-"var _object_spread = require("@swc/helpers/_/_object_spread");
+"'use strict';
+
+var _object_spread = require("@swc/helpers/_/_object_spread");
 module.exports.add = function(a, b) {
     return a + b;
 };
@@ -45,7 +47,9 @@ module.exports.extend = function(a, b) {
 `;
 
 exports[`Run config swc-helpers > file content cjs/cts-file.cjs 1`] = `
-"var _object_spread = require("@swc/helpers/_/_object_spread");
+"'use strict';
+
+var _object_spread = require("@swc/helpers/_/_object_spread");
 module.exports.ctsFile = function(options) {
     return _object_spread._({
         type: 'ctsFile'
@@ -69,7 +73,8 @@ export declare const foo: Record<string, any>;
 `;
 
 exports[`Run config swc-helpers > file content cjs/entry-mts.js 1`] = `
-""use strict";
+"'use strict';
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -307,16 +312,18 @@ export declare const foo: Record<string, any>;
 `;
 
 exports[`Run config swc-helpers > file content esm/entry-mts.js 1`] = `
-"import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
-import { add, extend } from './cjs';
-import { ctsFile } from './cts-file.cjs';
-export { add, extend };
-export { ctsFile };
-export var foo = _object_spread({}, extend({
+"import { _ } from '@swc/helpers/_/_object_spread';
+import { extend } from './cjs';
+export { add, extend } from './cjs';
+export { ctsFile } from './cts-file.cjs';
+
+var foo = _({}, extend({
     a: 1
 }, {
     b: 2
 }));
+
+export { foo };
 "
 `;
 
@@ -354,7 +361,9 @@ exports[`Run config swc-helpers-rolldown > esm structure 1`] = `
 `;
 
 exports[`Run config swc-helpers-rolldown > file content cjs/cjs.js 1`] = `
-"var _object_spread = require("@swc/helpers/_/_object_spread");
+"'use strict';
+
+var _object_spread = require("@swc/helpers/_/_object_spread");
 module.exports.add = function(a, b) {
     return a + b;
 };
@@ -365,7 +374,9 @@ module.exports.extend = function(a, b) {
 `;
 
 exports[`Run config swc-helpers-rolldown > file content cjs/cts-file.cjs 1`] = `
-"var _object_spread = require("@swc/helpers/_/_object_spread");
+"'use strict';
+
+var _object_spread = require("@swc/helpers/_/_object_spread");
 module.exports.ctsFile = function(options) {
     return _object_spread._({
         type: 'ctsFile'
@@ -389,7 +400,8 @@ export declare const foo: Record<string, any>;
 `;
 
 exports[`Run config swc-helpers-rolldown > file content cjs/entry-mts.js 1`] = `
-""use strict";
+"'use strict';
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -575,15 +587,17 @@ export declare const foo: Record<string, any>;
 `;
 
 exports[`Run config swc-helpers-rolldown > file content esm/entry-mts.js 1`] = `
-"import { _ as _object_spread } from "@swc/helpers/_/_object_spread";
-import { add, extend } from './cjs';
-import { ctsFile } from './cts-file.cjs';
-export { add, extend };
-export { ctsFile };
-export var foo = _object_spread({}, extend({
+"import { _ } from '@swc/helpers/_/_object_spread';
+import { extend } from './cjs';
+export { add, extend } from './cjs';
+export { ctsFile } from './cts-file.cjs';
+
+var foo = _({}, extend({
     a: 1
 }, {
     b: 2
 }));
+
+export { foo };
 "
 `;
