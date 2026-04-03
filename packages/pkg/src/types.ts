@@ -460,17 +460,7 @@ export type BuildTask = _BuildTask<TaskConfig, TaskName | string>;
 export type Context = _Context<TaskConfig, ExtendsPluginAPI, UserConfig>;
 
 // Plugins
-export interface CustomFormatTaskOptions {
-  format: string;
-  type: 'bundle' | 'transform';
-}
-
-export type CustomFormatTaskCreator = (options: CustomFormatTaskOptions) => TaskConfig | null;
-
-export type CustomFormatTaskRegister = (format: string, creator: CustomFormatTaskCreator) => void;
-
 export interface ExtendsPluginAPI {
-  registerFormat: CustomFormatTaskRegister;
   pluginScope?: 'global' | 'pkg';
 }
 

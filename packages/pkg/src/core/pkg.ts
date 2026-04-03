@@ -326,7 +326,6 @@ export async function runPkgPlugins(ctx: Context, pkgs: PkgResolvedConfig[]) {
         },
         {
           ...(ctx['extendsPluginAPI'] || {}),
-          registerFormat: ignoreGlobalApi('registerFormat', ctx['extendsPluginAPI'].registerFormat),
           pluginScope: 'pkg',
         },
       );
