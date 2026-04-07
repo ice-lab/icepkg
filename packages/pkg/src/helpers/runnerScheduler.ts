@@ -37,20 +37,48 @@ export class RunnerScheduler<T> {
   async run(changedFiles?: WatchChangedFile[]): Promise<T[]> {
     const startTime = Date.now();
     this.reporter.onStart?.();
-    const parallelPromise = Promise.all(this.parallelRunners.map((runner) => runner.run(changedFiles)));
-    const concurrentPromise = concurrentPromiseAll(
-      this.concurrentRunners.map((runner) => () => runner.run(changedFiles)),
-      1,
-    );
+    try {
+      const parallelPromise = Promise.allSettled(this.parallelRunners.map((runner) => runner.run(changedFiles)));
+      const concurrentPromise = concurrentPromiseAll(
+        this.concurrentRunners.map((runner) => () => runner.run(changedFiles)),
+        1,
+      ).then(
+        (value) => ({ status: 'fulfilled' as const, value }),
+        (reason) => ({ status: 'rejected' as const, reason }),
+      );
 
-    const [parallelResults, concurrentResults] = await Promise.all([parallelPromise, concurrentPromise]);
-    const stopTime = Date.now();
-    this.reporter.onStop?.({
-      startTime,
-      stopTime,
-      cost: stopTime - startTime,
-      runners: this.runners,
-    });
-    return [...parallelResults, ...concurrentResults];
+      const [parallelSettled, concurrentSettled] = await Promise.all([parallelPromise, concurrentPromise]);
+
+      let firstError: unknown;
+      const parallelResults: T[] = [];
+      for (const item of parallelSettled) {
+        if (item.status === 'fulfilled') {
+          parallelResults.push(item.value);
+        } else if (firstError === undefined) {
+          firstError = item.reason;
+        }
+      }
+
+      let concurrentResults: T[] = [];
+      if (concurrentSettled.status === 'fulfilled') {
+        concurrentResults = concurrentSettled.value;
+      } else if (firstError === undefined) {
+        firstError = concurrentSettled.reason;
+      }
+
+      if (firstError !== undefined) {
+        throw firstError;
+      }
+
+      return [...parallelResults, ...concurrentResults];
+    } finally {
+      const stopTime = Date.now();
+      this.reporter.onStop?.({
+        startTime,
+        stopTime,
+        cost: stopTime - startTime,
+        runners: this.runners,
+      });
+    }
   }
 }

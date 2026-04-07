@@ -1,7 +1,7 @@
 import { consola } from 'consola';
 import { createBatchChangeHandler, createWatcher } from '../helpers/watcher.js';
 import type { OutputResult, Context, WatchChangedFile, BuildTask } from '../types.js';
-import { RunnerLinerTerminalReporter } from '../helpers/runnerReporter.js';
+import { createRunnerReporter } from '../helpers/runnerReporter.js';
 import { getTaskRunners } from '../helpers/getTaskRunners.js';
 import { RunnerScheduler } from '../helpers/runnerScheduler.js';
 import { createServer } from '../server/createServer.js';
@@ -45,7 +45,7 @@ export default async function start(context: Context) {
 
   const tasks = getTaskRunners(buildTasks, context, watcher);
 
-  const terminal = new RunnerLinerTerminalReporter();
+  const terminal = createRunnerReporter();
   const taskGroup = new RunnerScheduler(tasks, terminal);
 
   const outputResults: OutputResult[] = await taskGroup.run();

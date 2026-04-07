@@ -235,30 +235,31 @@ export function debouncePromise<T extends unknown[]>(
   };
 }
 
-// Build time 0-500ms Green
-//            500-3000 Yellow
-//            3000-    Red
-export const timeFrom = (start: number, subtract = 0): string => {
-  const time: number | string = performance.now() - start - subtract;
-  const timeString = `${time.toFixed(2)} ms`.padEnd(5, ' ');
-  if (time < 500) {
+// Build time <1s Green
+//            <5s Yellow
+//            >=5s Red
+function colorizeTimeCost(time: number, timeString: string) {
+  if (time < 1000) {
     return picocolors.green(timeString);
-  } else if (time < 3000) {
+  } else if (time < 5000) {
     return picocolors.yellow(timeString);
   } else {
     return picocolors.red(timeString);
   }
+}
+
+export const timeFrom = (start: number, subtract = 0): string => {
+  const time = performance.now() - start - subtract;
+  const timeString = `${(time / 1000).toFixed(2)}s`;
+  return colorizeTimeCost(time, timeString);
 };
 
-export function formatTimeCost(time: number) {
-  const timeString = `${time.toFixed(2)} ms`.padEnd(5, ' ');
-  if (time < 500) {
-    return picocolors.green(timeString);
-  } else if (time < 3000) {
-    return picocolors.yellow(timeString);
-  } else {
-    return picocolors.red(timeString);
+export function formatTimeCost(time: number, colored = true) {
+  const timeString = `${(time / 1000).toFixed(2)}s`;
+  if (!colored) {
+    return timeString;
   }
+  return colorizeTimeCost(time, timeString);
 }
 
 export const unique = <T>(arr: T[]): T[] => {
