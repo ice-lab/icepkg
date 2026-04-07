@@ -36,14 +36,17 @@ exports[`Run config external-helpers > file content esm/index.d.ts 1`] = `
 `;
 
 exports[`Run config external-helpers > file content esm/index.js 1`] = `
-"import { _ as _to_consumable_array } from "@swc/helpers/_/_to_consumable_array";
-export function spread(target, sources) {
+"import { _ } from '@swc/helpers/_/_to_consumable_array';
+
+function spread(target, sources) {
     var _Object;
     return (_Object = Object).assign.apply(_Object, [
         {},
         target
-    ].concat(_to_consumable_array(sources)));
+    ].concat(_(sources)));
 }
+
+export { spread };
 "
 `;
 
@@ -102,13 +105,15 @@ function _unsupported_iterable_to_array(o, minLen) {
     if (n === "Map" || n === "Set") return Array.from(n);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
 }
-export function spread(target, sources) {
+function spread(target, sources) {
     var _Object;
     return (_Object = Object).assign.apply(_Object, [
         {},
         target
     ].concat(_to_consumable_array(sources)));
 }
+
+export { spread };
 "
 `;
 
@@ -132,8 +137,10 @@ exports[`Run config pkg-inline-helpers > file content esm/index.d.ts 1`] = `
 `;
 
 exports[`Run config pkg-inline-helpers > file content esm/index.js 1`] = `
-"export function spread(target, sources) {
+"function spread(target, sources) {
     return Object.assign({}, target, ...sources);
 }
+
+export { spread };
 "
 `;

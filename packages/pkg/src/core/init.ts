@@ -1,5 +1,5 @@
 import { AliasBundleFormatString, BuildTask, BundleUserConfig, Context, DeclarationUserConfig } from '../types.js';
-import { formatEntry, getTransformDefaultOutputDir } from '../helpers/getTaskIO.js';
+import { formatEntry, getTransformDefaultOutputDir, getTransformEntryRoot } from '../helpers/getTaskIO.js';
 import { stringifyObject } from '../utils.js';
 import { merge, mergeWith, omit } from 'es-toolkit/object';
 import path, { resolve } from 'node:path';
@@ -124,6 +124,9 @@ export function initTask(buildTask: BuildTask, options: InitTaskOptions) {
     mergeDefaults(config, defaultBundleUserConfig);
   } else if (config.type === 'transform') {
     config.modes ??= [expectedMode];
+    config.excludes ??= userConfig.transform?.excludes;
+    config.entryRoot ??= pkg?.entryRoot ?? userConfig.transform?.entryRoot;
+    config.entryRoot = getTransformEntryRoot(rootDir, config.entry as Record<string, string>, config.entryRoot);
     config.outputDir ??= pkg?.outputDir ?? getTransformDefaultOutputDir(rootDir, taskName, config);
     config.outputDir = resolve(rootDir, config.outputDir!);
   } else if (config.type === 'declaration') {

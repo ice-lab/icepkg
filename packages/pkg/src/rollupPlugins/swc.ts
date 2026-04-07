@@ -1,4 +1,4 @@
-import { extname, basename, relative, sep } from 'path';
+import { extname, relative, sep } from 'path';
 import * as swc from '@swc/core';
 import { isTypescriptOnly } from '../helpers/suffix.js';
 import {
@@ -95,9 +95,6 @@ const swcPlugin = (
         absolutePath: id,
         ext: extname(id),
       };
-      // If file's name comes with .mjs、.mts、.cjs、.cts suffix
-      const destExtname = ['m', 'c'].includes(file.ext[1]) ? `.${file.ext[1]}js` : '.js';
-      const destFilename = basename(id).replace(RegExp(`${extname(id)}$`), destExtname);
       const sourceFileName = `.${sep}${relative(rootDir, id)}`;
 
       const { code, map } = await swc.transform(
@@ -115,9 +112,6 @@ const swcPlugin = (
       return {
         code: code,
         map: map,
-        meta: {
-          filename: destFilename,
-        },
       };
     },
     options(options) {

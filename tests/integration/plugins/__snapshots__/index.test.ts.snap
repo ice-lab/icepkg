@@ -30,10 +30,12 @@ export declare const info: any;
 `;
 
 exports[`Run config pkg-scope > file content es2017/index.js 1`] = `
-"export const foo = 1;
-export const info = {
+"const foo = 1;
+const info = {
     "name": "global"
 };
+
+export { foo, info };
 "
 `;
 
@@ -47,10 +49,12 @@ export declare const info: any;
 `;
 
 exports[`Run config pkg-scope > file content esm/index.js 1`] = `
-"export var foo = 1;
-export var info = {
+"var foo = 1;
+var info = {
     "name": "pkg-config"
 };
+
+export { foo, info };
 "
 `;
 
@@ -80,10 +84,12 @@ export declare const info: any;
 `;
 
 exports[`Run config plugin-scope > file content es2017/index.js 1`] = `
-"export const foo = 1;
-export const info = {
+"const foo = 1;
+const info = {
     "pluginScope": "global"
 };
+
+export { foo, info };
 "
 `;
 
@@ -97,9 +103,11 @@ export declare const info: any;
 `;
 
 exports[`Run config plugin-scope > file content esm/index.js 1`] = `
-"export var foo = 1;
-export var info = {
+"var foo = 1;
+var info = {
     "pluginScope": "pkg"
 };
+
+export { foo, info };
 "
 `;

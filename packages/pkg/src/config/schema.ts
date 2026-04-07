@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const transformSchema = z.object({
   formats: z.string().array().optional(),
   excludes: z.union([z.string(), z.array(z.string())]).optional(),
+  entryRoot: z.string().optional(),
 });
 
 export const bundleSchema = z.object({

@@ -1,17 +1,18 @@
 import { performance } from 'perf_hooks';
-import { isAbsolute, resolve, extname, dirname, relative, basename } from 'path';
+import { isAbsolute, resolve, extname, relative, dirname } from 'path';
 import fs from 'fs-extra';
 import semverGtr from 'semver/ranges/gtr.js';
 import { consola } from 'consola';
-import { loadEntryFiles, loadSource, INCLUDES_UTF8_FILE_TYPE } from '../helpers/load.js';
-import { createPluginContainer } from '../helpers/pluginContainer.js';
-import { checkDependencyExists, isObject, RequireKeys, timeFrom } from '../utils.js';
+import { createFilter } from '@rollup/pluginutils';
+import { loadEntryFiles } from '../helpers/load.js';
+import { checkDependencyExists, createScriptsFilter, timeFrom, toArray, unique } from '../utils.js';
 import type { OutputFile, OutputResult, TaskRunnerContext, TransformTaskConfig, WatchChangedFile } from '../types.js';
-import { SourceDescription, type Plugin, type RollupOptions, type SourceMapInput } from 'rollup';
-import { getTransformEntryDirs } from '../helpers/getTaskIO.js';
+import { rollup, type ExternalOption, type OutputOptions, type Plugin, type RollupOptions } from 'rollup';
+import { getTransformEntryDirs, getTransformEntryRoot } from '../helpers/getTaskIO.js';
 import { getRollupOptions } from '../engine/rollup/options.js';
+import { toOutputFiles } from '../engine/rollup/output.js';
+import { withFilteredRollupWarnings } from '../engine/rollup/warn.js';
 import { Runner } from '../helpers/runner.js';
-import { getExistedChangedFilesPath } from '../helpers/watcher.js';
 
 export function createTransformTask(taskRunnerContext: TaskRunnerContext) {
   return new TransformRunner(taskRunnerContext);
@@ -19,168 +20,160 @@ export function createTransformTask(taskRunnerContext: TaskRunnerContext) {
 
 class TransformRunner extends Runner<OutputResult> {
   private rollupOptions: RollupOptions;
+  private cache: {
+    allEntryDirs: string[];
+    entryRoot: string;
+    excludes: string | string[];
+    scriptFilter: ReturnType<typeof createScriptsFilter>;
+    isEntryFileIncluded: (filePath: string) => boolean;
+  };
 
   constructor(taskRunnerContext: TaskRunnerContext) {
     super(taskRunnerContext);
+    const { buildContext, buildTask } = taskRunnerContext;
+    const { rootDir } = buildContext;
+    const config = buildTask.config as TransformTaskConfig;
+    const entry = config.entry as Record<string, string>;
+    const allEntryDirs = getTransformEntryDirs(rootDir, entry);
+    const entryRoot = config.entryRoot ?? getTransformEntryRoot(rootDir, entry);
+    const excludes = config.excludes ?? [];
+
+    this.cache = {
+      allEntryDirs,
+      entryRoot,
+      excludes,
+      scriptFilter: createScriptsFilter(),
+      isEntryFileIncluded: createEntryFileIncludeMatcher(excludes),
+    };
     this.rollupOptions = getRollupOptions(taskRunnerContext.buildContext, taskRunnerContext);
+
     if (taskRunnerContext.watcher) {
-      const entryDirs = getTransformEntryDirs(
-        taskRunnerContext.buildContext.rootDir,
-        taskRunnerContext.buildTask.config.entry as Record<string, string>,
-      );
-      taskRunnerContext.watcher.add(entryDirs);
+      taskRunnerContext.watcher.add(this.cache.allEntryDirs);
     }
   }
 
   override doRun(files?: WatchChangedFile[]): Promise<OutputResult> {
-    return runTransform(this, this.rollupOptions, files ? getExistedChangedFilesPath(files) : undefined);
+    return runTransform(this, this.rollupOptions, files);
+  }
+
+  getCache() {
+    return this.cache;
   }
 }
 
-type TransformOutputFile = RequireKeys<OutputFile, 'absolutePath' | 'filePath' | 'ext'>;
+interface ResolvedCollectedFile extends CollectedFile {
+  dest: string;
+  filename: string;
+}
+
+interface CollectedFile {
+  filePath: string;
+  absolutePath: string;
+  ext: string;
+}
+
+function createEntryFileIncludeMatcher(excludes: string | string[]) {
+  const patterns = ['node_modules/**', ...toArray(excludes ?? [])];
+  const filter = createFilter(undefined, patterns);
+  return (filePath: string) => {
+    const normalizedFilePath = filePath.split('\\').join('/');
+    return filter(normalizedFilePath);
+  };
+}
 
 async function runTransform(
-  task: Runner,
+  task: TransformRunner,
   rollupOptions: RollupOptions,
-  updatedFiles?: string[],
+  changedFiles?: WatchChangedFile[],
 ): Promise<OutputResult> {
   const taskRunnerContext = task.context;
   const { logger } = task;
-  const { buildContext } = taskRunnerContext;
   let isDistContainingSWCHelpers = false;
   let isDistContainingJSXRuntime = false;
 
-  const { rootDir, userConfig } = buildContext;
   const { buildTask } = taskRunnerContext;
   const { name: taskName } = buildTask;
   const config = buildTask.config as TransformTaskConfig;
+  const { allEntryDirs, entryRoot, excludes, scriptFilter, isEntryFileIncluded } = task.getCache();
 
-  const entryDirs = getTransformEntryDirs(rootDir, config.entry as Record<string, string>);
+  const entryDirs = getTargetEntryDirs(allEntryDirs, changedFiles);
 
-  if (config.sourcemap === 'inline') {
-    task.logger.warn('The sourcemap "inline" for transform has not fully supported.');
+  if (changedFiles?.length) {
+    logger.debug(
+      `Rebuild transform task (${taskName}) for ${changedFiles.length} changed files and ${entryDirs.length} entry dirs.`,
+    );
   }
 
-  const files: TransformOutputFile[] = [];
-
-  if (updatedFiles) {
-    for (const updatedFile of updatedFiles) {
-      for (const entryDir of entryDirs) {
-        if (updatedFile.startsWith(entryDir)) {
-          files.push(getFileInfo(updatedFile, entryDir));
-          break;
-        }
-      }
-    }
-  } else {
-    for (const entryDir of entryDirs) {
-      files.push(
-        ...loadEntryFiles(entryDir, userConfig?.transform?.excludes || []).map<TransformOutputFile>((filePath) => ({
-          filePath,
-          absolutePath: resolve(entryDir, filePath),
-          ext: extname(filePath),
-        })),
-      );
-    }
-  }
-
-  const container = await createPluginContainer({
-    // asset plugins is Plugin[]
-    plugins: rollupOptions.plugins as Plugin[],
-    root: rootDir,
-    output: config.outputDir!,
-    logger,
-    build: {
-      rollupOptions,
-    },
+  const files = shouldFullRebuild(changedFiles)
+    ? collectTransformFiles(entryDirs, excludes, entryRoot)
+    : collectChangedTransformFiles(entryDirs, changedFiles ?? [], entryRoot, isEntryFileIncluded);
+  const resolvedFiles = files.map<ResolvedCollectedFile>((file) => {
+    const dest = resolve(config.outputDir!, file.filePath);
+    return {
+      ...file,
+      dest,
+      filename: relative(config.outputDir!, dest),
+    };
   });
 
-  // @ts-expect-error FIXME: config type.
-  await container.buildStart(config);
-  task.updateProgress(0, files.length);
+  await removeDeletedOutputs(config, entryDirs, changedFiles, entryRoot);
 
-  for (let i = 0; i < files.length; ++i) {
+  const rollupInputs = unique(files.filter((file) => scriptFilter(file.absolutePath)).map((file) => file.absolutePath));
+  const emittedFileSet = new Set<string>();
+  const outputFiles: OutputFile[] = [];
+
+  task.updateProgress(0, resolvedFiles.length);
+
+  if (rollupInputs.length) {
+    const buildStart = performance.now();
+    const bundle = await rollup({
+      ...withFilteredRollupWarnings(rollupOptions),
+      input: rollupInputs,
+      external: rollupOptions.external ?? defaultTransformExternal,
+      plugins: [transformRelativeExternalPlugin(), ...((rollupOptions.plugins as Plugin[]) ?? [])],
+    });
+
+    const output = await bundle.write(getTransformOutputOptions(config, entryRoot));
+    await bundle.close();
+
+    for (const item of output.output) {
+      emittedFileSet.add(resolve(config.outputDir!, item.fileName));
+    }
+
+    outputFiles.push(...toOutputFiles(output.output, config.outputDir!));
+
+    for (const item of output.output) {
+      if (item.type !== 'chunk') {
+        continue;
+      }
+
+      if (!isDistContainingSWCHelpers) {
+        isDistContainingSWCHelpers = item.code.includes('@swc/helpers');
+      }
+      if (!isDistContainingJSXRuntime) {
+        isDistContainingJSXRuntime = item.code.includes('@ice/jsx-runtime');
+      }
+    }
+
+    logger.debug(`Rollup preserveModules (${rollupInputs.length} inputs)`, timeFrom(buildStart));
+  }
+
+  for (const file of resolvedFiles) {
     const traverseFileStart = performance.now();
-    // those are required keys
-    const file = files[i] as RequireKeys<TransformOutputFile, 'dest'>;
-    const { absolutePath, filePath } = file;
-    const dest = resolve(config.outputDir!, filePath);
-    file.dest = dest;
-
-    await fs.ensureDir(dirname(dest));
-
-    const resolved = await container.resolveId(filePath, absolutePath);
-    const id = resolved?.id ?? absolutePath;
-
-    const loadResult = await container.load(id);
-
-    let code = '';
-    let map: SourceMapInput | undefined = undefined;
-
-    // User should use plugins to transform other types of files.
-    if (loadResult === null && !INCLUDES_UTF8_FILE_TYPE.test(file.ext)) {
-      await fs.copyFile(absolutePath, dest);
-
-      logger.debug(`Transform file ${absolutePath}`, timeFrom(traverseFileStart));
-      logger.debug(`Copy File ${absolutePath} to ${dest}`);
-
+    if (scriptFilter(file.absolutePath) || emittedFileSet.has(file.dest)) {
+      task.updateProgress(1);
       continue;
     }
 
-    if (loadResult === null) {
-      code = await loadSource(absolutePath);
-      // Need to generate .map ?
-    } else if (isObject<SourceDescription>(loadResult)) {
-      code = loadResult.code;
-      map = loadResult.map;
-    }
+    await fs.ensureDir(dirname(file.dest));
+    await fs.copyFile(file.absolutePath, file.dest);
+    emittedFileSet.add(file.dest);
+    outputFiles.push(file);
 
-    const transformResult = await container.transform(code, absolutePath);
-
-    if (transformResult === null || (isObject(transformResult) && transformResult.code == null)) {
-      // Do not need to transform the code.
-    } else if (isObject(transformResult)) {
-      const resultCode = transformResult.code as string | undefined;
-      if (typeof resultCode === 'string') {
-        file.code = code = resultCode;
-      }
-      const resultMap = transformResult.map as SourceMapInput | undefined;
-      if (resultMap != null) {
-        file.map = map = resultMap as SourceMapInput;
-      }
-
-      const destFilename = transformResult?.meta?.filename;
-
-      if (destFilename) {
-        file.dest = file.dest.replace(basename(file.dest), destFilename);
-      }
-    }
-
-    // IMPROVE: should disable sourcemap generation in the transform step for speed.
-    if (map && config.sourcemap !== false) {
-      const standardizedMap = typeof map === 'string' ? map : JSON.stringify(map);
-      const filenameForMap = transformResult?.meta?.filename
-        ? `${transformResult.meta.filename}.map`
-        : `${basename(file.dest)}.map`;
-      const destPath = file.dest;
-      await fs.writeFile(destPath, `${code}\n //# sourceMappingURL=${filenameForMap}`, 'utf-8');
-      await fs.writeFile(`${destPath}.map`, standardizedMap, 'utf-8');
-    } else {
-      await fs.writeFile(file.dest, code, 'utf-8');
-    }
-
-    if (!isDistContainingSWCHelpers) {
-      isDistContainingSWCHelpers = !!code && code.includes('@swc/helpers');
-    }
-    if (!isDistContainingJSXRuntime) {
-      isDistContainingJSXRuntime = !!code && code.includes('@ice/jsx-runtime');
-    }
-
-    logger.debug(`Transform file ${absolutePath}`, timeFrom(traverseFileStart));
+    logger.debug(`Copy file ${file.absolutePath} to ${file.dest}`);
+    logger.debug(`Transform file ${file.absolutePath}`, timeFrom(traverseFileStart));
     task.updateProgress(1);
   }
-
-  await container.close();
 
   if (isDistContainingSWCHelpers) {
     // take the semver in package.json for now, the actual used version may not be the same
@@ -201,16 +194,178 @@ async function runTransform(
   }
 
   return {
-    outputFiles: files.map((file) => ({ ...file, filename: relative(config.outputDir!, file.dest!) })),
+    outputFiles,
     taskName,
   };
 }
 
-function getFileInfo(filePath: string, rootDir: string): TransformOutputFile {
-  const relativeFilePath = isAbsolute(filePath) ? relative(rootDir, filePath) : filePath;
+function collectTransformFiles(entryDirs: string[], excludes: string | string[], entryRoot: string): CollectedFile[] {
+  const files: CollectedFile[] = [];
+  const visited = new Set<string>();
+
+  for (const entryDir of entryDirs) {
+    const matchedFiles = loadEntryFiles(entryDir, excludes);
+    for (const matchedFile of matchedFiles) {
+      const file = getFileInfo(resolve(entryDir, matchedFile), entryRoot);
+      if (visited.has(file.absolutePath)) {
+        continue;
+      }
+      visited.add(file.absolutePath);
+      files.push(file);
+    }
+  }
+
+  return files;
+}
+
+export function collectChangedTransformFiles(
+  entryDirs: string[],
+  changedFiles: WatchChangedFile[],
+  entryRoot: string,
+  isEntryFileIncluded: (filePath: string) => boolean,
+): CollectedFile[] {
+  const files: CollectedFile[] = [];
+  const visited = new Set<string>();
+
+  for (const changedFile of changedFiles) {
+    if (changedFile.event === 'delete') {
+      continue;
+    }
+
+    const absolutePath = resolve(changedFile.path);
+    const entryDir = entryDirs.find((candidate) => isPathInDir(absolutePath, candidate));
+
+    if (!entryDir) {
+      continue;
+    }
+
+    const entryRelativePath = relative(entryDir, absolutePath);
+    const file = getFileInfo(absolutePath, entryRoot);
+
+    if (!isEntryFileIncluded(entryRelativePath) || visited.has(file.absolutePath)) {
+      continue;
+    }
+
+    visited.add(file.absolutePath);
+    files.push(file);
+  }
+
+  return files;
+}
+
+function shouldFullRebuild(changedFiles?: WatchChangedFile[]) {
+  return !changedFiles?.length || changedFiles.some((file) => file.event === 'delete');
+}
+
+export function getTargetEntryDirs(entryDirs: string[], changedFiles?: WatchChangedFile[]) {
+  if (!changedFiles?.length) {
+    return entryDirs;
+  }
+
+  const changedPaths = changedFiles.map((file) => resolve(file.path));
+  const targetEntryDirs = entryDirs.filter((entryDir) =>
+    changedPaths.some((changedPath) => isPathInDir(changedPath, entryDir)),
+  );
+
+  return targetEntryDirs.length ? targetEntryDirs : entryDirs;
+}
+
+async function removeDeletedOutputs(
+  config: TransformTaskConfig,
+  entryDirs: string[],
+  changedFiles?: WatchChangedFile[],
+  entryRoot?: string,
+) {
+  if (!changedFiles?.length) {
+    return;
+  }
+
+  const deletedFiles = changedFiles.filter((file) => file.event === 'delete');
+
+  await Promise.all(
+    deletedFiles.map(async (file) => {
+      const absolutePath = resolve(file.path);
+      const entryDir = entryDirs.find((candidate) => isPathInDir(absolutePath, candidate));
+
+      if (!entryDir) {
+        return;
+      }
+
+      const fileInfo = getFileInfo(absolutePath, entryRoot ?? entryDir);
+      const directDest = resolve(config.outputDir!, fileInfo.filePath);
+      const emittedDest = resolve(config.outputDir!, getEmittedFileName(fileInfo.filePath));
+
+      await fs.remove(directDest);
+      if (emittedDest !== directDest) {
+        await fs.remove(emittedDest);
+      }
+
+      if (config.sourcemap !== false) {
+        await fs.remove(`${emittedDest}.map`);
+      }
+    }),
+  );
+}
+
+function isPathInDir(filePath: string, dirPath: string) {
+  const normalizedFilePath = resolve(filePath);
+  const normalizedDirPath = resolve(dirPath);
+  return normalizedFilePath === normalizedDirPath || normalizedFilePath.startsWith(`${normalizedDirPath}/`);
+}
+
+function getTransformOutputOptions(config: TransformTaskConfig, entryRoot: string): OutputOptions {
+  return {
+    dir: config.outputDir,
+    format: config.format.module === 'cjs' ? 'cjs' : 'es',
+    sourcemap: config.sourcemap,
+    preserveModules: true,
+    preserveModulesRoot: entryRoot,
+    exports: 'auto',
+    entryFileNames: (chunkInfo) => getChunkFileName(chunkInfo.facadeModuleId, entryRoot),
+    chunkFileNames: (chunkInfo) => getChunkFileName(chunkInfo.facadeModuleId, entryRoot),
+  };
+}
+
+function getChunkFileName(facadeModuleId: string | null, entryDir: string) {
+  if (!facadeModuleId) {
+    return '[name].js';
+  }
+
+  const relativePath = relative(entryDir, facadeModuleId);
+  return getEmittedFileName(relativePath);
+}
+
+function getEmittedFileName(relativePath: string) {
+  const ext = extname(relativePath);
+  const destExt = ext === '.cts' || ext === '.cjs' ? '.cjs' : ext === '.mts' || ext === '.mjs' ? '.mjs' : '.js';
+  return relativePath.replace(new RegExp(`${ext}$`), destExt);
+}
+
+const defaultTransformExternal: ExternalOption = (id) => {
+  return !id.startsWith('.') && !isAbsolute(id) && !id.startsWith('\0');
+};
+
+function transformRelativeExternalPlugin(): Plugin {
+  return {
+    name: 'ice-pkg:transform-relative-external',
+    resolveId(source, importer) {
+      if (importer && source.startsWith('.')) {
+        return {
+          id: source,
+          external: true,
+        };
+      }
+      return null;
+    },
+  };
+}
+
+function getFileInfo(filePath: string, rootDir: string): CollectedFile {
+  const absolutePath = isAbsolute(filePath) ? filePath : resolve(rootDir, filePath);
+  const relativeFilePath = relative(rootDir, absolutePath);
   return {
     filePath: relativeFilePath,
-    absolutePath: resolve(rootDir, relativeFilePath),
+    absolutePath,
     ext: extname(relativeFilePath),
   };
 }

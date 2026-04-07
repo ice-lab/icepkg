@@ -1,14 +1,7 @@
-import * as path from 'path';
 import * as rollup from 'rollup';
 import { toArray } from '../../utils.js';
-import type {
-  OutputAsset as RollupOutputAsset,
-  OutputChunk as RollupOutputChunk,
-  OutputOptions,
-  RollupBuild,
-  RollupOptions,
-  RollupOutput,
-} from 'rollup';
+import { toOutputFiles } from './output.js';
+import type { OutputOptions, RollupBuild, RollupOptions, RollupOutput } from 'rollup';
 import type { OutputFile, OutputResult, TaskRunnerContext } from '../../types.js';
 
 export async function build(rollupOptions: RollupOptions, taskRunnerContext: TaskRunnerContext): Promise<OutputResult> {
@@ -42,14 +35,7 @@ export async function writeFiles(
   for (let o = 0; o < rollupOutputOptions.length; ++o) {
     const writeResult = await write(rollupOutputOptions[o]);
     const distDir = rollupOutputOptions[o].dir ?? '';
-    writeResult.output.forEach((chunk: RollupOutputChunk | RollupOutputAsset) => {
-      outputFiles.push({
-        absolutePath: 'facadeModuleId' in chunk ? chunk.facadeModuleId! : undefined,
-        dest: path.join(distDir ?? '', chunk.fileName ?? ''),
-        filename: chunk.fileName,
-        code: chunk.type === 'chunk' ? chunk.code : chunk.source,
-      });
-    });
+    outputFiles.push(...toOutputFiles(writeResult.output, distDir));
     outputs.push(writeResult.output);
   }
 
