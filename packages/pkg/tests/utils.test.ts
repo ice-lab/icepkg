@@ -1,5 +1,7 @@
-import { describe, it, expect, vi, Mock } from 'vitest';
-import { concurrentPromiseAll, delay } from '../src/utils';
+import { performance } from 'node:perf_hooks';
+import picocolors from 'picocolors';
+import { afterEach, describe, it, expect, vi, Mock } from 'vitest';
+import { concurrentPromiseAll, delay, formatTimeCost, timeFrom } from '../src/utils';
 
 const MOCK_TASK_TIME = 20;
 
@@ -23,6 +25,16 @@ function buildTasks<T extends unknown[]>(values: T) {
 function taskStatus(tasks: Mock[]) {
   return tasks.map((task) => task.mock.calls.length);
 }
+
+function mockColor(name: 'green' | 'yellow' | 'red') {
+  return vi
+    .spyOn(picocolors, name)
+    .mockImplementation((input: string | number | null | undefined) => `${name}(${String(input)})`);
+}
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('concurrentPromiseAll', () => {
   it('should execute all tasks and return the expected result', async () => {
@@ -51,12 +63,46 @@ describe('concurrentPromiseAll', () => {
       await concurrentPromiseAll(tasks);
       expect(true).toBeFalsy(); // 应该永远不会到达这里
     } catch (error) {
-      expect(error.message).toBe('Task failed');
+      expect(error).toBeInstanceOf(Error);
+      expect((error as Error).message).toBe('Task failed');
     }
   });
 
   it('should return an empty array when given an empty task list', async () => {
     const result = await concurrentPromiseAll([]);
     expect(result).toEqual([]);
+  });
+});
+
+describe('time formatting', () => {
+  it('should format plain text time cost in seconds without colors', () => {
+    expect(formatTimeCost(120, false)).toBe('0.12s');
+    expect(formatTimeCost(4567, false)).toBe('4.57s');
+  });
+
+  it('should colorize formatTimeCost based on second thresholds', () => {
+    mockColor('green');
+    mockColor('yellow');
+    mockColor('red');
+
+    expect(formatTimeCost(120)).toBe('green(0.12s)');
+    expect(formatTimeCost(4200)).toBe('yellow(4.20s)');
+    expect(formatTimeCost(5000)).toBe('red(5.00s)');
+  });
+
+  it('should format timeFrom in seconds using the same thresholds', () => {
+    mockColor('green');
+    mockColor('yellow');
+    mockColor('red');
+
+    const now = vi.spyOn(performance, 'now');
+    now.mockReturnValue(1120);
+    expect(timeFrom(1000)).toBe('green(0.12s)');
+
+    now.mockReturnValue(5200);
+    expect(timeFrom(1000)).toBe('yellow(4.20s)');
+
+    now.mockReturnValue(6200);
+    expect(timeFrom(1000)).toBe('red(5.20s)');
   });
 });

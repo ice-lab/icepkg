@@ -20,6 +20,10 @@ export interface RunnerReporter {
   onStop?: (options: RunnerReporterStopOptions) => void;
 }
 
+export interface RunnerReporterOptions {
+  stream?: NodeJS.WriteStream;
+}
+
 export class RunnerLinerTerminalReporter implements RunnerReporter {
   private stream: NodeJS.WriteStream;
   private timer: any = null;
@@ -28,11 +32,7 @@ export class RunnerLinerTerminalReporter implements RunnerReporter {
   private isRendering = false;
   private runningRunners: Runner[] = [];
 
-  constructor(
-    options: {
-      stream?: NodeJS.WriteStream;
-    } = {},
-  ) {
+  constructor(options: RunnerReporterOptions = {}) {
     this.stream = options.stream ?? process.stderr;
   }
 
@@ -43,25 +43,25 @@ export class RunnerLinerTerminalReporter implements RunnerReporter {
   onRunnerEnd(runner: Runner) {
     this.runningRunners.splice(this.runningRunners.indexOf(runner), 1);
     const { status, context } = runner;
-    if (status === RunnerStatus.Finished) {
-      // TODO: for error
-      const items: string[] = [
-        runner.isError ? chalk.red(figures.cross) : chalk.green(figures.tick),
-        chalk.cyan(runner.name),
-        formatTimeCost(runner.getMetric(TASK_MARK).cost),
-      ];
-
-      if (context.mode === 'development') {
-        items.push(chalk.red('dev'));
-      }
-
-      // remove loading
-      this.clear();
-      // eslint-disable-next-line no-console
-      console.log(`  ${items.join(' ')}`);
-      // resume loading
-      this.render();
+    if (status !== RunnerStatus.Finished && status !== RunnerStatus.Error) {
+      return;
     }
+
+    const items: string[] = [
+      runner.isError ? chalk.red(figures.cross) : chalk.green(figures.tick),
+      chalk.cyan(runner.name),
+      formatTimeCost(runner.getMetric(TASK_MARK).cost),
+    ];
+
+    if (context.mode === 'development') {
+      items.push(chalk.red('dev'));
+    }
+
+    // remove loading
+    this.clear();
+    this.stream.write(`  ${items.join(' ')}\n`);
+    // resume loading
+    this.render();
   }
 
   onStart() {
@@ -77,9 +77,8 @@ export class RunnerLinerTerminalReporter implements RunnerReporter {
     // 停下来之后进行最后一次更新
     this.clear();
     this.isRendering = false;
-    // eslint-disable-next-line no-console
-    console.log(
-      `  ${chalk.blue(figures.info)} Done in ${formatTimeCost(options.cost)} for ${options.runners.length} tasks`,
+    this.stream.write(
+      `  ${chalk.blue(figures.info)} Done in ${formatTimeCost(options.cost)} for ${options.runners.length} tasks\n`,
     );
   }
 
@@ -119,4 +118,49 @@ export class RunnerLinerTerminalReporter implements RunnerReporter {
     }
     return `  ${chalk.dim(this.spinner.frames[this.frame])} ${chalk.dim('Running...')}`;
   }
+}
+
+export class RunnerPlainTextReporter implements RunnerReporter {
+  private stream: NodeJS.WriteStream;
+
+  constructor(options: RunnerReporterOptions = {}) {
+    this.stream = options.stream ?? process.stderr;
+  }
+
+  onRunnerEnd(runner: Runner) {
+    const { status, context } = runner;
+    if (status !== RunnerStatus.Finished && status !== RunnerStatus.Error) {
+      return;
+    }
+
+    const items: string[] = [
+      runner.isError ? figures.cross : figures.tick,
+      runner.name,
+      formatTimeCost(runner.getMetric(TASK_MARK).cost, false),
+    ];
+
+    if (context.mode === 'development') {
+      items.push('dev');
+    }
+
+    this.stream.write(`  ${items.join(' ')}\n`);
+  }
+
+  onStop(options: RunnerReporterStopOptions) {
+    this.stream.write(
+      `  ${figures.info} Done in ${formatTimeCost(options.cost, false)} for ${options.runners.length} tasks\n`,
+    );
+  }
+}
+
+export function isTerminalEnvironment(stream: NodeJS.WriteStream = process.stderr) {
+  return Boolean(stream.isTTY) && !process.env.CI;
+}
+
+export function createRunnerReporter(options: RunnerReporterOptions = {}): RunnerReporter {
+  const stream = options.stream ?? process.stderr;
+  if (isTerminalEnvironment(stream)) {
+    return new RunnerLinerTerminalReporter({ stream });
+  }
+  return new RunnerPlainTextReporter({ stream });
 }

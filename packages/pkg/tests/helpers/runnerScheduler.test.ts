@@ -18,6 +18,12 @@ class MockRunner extends Runner {
   }
 
   doRun(files?: WatchChangedFile[]): Promise<any> {
+    if (typeof this._value === 'function') {
+      return this._value(files);
+    }
+    if (this._value instanceof Error) {
+      return Promise.reject(this._value);
+    }
     return Promise.resolve(this._value);
   }
 }
@@ -46,4 +52,37 @@ it('should initialize with correct distribution of runners', async () => {
   expect(reporter.onRunnerEnd).toHaveBeenCalledTimes(2);
   expect(reporter.onStop).toHaveBeenCalledTimes(1);
   expect(reporter.onStart).toHaveBeenCalledTimes(1);
+});
+
+it('should call reporter cleanup when runner fails', async () => {
+  const failedRunner = new MockRunner(mockContext, false, new Error('boom'));
+  const reporter = new MockReporter();
+
+  const scheduler = new RunnerScheduler([failedRunner], reporter);
+
+  await expect(scheduler.run()).rejects.toThrow('boom');
+  expect(reporter.onRunnerStart).toHaveBeenCalledTimes(1);
+  expect(reporter.onRunnerEnd).toHaveBeenCalledTimes(1);
+  expect(reporter.onStop).toHaveBeenCalledTimes(1);
+  expect(reporter.onStart).toHaveBeenCalledTimes(1);
+});
+
+it('should call onStop after all runners settled when one fails early', async () => {
+  const failedRunner = new MockRunner(mockContext, true, new Error('boom'));
+  const slowRunner = new MockRunner(
+    mockContext,
+    true,
+    () => new Promise<number>((resolve) => setTimeout(() => resolve(1), 20)),
+  );
+  const reporter = new MockReporter();
+
+  const scheduler = new RunnerScheduler([failedRunner, slowRunner], reporter);
+
+  await expect(scheduler.run()).rejects.toThrow('boom');
+  expect(reporter.onRunnerEnd).toHaveBeenCalledTimes(2);
+  expect(reporter.onStop).toHaveBeenCalledTimes(1);
+
+  const stopOrder = reporter.onStop.mock.invocationCallOrder[0];
+  const endOrders = reporter.onRunnerEnd.mock.invocationCallOrder;
+  expect(stopOrder).toBeGreaterThan(Math.max(...endOrders));
 });

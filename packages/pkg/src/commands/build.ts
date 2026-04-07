@@ -1,6 +1,6 @@
 import fse from 'fs-extra';
 import type { BuildTask, Context, OutputResult } from '../types.js';
-import { RunnerLinerTerminalReporter } from '../helpers/runnerReporter.js';
+import { createRunnerReporter } from '../helpers/runnerReporter.js';
 import { getTaskRunners } from '../helpers/getTaskRunners.js';
 import { RunnerScheduler } from '../helpers/runnerScheduler.js';
 
@@ -31,7 +31,7 @@ export default async function build(context: Context) {
   const tasks = getTaskRunners(buildTasks, context);
 
   try {
-    const terminal = new RunnerLinerTerminalReporter();
+    const terminal = createRunnerReporter();
     const taskGroup = new RunnerScheduler(tasks, terminal);
 
     const results = taskGroup.run();
