@@ -78,7 +78,7 @@ export default defineConfig({
 ### define
 
 - 类型：`Record<string, string | boolean | number | object | null>`
-- 默认值：`{ __DEV__: 'true' | 'false', 'process.env.NODE_ENV': '"development"' | '"production"' }`
+- 默认值：`{ __DEV__: 'true' | 'false', 'process.env.NODE_ENV': '"development"' | '"production"', 'import.meta.vitest': undefined }`
 
 定义编译时环境变量，会在编译时被替换。注意：属性值会经过一次 `JSON.stringify()` 转换。
 
@@ -118,6 +118,8 @@ if (__DEV__) {
 :::info 发生了什么？
 实际上，在编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV !== 'production'`。
 :::
+
+另外，ICE PKG 默认会将 `import.meta.vitest` 替换为 `undefined`。这意味着在源码里使用 Vitest 的 [in-source test](https://vitest.dev/guide/in-source.html) 写法时，非测试构建默认不会把对应测试逻辑保留到产物中。
 
 ### sourceMaps
 
@@ -308,15 +310,15 @@ export default defineConfig({
 #### excludes
 
 - 类型：`string | string[]`
-- 默认值：`undefined`
+- 默认值：`['**/__tests__/**']`
 
-排除无需编译的文件。比如，我们不想编译 `src` 下的所有测试文件，其中测试文件包含在 `__tests__` 目录下，或以 `*.test.[j|t]s` 结尾。
+排除无需编译的文件。默认会排除 `__tests__` 目录下文件。比如，我们还不想编译 `src` 下以 `*.test.[j|t]s` 结尾的测试文件。
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  transfrom: {
+  transform: {
     excludes: ['**/__tests__/**', '*.test.[j|t]s'],
   },
 });

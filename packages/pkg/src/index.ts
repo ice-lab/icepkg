@@ -1,5 +1,3 @@
-export * from './test/index.js';
-
 export * from './types.js';
 
 export { getBuiltInPlugins } from './utils.js';

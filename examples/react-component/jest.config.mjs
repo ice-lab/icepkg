@@ -1,6 +1,4 @@
-import pkgService, { defineJestConfig } from '@ice/pkg';
-
-export default defineJestConfig(pkgService, {
+export default {
   preset: 'ts-jest',
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
   testEnvironment: 'jest-environment-jsdom',
@@ -8,4 +6,4 @@ export default defineJestConfig(pkgService, {
     '\\.module\\.(css|scss|less)$': 'identity-obj-proxy',
     '\\.(css|less|scss)$': '<rootDir>/__mocks__/styleMock.js',
   },
-});
+};

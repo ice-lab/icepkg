@@ -1,6 +1,6 @@
-import pkgService, { defineVitestConfig } from '@ice/pkg';
+import { defineConfig } from 'vitest/config';
 
-export default defineVitestConfig(pkgService, () => ({
+export default defineConfig(() => ({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest-setup.ts'],
