@@ -78,7 +78,7 @@ export default defineConfig({
 ### define
 
 - 类型：`Record<string, string | boolean | number | object | null>`
-- 默认值：`{ __DEV__: 'true' | 'false', 'process.env.NODE_ENV': '"development"' | '"production"', 'import.meta.vitest': undefined }`
+- 默认值：`{ __DEV__: 'true' | 'false', 'process.env.NODE_ENV': '"development"' | '"production"', 'import.meta.vitest': 'undefined' }`
 
 定义编译时环境变量，会在编译时被替换。注意：属性值会经过一次 `JSON.stringify()` 转换。
 
