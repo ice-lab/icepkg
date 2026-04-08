@@ -36,7 +36,7 @@ class TransformRunner extends Runner<OutputResult> {
     const entry = config.entry as Record<string, string>;
     const allEntryDirs = getTransformEntryDirs(rootDir, entry);
     const entryRoot = config.entryRoot ?? getTransformEntryRoot(rootDir, entry);
-    const excludes = config.excludes ?? [];
+    const excludes = config.excludes ?? ['**/__tests__/**'];
 
     this.cache = {
       allEntryDirs,

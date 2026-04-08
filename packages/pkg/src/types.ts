@@ -73,6 +73,7 @@ export interface TransformUserConfig {
    * Exclude all files matching any of those conditions.
    * - `string` to match any paths by `minimatch` glob patterns
    * - An `array` to match at least one of the conditions
+   * Default: files in __tests__ directories are excluded by default.
    * @see https://github.com/isaacs/minimatch
    */
   excludes?: string | string[];
