@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.0-alpha.5
+
+### Major Changes
+
+- fb0a276: refactor: use rollup to compile transform mode
+- 2c04129: feat: remove vitest/jest define method and support vitest in-source test
+
+### Minor Changes
+
+- 6224edc: feat: support plain text reporter and use seconds
+- 12a99de: feat: support inline helpers
+- f6caa58: feat: registerTask support order
+- 1788b61: feat: support auto restart when config file changed
+
 ## 2.0.0-alpha.4
 
 ### Minor Changes
