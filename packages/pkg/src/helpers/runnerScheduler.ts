@@ -81,4 +81,10 @@ export class RunnerScheduler<T> {
       });
     }
   }
+
+  async close(): Promise<void> {
+    for (const runner of this.runners) {
+      await runner.close();
+    }
+  }
 }

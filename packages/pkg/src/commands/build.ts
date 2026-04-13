@@ -1,11 +1,25 @@
 import fse from 'fs-extra';
-import type { BuildTask, Context, OutputResult } from '../types.js';
+import type { BuildTask, Context, OutputResult, BuildCloseReason } from '../types.js';
 import { createRunnerReporter } from '../helpers/runnerReporter.js';
 import { getTaskRunners } from '../helpers/getTaskRunners.js';
 import { RunnerScheduler } from '../helpers/runnerScheduler.js';
 
 export default async function build(context: Context) {
   const { applyHook, commandArgs } = context;
+  let closePromise: Promise<void> | null = null;
+  let error: unknown;
+  let outputResults: OutputResult[] | undefined;
+
+  async function dispose(reason: BuildCloseReason) {
+    if (closePromise) {
+      return closePromise;
+    }
+    closePromise = (async () => {
+      await applyHook('before.build.close', reason);
+      await taskGroup?.close();
+    })();
+    return closePromise;
+  }
 
   const buildTasks = context.getTaskConfig() as BuildTask[];
   const taskConfigs = buildTasks.map(({ config }) => config);
@@ -24,26 +38,29 @@ export default async function build(context: Context) {
     config: taskConfigs,
   });
 
-  // Empty outputDir before run the task.
   const outputDirs = taskConfigs.map((config) => config.outputDir!).filter(Boolean);
   outputDirs.forEach((outputDir) => fse.emptyDirSync(outputDir));
 
   const tasks = getTaskRunners(buildTasks, context);
+  const terminal = createRunnerReporter();
+  const taskGroup = new RunnerScheduler(tasks, terminal);
 
   try {
-    const terminal = createRunnerReporter();
-    const taskGroup = new RunnerScheduler(tasks, terminal);
-
     const results = taskGroup.run();
-    const outputResults: OutputResult[] = await results;
+    outputResults = await results;
 
     await applyHook('after.build.compile', outputResults);
   } catch (err) {
+    error = err;
     await applyHook('error', {
       errCode: 'COMPILE_ERROR',
       err,
     });
-
-    throw err;
   }
+
+  return {
+    dispose,
+    error,
+    outputResults,
+  };
 }

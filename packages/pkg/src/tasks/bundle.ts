@@ -198,6 +198,13 @@ export class BundleRunner extends Runner<OutputResult> {
     }
     return await build(this.rolldownOptions!, this.context);
   }
+
+  override async close(): Promise<void> {
+    await (this.watcher as { close?: () => Promise<void> } | null)?.close?.();
+    this.watcher = null;
+    this.result = null;
+    this.executors.length = 0;
+  }
 }
 
 // Fork from https://github.com/rollup/rollup/blob/v2.79.1/src/watch/WatchEmitter.ts

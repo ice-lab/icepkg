@@ -1,6 +1,13 @@
 import { consola } from 'consola';
 import { createBatchChangeHandler, createWatcher } from '../helpers/watcher.js';
-import type { OutputResult, Context, WatchChangedFile, BuildTask } from '../types.js';
+import type {
+  OutputResult,
+  Context,
+  WatchChangedFile,
+  BuildTask,
+  StartCommandHandle,
+  StartCloseReason,
+} from '../types.js';
 import { createRunnerReporter } from '../helpers/runnerReporter.js';
 import { getTaskRunners } from '../helpers/getTaskRunners.js';
 import { RunnerScheduler } from '../helpers/runnerScheduler.js';
@@ -36,6 +43,41 @@ export default async function start(context: Context) {
       })
     : null;
   const batchHandler = createBatchChangeHandler(runChangedCompile);
+  const tasks = getTaskRunners(buildTasks, context, watcher);
+  const terminal = createRunnerReporter();
+  const taskGroup = new RunnerScheduler(tasks, terminal);
+  let runningCompile: Promise<unknown> | null = null;
+  let disposed = false;
+  let disposePromise: Promise<void> | null = null;
+
+  function trackCompile<T>(compileTask: Promise<T>): Promise<T> {
+    const tracked = compileTask.finally(() => {
+      runningCompile = null;
+    });
+    runningCompile = tracked.catch(() => {});
+    return tracked;
+  }
+
+  async function dispose(reason: StartCloseReason) {
+    if (disposePromise) {
+      return disposePromise;
+    }
+
+    disposePromise = (async () => {
+      if (disposed) {
+        return;
+      }
+      disposed = true;
+      await runningCompile;
+      await applyHook('before.start.close', reason);
+      await taskGroup?.close();
+      await watcher.close();
+      await devServer?.close();
+    })();
+
+    return disposePromise;
+  }
+
   batchHandler.beginBlock();
 
   watcher.on('add', (id) => batchHandler.onChange(id, 'create'));
@@ -43,12 +85,7 @@ export default async function start(context: Context) {
   watcher.on('unlink', (id) => batchHandler.onChange(id, 'delete'));
   watcher.on('error', (error) => consola.error(error));
 
-  const tasks = getTaskRunners(buildTasks, context, watcher);
-
-  const terminal = createRunnerReporter();
-  const taskGroup = new RunnerScheduler(tasks, terminal);
-
-  const outputResults: OutputResult[] = await taskGroup.run();
+  const outputResults: OutputResult[] = await trackCompile(taskGroup.run());
 
   await applyHook('after.start.compile', outputResults);
 
@@ -57,8 +94,12 @@ export default async function start(context: Context) {
   batchHandler.endBlock();
 
   async function runChangedCompile(changedFiles: WatchChangedFile[]) {
+    if (disposed) {
+      return;
+    }
+
     try {
-      const newOutputResults: OutputResult[] = await taskGroup.run(changedFiles);
+      const newOutputResults: OutputResult[] = await trackCompile(taskGroup.run(changedFiles));
 
       await applyHook('after.start.compile', newOutputResults);
     } catch (error) {
@@ -66,5 +107,10 @@ export default async function start(context: Context) {
     }
   }
 
-  return watcher;
+  const runtimeHandle: StartCommandHandle = {
+    watcher,
+    dispose,
+  };
+
+  return runtimeHandle;
 }

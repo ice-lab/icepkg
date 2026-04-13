@@ -1,5 +1,7 @@
+import path from 'node:path';
 import { CommandArgs, Context as BuildScriptContext, PluginList } from 'build-scripts';
 import type { ICommandFn } from 'build-scripts/lib/Service.js';
+import { globby } from 'globby';
 import { Context, ExtendsPluginAPI, TaskConfig, UserConfig } from '../types.js';
 import taskRegisterPlugin from '../plugins/component.js';
 import { userConfigSchema } from '../config/schema.js';
@@ -18,7 +20,31 @@ export interface CreatePkgOptions {
 
 export interface PkgCore {
   ctx: Context;
-  run: () => Promise<void>;
+  run: () => unknown;
+  resolvedConfigFile: string | null;
+}
+
+const BUILD_CONFIG_GLOB = 'build.config.{js,ts,mjs,mts,cjs,cts}';
+
+async function resolveConfigFile(options: CreatePkgOptions): Promise<string | null> {
+  const toAbsolutePath = (filePath: string) =>
+    path.isAbsolute(filePath) ? filePath : path.resolve(options.rootDir, filePath);
+
+  if (options.userConfigFile) {
+    return toAbsolutePath(options.userConfigFile);
+  }
+
+  if (typeof options.commandArgs.config === 'string') {
+    return toAbsolutePath(options.commandArgs.config);
+  }
+
+  const configFiles = await globby(BUILD_CONFIG_GLOB, {
+    cwd: options.rootDir,
+    onlyFiles: true,
+    absolute: true,
+  });
+
+  return configFiles[0] ?? null;
 }
 
 /**
@@ -39,6 +65,8 @@ export interface PkgCore {
  * 为了实现以上流程，需要魔改 build-scripts 的部分逻辑，所以会尝试调用其 private 方法
  */
 export async function createCore(options: CreatePkgOptions) {
+  const resolvedConfigFile = await resolveConfigFile(options);
+
   const extendsPluginAPI: ExtendsPluginAPI = {
     pluginScope: 'global',
   };
@@ -46,7 +74,7 @@ export async function createCore(options: CreatePkgOptions) {
     command: options.command,
     rootDir: options.rootDir,
     commandArgs: options.commandArgs,
-    configFile: options.userConfigFile,
+    configFile: resolvedConfigFile ?? undefined,
     plugins: [taskRegisterPlugin] as PluginList,
     extendsPluginAPI,
   }) as Context;
@@ -62,8 +90,9 @@ export async function createCore(options: CreatePkgOptions) {
 
   const core: PkgCore = {
     ctx,
-    async run() {
-      await commandHandler(ctx);
+    resolvedConfigFile,
+    run() {
+      return commandHandler(ctx);
     },
   };
 

@@ -22,7 +22,7 @@ export function createBatchChangeHandler(changeCallback: WatchCallback) {
   let nextChangedFiles: WatchChangedFile[] = [];
   let runningTask: Promise<void> | null = null;
   let enableBatch = false;
-  let timer: any = 0;
+  let timer: NodeJS.Timeout | null = null;
 
   async function onChange(id: string, event: WatchEvent) {
     nextChangedFiles.push({ path: id, event });
