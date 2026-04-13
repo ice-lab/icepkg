@@ -546,6 +546,21 @@ export interface WatchChangedFile {
   event: WatchEvent;
 }
 
+export type StartCloseReason = 'config-change' | 'signal-exit';
+
+export type BuildCloseReason = 'build-finished' | 'build-error';
+
+export interface BuildCommandHandle {
+  dispose: (reason: BuildCloseReason) => Promise<void>;
+  error?: unknown;
+  outputResults?: OutputResult[];
+}
+
+export interface StartCommandHandle {
+  watcher: FSWatcher;
+  dispose: (reason: StartCloseReason) => Promise<void>;
+}
+
 export interface TaskRunnerContext {
   mode: NodeEnvMode;
   buildTask: BuildTask;

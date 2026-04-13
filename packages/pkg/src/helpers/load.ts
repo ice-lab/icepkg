@@ -1,4 +1,4 @@
-import * as glob from 'globby';
+import { globbySync } from 'globby';
 import { join } from 'path';
 import * as fs from 'node:fs/promises';
 import { safeRequire, toArray } from '../utils.js';
@@ -18,7 +18,7 @@ export function loadPkg(cwd: string) {
  * @returns
  */
 export function loadEntryFiles(entry: string, excludes: string | string[]) {
-  return glob.sync('**/*.*', {
+  return globbySync('**/*.*', {
     cwd: entry,
     ignore: ['node_modules/**', ...toArray(excludes ?? [])],
     onlyFiles: true,

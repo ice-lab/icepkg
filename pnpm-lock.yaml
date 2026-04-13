@@ -456,8 +456,8 @@ importers:
         specifier: ^4.13.0
         version: 4.13.0
       globby:
-        specifier: ^11.0.4
-        version: 11.1.0
+        specifier: ^14.0.1
+        version: 14.0.1
       gzip-size:
         specifier: ^7.0.0
         version: 7.0.0

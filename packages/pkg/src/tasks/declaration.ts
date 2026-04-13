@@ -2,7 +2,7 @@ import path from 'node:path';
 import { Worker, MessagePort } from 'node:worker_threads';
 import { fileURLToPath } from 'node:url';
 import { DeclarationTaskConfig, OutputResult, TaskRunnerContext, WatchChangedFile } from '../types.js';
-import globby from 'globby';
+import { globby } from 'globby';
 import { Runner } from '../helpers/runner.js';
 import { Rpc } from '../helpers/rpc.js';
 import { DeclarationMainMethods, DeclarationWorkerMethods } from './declaration.rpc.js';

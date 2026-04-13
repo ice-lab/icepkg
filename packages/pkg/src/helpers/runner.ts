@@ -62,6 +62,10 @@ export abstract class Runner<T = unknown> extends TypedEventEmitter<{
 
   abstract doRun(files?: WatchChangedFile[]): Promise<T>;
 
+  async close(): Promise<void> {
+    // EMPTY
+  }
+
   async run(files?: WatchChangedFile[]) {
     if (!this.taskRunning) {
       this.metrics = {};
