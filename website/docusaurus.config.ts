@@ -20,33 +20,19 @@ const config: Config = {
       {
         docs: {
           sidebarPath: path.resolve('./sidebars.js'),
-          sidebarItemsGenerator: async () => {
-            return [
-              { type: 'doc', id: 'index' },
-              { type: 'doc', id: 'quick-start' },
-              { type: 'doc', id: 'guide/abilities' },
-              { type: 'doc', id: 'guide/scenarios' },
-              { type: 'doc', id: 'guide/build' },
-              { type: 'doc', id: 'guide/publish' },
-              { type: 'doc', id: 'guide/test' },
-              { type: 'doc', id: 'guide/preview' },
-              { type: 'doc', id: 'guide/mf' },
-              { type: 'doc', id: 'guide/jsx-plus' },
-              { type: 'doc', id: 'guide/monorepo' },
-              {
-                type: 'category',
-                label: '参考',
-                items: [
-                  { type: 'doc', id: 'reference/cli' },
-                  { type: 'doc', id: 'reference/config' },
-                  { type: 'doc', id: 'reference/plugins-development' },
-                ],
-              },
-              { type: 'doc', id: 'faq', label: '常见问题' },
-            ];
-          },
           routeBasePath: '/',
           editUrl: 'https://github.com/ice-lab/icepkg/tree/main/website/docs',
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: 'v2',
+              path: '/',
+            },
+            v1: {
+              label: 'v1',
+              path: '/v1',
+            },
+          },
         },
         blog: false,
         theme: {},
@@ -68,26 +54,23 @@ const config: Config = {
       },
       items: [
         { type: 'search', position: 'right' },
+        { type: 'docSidebar', sidebarId: 'tutorialSidebar', label: '使用', position: 'left' },
+        { type: 'docSidebar', sidebarId: 'configSidebar', label: '配置', position: 'left' },
         {
-          label: '生态',
+          label: '生态与资源',
           position: 'right',
           items: [
             { label: '应用研发框架 ICE', to: 'https://v3.ice.work/' },
             { label: '微前端 ICESTARK', to: 'https://micro-frontends.ice.work/' },
             { label: '可视化工具 AppWorks', to: 'https://appworks.site/' },
             { label: '前端环境 AppToolkit', to: 'https://github.com/appworks-lab/toolkit#readme' },
-          ],
-        },
-        {
-          label: '资源',
-          position: 'right',
-          items: [
-            { to: 'https://fusion.design/pc/doc/component/102', label: 'Fusion 组件' },
-            { to: 'https://ant.design', label: 'Antd 组件' },
+            { label: 'Fusion 组件', to: 'https://fusion.design/pc/doc/component/102' },
+            { label: 'Antd 组件', to: 'https://ant.design' },
             { label: '社区钉钉群', to: 'https://iceworks.oss-cn-hangzhou.aliyuncs.com/assets/images/ice-group.png' },
           ],
         },
         { href: 'https://github.com/ice-lab/icepkg', label: 'GitHub', position: 'right' },
+        { type: 'docsVersionDropdown', position: 'right' },
       ],
     },
 
@@ -125,6 +108,16 @@ const config: Config = {
       darkTheme: themes.dracula,
     },
   },
+
+  plugins: [
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+      },
+    ],
+  ],
 
   themes: [
     [

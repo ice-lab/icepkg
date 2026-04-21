@@ -15,7 +15,7 @@ $ npm init @ice/pkg my-lib
 ? 请选择项目类型 (Use arrow keys)
 ❯ React 组件
   Node 模块
-  前端类库  
+  前端类库
   Rax 组件
 ```
 
@@ -27,9 +27,9 @@ $ npm init @ice/pkg my-lib
 
 ```md
 src
-├── Header        # 子组件 Header
-|  ├── index.css
-|  └── index.tsx
+├── Header # 子组件 Header
+| ├── index.css
+| └── index.tsx
 └── index.tsx
 ```
 
@@ -46,7 +46,7 @@ export default function Component() {
       <Header />
       ...
     </div>
-  )
+  );
 }
 ```
 
@@ -58,7 +58,7 @@ export default function Component() {
 import './index.css';
 
 export default function Header() {
-  return (<div>Header</div>)
+  return <div>Header</div>;
 }
 ```
 
@@ -72,13 +72,14 @@ export default function Header() {
 ```md
 src
 ├── Button
-|  ├── index.css
-|  └── index.tsx
+| ├── index.css
+| └── index.tsx
 ├── Input
-|  ├── index.css
-|  └── index.tsx
+| ├── index.css
+| └── index.tsx
 └── index.ts
 ```
+
 <Tabs>
 <TabItem value="index.ts" label="index.ts">
 
@@ -95,9 +96,7 @@ export * from './Input';
 import * as React from 'react';
 
 export function Button() {
-  return (
-    <button>example</button>
-  )
+  return <button>example</button>;
 }
 ```
 
@@ -126,16 +125,17 @@ export function writeLicenseToFileHeader(absFilePath: string) {
 前端类库指的是运行在浏览器环境中的 JavaScript 模块，并且所有的依赖都会打包到这个模块里面。使用的场景有：
 
 1. 类似 [React](https://unpkg.com/browse/react@18.2.0/umd/)、[moment](https://unpkg.com/browse/moment@2.29.4/min/) 等类库，用户的项目中把这些依赖 external 掉，需要在 HTML 中通过 `<script />` 引入 UMD 产物：
+
 ```html
 <html>
-<head>
-  <script src="https://unpkg.com/your-lib-name/dist/index.umd.es5.production.js"></script>
-</head>
-<body>
-  <script>
-    console.log(window.YourLibName);
-  </script>
-</body>
+  <head>
+    <script src="https://unpkg.com/your-lib-name/dist/index.umd.es5.production.js"></script>
+  </head>
+  <body>
+    <script>
+      console.log(window.YourLibName);
+    </script>
+  </body>
 </html>
 ```
 
@@ -160,10 +160,7 @@ import { createElement } from 'rax';
 import styles from './index.module.css';
 
 export default function Component() {
-
-  return (
-    <div className={styles.Component}>Hello</div>
-  );
+  return <div className={styles.Component}>Hello</div>;
 }
 ```
 

@@ -78,7 +78,7 @@ export default defineConfig({
 ### define
 
 - 类型：`Record<string, string | boolean | number | object | null>`
-- 默认值：`{ __DEV__: 'true' | 'false', 'process.env.NODE_ENV': '"development"' | '"production"', 'import.meta.vitest': 'undefined' }`
+- 默认值：`{ __DEV__: 'true' | 'false', 'process.env.NODE_ENV': '"development"' | '"production"' }`
 
 定义编译时环境变量，会在编译时被替换。注意：属性值会经过一次 `JSON.stringify()` 转换。
 
@@ -118,8 +118,6 @@ if (__DEV__) {
 :::info 发生了什么？
 实际上，在编译时，`__DEV__` 会被替换为 `process.env.NODE_ENV !== 'production'`。
 :::
-
-另外，ICE PKG 默认会将 `import.meta.vitest` 替换为 `undefined`。这意味着在源码里使用 Vitest 的 [in-source test](https://vitest.dev/guide/in-source.html) 写法时，非测试构建默认不会把对应测试逻辑保留到产物中。
 
 ### sourceMaps
 
@@ -264,61 +262,18 @@ export default defineConfig({
 - es2017 # ES module + ES2017 产物
 ```
 
-#### entryRoot
-
-- 类型：`string`
-- 默认值：自动推导（已配置 entry 父目录的最近公共祖先）
-
-用于控制 Transform 模式输出路径的相对根目录。该配置只影响产物路径映射，不影响文件处理范围。
-
-例如，当 entry 是 `./src/a/b/c/index.ts`：
-
-- `entryRoot: './src/a/b'` 时，输出为 `esm/c/index.js`
-- `entryRoot: './src'` 时，输出为 `esm/a/b/c/index.js`
-
-```ts title="build.config.mts"
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  entry: './src/a/b/c/index.ts',
-  transform: {
-    formats: ['esm'],
-    entryRoot: './src/a/b',
-  },
-});
-```
-
-当使用 `pkgs` 配置时，`pkgs[].entryRoot` 的优先级高于 `transform.entryRoot`。
-
-```ts title="build.config.mts"
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  transform: {
-    entryRoot: './src',
-  },
-  pkgs: [
-    {
-      id: 'button',
-      entry: './src/components/button/index.ts',
-      entryRoot: './src/components',
-    },
-  ],
-});
-```
-
 #### excludes
 
 - 类型：`string | string[]`
-- 默认值：`['**/__tests__/**']`
+- 默认值：`undefined`
 
-排除无需编译的文件。默认会排除 `__tests__` 目录下文件。比如，我们还不想编译 `src` 下以 `*.test.[j|t]s` 结尾的测试文件。
+排除无需编译的文件。比如，我们不想编译 `src` 下的所有测试文件，其中测试文件包含在 `__tests__` 目录下，或以 `*.test.[j|t]s` 结尾。
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  transform: {
+  transfrom: {
     excludes: ['**/__tests__/**', '*.test.[j|t]s'],
   },
 });
@@ -419,12 +374,10 @@ export default defineConfig({
 
 #### externals
 
-- 类型：`boolean | Record<string, string> | (string | RegExp | Record<string, string>)[]`
-- 默认值：`false`
+- 类型：`boolean | Record<string, string>`
+- 默认值：`true`
 
-默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。
-若想要 Bundle 不包含依赖产物，可以传入 `true`，其会解析 `package.json` 并将所有依赖 external 掉，包括 node 的依赖。
-适合针对 Node 环境的构建。
+默认情况下，bundle 的产物包含所有依赖产物。该选项可修改这一结果。若想要 Bundle 不包含依赖产物，可如下配置：
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
@@ -436,18 +389,7 @@ export default defineConfig({
 });
 ```
 
-若想要自定义配置 externals，则可以直接传入想要 external 的依赖，支持字符串和正则表达式。
-
-```ts title="build.config.mts"
-import { defineConfig } from '@ice/pkg';
-export default defineConfig({
-  bundle: {
-    externals: ['react', 'react-dom', /^@ice($|\/)/],
-  },
-});
-```
-
-如果你选择构建 umd 格式，默认情况下会根据一定的规则生成从全局对象上获取依赖的名字，如果你想自定义，则可以直接传入一个对象来配置。
+若想要自定义配置 externals，参考如下配置：
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
@@ -461,8 +403,6 @@ export default defineConfig({
   },
 });
 ```
-
-当然，也可以进行混合使用。
 
 #### minify
 

@@ -25,10 +25,6 @@ function getUserConfig() {
       defaultValue: 'automatic',
     },
     {
-      name: 'generateTypesForJs',
-      defaultValue: false,
-    },
-    {
       name: 'declaration',
       defaultValue: true,
     },

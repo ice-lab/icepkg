@@ -50,7 +50,7 @@ export default defineConfig({
 
 ## Tips
 
-- 如果通过配置 `outputDir` 修改输出目录
+- 如果通过配置 `outputDir` 修改输出目录，需同步更新宿主应用中消费微模块产物的路径
 - 可以通过 `server: true` 开启本地预览服务调试微模块产物
 
 ## 注意事项

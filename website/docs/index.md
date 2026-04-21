@@ -1,51 +1,28 @@
-# ICE PKG
+# 简介
 
-ICE PKG 是飞冰开源的 NPM 包开发解决方案，默认支持 React 组件、Rax 组件、Node 模块、前端类库等多场景 NPM 包的研发。
+ICE PKG 是飞冰开源的 NPM 包开发解决方案，默认支持 React 组件、Node 模块、前端类库等多场景 NPM 包的研发。
 
 ## 特性
 
-- **📈 更快**：使用 [SWC](https://swc.rs/docs/configuration/swcrc) 编译和压缩，提升数十倍编译速度
+- **📈 更快**：支持使用 [SWC](https://swc.rs/docs/configuration/swcrc)/[Rolldown](https://rolldown.rs/) 编译和压缩，提升数十倍编译速度
 - **🎊 双模式**：同时提供 Transform + Bundle 两种构建模式
 - **🅾️ 零配置**：无需任何配置，提供内建的 TypeScript、JSX 等构建支持
 - **☄️ 面向未来**：提供 ES2017 产物，打包出面向现代浏览器支持的产物
-- **☘️ 文档预览**：基于 [Docusaurus](https://docusaurus.io/) 提供预览文档、生成静态文档能力
+- **🖥️ 内置开发服务器**：提供内置 Dev Server，开箱即用，无需额外配置
+- **📦 模块联邦支持**：支持 Module Federation（MF），便于跨应用共享模块
+- **🏗️ 多产物构建**：支持同时构建多种格式产物（ESM、CJS、UMD 等），一次命令输出所有目标格式
 
-### 更快
+## 为什么需要 ICE PKG
 
-使用 SWC 与 [tsc](https://www.typescriptlang.org/)、[Babel](https://babeljs.io/) 编译同一个项目之间耗时对比：
+在开发组件库或工具库时，开发者不仅需要专注于实现项目逻辑，还需要处理与代码本身无关的繁琐工作，例如构建、调试、文档预览和测试。社区中虽然有许多工具可以解决其中部分问题，但开发者往往需要同时协调多个工具，面临配置繁琐、生态割裂等困境。
 
-<figure style={{
-  maxWidth: '800px',
-  fontSize: '13px',
-  lineHeight: '20px'
-}}>
-  <img src="https://img.alicdn.com/imgextra/i1/O1CN01MoY2ji23DGjyTw2Dh_!!6000000007221-2-tps-2972-638.png" alt="benchmark" />
+ICE PKG 提供了一套面向 NPM 包研发的一体化解决方案，重点解决以下问题：
 
-<figcaption>Above: benchmark 使用 <a href="https://github.com/maoxiaoke/pkg-benchmark">飞冰 fusion pro</a> 模板</figcaption>
-</figure>
-
-### 双模式
-
-社区的众多方案如 [Microbundle](https://github.com/developit/microbundle)、[tsup](https://github.com/egoist/tsup) 均只支持打包模式 (将所有依赖文件打包成一个文件输出，下称 Bundle 模式)。但 Bundle 模式[并非总是最佳选择](https://github.com/ice-lab/icepkg/issues/301)。其中最为**显著的问题**在于：**对 Tree-Shaking 不友好**，无用的依赖总是会被打包到最终的输出产物中，继而影响应用的体积。
-
-ICE PKG 除支持 Bundle 模式外，也默认支持了 Transform 模式（将文件挨个编译到输出目录）。更多内容请参考[构建能力 — 双模式构建](./guide/abilities#双模式构建)。
-
-### ES2017 产物
-
-为现代浏览器提供 ES2017 产物，可以减少产物体积，亦可加快执行速度。更多内容参考 [构建能力 — es2017 产物](./guide/abilities#es2017-产物)。
-
-### 多场景
-
-依赖 ICE PKG 强大的[双模式](#双模式)能力，支持多类场景的开发需求。包括但不限定于以下场景：
-
-+ React 组件
-+ Rax 组件
-+ Node 模块
-+ 前端类库
-
-### 文档预览
-
-结合 [Docusaurus](https://docusaurus.io/)，ICE PKG 升级了文档预览的能力。更多内容参考 [指南 - 文档预览](./guide/preview)。
+- **构建模式单一**：社区大多数工具仅支持 Bundle 模式，对 Tree-Shaking 不友好，导致最终产物体积虚高。ICE PKG 默认支持 Transform 和 Bundle 双模式，开发者可按需选择最合适的构建方式。
+- **配置成本高**：从零搭建一个支持 TypeScript、JSX、多格式产物输出的构建流程往往需要大量配置。ICE PKG 做到真正零配置开箱即用，内建对 TypeScript、JSX、CSS 等的支持。
+- **构建性能瓶颈**：传统基于 Babel/tsc 的构建工具在大型项目中速度较慢。ICE PKG 集成高性能的 SWC 编译器，构建速度提升数十倍，并支持实验性的 Rolldown 引擎进一步加速。
+- **研发链路割裂**：构建、文档预览、测试等环节往往依赖不同的独立工具。ICE PKG 将这些能力整合到统一的工具链中，降低研发链路的维护成本。
+- **生态协同成本高**：在飞冰（ICE）体系下开发组件或工具包时，往往需要额外适配工程配置。ICE PKG 作为飞冰生态的官方 NPM 包研发方案，与 [ice.js](https://v3.ice.work/) 等工具无缝衔接，真正做到生态内开箱即用。
 
 ## 社区
 

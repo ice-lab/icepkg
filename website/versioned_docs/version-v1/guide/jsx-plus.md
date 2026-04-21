@@ -109,13 +109,9 @@ function ExampleComponent(props) {
 
 ```jsx
 <Waterfall
-  renderHeader={() => <view>header</view>}
-  renderFooter={() => <view>footer</view>}
-  renderItem={(item, index) => (
-    <view>
-      {index}: {item}
-    </view>
-  )}
+  renderHeader={() => (<view>header</view>)}
+  renderFooter={() => (<view>footer</view>)}
+  renderItem={(item, index) => (<view>{index}: {item}</view>}
 />
 ```
 

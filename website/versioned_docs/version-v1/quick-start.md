@@ -4,7 +4,7 @@
 
 ### 1. Node.js
 
-使用 ICE PKG 开发前需要安装 [Node.js](https://nodejs.org)，并确保 node 版本是 18 或以上，推荐使用 20。
+使用 ICE PKG 开发前需要安装 [Node.js](https://nodejs.org)，并确保 node 版本是 16.14 或以上。
 
 ### 2. 包管理工具
 
@@ -49,7 +49,13 @@ $ cd react-component
 $ npm start
 ```
 
-默认情况下会启动 transform 构建模式，可以根据你的诉求新增新的构建目标。
+现在，访问 `http://localhost:4000`，即可查看组件 README 文档：
+
+![demo-readme](https://img.alicdn.com/imgextra/i2/O1CN01OctOw81JXuHCC6FhP_!!6000000001039-2-tps-1110-720.png)
+
+访问 `http://localhost:4000/usage`，即可预览组件：
+
+![component-preview](https://img.alicdn.com/imgextra/i3/O1CN01uEHuWp1DtXHv6uwax_!!6000000000274-2-tps-1160-540.png)
 
 ## 生成构建产物
 
@@ -61,22 +67,7 @@ $ npm run build
 
 1. 在 `package.json` 中修改包名
 
-2. 确认 `package.json` 中的 `exports`/`main` 字段已正确指向构建产物，例如：
-
-```json
-{
-  "exports": {
-    ".": {
-      "import": "./es2017/index.js",
-      "default": "./es2017/index.js"
-    }
-  }
-}
-```
-
-更多配置说明请参考 [React 组件 — 发布配置](./guide/scenario/react#发布配置)。
-
-3. 执行发布命令（npm 会先自动执行 `prepublishOnly` 脚本完成构建）：
+2. 执行发布命令：
 
 ```bash
 $ npm publish
