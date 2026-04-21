@@ -88,7 +88,7 @@ export { default as Input } from './Input';
 console.log(123);
 
 export default function Button() {
-  return (<button>Click Me</button>)
+  return <button>Click Me</button>;
 }
 ```
 
@@ -99,7 +99,7 @@ export default function Button() {
 console.log(123);
 
 export default function Input() {
-  return (<input />)
+  return <input />;
 }
 ```
 
@@ -135,11 +135,7 @@ import 'index.scss';
 
 ```json
 {
-  "sideEffects": [
-    "./esm/Input/index.js",
-    "*.css",
-    "*.less"
-  ]
+  "sideEffects": ["./esm/Input/index.js", "*.css", "*.less"]
 }
 ```
 
@@ -161,7 +157,6 @@ $ npm version minor
 ```
 
 关于 `npm-version` 的更多用法可以参考 [NPM 文档](https://docs.npmjs.com/cli/v9/commands/npm-version?v=true)。
-
 
 ## 构建和发布
 

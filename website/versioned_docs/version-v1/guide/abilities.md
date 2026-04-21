@@ -1,4 +1,4 @@
-# 构建能力
+# 双模式
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -45,13 +45,6 @@ esm
 - 其他类型的文件（比如 `.css`、`.scss` 等等），不做任何编译操作，将会被直接拷贝到输出目录
 
 Transform 模式下输出的产物具有较好的调试性，并且对 Tree-Shaking 友好。适用于大部分开发 React/Rax 组件或者 Node 模块场景。
-
-当配置了多个 entry 时，Transform 只会处理 entry 作用域内的文件，不会隐式处理未配置目录。你可以通过 `transform.entryRoot` 控制输出路径的相对根目录。例如，entry 为 `./src/a/b/c/index.ts` 时：
-
-- `entryRoot: './src/a/b'` 输出 `esm/c/index.js`
-- `entryRoot: './src'` 输出 `esm/a/b/c/index.js`
-
-若使用 `pkgs`，可在具体 pkg 上配置 `entryRoot`，其优先级高于全局 `transform.entryRoot`。
 
 ### Bundle 模式
 

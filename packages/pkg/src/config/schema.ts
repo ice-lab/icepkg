@@ -59,7 +59,6 @@ export const userConfigSchema = z.object({
     .record(z.string(), z.union([z.string(), z.boolean(), z.number(), z.null(), z.record(z.string(), z.any())]))
     .optional(),
   sourceMaps: z.union([z.boolean(), z.enum(['inline'])]).optional(),
-  generateTypeForJs: z.boolean().optional(),
   jsxRuntime: z.enum(['classic', 'automatic']).optional(),
   plugins: z.any().array().optional(),
   helpers: z.enum(['external', 'inline']).optional(),
@@ -71,6 +70,7 @@ export const userConfigSchema = z.object({
     z.object({
       outputMode: z.enum(['multi', 'unique']).optional(),
       generator: z.enum(['tsc', 'oxc']).optional(),
+      allowJs: z.boolean().optional(),
     }),
   ]),
   server: z.union([z.boolean(), serverSchema]).optional(),

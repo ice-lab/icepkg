@@ -47,6 +47,7 @@ export interface DtsCompileOptions {
   rootDir: string;
   outputDir: string;
   usingOxc: boolean;
+  allowJs?: boolean;
 }
 
 function formatAliasToTSPathsConfig(alias: TaskConfig['alias']) {
@@ -79,6 +80,7 @@ export async function dtsCompile({
   outputDir,
   alias,
   usingOxc,
+  allowJs = false,
 }: DtsCompileOptions): Promise<DtsInputFile[]> {
   if (!files.length) {
     return [];
@@ -88,7 +90,7 @@ export async function dtsCompile({
 
   const defaultTSConfig: TsConfigJson = {
     compilerOptions: {
-      allowJs: true,
+      allowJs,
       declaration: true,
       emitDeclarationOnly: true,
       incremental: true,

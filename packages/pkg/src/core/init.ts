@@ -28,6 +28,7 @@ const defaultBundleUserConfig: BundleUserConfig = {
 const defaultDeclarationUserConfig = {
   outputMode: 'multi',
   generator: 'tsc',
+  allowJs: false,
 } satisfies DeclarationUserConfig;
 
 export function initContextTasks(ctx: Context) {
@@ -159,6 +160,7 @@ export function initDeclarationTask(buildTask: BuildTask, options: InitTaskOptio
   } else {
     config.outputMode ??= declarationConfig?.outputMode ?? defaultDeclarationUserConfig.outputMode;
     config.generator ??= declarationConfig?.generator ?? defaultDeclarationUserConfig.generator;
+    config.allowJs ??= declarationConfig?.allowJs ?? defaultDeclarationUserConfig.allowJs;
   }
 
   const allOutputDirs = allTasks

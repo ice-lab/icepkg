@@ -33,9 +33,12 @@ class DeclarationRunner extends Runner<OutputResult> {
         context.buildContext.rootDir,
         (context.buildTask.config.entry! as Record<string, string>) ?? {},
       );
+      const filePattern = (context.buildTask.config as DeclarationTaskConfig).allowJs
+        ? '**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}'
+        : '**/*.{ts,tsx,mts,cts}';
       const result = await Promise.all(
         entryDirs.map((entry) =>
-          globby('**/*.{ts,tsx,mts,cts}', {
+          globby(filePattern, {
             cwd: entry,
             onlyFiles: true,
             ignore: ['**/*.d.{ts,mts,cts}'],
@@ -64,6 +67,7 @@ class DeclarationRunner extends Runner<OutputResult> {
         outputDir: buildConfig.outputDir!,
         alias: buildConfig.alias,
         usingOxc: buildConfig.generator === 'oxc',
+        allowJs: buildConfig.allowJs ?? false,
       },
     ]);
 

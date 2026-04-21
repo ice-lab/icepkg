@@ -1,0 +1,24 @@
+{
+  "tutorialSidebar": [
+    { "type": "doc", "id": "index" },
+    { "type": "doc", "id": "quick-start" },
+    { "type": "doc", "id": "guide/abilities" },
+    { "type": "doc", "id": "guide/scenarios" },
+    { "type": "doc", "id": "guide/build" },
+    { "type": "doc", "id": "guide/publish" },
+    { "type": "doc", "id": "guide/test" },
+    { "type": "doc", "id": "guide/preview" },
+    { "type": "doc", "id": "guide/jsx-plus" },
+    { "type": "doc", "id": "guide/monorepo" },
+    {
+      "type": "category",
+      "label": "参考",
+      "items": [
+        { "type": "doc", "id": "reference/cli" },
+        { "type": "doc", "id": "reference/config" },
+        { "type": "doc", "id": "reference/plugins-development" }
+      ]
+    },
+    { "type": "doc", "id": "faq", "label": "常见问题" }
+  ]
+}

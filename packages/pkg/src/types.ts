@@ -176,6 +176,13 @@ export interface DeclarationUserConfig {
    * @default 'tsc'
    */
   generator?: 'tsc' | 'oxc';
+
+  /**
+   * Whether to generate declaration files for JavaScript files.
+   * Useful when using JSDoc type annotations in JS files.
+   * @default false
+   */
+  allowJs?: boolean;
 }
 
 export interface PkgUserConfig
@@ -278,12 +285,6 @@ export interface UserConfig {
    * but not include it in the result object.
    */
   sourceMaps?: boolean | 'inline';
-  /**
-   * Whether or not to generate declaration files for Ecmascript
-   * @default false
-   */
-  generateTypesForJs?: boolean;
-
   /**
    * Generate .d.ts files from TypeScript files in your project.
    * @default true
