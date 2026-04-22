@@ -31,11 +31,13 @@ packages/*/es/
 /packages/**/es
 /packages/**/esnext
 /packages/**/es2017
+/packages/**/es2022
 /packages/**/cjs
 /packages/**/esm
 /packages/**/dist
 /tests/**/esm
 /tests/**/es2017
+/tests/**/es2022
 /tests/**/cjs
 /tests/**/dist
 /tests/integration/**/build.config.for-test.mts
@@ -45,6 +47,7 @@ packages/*/es/
 examples/**/esm
 examples/**/es
 examples/**/es2017
+examples/**/es2022
 examples/**/cjs
 examples/**/lib
 examples/**/dist

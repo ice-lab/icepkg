@@ -4,24 +4,26 @@
 
 ## 构建产物说明
 
-ICE PKG 默认支持 `esm`、`es2017`、`cjs`、`umd`、`mf` 五种构建产物类型。每种产物类型在不同构建模式下支持情况、模块规范、语法规范说明如下表：
+ICE PKG 默认支持 `esm`、`es2017`、`es2022`、`cjs`、`umd`、`mf` 六种构建产物类型。每种产物类型在不同构建模式下支持情况、模块规范、语法规范说明如下表：
 
 | 产物类型 | Transform 模式 | Bundle 模式 |     模块规范      | 语法规范 |
 | :------: | :------------: | :---------: | :---------------: | :------: |
 |  `esm`   |     ✅支持     |   ✅支持    |     ES Module     |   ES5    |
 | `es2017` |     ✅支持     |   ✅支持    |     ES Module     |  ES2017  |
+| `es2022` |     ✅支持     |   ✅支持    |     ES Module     |  ES2022  |
 |  `cjs`   |     ✅支持     |   ✅支持    |     CommonJS      |   ES5    |
 |  `umd`   |    ❌不支持    |   ✅支持    |        UMD        |   ES5    |
 |   `mf`   |    ❌不支持    |   ✅支持    | Module Federation |    —     |
 
 每种构建产物的优缺点和适用场景如下表所示：
 
-| 产物类型 | 优点                               | 缺点     | 适用场景                                                                                                           |
-| :------: | ---------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
-|  `esm`   | 兼容性较好                         | 体积大   | 消费产物的应用打包时不编译 `node_modules`；或者运行环境支持的 ECMAScript 版本较低                                  |
-| `es2017` | 保留大部分 JavaScript 语法，体积小 | 兼容性差 | 消费产物的应用打包时编译 `node_modules`；或者运行环境支持的 ES2017 语法。更多说明可参考[文档](./build#es2017-产物) |
-|  `cjs`   | 兼容各版本的 Node.js               | 体积大   | 在 Node.js 环境下运行                                                                                              |
-|  `umd`   | 兼容运行在浏览器和 Node.js 中      | 体积大   | 用户的项目中某个依赖 external，需要在 HTML 中通过 `<script />` 引入 UMD 产物；或者在浏览器中直接使用产物           |
+| 产物类型 | 优点                               | 缺点       | 适用场景                                                                                                           |
+| :------: | ---------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------ |
+|  `esm`   | 兼容性较好                         | 体积大     | 消费产物的应用打包时不编译 `node_modules`；或者运行环境支持的 ECMAScript 版本较低                                  |
+| `es2017` | 保留大部分 JavaScript 语法，体积小 | 兼容性差   | 消费产物的应用打包时编译 `node_modules`；或者运行环境支持的 ES2017 语法。更多说明可参考[文档](./build#es2017-产物) |
+| `es2022` | 保留更多新语法，体积最小           | 兼容性更差 | 运行环境明确支持 ES2022（Chrome 94+、Safari 16.4+）的场景。更多说明可参考[文档](./build#es2022-产物)               |
+|  `cjs`   | 兼容各版本的 Node.js               | 体积大     | 在 Node.js 环境下运行                                                                                              |
+|  `umd`   | 兼容运行在浏览器和 Node.js 中      | 体积大     | 用户的项目中某个依赖 external，需要在 HTML 中通过 `<script />` 引入 UMD 产物；或者在浏览器中直接使用产物           |
 
 ## 配置产物输出
 
@@ -139,48 +141,72 @@ export default defineConfig({
 
 ### 兼容模式
 
-对于从 v1 迁移的项目，也可以通过 `transform.formats` 或 `bundle.formats` 指定输出格式：
+对于从 v1 迁移的项目，也可以通过 `transform.formats` 或 `bundle.formats` 指定输出格式，两者在内部会自动转换为等价的 `pkgs` 条目：
+
+- `transform.formats` 中的每个格式直接作为 `pkgs` 的 preset 字符串
+- `bundle.formats` 中的每个格式加 `!` 前缀后追加到 `pkgs`
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
   transform: {
-    formats: ['esm', 'es2017'],
+    formats: ['esm', 'es2017'], // 等价于 pkgs: ['esm', 'es2017']
   },
   bundle: {
-    formats: ['umd'],
+    formats: ['umd'], // 等价于 pkgs: [..., '!umd']
   },
 });
 ```
 
-:::caution
-`pkgs` 一旦配置，`transform.formats` 和 `bundle.formats` 将**自动失效**，产物完全由 `pkgs` 接管。两种方式不能混用。
+若 `pkgs`、`transform.formats`、`bundle.formats` 同时配置，三者会合并（字符串 preset 自动去重）：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+// 最终等价于 pkgs: ['cjs', 'esm', '!umd']
+export default defineConfig({
+  pkgs: ['cjs'],
+  transform: { formats: ['esm'] },
+  bundle: { formats: ['umd'] },
+});
+```
+
+:::tip
+若三者均未配置，默认输出 `pkgs: ['esm']`（ES Module + ES5 产物）。
 :::
 
 ## 默认构建产物
 
-下面是 ICE PKG 默认的产物构建配置：
+ICE PKG 默认输出一份 ES Module + ES5 语法的产物（即 `esm` 预设），等价于：
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
 
 export default defineConfig({
-  pkgs: [{ module: 'esm', target: 'es2017' }],
+  pkgs: ['esm'],
 });
 ```
 
 执行 `npm run build` 命令后，得到以下的构建产物：
 
 ```md
-── es2017
+── esm
 | ├── index.d.ts
 | └── index.js
 ```
 
 输出构建目录名和构建产物类型一一对应。
 
-对于 React 组件来说，它们会在应用中消费，而应用通常是会被打包工具打包后才能在生产环境中使用。以 Webpack 举例，可以配置 `resolve.conditionNames = ['es2017', 'esm']`，这样会优先使用 es2017 产物，配合在 `browserslist` 中配置高版本的浏览器（比如中后台场景），打包出来的产物能直接运行在目标浏览器，体积也会更小。
+## 语法目标（target）说明
+
+ICE PKG 支持三种语法编译目标，控制编译器保留或降级哪些 JavaScript 语法：
+
+|  target  | 保留的语法特性（不降级）                                                                                                                                 | 最低浏览器要求                              | 参考                                                                                                                                                                                                                                                                                             |
+| :------: | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+|  `es5`   | 无，所有现代语法均降级为 ES5                                                                                                                             | Chrome 49、IE 11                            | —                                                                                                                                                                                                                                                                                                |
+| `es2017` | 箭头函数、Class、`async`/`await`、解构、展开运算符、模板字符串、`for...of`、`Promise`、`Object.entries/values` 等                                        | Chrome 61、Safari 11、Firefox 60、Edge 16   | [compat-table](https://compat-table.github.io/compat-table/es2016plus/) / [caniuse](https://caniuse.com/async-functions,object-values,object-entries,mdn-javascript_builtins_object_getownpropertydescriptors,pad-start-end,mdn-javascript_grammar_trailing_commas_trailing_commas_in_functions) |
+| `es2022` | 在 ES2017 基础上，额外保留：class 私有字段（`#field`）、class static blocks、`Array/String.at()`、`Object.hasOwn()`、top-level `await`、`Error` cause 等 | Chrome 94、Safari 16.4、Firefox 93、Edge 94 | [compat-table](https://compat-table.github.io/compat-table/es2016plus/)                                                                                                                                                                                                                          |
 
 ## ES2017 产物
 
@@ -217,6 +243,28 @@ export default defineConfig({
 | └── index.js
 ├── dist
 | └── index.esm.es2017.production.js
+```
+
+## ES2022 产物
+
+ES2022 产物在 ES2017 的基础上，进一步保留了更多较新的语法特性（class 私有字段、class static blocks、`Array.at()`、top-level await 等），产物体积更小，但要求运行环境支持 ES2022（Chrome 94+、Safari 16.4+、Firefox 93+）。
+
+如果你的运行环境明确支持 ES2022，可以使用以下配置：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+export default defineConfig({
+  pkgs: ['es2022'],
+});
+```
+
+构建产物如下：
+
+```md
+── es2022
+| ├── index.d.ts
+| └── index.js
 ```
 
 ## ES Module 和 CommonJS 产物

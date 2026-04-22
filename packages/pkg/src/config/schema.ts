@@ -52,27 +52,68 @@ export const serverSchema = z.object({
   autoServeBundle: z.boolean().optional(),
 });
 
-export const userConfigSchema = z.object({
-  entry: z.union([z.string(), z.string().array(), z.record(z.string(), z.string())]).optional(),
-  alias: z.record(z.string(), z.string()).optional(),
-  define: z
-    .record(z.string(), z.union([z.string(), z.boolean(), z.number(), z.null(), z.record(z.string(), z.any())]))
-    .optional(),
-  sourceMaps: z.union([z.boolean(), z.enum(['inline'])]).optional(),
-  jsxRuntime: z.enum(['classic', 'automatic']).optional(),
-  plugins: z.any().array().optional(),
-  helpers: z.enum(['external', 'inline']).optional(),
-
-  transform: transformSchema.optional(),
-  bundle: bundleSchema.optional(),
-  declaration: z.union([
+// Shared field schemas reused across userConfigSchema and pkgUserConfigSchema
+const entrySchema = z.union([z.string(), z.string().array(), z.record(z.string(), z.string())]).optional();
+const aliasSchema = z.record(z.string(), z.string()).optional();
+const defineSchema = z
+  .record(z.string(), z.union([z.string(), z.boolean(), z.number(), z.null(), z.record(z.string(), z.any())]))
+  .optional();
+const sourceMapsSchema = z.union([z.boolean(), z.enum(['inline'])]).optional();
+const jsxRuntimeSchema = z.enum(['classic', 'automatic']).optional();
+const helpersSchema = z.enum(['external', 'inline']).optional();
+const declarationSchema = z
+  .union([
     z.boolean(),
     z.object({
       outputMode: z.enum(['multi', 'unique']).optional(),
       generator: z.enum(['tsc', 'oxc']).optional(),
       allowJs: z.boolean().optional(),
     }),
-  ]),
+  ])
+  .optional();
+
+export const pkgUserConfigSchema = z.object({
+  id: z.string().optional(),
+  module: z.enum(['esm', 'cjs', 'umd', 'mf']).optional(),
+  target: z.enum(['es5', 'es2017', 'es2022']).optional(),
+  bundle: z.boolean().optional(),
+  disable: z.boolean().optional(),
+  outputDir: z.string().optional(),
+  entryRoot: z.string().optional(),
+  extends: z.array(z.string()).optional(),
+  plugins: z.any().array().optional(),
+  // fields shared with bundleSchema
+  externals: bundleSchema.shape.externals,
+  name: z.string().optional(),
+  compileDependencies: bundleSchema.shape.compileDependencies,
+  polyfill: bundleSchema.shape.polyfill,
+  minify: bundleSchema.shape.minify,
+  codeSplitting: z.boolean().optional(),
+  engine: z.enum(['rollup', 'rslib', 'rolldown']).optional(),
+  // fields shared with userConfigSchema
+  entry: entrySchema,
+  alias: aliasSchema,
+  define: defineSchema,
+  jsxRuntime: jsxRuntimeSchema,
+  declaration: declarationSchema,
+  sourceMaps: sourceMapsSchema,
+  helpers: helpersSchema,
+});
+
+export const userConfigSchema = z.object({
+  entry: entrySchema,
+  alias: aliasSchema,
+  define: defineSchema,
+  sourceMaps: sourceMapsSchema,
+  jsxRuntime: jsxRuntimeSchema,
+  plugins: z.any().array().optional(),
+  helpers: helpersSchema,
+
+  // boolean | undefined is allowed to support `condition && { ... }` shorthand
+  pkgs: z.array(z.union([z.string(), z.boolean(), z.undefined(), pkgUserConfigSchema])).optional(),
+  transform: transformSchema.optional(),
+  bundle: bundleSchema.optional(),
+  declaration: declarationSchema,
   server: z.union([z.boolean(), serverSchema]).optional(),
 });
 

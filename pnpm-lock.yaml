@@ -697,6 +697,15 @@ importers:
         specifier: ^18.0.0
         version: 18.0.15
 
+  tests/integration/syntax-target:
+    dependencies:
+      '@ice/pkg':
+        specifier: workspace:*
+        version: link:../../../packages/pkg
+      '@swc/helpers':
+        specifier: ^0.5.15
+        version: 0.5.17
+
   tests/integration/transform:
     dependencies:
       '@ice/pkg':

@@ -5,7 +5,6 @@ exports[`Run config bundle > cjs structure 1`] = `null`;
 exports[`Run config bundle > dist structure 1`] = `
 [
   "dist/",
-  "├── index.esm.es2017.production.js",
   "└── index.esm.es5.production.js",
 ]
 `;
@@ -52,7 +51,6 @@ exports[`Run config bundle-with-dev-mode > cjs structure 1`] = `null`;
 exports[`Run config bundle-with-dev-mode > dist structure 1`] = `
 [
   "dist/",
-  "├── index.esm.es2017.development.js",
   "└── index.esm.es5.development.js",
 ]
 `;
@@ -78,8 +76,6 @@ exports[`Run config bundle-with-full-modes > cjs structure 1`] = `null`;
 exports[`Run config bundle-with-full-modes > dist structure 1`] = `
 [
   "dist/",
-  "├── index.esm.es2017.development.js",
-  "├── index.esm.es2017.production.js",
   "├── index.esm.es5.development.js",
   "└── index.esm.es5.production.js",
 ]
@@ -93,13 +89,7 @@ exports[`Run config declaration-generator-oxc > cjs structure 1`] = `null`;
 
 exports[`Run config declaration-generator-oxc > dist structure 1`] = `null`;
 
-exports[`Run config declaration-generator-oxc > es2017 structure 1`] = `
-[
-  "es2017/",
-  "├── index.d.ts",
-  "└── index.js",
-]
-`;
+exports[`Run config declaration-generator-oxc > es2017 structure 1`] = `null`;
 
 exports[`Run config declaration-generator-oxc > esm structure 1`] = `
 [
@@ -107,18 +97,6 @@ exports[`Run config declaration-generator-oxc > esm structure 1`] = `
   "├── index.d.ts",
   "└── index.js",
 ]
-`;
-
-exports[`Run config declaration-generator-oxc > file content es2017/index.d.ts 1`] = `
-"export declare const foo = 1;
-"
-`;
-
-exports[`Run config declaration-generator-oxc > file content es2017/index.js 1`] = `
-"const foo = 1;
-
-export { foo };
-"
 `;
 
 exports[`Run config declaration-generator-oxc > file content esm/index.d.ts 1`] = `
@@ -137,13 +115,7 @@ exports[`Run config default > cjs structure 1`] = `null`;
 
 exports[`Run config default > dist structure 1`] = `null`;
 
-exports[`Run config default > es2017 structure 1`] = `
-[
-  "es2017/",
-  "├── index.d.ts",
-  "└── index.js",
-]
-`;
+exports[`Run config default > es2017 structure 1`] = `null`;
 
 exports[`Run config default > esm structure 1`] = `
 [
@@ -157,12 +129,7 @@ exports[`Run config no-declaration > cjs structure 1`] = `null`;
 
 exports[`Run config no-declaration > dist structure 1`] = `null`;
 
-exports[`Run config no-declaration > es2017 structure 1`] = `
-[
-  "es2017/",
-  "└── index.js",
-]
-`;
+exports[`Run config no-declaration > es2017 structure 1`] = `null`;
 
 exports[`Run config no-declaration > esm structure 1`] = `
 [
@@ -259,14 +226,7 @@ exports[`Run config sourcemap-enable > cjs structure 1`] = `null`;
 
 exports[`Run config sourcemap-enable > dist structure 1`] = `null`;
 
-exports[`Run config sourcemap-enable > es2017 structure 1`] = `
-[
-  "es2017/",
-  "├── index.d.ts",
-  "├── index.js",
-  "└── index.js.map",
-]
-`;
+exports[`Run config sourcemap-enable > es2017 structure 1`] = `null`;
 
 exports[`Run config sourcemap-enable > esm structure 1`] = `
 [

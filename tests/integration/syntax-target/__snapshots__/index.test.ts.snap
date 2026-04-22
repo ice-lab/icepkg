@@ -1,0 +1,231 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Run config rolldown > dist structure 1`] = `
+[
+  "dist/",
+  "├── es2017/",
+  "│   └── index.esm.es2017.production.js",
+  "├── es2022/",
+  "│   └── index.esm.es2022.production.js",
+  "└── es5/",
+  "    ├── index.esm.es5.production.js",
+  "    └── vendor.esm.es5.production.js",
+]
+`;
+
+exports[`Run config rolldown > file content dist/es5/index.esm.es5.production.js 1`] = `"import{a as e,c as t,i as n,l as r,n as i,o as a,r as o,s,t as c}from"./vendor.esm.es5.production.js";var l=new WeakMap,u=function(){function o(){t(this,o),a(this,l,{writable:!0,value:0})}return i(o,[{key:\`increment\`,value:function(){return e(this,l,s(this,l)+n(o,o,d)),s(this,l)}},{key:\`fetchValue\`,value:function(){return r(function(){return c(this,function(e){return[2,s(this,l)]})}).call(this)}}]),o}(),d={writable:!0,value:1};o(u,u,d,2);var f=function(e){return e*2};function p(e){return r(function(){var t;return c(this,function(n){switch(n.label){case 0:return[4,Promise.resolve(e)];case 1:return t=n.sent(),[2,f(t)]}})})()}export{u as Counter,f as double,p as fetchDouble};"`;
+
+exports[`Run config rolldown > file content dist/es5/vendor.esm.es5.production.js 1`] = `"function e(e,t,n,r,i,a,o){try{var s=e[a](o),c=s.value}catch(e){n(e);return}s.done?t(c):Promise.resolve(c).then(r,i)}function t(t){return function(){var n=this,r=arguments;return new Promise(function(i,a){var o=t.apply(n,r);function s(t){e(o,i,a,s,c,\`next\`,t)}function c(t){e(o,i,a,s,c,\`throw\`,t)}s(void 0)})}}function n(e,t){if(!(e instanceof t))throw TypeError(\`Cannot call a class as a function\`)}function r(e,t){return t.get?t.get.call(e):t.value}function i(e,t,n){if(!t.has(e))throw TypeError(\`attempted to \`+n+\` private field on non-instance\`);return t.get(e)}function a(e,t){return r(e,i(e,t,\`get\`))}function o(e,t){if(t.has(e))throw TypeError(\`Cannot initialize the same private elements twice on an object\`)}function s(e,t,n){o(e,t),t.set(e,n)}function c(e,t,n){if(t.set)t.set.call(e,n);else{if(!t.writable)throw TypeError(\`attempted to set read only private field\`);t.value=n}}function l(e,t,n){return c(e,i(e,t,\`set\`),n),n}function u(e,t){if(e!==t)throw TypeError(\`Private static access of wrong provenance\`)}function d(e,t){if(e===void 0)throw TypeError(\`attempted to \`+t+\` private static field before its declaration\`)}function f(e,t,n){return u(e,t),d(n,\`get\`),r(e,n)}function p(e,t,n,r){return u(e,t),d(n,\`set\`),c(e,n,r),r}function m(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,\`value\`in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function h(e,t,n){return t&&m(e.prototype,t),n&&m(e,n),e}function g(e,t){var n={label:0,sent:function(){if(a[0]&1)throw a[1];return a[1]},trys:[],ops:[]},r,i,a,o=Object.create((typeof Iterator==\`function\`?Iterator:Object).prototype);return o.next=s(0),o.throw=s(1),o.return=s(2),typeof Symbol==\`function\`&&(o[Symbol.iterator]=function(){return this}),o;function s(e){return function(t){return c([e,t])}}function c(s){if(r)throw TypeError(\`Generator is already executing.\`);for(;o&&(o=0,s[0]&&(n=0)),n;)try{if(r=1,i&&(a=s[0]&2?i.return:s[0]?i.throw||((a=i.return)&&a.call(i),0):i.next)&&!(a=a.call(i,s[1])).done)return a;switch(i=0,a&&(s=[s[0]&2,a.value]),s[0]){case 0:case 1:a=s;break;case 4:return n.label++,{value:s[1],done:!1};case 5:n.label++,i=s[1],s=[0];continue;case 7:s=n.ops.pop(),n.trys.pop();continue;default:if((a=n.trys,!(a=a.length>0&&a[a.length-1]))&&(s[0]===6||s[0]===2)){n=0;continue}if(s[0]===3&&(!a||s[1]>a[0]&&s[1]<a[3])){n.label=s[1];break}if(s[0]===6&&n.label<a[1]){n.label=a[1],a=s;break}if(a&&n.label<a[2]){n.label=a[2],n.ops.push(s);break}a[2]&&n.ops.pop(),n.trys.pop();continue}s=t.call(e,n)}catch(e){s=[6,e],i=0}finally{r=a=0}if(s[0]&5)throw s[1];return{value:s[0]?s[1]:void 0,done:!0}}}export{l as a,n as c,f as i,t as l,h as n,s as o,p as r,a as s,g as t};"`;
+
+exports[`Run config rolldown > file content dist/es2017/index.esm.es2017.production.js 1`] = `"function e(e,t){if(t.has(e))throw TypeError(\`Cannot initialize the same private elements twice on an object\`)}function t(t,n,r){e(t,n),n.set(t,r)}function n(e,t,n){if(typeof e==\`function\`?e===t:e.has(t))return arguments.length<3?t:n;throw TypeError(\`Private element is not present on this object\`)}function r(e,t){return e.get(n(e,t))}function i(e,t,r){return e.set(n(e,t),r),r}var a=new WeakMap,o=class{constructor(){t(this,a,0)}increment(){return i(a,this,r(a,this)+s._),r(a,this)}async fetchValue(){return r(a,this)}},s={_:1};s._=2;const c=e=>e*2;async function l(e){return c(await Promise.resolve(e))}export{o as Counter,c as double,l as fetchDouble};"`;
+
+exports[`Run config rolldown > file content dist/es2022/index.esm.es2022.production.js 1`] = `"var e=class e{#e=0;static#t=1;static{e.#t=2}increment(){return this.#e+=e.#t,this.#e}async fetchValue(){return this.#e}};const t=e=>e*2;async function n(e){return t(await Promise.resolve(e))}export{e as Counter,t as double,n as fetchDouble};"`;
+
+exports[`Run config rollup > dist structure 1`] = `
+[
+  "dist/",
+  "├── es2017/",
+  "│   ├── index.esm.es2017.production.js",
+  "│   └── vendor.esm.es2017.production.js",
+  "├── es2022/",
+  "│   └── index.esm.es2022.production.js",
+  "└── es5/",
+  "    ├── index.esm.es5.production.js",
+  "    └── vendor.esm.es5.production.js",
+]
+`;
+
+exports[`Run config rollup > es2017 structure 1`] = `
+[
+  "es2017/",
+  "└── index.js",
+]
+`;
+
+exports[`Run config rollup > es2022 structure 1`] = `
+[
+  "es2022/",
+  "└── index.js",
+]
+`;
+
+exports[`Run config rollup > esm structure 1`] = `
+[
+  "esm/",
+  "└── index.js",
+]
+`;
+
+exports[`Run config rollup > file content dist/es5/index.esm.es5.production.js 1`] = `
+"import{_ as e,a as t,b as n,c as r,d as u,e as s,f as i,g as a,h as o}from"./vendor.esm.es5.production.js";var c=new WeakMap,f=function(){function e(){r(this,e),u(this,c,{writable:!0,value:0})}return t(e,[{key:"increment",value:function(){return s(this,c,i(this,c)+a(e,e,l)),i(this,c)}},{key:"fetchValue",value:function(){return n(function(){return o(this,function(e){return[2,i(this,c)]})}).call(this)}}]),e}(),l={writable:!0,value:1};e(f,f,l,2);var h=function(e){return 2*e};function v(e){return n(function(){return o(this,function(t){switch(t.label){case 0:return[4,Promise.resolve(e)];case 1:return[2,h(t.sent())]}})})()}export{f as Counter,h as double,v as fetchDouble};
+"
+`;
+
+exports[`Run config rollup > file content dist/es5/vendor.esm.es5.production.js 1`] = `
+"function e(e,t,r,n,a,o,i){try{var c=e[o](i),s=c.value}catch(e){r(e);return}c.done?t(s):Promise.resolve(s).then(n,a)}function t(t){return function(){var r=this,n=arguments;return new Promise(function(a,o){var i=t.apply(r,n);function c(t){e(i,a,o,c,s,"next",t)}function s(t){e(i,a,o,c,s,"throw",t)}c(void 0)})}}function r(e,t){if(!(e instanceof t))throw TypeError("Cannot call a class as a function")}function n(e,t){return t.get?t.get.call(e):t.value}function a(e,t,r){if(!t.has(e))throw TypeError("attempted to "+r+" private field on non-instance");return t.get(e)}function o(e,t){var r=a(e,t,"get");return n(e,r)}function i(e,t,r){if(t.has(e))throw TypeError("Cannot initialize the same private elements twice on an object");t.set(e,r)}function c(e,t,r){if(t.set)t.set.call(e,r);else{if(!t.writable)throw TypeError("attempted to set read only private field");t.value=r}}function s(e,t,r){var n=a(e,t,"set");return c(e,n,r),r}function l(e,t){if(e!==t)throw TypeError("Private static access of wrong provenance")}function u(e,t){if(void 0===e)throw TypeError("attempted to "+t+" private static field before its declaration")}function f(e,t,r){return l(e,t),u(r,"get"),n(e,r)}function p(e,t,r,n){return l(e,t),u(r,"set"),c(e,r,n),n}function _(e,t,r){return t&&function(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}(e.prototype,t),e}function v(e,t){var r,n,a,o={label:0,sent:function(){if(1&a[0])throw a[1];return a[1]},trys:[],ops:[]},i=Object.create(("function"==typeof Iterator?Iterator:Object).prototype);return i.next=c(0),i.throw=c(1),i.return=c(2),"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function c(c){return function(s){var l=[c,s];if(r)throw TypeError("Generator is already executing.");for(;i&&(i=0,l[0]&&(o=0)),o;)try{if(r=1,n&&(a=2&l[0]?n.return:l[0]?n.throw||((a=n.return)&&a.call(n),0):n.next)&&!(a=a.call(n,l[1])).done)return a;switch(n=0,a&&(l=[2&l[0],a.value]),l[0]){case 0:case 1:a=l;break;case 4:return o.label++,{value:l[1],done:!1};case 5:o.label++,n=l[1],l=[0];continue;case 7:l=o.ops.pop(),o.trys.pop();continue;default:if(!(a=(a=o.trys).length>0&&a[a.length-1])&&(6===l[0]||2===l[0])){o=0;continue}if(3===l[0]&&(!a||l[1]>a[0]&&l[1]<a[3])){o.label=l[1];break}if(6===l[0]&&o.label<a[1]){o.label=a[1],a=l;break}if(a&&o.label<a[2]){o.label=a[2],o.ops.push(l);break}a[2]&&o.ops.pop(),o.trys.pop();continue}l=t.call(e,o)}catch(e){l=[6,e],n=0}finally{r=a=0}if(5&l[0])throw l[1];return{value:l[0]?l[1]:void 0,done:!0}}}}"function"==typeof SuppressedError&&SuppressedError;export{p as _,_ as a,t as b,r as c,i as d,s as e,o as f,f as g,v as h};
+"
+`;
+
+exports[`Run config rollup > file content dist/es2017/index.esm.es2017.production.js 1`] = `
+"import{_ as e,a as t,b as r,c as a,d as s}from"./vendor.esm.es2017.production.js";var n=new WeakMap;class o{increment(){return t(this,n,r(this,n)+a(o,o,i)),r(this,n)}async fetchValue(){return r(this,n)}constructor(){s(this,n,{writable:!0,value:0})}}var i={writable:!0,value:1};e(o,o,i,2);let u=e=>2*e;async function c(e){return u(await Promise.resolve(e))}export{o as Counter,u as double,c as fetchDouble};
+"
+`;
+
+exports[`Run config rollup > file content dist/es2017/vendor.esm.es2017.production.js 1`] = `
+"function t(t,e){return e.get?e.get.call(t):e.value}function e(t,e,r){if(!e.has(t))throw TypeError("attempted to "+r+" private field on non-instance");return e.get(t)}function r(r,i){var a=e(r,i,"get");return t(r,a)}function i(t,e,r){if(e.has(t))throw TypeError("Cannot initialize the same private elements twice on an object");e.set(t,r)}function a(t,e,r){if(e.set)e.set.call(t,r);else{if(!e.writable)throw TypeError("attempted to set read only private field");e.value=r}}function n(t,r,i){var n=e(t,r,"set");return a(t,n,i),i}function s(t,e){if(t!==e)throw TypeError("Private static access of wrong provenance")}function o(t,e){if(void 0===t)throw TypeError("attempted to "+e+" private static field before its declaration")}function c(e,r,i){return s(e,r),o(i,"get"),t(e,i)}function f(t,e,r,i){return s(t,e),o(r,"set"),a(t,r,i),i}export{f as _,n as a,r as b,c as c,i as d};
+"
+`;
+
+exports[`Run config rollup > file content dist/es2022/index.esm.es2022.production.js 1`] = `
+"class t{#t=0;static #e=1;static{t.#e=2}increment(){return this.#t+=t.#e,this.#t}async fetchValue(){return this.#t}}let e=t=>2*t;async function u(t){return e(await Promise.resolve(t))}export{t as Counter,e as double,u as fetchDouble};
+"
+`;
+
+exports[`Run config rollup > file content es2017/index.js 1`] = `
+"import { _ as _$2 } from '@swc/helpers/_/_class_private_field_get';
+import { _ as _$4 } from '@swc/helpers/_/_class_private_field_init';
+import { _ as _$1 } from '@swc/helpers/_/_class_private_field_set';
+import { _ as _$3 } from '@swc/helpers/_/_class_static_private_field_spec_get';
+import { _ } from '@swc/helpers/_/_class_static_private_field_spec_set';
+
+var _count = /*#__PURE__*/ new WeakMap();
+// ES2015: class, arrow function
+// ES2017: async/await
+// ES2022: class private fields, static class blocks
+class Counter {
+    increment() {
+        _$1(this, _count, _$2(this, _count) + _$3(Counter, Counter, _defaultStep));
+        return _$2(this, _count);
+    }
+    async fetchValue() {
+        return _$2(this, _count);
+    }
+    constructor(){
+        _$4(this, _count, {
+            writable: true,
+            value: 0
+        });
+    }
+}
+var _defaultStep = {
+    writable: true,
+    value: 1
+};
+_(Counter, Counter, _defaultStep, 2);
+const double = (n)=>n * 2;
+async function fetchDouble(n) {
+    const result = await Promise.resolve(n);
+    return double(result);
+}
+
+export { Counter, double, fetchDouble };
+"
+`;
+
+exports[`Run config rollup > file content es2022/index.js 1`] = `
+"// ES2015: class, arrow function
+// ES2017: async/await
+// ES2022: class private fields, static class blocks
+class Counter {
+    #count = 0;
+    static #defaultStep = 1;
+    static{
+        Counter.#defaultStep = 2;
+    }
+    increment() {
+        this.#count += Counter.#defaultStep;
+        return this.#count;
+    }
+    async fetchValue() {
+        return this.#count;
+    }
+}
+const double = (n)=>n * 2;
+async function fetchDouble(n) {
+    const result = await Promise.resolve(n);
+    return double(result);
+}
+
+export { Counter, double, fetchDouble };
+"
+`;
+
+exports[`Run config rollup > file content esm/index.js 1`] = `
+"import { _ as _$5 } from '@swc/helpers/_/_async_to_generator';
+import { _ as _$7 } from '@swc/helpers/_/_class_call_check';
+import { _ as _$3 } from '@swc/helpers/_/_class_private_field_get';
+import { _ as _$8 } from '@swc/helpers/_/_class_private_field_init';
+import { _ as _$2 } from '@swc/helpers/_/_class_private_field_set';
+import { _ as _$4 } from '@swc/helpers/_/_class_static_private_field_spec_get';
+import { _ } from '@swc/helpers/_/_class_static_private_field_spec_set';
+import { _ as _$1 } from '@swc/helpers/_/_create_class';
+import { _ as _$6 } from '@swc/helpers/_/_ts_generator';
+
+var _count = /*#__PURE__*/ new WeakMap();
+// ES2015: class, arrow function
+// ES2017: async/await
+// ES2022: class private fields, static class blocks
+var Counter = /*#__PURE__*/ function() {
+    function Counter() {
+        _$7(this, Counter);
+        _$8(this, _count, {
+            writable: true,
+            value: 0
+        });
+    }
+    _$1(Counter, [
+        {
+            key: "increment",
+            value: function increment() {
+                _$2(this, _count, _$3(this, _count) + _$4(Counter, Counter, _defaultStep));
+                return _$3(this, _count);
+            }
+        },
+        {
+            key: "fetchValue",
+            value: function fetchValue() {
+                return _$5(function() {
+                    return _$6(this, function(_state) {
+                        return [
+                            2,
+                            _$3(this, _count)
+                        ];
+                    });
+                }).call(this);
+            }
+        }
+    ]);
+    return Counter;
+}();
+var _defaultStep = {
+    writable: true,
+    value: 1
+};
+_(Counter, Counter, _defaultStep, 2);
+var double = function(n) {
+    return n * 2;
+};
+function fetchDouble(n) {
+    return _$5(function() {
+        var result;
+        return _$6(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        Promise.resolve(n)
+                    ];
+                case 1:
+                    result = _state.sent();
+                    return [
+                        2,
+                        double(result)
+                    ];
+            }
+        });
+    })();
+}
+
+export { Counter, double, fetchDouble };
+"
+`;
