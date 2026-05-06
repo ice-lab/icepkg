@@ -110,7 +110,9 @@ export function initTask(buildTask: BuildTask, options: InitTaskOptions) {
         // compact mode，以前的旧版本在注册任务的时候，可能不会添加 formats，则降级使用旧模式
         const legacyFormats = bundleConfig.formats ?? ['esm', 'es2017'];
         const aliasedFormatsGroup = groupBy(legacyFormats, (format) => (format === 'es2017' ? 'es2017' : 'es5'));
-        const es5Formats = aliasedFormatsGroup.es5 as Array<Exclude<AliasBundleFormatString, 'es2017'>> | undefined;
+        const es5Formats = aliasedFormatsGroup.es5 as
+          | Array<Exclude<AliasBundleFormatString, 'es2017' | 'es2022'>>
+          | undefined;
         config.formats = [...(es5Formats?.map((module) => createFormat(module, 'es5')) ?? [])];
       } else {
         // 理论上 Pkg 模式不会出现这个情况，但为了健壮性还是尝试补上这部分

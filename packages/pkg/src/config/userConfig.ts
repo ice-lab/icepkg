@@ -1,9 +1,4 @@
-import type { TransformUserConfig } from '../types.js';
-
 function getUserConfig() {
-  const defaultTransformUserConfig: TransformUserConfig = {
-    formats: ['esm', 'es2017'],
-  };
   const userConfig = [
     {
       name: 'entry',
@@ -30,10 +25,12 @@ function getUserConfig() {
     },
     {
       name: 'transform',
-      defaultValue: defaultTransformUserConfig,
     },
     {
       name: 'bundle',
+    },
+    {
+      name: 'pkgs',
     },
   ];
   return userConfig;

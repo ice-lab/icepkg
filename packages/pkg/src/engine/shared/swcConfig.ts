@@ -17,11 +17,11 @@ const BROWSER_TARGETS_MAP: Record<JsTarget, any> = {
     ios: 11,
   },
   es2022: {
-    chrome: 85,
-    safari: 15,
-    firefox: 79,
-    edge: 85,
-    ios: 15,
+    chrome: 94,
+    safari: '16.4',
+    firefox: 93,
+    edge: 94,
+    ios: '16.4',
   },
 };
 

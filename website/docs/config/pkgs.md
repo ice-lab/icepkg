@@ -3,7 +3,7 @@
 `@ice/pkg` 2.0 引用的新式配置方式
 
 - 类型：`Array<PresetPkg | PkgUserConfig | boolean | undefined>`
-- 默认值：`undefined`
+- 默认值：`['esm']`（当 `pkgs`、`transform.formats`、`bundle.formats` 均未配置时）
 
 配置多个构建单元（package），每个 pkg 可以独立控制构建模式、格式、入口、输出目录等。适用于需要同时输出多种格式或多个子包的场景。
 
@@ -21,8 +21,8 @@ export default defineConfig({
 
 支持的预设值：
 
-- Transform 格式（直接字符串）：`'esm'`、`'cjs'`、`'es2017'`
-- Bundle 格式（以 `!` 为前缀）：`'!esm'`、`'!cjs'`、`'!es2017'`、`'!umd'`、`'!mf'`
+- Transform 格式（直接字符串）：`'esm'`、`'cjs'`、`'es2017'`、`'es2022'`
+- Bundle 格式（以 `!` 为前缀）：`'!esm'`、`'!cjs'`、`'!es2017'`、`'!es2022'`、`'!umd'`、`'!mf'`
 
 ## PkgUserConfig 配置项
 
@@ -102,6 +102,22 @@ export default defineConfig({
 - 类型：`boolean`
 
 禁用该 pkg，构建时跳过。可以在不改动配置的情况下，通过环境变量或者其他变量进行控制。
+
+## 条件配置
+
+`pkgs` 数组中的 `false`、`undefined` 等假值会被自动忽略，因此可以使用 `condition && { ... }` 语法来按条件包含某个 pkg，无需额外的 if 判断：
+
+```ts title="build.config.mts"
+import { defineConfig } from '@ice/pkg';
+
+const enableCJS = process.env.ENABLE_CJS === 'true';
+
+export default defineConfig({
+  pkgs: ['esm', enableCJS && { module: 'cjs', target: 'es2017' }],
+});
+```
+
+当 `enableCJS` 为 `false` 时，`false && { ... }` 的结果 `false` 会被忽略，等同于只配置了 `'esm'`。
 
 ---
 

@@ -6,7 +6,7 @@ import { Context, ExtendsPluginAPI, TaskConfig, UserConfig } from '../types.js';
 import taskRegisterPlugin from '../plugins/component.js';
 import { userConfigSchema } from '../config/schema.js';
 import { createMessageBuilder, fromZodError } from 'zod-validation-error';
-import { registerPkgTasks, registerTasks } from './register.js';
+import { registerPkgTasks } from './register.js';
 import { initContextTasks } from './init.js';
 import { resolvePackage, runPkgPlugins } from './pkg.js';
 
@@ -128,14 +128,15 @@ export async function createCore(options: CreatePkgOptions) {
   }
 
   const pkgs = await resolvePackage(ctx);
-  await runPkgPlugins(ctx, pkgs);
 
-  if (pkgs.length) {
-    // when pkg is preset, no need to register old tasks
-    await registerPkgTasks(ctx, pkgs);
-  } else {
-    registerTasks(ctx);
+  if (pkgs.length === 0) {
+    throw new Error(
+      'No packages were resolved. Please check your `pkgs` configuration or whether all packages have been disabled.',
+    );
   }
+
+  await runPkgPlugins(ctx, pkgs);
+  registerPkgTasks(ctx, pkgs);
 
   initContextTasks(ctx);
 

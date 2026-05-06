@@ -10,15 +10,13 @@ runProjectTest(import.meta.url, [
     name: 'bundle',
     snapshot: 'structure',
     config: {
-      transform: { formats: [] },
-      bundle: {},
+      pkgs: ['!esm'],
     },
   },
   {
     name: 'bundle-full',
     snapshot: 'structure',
     config: {
-      transform: { formats: [] },
       bundle: {
         formats: ['cjs', 'es2017', 'esm', 'umd'],
       },
@@ -28,7 +26,7 @@ runProjectTest(import.meta.url, [
     name: 'bundle-with-full-modes',
     snapshot: 'structure',
     config: {
-      transform: { formats: [] },
+      pkgs: [{ module: 'esm', target: 'es5', bundle: true }],
       bundle: {
         modes: ['development', 'production'],
       },
@@ -38,7 +36,7 @@ runProjectTest(import.meta.url, [
     name: 'bundle-with-dev-mode',
     snapshot: 'structure',
     config: {
-      transform: { formats: [] },
+      pkgs: [{ module: 'esm', target: 'es5', bundle: true }],
       bundle: {
         modes: ['development'],
       },
@@ -48,7 +46,7 @@ runProjectTest(import.meta.url, [
     name: 'bundle-with-empty-mode',
     snapshot: 'structure',
     config: {
-      transform: { formats: [] },
+      pkgs: [{ module: 'esm', target: 'es5', bundle: true }],
       bundle: {
         modes: [],
       },

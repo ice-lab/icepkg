@@ -100,6 +100,32 @@ V2 中 Bundle 模式使用 `es5` 语法目标时，会默认对 `node_modules` �
 
 ---
 
+### 默认构建产物从 `['esm', 'es2017']` 改为 `['esm']`
+
+V1 中未配置任何格式时，默认会同时输出 `esm`（ES Module + ES5）和 `es2017`（ES Module + ES2017）两份产物。V2 默认只输出一份 `esm` 产物。
+
+如果你的项目依赖默认的双产物输出，请显式配置：
+
+```diff
+export default defineConfig({
++ pkgs: ['esm', 'es2017'],
+});
+```
+
+或使用旧式 `transform.formats` 写法（V2 仍兼容）：
+
+```diff
+export default defineConfig({
++ transform: {
++   formats: ['esm', 'es2017'],
++ },
+});
+```
+
+同时，V2 推荐使用 [`pkgs`](../config/pkgs) 替代 `transform.formats` 和 `bundle.formats` 来配置产物输出，`pkgs` 提供更灵活的差异化配置能力。
+
+---
+
 ### `generateTypesForJs` 迁移到 `declaration.allowJs`
 
 顶级配置项 `generateTypesForJs` 已移除，改为 `declaration.allowJs`：
@@ -124,13 +150,17 @@ export default defineConfig({
 
 ## 任务
 
-1. 读取项目根目录下的 `build.config.mts`（或 `build.config.ts` / `build.config.mjs`）
-2. 检查并修复以下所有 Breaking Changes
+1. 判断当前项目是否为 monorepo（查看根目录是否有 `pnpm-workspace.yaml` / `lerna.json` / `package.json` 中的 `workspaces` 字段）
+   - 若是 monorepo：递归查找所有子包目录下的 `build.config.{mts,ts,mjs,cjs,js}` 文件，逐一处理
+   - 若非 monorepo：只处理根目录下的 `build.config.{mts,ts,mjs,cjs,js}`
+2. 对每个找到的配置文件，检查并修复以下所有 Breaking Changes
 3. 如有涉及测试框架配置（`jest.config.*` / `vitest.config.*`），一并读取并修复
-4. 直接修改文件，完成后输出变更摘要
+4. 直接修改文件，完成后按包输出变更摘要
 
 ## Breaking Changes 检查清单
 
+- [ ] 未配置任何格式但依赖默认双产物（`esm` + `es2017`）→ 显式添加 `pkgs: ['esm', 'es2017']`
+- [ ] `transform.formats` / `bundle.formats` → 推荐迁移到 `pkgs` 配置（可保留旧写法，V2 兼容）
 - [ ] `bundle.development: true` → 替换为 `bundle.modes: ['development', 'production']`
 - [ ] `bundle.polyfill` 未配置但原本依赖默认注入 → 根据需要显式设为 `'usage'` 或 `'entry'`
 - [ ] `externals` 使用字符串且需要匹配子路径 → 改用正则，例如 `'lodash'` → `/^lodash/`
@@ -142,4 +172,5 @@ export default defineConfig({
 - 只修改需要变更的部分，保持其他配置不变
 - 如果某项 Breaking Change 在当前项目中不涉及，跳过即可
 - 修改前先读取文件，确认当前内容后再做变更
+- monorepo 中各子包配置相互独立，逐包处理，不要遗漏
 ```

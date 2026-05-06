@@ -10,10 +10,14 @@ export const JSX_RUNTIME_SOURCE = '@ice/jsx-runtime';
 export const ALIAS_TRANSFORM_FORMATS_MAP: Record<AliasTransformFormatString, StandardTransformFormatString> = {
   esm: 'esm:es5',
   es2017: 'esm:es2017',
+  es2022: 'esm:es2022',
   cjs: 'cjs:es5',
 };
 
-export const ALIAS_BUNDLE_FORMATS_MAP: Record<AliasBundleFormatString, StandardBundleFormatString> = {
+export const ALIAS_BUNDLE_FORMATS_MAP: Record<
+  Exclude<AliasBundleFormatString, 'es2022'>,
+  StandardBundleFormatString
+> = {
   umd: 'umd:es5',
   esm: 'esm:es5',
   es2017: 'esm:es2017',

@@ -54,7 +54,7 @@ export interface Format<M extends ModuleType = ModuleType, T extends JsTarget = 
 export type TransformFormat = Format<NodeModuleType, JsTarget>;
 export type BundleFormat = Format<ModuleType, JsTarget>;
 
-export type AliasTransformFormatString = 'cjs' | 'esm' | 'es2017';
+export type AliasTransformFormatString = 'cjs' | 'esm' | 'es2017' | 'es2022';
 export type AliasBundleFormatString = AliasTransformFormatString | 'umd' | 'mf';
 
 export type TransformUserFormat = StandardTransformFormatString | AliasTransformFormatString;
@@ -65,8 +65,8 @@ export interface TransformUserConfig {
    * Which type of contents would be generated
    * "cjs" - Commonjs with ES5 syntax (targeting Node version under 12);
    * "esm" - ES Module with ES5 syntax (legacy outputs);
-   * "es2017" - ES Module with ES2017 (targeting modern browsers and Node version upon 12)
-   * @default ['esm', 'es2017']
+   * "es2017" - ES Module with ES2017 (targeting modern browsers and Node version upon 12);
+   * "es2022" - ES Module with ES2022 (targeting browsers supporting class static blocks+)
    */
   formats?: TransformUserFormat[];
   /**
@@ -107,7 +107,6 @@ export interface BundleUserConfig {
    * "esm"
    * "cjs"
    * "es2017"
-   * @default ['esm','es2017']
    */
   formats?: BundleUserFormat[];
   /**
@@ -264,6 +263,8 @@ export interface PkgResolvedConfig
 export type PresetPkg = TransformUserFormat | `!${BundleUserFormat}`;
 
 export interface UserConfig {
+  // boolean | undefined are allowed to support `condition && { ... }` shorthand,
+  // where falsy values are silently ignored during resolution.
   pkgs?: Array<PresetPkg | PkgUserConfig | boolean | undefined>;
   /**
    * Entry for a task

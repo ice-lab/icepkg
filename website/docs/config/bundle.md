@@ -8,15 +8,10 @@
 推荐使用 [`pkgs`](./pkgs) 替代 `formats` 来配置多产物输出，`pkgs` 提供更灵活的差异化配置能力。
 :::
 
-- 类型：`['esm', 'umd', 'cjs', 'es2017']`
-- 默认值：`['esm', 'es2017']`
+- 类型：`['esm', 'umd', 'cjs', 'es2017', 'es2022', 'mf']`
+- 默认值：无
 
-输出的类型，默认是输出 `esm` 和 `es2017` 产物。
-
-```shell title=root/dist
-- index.esm.es5.production.js        # 输出 ES module + es5 产物
-- index.esm.es2017.production.js     # 输出 ES module + es2017 产物
-```
+输出的 Bundle 格式类型。未配置时不产生任何 Bundle 产物，需显式指定至少一种格式：
 
 若只需要产出 umd 规范产物，可配置为：
 

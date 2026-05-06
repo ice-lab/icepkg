@@ -1,0 +1,10 @@
+{
+  "name": "@ice/pkg-tests-syntax-target",
+  "version": "0.0.0",
+  "description": "Integration tests for syntax compilation targets (es5/es2017/es2022) in both transform and bundle modes",
+  "private": true,
+  "dependencies": {
+    "@ice/pkg": "workspace:*",
+    "@swc/helpers": "^0.5.15"
+  }
+}

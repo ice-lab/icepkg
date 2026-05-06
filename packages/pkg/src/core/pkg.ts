@@ -1,6 +1,7 @@
 import {
   AliasBundleFormatString,
   Context,
+  PresetPkg,
   PkgResolvedConfig,
   PkgUserConfig,
   PluginInfo,
@@ -91,6 +92,19 @@ const LEGACY_PRESET_CONFIG_MAP: Record<
     displayId: 'umd',
     bundle: true,
   },
+  es2022: {
+    id: 'es2022',
+    module: 'esm',
+    target: 'es2022',
+    outputDir: 'es2022',
+  },
+  '!es2022': {
+    id: '!es2022',
+    module: 'esm',
+    target: 'es2022',
+    displayId: 'es2022',
+    bundle: true,
+  },
 };
 
 function parsePresetPkgString(
@@ -100,7 +114,7 @@ function parsePresetPkgString(
     return null;
   }
   const bundle = preset[0] === '!';
-  const fmtString = preset.slice(1);
+  const fmtString = bundle ? preset.slice(1) : preset;
   const fmt = tryToFormat(fmtString);
   if (!fmt) {
     // use legacy format
@@ -144,8 +158,21 @@ function resolveExtends(extendsConfig: string[] = [], pkgsMap: Map<string, PkgRe
 
 export async function resolvePackage(ctx: Context) {
   const { userConfig } = ctx;
-  // filter undefined or boolean out
-  const pkgs = userConfig.pkgs ?? [];
+
+  // Derive pkgs from transform.formats / bundle.formats if not explicitly set,
+  // falling back to the default ['esm'] when nothing is configured at all.
+  const transformPresets = (userConfig.transform?.formats ?? []) as string[];
+  const bundlePresets = (userConfig.bundle?.formats ?? []).map((f) => `!${f}`);
+  const legacyPresets = [...transformPresets, ...bundlePresets];
+
+  // Only fall back to the default when all three config keys are absent.
+  // Explicitly configured empty arrays (e.g. transform.formats: []) mean
+  // "no legacy formats", not "nothing configured".
+  const hasLegacyConfig = userConfig.transform?.formats !== undefined || userConfig.bundle?.formats !== undefined;
+  const rawPkgs = userConfig.pkgs ?? (hasLegacyConfig || legacyPresets.length ? [] : ['esm']);
+  // Merge legacy presets, deduplicating against existing string entries in pkgs
+  const existingStrings = new Set<string>(rawPkgs.filter((p): p is PresetPkg => typeof p === 'string'));
+  const pkgs = [...rawPkgs, ...(legacyPresets.filter((p) => !existingStrings.has(p)) as PresetPkg[])];
   const resolvedPkgs: PkgResolvedConfig[] = [];
   const pkgsMap = new Map<string, PkgResolvedConfig>();
 
@@ -183,7 +210,9 @@ export async function resolvePackage(ctx: Context) {
   if (groupedPkgs.bundleLegacy?.length) {
     const formats = groupedPkgs.bundleLegacy.map((v) => v.slice(1)) as AliasBundleFormatString[];
     const aliasedFormatsGroup = groupBy(formats, (format) => (format === 'es2017' ? 'es2017' : 'es5'));
-    const es5Formats = aliasedFormatsGroup.es5 as Array<Exclude<AliasBundleFormatString, 'es2017'>> | undefined;
+    const es5Formats = aliasedFormatsGroup.es5 as
+      | Array<Exclude<AliasBundleFormatString, 'es2017' | 'es2022'>>
+      | undefined;
 
     if (es5Formats?.length) {
       const resolvedPkg: PkgResolvedConfig = {

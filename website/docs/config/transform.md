@@ -1,20 +1,10 @@
 # transform
 
 :::tip
-Transform 模式是 ICE PKG 默认的编译模式。
+Transform 模式是 ICE PKG 默认的编译模式。推荐使用 [`pkgs`](./pkgs) 配置多产物输出。
 :::
 
-该字段定义 [Transform 模式](../guide/build-modes#transform-模式) 下额外的配置。默认配置是：
-
-```ts title="build.config.mts"
-import { defineConfig } from '@ice/pkg';
-
-export default defineConfig({
-  transform: {
-    formats: ['esm', 'es2017'],
-  },
-});
-```
+该字段定义 [Transform 模式](../guide/build-modes#transform-模式) 下额外的配置。
 
 ## formats
 
@@ -22,17 +12,10 @@ export default defineConfig({
 推荐使用 [`pkgs`](./pkgs) 替代 `formats` 来配置多产物输出，`pkgs` 提供更灵活的差异化配置能力。
 :::
 
-- 类型：`Array<'cjs' | 'esm' | 'es2017'>`
-- 默认值：`['esm', 'es2017']`
+- 类型：`Array<'cjs' | 'esm' | 'es2017' | 'es2022'>`
+- 默认值：无
 
-输出的类型。ICE PKG 会默认把产物输出到 `esm` (输出 ES module + ES5 产物) 和 `es2017` (输出 ES module + ES2017 产物) 两个文件夹。
-
-```shell
-- esm    # ES module + ES5 产物
-- es2017 # ES module + ES2017 产物
-```
-
-若想要输出 CommonJS 产物，可如下配置：
+输出的格式类型。若想同时输出多种格式，可如下配置：
 
 ```ts title="build.config.mts"
 import { defineConfig } from '@ice/pkg';
