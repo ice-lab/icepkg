@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0-alpha.6
+
+### Major Changes
+
+- c3161c1: feat: change default formats to 'esm'
+- a58485f: feat: migrate `generateTypesForJs` to `declaration.allowJs`
+
 ## 2.0.0-alpha.5
 
 ### Major Changes

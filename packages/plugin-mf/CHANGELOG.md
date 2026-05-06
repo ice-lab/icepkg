@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0-alpha.2
+
+### Patch Changes
+
+- Updated dependencies [c3161c1]
+- Updated dependencies [a58485f]
+  - @ice/pkg@2.0.0-alpha.6
+
 ## 1.0.0-alpha.1
 
 ### Patch Changes
