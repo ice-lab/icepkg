@@ -28,7 +28,8 @@
     "@ice/pkg-plugin-mf": "0.1.0",
     "@ice/pkg-test-bundle-mf": "0.1.0",
     "@ice/pkg-tests-helpers-config": "0.0.0",
-    "@ice/pkg-tests-transform": "0.0.0"
+    "@ice/pkg-tests-transform": "0.0.0",
+    "@ice/pkg-tests-syntax-target": "0.0.0"
   },
   "changesets": [
     "calm-clocks-hang",
@@ -50,6 +51,8 @@
     "green-crabs-add",
     "hip-beans-fail",
     "long-experts-design",
+    "mean-rice-walk",
+    "migrate-generate-types-for-js",
     "perfect-chicken-travel",
     "purple-eels-provide",
     "quick-wasps-shake",

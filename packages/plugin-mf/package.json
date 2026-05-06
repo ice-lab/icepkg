@@ -1,6 +1,6 @@
 {
   "name": "@ice/pkg-plugin-mf",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "ICE PKG plugin for module federation",
   "main": "es2017/index.js",
   "type": "module",
@@ -39,7 +39,7 @@
     "@ice/pkg": "workspace:*"
   },
   "peerDependencies": {
-    "@ice/pkg": "workspace:^2.0.0-alpha.5"
+    "@ice/pkg": "workspace:^2.0.0-alpha.6"
   },
   "peerDependenciesMeta": {
     "@ice/pkg": {
